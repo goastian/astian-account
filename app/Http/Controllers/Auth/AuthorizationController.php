@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Assets\Device;
+use App\Events\Auth\LoginEvent;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Transformers\Auth\EmployeeTransformer;
@@ -28,6 +29,8 @@ class AuthorizationController extends Controller
         $request->authenticate();
 
         $token = request()->user()->createToken($this->setTokenName($request));
+
+        LoginEvent::dispatch($this->AuthKey());
 
         return response()->json(['data' => [
             'Authorization' => "Bearer " . $token->plainTextToken,

@@ -2,11 +2,11 @@
 
 namespace App\Listeners\Token;
 
-use App\Events\Token\DestoryTokenEvent;
+use App\Events\Token\DestroyTokenEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DestoryTokenListener
+class DestroyTokenListener
 {
     /**
      * Create the event listener.
@@ -21,10 +21,10 @@ class DestoryTokenListener
     /**
      * Handle the event.
      *
-     * @param  \App\Events\Token\DestoryTokenEvent  $event
+     * @param  \App\Events\Token\DestroyTokenEvent  $event
      * @return void
      */
-    public function handle(DestoryTokenEvent $event)
+    public function handle(DestroyTokenEvent $event)
     {
         //
     }

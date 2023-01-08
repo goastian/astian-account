@@ -8,20 +8,25 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\SerializesModels; 
+
 
 class DestroyAllTokenEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    public $id = null;
+
     public $data = null;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($data = null)
+    public function __construct($id, $data = null)
     {
+        $this->id =$id;
         $this->data = $data;
     }
 
@@ -32,6 +37,16 @@ class DestroyAllTokenEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('spondylus.' . request()->id);
+        return new PrivateChannel('spondylus.' . $this->id);
+    }
+
+     /**
+     * The event's broadcast name.
+     *
+     * @return string
+     */
+    public function broadcastAs()
+    {
+        return 'DestroyAllTokenEvent';
     }
 }
