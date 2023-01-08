@@ -32,6 +32,6 @@ class DestroyAllTokenEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('spondylus');
+        return new PrivateChannel('spondylus.' . request()->id);
     }
 }

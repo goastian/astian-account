@@ -13,3 +13,10 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
  
+Broadcast::channel('spondylus', function($user){
+    return $user->id == request()->user()->id;
+});
+
+Broadcast::channel('spondylus.{id}', function ($user,$id) {
+    return $user->id == $id;
+});
