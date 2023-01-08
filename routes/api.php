@@ -12,5 +12,5 @@ Route::get('about', [AuthenticatedSessionController::class, 'profile']);
 
 Route::get('tokens',[TokensController::class, 'index'])->name('tokens.index');
 Route::post('tokens', [TokensController::class, 'store'])->name('tokens.store');
-Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens.destroy');
 Route::delete('tokens/clean', [TokensController::class, 'destroyAllTokens'])->name('tokens.clean');
+Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens.destroy');
