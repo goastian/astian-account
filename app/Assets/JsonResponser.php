@@ -40,7 +40,7 @@ trait JsonResponser
             $transformer = $model->transformer;
         }
 
-        $model = fractal($model, $model->transformer);
+        $model = $this->transformData($model, $model->transformer);
 
         return $this->message($model, $code);
     }
@@ -63,7 +63,7 @@ trait JsonResponser
 
         $collection = $this->paginate($collection);
 
-        $collection = fractal($collection, $transformer);
+        $collection = $this->transformData($collection, $transformer);
 
         return $this->message($collection, $code);
     }
@@ -220,5 +220,13 @@ trait JsonResponser
             $sorted = $collection->sortDesc()->values()->all();
             return  collect($sorted);
         }
+    }
+
+    /**
+     * transforma la data usando transformadores
+     */
+    public function transformData($data, $transformer)
+    {
+        return fractal($data, $transformer);
     }
 }

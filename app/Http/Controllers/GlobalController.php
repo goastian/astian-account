@@ -13,4 +13,10 @@ class GlobalController extends Controller
     {
         $this->middleware('auth:sanctum');
     }
+
+
+    public function AuthKey()
+    {
+       return request()->user()->id;
+    }
 }
