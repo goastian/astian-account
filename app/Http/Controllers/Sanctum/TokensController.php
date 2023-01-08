@@ -3,17 +3,21 @@
 namespace App\Http\Controllers\Sanctum;
 
 use App\Assets\Device;
+use App\Events\Token\DestroyAllTokenEvent;
+use App\Events\Token\DestroyTokenEvent;
+use App\Events\Token\StoreTokenEvent;
 use Illuminate\Http\Request;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Transformers\Auth\EmployeeTransformer;
 use App\Transformers\Tokens\TokensTransformer;
 
 class TokensController extends Controller
-{ 
+{
     use Device;
 
     public function __construct()
     {
-        parent::__construct();        
+        parent::__construct();
     }
     /**
      * Display a listing of the resource.
@@ -36,13 +40,18 @@ class TokensController extends Controller
     {
         $token = $request->user()->createToken($this->setTokenName($request));
 
+    
+        StoreTokenEvent::dispatch($this->AuthKey());
+
         return response()->json(['token' => 'Bearer ' . $token->plainTextToken], 201);
     }
 
-   
+
     public function destroyAllTokens(Request $request)
     {
         $request->user()->tokens()->delete();
+
+        DestroyAllTokenEvent::dispatch($this->AuthKey());
 
         return response()->json(['data' => [
             'message' => 'Los Tokens fueron revocados.'
@@ -54,7 +63,9 @@ class TokensController extends Controller
     {
         $token = $request->user()->tokens()->where('id', $id)->first();
 
-        $token->delete();
+        $token->delete(); 
+        
+        DestroyTokenEvent::dispatch($this->AuthKey());
 
         return response()->json(['data' => [
             'message' => 'El token ha sido revocado.'

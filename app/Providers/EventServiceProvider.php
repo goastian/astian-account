@@ -16,16 +16,16 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
 
-        \App\Events\Auth\LoginTokenEvent::class => [
-            \App\Listeners\Auth\LoginTokenListener::class
+        \App\Events\Auth\LoginEvent::class => [
+            \App\Listeners\Auth\LoginListener::class
         ],
 
         \App\Events\Token\StoreTokenEvent::class => [
             \App\Listeners\Token\StoreTokenListener::class
         ],
 
-        \App\Events\Token\DestoryTokenEvent::class => [
-            \App\Listeners\Token\DestoryTokenListener::class
+        \App\Events\Token\DestroyTokenEvent::class => [
+            \App\Listeners\Token\DestroyTokenListener::class
         ],
 
         \App\Events\Token\DestroyAllTokenEvent::class => [
