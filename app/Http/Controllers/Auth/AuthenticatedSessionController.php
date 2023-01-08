@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
+use App\Transformers\Auth\EmployeeTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -55,6 +56,6 @@ class AuthenticatedSessionController extends Controller
 
     public function profile()
     {
-        return request()->user();
+        return fractal(request()->user(), EmployeeTransformer::class);
     }
 }

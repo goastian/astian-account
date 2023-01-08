@@ -1,19 +1,21 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
- 
+
 use App\Assets\Device;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Transformers\Auth\EmployeeTransformer;
 
 class AuthorizationController extends Controller
-{ 
+{
     use  Device;
 
     public function __construct()
     {
         $this->middleware('guest')->only('store');
-        $this->middleware('auth:sanctum')->only('destroy'); 
+        $this->middleware('auth:sanctum')->only('destroy');
+        $this->middleware('transform.request:'. EmployeeTransformer::class)->only('store');
     }
     /**
      * Handle an incoming authentication request.
@@ -27,7 +29,7 @@ class AuthorizationController extends Controller
 
         $token = request()->user()->createToken($this->setTokenName($request));
 
-        return response()->json(['data' => [ 
+        return response()->json(['data' => [
             'Authorization' => "Bearer " . $token->plainTextToken,
         ]], 201);
     }
