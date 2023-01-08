@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Sanctum;
 use App\Assets\Device;
 use Illuminate\Http\Request;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Transformers\Tokens\TokensTransformer;
 
 class TokensController extends Controller
 { 
@@ -22,7 +23,7 @@ class TokensController extends Controller
     public function index(Request $request)
     {
         $tokens = $request->user()->tokens;
-        return $this->showAll($tokens, SanctumTransformer::class, 200);
+        return $this->showAll($tokens, TokensTransformer::class, 200);
     }
 
     /**
