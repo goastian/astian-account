@@ -38,8 +38,8 @@ return new class extends Migration
             'address' => 'Av. Tacna Nro 327 - Tumbes',
         ])->save();
 
-        DB::table('role_user')->insert([
-            'user_id' => 1,
+        DB::table('employee_role')->insert([
+            'employee_id' => 1,
             'role_id' => 1
         ]);
     }
