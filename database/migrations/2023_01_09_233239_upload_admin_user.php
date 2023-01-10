@@ -1,9 +1,10 @@
 <?php
 
-use App\Models\User\Employee;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use App\Models\User\Employee;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -14,6 +15,17 @@ return new class extends Migration
      */
     public function up()
     {
+        /**
+         * datos del user administrador
+         */
+        $roles = ['admin', 'escritura', 'lectura'];
+
+        foreach ($roles as $key) {
+            DB::table('roles')->insert([
+                'name' => $key
+            ]);
+        }
+
         Employee::create([
             'name' => 'admin',
             'last_name' => 'admin',
@@ -25,6 +37,11 @@ return new class extends Migration
             'department' => 'tumbes',
             'address' => 'Av. Tacna Nro 327 - Tumbes',
         ])->save();
+
+        DB::table('role_user')->insert([
+            'user_id' => 1,
+            'role_id' => 1
+        ]);
     }
 
     /**
