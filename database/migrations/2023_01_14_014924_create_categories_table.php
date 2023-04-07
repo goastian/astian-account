@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
+            $table->string('category', 100);
             $table->float('price',8,2);
+            $table->boolean('air_conditionar');
             $table->boolean('tv');
             $table->boolean('bathroom');
-            $table->boolean('air_conditionar');
-            $table->boolean('wifi');
             $table->boolean('hot_water');
             $table->boolean('cold_water');
+            $table->boolean('wifi');
+            $table->boolean('fan');
             $table->softDeletes();
             $table->timestamps();
         });

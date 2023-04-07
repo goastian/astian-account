@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rooms', function (Blueprint $table) {
-            $table->id();
-            $table->string('number', 5); 
-            $table->string('description', 150); 
-            $table->softDeletes();
-            $table->timestamps();
+        Schema::create('client_rent', function (Blueprint $table) {
+            $table->integer('client_id', false, true);
+            $table->integer('rent_id', false, true);
         });
     }
 
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rooms');
+        Schema::dropIfExists('client_rent');
     }
 };
