@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('category', 100);
+            $table->string('name', 100);
             $table->float('price',8,2);
             $table->boolean('air_conditionar');
             $table->boolean('tv');
