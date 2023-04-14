@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Asset\CategoryController;
+use App\Http\Controllers\Asset\RoomController;
 use App\Http\Controllers\Sanctum\TokensController;
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -20,3 +21,8 @@ Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens
 //categories
 Route::get('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.retore');
 Route::resource('categories', CategoryController::class)->except('edit','create');
+
+//rooms
+Route::delete('rooms/{room}/disable', [RoomController::class, 'disable'])->name('rooms.disable');
+Route::get('rooms/{id}/enable', [RoomController::class, 'enable'])->name('rooms.enable');
+Route::resource('rooms', RoomController::class)->except('edit', 'create');
