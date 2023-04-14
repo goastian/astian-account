@@ -13,6 +13,8 @@ class {{ class }} extends Model
 
     public $view = "";
 
+    public $transformer = "";
+
     protected $fillable = [
         //
     ];
