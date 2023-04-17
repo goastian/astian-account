@@ -18,7 +18,6 @@ Route::get('tokens',[TokensController::class, 'index'])->name('tokens.index');
 Route::post('tokens', [TokensController::class, 'store'])->name('tokens.store');
 Route::delete('tokens/clean', [TokensController::class, 'destroyAllTokens'])->name('tokens.clean');
 Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens.destroy');
-
 //categories
 Route::delete('categories/{category}/disable', [CategoryController::class, 'disable'])->name('categories.disable');
 Route::get('categories/{id}/enable', [CategoryController::class, 'enable'])->name('categories.enable');
