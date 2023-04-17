@@ -5,6 +5,18 @@ use App\Http\Controllers\Asset\CategoryCalendarController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Asset\CategoryController;
 use App\Http\Controllers\Asset\RoomController; 
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\Sanctum\TokensController;
+
+Route::post('login', [AuthorizationController::class,'store']);
+Route::post('logout', [AuthorizationController::class, 'destroy']);
+Route::get('about', [AuthenticatedSessionController::class, 'profile']);
+
+Route::get('tokens',[TokensController::class, 'index'])->name('tokens.index');
+Route::post('tokens', [TokensController::class, 'store'])->name('tokens.store');
+Route::delete('tokens/clean', [TokensController::class, 'destroyAllTokens'])->name('tokens.clean');
+Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens.destroy');
  
 //categories
 Route::delete('categories/{category}/disable', [CategoryController::class, 'disable'])->name('categories.disable');
