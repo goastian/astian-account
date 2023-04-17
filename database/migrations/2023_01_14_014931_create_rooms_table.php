@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('number', 5); 
-            $table->string('description', 150); 
+            $table->string('number', 5);
+            $table->tinyInteger('bed',  false, true);
+            $table->string('description', 150);
             $table->integer('category_id', false, true);
             $table->softDeletes();
             $table->timestamps();
