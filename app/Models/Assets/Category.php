@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Book;
+namespace App\Models\Assets;
 
 use App\Transformers\Asset\CategoryTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

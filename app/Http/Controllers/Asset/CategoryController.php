@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Asset;
 
-use App\Exceptions\ReportMessage;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Category\StoreRequest;
-use App\Http\Requests\Category\UpdateRequest;
-use App\Models\Book\Category;
-use App\Transformers\Asset\CategoryTransformer;
 use Error;
+use App\Models\Assets\Category;
+use App\Exceptions\ReportMessage;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Category\StoreRequest;
+use App\Http\Requests\Category\UpdateRequest; 
+use App\Transformers\Asset\CategoryTransformer;
+use App\Http\Controllers\GlobalController as Controller;
 
 class CategoryController extends Controller
 {

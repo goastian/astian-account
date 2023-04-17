@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Asset;
 
-use App\Exceptions\ReportMessage;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Room\StoreRequest;
-use App\Http\Requests\Room\UpdateRequest;
-use App\Models\Book\Room;
-use App\Transformers\Asset\RoomTransformer;
 use Error;
+use App\Models\Assets\Room;
 use Illuminate\Http\Request;
+use App\Exceptions\ReportMessage;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Room\StoreRequest;
+use App\Http\Requests\Room\UpdateRequest; 
+use App\Transformers\Asset\RoomTransformer;
+use App\Http\Controllers\GlobalController as Controller;
 
 class RoomController extends Controller
 {
