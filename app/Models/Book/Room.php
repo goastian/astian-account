@@ -33,4 +33,9 @@ class Room extends Model
         $this->attributes['description'] = strtolower($value);
     }    
 
+    public function rents()
+    {
+        return $this->hasMany(Rent::class);
+    }
+
 }

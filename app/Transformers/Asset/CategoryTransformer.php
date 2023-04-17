@@ -43,6 +43,7 @@ class CategoryTransformer extends TransformerAbstract
             'agua_fria' => $category->cold_water,
             'ventilador' => $category->fan,
             'registrado' => $category->created_at,
+            'actualizado' => $category->updated_at,
             'inactivo' => $category->deleted_at,
 
         ];
@@ -97,7 +98,8 @@ class CategoryTransformer extends TransformerAbstract
             'agua_caliente' => 'hot_water',
             'ventilador' => 'fan',
             'agua_fria' => 'cold_water',
-            'registrado' => 'created_at'
+            'registrado' => 'created_at',
+            'actualizado' => 'updated_at',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
