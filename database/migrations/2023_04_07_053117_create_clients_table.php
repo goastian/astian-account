@@ -13,18 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('categories', function (Blueprint $table) {
+        Schema::create('clients', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->float('price',8,2);
-            $table->boolean('air_conditionar');
-            $table->boolean('tv');
-            $table->boolean('bathroom');
-            $table->boolean('hot_water');
-            $table->boolean('cold_water');
-            $table->boolean('wifi');
-            $table->boolean('fan');
-            $table->softDeletes();
+            $table->string('last_name', 100);
+            $table->string('document', 100);
+            $table->string('number', 50);
+            $table->string('city', 100);
+            $table->string('country', 100);
+            $table->string('email', 100);
+            $table->string('phone', 9);
             $table->timestamps();
         });
     }
@@ -36,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('categories');
+        Schema::dropIfExists('clients');
     }
 };
