@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers\Asset;
 
-use Error;
-use Exception;
-use App\Models\Book\Room;
-use Illuminate\Http\Request;
 use App\Exceptions\ReportMessage;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Room\StoreRequest;
 use App\Http\Requests\Room\UpdateRequest;
+use App\Models\Book\Room;
 use App\Transformers\Asset\RoomTransformer;
-use App\Http\Controllers\GlobalController as Controller;
+use Error;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -58,8 +57,10 @@ class RoomController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Room $room)
+    public function show($id)
     {
+        $room = Room::withTrashed()->find($id);
+
         return $this->showOne($room);
     }
 
@@ -89,6 +90,12 @@ class RoomController extends Controller
      */
     public function destroy(Room $room)
     {
+        $rents = count($room->rents()->get());
+
+        if ($rents > 0) {
+            throw new ReportMessage(__("La categoria tiene recursos asociados y no puede ser eliminada"), 403);
+        }
+
         $room->forceDelete();
 
         return $this->showOne($room);

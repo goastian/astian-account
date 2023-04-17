@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Asset;
 
+use App\Exceptions\ReportMessage;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Category\StoreRequest;
 use App\Http\Requests\Category\UpdateRequest;
 use App\Models\Book\Category;
 use App\Transformers\Asset\CategoryTransformer;
-use Illuminate\Http\Request;
+use Error;
 use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
@@ -27,7 +28,7 @@ class CategoryController extends Controller
 
     public function index(Category $category)
     {
-        $categories = $category->all();
+        $categories = $category->withTrashed()->get();
 
         return $this->showAll($categories, CategoryTransformer::class);
     }
@@ -58,8 +59,10 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function show(Category $category)
+    public function show($id)
     {
+        $category = Category::withTrashed()->find($id);
+
         return $this->showOne($category);
     }
 
@@ -90,6 +93,20 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        $rooms = count($category->rooms()->get());
+        $calendars = count($category->calendar()->get());
+
+        if ($rooms > 0 or $calendars > 0) {
+            throw new ReportMessage(__("La categoria tiene recursos asociados y no puede ser eliminada"), 403);
+        }
+
+        $category->forceDelete();
+
+        return $this->showOne($category);
+    }
+
+    public function disable(Category $category)
+    {
         $category->delete();
 
         return $this->showOne($category);
@@ -101,17 +118,21 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function restore($id)
+    public function enable($id)
     {
-        $category = Category::onlyTrashed()->find($id);
+        try {
 
-        if (isset($category)) {
+            $category = Category::onlyTrashed()->find($id);
+
             $category->restore();
+
             return $this->showOne($category);
+
+        } catch (Error $e) {
+
+            throw new ReportMessage("Error al procesar la petición", 404);
+
         }
 
-        return $this->message(['data' => [
-            "message" => "El recurso ha sido habilitado",
-        ]]);
     }
 }

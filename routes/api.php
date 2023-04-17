@@ -19,7 +19,8 @@ Route::delete('tokens/clean', [TokensController::class, 'destroyAllTokens'])->na
 Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens.destroy');
 
 //categories
-Route::get('categories/{id}/restore', [CategoryController::class, 'restore'])->name('categories.retore');
+Route::delete('categories/{category}/disable', [CategoryController::class, 'disable'])->name('categories.disable');
+Route::get('categories/{id}/enable', [CategoryController::class, 'enable'])->name('categories.enable');
 Route::resource('categories', CategoryController::class)->except('edit','create');
 
 //rooms

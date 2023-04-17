@@ -38,4 +38,14 @@ class Category extends Model
     {
         return ucfirst($value);
     }
+
+    public function rooms()
+    {
+        return $this->hasMany(Room::class);
+    }
+
+    public function calendar()
+    {
+        return $this->hasMany(Calendar::class);
+    }
 }
