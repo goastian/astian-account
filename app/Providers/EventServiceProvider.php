@@ -31,6 +31,59 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Token\DestroyAllTokenEvent::class => [
             \App\Listeners\Token\DestroyAllTokenListener::class
         ],
+
+        //Events CategoryController Assets
+        \App\Events\Asset\StoreCategoryEvent::class => [
+            \App\Listeners\Asset\StoreCategoryListener::class
+        ],
+
+        \App\Events\Asset\UpdateCategoryEvent::class => [
+            \App\Listeners\Asset\UpdateCategoryListener::class
+        ],
+
+        \App\Events\Asset\DisableCategoryEvent::class => [
+            \App\Listeners\Asset\DisableCategoryListener::class
+        ],
+
+        \App\Events\Asset\EnableCategoryEvent::class => [
+            \App\Listeners\Asset\EnableCategoryListener::class
+        ],
+
+        \App\Events\Asset\DestroyCategoryEvent::class => [
+            \App\Listeners\Asset\DestroyCategoryListener::class
+        ],
+
+
+        //Events CategoryCalendarController Assets
+        \App\Events\Asset\StoreCategoryCalendarEvent::class => [
+            \App\Listeners\Asset\StoreCategoryCalendarListener::class
+        ],
+
+        \App\Events\Asset\UpdateCategoryCalendarEvent::class => [
+            \App\Listeners\Asset\UpdateCategoryCalendarListener::class
+        ],
+
+        //Events CategoryCalendarController Assets
+        \App\Events\Asset\StoreRoomEvent::class => [
+            \App\Listeners\Asset\StoreRoomListener::class
+        ],
+
+        \App\Events\Asset\UpdateRoomEvent::class => [
+            \App\Listeners\Asset\UpdateRoomListener::class
+        ],
+
+        \App\Events\Asset\EnableRoomEvent::class => [
+            \App\Listeners\Asset\EnableRoomListener::class
+        ],
+
+        \App\Events\Asset\DisableRoomEvent::class => [
+            \App\Listeners\Asset\DisableRoomListener::class
+        ],
+
+        \App\Events\Asset\DestroyRoomEvent::class => [
+            \App\Listeners\Asset\DestroyRoomListener::class
+        ],
+
     ];
 
     /**
