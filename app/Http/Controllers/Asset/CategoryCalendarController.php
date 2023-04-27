@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Asset;
 
+use App\Events\Asset\StoreCategoryCalendarEvent;
+use App\Events\Asset\UpdateCategoryCalendarEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\CategoryCalendar\Update;
 use App\Models\Assets\Calendar;
@@ -82,6 +84,8 @@ class CategoryCalendarController extends Controller
 
         });
 
+        StoreCategoryCalendarEvent::dispatch($this->AuthKey());
+
         return $this->message(['data' =>
             [
                 'message' => __("El calendario ha sido extendido hasta el " . $category->calendar()->get()->last()->day),
@@ -117,6 +121,8 @@ class CategoryCalendarController extends Controller
 
         });
 
+        UpdateCategoryCalendarEvent::dispatch($this->AuthKey());
+        
         return $this->showOne($calendar);
     }
 

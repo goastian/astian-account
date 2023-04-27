@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Asset;
 
+use App\Events\Asset\DestroyCategoryEvent;
+use App\Events\Asset\DisableCategoryEvent;
+use App\Events\Asset\EnableCategoryEvent;
+use App\Events\Asset\StoreCategoryEvent;
+use App\Events\Asset\UpdateCategoryEvent;
 use Error;
 use App\Models\Assets\Category;
 use App\Exceptions\ReportMessage;
@@ -49,6 +54,8 @@ class CategoryController extends Controller
             $category->save();
         });
 
+        StoreCategoryEvent::dispatch($this->AuthKey());
+
         return $this->showOne($category, CategoryTransformer::class, 201);
     }
 
@@ -81,6 +88,8 @@ class CategoryController extends Controller
 
             $category->push();
         });
+    
+        UpdateCategoryEvent::dispatch($this->AuthKey());
 
         return $this->showOne($category);
     }
@@ -102,12 +111,16 @@ class CategoryController extends Controller
 
         $category->forceDelete();
 
+        DestroyCategoryEvent::dispatch($this->AuthKey());
+
         return $this->showOne($category);
     }
 
     public function disable(Category $category)
     {
         $category->delete();
+
+        DisableCategoryEvent::dispatch($this->AuthKey());
 
         return $this->showOne($category);
     }
@@ -125,6 +138,8 @@ class CategoryController extends Controller
             $category = Category::onlyTrashed()->find($id);
 
             $category->restore();
+
+            EnableCategoryEvent::dispatch($this->AuthKey());
 
             return $this->showOne($category);
 
