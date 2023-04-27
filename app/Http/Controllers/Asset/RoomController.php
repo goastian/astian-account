@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers\Asset;
 
+use App\Events\Asset\DestroyRoomEvent;
+use App\Events\Asset\DisableRoomEvent;
+use App\Events\Asset\EnableRoomEvent;
+use App\Events\Asset\StoreRoomEvent;
+use App\Events\Asset\UpdateRoomEvent;
 use Error;
 use App\Models\Assets\Room;
 use Illuminate\Http\Request;
@@ -48,6 +53,8 @@ class RoomController extends Controller
             $room->save();
         });
 
+        StoreRoomEvent::dispatch($this->AuthKey());
+
         return $this->showOne($room, 201);
     }
 
@@ -78,6 +85,8 @@ class RoomController extends Controller
             $room->push();
         });
 
+        UpdateRoomEvent::dispatch($this->AuthKey());
+
         return $this->showOne($room, 201);
 
     }
@@ -98,12 +107,16 @@ class RoomController extends Controller
 
         $room->forceDelete();
 
+        DestroyRoomEvent::dispatch($this->AuthKey());
+
         return $this->showOne($room);
     }
 
     public function disable(Room $room)
     {
         $room->delete();
+
+        DisableRoomEvent::dispatch($this->AuthKey());
 
         return $this->showOne($room);
     }
@@ -115,6 +128,8 @@ class RoomController extends Controller
             $room = Room::onlyTrashed()->where('id', $id)->first();
 
             $room->restore();
+
+            EnableRoomEvent::dispatch($this->AuthKey());
 
             return $this->showOne($room);
 
