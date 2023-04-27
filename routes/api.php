@@ -1,9 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\Sanctum\TokensController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Asset\RoomController;
+use App\Http\Controllers\Asset\CalendarController;
+use App\Http\Controllers\Asset\CategoryController;
+use App\Http\Controllers\Sanctum\TokensController;
+use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\Asset\CategoryCalendarController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 
 //Auth
