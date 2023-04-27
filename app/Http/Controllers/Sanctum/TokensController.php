@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Sanctum;
 
+use Error;
 use App\Assets\Device;
-use App\Events\Token\DestroyAllTokenEvent;
-use App\Events\Token\DestroyTokenEvent;
-use App\Events\Token\StoreTokenEvent;
 use Illuminate\Http\Request;
-use App\Http\Controllers\GlobalController as Controller;
+use App\Exceptions\ReportMessage;
+use App\Events\Token\StoreTokenEvent;
+use App\Events\Token\DestroyTokenEvent;
+use App\Events\Token\DestroyAllTokenEvent;
 use App\Transformers\Auth\EmployeeTransformer;
 use App\Transformers\Tokens\TokensTransformer;
+use App\Http\Controllers\GlobalController as Controller;
 
 class TokensController extends Controller
 {
@@ -40,7 +42,7 @@ class TokensController extends Controller
     {
         $token = $request->user()->createToken($this->setTokenName($request));
 
-    
+
         StoreTokenEvent::dispatch($this->AuthKey());
 
         return response()->json(['token' => 'Bearer ' . $token->plainTextToken], 201);
@@ -61,14 +63,21 @@ class TokensController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        $token = $request->user()->tokens()->where('id', $id)->first();
+        try {
 
-        $token->delete(); 
-        
-        DestroyTokenEvent::dispatch($this->AuthKey());
+            $token = $request->user()->tokens()->where('id', $id)->first();
 
-        return response()->json(['data' => [
-            'message' => 'El token ha sido revocado.'
-        ]], 200);
+            $token->delete();
+
+            DestroyTokenEvent::dispatch($this->AuthKey());
+
+            return response()->json(['data' => [
+                'message' => 'El token ha sido revocado.'
+            ]], 200);
+            
+        } catch (Error $e) {
+
+            throw new ReportMessage("Error al procesar la petición", 404);
+        }
     }
 }
