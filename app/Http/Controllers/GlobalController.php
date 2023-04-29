@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Assets\JsonResponser;
-use Illuminate\Http\Request;
+use App\Assets\Asset;
+use App\Assets\JsonResponser; 
 
 class GlobalController extends Controller
 {
-    use JsonResponser;
+    use JsonResponser, Asset;
 
     public function __construct()
     {

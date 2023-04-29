@@ -36,4 +36,23 @@ class RoleTransformer extends TransformerAbstract
             'role' => $role->name
         ];
     }
+
+
+    public static function transformRequest($index)
+    {
+        $attribute = [
+            'role' => 'role_id'
+        ];
+
+        return isset($attribute[$index]) ? $attribute[$index] : null;
+    }
+
+    public static function transformResponse($index)
+    {
+       $attribute = [
+            'role_id' => 'role'
+        ];
+
+        return isset($attribute[$index]) ? $attribute[$index] : null;
+    }
 }

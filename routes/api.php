@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Sanctum\TokensController;
 use App\Http\Controllers\User\RoleController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 //Auth
@@ -19,3 +21,9 @@ Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens
 
 //Roles
 Route::resource('roles', RoleController::class)->only('index');
+
+//Employees
+Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
+Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
+Route::resource('users', UserController::class)->except('edit', 'create','destroy');
+Route::resource('users.roles', UserRoleController::class)->only('index','store', 'destroy');

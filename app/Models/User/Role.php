@@ -20,4 +20,8 @@ class Role extends Model
         //
     ];
     
+    public function users()
+    {
+      return  $this->belongsToMany(Employee::class, 'employee_role');
+    }
 }
