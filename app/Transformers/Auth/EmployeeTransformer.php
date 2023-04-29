@@ -58,7 +58,8 @@ class EmployeeTransformer extends TransformerAbstract
             'numero' => 'document_number',
             'pais' => 'country',
             'departamento' => 'department',
-            'direccion' => 'address', 
+            'direccion' => 'address',
+            'acceso' => 'role', 
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
@@ -76,7 +77,8 @@ class EmployeeTransformer extends TransformerAbstract
             'document_number' => 'numero',
             'country' => 'pais',
             'department' => 'departamento',
-            'address' => 'direccion' 
+            'address' => 'direccion',
+            'role' => 'acceso'
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
