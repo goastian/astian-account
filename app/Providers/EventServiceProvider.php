@@ -31,6 +31,23 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Token\DestroyAllTokenEvent::class => [
             \App\Listeners\Token\DestroyAllTokenListener::class
         ],
+
+        //Employee 
+        \App\Events\Employee\StoreEmployeeEvent::class => [
+            \App\Listeners\Employee\StoreEmployeeListener::class,
+        ], 
+
+        \App\Events\Employee\UpdateEmployeeEvent::class => [
+            \App\Listeners\Employee\UpdateEmployeeListener::class,
+        ],
+
+        \App\Events\Employee\DisableEmployeeEvent::class => [
+            \App\Listeners\Employee\DisableEmployeeListener::class,
+        ],
+
+        \App\Events\Employee\EnableEmployeeEvent::class => [
+            \App\Listeners\Employee\EnableEmployeeListener::class,
+        ],
     ];
 
     /**
