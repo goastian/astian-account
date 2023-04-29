@@ -16,10 +16,12 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
 
+        //Login
         \App\Events\Auth\LoginEvent::class => [
             \App\Listeners\Auth\LoginListener::class
         ],
 
+        //Token events
         \App\Events\Token\StoreTokenEvent::class => [
             \App\Listeners\Token\StoreTokenListener::class
         ],
@@ -63,7 +65,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Asset\UpdateCategoryCalendarListener::class
         ],
 
-        //Events CategoryCalendarController Assets
+        //Events RoomController Assets
         \App\Events\Asset\StoreRoomEvent::class => [
             \App\Listeners\Asset\StoreRoomListener::class
         ],
@@ -84,6 +86,22 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Asset\DestroyRoomListener::class
         ],
 
+        //Employee 
+        \App\Events\Employee\StoreEmployeeEvent::class => [
+            \App\Listeners\Employee\StoreEmployeeListener::class,
+        ], 
+
+        \App\Events\Employee\UpdateEmployeeEvent::class => [
+            \App\Listeners\Employee\UpdateEmployeeListener::class,
+        ],
+
+        \App\Events\Employee\DisableEmployeeEvent::class => [
+            \App\Listeners\Employee\DisableEmployeeListener::class,
+        ],
+
+        \App\Events\Employee\EnableEmployeeEvent::class => [
+            \App\Listeners\Employee\EnableEmployeeListener::class,
+        ],
     ];
 
     /**

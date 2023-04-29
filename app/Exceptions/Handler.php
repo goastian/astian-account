@@ -74,13 +74,16 @@ class Handler extends ExceptionHandler
      * @throws \Throwable
      */
     public function render($request, Throwable $e)
-    {
+    { 
         if ($request->wantsJson()) {
 
             if ($e instanceof ModelNotFoundException) {
                 return response()->json(['data' => ['message' => __("No se puede procesar la petición")]], 400);
             }
 
+            if($e instanceof AuthorizationException){
+                return response()->json(['data' => ['message' => __("No cuenta con los persmios requeridos")]], 403);
+            }
         }
 
         if (method_exists($e, 'render') && $response = $e->render($request)) {
@@ -97,11 +100,11 @@ class Handler extends ExceptionHandler
             return $response;
         }
 
-        return match(true) {
+        return match (true) {
             $e instanceof HttpResponseException => $e->getResponse(),
             $e instanceof AuthenticationException => $this->unauthenticated($request, $e),
             $e instanceof ValidationException => $this->convertValidationExceptionToResponse($e, $request),
-        default=> $this->renderExceptionResponse($request, $e),
+            default => $this->renderExceptionResponse($request, $e),
         };
     }
 
@@ -113,17 +116,19 @@ class Handler extends ExceptionHandler
      */
     protected function prepareException(Throwable $e)
     {
-        return match(true) {
+        return match (true) {
             $e instanceof BackedEnumCaseNotFoundException => new NotFoundHttpException($e->getMessage(), $e),
             $e instanceof ModelNotFoundException => new NotFoundHttpException($e->getMessage(), $e),
             $e instanceof AuthorizationException && $e->hasStatus() => new HttpException(
-                $e->status(), $e->response()?->message() ?: (Response::$statusTexts[$e->status()] ?? 'Whoops, looks like something went wrong.'), $e
+                $e->status(),
+                $e->response()?->message() ?: (Response::$statusTexts[$e->status()] ?? 'Whoops, looks like something went wrong.'),
+                $e
             ),
             $e instanceof AuthorizationException && !$e->hasStatus() => new AccessDeniedHttpException($e->getMessage(), $e),
             $e instanceof TokenMismatchException => new HttpException(419, $e->getMessage(), $e),
             $e instanceof SuspiciousOperationException => new NotFoundHttpException('Bad hostname provided.', $e),
             $e instanceof RecordsNotFoundException => new NotFoundHttpException('Not found.', $e),
-        default=> $e,
+            default => $e,
         };
     }
 }

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Asset;
 
+use Error;
 use App\Events\Asset\DestroyRoomEvent;
 use App\Events\Asset\DisableRoomEvent;
 use App\Events\Asset\EnableRoomEvent;
 use App\Events\Asset\StoreRoomEvent;
 use App\Events\Asset\UpdateRoomEvent;
-use Error;
 use App\Models\Assets\Room;
-use Illuminate\Http\Request;
 use App\Exceptions\ReportMessage;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Room\StoreRequest;
-use App\Http\Requests\Room\UpdateRequest; 
+use App\Http\Requests\Room\UpdateRequest;
 use App\Transformers\Asset\RoomTransformer;
 use App\Http\Controllers\GlobalController as Controller;
 
@@ -88,7 +87,6 @@ class RoomController extends Controller
         UpdateRoomEvent::dispatch($this->AuthKey());
 
         return $this->showOne($room, 201);
-
     }
 
     /**
@@ -132,12 +130,8 @@ class RoomController extends Controller
             EnableRoomEvent::dispatch($this->AuthKey());
 
             return $this->showOne($room);
-
         } catch (Error $e) {
             throw new ReportMessage("Error al procesar la petición", 404);
-
         }
-
     }
-
 }
