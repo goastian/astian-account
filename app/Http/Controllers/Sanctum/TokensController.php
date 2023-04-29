@@ -74,7 +74,6 @@ class TokensController extends Controller
             return response()->json(['data' => [
                 'message' => 'El token ha sido revocado.'
             ]], 200);
-            
         } catch (Error $e) {
 
             throw new ReportMessage("Error al procesar la petición", 404);

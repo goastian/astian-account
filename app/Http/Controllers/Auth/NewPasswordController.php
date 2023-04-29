@@ -47,7 +47,7 @@ class NewPasswordController extends Controller
                     'password' => Hash::make($request->password), 
                 ])->save();
 
-                event(new PasswordReset($user));
+               // event(new PasswordReset($user));
             }
         );
 
