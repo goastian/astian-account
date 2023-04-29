@@ -3,10 +3,11 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class Auth extends Authenticatable
@@ -79,11 +80,35 @@ class Auth extends Authenticatable
     {
         $this->attributes['address'] = strtolower($value);
     }
-
-    public function setPasswordAttribute($value)
+ 
+    public function isAdmin()
     {
-        $this->attributes['password'] = Hash::make($value);
+        return $this->roles()->get()->contains('name', 'admin');
     }
 
-    
+    public function canWrite()
+    {
+        return $this->roles()->get()->contains('name', 'escritura');
+    }
+
+    public function canRead()
+    {
+        return $this->roles()->get()->contains('name', 'lectura');
+    }
+
+    public function granted()
+    {
+        return $this->isAdmin() or $this->canWrite();
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
+    }
 }

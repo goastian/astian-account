@@ -9,10 +9,13 @@ use Illuminate\Support\Facades\DB;
 use App\Events\Employee\StoreEmployeeEvent;
 use App\Events\Employee\EnableEmployeeEvent;
 use App\Events\Employee\UpdateEmployeeEvent;
+use App\Http\Requests\Employee\IndexRequest;
 use App\Http\Requests\Employee\StoreRequest;
 use Illuminate\Support\Facades\Notification;
 use App\Events\Employee\DisableEmployeeEvent;
+use App\Http\Requests\Employee\EnableRequest;
 use App\Http\Requests\Employee\UpdateRequest;
+use App\Http\Requests\Employee\DisableRequest;
 use App\Notifications\Employee\CreatedNewUser;
 use App\Transformers\Auth\EmployeeTransformer;
 use App\Events\Employee\SendEmailStoreUserEvent;
@@ -32,7 +35,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Employee $user)
+    public function index(IndexRequest $request, Employee $user)
     {
         $params = $this->transformFilter($user->transformer);
 
@@ -54,7 +57,7 @@ class UserController extends Controller
         DB::transaction(function () use ($request, $user, $temp_password) {
 
             $user = $user->fill($request->except('password', 'role'));
-            $user->password = $temp_password;
+            $user->password =  $temp_password;
             $user->save();
 
             $user->roles()->syncWithoutDetaching($request->role);
@@ -73,7 +76,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(IndexRequest $request, $id)
     {
         $user = Employee::withTrashed()->find($id);
 
@@ -120,7 +123,7 @@ class UserController extends Controller
         //
     }
 
-    public function disable(Employee $user)
+    public function disable(DisableRequest $request, Employee $user)
     {
         $user->delete();
 
@@ -129,7 +132,7 @@ class UserController extends Controller
         return $this->showOne($user);
     }
 
-    public function enable($id)
+    public function enable(EnableRequest $request, $id)
     {
         try {
 
