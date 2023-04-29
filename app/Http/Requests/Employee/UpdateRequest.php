@@ -13,7 +13,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return request()->user()->isAdmin() || request()->user()->id == Request('user')->id;
     }
 
     /**

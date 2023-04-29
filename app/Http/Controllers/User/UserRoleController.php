@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\Role\RoleTransformer;
+use App\Http\Requests\UserRole\StoreRequest;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Requests\UserRole\DestroyRequest;
+use App\Http\Requests\UserRole\IndexRequest;
 
 class UserRoleController extends Controller
 {
@@ -23,7 +26,7 @@ class UserRoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Employee $user)
+    public function index(IndexRequest $request, Employee $user)
     {
         $roles = $user->roles()->get();
 
@@ -36,12 +39,8 @@ class UserRoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Employee $user)
+    public function store(StoreRequest $request, Employee $user)
     {
-        $this->validate($request, [
-            'role_id' => ['required', 'exists:roles,id']
-        ]);
-
         DB::transaction(function () use ($request, $user) {
             $user->roles()->syncWithoutDetaching($request->role_id);
         });
@@ -49,28 +48,6 @@ class UserRoleController extends Controller
         return $this->showOne(Role::findOrFail($request->role_id), 201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
@@ -78,7 +55,7 @@ class UserRoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Employee $user, Role $role)
+    public function destroy(DestroyRequest $request, Employee $user, Role $role)
     {
         DB::transaction(function () use ($role, $user) {
 

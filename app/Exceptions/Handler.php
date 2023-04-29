@@ -74,11 +74,15 @@ class Handler extends ExceptionHandler
      * @throws \Throwable
      */
     public function render($request, Throwable $e)
-    {
+    { 
         if ($request->wantsJson()) {
 
             if ($e instanceof ModelNotFoundException) {
                 return response()->json(['data' => ['message' => __("No se puede procesar la petición")]], 400);
+            }
+
+            if($e instanceof AuthorizationException){
+                return response()->json(['data' => ['message' => __("No cuenta con los persmios requeridos")]], 403);
             }
         }
 

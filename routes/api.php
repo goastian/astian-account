@@ -1,12 +1,12 @@
 <?php
-
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\Sanctum\TokensController;
+ 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRoleController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Sanctum\TokensController;
+use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 //Auth
 Route::post('login', [AuthorizationController::class,'store']);
