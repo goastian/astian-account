@@ -2,6 +2,7 @@
 
 namespace App\Transformers\Asset;
 
+use App\Models\Assets\Category;
 use League\Fractal\TransformerAbstract;
 
 class RoomTransformer extends TransformerAbstract
@@ -30,13 +31,13 @@ class RoomTransformer extends TransformerAbstract
      * @return array
      */
     public function transform($room)
-    {
+    { 
         return [
             'identificador' => $room->id,
             'numero' => $room->number, 
             'descripcion' => $room->description,
             'categoria_id' => $room->category_id,
-            'categoria_nombre' => $room->category_name,
+            'categoria_nombre' => $room->category_name ? $room->category_name : Category::find($room->category_id)->name,
             'registrado' => $room->created_at,
             'actualizado' => $room->updated_at,
             'disponible' => $room->deleted_at,
