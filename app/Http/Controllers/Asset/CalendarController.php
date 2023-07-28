@@ -20,12 +20,10 @@ class CalendarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Calendar $calendar)
-    {
-        $params = $this->transformFilter($calendar->transformer);
+    { 
+        $calendars = $this->search($calendar->view);
 
-        $calendars = $this->search($calendar->view, $params);
-
-        return $this->showAll($calendars, $calendar->transformer);
+        return $this->showAll($calendars);
 
     }
 

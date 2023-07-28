@@ -19,7 +19,6 @@ class CategoryCalendarController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('transform.request:' . CalendarTransformer::class)->only('store', 'update');
     }
 
     /**
@@ -32,7 +31,7 @@ class CategoryCalendarController extends Controller
 
         $calendars = $calendar->all();
 
-        return $this->showAll($calendars, $calendar->transformer);
+        return $this->showAll($calendars);
     }
 
     /**

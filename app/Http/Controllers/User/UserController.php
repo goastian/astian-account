@@ -27,7 +27,6 @@ class UserController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('transform.request:' . EmployeeTransformer::class)->only('store', 'update');
     }
 
     /**
@@ -37,11 +36,11 @@ class UserController extends Controller
      */
     public function index(IndexRequest $request, Employee $user)
     {
-        $params = $this->transformFilter($user->transformer);
+        //$params = $this->transformFilter($user->transformer);
 
-        $users = $this->search($user->table, $params);
+        $users = $this->search($user->table);
 
-        return $this->showAll($users, $user->transformer);
+        return $this->showAll($users);
     }
 
     /**

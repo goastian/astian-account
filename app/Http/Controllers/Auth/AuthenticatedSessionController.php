@@ -56,6 +56,6 @@ class AuthenticatedSessionController extends Controller
 
     public function profile()
     { 
-        return $this->transformData(request()->user(), EmployeeTransformer::class);
+        return request()->user();
     }
 }

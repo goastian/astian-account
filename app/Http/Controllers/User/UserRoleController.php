@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Models\User\Role;
-use Illuminate\Http\Request;
 use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
-use App\Transformers\Role\RoleTransformer;
 use App\Http\Requests\UserRole\StoreRequest;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\UserRole\DestroyRequest;
@@ -18,7 +16,6 @@ class UserRoleController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('transform.request:' . RoleTransformer::class);
     }
 
     /**
@@ -30,7 +27,7 @@ class UserRoleController extends Controller
     {
         $roles = $user->roles()->get();
 
-        return $this->showAll($roles, RoleTransformer::class);
+        return $this->showAll($roles);
     }
 
     /**

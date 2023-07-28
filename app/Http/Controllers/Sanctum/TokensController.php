@@ -29,7 +29,7 @@ class TokensController extends Controller
     public function index(Request $request)
     {
         $tokens = $request->user()->tokens;
-        return $this->showAll($tokens, TokensTransformer::class, 200);
+        return $this->showAll($tokens, 200);
     }
 
     /**

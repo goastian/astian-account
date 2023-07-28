@@ -12,8 +12,7 @@ use App\Models\Assets\Category;
 use App\Exceptions\ReportMessage;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\Category\StoreRequest;
-use App\Http\Requests\Category\UpdateRequest; 
-use App\Transformers\Asset\CategoryTransformer;
+use App\Http\Requests\Category\UpdateRequest;  
 use App\Http\Controllers\GlobalController as Controller;
 
 class CategoryController extends Controller
@@ -22,7 +21,6 @@ class CategoryController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('transform.request:' . CategoryTransformer::class)->only('store', 'update');
     }
 
     /**
@@ -35,7 +33,7 @@ class CategoryController extends Controller
     {
         $categories = $category->withTrashed()->get();
 
-        return $this->showAll($categories, CategoryTransformer::class);
+        return $this->showAll($categories);
     }
 
     /**
@@ -56,7 +54,7 @@ class CategoryController extends Controller
 
         StoreCategoryEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($category, CategoryTransformer::class, 201);
+        return $this->showOne($category, 201);
     }
 
     /**

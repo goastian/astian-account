@@ -2,7 +2,6 @@
 
 namespace App\Models\Assets;
 
-use App\Transformers\Asset\CategoryTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,8 +13,6 @@ class Category extends Model
     public $table = "categories";
 
     public $view = "";
-
-    public $transformer = CategoryTransformer::class;
 
     protected $fillable = [
         'name',
