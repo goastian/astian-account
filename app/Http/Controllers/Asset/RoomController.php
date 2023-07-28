@@ -22,7 +22,6 @@ class RoomController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('transform.request:' . RoomTransformer::class)->only('store', 'update');
     }
 
     /**
@@ -32,11 +31,9 @@ class RoomController extends Controller
      */
     public function index(Room $room)
     {
-        $params = $this->transformFilter($room->transformer);
+        $rooms = $this->search($room->view);
 
-        $rooms = $this->search($room->view, $params);
-
-        return $this->showAll($rooms, RoomTransformer::class);
+        return $this->showAll($rooms);
     }
 
     /**

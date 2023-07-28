@@ -14,9 +14,6 @@ class Employee extends Auth
 
     //public $view = "";
 
-    public $transformer = EmployeeTransformer::class;
-
-
     public function roles()
     {
        return $this->belongsToMany(Role::class, 'employee_role');

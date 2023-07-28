@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\User\Role;
-use Illuminate\Http\Request;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Transformers\Role\RoleTransformer;
+use App\Models\User\Role;  
+use App\Http\Controllers\GlobalController as Controller; 
 
 class RoleController extends Controller
 {
@@ -23,6 +21,6 @@ class RoleController extends Controller
     {
         $roles = $role->all();
 
-        return $this->showAll($roles, RoleTransformer::class);
+        return $this->showAll($roles);
     }
 }

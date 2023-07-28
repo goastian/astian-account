@@ -4,7 +4,6 @@ namespace App\Models\Assets;
 
 use App\Models\Book\Rent;
 use Illuminate\Database\Eloquent\Model;
-use App\Transformers\Asset\RoomTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -15,8 +14,6 @@ class Room extends Model
     public $table = "rooms";
 
     public $view = "room";
-
-    public $transformer = RoomTransformer::class;
 
     protected $fillable = [
         'number',

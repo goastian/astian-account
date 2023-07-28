@@ -29,19 +29,8 @@ trait JsonResponser
      * @param Integer $code
      * @return Object
      */
-    public function showOne(Model $model, $transformer = null, $code = 200)
-    {
-        //accediendo al transformador
-        if (gettype($transformer) == "integer") {
-            $code = $transformer;
-        }
-
-        if ($transformer == null or gettype($transformer) == "integer") { //si no se ingresa un transformador se accede al de la clase Model
-            $transformer = $model->transformer;
-        }
-
-        $model = $this->transformData($model, $model->transformer);
-
+    public function showOne(Model $model, $code = 200)
+    { 
         return $this->message($model, $code);
     }
 
@@ -52,18 +41,16 @@ trait JsonResponser
      * @param int $code
      * @return Collection
      */
-    public function showAll(Collection $collection, $transformer, $code = 200)
+    public function showAll(Collection $collection, $code = 200)
     {
         //si no tiene data la $colleccion enviamos un mensjae
         // if (count($collection) == 0) {
         //     throw new ReportMessage(__("No Data"), 404);
         // }
 
-        $collection = $this->orderBy($collection, $transformer);
+        $collection = $this->orderBy($collection);
 
         $collection = $this->paginate($collection);
-
-        $collection = $this->transformData($collection, $transformer);
 
         return $this->message($collection, $code);
     }
@@ -190,23 +177,14 @@ trait JsonResponser
      * @param Collection $collection
      * @param $transformer
      */
-    public function orderBy(Collection $collection, $transformer)
+    public function orderBy(Collection $collection)
     {
         //obtenemos los datos para ordenar
         $order_by = request()->only('order_by');
 
         try {
-            //transformamos a attributos originales
-            $transformOrderBy = [];
-            foreach ($order_by['order_by'] as $key => $value) {
-                //obtenemos la clave original a partir del transformado
-                $transformerField = $transformer::getOriginalAttributes($key);
-                //creamos nueva llaves con los originales
-                $transformOrderBy[$transformerField] = str_replace($key, $transformerField, $value);
-            }
-
-            //ordemos los valores
-            foreach ($transformOrderBy as $key => $value) {
+                       //ordemos los valores
+            foreach ($order_by as $key => $value) {
 
                 $collection = $collection->sortBy([$key, $value]);
             }
@@ -220,13 +198,5 @@ trait JsonResponser
             $sorted = $collection->sortDesc()->values()->all();
             return  collect($sorted);
         }
-    }
-
-    /**
-     * transforma la data usando transformadores
-     */
-    public function transformData($data, $transformer)
-    {
-        return fractal($data, $transformer);
-    }
+    }    
 }
