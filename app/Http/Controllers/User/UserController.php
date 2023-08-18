@@ -2,31 +2,31 @@
 
 namespace App\Http\Controllers\User;
 
-use Error;
-use App\Models\User\Employee;
-use App\Exceptions\ReportMessage;
-use Illuminate\Support\Facades\DB;
-use App\Events\Employee\StoreEmployeeEvent;
+use App\Events\Employee\DisableEmployeeEvent;
 use App\Events\Employee\EnableEmployeeEvent;
+use App\Events\Employee\StoreEmployeeEvent;
 use App\Events\Employee\UpdateEmployeeEvent;
+use App\Exceptions\ReportMessage;
+use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Requests\Employee\DisableRequest;
+use App\Http\Requests\Employee\EnableRequest;
 use App\Http\Requests\Employee\IndexRequest;
 use App\Http\Requests\Employee\StoreRequest;
-use Illuminate\Support\Facades\Notification;
-use App\Events\Employee\DisableEmployeeEvent;
-use App\Http\Requests\Employee\EnableRequest;
 use App\Http\Requests\Employee\UpdateRequest;
-use App\Http\Requests\Employee\DisableRequest;
+use App\Models\User\Employee;
 use App\Notifications\Employee\CreatedNewUser;
-use App\Transformers\Auth\EmployeeTransformer;
-use App\Events\Employee\SendEmailStoreUserEvent;
-use App\Http\Controllers\GlobalController as Controller;
+use Error;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
 
-    public function __construct()
+    public function __construct(Employee $user)
     {
         parent::__construct();
+        $this->middleware('transform.request:' . $user->transformer)->only('store', 'update');
     }
 
     /**
@@ -36,11 +36,11 @@ class UserController extends Controller
      */
     public function index(IndexRequest $request, Employee $user)
     {
-        //$params = $this->transformFilter($user->transformer);
+        $params = $this->filter_transform($user->transformer);
 
-        $users = $this->search($user->table);
+        $users = $this->search($user->table, $params);
 
-        return $this->showAll($users);
+        return $this->showAll($users, $user->transformer);
     }
 
     /**
@@ -56,7 +56,7 @@ class UserController extends Controller
         DB::transaction(function () use ($request, $user, $temp_password) {
 
             $user = $user->fill($request->except('password', 'role'));
-            $user->password =  $temp_password;
+            $user->password = Hash::make($temp_password);
             $user->save();
 
             $user->roles()->syncWithoutDetaching($request->role);
@@ -64,9 +64,9 @@ class UserController extends Controller
 
         StoreEmployeeEvent::dispatch($this->AuthKey());
 
-        Notification::send($user, new CreatedNewUser());
+        Notification::send($user, new CreatedNewUser($temp_password));
 
-        return $this->showOne($user, 201);
+        return $this->showOne($user, $user->transformer, 201);
     }
 
     /**
@@ -79,7 +79,7 @@ class UserController extends Controller
     {
         $user = Employee::withTrashed()->find($id);
 
-        return $this->showOne($user);
+        return $this->showOne($user, $user->transformer);
     }
 
     /**
@@ -93,22 +93,62 @@ class UserController extends Controller
     {
         DB::transaction(function () use ($request, $user) {
 
-            $user->name = $request->name;
-            $user->last_name = $request->last_name;
-            $user->email = $request->email;
-            $user->document_type = $request->document_type;
-            $user->document_number = $request->document_number;
-            $user->last_name = $request->last_name;
-            $user->country = $request->country;
-            $user->department = $request->department;
-            $user->address = $request->address;
+            if (request()->user()->isAdmin() && $this->is_diferent($user->name, $request->name)) {
+                $this->can_update[] = true;
+                $user->name = $request->name;
+            }
 
-            $user->push();
+            if (request()->user()->isAdmin() && $this->is_diferent($user->last_name, $request->last_name)) {
+                $this->can_update[] = true;
+                $user->last_name = $request->last_name;
+            }
+
+            if ($this->can_access() && $this->is_diferent($user->email, $request->email)) {
+                $this->can_update[] = true;
+                $user->email = $request->email;
+            }
+
+            if (request()->user()->isAdmin() && $this->is_diferent($user->document_type, $request->document_type)) {
+                $this->can_update[] = true;
+                $user->document_type = $request->document_type;
+            }
+
+            if (request()->user()->isAdmin() && $this->is_diferent($user->document_number, $request->document_number)) {
+                $this->can_update[] = true;
+                $user->document_number = $request->document_number;
+            }
+ 
+            if (request()->user()->isAdmin() && $this->is_diferent($user->country, $request->country)) {
+                $this->can_update[] = true;
+                $user->country = $request->country;
+            }
+
+            if (request()->user()->isAdmin() && $this->is_diferent($user->department, $request->department)) {
+                $this->can_update[] = true;
+                $user->department = $request->department;
+            }
+
+            if (request()->user()->isAdmin() && $this->is_diferent($user->address, $request->address)) {
+                $this->can_update[] = true;
+                $user->address = $request->address;
+            }
+
+            if ($this->can_access() && $this->is_diferent($user->phone, $request->phone)) {
+                $this->can_update[] = true;
+                $user->phone = $request->phone;
+            }
+
+            if (in_array(true, $this->can_update)) {
+                $user->push();
+            }
+
         });
 
-        UpdateEmployeeEvent::dispatch($this->AuthKey());
-
-        return $this->showOne($user, 201);
+        if (in_array(true, $this->can_update)) {
+            UpdateEmployeeEvent::dispatch($this->AuthKey());
+        }
+        
+        return $this->showOne($user, $user->transformer, 201);
     }
 
     /**
@@ -128,7 +168,7 @@ class UserController extends Controller
 
         DisableEmployeeEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($user);
+        return $this->showOne($user, $user->transformer);
     }
 
     public function enable(EnableRequest $request, $id)
@@ -136,15 +176,19 @@ class UserController extends Controller
         try {
 
             $user = Employee::onlyTrashed()->find($id);
-            
+
             $user->restore();
-            
+
             EnableEmployeeEvent::dispatch($this->AuthKey());
-            
-            return $this->showOne($user);
-            
-        }catch(Error $e){
+
+            return $this->showOne($user, $user->transformer);
+
+        } catch (Error $e) {
             throw new ReportMessage("Error al procesar la petición", 404);
         }
+    }
+
+    public function can_access(){
+        return request()->user()->isAdmin() || request()->user->id == request()->user()->id;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Category;
 
+use App\Enum\EnumType;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
@@ -13,7 +15,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return request()->user()->canWrite() || request()->user()->isAdmin();
     }
 
     /**
@@ -24,15 +26,15 @@ class UpdateRequest extends FormRequest
     public function rules()
     { 
         return [
-            'name' => ['required', 'max:100', 'unique:categories,name,' . Request('category')->id],
-            'price' => ['required', 'integer'],
-            'air_conditionar' => ['required', 'boolean'],
-            'tv' => ['required', 'boolean'],
-            'bathroom' => ['required', 'boolean'],
-            'hot_water' => ['required', 'boolean'],
-            'cold_water' => ['required', 'boolean'],
-            'wifi' => ['required', 'boolean'],
-            'fan' => ['required', 'boolean'],
+            'name' => ['nullable', 'max:100', 'unique:categories,name,' . Request('category')->id],
+            'price' => ['nullable', 'integer'],
+            'air_conditionar' => ['nullable', Rule::in(EnumType::yes_or_not())],
+            'tv' => ['nullable', Rule::in(EnumType::yes_or_not())],
+            'bathroom' => ['nullable', Rule::in(EnumType::yes_or_not())],
+            'hot_water' => ['nullable', Rule::in(EnumType::yes_or_not())],
+            'cold_water' => ['nullable', Rule::in(EnumType::yes_or_not())],
+            'wifi' => ['nullable', Rule::in(EnumType::yes_or_not())],
+            'fan' => ['nullable', Rule::in(EnumType::yes_or_not())],
         ];
     }
 }

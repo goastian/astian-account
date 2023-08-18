@@ -18,11 +18,11 @@ return new class extends Migration
             $table->string('name', 100);
             $table->string('last_name', 100);
             $table->string('document', 100);
-            $table->string('number', 50);
-            $table->string('city', 100);
+            $table->string('number', 50)->unique();
+            $table->string('city', 100)->nullable();
             $table->string('country', 100);
-            $table->string('email', 100);
-            $table->string('phone', 9);
+            $table->string('email', 100)->nullable();
+            $table->string('phone', 9)->nullable();
             $table->timestamps();
         });
     }

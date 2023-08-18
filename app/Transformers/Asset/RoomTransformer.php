@@ -30,17 +30,26 @@ class RoomTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($room)
+    public function transform($data)
     { 
         return [
-            'identificador' => $room->id,
-            'numero' => $room->number, 
-            'descripcion' => $room->description,
-            'categoria_id' => $room->category_id,
-            'categoria_nombre' => $room->category_name ? $room->category_name : Category::find($room->category_id)->name,
-            'registrado' => $room->created_at,
-            'actualizado' => $room->updated_at,
-            'disponible' => $room->deleted_at,
+            'id' => $data->id,
+            'numero' => $data->number, 
+            'descripcion' => $data->description,
+            'categoria_id' => $data->category_id,
+            'categoria_nombre' => $data->category_name ? $data->category_name : Category::find($data->category_id)->name,
+            'registrado' => $data->created_at,
+            'actualizado' => $data->updated_at,
+            'disponible' => $data->deleted_at,
+            'links' => [
+                'parent' => route('rooms.index'),
+                'store' => route('rooms.store'),
+                'show' => route('rooms.show', ['room' => $data->id]),
+                'update' => route('rooms.update', ['room' => $data->id]),
+                'destroy' => route('rooms.update', ['room' => $data->id]),
+                'disable' => route('rooms.disable', ['room' => $data->id]),
+                'enable' => route('rooms.enable', ['id' => $data->id]),
+            ]
         ];
     }
 

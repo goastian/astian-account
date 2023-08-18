@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
             $table->string('company');
-            $table->string('ruc');
+            $table->string('ruc')->unique();
             $table->timestamps();
         });
     }

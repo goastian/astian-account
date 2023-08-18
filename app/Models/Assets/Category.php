@@ -2,17 +2,22 @@
 
 namespace App\Models\Assets;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Assets\Timestamps;
+use App\Models\Booking\Rent;
+use App\Transformers\Asset\CategoryTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Timestamps;
 
     public $table = "categories";
 
     public $view = "";
+
+    public $transformer = CategoryTransformer::class;
 
     protected $fillable = [
         'name',
@@ -44,5 +49,9 @@ class Category extends Model
     public function calendar()
     {
         return $this->hasMany(Calendar::class);
+    }
+
+    public function rents() {
+        return $this->hasMany(Rent::class);
     }
 }

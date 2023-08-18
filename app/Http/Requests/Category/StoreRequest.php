@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Category;
 
+use App\Enum\EnumType;
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
@@ -13,7 +15,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return request()->user()->canWrite() || request()->user()->isAdmin();
     }
 
     /**
@@ -26,13 +28,13 @@ class StoreRequest extends FormRequest
         return [
             'name' => ['required', 'max:100', 'unique:categories,name'],
             'price' => ['required', 'integer'],
-            'air_conditionar' => ['required','boolean'],
-            'tv' => ['required','boolean'],
-            'bathroom' => ['required','boolean'],
-            'hot_water' => ['required','boolean'],
-            'cold_water' => ['required','boolean'],
-            'wifi' => ['required','boolean'],
-            'fan' => ['required','boolean']
+            'air_conditionar' => ['required', Rule::in(EnumType::yes_or_not())],
+            'tv' => ['required', Rule::in(EnumType::yes_or_not())],
+            'bathroom' => ['required', Rule::in(EnumType::yes_or_not())],
+            'hot_water' => ['required', Rule::in(EnumType::yes_or_not())],
+            'cold_water' => ['required', Rule::in(EnumType::yes_or_not())],
+            'wifi' => ['required', Rule::in(EnumType::yes_or_not())],
+            'fan' => ['required', Rule::in(EnumType::yes_or_not())]
         ];
     }
 }

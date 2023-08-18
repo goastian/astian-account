@@ -2,8 +2,10 @@
 
 namespace App\Models\Assets;
 
+use App\Models\Assets\Category;
+use App\Transformers\Asset\CalendarTransformer;
+use Illuminate\Database\Eloquent\Model; 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Calendar extends Model
 {
@@ -12,6 +14,8 @@ class Calendar extends Model
     public $table = "calendars";
 
     public $view = "calendar";
+
+    public $transformer = CalendarTransformer::class;
 
     public $timestamps = false;
 
@@ -38,4 +42,7 @@ class Calendar extends Model
         return $days;
     }
 
+    public function category(){
+        return $this->belongsTo(Category::class);
+    }
 }
