@@ -36,6 +36,7 @@ return new class extends Migration
             'country' => 'peru',
             'department' => 'tumbes',
             'address' => 'Av. Tacna Nro 327 - Tumbes',
+            'phone' => '789526352'
         ])->save();
 
         DB::table('employee_role')->insert([

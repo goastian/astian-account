@@ -5,10 +5,14 @@ namespace App\Http\Controllers\User;
 use App\Models\User\Role;
 use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\UserRole\StoreRequest;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\UserRole\DestroyRequest;
+use App\Transformers\Role\RoleTransformer;
 use App\Http\Requests\UserRole\IndexRequest;
+use App\Http\Requests\UserRole\StoreRequest;
+use App\Http\Requests\UserRole\DestroyRequest;
+use App\Events\Employee\StoreEmployeeRoleEvent;
+use App\Events\Employee\DestroyEmployeeRoleEvent;
+use App\Transformers\Auth\EmployeeRoleTransformer;
+use App\Http\Controllers\GlobalController as Controller;
 
 class UserRoleController extends Controller
 {
@@ -16,6 +20,7 @@ class UserRoleController extends Controller
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('transform.request:' . RoleTransformer::class);
     }
 
     /**
@@ -27,7 +32,7 @@ class UserRoleController extends Controller
     {
         $roles = $user->roles()->get();
 
-        return $this->showAll($roles);
+        return $this->showAll($roles, EmployeeRoleTransformer::class);
     }
 
     /**
@@ -42,7 +47,9 @@ class UserRoleController extends Controller
             $user->roles()->syncWithoutDetaching($request->role_id);
         });
 
-        return $this->showOne(Role::findOrFail($request->role_id), 201);
+        StoreEmployeeRoleEvent::dispatch($this->AuthKey());
+        
+        return $this->showOne(Role::findOrFail($request->role_id), RoleTransformer::class, 201);
     }
 
 
@@ -55,12 +62,11 @@ class UserRoleController extends Controller
     public function destroy(DestroyRequest $request, Employee $user, Role $role)
     {
         DB::transaction(function () use ($role, $user) {
-
             $user->roles()->detach($role->id);
         });
 
-        return $this->message(['data' =>
-            ['message' => "El permiso ha sido revocado"]
-        ], 200);
+        DestroyEmployeeRoleEvent::dispatch($this->AuthKey());
+
+        return $this->message("El permiso ha sido revocado", 200);
     }
 }

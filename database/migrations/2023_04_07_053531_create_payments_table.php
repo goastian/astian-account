@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\EnumType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,9 +16,11 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->double('amount', 8,2);
             $table->string('description', 150);
-            $table->string('file');
+            $table->double('price', 8,2);
+            $table->string('code', 150)->unique();
+            $table->enum('type',EnumType::payment_type());
+            $table->enum('method', EnumType::payment_method());
             $table->integer('paymentable_id', false, true);
             $table->string('paymentable_type');
             $table->timestamps();

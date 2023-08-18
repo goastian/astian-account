@@ -2,25 +2,26 @@
 
 namespace App\Http\Controllers\Asset;
 
-use App\Events\Asset\DestroyCategoryEvent;
-use App\Events\Asset\DisableCategoryEvent;
-use App\Events\Asset\EnableCategoryEvent;
-use App\Events\Asset\StoreCategoryEvent;
-use App\Events\Asset\UpdateCategoryEvent;
-use Error;
-use App\Models\Assets\Category;
+use App\Events\Asset\Category\DestroyCategoryEvent;
+use App\Events\Asset\Category\DisableCategoryEvent;
+use App\Events\Asset\Category\EnableCategoryEvent;
+use App\Events\Asset\Category\StoreCategoryEvent;
+use App\Events\Asset\Category\UpdateCategoryEvent;
 use App\Exceptions\ReportMessage;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\Category\StoreRequest;
-use App\Http\Requests\Category\UpdateRequest;  
 use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Requests\Category\StoreRequest;
+use App\Http\Requests\Category\UpdateRequest;
+use App\Models\Assets\Category;
+use Error;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
 
-    public function __construct()
+    public function __construct(Category $category)
     {
         parent::__construct();
+        $this->middleware('transform.request:' . $category->transformer)->only('store', 'update');
     }
 
     /**
@@ -31,9 +32,11 @@ class CategoryController extends Controller
 
     public function index(Category $category)
     {
-        $categories = $category->withTrashed()->get();
+        $params = $this->filter_transform($category->transformer);
 
-        return $this->showAll($categories);
+        $categories = $this->search($category->table, $params);
+
+        return $this->showAll($categories, $category->transformer);
     }
 
     /**
@@ -54,7 +57,7 @@ class CategoryController extends Controller
 
         StoreCategoryEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($category, 201);
+        return $this->showOne($category, $category->transformer, 201);
     }
 
     /**
@@ -68,7 +71,7 @@ class CategoryController extends Controller
     {
         $category = Category::withTrashed()->find($id);
 
-        return $this->showOne($category);
+        return $this->showOne($category, $category->transformer);
     }
 
     /**
@@ -82,12 +85,59 @@ class CategoryController extends Controller
     public function update(UpdateRequest $request, Category $category)
     {
         DB::transaction(function () use ($request, $category) {
-            $catgegory = $category->fill($request->all());
 
-            $category->push();
+            if ($this->is_diferent($category->name, $request->name)) {
+                $this->can_update[] = true;
+                $category->name = $request->name;
+            }
+            if ($this->is_diferent($category->price, $request->price)) {
+                $this->can_update[] = true;
+                $category->price = $request->price;
+            }
+
+            if ($this->is_diferent($category->air_conditionar, $request->air_conditionar)) {
+                $this->can_update[] = true;
+                $category->air_conditionar = $request->air_conditionar;
+            }
+
+            if ($this->is_diferent($category->tv, $request->tv)) {
+                $this->can_update[] = true;
+                $category->tv = $request->tv;
+            }
+
+            if ($this->is_diferent($category->bathroom, $request->bathroom)) {
+                $this->can_update[] = true;
+                $category->bathroom = $request->bathroom;
+            }
+
+            if ($this->is_diferent($category->hot_water, $request->hot_water)) {
+                $this->can_update[] = true;
+                $category->hot_water = $request->hot_water;
+            }
+
+            if ($this->is_diferent($category->cold_water, $request->cold_water)) {
+                $this->can_update[] = true;
+                $category->cold_water = $request->cold_water;
+            }
+
+            if ($this->is_diferent($category->wifi, $request->wifi)) {
+                $this->can_update[] = true;
+                $category->wifi = $request->wifi;
+            }
+
+            if ($this->is_diferent($category->fan, $request->fan)) {
+                $this->can_update[] = true;
+                $category->fan = $request->fan;
+            }
+
+            if (in_array(true, $this->can_update)) {
+                $category->push();
+            }
         });
-    
-        UpdateCategoryEvent::dispatch($this->AuthKey());
+
+        if (in_array(true, $this->can_update)) {
+            UpdateCategoryEvent::dispatch($this->AuthKey());
+        }
 
         return $this->showOne($category);
     }
@@ -111,7 +161,7 @@ class CategoryController extends Controller
 
         DestroyCategoryEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($category);
+        return $this->showOne($category, $category->transformer);
     }
 
     public function disable(Category $category)
@@ -120,7 +170,7 @@ class CategoryController extends Controller
 
         DisableCategoryEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($category);
+        return $this->showOne($category, $category->transformer);
     }
 
     /**
@@ -139,7 +189,7 @@ class CategoryController extends Controller
 
             EnableCategoryEvent::dispatch($this->AuthKey());
 
-            return $this->showOne($category);
+            return $this->showOne($category, $category->transformer);
 
         } catch (Error $e) {
 

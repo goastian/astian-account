@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Assets\JsonResponser;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
 {
+    use JsonResponser;
+
     public function __construct()
     {
         $this->middleware('guest')->except('destroy', 'profile');
@@ -48,7 +51,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
         
         if (request()->wantsJson()) {
-            return response()->json(['status' => 'La session ha terminado.']);
+            return $this->message('La session ha terminado.');
         }
         
         return redirect(env('APP_URL'));
@@ -56,6 +59,6 @@ class AuthenticatedSessionController extends Controller
 
     public function profile()
     { 
-        return request()->user();
+        return  $this->showOne(request()->user(), EmployeeTransformer::class);
     }
 }
