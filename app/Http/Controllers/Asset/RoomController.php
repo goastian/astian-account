@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Asset;
 
-use Error;
-use App\Events\Asset\DestroyRoomEvent;
-use App\Events\Asset\DisableRoomEvent;
-use App\Events\Asset\EnableRoomEvent;
-use App\Events\Asset\StoreRoomEvent;
-use App\Events\Asset\UpdateRoomEvent;
-use App\Models\Assets\Room;
+use App\Events\Asset\Room\DestroyRoomEvent;
+use App\Events\Asset\Room\DisableRoomEvent;
+use App\Events\Asset\Room\EnableRoomEvent;
+use App\Events\Asset\Room\StoreRoomEvent;
+use App\Events\Asset\Room\UpdateRoomEvent;
 use App\Exceptions\ReportMessage;
-use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Room\StoreRequest;
 use App\Http\Requests\Room\UpdateRequest;
-use App\Transformers\Asset\RoomTransformer;
-use App\Http\Controllers\GlobalController as Controller;
+use App\Models\Assets\Room;
+use Error;
+use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
 
-    public function __construct()
+    public function __construct(Room $room)
     {
         parent::__construct();
+        $this->middleware('transform.request:' . $room->transformer)->only('store', 'update');
     }
 
     /**
@@ -31,9 +31,11 @@ class RoomController extends Controller
      */
     public function index(Room $room)
     {
-        $rooms = $this->search($room->view);
+        $params = $this->filter_transform($room->transformer);
 
-        return $this->showAll($rooms);
+        $rooms = $this->search($room->view, $params);
+
+        return $this->showAll($rooms, $room->transformer);
     }
 
     /**
@@ -51,7 +53,7 @@ class RoomController extends Controller
 
         StoreRoomEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($room, 201);
+        return $this->showOne($room, $room->transformer, 201);
     }
 
     /**
@@ -64,7 +66,7 @@ class RoomController extends Controller
     {
         $room = Room::withTrashed()->find($id);
 
-        return $this->showOne($room);
+        return $this->showOne($room, $room->transformer);
     }
 
     /**
@@ -77,13 +79,32 @@ class RoomController extends Controller
     public function update(UpdateRequest $request, Room $room)
     {
         DB::transaction(function () use ($request, $room) {
-            $room = $room->fill($request->all());
-            $room->push();
+            if ($this->is_diferent($room->number, $request->number)) {
+                $this->can_update[] = true;
+                $room->number = $request->number;
+            }
+
+            if ($this->is_diferent($room->description, $request->description)) {
+                $this->can_update[] = true;
+                $room->description = $request->description;
+            }
+
+            if ($this->is_diferent($room->category_id, $request->category_id)) {                
+                $this->can_update[] = true; 
+                $room->category_id = $request->category_id;
+            }
+
+            if (in_array(true, $this->can_update)) {
+                $room->push();
+            }
+
         });
 
-        UpdateRoomEvent::dispatch($this->AuthKey());
+        if (in_array(true, $this->can_update)) {
+            UpdateRoomEvent::dispatch($this->AuthKey());
+        }
 
-        return $this->showOne($room, 201);
+        return $this->showOne($room, $room->transformer, 201);
     }
 
     /**
@@ -104,7 +125,7 @@ class RoomController extends Controller
 
         DestroyRoomEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($room);
+        return $this->showOne($room, $room->transformer);
     }
 
     public function disable(Room $room)
@@ -113,7 +134,7 @@ class RoomController extends Controller
 
         DisableRoomEvent::dispatch($this->AuthKey());
 
-        return $this->showOne($room);
+        return $this->showOne($room, $room->transformer);
     }
 
     public function enable($id)
@@ -126,7 +147,7 @@ class RoomController extends Controller
 
             EnableRoomEvent::dispatch($this->AuthKey());
 
-            return $this->showOne($room);
+            return $this->showOne($room, $room->transformer);
         } catch (Error $e) {
             throw new ReportMessage("Error al procesar la petición", 404);
         }

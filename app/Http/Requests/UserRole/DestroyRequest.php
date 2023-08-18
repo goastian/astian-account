@@ -13,7 +13,7 @@ class DestroyRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->isAdmin();
+        return request()->user()->isAdmin() and request()->user->id != request()->user()->id;
     }
 
     /**

@@ -8,10 +8,9 @@ use Illuminate\Http\Request;
 use App\Exceptions\ReportMessage;
 use App\Events\Token\StoreTokenEvent;
 use App\Events\Token\DestroyTokenEvent;
-use App\Events\Token\DestroyAllTokenEvent;
-use App\Transformers\Auth\EmployeeTransformer;
-use App\Transformers\Tokens\TokensTransformer;
+use App\Events\Token\DestroyAllTokenEvent; 
 use App\Http\Controllers\GlobalController as Controller;
+use App\Transformers\Tokens\TokensTransformer;
 
 class TokensController extends Controller
 {
@@ -29,7 +28,7 @@ class TokensController extends Controller
     public function index(Request $request)
     {
         $tokens = $request->user()->tokens;
-        return $this->showAll($tokens, 200);
+        return $this->showAll($tokens,TokensTransformer::class, 200);
     }
 
     /**
@@ -41,7 +40,6 @@ class TokensController extends Controller
     public function store(Request $request)
     {
         $token = $request->user()->createToken($this->setTokenName($request));
-
 
         StoreTokenEvent::dispatch($this->AuthKey());
 
@@ -55,9 +53,7 @@ class TokensController extends Controller
 
         DestroyAllTokenEvent::dispatch($this->AuthKey());
 
-        return response()->json(['data' => [
-            'message' => 'Los Tokens fueron revocados.'
-        ]], 200);
+        return $this->message('Los Tokens fueron revocados.', 200);
     }
 
 
@@ -71,9 +67,8 @@ class TokensController extends Controller
 
             DestroyTokenEvent::dispatch($this->AuthKey());
 
-            return response()->json(['data' => [
-                'message' => 'El token ha sido revocado.'
-            ]], 200);
+            return $this->message('El token ha sido revocado.', 200);
+            
         } catch (Error $e) {
 
             throw new ReportMessage("Error al procesar la petición", 404);

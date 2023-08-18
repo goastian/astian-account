@@ -167,5 +167,9 @@ return [
         'title'                 => 'título',
         'username'              => 'usuario',
         'year'                  => 'año',
+        'price'                 => 'precio',
+        'category_id'           => 'categoria_id',
+        'categoria'             => 'categoria',
+        'check_out'             => 'salida'
     ],
 ];

@@ -29,22 +29,32 @@ class CategoryTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($category)
+    public function transform($data)
     { 
         return [
-            'identificador' => $category->id,
-            'categoria' => $category->name,
-            'precio' => $category->price,
-            'tv' => $category->tv,
-            'baño_privado' => $category->bathroom,
-            'aire_acondicionado' => $category->air_conditionar,
-            'internet' => $category->wifi,
-            'agua_caliente' => $category->hot_water,
-            'agua_fria' => $category->cold_water,
-            'ventilador' => $category->fan,
-            'registrado' => $category->created_at,
-            'actualizado' => $category->updated_at,
-            'inactivo' => $category->deleted_at,
+            'id' => $data->id,
+            'categoria' => $data->name,
+            'precio' => $data->price,
+            'tv' => $data->tv,
+            'baño_privado' => $data->bathroom,
+            'aire_acondicionado' => $data->air_conditionar,
+            'internet' => $data->wifi,
+            'agua_caliente' => $data->hot_water,
+            'agua_fria' => $data->cold_water,
+            'ventilador' => $data->fan,
+            'registrado' => $data->created_at,
+            'actualizado' => $data->updated_at,
+            'inactivo' => $data->deleted_at,
+            'links' => [
+                'parent' => route('categories.index'),
+                'store' => route('categories.store'),
+                'show' => route('categories.show', ['category' => $data->id]),
+                'update' => route('categories.update', ['category' => $data->id]),
+                'destroy' => route('categories.destroy', ['category' => $data->id]),
+                'disable' => route('categories.disable', ['category' => $data->id]),
+                'enable' => route('categories.enable', ['id' => $data->id]),
+                'calendar' => route('categories.calendars.index', ['category' => $data->id])
+            ]
 
         ];
     }
@@ -88,7 +98,7 @@ class CategoryTransformer extends TransformerAbstract
     public static function getOriginalAttributes($index)
     {
         $attribute = [
-            'identificador' => 'id',
+            'id' => 'id',
             'categoria' => 'name',
             'precio' => 'price',
             'tv' => 'tv',

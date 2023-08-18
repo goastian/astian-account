@@ -16,8 +16,9 @@ return new class extends Migration
         Schema::create('rents', function (Blueprint $table) {
             $table->id();
             $table->integer('category_id',false, true);
-            $table->integer('room_id', false, true);
+            $table->integer('room_id', false, true)->nullable();
             $table->double('price', 8,2);
+            $table->integer('booking_id', false, true);
             $table->timestamps();
         });
     }
