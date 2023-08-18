@@ -13,7 +13,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return request()->user()->canWrite() || request()->user()->isAdmin();
     }
 
     /**
@@ -24,9 +24,9 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'number' => ['required','max:5', 'unique:rooms,number,'. Request('room')->id],
-            'description' => ['required', 'max:150'],
-            'category_id' => ['required','exists:categories,id']
+            'number' => ['nullable','max:5', 'unique:rooms,number,'. Request('room')->id],
+            'description' => ['nullable', 'max:150'],
+            'category_id' => ['nullable','exists:categories,id']
         ];
     }
 }

@@ -16,6 +16,8 @@ class AuthorizationController extends Controller
     {
         $this->middleware('guest')->only('store');
         $this->middleware('auth:sanctum')->only('destroy');
+        $this->middleware('transform.request:' . EmployeeTransformer::class)->only('store');
+
     }
     /**
      * Handle an incoming authentication request.
@@ -46,8 +48,6 @@ class AuthorizationController extends Controller
     {
         request()->user()->currentAccessToken()->delete();
 
-        return response()->json(['data' => [
-            'message' => 'La sesion ha sido cerrada.'
-        ]], 200);
+        return $this->message('La sesion ha sido cerrada.', 200);
     }
 }

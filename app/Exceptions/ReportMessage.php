@@ -26,8 +26,6 @@ class ReportMessage extends Exception
      */
     public function render($request)
     {
-        return  $this->message(['data' => [
-            'message' => $this->message
-        ]], $this->code);
+        return  $this->message($this->message, $this->code);
     }
 }

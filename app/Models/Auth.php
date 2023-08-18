@@ -28,7 +28,8 @@ class Auth extends Authenticatable
         'document_number',
         'country',
         'department',
-        'address'
+        'address',
+        'phone',
     ];
 
     /**
@@ -50,7 +51,6 @@ class Auth extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
     public function setNameAttribute($value)
     {
         $this->attributes['name'] = strtolower($value);
@@ -59,6 +59,11 @@ class Auth extends Authenticatable
     public function setLastNameAttribute($value)
     {
         $this->attributes['last_name'] = strtolower($value);
+    }
+
+    public function setEmailAttribute($value)
+    {
+        $this->attributes['email'] = strtolower($value);
     }
 
     public function setDocumentTypeAttribute($value)
@@ -80,7 +85,7 @@ class Auth extends Authenticatable
     {
         $this->attributes['address'] = strtolower($value);
     }
- 
+
     public function isAdmin()
     {
         return $this->roles()->get()->contains('name', 'admin');

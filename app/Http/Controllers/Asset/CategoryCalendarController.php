@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Asset;
 
-use App\Events\Asset\StoreCategoryCalendarEvent;
-use App\Events\Asset\UpdateCategoryCalendarEvent;
+use App\Events\Asset\Category\Calendar\StoreCategoryCalendarEvent;
+use App\Events\Asset\Category\Calendar\UpdateCategoryCalendarEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\CategoryCalendar\Update;
 use App\Models\Assets\Calendar;
 use App\Models\Assets\Category;
 use App\Transformers\Asset\CalendarTransformer;
+use App\Transformers\Asset\CategoryCalendarTransformer;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,7 @@ class CategoryCalendarController extends Controller
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('transform.request:' . CalendarTransformer::class)->only('store', 'update');
     }
 
     /**
@@ -26,12 +28,11 @@ class CategoryCalendarController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Calendar $calendar)
+    public function index(Category $category)
     {
+        $calendars = $category->calendar()->get();
 
-        $calendars = $calendar->all();
-
-        return $this->showAll($calendars);
+        return $this->showAll($calendars, CategoryCalendarTransformer::class);
     }
 
     /**
@@ -99,9 +100,8 @@ class CategoryCalendarController extends Controller
      */
     public function show(Category $category, Calendar $calendar)
     {
-        $day = $calendar->find($category->id);
 
-        return $this->showOne($day);
+        return $this->showOne($calendar, CategoryCalendarTransformer::class);
     }
 
     /**
@@ -112,27 +112,29 @@ class CategoryCalendarController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Update $request, Category $category, Calendar $calendar)
-    { 
-        DB::transaction(function() use ($request, $calendar){
-            
-            $calendar->available = $request->available;
-            $calendar->push();
+    {
+
+        $this->validate($request, [
+            'available' => ['nullable', 'integer', 'max:10', 'min:0'],
+        ]);
+
+        DB::transaction(function () use ($request, $calendar) {
+
+            if ($calendar->available != $request->available) {
+                $this->can_update[] = true;
+                $calendar->available = $request->available;
+            }
+
+            if (in_array(true, $this->can_update)) {
+                $calendar->push();
+            }
 
         });
 
-        UpdateCategoryCalendarEvent::dispatch($this->AuthKey());
-        
-        return $this->showOne($calendar);
-    }
+        if (in_array(true, $this->can_update)) {
+            UpdateCategoryCalendarEvent::dispatch($this->AuthKey());
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return $this->showOne($calendar, CategoryCalendarTransformer::class);
     }
 }

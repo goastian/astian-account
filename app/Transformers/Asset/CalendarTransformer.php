@@ -36,6 +36,7 @@ class CalendarTransformer extends TransformerAbstract
             'dia' => $calendar->day,
             'disponibles' => $calendar->available,
             'categoria_id' => $calendar->category_id,
+            'categoria' => $calendar->category_name
         ];
     }
 
@@ -66,7 +67,7 @@ class CalendarTransformer extends TransformerAbstract
     public  static function getOriginalAttributes($index)
     {
         $attribute = [
-            'identificador' => 'id',
+            'id' => 'id',
             'dia' => 'day',
             'disponibles' => 'available',
             'categoria_id' => 'category_id',

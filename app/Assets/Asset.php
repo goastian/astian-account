@@ -3,7 +3,7 @@
 namespace App\Assets;
 
 /**
- * 
+ *
  */
 trait Asset
 {
@@ -11,7 +11,7 @@ trait Asset
     {
         return [
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-            'Q', 'R', 'S', 'T', 'U', 'X', 'Y', 'W', 'Z'
+            'Q', 'R', 'S', 'T', 'U', 'X', 'Y', 'W', 'Z',
         ];
     }
 
@@ -21,7 +21,7 @@ trait Asset
      * @param  paramType  $value
      * @return void
      */
-    public function generateCode($len=5)
+    public function generateCode($len = 5)
     {
         //abc
         $letters = $this->abc();
@@ -54,7 +54,7 @@ trait Asset
      * @param  paramType  $value
      * @return void
      */
-    public function passwordTempGenerate($len = 10)
+    public function passwordTempGenerate($len = 15)
     {
         $passwd = $this->abc();
 
@@ -67,5 +67,36 @@ trait Asset
         }
 
         return $new_string;
+    }
+
+    public function generateUniqueCode($id, $includeDate = true, $includeLetters = true, $numLetters = 5)
+    {
+        // Generar la parte del ID
+        $code = $id;
+        $code .= "-";
+
+        // Generar la parte de la fecha actual
+        if ($includeDate) {
+            $code .= date('YmdHis');
+        }
+
+        // Generar la parte de letras aleatorias
+        if ($includeLetters) {
+            $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $lettersLength = strlen($letters);
+
+            for ($i = 0; $i < $numLetters; $i++) {
+                $code .= $letters[rand(0, $lettersLength - 1)];
+            }
+        }
+
+        return $code;
+    }
+
+    public $can_update = [];
+
+    public function is_diferent($value1, $value2)
+    {
+        return $value2 ? strtolower($value1) != strtolower($value2) : false;
     }
 }

@@ -32,7 +32,7 @@ class EmployeeTransformer extends TransformerAbstract
     public function transform($user)
     {
         return [
-            'identificador' => $user->id,
+            'id' => $user->id,
             'nombre' => $user->name,
             'apellido' => $user->last_name,
             'correo_electronico' => $user->email,
@@ -41,9 +41,19 @@ class EmployeeTransformer extends TransformerAbstract
             'pais' => $user->country,
             'departamento' => $user->department,
             'direccion' => $user->address,
+            'telefono' => $user->phone,
             'registrado' => $user->created_at,
             'actualizado' => $user->updated_at,
             'inactivo' => $user->deleted_at,
+            'links' =>[
+                'parent' => route('users.index'),
+                'store' => route('users.store'),
+                'show' => route('users.show', ['user' => $user->id]), 
+                'update' => route('users.update', ['user' => $user->id]), 
+                'disable' => route('users.disable', ['user' => $user->id]),
+                'enable' => route('users.enable', ['id' => $user->id]),
+                'roles' => route('users.roles.index',['user' => $user->id]),
+            ]
         ];
     }
 
@@ -59,6 +69,7 @@ class EmployeeTransformer extends TransformerAbstract
             'pais' => 'country',
             'departamento' => 'department',
             'direccion' => 'address',
+            'telefono' => 'phone',
             'acceso' => 'role', 
         ];
 
@@ -78,6 +89,7 @@ class EmployeeTransformer extends TransformerAbstract
             'country' => 'pais',
             'department' => 'departamento',
             'address' => 'direccion',
+            'phone' => 'telefono',
             'role' => 'acceso'
         ];
 
@@ -88,7 +100,7 @@ class EmployeeTransformer extends TransformerAbstract
     public static function getOriginalAttributes($index)
     {
         $attributes = [
-            'identificador' => 'id',
+            'id' => 'id',
             'nombre' => 'name',
             'apellido' => 'last_name',
             'correo_electronico' => 'email',
@@ -97,6 +109,7 @@ class EmployeeTransformer extends TransformerAbstract
             'pais' => 'country',
             'departamento' => 'department',
             'direccion' => 'address',
+            'telefono' => 'phone',
             'registrado' => 'created_at',
             'actualizado' => 'updated_at',
             'inactivo' => 'deleted_at',

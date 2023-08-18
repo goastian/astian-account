@@ -21,6 +21,6 @@ class RoleController extends Controller
     {
         $roles = $role->all();
 
-        return $this->showAll($roles);
+        return $this->showAll($roles, $role->transformer);
     }
 }

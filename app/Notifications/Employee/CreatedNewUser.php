@@ -10,15 +10,18 @@ use Illuminate\Notifications\Notification;
 class CreatedNewUser extends Notification implements ShouldQueue
 {
     use Queueable;
- 
+    
+
+    public $password = null;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($password = null)
     {
-        
+        $this->password = $password;
     }
 
     /**
@@ -42,8 +45,9 @@ class CreatedNewUser extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->subject("Cuenta registrada")
-            ->line("Su cuenta ha sido registrada para crear una contraseña")
-            ->line("Sigan los siguientes pasos:")
+            ->line("Su cuenta ha sido registrada, su contraseña es : " . $this->password)
+            ->line("Esta contraseña se genero aleatoriamente, si desea cambiarla")
+            ->line("Puede seguir los siguientes pasos:")
             ->line("Ingrese al enlace que se encuentra debajo:")
             ->line("Escriba su email y de click en aceptar:")
             ->line("Llegará un email, al dar click en el enlace te redireccionará para que actualices tu contraseña:")
