@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Assets\JsonResponser;
+use App\Events\Auth\LoginEvent;
+use App\Events\Auth\LogoutEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use App\Transformers\Auth\EmployeeTransformer;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticatedSessionController extends Controller
@@ -18,10 +19,9 @@ class AuthenticatedSessionController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('destroy', 'profile');
-        $this->middleware('auth:sanctum')->only('profile', 'destroy'); 
+        $this->middleware('auth:sanctum')->only('profile', 'destroy');
     }
-    
-    
+
     public function create()
     {
         return view('auth.login');
@@ -35,6 +35,8 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        LoginEvent::dispatch($this->AuthKey());
 
         return RouteServiceProvider::home();
     }
@@ -50,15 +52,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
         
+        LogoutEvent::dispatch($this->AuthKey());
+        
         if (request()->wantsJson()) {
             return $this->message('La session ha terminado.');
         }
-        
+
+
         return redirect(env('APP_URL'));
     }
 
     public function profile()
-    { 
-        return  $this->showOne(request()->user(), EmployeeTransformer::class);
+    {
+        return $this->showOne(request()->user(), EmployeeTransformer::class);
     }
 }
