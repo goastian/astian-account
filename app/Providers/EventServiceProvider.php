@@ -21,6 +21,10 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Auth\LoginListener::class
         ],
 
+        \App\Events\Auth\LogoutEvent::class => [
+            \App\Listeners\Auth\LogoutListener::class
+        ],
+
         //Token events
         \App\Events\Token\StoreTokenEvent::class => [
             \App\Listeners\Token\StoreTokenListener::class

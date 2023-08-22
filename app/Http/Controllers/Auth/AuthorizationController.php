@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Assets\Device;
 use App\Events\Auth\LoginEvent;
+use App\Events\Auth\LogoutEvent;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Transformers\Auth\EmployeeTransformer;
+use Illuminate\Auth\Events\Logout;
 
 class AuthorizationController extends Controller
 {
@@ -47,6 +49,8 @@ class AuthorizationController extends Controller
     public function destroy()
     {
         request()->user()->currentAccessToken()->delete();
+
+        LogoutEvent::dispatch($this->AuthKey());
 
         return $this->message('La sesion ha sido cerrada.', 200);
     }
