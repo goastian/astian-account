@@ -1,4 +1,5 @@
-## About Laravel
+## SANGHAS
+**API REST** desarrollada con la finalidad de proporcionar una solucion en el control de registros, reservas, pagos, que realizan en un hospedaje.
  
 ### Eventos 
 
