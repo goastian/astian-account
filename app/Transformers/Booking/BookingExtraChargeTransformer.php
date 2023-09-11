@@ -2,10 +2,12 @@
 
 namespace App\Transformers\Booking;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class BookingExtraChargeTransformer extends TransformerAbstract
 {
+    use Asset;
     /**
      * List of resources to automatically include
      *
@@ -37,7 +39,7 @@ class BookingExtraChargeTransformer extends TransformerAbstract
             'cantidad' => $data->amount,
             'costo' => $data->price,
             'total' => $data->total,
-            'registrado' => $data->created_at,
+            'registrado' => $this->format_date($data->created_at),
             'links' => [
                 'previous' => route('booking.show', ['booking' => request('booking')->id]),
                 'parent' => route('booking.charges.index', ['booking' => request('booking')->id]),

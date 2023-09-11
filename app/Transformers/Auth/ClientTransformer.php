@@ -2,10 +2,12 @@
 
 namespace App\Transformers\Auth;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class ClientTransformer extends TransformerAbstract
 {
+    use Asset;
     /**
      * List of resources to automatically include
      *
@@ -41,8 +43,8 @@ class ClientTransformer extends TransformerAbstract
             "pais" => $data->country,
             "correo_electronico" => $data->email,
             "telefono" => $data->phone,
-            "registrado" => $data->created_at,
-            "actualizado" => $data->updated_at,
+            "registrado" => $this->format_date($data->created_at),
+            "actualizado" => $this->format_date($data->updated_at),
         ];
     }
 

@@ -2,10 +2,13 @@
 
 namespace App\Transformers\Auth;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class EmployeeTransformer extends TransformerAbstract
 {
+    use Asset;
+    
     /**
      * List of resources to automatically include
      *
@@ -42,9 +45,9 @@ class EmployeeTransformer extends TransformerAbstract
             'departamento' => $user->department,
             'direccion' => $user->address,
             'telefono' => $user->phone,
-            'registrado' => $user->created_at,
-            'actualizado' => $user->updated_at,
-            'inactivo' => $user->deleted_at,
+            'registrado' => $this->format_date($user->created_at),
+            'actualizado' => $this->format_date($user->updated_at),
+            'inactivo' => $this->format_date($user->deleted_at),
             'links' =>[
                 'parent' => route('users.index'),
                 'store' => route('users.store'),

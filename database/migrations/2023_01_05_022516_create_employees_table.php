@@ -15,7 +15,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->string('name', 100);
             $table->string('last_name', 100);
             $table->string('email', 100)->unique();
@@ -28,7 +28,9 @@ return new class extends Migration
             $table->string('phone', 15);
             //$table->rememberToken();
             $table->timestamps();
-            $table->softDeletes();
+            $table->softDeletes(); 
+            $table->primary('id');
+
         });
     }
 

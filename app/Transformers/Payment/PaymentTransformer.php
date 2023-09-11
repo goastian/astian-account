@@ -2,10 +2,13 @@
 
 namespace App\Transformers\Payment;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class PaymentTransformer extends TransformerAbstract
 {
+    use Asset;
+    
     /**
      * List of resources to automatically include
      *
@@ -38,8 +41,8 @@ class PaymentTransformer extends TransformerAbstract
             "codigo" => $data->code,
             "tipo" => $data->type == 'in' ? "ingreso" : 'egreso',
             "forma_pago" => $data->method,
-            "realizado" => $data->created_at,
-            "actualizado" => $data->updated_at,
+            "realizado" => $this->format_date($data->created_at),
+            "actualizado" => $this->format_date($data->updated_at),
             'links' => [
                 'booking' => route('booking.show', ['booking' => $this->getID($data->code)]),
             ],

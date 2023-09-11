@@ -84,13 +84,23 @@ class RoomController extends Controller
                 $room->number = $request->number;
             }
 
+            if ($this->is_diferent($room->capacity, $request->capacity)) {
+                $this->can_update[] = true;
+                $room->capacity = $request->capacity;
+            }
+
             if ($this->is_diferent($room->description, $request->description)) {
                 $this->can_update[] = true;
                 $room->description = $request->description;
             }
 
-            if ($this->is_diferent($room->category_id, $request->category_id)) {                
-                $this->can_update[] = true; 
+            if ($this->is_diferent($room->note, $request->note, true)) {
+                $this->can_update[] = true;
+                $room->note = $request->note;
+            }
+
+            if ($this->is_diferent($room->category_id, $request->category_id)) {
+                $this->can_update[] = true;
                 $room->category_id = $request->category_id;
             }
 
@@ -118,7 +128,7 @@ class RoomController extends Controller
         $rents = count($room->rents()->get());
 
         if ($rents > 0) {
-            throw new ReportMessage(__("La categoria tiene recursos asociados y no puede ser eliminada"), 403);
+            throw new ReportMessage(__("No puede eliminar esta habitacion"), 403);
         }
 
         $room->forceDelete();
@@ -139,6 +149,30 @@ class RoomController extends Controller
 
     public function enable($id)
     {
+        /**
+         * busquemos la habitacion en el ultimo registros
+         */
+        $room = DB::table('rents')
+            ->join('booking', 'booking.id', '=', 'rents.booking_id')
+            ->where('booking.deleted_at', '=', null)
+            ->where('rents.room_id', '=', $id)
+            ->get()
+            ->last();
+
+        /**
+         * mientras el check_out sea mayor que la la fecha actual la habitacion se encontrará
+         * ocupada evitando que se active
+         */
+        if (strtotime($room->check_out) > strtotime(now())) {
+            $message = "Esta habitacion no se puede habilitar por que aun esta alquilada ";
+            $message .= "Si la habitacion no se encuentra en uso o el usuario ya no se alojará ";
+            $message .= "puede proceder con la cancelacion del registro";
+            throw new ReportMessage(__($message), 403);
+        }
+
+        /**
+         * ejecutamos la accion para habilitar
+         */
         try {
 
             $room = Room::onlyTrashed()->where('id', $id)->first();
@@ -149,7 +183,7 @@ class RoomController extends Controller
 
             return $this->showOne($room, $room->transformer);
         } catch (Error $e) {
-            throw new ReportMessage("Error al procesar la petición", 404);
+            throw new ReportMessage("Error al procesar la petición", 403);
         }
     }
 }

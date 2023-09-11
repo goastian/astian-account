@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\Asset;
 
-use App\Events\Asset\Category\Calendar\StoreCategoryCalendarEvent;
-use App\Events\Asset\Category\Calendar\UpdateCategoryCalendarEvent;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\CategoryCalendar\Update;
+use Exception; 
 use App\Models\Assets\Calendar;
 use App\Models\Assets\Category;
-use App\Transformers\Asset\CalendarTransformer;
-use App\Transformers\Asset\CategoryCalendarTransformer;
-use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\CategoryCalendar\Update;
+use App\Transformers\Asset\CalendarTransformer;
+use App\Http\Requests\Category\Calendar\StoreRequest;
+use App\Transformers\Asset\CategoryCalendarTransformer;
+use App\Http\Controllers\GlobalController as Controller;
+use App\Events\Asset\Category\Calendar\StoreCategoryCalendarEvent;
+use App\Events\Asset\Category\Calendar\UpdateCategoryCalendarEvent;
 
 class CategoryCalendarController extends Controller
 {
@@ -41,19 +41,9 @@ class CategoryCalendarController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Category $category, Calendar $calendar)
+    public function store(StoreRequest $request, Category $category, Calendar $calendar)
     {
-        //dd($calendar->get()->last());
-        /*
-        no hay fechas registradas
-        obtener la fecha actaul
-        si
-        se le agrega una catidad de dias apartit de la fecha
-        si no obtenemos la ultima fecha
-        agregamos dias a partir de la fehca
-         */
         DB::transaction(function () use ($request, $category, $calendar) {
-
             try {
                 //si exite fechas se buscara la ultima
                 $last_day = date("Y-m-d", strtotime($category->calendar()->get()->last()->day . " + 1 days"));
@@ -63,12 +53,6 @@ class CategoryCalendarController extends Controller
                 $last_day = now();
             }
 
-            //  throw new ReportNewError(__("Please enter a number of rooms available for sale"), 422);
-            $this->validate($request, [
-                'available' => ['required', 'integer', 'max:10'],
-                'add_days' => ['required', 'integer', 'max:365'],
-            ]);
-
             //obtenemos una lista de fechas a partir de la $last_day
             $days = $calendar->generateDaysCollection($last_day, $request->add_days);
 
@@ -77,7 +61,7 @@ class CategoryCalendarController extends Controller
 
                 $category->calendar()->create([
                     'day' => $days[$i],
-                    'available' => $request->available,
+                    'available' => $request->available ? $request->available : count($category->rooms()->get()),
                     'category_id' => $category->id,
                 ]);
             }
@@ -86,10 +70,7 @@ class CategoryCalendarController extends Controller
 
         StoreCategoryCalendarEvent::dispatch($this->AuthKey());
 
-        return $this->message(['data' =>
-            [
-                'message' => __("El calendario ha sido extendido hasta el " . $category->calendar()->get()->last()->day),
-            ]], 201);
+        return $this->message( __("El calendario ha sido extendido hasta el " . $category->calendar()->get()->last()->day), 201);
     }
 
     /**

@@ -21,6 +21,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Booking\BookingExtraChargeController;
 use App\Http\Controllers\Booking\BookingRentClientController;
 use App\Http\Controllers\Booking\PaymentController;
+use App\Http\Controllers\Reservation\ReservationController;
 
 //Valores absolutos
 Route::get('payment-type', [EnumType::class, 'payment_type']);
@@ -66,12 +67,15 @@ Route::resource('calendars', CalendarController::class)->only('index');
 Route::resource('payments', PaymentController::class)->only('index');
 
 //booking
+Route::get('activate-rooms', [BookingController::class, 'activate_rooms'])->name('activate-rooms');
 Route::resource('booking', BookingController::class)->except('edit', 'create');
 Route::resource('booking.payments', BookingPaymentController::class)->only('index', 'store','update');
 Route::resource('booking.charges', BookingExtraChargeController::class)->only('index', 'store', 'destroy');
 Route::resource('booking.company', BookingCompanyController::class)->only('index', 'store');
-Route::resource('booking.rooms', BookingRentController::class)->except('edit', 'create');
-Route::resource('booking.rooms.huespeds', BookingRentClientController::class)->only('index', 'store', 'destroy');
+Route::resource('booking.rents', BookingRentController::class)->except('edit', 'create');
+Route::resource('booking.rents.huespeds', BookingRentClientController::class)->only('index', 'store', 'destroy');
+
+Route::resource('reservations', ReservationController::class)->only('store');
 
 //Clientes
 Route::resource('clients', ClientController::class)->only('index', 'show','update');

@@ -1,10 +1,8 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 use App\Models\User\Employee;
-use Illuminate\Support\Facades\DB;
+use App\Models\User\Role;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -21,9 +19,9 @@ return new class extends Migration
         $roles = ['admin', 'escritura', 'lectura'];
 
         foreach ($roles as $key) {
-            DB::table('roles')->insert([
-                'name' => $key
-            ]);
+            Role::create([
+                'name' => $key,
+            ])->save();
         }
 
         Employee::create([
@@ -36,13 +34,11 @@ return new class extends Migration
             'country' => 'peru',
             'department' => 'tumbes',
             'address' => 'Av. Tacna Nro 327 - Tumbes',
-            'phone' => '789526352'
+            'phone' => '789526352',
         ])->save();
 
-        DB::table('employee_role')->insert([
-            'employee_id' => 1,
-            'role_id' => 1
-        ]);
+        Employee::first()->roles()->syncWithoutDetaching(Role::first()->id);
+
     }
 
     /**

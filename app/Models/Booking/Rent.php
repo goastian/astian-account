@@ -7,11 +7,12 @@ use App\Models\Assets\Category;
 use App\Models\Assets\Room;
 use App\Models\User\Client;
 use App\Models\Booking\Booking;
+use App\Models\master;
 use App\Transformers\Booking\RentTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Rent extends Model
+class Rent extends master
 {
     use HasFactory, Timestamps;
 
@@ -33,9 +34,9 @@ class Rent extends Model
     ];
 
    
-    public function Booking()
+    public function booking()
     {
-        return $this->belongsTo(Booking::class);
+        return $this->belongsTo(Booking::class)->withTrashed();
     }
 
     public function huespeds()
@@ -45,7 +46,7 @@ class Rent extends Model
     }
 
     public function room(){
-        return $this->belongsTo(Room::class);
+        return $this->belongsTo(Room::class)->withTrashed();
     }
 
     public function category(){

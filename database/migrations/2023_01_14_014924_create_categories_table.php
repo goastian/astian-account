@@ -15,9 +15,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->string('name', 100);
             $table->float('price',8,2);
+            $table->tinyInteger('capacity');
             $table->enum('air_conditionar', EnumType::yes_or_not());
             $table->enum('tv', EnumType::yes_or_not());
             $table->enum('bathroom', EnumType::yes_or_not());
@@ -27,6 +28,7 @@ return new class extends Migration
             $table->enum('fan', EnumType::yes_or_not());
             $table->softDeletes();
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

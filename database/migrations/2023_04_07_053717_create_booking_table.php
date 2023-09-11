@@ -15,14 +15,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('booking', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->string('code')->unique()->nullable();
+            $table->dateTime('check_in');
             $table->dateTime('check_out');
-            $table->integer('client_id', false, true)->nullable();
-            $table->integer('company_id', false, true)->nullable();
+            $table->string('client_id')->nullable();
+            $table->string('company_id')->nullable();
             $table->enum('type', EnumType::booking_type());
             $table->timestamps();
             $table->softDeletes();
+            $table->primary('id');
         });
     }
 
