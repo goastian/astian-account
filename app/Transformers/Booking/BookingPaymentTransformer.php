@@ -2,10 +2,12 @@
 
 namespace App\Transformers\Booking;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class BookingPaymentTransformer extends TransformerAbstract
 {
+    use Asset;
     /**
      * List of resources to automatically include
      *
@@ -38,8 +40,8 @@ class BookingPaymentTransformer extends TransformerAbstract
             "codigo" => $data->code,
             "tipo" => $data->type == 'in' ? "ingreso" : 'egreso',
             "forma_pago" => $data->method,
-            "realizado" => $data->created_at,
-            "actualizado" => $data->updated_at,
+            "realizado" => $this->format_date($data->created_at),
+            "actualizado" => $this->format_date($data->updated_at),
             'links' => [
                 'previous' => route('booking.show', ['booking' => request('booking')->id]),
                 'parent' => route('booking.payments.index', ['booking' => request('booking')->id]),

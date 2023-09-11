@@ -14,12 +14,13 @@ return new class extends Migration
     public function up()
     {
         Schema::create('rents', function (Blueprint $table) {
-            $table->id();
-            $table->integer('category_id',false, true);
-            $table->integer('room_id', false, true)->nullable();
+            $table->uuid('id')->unique();
+            $table->string('category_id');
+            $table->string('room_id')->nullable();
             $table->double('price', 8,2);
-            $table->integer('booking_id', false, true);
+            $table->string('booking_id');
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

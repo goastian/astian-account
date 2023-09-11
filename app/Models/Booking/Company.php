@@ -3,11 +3,12 @@
 namespace App\Models\Booking;
 
 use App\Assets\Timestamps;
+use App\Models\master;
 use App\Transformers\Company\CompanyTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Company extends Model
+class Company extends master
 {
     use HasFactory, Timestamps;
 

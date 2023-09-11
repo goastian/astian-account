@@ -10,26 +10,15 @@ class EnumType
      */
     public static function payment_type()
     {
-        return [
-            'in',
-            'out',
-        ];
+        return explode(',', env('PAYMENT_TYPE'));
     }
-  
+
     /**
      * metodos de pago
      */
     public static function payment_method()
     {
-        return [
-            'efectivo',
-            'yape',
-            'plin',
-            'bcp',
-            'interbank',
-            'bbva',
-            'paypal',
-        ];
+        return explode(',', env('PAYMENT_METHOD'));
     }
 
     /**
@@ -38,8 +27,8 @@ class EnumType
     public static function yes_or_not()
     {
         return [
-            'si', 
-            'no'
+            'si',
+            'no',
         ];
     }
 
@@ -49,18 +38,13 @@ class EnumType
     public static function booking_type()
     {
         return [
-            'booking', 
-            'reservation'
+            'booking',
+            'reservation',
         ];
     }
 
-    public static function documento_type(){
-        return [
-            'dni',
-            'cpp',
-            'pasaporte',
-            'cedula',
-            'carnet de extranjeria',
-        ];
+    public static function documento_type()
+    {
+        return explode(',', env('DOCUMENT_TYPE'));
     }
 }

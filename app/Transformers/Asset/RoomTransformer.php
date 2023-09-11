@@ -2,11 +2,13 @@
 
 namespace App\Transformers\Asset;
 
+use App\Assets\Asset;
 use App\Models\Assets\Category;
 use League\Fractal\TransformerAbstract;
 
 class RoomTransformer extends TransformerAbstract
 {
+    use Asset;
     /**
      * List of resources to automatically include
      *
@@ -35,12 +37,14 @@ class RoomTransformer extends TransformerAbstract
         return [
             'id' => $data->id,
             'numero' => $data->number, 
+            'capacidad' => $data->capacity,
             'descripcion' => $data->description,
+            'nota' => $data->note, 
             'categoria_id' => $data->category_id,
-            'categoria_nombre' => $data->category_name ? $data->category_name : Category::find($data->category_id)->name,
-            'registrado' => $data->created_at,
-            'actualizado' => $data->updated_at,
-            'disponible' => $data->deleted_at,
+            'categoria_nombre' => $data->category_name ? $data->category_name : $data->category->name,
+            'registrado' => $this->format_date($data->created_at),
+            'actualizado' => $this->format_date($data->updated_at),
+            'inactivo' => $this->format_date($data->deleted_at),
             'links' => [
                 'parent' => route('rooms.index'),
                 'store' => route('rooms.store'),
@@ -58,7 +62,9 @@ class RoomTransformer extends TransformerAbstract
     {
         $attribute = [
             'numero' => 'number',            
+            'capacidad' => 'capacity',            
             'descripcion' => 'description', 
+            'nota' => 'note', 
             'categoria_id' => 'category_id'
         ];
         
@@ -70,7 +76,9 @@ class RoomTransformer extends TransformerAbstract
     {
         $attribute = [
             'number' => 'numero', 
+            'capacity' => 'capacidad', 
             'description' => 'descripcion', 
+            'note' => 'nota', 
             'category_id' => 'categoria_id'
         ];
 
@@ -81,12 +89,14 @@ class RoomTransformer extends TransformerAbstract
     {
         $attribute = [
             'numero' => 'number', 
+            'capacidad' => 'capacity', 
             'descripcion' => 'description',
+            'nota' => 'note',
             'categoria_id' => 'category_id',
             'categoria_nombre' => 'category_name',
             'registrado' => 'created_at',
             'actualizado' => 'updated_at',
-            'disponible' => 'deleted_at',
+            'inactivo' => 'deleted_at',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;

@@ -14,16 +14,17 @@ return new class extends Migration
     public function up()
     {
         Schema::create('clients', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->string('name', 100);
             $table->string('last_name', 100);
-            $table->string('document', 100);
-            $table->string('number', 50)->unique();
+            $table->string('document', 100)->nullable();
+            $table->string('number', 50)->unique()->nullable();
             $table->string('city', 100)->nullable();
-            $table->string('country', 100);
-            $table->string('email', 100)->nullable();
+            $table->string('country', 100)->nullable();
+            $table->string('email', 100)->unique()->nullable();
             $table->string('phone', 9)->nullable();
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

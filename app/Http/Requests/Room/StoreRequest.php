@@ -25,7 +25,9 @@ class StoreRequest extends FormRequest
     {
         return [
             'number' => ['required','max:5', 'unique:rooms,number'],
-            'description' => ['required', 'max:150'],
+            'capacity' => ['required','integer', 'max:20'],
+            'description' => ['nullable', 'max:150'],
+            'note' => ['nullable', 'max:150'],
             'category_id' => ['required','exists:categories,id']
         ];
     }

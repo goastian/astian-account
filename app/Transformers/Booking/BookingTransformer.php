@@ -2,12 +2,15 @@
 
 namespace App\Transformers\Booking;
 
+use App\Assets\Asset;
 use App\Models\Booking\Booking;
 use ErrorException;
 use League\Fractal\TransformerAbstract;
 
 class BookingTransformer extends TransformerAbstract
 {
+    use Asset;
+    
     /**
      * List of resources to automatically include
      *
@@ -37,8 +40,8 @@ class BookingTransformer extends TransformerAbstract
 
             return [
                 'id' => $data->id,
-                'ingreso' => $data->check_in ? $data->check_in : $data->created_at,
-                'salida' => $data->check_out,
+                'ingreso' => $this->format_date($data->check_in),
+                'salida' => $this->format_date($data->check_out),
                 'codigo' => $data->code,
                 'empresa' => $data->company,
                 'ruc' => $data->ruc,
@@ -52,11 +55,12 @@ class BookingTransformer extends TransformerAbstract
                 'reembolso' => $data->refund,
                 'links' => [
                     'parent' => route('booking.index'),
+                    'reservation' => route('reservations.store'),
                     'store' => route('booking.store'),
                     'show' => route('booking.show', ['booking' => $data->id]),
                     'update' => route('booking.update', ['booking' => $data->id]),
                     'destroy' => route('booking.destroy', ['booking' => $data->id]),
-                    'rooms' => route('booking.rooms.index', ['booking' => $data->id]),
+                    'rooms' => route('booking.rents.index', ['booking' => $data->id]),
                     'charges' => route('booking.charges.index', ['booking' => $data->id]),
                     'payment' => route('booking.payments.index', ['booking' => $data->id]),
                 ]
@@ -65,20 +69,24 @@ class BookingTransformer extends TransformerAbstract
 
         return [
             'id' => $data->id,
-            'ingreso' => $data->check_in ? $data->check_in : $data->created_at,
-            'salida' => $data->check_out,
             'codigo' => $data->code,
-            'habitacion' => $data->room,
-            'categoria' => $data->category,
-            'empresa' => $data->company,
-            'ruc' => $data->ruc,
+            'ingreso' => $this->format_date($data->check_in),
+            'salida' => $this->format_date($data->check_out),
+            'registrado' => $this->format_date($data->created_at),
+            'actualizado' => $this->format_date($data->updated_at),
+            'tipo' => $data->type,
+            'nombre' => $data->name,
+            'apellido' => $data->last_name, 
+            'correo_electronico' => $data->email,
+            'telefono' => $data->phone,
             'links' => [
                     'parent' => route('booking.index'),
+                    'reservation' => route('reservations.store'),
                     'store' => route('booking.store'),
                     'show' => route('booking.show', ['booking' => $data->id]),
                     'update' => route('booking.update', ['booking' => $data->id]),
                     'destroy' => route('booking.destroy', ['booking' => $data->id]),
-                    'rooms' => route('booking.rooms.index', ['booking' => $data->id]),
+                    'rooms' => route('booking.rents.index', ['booking' => $data->id]),
                     'charges' => route('booking.charges.index', ['booking' => $data->id]),
                     'payment' => route('booking.payments.index', ['booking' => $data->id]),
                 ]
@@ -89,6 +97,7 @@ class BookingTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
+            'ingreso' => 'check_in',
             'salida' => 'check_out',
             'empresa' => 'company',
             'ruc' => 'ruc',
@@ -115,6 +124,7 @@ class BookingTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attribute = [
+            'check_in' => 'ingreso',
             'check_out' => 'salida',
             'company' => 'empresa',
             'ruc' => 'ruc',

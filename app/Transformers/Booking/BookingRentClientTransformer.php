@@ -2,10 +2,13 @@
 
 namespace App\Transformers\Booking;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class BookingRentClientTransformer extends TransformerAbstract
 {
+    use Asset;
+
     /**
      * List of resources to automatically include
      *
@@ -41,24 +44,24 @@ class BookingRentClientTransformer extends TransformerAbstract
             "pais" => $data->country,
             "correo_electronico" => $data->email,
             "telefono" => $data->phone,
-            "registrado" => $data->pivot->created_at,
-            "actualizado" => $data->updated_at,
+            "registrado" => $this->format_date($data->pivot->created_at),
+            "actualizado" => $this->format_date($data->updated_at),
             'links' => [
-                'previous' => route('booking.rooms.show', ['booking' => request('booking')->id, 'room' => $data->id]),
-                'parent' => route('booking.rooms.huespeds.index', [
-                   'booking' => request('booking')->id,
-                   'room' => $data->id,
+                'previous' => route('booking.rents.show', ['booking' => request('booking')->id, 'rent' => $data->id]),
+                'parent' => route('booking.rents.huespeds.index', [
+                    'booking' => request('booking')->id,
+                    'rent' => $data->id,
                 ]),
-                'store' => route('booking.rooms.huespeds.store', [
-                   'booking' => request('booking')->id,
-                   'room' => request('room')->id,
+                'store' => route('booking.rents.huespeds.store', [
+                    'booking' => request('booking')->id,
+                    'rent' => request('rent')->id,
                 ]),
                 'show' => route('clients.show', ['client' => $data->id]),
                 'update' => route('clients.update', ['client' => $data->id]),
-                'destroy' => route('booking.rooms.huespeds.destroy', [
-                   'booking' => request('booking')->id,
-                   'room' => request('room')->id,
-                   'huesped' => $data->id
+                'destroy' => route('booking.rents.huespeds.destroy', [
+                    'booking' => request('booking')->id,
+                    'rent' => request('rent')->id,
+                    'huesped' => $data->id,
                 ]),
             ],
         ];

@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->string('company');
             $table->string('ruc')->unique();
             $table->timestamps();
+            $table->primary('id');
         });
     }
 
