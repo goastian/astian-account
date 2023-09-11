@@ -13,7 +13,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->granted() and (request('booking')->id == request('room')->booking_id);
+        return request()->user()->granted() and (request('booking')->id == request('rent')->booking_id);
     }
 
     /**

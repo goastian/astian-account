@@ -3,16 +3,19 @@
 namespace App\Models\Booking;
 
 use App\Assets\Timestamps;
+use App\Exceptions\ReportMessage;
+use App\Models\Assets\Calendar;
 use App\Models\Booking\Company;
 use App\Models\Booking\ExtraCharge;
 use App\Models\Booking\Payment;
 use App\Models\Booking\Rent;
+use App\Models\master;
 use App\Transformers\Booking\BookingTransformer;
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Booking extends Model
+class Booking extends master
 {
     use HasFactory, SoftDeletes, Timestamps;
 
@@ -24,6 +27,7 @@ class Booking extends Model
 
     protected $fillable = [
         'code',
+        'check_in',
         'check_out',
         'company_id',
         'type',
@@ -43,7 +47,7 @@ class Booking extends Model
 
     /**
      * calcular los dias entre dos fechas
-     * created_at y check_out, seran los dos campos a calcular
+     * check_in y check_out, seran los dos campos a calcular
      * las horas desde donde se calculara seran las siguientes las cuales seran valores
      * estaticos no modificables
      * hora de unicio o ingreso sera a partir de las 13:00 horas y vencera el siguiente dia a las
@@ -58,34 +62,26 @@ class Booking extends Model
      */
     public function getDaysAttribute()
     {
-        $fechaInicio = strtotime($this->created_at);
-        $fechaFin = strtotime($this->check_out);
+        $check_out = new DateTime($this->check_out);
+        $check_in = new DateTime($this->check_in);
 
-        // Definir los límites de horas de inicio y fin del día
-        $horaInicioDia = strtotime('13:00');
-        $horaFinDia = strtotime('12:00 +1 day');
-
-        // Si el usuario ingresa después de las 06:00 y 13:00 horas en adelante, su día vencerá al siguiente día a las 12:00 horas
-        if (date('H:i', $fechaInicio) >= '06:00' && date('H:i', $fechaInicio) < '13:00') {
-            $fechaInicio = $horaInicioDia;
-        } elseif (date('H:i', $fechaInicio) >= '13:00') {
-            $fechaInicio = strtotime('+1 day', $horaInicioDia); // Añadir un día al final del día para que venza al siguiente día a las 12:00 horas
+        //inicializamos en ceros
+        $dias = 0;
+        //si ingresa antes de las 6:00 se le sumara un dia
+        if (strtotime(date('H:i', strtotime($this->check_in))) < strtotime("06:00")) {
+            $dias += 1;
         }
 
-        // Si el usuario ingresa antes de las 06:00 horas, su horario vencerá el mismo día a las 12:00 horas, sumando un día más a su estadia
-        if (date('H:i', $fechaFin) < '06:00') {
-            $fechaFin = strtotime('+1 day', $horaFinDia); // Añadir un día al final del día para que venza al siguiente día a las 12:00 horas
+        //luego calculamos la diferencia
+        $interval = $check_in->diff($check_out);
+
+        $dias += (int) $interval->days;
+
+        //para ajustar la funcion de php diff debemos comprobar que la hora despues de las 12:01
+        //se incremente 1 al calculo
+        if (strtotime(date('H:i', strtotime($this->check_in))) > strtotime("12:00")) {
+            $dias += 1;
         }
-
-        $diferencia = $fechaFin - $fechaInicio;
-
-        // Si la diferencia es menor o igual a cero, retornamos 1, ya que ningún día debe tener un valor de 0
-        if ($diferencia <= 0) {
-            return 1;
-        }
-
-        // Calculamos la cantidad de días en números enteros
-        $dias = ceil($diferencia / (60 * 60 * 24));
 
         return $dias;
     }
@@ -160,5 +156,53 @@ class Booking extends Model
         }
 
         $this->attributes['check_out'] = date('Y-m-d H:i', $check_out);
+    }
+
+    /**
+     * verifica que sea una reserva
+     */
+    public function is_reservation()
+    {
+        return $this->type == "reservation";
+    }
+
+    /**
+     * filtra el calendario por medio de categoria
+     * @param String $category_id
+     * @param String $check_in
+     * @param String $check_out
+     * @return Collection Calendar
+     */
+    public function get_calendar($category_id, $check_in, $check_out)
+    {
+        $check_in = date('Y-m-d', strtotime($check_in));
+        $check_out = date('Y-m-d', strtotime($check_out . "- 1 days"));
+
+        return Calendar::where('category_id', $category_id)
+            ->whereBetween('day', [$check_in, $check_out])
+            ->get();
+    }
+
+    /**
+     * verifica que haya disponiblidad en el calendario
+     * @param Calendar $calendar
+     */
+    public function can_not_update_calendar(Calendar $calendar)
+    {
+        if ($calendar->available < 1) {
+            $message = "Por favor revise la disponiblidad, el dia $calendar->day no tiene";
+            $message .= " habitaciones disponibles";
+            throw new ReportMessage(__($message), 400);
+        }
+    }
+
+    /**
+     * verifica que el check_in haya empesado,
+     * se utiliza el tiempo actual y y el checkin para verificar
+     * @return Boolean
+     */
+    public function booking_start()
+    {
+        return strtotime(now()) >= strtotime($this->check_in);
     }
 }

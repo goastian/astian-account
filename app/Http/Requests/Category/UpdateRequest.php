@@ -28,6 +28,7 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ['nullable', 'max:100', 'unique:categories,name,' . Request('category')->id],
             'price' => ['nullable', 'integer'],
+            'capacity' => ['nullable', 'integer', 'max:20'],
             'air_conditionar' => ['nullable', Rule::in(EnumType::yes_or_not())],
             'tv' => ['nullable', Rule::in(EnumType::yes_or_not())],
             'bathroom' => ['nullable', Rule::in(EnumType::yes_or_not())],

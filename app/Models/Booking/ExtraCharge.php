@@ -3,11 +3,12 @@
 namespace App\Models\Booking;
 
 use App\Assets\Timestamps;
+use App\Models\master;
 use App\Transformers\Booking\ExtraChargeTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ExtraCharge extends Model
+class ExtraCharge extends master
 {
     use HasFactory, Timestamps;
 

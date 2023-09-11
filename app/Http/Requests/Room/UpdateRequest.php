@@ -26,6 +26,7 @@ class UpdateRequest extends FormRequest
         return [
             'number' => ['nullable','max:5', 'unique:rooms,number,'. Request('room')->id],
             'description' => ['nullable', 'max:150'],
+            'note' => ['nullable', 'max:150'],
             'category_id' => ['nullable','exists:categories,id']
         ];
     }

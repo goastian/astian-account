@@ -15,15 +15,16 @@ return new class extends Migration
     public function up()
     {
         Schema::create('payments', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->string('description', 150);
             $table->double('price', 8,2);
             $table->string('code', 150)->unique();
             $table->enum('type',EnumType::payment_type());
             $table->enum('method', EnumType::payment_method());
-            $table->integer('paymentable_id', false, true);
+            $table->string('paymentable_id');
             $table->string('paymentable_type');
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

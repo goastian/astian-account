@@ -3,8 +3,7 @@
 namespace App\Http\Controllers\Booking;
  
 use App\Models\User\Client;
-use App\Models\Booking\Rent;
-use Illuminate\Http\Request;
+use App\Models\Booking\Rent; 
 use App\Models\Booking\Booking;
 use App\Exceptions\ReportMessage;
 use Illuminate\Support\Facades\DB;
@@ -31,9 +30,9 @@ class BookingRentClientController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(ShowRequest $request, Booking $booking, Rent $room)
+    public function index(ShowRequest $request, Booking $booking, Rent $rent)
     {
-        $huespeds = $room->huespeds()->get()->makeHidden('created_at');
+        $huespeds = $rent->huespeds()->get()->makeHidden('created_at');
 
         return $this->showAll($huespeds, BookingRentClientTransformer::class);
     }
@@ -44,12 +43,12 @@ class BookingRentClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request, Booking $booking, Rent $room, Client $huesped)
+    public function store(StoreRequest $request, Booking $booking, Rent $rent, Client $huesped)
     {
         
-        DB::transaction(function () use ($request, $room, $huesped) {
+        DB::transaction(function () use ($request, $rent, $huesped) {
             try {
-                $room->huespeds()->create([
+                $rent->huespeds()->create([
                     'name' => $request->name,
                     'last_name' => $request->last_name,
                     'document' => $request->document,
@@ -63,7 +62,7 @@ class BookingRentClientController extends Controller
             } catch (QueryException $e) {
                 try {
                     $huesped = $huesped->where('number', $request->number)->first();
-                    $room->huespeds()->save($huesped);
+                    $rent->huespeds()->save($huesped);
                 } catch (QueryException $e) {
                     throw new ReportMessage(__('Ocurrio un error, Este usuario ya ha sido registrado, si cree que es un error contacte con su soporte tecnico'), 422);
                 }
@@ -81,9 +80,9 @@ class BookingRentClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, Booking $booking, Rent $room, Client $huesped)
+    public function destroy(DestroyRequest $request, Booking $booking, Rent $rent, Client $huesped)
     {
-        $room->huespeds()->detach($huesped->id);
+        $rent->huespeds()->detach($huesped->id);
 
         DestroyBookingRoomClientEvent::dispatch($this->AuthKey());
 

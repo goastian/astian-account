@@ -13,7 +13,7 @@ class DestroyRequest extends FormRequest
      */
     public function authorize()
     {
-        return Request()->user()->granted() && Request('booking')->id == Request('room')->booking_id;
+        return Request()->user()->granted() && Request('booking')->id == Request('rent')->booking_id;
     }
 
     /**

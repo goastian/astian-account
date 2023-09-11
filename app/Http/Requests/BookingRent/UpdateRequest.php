@@ -13,7 +13,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return (request()->user()->canWrite() || request()->user()->isAdmin()) && Request('booking')->id == Request('room')->booking_id;
+        return $this->can_access() && $this->belongs_to();;
     }
 
     /**
@@ -26,7 +26,23 @@ class UpdateRequest extends FormRequest
         return [
             'room_id' => ['nullable', 'exists:rooms,id'],
             'category_id' => ['nullable', 'exists:categories,id'],
-            'price' => ['nullable', 'integer']
+            'price' => ['nullable', 'integer'],
         ];
+    }
+
+    /**
+     * comprueba que tenga los permisos necesarios
+     */
+    public function can_access()
+    {
+        return request()->user()->canWrite() || request()->user()->isAdmin();
+    }
+
+    /**
+     * verifica que el regristro en rent pertenesca al booking  
+     */
+    public function belongs_to()
+    {
+        return Request('booking')->id == Request('rent')->booking_id;
     }
 }

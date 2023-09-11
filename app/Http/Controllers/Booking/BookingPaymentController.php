@@ -43,7 +43,7 @@ class BookingPaymentController extends Controller
     public function store(StoreRequest $request, Booking $booking)
     {
 
-        $code = "B" . $this->generateUniqueCode($booking->id);
+        $code = "B" . $this->generateUniqueCode();
 
         DB::transaction(function () use ($request, $booking, $code) {
             $booking->payments()->create([

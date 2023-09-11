@@ -2,10 +2,14 @@
 
 namespace App\Transformers\Asset;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class CategoryTransformer extends TransformerAbstract
 {
+
+    use Asset;
+    
     /**
      * List of resources to automatically include
      *
@@ -35,6 +39,7 @@ class CategoryTransformer extends TransformerAbstract
             'id' => $data->id,
             'categoria' => $data->name,
             'precio' => $data->price,
+            'capacidad' => $data->capacity,
             'tv' => $data->tv,
             'baño_privado' => $data->bathroom,
             'aire_acondicionado' => $data->air_conditionar,
@@ -42,9 +47,9 @@ class CategoryTransformer extends TransformerAbstract
             'agua_caliente' => $data->hot_water,
             'agua_fria' => $data->cold_water,
             'ventilador' => $data->fan,
-            'registrado' => $data->created_at,
-            'actualizado' => $data->updated_at,
-            'inactivo' => $data->deleted_at,
+            'registrado' => $this->format_date($data->created_at),
+            'actualizado' => $this->format_date($data->updated_at),
+            'inactivo' => $this->format_date($data->deleted_at),
             'links' => [
                 'parent' => route('categories.index'),
                 'store' => route('categories.store'),
@@ -65,6 +70,7 @@ class CategoryTransformer extends TransformerAbstract
         $attribute = [ 
             'categoria' => 'name',
             'precio' => 'price',
+            'capacidad' => 'capacity',
             'tv' => 'tv',
             'baño_privado' => 'bathroom',
             'aire_acondicionado' => 'air_conditionar',
@@ -83,6 +89,7 @@ class CategoryTransformer extends TransformerAbstract
         $attribute = [ 
             'name' => 'categoria',
             'price' => 'precio',
+            'capacity' => 'capacidad',
             'tv' => 'tv',
             'bathroom' => 'baño_privado',
             'air_conditionar' => 'aire_acondicionado',
@@ -101,6 +108,7 @@ class CategoryTransformer extends TransformerAbstract
             'id' => 'id',
             'categoria' => 'name',
             'precio' => 'price',
+            'capacidad' => 'capacity',
             'tv' => 'tv',
             'baño_privado' => 'bathroom',
             'aire_acondicionado' => 'air_conditionar',
