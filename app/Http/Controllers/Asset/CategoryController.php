@@ -95,6 +95,11 @@ class CategoryController extends Controller
                 $category->price = $request->price;
             }
 
+            if ($this->is_diferent($category->capacity, $request->capacity)) {
+                $this->can_update[] = true;
+                $category->capacity = $request->capacity;
+            }
+
             if ($this->is_diferent($category->air_conditionar, $request->air_conditionar)) {
                 $this->can_update[] = true;
                 $category->air_conditionar = $request->air_conditionar;

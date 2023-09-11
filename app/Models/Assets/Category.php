@@ -4,12 +4,13 @@ namespace App\Models\Assets;
 
 use App\Assets\Timestamps;
 use App\Models\Booking\Rent;
+use App\Models\master;
 use App\Transformers\Asset\CategoryTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Category extends Model
+class Category extends master
 {
     use HasFactory, SoftDeletes, Timestamps;
 
@@ -22,6 +23,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'price',
+        'capacity',
         'air_conditionar',
         'tv',
         'bathroom',
@@ -42,8 +44,8 @@ class Category extends Model
     }
 
     public function rooms()
-    {
-        return $this->hasMany(Room::class);
+    { 
+        return $this->hasMany(Room::class)->withTrashed();
     }
 
     public function calendar()

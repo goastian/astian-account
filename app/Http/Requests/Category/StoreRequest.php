@@ -28,6 +28,7 @@ class StoreRequest extends FormRequest
         return [
             'name' => ['required', 'max:100', 'unique:categories,name'],
             'price' => ['required', 'integer'],
+            'capacity' => ['required', 'integer', 'max:20'],
             'air_conditionar' => ['required', Rule::in(EnumType::yes_or_not())],
             'tv' => ['required', Rule::in(EnumType::yes_or_not())],
             'bathroom' => ['required', Rule::in(EnumType::yes_or_not())],

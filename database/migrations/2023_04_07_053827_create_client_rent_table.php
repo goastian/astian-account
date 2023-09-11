@@ -15,8 +15,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('client_rent', function (Blueprint $table) {
-            $table->integer('client_id', false, true);
-            $table->integer('rent_id', false, true);
+            $table->string('client_id', false, true);
+            $table->string('rent_id', false, true);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->unique(['client_id', 'rent_id']);

@@ -30,11 +30,11 @@ class DestroyRequest extends FormRequest
 
     public function exists_huesped()
     {
-        return request('room')->huespeds()->get()->contains(request('huesped')->id);
+        return request('rent')->huespeds()->get()->contains(request('huesped')->id);
     }
 
     public function user_validate()
     {
-        return request()->user()->granted() and (request('booking')->id == request('room')->booking_id);
+        return request()->user()->granted() and (request('booking')->id == request('rent')->booking_id);
     }
 }

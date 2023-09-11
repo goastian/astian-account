@@ -14,13 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('extra_charges', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->string('charge');
             $table->tinyInteger('amount', false, true)->nullable();
             $table->float('price', 8, 2);
-            $table->integer('extra_chargeable_id', false, true);
+            $table->string('extra_chargeable_id');
             $table->string('extra_chargeable_type');
             $table->timestamps();
+            $table->primary('id');
+
         });
     }
 

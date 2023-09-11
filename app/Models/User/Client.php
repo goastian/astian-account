@@ -4,11 +4,12 @@ namespace App\Models\User;
 
 use App\Assets\Timestamps;
 use App\Models\Booking\Rent;
+use App\Models\master;
 use App\Transformers\Auth\ClientTransformer;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Client extends Model
+class Client extends master
 {
     use HasFactory, Timestamps;
 

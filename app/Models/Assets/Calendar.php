@@ -2,12 +2,13 @@
 
 namespace App\Models\Assets;
 
+use App\Models\master;
 use App\Models\Assets\Category;
-use App\Transformers\Asset\CalendarTransformer;
 use Illuminate\Database\Eloquent\Model; 
+use App\Transformers\Asset\CalendarTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Calendar extends Model
+class Calendar extends master
 {
     use HasFactory;
 

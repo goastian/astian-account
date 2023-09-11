@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
 
@@ -18,82 +16,81 @@ class EventServiceProvider extends ServiceProvider
 
         //Login
         \App\Events\Auth\LoginEvent::class => [
-            \App\Listeners\Auth\LoginListener::class
+            \App\Listeners\Auth\LoginListener::class,
         ],
 
         \App\Events\Auth\LogoutEvent::class => [
-            \App\Listeners\Auth\LogoutListener::class
+            \App\Listeners\Auth\LogoutListener::class,
         ],
 
         //Token events
         \App\Events\Token\StoreTokenEvent::class => [
-            \App\Listeners\Token\StoreTokenListener::class
+            \App\Listeners\Token\StoreTokenListener::class,
         ],
 
         \App\Events\Token\DestroyTokenEvent::class => [
-            \App\Listeners\Token\DestroyTokenListener::class
+            \App\Listeners\Token\DestroyTokenListener::class,
         ],
 
         \App\Events\Token\DestroyAllTokenEvent::class => [
-            \App\Listeners\Token\DestroyAllTokenListener::class
+            \App\Listeners\Token\DestroyAllTokenListener::class,
         ],
 
         //Events CategoryController Assets
         \App\Events\Asset\Category\StoreCategoryEvent::class => [
-            \App\Listeners\Asset\Category\StoreCategoryListener::class
+            \App\Listeners\Asset\Category\StoreCategoryListener::class,
         ],
 
         \App\Events\Asset\Category\UpdateCategoryEvent::class => [
-            \App\Listeners\Asset\Category\UpdateCategoryListener::class
+            \App\Listeners\Asset\Category\UpdateCategoryListener::class,
         ],
 
         \App\Events\Asset\Category\DisableCategoryEvent::class => [
-            \App\Listeners\Asset\Category\DisableCategoryListener::class
+            \App\Listeners\Asset\Category\DisableCategoryListener::class,
         ],
 
         \App\Events\Asset\Category\EnableCategoryEvent::class => [
-            \App\Listeners\Asset\Category\EnableCategoryListener::class
+            \App\Listeners\Asset\Category\EnableCategoryListener::class,
         ],
 
         \App\Events\Asset\Category\DestroyCategoryEvent::class => [
-            \App\Listeners\Asset\Category\DestroyCategoryListener::class
+            \App\Listeners\Asset\Category\DestroyCategoryListener::class,
         ],
-
 
         //Events CategoryCalendarController Assets
         \App\Events\Asset\Category\Calendar\StoreCategoryCalendarEvent::class => [
-            \App\Listeners\Asset\Category\Calendar\StoreCategoryCalendarListener::class
+            \App\Listeners\Asset\Category\Calendar\StoreCategoryCalendarListener::class,
         ],
 
         \App\Events\Asset\Category\Calendar\UpdateCategoryCalendarEvent::class => [
-            \App\Listeners\Asset\Category\Calendar\UpdateCategoryCalendarListener::class
+            \App\Listeners\Asset\Category\Calendar\UpdateCategoryCalendarListener::class,
         ],
 
         //Events RoomController Assets
         \App\Events\Asset\Room\StoreRoomEvent::class => [
-            \App\Listeners\Asset\Room\StoreRoomListener::class
+            \App\Listeners\Asset\Room\StoreRoomListener::class,
         ],
 
         \App\Events\Asset\Room\UpdateRoomEvent::class => [
-            \App\Listeners\Asset\Room\UpdateRoomListener::class
+            \App\Listeners\Asset\Room\UpdateRoomListener::class,
         ],
 
         \App\Events\Asset\Room\EnableRoomEvent::class => [
-            \App\Listeners\Asset\Room\EnableRoomListener::class
+            \App\Listeners\Asset\Room\EnableRoomListener::class,
         ],
 
         \App\Events\Asset\Room\DisableRoomEvent::class => [
-            \App\Listeners\Asset\Room\DisableRoomListener::class
+            \App\Listeners\Asset\Room\DisableRoomListener::class,
         ],
 
         \App\Events\Asset\Room\DestroyRoomEvent::class => [
-            \App\Listeners\Asset\Room\DestroyRoomListener::class
+            \App\Listeners\Asset\Room\DestroyRoomListener::class,
         ],
 
-        //Employee 
+        //Employee
         \App\Events\Employee\StoreEmployeeEvent::class => [
             \App\Listeners\Employee\StoreEmployeeListener::class,
-        ], 
+        ],
 
         \App\Events\Employee\UpdateEmployeeEvent::class => [
             \App\Listeners\Employee\UpdateEmployeeListener::class,
@@ -114,7 +111,6 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Employee\DestroyEmployeeRoleEvent::class => [
             \App\Listeners\Employee\DestroyEmployeeRoleListener::class,
         ],
-
 
         //booking
         \App\Events\Booking\StoreBookingEvent::class => [
@@ -153,19 +149,19 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Booking\Client\StoreBookingRoomClientListener::class,
         ],
 
-         \App\Events\Booking\Client\UpdateBookingRoomClientEvent::class => [
+        \App\Events\Booking\Client\UpdateBookingRoomClientEvent::class => [
             \App\Listeners\Booking\Client\UpdateBookingRoomClientListener::class,
         ],
 
-          \App\Events\Booking\Client\DestroyBookingRoomClientEvent::class => [
+        \App\Events\Booking\Client\DestroyBookingRoomClientEvent::class => [
             \App\Listeners\Booking\Client\DestroyBookingRoomClientListener::class,
         ],
 
-         \App\Events\Booking\Payments\StoreBookingPaymentEvent::class => [
+        \App\Events\Booking\Payments\StoreBookingPaymentEvent::class => [
             \App\Listeners\Booking\Payments\StoreBookingPaymentListener::class,
         ],
 
-         \App\Events\Booking\Payments\UpdateBookingPaymentEvent::class => [
+        \App\Events\Booking\Payments\UpdateBookingPaymentEvent::class => [
             \App\Listeners\Booking\Payments\UpdateBookingPaymentListener::class,
         ],
 
@@ -176,6 +172,19 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\Accounting\UpdateAccountingEvent::class => [
             \App\Listeners\Accounting\UpdateAccountingListener::class,
+        ],
+
+        //Reservation
+        \App\Events\Reservation\StoreReservationEvent::class => [
+            \App\Listeners\Reservation\StoreReservationListener::class,
+        ],
+
+        \App\Events\Reservation\UpdateReservationEvent::class => [
+            \App\Listeners\Reservation\UpdateReservationListener::class,
+        ],
+
+        \App\Events\Reservation\DestroyReservationEvent::class => [
+            \App\Listeners\Reservation\DestroyReservationListener::class,
         ],
     ];
 

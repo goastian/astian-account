@@ -2,10 +2,12 @@
 
 namespace App\Transformers\Accounting;
 
+use App\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class AccountingTransformer extends TransformerAbstract
 {
+    use Asset;
     /**
      * List of resources to automatically include
      *
@@ -38,8 +40,8 @@ class AccountingTransformer extends TransformerAbstract
             "tipo" => $data->type,
             'codigo' => $data->code,
             "metodo_pago" => $data->method,
-            "registrado" => $data->created_at,
-            "actualizado" => $data->updated_at, 
+            "registrado" => $this->format_date($data->created_at),
+            "actualizado" => $this->format_date($data->updated_at), 
         ];
     }
 

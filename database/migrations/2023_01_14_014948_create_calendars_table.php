@@ -14,10 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('calendars', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->unique();
             $table->date('day');
-            $table->integer('available', false, true);
-            $table->integer('category_id', false, true); 
+            $table->string('available');
+            $table->string('category_id'); 
+            $table->primary('id');
         });
     }
 
