@@ -1,8 +1,8 @@
 <?php
 
 use App\Enum\EnumType;
-use App\Http\Controllers\Account\AccountController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Asset\RoomController;
@@ -11,17 +11,18 @@ use App\Http\Controllers\User\UserRoleController;
 use App\Http\Controllers\Asset\CalendarController;
 use App\Http\Controllers\Asset\CategoryController;
 use App\Http\Controllers\Sanctum\TokensController;
+use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Booking\BookingController;
+use App\Http\Controllers\Booking\PaymentController;
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Booking\BookingRentController;
 use App\Http\Controllers\Asset\CategoryCalendarController;
 use App\Http\Controllers\Booking\BookingCompanyController;
 use App\Http\Controllers\Booking\BookingPaymentController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Booking\BookingExtraChargeController;
-use App\Http\Controllers\Booking\BookingRentClientController;
-use App\Http\Controllers\Booking\PaymentController;
 use App\Http\Controllers\Reservation\ReservationController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Booking\BookingRentClientController;
+use App\Http\Controllers\Booking\BookingExtraChargeController;
 
 //Valores absolutos
 Route::get('payment-type', [EnumType::class, 'payment_type']);
@@ -30,7 +31,7 @@ Route::get('booking-type', [EnumType::class, 'booking_type']);
 Route::get('document-type', [EnumType::class, 'documento_type']);
 
 //Auth
-Route::post('login', [AuthorizationController::class,'store']);
+Route::post('login', [AuthorizationController::class,'store'])->name('signin');
 Route::post('logout', [AuthorizationController::class, 'destroy']);
 Route::get('about', [AuthenticatedSessionController::class, 'profile']);
 
