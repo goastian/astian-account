@@ -17,11 +17,33 @@ class TransformRequest
      */
     public function handle(Request $request, Closure $next, $transformer)
     {
-
         //transform Request
         $inputAttrs = [];
+
         foreach ($request->request->all() as $input => $value) {
-            $inputAttrs[$transformer::transformRequest($input)] = $value;
+
+            if (is_array($value)) {
+
+                $$input = [];
+
+                foreach ($value as $key1 => $value1) {
+                    foreach ($value1 as $key2 => $value2) {
+
+                        $index = $transformer::transformRequest("$input.$key1.$key2");
+
+                        if ($index) {
+                            $data = str_replace('*', $key1, $index);
+                            $data = explode('.', $data);
+
+                            $$input[$data[1]][$data[2]] = $value2;
+                        }
+                        $inputAttrs[$input] = $$input;
+                    }
+                }
+            } else {
+                $inputAttrs[$transformer::transformRequest($input)] = $value;
+            }
+
         }
 
         $request->replace($inputAttrs);
@@ -44,7 +66,14 @@ class TransformRequest
 
                 $transformedField = $transformer::transformResponse($field);
 
-                $transformErrors[$transformedField] = str_replace($field,  $transformedField , $error);
+                /**
+                 * verificacion de datos para campos de validacion arrrays
+                 */
+                if (strpos($field, '.')) {
+                    $old_key = explode('.', $field);
+                    $transformedField = str_replace('*', $old_key[1], $transformedField);
+                }
+                $transformErrors[$transformedField] = str_replace($field, $transformedField, $error);
             }
 
             $data->errors = $transformErrors;

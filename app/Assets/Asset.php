@@ -2,7 +2,7 @@
 
 namespace App\Assets;
 
-use App\Models\Assets\Calendar; 
+use ErrorException;
 
 /**
  *
@@ -89,7 +89,6 @@ trait Asset
     {
         return isset($date) ? date('Y-m-d H:i:s', strtotime($date)) : null;
     }
- 
 
     /**
      * verica si el tiempo actual esta entre el checkin y el check_out
@@ -99,4 +98,17 @@ trait Asset
         return strtotime(now()) >= strtotime($check_in) and strtotime(now()) < strtotime($check_out);
     }
 
+    /**
+     * remplaza los indices de las variables es utilizada dentro de los transformadores
+     * @param String $index
+     */
+    public static function changeIndex($index)
+    {
+        try {
+            $number = explode(".", $index)[1];
+            return str_replace($number, '*', $index);
+        } catch (ErrorException $e) {
+            return $index;
+        }
+    }
 }

@@ -29,7 +29,7 @@ class BookingController extends Controller
     public function __construct(Booking $booking)
     {
         parent::__construct();
-        $this->middleware('transform.request:' . $booking->transformer)->only('update');
+        $this->middleware('transform.request:' . $booking->transformer)->only('update','store');
     }
 
     /**
