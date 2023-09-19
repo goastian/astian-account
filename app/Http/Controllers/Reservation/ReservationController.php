@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Reservation;
 
-use App\Models\User\Client;
-use App\Models\Booking\Rent;
-use Illuminate\Http\Request;
+use App\Events\Asset\Category\Calendar\UpdateCategoryCalendarEvent;
+use App\Events\Reservation\StoreReservationEvent;
+use App\Exceptions\ReportMessage;
+use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Requests\Reservation\StoreRequest;
 use App\Models\Booking\Booking;
 use App\Models\Booking\Company;
-use App\Exceptions\ReportMessage;
-use Illuminate\Support\Facades\DB;
+use App\Models\Booking\Rent;
+use App\Models\User\Client;
+use App\Transformers\Reservation\ReservationTransformer;
 use Illuminate\Database\QueryException;
-use App\Http\Requests\Reservation\StoreRequest;
-use App\Events\Reservation\StoreReservationEvent;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Events\Asset\Category\Calendar\UpdateCategoryCalendarEvent;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReservationController extends Controller
 {
@@ -21,6 +22,7 @@ class ReservationController extends Controller
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('transform.request:' . ReservationTransformer::class)->only('store');
     }
 
     /**

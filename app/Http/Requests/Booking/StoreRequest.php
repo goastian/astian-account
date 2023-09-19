@@ -22,7 +22,7 @@ class StoreRequest extends FormRequest
      * @return array<string, mixed>
      */
     public function rules()
-    {
+    { 
         return [
             // datos del registro
             'check_out' => ['required', 'date_format:Y-m-d', 'after_or_equal:' . date('Y-m-d')],
