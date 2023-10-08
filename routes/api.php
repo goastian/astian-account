@@ -1,20 +1,17 @@
 <?php
 
 use App\Enum\EnumType;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Route; 
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Asset\RoomController;
 use App\Http\Controllers\User\ClientController;
 use App\Http\Controllers\User\UserRoleController;
 use App\Http\Controllers\Asset\CalendarController;
-use App\Http\Controllers\Asset\CategoryController;
-use App\Http\Controllers\Sanctum\TokensController;
+use App\Http\Controllers\Asset\CategoryController; 
 use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Booking\BookingController;
-use App\Http\Controllers\Booking\PaymentController;
-use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\Booking\PaymentController; 
 use App\Http\Controllers\Booking\BookingRentController;
 use App\Http\Controllers\Asset\CategoryCalendarController;
 use App\Http\Controllers\Booking\BookingCompanyController;
@@ -29,18 +26,9 @@ Route::get('payment-type', [EnumType::class, 'payment_type']);
 Route::get('payment-method', [EnumType::class, 'payment_method']);
 Route::get('booking-type', [EnumType::class, 'booking_type']);
 Route::get('document-type', [EnumType::class, 'documento_type']);
-
-//Auth
-Route::post('login', [AuthorizationController::class,'store'])->name('signin');
-Route::post('logout', [AuthorizationController::class, 'destroy']);
+ 
 Route::get('about', [AuthenticatedSessionController::class, 'profile']);
-
-//Tokens
-Route::get('tokens', [TokensController::class, 'index'])->name('tokens.index');
-Route::post('tokens', [TokensController::class, 'store'])->name('tokens.store');
-Route::delete('tokens/clean', [TokensController::class, 'destroyAllTokens'])->name('tokens.clean');
-Route::delete('tokens/{id}', [TokensController::class, 'destroy'])->name('tokens.destroy');
-
+ 
 //Roles
 Route::resource('roles', RoleController::class)->only('index');
 
