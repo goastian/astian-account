@@ -13,29 +13,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-
-        //Login
-        \App\Events\Auth\LoginEvent::class => [
-            \App\Listeners\Auth\LoginListener::class,
-        ],
-
-        \App\Events\Auth\LogoutEvent::class => [
-            \App\Listeners\Auth\LogoutListener::class,
-        ],
-
-        //Token events
-        \App\Events\Token\StoreTokenEvent::class => [
-            \App\Listeners\Token\StoreTokenListener::class,
-        ],
-
-        \App\Events\Token\DestroyTokenEvent::class => [
-            \App\Listeners\Token\DestroyTokenListener::class,
-        ],
-
-        \App\Events\Token\DestroyAllTokenEvent::class => [
-            \App\Listeners\Token\DestroyAllTokenListener::class,
-        ],
-
+ 
         //Events CategoryController Assets
         \App\Events\Asset\Category\StoreCategoryEvent::class => [
             \App\Listeners\Asset\Category\StoreCategoryListener::class,
