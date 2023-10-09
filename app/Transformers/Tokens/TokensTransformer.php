@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Transformers\Tokens;
-
-use App\Assets\Asset;
+ 
+use Elyerr\ApiExtend\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class TokensTransformer extends TransformerAbstract
@@ -37,9 +37,9 @@ class TokensTransformer extends TransformerAbstract
         return [
             'identificador' => $token->id,
             'agente' => $token->name,
-            'ultimo_uso' => $token->last_used_at,
-            'creado' =>  $token->created_at,
-            'actualizado' =>  $token->updated_at,
+            'ultimo_uso' => $token->last_used_at ? $this->format_date($token->last_used_at) : null,
+            'creado' => $token->created_at ? $this->format_date($token->created_at) : null,
+            'actualizado' => $token->updated_at ? $this->format_date($token->updated_at) : null,
         ];
     }
 }

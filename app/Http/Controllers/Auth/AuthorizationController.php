@@ -1,25 +1,23 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
-use App\Assets\Device;
-use App\Events\Auth\LoginEvent;
-use App\Events\Auth\LogoutEvent;
+ 
+use Illuminate\Routing\Controller;
+use Elyerr\ApiExtend\Events\LoginEvent;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Http\Controllers\GlobalController as Controller;
 use App\Transformers\Auth\EmployeeTransformer;
-use Illuminate\Auth\Events\Logout;
+use Elyerr\ApiExtend\Events\LogoutEvent;
+use Elyerr\ApiExtend\Assets\JsonResponser;
 
 class AuthorizationController extends Controller
 {
-    use  Device;
+    use JsonResponser;
 
     public function __construct()
     {
         $this->middleware('guest')->only('store');
         $this->middleware('auth:sanctum')->only('destroy');
-        $this->middleware('transform.request:' . EmployeeTransformer::class)->only('store');
-
+        $this->middleware('transform.request:'. EmployeeTransformer::class)->only('store');
     }
     /**
      * Handle an incoming authentication request.
@@ -31,9 +29,9 @@ class AuthorizationController extends Controller
     {
         $request->authenticate();
 
-        $token = request()->user()->createToken($this->setTokenName($request));
+        $token = request()->user()->createToken($request->email ."|". $_SERVER['HTTP_USER_AGENT']);
 
-        LoginEvent::dispatch($this->AuthKey());
+        LoginEvent::dispatch(request()->user());
 
         return response()->json(['data' => [
             'Authorization' => "Bearer " . $token->plainTextToken,
@@ -48,9 +46,9 @@ class AuthorizationController extends Controller
      */
     public function destroy()
     {
-        request()->user()->currentAccessToken()->delete();
+        request()->user()->currentAccessToken()->delete(); 
 
-        LogoutEvent::dispatch($this->AuthKey());
+        LogoutEvent::dispatch(request()->user());
 
         return $this->message('La sesion ha sido cerrada.', 200);
     }

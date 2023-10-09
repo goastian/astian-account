@@ -3,7 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use Elyerr\ApiExtend\Assets\Asset;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -13,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {  
-    use HasApiTokens, HasUuids, HasFactory, Notifiable;
+    use HasApiTokens, HasUuids, HasFactory, Notifiable, Asset;
 
         /**
      * The data type of the auto-incrementing ID.
@@ -38,10 +38,7 @@ class Auth extends Authenticatable
         'last_name',
         'email',
         'password',
-        'document_type',
-        'document_number',
-        'country',
-        'department',
+        'country', 
         'address',
         'phone',
     ];
@@ -79,46 +76,17 @@ class Auth extends Authenticatable
     {
         $this->attributes['email'] = strtolower($value);
     }
-
-    public function setDocumentTypeAttribute($value)
-    {
-        $this->attributes['document_type'] = strtolower($value);
-    }
-
+  
     public function setCountryAttribute($value)
     {
         $this->attributes['country'] = strtolower($value);
     }
-
-    public function setDepartmentAttribute($value)
-    {
-        $this->attributes['department'] = strtolower($value);
-    }
-
+ 
     public function setAddressAttribute($value)
     {
         $this->attributes['address'] = strtolower($value);
     }
-
-    public function isAdmin()
-    {
-        return $this->roles()->get()->contains('name', 'admin');
-    }
-
-    public function canWrite()
-    {
-        return $this->roles()->get()->contains('name', 'escritura');
-    }
-
-    public function canRead()
-    {
-        return $this->roles()->get()->contains('name', 'lectura');
-    }
-
-    public function granted()
-    {
-        return $this->isAdmin() or $this->canWrite();
-    }
+ 
 
     /**
      * Send the password reset notification.

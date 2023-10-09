@@ -2,16 +2,11 @@
 
 namespace App\Models\Booking;
  
-use App\Assets\Timestamps;
-use App\Models\master;
-use Illuminate\Database\Eloquent\Model;
-use App\Transformers\Payment\PaymentTransformer;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Master as master; 
+use App\Transformers\Payment\PaymentTransformer; 
 
 class Payment extends master
 {
-    use HasFactory, Timestamps;
-
     public $table = "payments";
 
     public $view = "payment";

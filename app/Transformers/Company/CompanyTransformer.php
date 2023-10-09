@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Transformers\Company;
-
-use Attribute;
+ 
 use League\Fractal\TransformerAbstract;
 
 class CompanyTransformer extends TransformerAbstract

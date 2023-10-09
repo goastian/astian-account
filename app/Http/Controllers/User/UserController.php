@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\Employee\DisableEmployeeEvent;
-use App\Events\Employee\EnableEmployeeEvent;
-use App\Events\Employee\StoreEmployeeEvent;
-use App\Events\Employee\UpdateEmployeeEvent;
-use App\Exceptions\ReportMessage;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Employee\DisableRequest;
-use App\Http\Requests\Employee\EnableRequest;
-use App\Http\Requests\Employee\IndexRequest;
-use App\Http\Requests\Employee\StoreRequest;
-use App\Http\Requests\Employee\UpdateRequest;
-use App\Models\User\Employee;
-use App\Notifications\Employee\CreatedNewUser;
 use Error;
+use App\Models\User\Employee; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Events\Employee\StoreEmployeeEvent;
+use App\Events\Employee\EnableEmployeeEvent;
+use App\Events\Employee\UpdateEmployeeEvent;
+use App\Http\Requests\Employee\IndexRequest;
+use App\Http\Requests\Employee\StoreRequest;
 use Illuminate\Support\Facades\Notification;
+use App\Events\Employee\DisableEmployeeEvent;
+use App\Http\Requests\Employee\EnableRequest;
+use App\Http\Requests\Employee\UpdateRequest;
+use App\Http\Requests\Employee\DisableRequest;
+use App\Notifications\Employee\CreatedNewUser;
+use App\Http\Controllers\GlobalController as Controller;
+use Elyerr\ApiExtend\Exceptions\ReportError;
 
 class UserController extends Controller
 {
@@ -184,7 +184,7 @@ class UserController extends Controller
             return $this->showOne($user, $user->transformer);
 
         } catch (Error $e) {
-            throw new ReportMessage("Error al procesar la petición", 404);
+            throw new ReportError("Error al procesar la petición", 404);
         }
     }
 

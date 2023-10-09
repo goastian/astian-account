@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Transformers\Asset;
-
-use App\Assets\Asset;
-use App\Models\Assets\Category;
+  
+use Elyerr\ApiExtend\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class RoomTransformer extends TransformerAbstract
