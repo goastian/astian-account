@@ -1,18 +1,13 @@
 <?php
 
 namespace App\Models\User;
-
-use App\Assets\Timestamps;
+ 
 use App\Models\Booking\Rent;
-use App\Models\master;
-use App\Transformers\Auth\ClientTransformer;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Master as master;
+use App\Transformers\Auth\ClientTransformer; 
 
 class Client extends master
-{
-    use HasFactory, Timestamps;
-
+{ 
     public $table = "clients";
 
     public $view = "";

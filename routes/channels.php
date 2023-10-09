@@ -12,4 +12,10 @@ use Illuminate\Support\Facades\Broadcast;
 | used to check if an authenticated user can listen to the channel.
 |
 */
- 
+ Broadcast::channel(env("CHANNEL_NAME") . ".{id}", function ($user, $id) {
+	return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel(env("CHANNEL_NAME"), function ($user) {
+	return (int) $user->id === (int) request()->user()->id; 
+});

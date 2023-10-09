@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Transformers\Booking;
-
-use App\Assets\Asset;
+ 
 use App\Models\Booking\Booking;
+use Elyerr\ApiExtend\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class BookingTransformer extends TransformerAbstract

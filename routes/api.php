@@ -1,6 +1,8 @@
 <?php
 
 use App\Enum\EnumType;
+use App\Http\Controllers\Auth\TokensController;
+use App\Http\Controllers\Auth\AuthorizationController;
 use Illuminate\Support\Facades\Route; 
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
@@ -26,6 +28,11 @@ Route::get('payment-type', [EnumType::class, 'payment_type']);
 Route::get('payment-method', [EnumType::class, 'payment_method']);
 Route::get('booking-type', [EnumType::class, 'booking_type']);
 Route::get('document-type', [EnumType::class, 'documento_type']);
+
+Route::post('login', [AuthorizationController::class, 'store'])->name('signin');
+Route::post('logout', [AuthorizationController::class, 'destroy']);
+Route::delete('tokens', [TokensController::class, 'destroyAllTokens']);
+Route::resource('tokens', TokensController::class)->only('index', 'store', 'destroy');
  
 Route::get('about', [AuthenticatedSessionController::class, 'profile']);
  

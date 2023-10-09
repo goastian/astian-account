@@ -1,23 +1,21 @@
 <?php
 
 namespace App\Models\Booking;
-
-use App\Assets\Timestamps;
-use App\Exceptions\ReportMessage;
+ 
+use DateTime; 
+use App\Models\Booking\Rent;
 use App\Models\Assets\Calendar;
 use App\Models\Booking\Company;
-use App\Models\Booking\ExtraCharge;
 use App\Models\Booking\Payment;
-use App\Models\Booking\Rent;
-use App\Models\master;
-use App\Transformers\Booking\BookingTransformer;
-use DateTime;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Master as master; 
+use App\Models\Booking\ExtraCharge;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\Booking\BookingTransformer;
+use Elyerr\ApiExtend\Exceptions\ReportError;
 
 class Booking extends master
 {
-    use HasFactory, SoftDeletes, Timestamps;
+    use SoftDeletes;
 
     public $table = "booking";
 
@@ -192,7 +190,7 @@ class Booking extends master
         if ($calendar->available < 1) {
             $message = "Por favor revise la disponiblidad, el dia $calendar->day no tiene";
             $message .= " habitaciones disponibles";
-            throw new ReportMessage(__($message), 400);
+            throw new ReportError(__($message), 400);
         }
     }
 

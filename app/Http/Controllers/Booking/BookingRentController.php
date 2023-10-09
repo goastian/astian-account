@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Booking;
 
 use App\Models\Assets\Room;
 use App\Models\Booking\Rent;
-use App\Models\Booking\Booking;
-use App\Exceptions\ReportMessage;
+use App\Models\Booking\Booking; 
 use Illuminate\Support\Facades\DB;
 use App\Events\Asset\Room\EnableRoomEvent;
 use App\Events\Asset\Room\UpdateRoomEvent;
 use App\Events\Asset\Room\DisableRoomEvent;
+use Elyerr\ApiExtend\Exceptions\ReportError;
 use App\Http\Requests\BookingRent\ShowRequest;
 use App\Http\Requests\BookingRent\StoreRequest;
 use App\Http\Requests\BookingRent\UpdateRequest;
@@ -59,7 +59,7 @@ class BookingRentController extends Controller
                 $message = "esta habitacion no esta disponible,
                 puede que este ocupada o por algun motivo desabilitada por mantenimiento.
                 si cree que esto es un error contactese con el area TI";
-                throw new ReportMessage(__($message), 400);
+                throw new ReportError(__($message), 400);
             }
 
             //deshabilitar habitacion solo si esta en el rango del check_in
@@ -172,7 +172,7 @@ class BookingRentController extends Controller
                     $message = "esta habitacion no esta disponible, ";
                     $message .= "puede que este ocupada o por algun motivo desabilitada por mantenimiento.";
                     $message .= "si cree que esto es un error contactese con el area TI";
-                    throw new ReportMessage(__($message), 400);
+                    throw new ReportError(__($message), 400);
                 }
 
                 /**
@@ -222,7 +222,7 @@ class BookingRentController extends Controller
         if (count($booking->rents()->get()) < 2) {
             $message = "No puedes eliminar todas las habitaciones de un registros: ";
             $message .= "en todo caso puedes optar por cancelar el registro";
-            throw new ReportMessage($message, 400);
+            throw new ReportError($message, 400);
         }
 
         DB::transaction(function () use ($booking, $rent) {
