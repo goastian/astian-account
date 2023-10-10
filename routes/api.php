@@ -31,7 +31,7 @@ Route::get('document-type', [EnumType::class, 'documento_type']);
 
 Route::post('login', [AuthorizationController::class, 'store'])->name('signin');
 Route::post('logout', [AuthorizationController::class, 'destroy']);
-Route::delete('tokens', [TokensController::class, 'destroyAllTokens']);
+Route::delete('tokens', [TokensController::class, 'destroyAllTokens'])->name('tokens.destroyAll');
 Route::resource('tokens', TokensController::class)->only('index', 'store', 'destroy');
  
 Route::get('about', [AuthenticatedSessionController::class, 'profile']);
