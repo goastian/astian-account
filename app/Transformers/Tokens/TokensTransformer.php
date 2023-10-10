@@ -40,6 +40,12 @@ class TokensTransformer extends TransformerAbstract
             'ultimo_uso' => $token->last_used_at ? $this->format_date($token->last_used_at) : null,
             'creado' => $token->created_at ? $this->format_date($token->created_at) : null,
             'actualizado' => $token->updated_at ? $this->format_date($token->updated_at) : null,
+            'links' => [
+                'self' => route('tokens.index'),
+                'store' => route('tokens.store'),
+                'destroy' => route('tokens.destroy', ['token' => $token->id]),
+                'destroyAll' => route('tokens.destroyAll')
+            ]
         ];
     }
 }
