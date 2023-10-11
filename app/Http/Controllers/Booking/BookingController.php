@@ -291,13 +291,15 @@ class BookingController extends Controller
     public function activate_rooms()
     {
         if (strtotime(date('H:i', strtotime(now()))) > strtotime('12:15')) {
-            Booking::get()->each(function ($booking) {
+            Booking::where('created_at','>', date('Y-m-d', strtotime(now() . "- 30 days" )))->get()->each(function ($booking) {
                 //verificamos que la hora actual sea mayor al checkout para activar la habitacion
                 if (strtotime(now()) > strtotime($booking->check_out)) {
                     $booking->rents()->get()->each(function ($rents) use ($booking) {
                         $room = Room::onlyTrashed()->find($rents->room_id);
-                        $room->deleted_at = null;
-                        $room->push();
+                        if ($room){
+                            $room->deleted_at = null;
+                            $room->push();
+                        }
                     });
 
                     EnableRoomEvent::dispatch($this->AuthKey());

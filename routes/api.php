@@ -63,7 +63,7 @@ Route::resource('calendars', CalendarController::class)->only('index');
 Route::resource('payments', PaymentController::class)->only('index');
 
 //booking
-Route::get('activate-rooms', [BookingController::class, 'activate_rooms'])->name('activate-rooms');
+//Route::get('activate-rooms', [BookingController::class, 'activate_rooms'])->name('activate-rooms');
 Route::resource('booking', BookingController::class)->except('edit', 'create');
 Route::resource('booking.payments', BookingPaymentController::class)->only('index', 'store','update');
 Route::resource('booking.charges', BookingExtraChargeController::class)->only('index', 'store', 'destroy');
