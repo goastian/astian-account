@@ -4,18 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Elyerr\ApiExtend\Assets\Asset;
-use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class Auth extends Authenticatable
-{  
+{
     use HasApiTokens, HasUuids, HasFactory, Notifiable, Asset;
 
-        /**
+    /**
      * The data type of the auto-incrementing ID.
      *
      * @var string
@@ -38,7 +38,7 @@ class Auth extends Authenticatable
         'last_name',
         'email',
         'password',
-        'country', 
+        'country',
         'address',
         'phone',
     ];
@@ -76,17 +76,48 @@ class Auth extends Authenticatable
     {
         $this->attributes['email'] = strtolower($value);
     }
-  
+
     public function setCountryAttribute($value)
     {
         $this->attributes['country'] = strtolower($value);
     }
- 
+
     public function setAddressAttribute($value)
     {
         $this->attributes['address'] = strtolower($value);
     }
- 
+
+    /**
+     * verifica si contiene los permisos para escribir
+     */
+    public function canWrite()
+    {
+        return $this->roles()->get()->contains('name', 'escritura');
+    }
+
+    /**
+     * verifica si contiene el role de administrador
+     */
+    public function isAdmin()
+    {
+        return $this->roles()->get()->contains('name', 'admin');
+    }
+
+    /**
+     * verifica si contiene el persmiso de solo lectura
+     */
+    public function canRead()
+    {
+        return $this->roles()->get()->contains('name', 'lectura');
+    }
+
+    /**
+     * verifica si contiene los permisos para editar
+     */
+    public function granted()
+    {
+        return $this->isAdmin() or $this->canWrite();
+    }
 
     /**
      * Send the password reset notification.
