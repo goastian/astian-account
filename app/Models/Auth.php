@@ -3,13 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
 use Elyerr\ApiExtend\Assets\Asset;
+use Illuminate\Notifications\Notifiable;
+use App\Models\Sanctum\PersonalAccessToken;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class Auth extends Authenticatable
 {
@@ -38,7 +39,10 @@ class Auth extends Authenticatable
         'last_name',
         'email',
         'password',
+        'document_type',
+        'document_number',
         'country',
+        'department',
         'address',
         'phone',
     ];
@@ -80,6 +84,11 @@ class Auth extends Authenticatable
     public function setCountryAttribute($value)
     {
         $this->attributes['country'] = strtolower($value);
+    }
+
+    public function setDepartmentAttribute($value)
+    {
+        $this->attributes['department'] = strtolower($value);
     }
 
     public function setAddressAttribute($value)
@@ -129,4 +138,10 @@ class Auth extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
+
+    public static function PersonalAccessToken($token)
+    {
+        return PersonalAccessToken::findToken($token);
+    }
+
 }
