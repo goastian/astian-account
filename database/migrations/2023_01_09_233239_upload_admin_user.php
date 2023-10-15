@@ -16,7 +16,7 @@ return new class extends Migration
         /**
          * datos del user administrador
          */
-        $roles = ['admin', 'escritura', 'lectura'];
+        $roles = ['admin', 'read', 'write','update','destroy','disable','enable'];
 
         foreach ($roles as $key) {
             Role::create([
@@ -33,7 +33,7 @@ return new class extends Migration
             'document_number' => '00000000',
             'country' => 'peru',
             'department' => 'tumbes',
-            'address' => 'Av. Tacna Nro 327 - Tumbes',
+            'address' => 'su casa en la tierra',
             'phone' => '789526352',
         ])->save();
 
