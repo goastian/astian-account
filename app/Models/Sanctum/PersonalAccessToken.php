@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Models\Sanctum;
-
-use Illuminate\Database\Eloquent\Model;
+ 
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 

@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Assets\Asset;
-use App\Assets\JsonResponser; 
+use Elyerr\ApiExtend\Assets\Asset;
+use Elyerr\ApiExtend\Assets\JsonResponser;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Routing\Controller;
 
 class GlobalController extends Controller
 {
-    use JsonResponser, Asset;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
+    
+    public $can_update = array();
 
     public function __construct()
     {

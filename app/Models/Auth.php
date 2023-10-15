@@ -3,19 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
 use Laravel\Sanctum\HasApiTokens;
+use Elyerr\ApiExtend\Assets\Asset;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Sanctum\PersonalAccessToken;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
-{  
-    use HasApiTokens, HasUuids, HasFactory, Notifiable;
+{
+    use HasApiTokens, HasUuids, HasFactory, Notifiable, Asset;
 
-        /**
+    /**
      * The data type of the auto-incrementing ID.
      *
      * @var string
@@ -80,11 +81,6 @@ class Auth extends Authenticatable
         $this->attributes['email'] = strtolower($value);
     }
 
-    public function setDocumentTypeAttribute($value)
-    {
-        $this->attributes['document_type'] = strtolower($value);
-    }
-
     public function setCountryAttribute($value)
     {
         $this->attributes['country'] = strtolower($value);
@@ -100,21 +96,33 @@ class Auth extends Authenticatable
         $this->attributes['address'] = strtolower($value);
     }
 
-    public function isAdmin()
-    {
-        return $this->roles()->get()->contains('name', 'admin');
-    }
-
+    /**
+     * verifica si contiene los permisos para escribir
+     */
     public function canWrite()
     {
         return $this->roles()->get()->contains('name', 'escritura');
     }
 
+    /**
+     * verifica si contiene el role de administrador
+     */
+    public function isAdmin()
+    {
+        return $this->roles()->get()->contains('name', 'admin');
+    }
+
+    /**
+     * verifica si contiene el persmiso de solo lectura
+     */
     public function canRead()
     {
         return $this->roles()->get()->contains('name', 'lectura');
     }
 
+    /**
+     * verifica si contiene los permisos para editar
+     */
     public function granted()
     {
         return $this->isAdmin() or $this->canWrite();
@@ -130,4 +138,10 @@ class Auth extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
+
+    public static function PersonalAccessToken($token)
+    {
+        return PersonalAccessToken::findToken($token);
+    }
+
 }

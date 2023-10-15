@@ -7,15 +7,11 @@ use App\Models\Assets\Category;
 use App\Models\Assets\Room;
 use App\Models\User\Client;
 use App\Models\Booking\Booking;
-use App\Models\master;
-use App\Transformers\Booking\RentTransformer;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Master as master;
+use App\Transformers\Booking\RentTransformer; 
 
 class Rent extends master
-{
-    use HasFactory, Timestamps;
-
+{ 
     public $table = "rents";
 
     public $view = "";

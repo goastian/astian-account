@@ -1,12 +1,11 @@
 <?php
 
 namespace App\Models\Account;
-
-use App\Assets\Timestamps;
+ 
 use App\Models\master;
+use Elyerr\ApiExtend\Assets\Timestamps; 
 use App\Transformers\Accounting\AccountingTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
 class Accounting extends master
 {

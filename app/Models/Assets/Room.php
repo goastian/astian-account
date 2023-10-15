@@ -2,17 +2,15 @@
 
 namespace App\Models\Assets;
  
-use App\Models\master;
-use App\Assets\Timestamps;
-use App\Models\Booking\Rent;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Master as master;
+use App\Models\Booking\Rent; 
 use App\Transformers\Asset\RoomTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Room extends master
 {
-    use HasFactory, SoftDeletes, Timestamps;
+    use HasFactory, SoftDeletes;
 
     public $table = "rooms";
 

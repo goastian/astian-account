@@ -2,14 +2,11 @@
 
 namespace App\Models\User;
 
-use App\Models\master;
-use App\Transformers\Role\RoleTransformer;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Master as master;
+use App\Transformers\Role\RoleTransformer; 
 
 class Role extends master
 {
-    use HasFactory;
 
     public $table = "roles";
 

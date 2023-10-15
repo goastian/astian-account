@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Account;
 
 use App\Events\Accounting\StoreAccountingEvent;
-use App\Events\Accounting\UpdateAccountingEvent;
-use App\Exceptions\ReportMessage;
+use App\Events\Accounting\UpdateAccountingEvent; 
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Accounting\StoreRequest;
 use App\Http\Requests\Accounting\UpdateRequest;
 use App\Models\Account\Accounting;
 use App\Transformers\Accounting\AccountingTransformer;
-use Illuminate\Http\Request;
+use Elyerr\ApiExtend\Exceptions\ReportError; 
 use Illuminate\Support\Facades\DB;
 
 class AccountController extends Controller
@@ -78,7 +77,7 @@ class AccountController extends Controller
     public function update(UpdateRequest $request, Accounting $accounting)
     {
         if (substr($accounting->code, 0, 2) != "A0") {
-            throw new ReportMessage(__("este elemento no puede ser actualizado"), 403);
+            throw new ReportError(__("este elemento no puede ser actualizado"), 403);
         }
 
         DB::transaction(function () use ($request, $accounting) {

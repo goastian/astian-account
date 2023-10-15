@@ -6,8 +6,7 @@ use App\Models\Assets\Room;
 use App\Models\Booking\Rent;
 use App\Models\Assets\Calendar;
 use App\Models\Booking\Booking;
-use App\Models\Booking\Company;
-use App\Exceptions\ReportMessage;
+use App\Models\Booking\Company; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use App\Events\Booking\StoreBookingEvent;
@@ -22,6 +21,7 @@ use App\Events\Reservation\UpdateReservationEvent;
 use App\Events\Reservation\DestroyReservationEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Events\Asset\Category\Calendar\UpdateCategoryCalendarEvent;
+use Elyerr\ApiExtend\Exceptions\ReportError;
 
 class BookingController extends Controller
 {
@@ -92,7 +92,7 @@ class BookingController extends Controller
                         $message = "esta habitacion no esta disponible, ";
                         $message .= "puede que este ocupada o por algun motivo desabilitada por mantenimiento.";
                         $message .= "si cree que esto es un error contactese con el area TI";
-                        throw new ReportMessage(__($message), 400);
+                        throw new ReportError(__($message), 400);
                     }
 
                     $rent->room->deleted_at = now();
@@ -291,13 +291,15 @@ class BookingController extends Controller
     public function activate_rooms()
     {
         if (strtotime(date('H:i', strtotime(now()))) > strtotime('12:15')) {
-            Booking::get()->each(function ($booking) {
+            Booking::where('created_at','>', date('Y-m-d', strtotime(now() . "- 30 days" )))->get()->each(function ($booking) {
                 //verificamos que la hora actual sea mayor al checkout para activar la habitacion
                 if (strtotime(now()) > strtotime($booking->check_out)) {
                     $booking->rents()->get()->each(function ($rents) use ($booking) {
                         $room = Room::onlyTrashed()->find($rents->room_id);
-                        $room->deleted_at = null;
-                        $room->push();
+                        if ($room){
+                            $room->deleted_at = null;
+                            $room->push();
+                        }
                     });
 
                     EnableRoomEvent::dispatch($this->AuthKey());

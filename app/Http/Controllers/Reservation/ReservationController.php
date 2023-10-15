@@ -12,6 +12,7 @@ use App\Models\Booking\Company;
 use App\Models\Booking\Rent;
 use App\Models\User\Client;
 use App\Transformers\Reservation\ReservationTransformer;
+use Elyerr\ApiExtend\Exceptions\ReportError;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -104,7 +105,7 @@ class ReservationController extends Controller
                             if ($calendar->available < 1) {
                                 $message = "Por favor revise la disponiblidad, el dia $calendar->day no tiene";
                                 $message .= " habitaciones disponibles";
-                                throw new ReportMessage(__($message), 400);
+                                throw new ReportError(__($message), 400);
                             }
 
                             $calendar->available = $calendar->available - 1;

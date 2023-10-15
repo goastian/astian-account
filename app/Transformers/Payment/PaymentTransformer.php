@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Transformers\Payment;
-
-use App\Assets\Asset;
+ 
+use Elyerr\ApiExtend\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class PaymentTransformer extends TransformerAbstract

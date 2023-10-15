@@ -15,19 +15,16 @@ class {{ class }} implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $id = null;
-
-    public $data = null;
+    public $user = null;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($id, $data = null)
-    {
-        $this->id =$id;
-        $this->data = $data;
+    public function __construct($user = null)
+    { 
+        $this->user = $user;
     }
 
     /**
@@ -37,7 +34,7 @@ class {{ class }} implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('spondylus');
+        return new PrivateChannel(env('CHANNEL_NAME','test'));
     }
 
      /**
