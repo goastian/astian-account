@@ -1,18 +1,16 @@
 <?php
 
 namespace App\Models\Assets;
-
-use App\Assets\Timestamps;
-use App\Models\Booking\Rent;
-use App\Models\master;
-use App\Transformers\Asset\CategoryTransformer;
-use Illuminate\Database\Eloquent\Model;
+ 
+use App\Models\Booking\Rent; 
+use App\Models\Master as master;
+use App\Transformers\Asset\CategoryTransformer; 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Category extends master
 {
-    use HasFactory, SoftDeletes, Timestamps;
+    use HasFactory, SoftDeletes;
 
     public $table = "categories";
 

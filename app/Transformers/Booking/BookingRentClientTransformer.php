@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Transformers\Booking;
-
-use App\Assets\Asset;
+ 
+use Elyerr\ApiExtend\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class BookingRentClientTransformer extends TransformerAbstract
@@ -10,7 +10,7 @@ class BookingRentClientTransformer extends TransformerAbstract
     use Asset;
 
     /**
-     * List of resources to automatically include
+     * List of resources to autosssmatically include
      *
      * @var array
      */

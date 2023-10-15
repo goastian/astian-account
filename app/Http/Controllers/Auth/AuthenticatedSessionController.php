@@ -1,17 +1,17 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
-use App\Assets\JsonResponser;
-use App\Events\Auth\LoginEvent;
-use App\Events\Auth\LogoutEvent;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use App\Transformers\Auth\EmployeeTransformer;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+ 
 use Inertia\Inertia;
+use Illuminate\Http\Request; 
+use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
+use Elyerr\ApiExtend\Events\LoginEvent;
+use App\Http\Requests\Auth\LoginRequest;
+use Elyerr\ApiExtend\Events\LogoutEvent;
+use Elyerr\ApiExtend\Assets\JsonResponser;
+use App\Transformers\Auth\EmployeeTransformer;
+use App\Http\Controllers\GlobalController as Controller;
 
 class AuthenticatedSessionController extends Controller
 {

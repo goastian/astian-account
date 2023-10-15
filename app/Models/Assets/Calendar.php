@@ -2,7 +2,7 @@
 
 namespace App\Models\Assets;
 
-use App\Models\master;
+use App\Models\Master as master;
 use App\Models\Assets\Category;
 use Illuminate\Database\Eloquent\Model; 
 use App\Transformers\Asset\CalendarTransformer;

@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Asset;
 
+use Error;
+use App\Models\Assets\Category;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Category\StoreRequest;
+use Elyerr\ApiExtend\Exceptions\ReportError;
+use App\Http\Requests\Category\UpdateRequest;
+use App\Events\Asset\Category\StoreCategoryEvent;
+use App\Events\Asset\Category\EnableCategoryEvent;
 use App\Events\Asset\Category\DestroyCategoryEvent;
 use App\Events\Asset\Category\DisableCategoryEvent;
-use App\Events\Asset\Category\EnableCategoryEvent;
-use App\Events\Asset\Category\StoreCategoryEvent;
-use App\Events\Asset\Category\UpdateCategoryEvent;
-use App\Exceptions\ReportMessage;
+use App\Events\Asset\Category\UpdateCategoryEvent; 
 use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Category\StoreRequest;
-use App\Http\Requests\Category\UpdateRequest;
-use App\Models\Assets\Category;
-use Error;
-use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -159,7 +159,7 @@ class CategoryController extends Controller
         $calendars = count($category->calendar()->get());
 
         if ($rooms > 0 or $calendars > 0) {
-            throw new ReportMessage(__("La categoria tiene recursos asociados y no puede ser eliminada"), 403);
+            throw new ReportError(__("La categoria tiene recursos asociados y no puede ser eliminada"), 403);
         }
 
         $category->forceDelete();
@@ -198,7 +198,7 @@ class CategoryController extends Controller
 
         } catch (Error $e) {
 
-            throw new ReportMessage("Error al procesar la petición", 404);
+            throw new ReportError("Error al procesar la petición", 404);
 
         }
 

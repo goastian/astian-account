@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Transformers\Asset;
-
-use App\Assets\Asset;
+ 
+use Elyerr\ApiExtend\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class CategoryTransformer extends TransformerAbstract

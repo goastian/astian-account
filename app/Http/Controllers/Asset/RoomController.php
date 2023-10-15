@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Asset;
 
+use Error;
+use App\Models\Assets\Room;
+use Illuminate\Support\Facades\DB;
+use App\Http\Requests\Room\StoreRequest;
+use App\Events\Asset\Room\StoreRoomEvent;
+use App\Http\Requests\Room\UpdateRequest;
+use App\Events\Asset\Room\EnableRoomEvent;
 use App\Events\Asset\Room\DestroyRoomEvent;
 use App\Events\Asset\Room\DisableRoomEvent;
-use App\Events\Asset\Room\EnableRoomEvent;
-use App\Events\Asset\Room\StoreRoomEvent;
-use App\Events\Asset\Room\UpdateRoomEvent;
-use App\Exceptions\ReportMessage;
+use App\Events\Asset\Room\UpdateRoomEvent; 
+use Elyerr\ApiExtend\Exceptions\ReportError;
 use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Room\StoreRequest;
-use App\Http\Requests\Room\UpdateRequest;
-use App\Models\Assets\Room;
-use Error;
-use Illuminate\Support\Facades\DB;
 
 class RoomController extends Controller
 {
@@ -128,7 +128,7 @@ class RoomController extends Controller
         $rents = count($room->rents()->get());
 
         if ($rents > 0) {
-            throw new ReportMessage(__("No puede eliminar esta habitacion"), 403);
+            throw new ReportError(__("No puede eliminar esta habitacion"), 403);
         }
 
         $room->forceDelete();
@@ -167,7 +167,7 @@ class RoomController extends Controller
             $message = "Esta habitacion no se puede habilitar por que aun esta alquilada ";
             $message .= "Si la habitacion no se encuentra en uso o el usuario ya no se alojará ";
             $message .= "puede proceder con la cancelacion del registro";
-            throw new ReportMessage(__($message), 403);
+            throw new ReportError(__($message), 403);
         }
 
         /**
@@ -183,7 +183,7 @@ class RoomController extends Controller
 
             return $this->showOne($room, $room->transformer);
         } catch (Error $e) {
-            throw new ReportMessage("Error al procesar la petición", 403);
+            throw new ReportError("Error al procesar la petición", 403);
         }
     }
 }

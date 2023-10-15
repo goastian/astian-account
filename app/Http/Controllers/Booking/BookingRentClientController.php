@@ -15,6 +15,7 @@ use App\Http\Controllers\GlobalController as Controller;
 use App\Events\Booking\Client\StoreBookingRoomClientEvent;
 use App\Transformers\Booking\BookingRentClientTransformer;
 use App\Events\Booking\Client\DestroyBookingRoomClientEvent;
+use Elyerr\ApiExtend\Exceptions\ReportError;
 
 class BookingRentClientController extends Controller
 {
@@ -64,7 +65,7 @@ class BookingRentClientController extends Controller
                     $huesped = $huesped->where('number', $request->number)->first();
                     $rent->huespeds()->save($huesped);
                 } catch (QueryException $e) {
-                    throw new ReportMessage(__('Ocurrio un error, Este usuario ya ha sido registrado, si cree que es un error contacte con su soporte tecnico'), 422);
+                    throw new ReportError(__('Ocurrio un error, Este usuario ya ha sido registrado, si cree que es un error contacte con su soporte tecnico'), 422);
                 }
             }
         });

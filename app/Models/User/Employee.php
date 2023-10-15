@@ -3,13 +3,12 @@
 namespace App\Models\User;
 
 use App\Models\Auth;
-use App\Assets\Timestamps;
 use App\Transformers\Auth\EmployeeTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class Employee extends Auth
 {
-    use SoftDeletes, Timestamps;
+    use SoftDeletes;
     
     public $table = "employees";
 
