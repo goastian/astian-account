@@ -13,7 +13,7 @@ class IndexRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->isAdmin() || Request('user')->id == request()->user()->id;
+        return request()->user()->tokenCan('admin') || Request('user')->id == request()->user()->id;
     }
 
     /**

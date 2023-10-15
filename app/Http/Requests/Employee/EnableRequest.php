@@ -13,7 +13,7 @@ class EnableRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->isAdmin();
+        return request()->user()->tokenCan('admin');
     }
 
     /**
