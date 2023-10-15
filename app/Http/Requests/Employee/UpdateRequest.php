@@ -15,7 +15,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->isAdmin() || request()->user()->id == Request('user')->id;
+        return request()->user()->tokenCan('admin') || request()->user()->id == Request('user')->id;
     }
 
     /**

@@ -13,7 +13,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->isAdmin();
+        return request()->user()->tokenCan('admin');
     }
 
     /**
@@ -24,7 +24,7 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'role_id' => ['required', 'exists:roles,id']
+            'role_id' => ['required', 'exists:roles,id'],
         ];
     }
 }

@@ -13,7 +13,7 @@ class DisableRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->id != request()->user->id and request()->user()->isAdmin();
+        return request()->user()->tokenCan('admin') and request()->user()->id != request()->user->id;
     }
 
     /**
