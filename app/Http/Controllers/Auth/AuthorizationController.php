@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
- 
-use Illuminate\Routing\Controller;
-use Elyerr\ApiExtend\Events\LoginEvent;
+
 use App\Http\Requests\Auth\LoginRequest;
 use App\Transformers\Auth\EmployeeTransformer;
-use Elyerr\ApiExtend\Events\LogoutEvent;
 use Elyerr\ApiExtend\Assets\JsonResponser;
+use Elyerr\ApiExtend\Events\LoginEvent;
+use Elyerr\ApiExtend\Events\LogoutEvent;
+use Illuminate\Routing\Controller;
 
 class AuthorizationController extends Controller
 {
@@ -17,7 +17,7 @@ class AuthorizationController extends Controller
     {
         $this->middleware('guest')->only('store');
         $this->middleware('auth:sanctum')->only('destroy');
-        $this->middleware('transform.request:'. EmployeeTransformer::class)->only('store');
+        $this->middleware('transform.request:' . EmployeeTransformer::class)->only('store');
     }
     /**
      * Handle an incoming authentication request.
@@ -28,8 +28,10 @@ class AuthorizationController extends Controller
     public function store(LoginRequest $request)
     {
         $request->authenticate();
+        
+        $abilities = $request->user()->roles()->get()->pluck('name')->implode(',');
 
-        $token = request()->user()->createToken($request->email ."|". $_SERVER['HTTP_USER_AGENT']);
+        $token = request()->user()->createToken($_SERVER['HTTP_USER_AGENT'], [$abilities]);
 
         LoginEvent::dispatch(request()->user());
 
@@ -46,7 +48,7 @@ class AuthorizationController extends Controller
      */
     public function destroy()
     {
-        request()->user()->currentAccessToken()->delete(); 
+        request()->user()->currentAccessToken()->delete();
 
         LogoutEvent::dispatch(request()->user());
 
