@@ -18,6 +18,7 @@ use App\Http\Requests\Employee\UpdateRequest;
 use App\Http\Requests\Employee\DisableRequest;
 use App\Notifications\Employee\CreatedNewUser;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Requests\Employee\ShowRequest;
 use Elyerr\ApiExtend\Exceptions\ReportError;
 
 class UserController extends Controller
@@ -75,7 +76,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(IndexRequest $request, $id)
+    public function show(ShowRequest $request, $id)
     {
         $user = Employee::withTrashed()->find($id);
 
