@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;  
-use Laravel\Passport\HasApiTokens;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Elyerr\ApiResponse\Assets\Asset;
-use Illuminate\Notifications\Notifiable; 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
 
 class Auth extends Authenticatable
 {
@@ -136,5 +137,5 @@ class Auth extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
-    }
+    } 
 }
