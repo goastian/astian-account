@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Providers;
- 
-use Illuminate\Support\ServiceProvider; 
-use App\Models\Sanctum\PersonalAccessToken;
-use Laravel\Sanctum\Sanctum;
+
+use App\Models\User\Role;
+use Laravel\Passport\Passport;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +25,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-			Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
+        
+        Passport::tokensExpireIn(now()->addHour(24));
+        Passport::refreshTokensExpireIn(now()->addDays(5));
+        Passport::personalAccessTokensExpireIn(now()->addDays(10));
+        
+        
+        $scopes =[];
+
+        foreach (Role::all() as $key => $value) {
+          array_push($scopes, [$value->name => $value->description]);
+        }
+        
+        Passport::tokensCan($scopes);
+
     }
 }

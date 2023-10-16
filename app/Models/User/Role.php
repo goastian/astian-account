@@ -17,7 +17,8 @@ class Role extends master
     public $timestamps = false;
 
     protected $fillable = [
-        'name'
+        'name',
+        'description'
     ];
     
     public function users()

@@ -2,8 +2,8 @@
 
 namespace App\Transformers\Auth;
 
- 
-use Elyerr\ApiExtend\Assets\Asset;
+  
+use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class EmployeeTransformer extends TransformerAbstract
