@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Error;
-use Illuminate\Http\Request; 
 use App\Http\Controllers\GlobalController;
 use App\Transformers\Tokens\TokensTransformer;
-use Elyerr\ApiExtend\Events\StoreTokenEvent;
-use Elyerr\ApiExtend\Exceptions\ReportError;
-use Elyerr\ApiExtend\Events\DestroyTokenEvent;
-use Elyerr\ApiExtend\Events\DestroyAllTokenEvent;
+use Elyerr\ApiResponse\Events\DestroyAllTokenEvent;
+use Elyerr\ApiResponse\Events\DestroyTokenEvent;
+use Elyerr\ApiResponse\Events\StoreTokenEvent;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Error;
+use Illuminate\Http\Request;
+use Laravel\Passport\Token;
 
 class TokensController extends GlobalController
 {
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
+        $this->middleware('auth:api');
     }
 
     /**
@@ -40,11 +41,15 @@ class TokensController extends GlobalController
      */
     public function store(Request $request)
     {
-        $token = $request->user()->createToken($request->user()->email . "|" . $_SERVER['HTTP_USER_AGENT']);
+        $this->validate($request, [
+            'scopes' => ['required', 'array', 'exists:roles,name'],
+        ]);
+
+        $token = $request->user()->createToken($_SERVER['HTTP_USER_AGENT'], $request->scopes)->accessToken;
 
         StoreTokenEvent::dispatch(request()->user());
 
-        return response()->json(['token' => 'Bearer ' . $token->plainTextToken], 201);
+        return response()->json(['token' => $token], 201);
     }
 
     /**
@@ -53,7 +58,11 @@ class TokensController extends GlobalController
      */
     public function destroyAllTokens(Request $request)
     {
-        $request->user()->tokens()->delete();
+        $user = $request->user();
+
+        $user->tokens->each(function (Token $token, $key) {
+            $token->revoke();
+        });
 
         DestroyAllTokenEvent::dispatch(request()->user());
 
@@ -69,11 +78,11 @@ class TokensController extends GlobalController
     {
         try {
 
-            $token = $request->user()->tokens()->where('id', $id)->first();
+            $token = Token::find($id);
 
-            $token->delete();
+            $token->revoke();
 
-            DestroyTokenEvent::dispatch(request()->user());
+            DestroyTokenEvent::dispatch();
 
             return $this->message('El token ha sido revocado.', 201);
 

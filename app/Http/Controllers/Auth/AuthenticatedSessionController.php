@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Auth;
 use Inertia\Inertia;
 use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Auth;
-use App\Providers\RouteServiceProvider;
-use Elyerr\ApiExtend\Events\LoginEvent;
-use App\Http\Requests\Auth\LoginRequest;
-use Elyerr\ApiExtend\Events\LogoutEvent;
-use Elyerr\ApiExtend\Assets\JsonResponser;
+use App\Providers\RouteServiceProvider; 
+use App\Http\Requests\Auth\LoginRequest; 
+use Elyerr\ApiResponse\Events\LoginEvent;
+use Elyerr\ApiResponse\Events\LogoutEvent;
+use Elyerr\ApiResponse\Assets\JsonResponser;
 use App\Transformers\Auth\EmployeeTransformer;
 use App\Http\Controllers\GlobalController as Controller;
 
@@ -20,7 +20,7 @@ class AuthenticatedSessionController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('destroy', 'profile');
-        $this->middleware('auth:sanctum')->only('profile', 'destroy');
+        $this->middleware('auth:api')->only('profile', 'destroy');  
     }
 
     public function create()
