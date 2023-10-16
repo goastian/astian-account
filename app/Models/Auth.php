@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Sanctum\HasApiTokens;
-use Elyerr\ApiExtend\Assets\Asset;
-use Illuminate\Notifications\Notifiable;
-use App\Models\Sanctum\PersonalAccessToken;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;  
+use Laravel\Passport\HasApiTokens;
+use Elyerr\ApiResponse\Assets\Asset;
+use Illuminate\Notifications\Notifiable; 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {
-    use HasApiTokens, HasUuids, HasFactory, Notifiable, Asset;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Asset;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -138,10 +137,4 @@ class Auth extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
-
-    public static function PersonalAccessToken($token)
-    {
-        return PersonalAccessToken::findToken($token);
-    }
-
 }

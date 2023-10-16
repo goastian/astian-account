@@ -16,11 +16,21 @@ return new class extends Migration
         /**
          * datos del user administrador
          */
-        $roles = ['admin', 'read', 'write','update','destroy','disable','enable'];
+        $roles = [
+            'admin' => "acceso total al sistema", 
+            'read' => "acceso para leer informacion", 
+            'write' => "acceso para registrar informacion",
+            'update' => "acceso para actualizar informacion",
+            'destroy' => "acceso para borrar informacion",
+            'disable' => "acceso para deshabilitar un recurso",
+            'enable' => "acceso para habilitar recursos",
+            'download' => "acceso para descargar informacion"
+        ];
 
-        foreach ($roles as $key) {
+        foreach ($roles as $key => $value) {
             Role::create([
                 'name' => $key,
+                'description' => $value
             ])->save();
         }
 
@@ -32,7 +42,7 @@ return new class extends Migration
             'document_type' => 'DNI',
             'document_number' => '00000000',
             'country' => 'peru',
-            'department' => 'tumbes',
+            'department' => 'lima',
             'address' => 'su casa en la tierra',
             'phone' => '789526352',
         ])->save();

@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Transformers\Tokens;
- 
-use Elyerr\ApiExtend\Assets\Asset;
+  
+use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class TokensTransformer extends TransformerAbstract

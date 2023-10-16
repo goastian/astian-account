@@ -6,11 +6,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
-        "elyerr/api-extend": "^1.0",
+        "elyerr/api-response": "dev-main",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.9",
         "laravel/framework": "^10.0",
-        "laravel/sanctum": "^3.2",
+        "laravel/passport": "^11.8",
         "laravel/tinker": "^2.7",
         "spatie/laravel-fractal": "^6.0",
         "tightenco/ziggy": "^1.0"
