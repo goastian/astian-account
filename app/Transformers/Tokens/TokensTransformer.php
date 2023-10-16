@@ -37,7 +37,9 @@ class TokensTransformer extends TransformerAbstract
         return [
             'identificador' => $token->id,
             'agente' => $token->name,
-            'ultimo_uso' => $token->last_used_at ? $this->format_date($token->last_used_at) : null,
+            'habilidad' => implode(",",$token->scopes),
+            'revocado' => $token->revoked,
+            'expira' => $token->expires_at ? $this->format_date($token->expires_at) : null,
             'creado' => $token->created_at ? $this->format_date($token->created_at) : null,
             'actualizado' => $token->updated_at ? $this->format_date($token->updated_at) : null,
             'links' => [
