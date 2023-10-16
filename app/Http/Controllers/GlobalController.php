@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Elyerr\ApiExtend\Assets\Asset;
-use Elyerr\ApiExtend\Assets\JsonResponser;
+use Elyerr\ApiResponse\Assets\Asset;
+use Elyerr\ApiResponse\Assets\JsonResponser;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -17,13 +17,7 @@ class GlobalController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:sanctum');
-        $this->middleware('ability:admin,read')->only('index', 'show');
-        $this->middleware('ability:admin,write')->only('store');
-        $this->middleware('ability:admin,update')->only('update');
-        $this->middleware('ability:admin,enable')->only('enable');
-        $this->middleware('ability:admin,disable')->only('disable');
-        $this->middleware('ability:admin,destroy')->only('destroy');
+        $this->middleware('auth:api');
     }
 
     public function AuthKey()
