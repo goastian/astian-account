@@ -9,7 +9,6 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 
 class Auth extends Authenticatable
@@ -94,38 +93,6 @@ class Auth extends Authenticatable
     public function setAddressAttribute($value)
     {
         $this->attributes['address'] = strtolower($value);
-    }
-
-    /**
-     * verifica si contiene los permisos para escribir
-     */
-    public function canWrite()
-    {
-        return $this->roles()->get()->contains('name', 'escritura');
-    }
-
-    /**
-     * verifica si contiene el role de administrador
-     */
-    public function isAdmin()
-    {
-        return $this->roles()->get()->contains('name', 'admin');
-    }
-
-    /**
-     * verifica si contiene el persmiso de solo lectura
-     */
-    public function canRead()
-    {
-        return $this->roles()->get()->contains('name', 'lectura');
-    }
-
-    /**
-     * verifica si contiene los permisos para editar
-     */
-    public function granted()
-    {
-        return $this->isAdmin() or $this->canWrite();
     }
 
     /**
