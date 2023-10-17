@@ -10,6 +10,7 @@ use App\Events\Employee\StoreEmployeeEvent;
 use App\Events\Employee\EnableEmployeeEvent;
 use App\Events\Employee\UpdateEmployeeEvent;
 use App\Http\Requests\Employee\IndexRequest;
+use App\Http\Requests\Employee\ShowRequest; 
 use App\Http\Requests\Employee\StoreRequest;
 use Illuminate\Support\Facades\Notification;
 use App\Events\Employee\DisableEmployeeEvent;
@@ -17,16 +18,15 @@ use App\Http\Requests\Employee\EnableRequest;
 use App\Http\Requests\Employee\UpdateRequest;
 use App\Http\Requests\Employee\DisableRequest;
 use App\Notifications\Employee\CreatedNewUser;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Employee\ShowRequest;
-use Elyerr\ApiExtend\Exceptions\ReportError;
 
 class UserController extends Controller
 {
 
     public function __construct(Employee $user)
     {
-        parent::__construct();
+        parent::__construct(); 
         $this->middleware('transform.request:' . $user->transformer)->only('store', 'update');
     }
 
@@ -94,12 +94,12 @@ class UserController extends Controller
     {
         DB::transaction(function () use ($request, $user) {
 
-            if (request()->user()->isAdmin() && $this->is_diferent($user->name, $request->name)) {
+            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->name, $request->name)) {
                 $this->can_update[] = true;
                 $user->name = $request->name;
             }
 
-            if (request()->user()->isAdmin() && $this->is_diferent($user->last_name, $request->last_name)) {
+            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->last_name, $request->last_name)) {
                 $this->can_update[] = true;
                 $user->last_name = $request->last_name;
             }
@@ -109,27 +109,27 @@ class UserController extends Controller
                 $user->email = $request->email;
             }
 
-            if (request()->user()->isAdmin() && $this->is_diferent($user->document_type, $request->document_type)) {
+            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->document_type, $request->document_type)) {
                 $this->can_update[] = true;
                 $user->document_type = $request->document_type;
             }
 
-            if (request()->user()->isAdmin() && $this->is_diferent($user->document_number, $request->document_number)) {
+            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->document_number, $request->document_number)) {
                 $this->can_update[] = true;
                 $user->document_number = $request->document_number;
             }
  
-            if (request()->user()->isAdmin() && $this->is_diferent($user->country, $request->country)) {
+            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->country, $request->country)) {
                 $this->can_update[] = true;
                 $user->country = $request->country;
             }
 
-            if (request()->user()->isAdmin() && $this->is_diferent($user->department, $request->department)) {
+            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->department, $request->department)) {
                 $this->can_update[] = true;
                 $user->department = $request->department;
             }
 
-            if (request()->user()->isAdmin() && $this->is_diferent($user->address, $request->address)) {
+            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->address, $request->address)) {
                 $this->can_update[] = true;
                 $user->address = $request->address;
             }
@@ -190,6 +190,6 @@ class UserController extends Controller
     }
 
     public function can_access(){
-        return request()->user()->isAdmin() || request()->user->id == request()->user()->id;
+        return request()->user()->tokenCan('admin') || request()->user->id == request()->user()->id;
     }
 }
