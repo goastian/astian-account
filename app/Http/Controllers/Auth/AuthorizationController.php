@@ -1,13 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
+ 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Transformers\Auth\EmployeeTransformer;
-use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Events\LoginEvent;
-use Elyerr\ApiResponse\Events\LogoutEvent;
-use Illuminate\Routing\Controller;
+use Elyerr\ApiResponse\Events\LogoutEvent; 
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use App\Transformers\Auth\EmployeeTransformer;
 
 class AuthorizationController extends Controller
 {
@@ -16,7 +16,7 @@ class AuthorizationController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->only('store');
-        $this->middleware('auth:api')->only('destroy');
+        $this->middleware('auth')->only('destroy');
         $this->middleware('transform.request:' . EmployeeTransformer::class)->only('store');
     }
     /**
@@ -28,11 +28,10 @@ class AuthorizationController extends Controller
     public function store(LoginRequest $request)
     {
         $request->authenticate();
-
         $scoupes = $request->user()->roles()->get()->pluck('name')->implode(',');
         
         $token = request()->user()->createToken($_SERVER['HTTP_USER_AGENT'], explode(',', $scoupes))->accessToken;
-
+         
         LoginEvent::dispatch(request()->user());
 
         return response()->json(['data' => [
