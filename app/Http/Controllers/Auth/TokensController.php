@@ -1,18 +1,18 @@
 <?php
 
 namespace App\Http\Controllers\Auth;
-
-use App\Http\Controllers\GlobalController;
+ 
+use Error;
+use Laravel\Passport\Token;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Transformers\Tokens\TokensTransformer;
-use Elyerr\ApiResponse\Events\DestroyAllTokenEvent;
-use Elyerr\ApiResponse\Events\DestroyTokenEvent;
 use Elyerr\ApiResponse\Events\StoreTokenEvent;
 use Elyerr\ApiResponse\Exceptions\ReportError;
-use Error;
-use Illuminate\Http\Request;
-use Laravel\Passport\Token;
+use Elyerr\ApiResponse\Events\DestroyTokenEvent;
+use Elyerr\ApiResponse\Events\DestroyAllTokenEvent;
 
-class TokensController extends GlobalController
+class TokensController extends Controller
 {
 
     public function __construct()
