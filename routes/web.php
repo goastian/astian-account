@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\OAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -11,11 +12,12 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
+Route::get('/oauth', [OAuthController::class, 'dashboard'])->name('dashboard');
+Route::get('/oauth/clientes', [OAuthController::class, 'clientes'])->name('clientes');
+
+require __DIR__ . '/auth.php'; 
 
 Route::get('/', function () {
-    return request()->user() ? redirect(env('FRONTEND_URL')) : redirect()->route('login'); 
+    return request()->user() ? redirect()->route('dashboard') : redirect()->route('login');
 });
-
-require __DIR__.'/auth.php';
-require __DIR__.'/oauth.php';
