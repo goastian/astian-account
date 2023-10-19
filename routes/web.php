@@ -13,11 +13,9 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
-Route::get('/oauth', [OAuthController::class, 'dashboard'])->name('dashboard');
-Route::get('/oauth/clientes', [OAuthController::class, 'clientes'])->name('clientes');
+Route::get('/', [OAuthController::class, 'dashboard'])->name('dashboard');
+Route::get('/clientes', [OAuthController::class, 'clientes'])->name('clientes');
+Route::get('/tokens', [OAuthController::class, 'tokens'])->name('tokens');
+Route::get('/session',[OAuthController::class, 'sessionState'])->name('session.update');
 
-require __DIR__ . '/auth.php'; 
-
-Route::get('/', function () {
-    return request()->user() ? redirect()->route('dashboard') : redirect()->route('login');
-});
+require __DIR__ . '/auth.php';
