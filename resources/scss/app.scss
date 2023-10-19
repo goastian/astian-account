@@ -1,7 +1,13 @@
 //@import 'bootstrap';
 
 .errors {
-    color: red;
+    color: rgb(226, 14, 14);
     display: block;
     font-size: 12px;
+    font-weight: bold;
 }
+
+.text-sm {
+    font-size: 0.78rem !important;
+}
+ 
