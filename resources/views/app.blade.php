@@ -21,10 +21,10 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased">
-    <nav class="navbar navbar-dark bg-dark navbar-expand-sm">
+<body class="font-sans antialiased bg-dark text-info">
+    <nav class="navbar navbar-dark navbar-expand-sm px-0">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-xl text-success" href="{{ route('dashboard')}}">
+            <a class="navbar-brand fw-bold text-xl text-success" href="{{ route('dashboard') }}">
                 <v-icon styles="fa-home pull-left"></v-icon>
                 Home
             </a>
@@ -35,7 +35,10 @@
             <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{route('clientes')}}">Clientes</a>
+                        <a class="nav-link" aria-current="page" href="{{ route('clientes') }}">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ route('tokens') }}">Tokens</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav text-md">
@@ -51,8 +54,7 @@
                             <li>
                                 <form action="{{ route('logout') }}" method="POST">
                                     @csrf
-                                    <button type="submit"
-                                        class="dropdown-item text-md">
+                                    <button type="submit" class="dropdown-item text-md">
                                         Cerrar
                                     </button>
                                 </form>
@@ -63,7 +65,9 @@
             </div>
         </div>
     </nav>
-    @inertia
+    <section class="container-fuild">
+        @inertia
+    </section>
 </body>
 
 </html>
