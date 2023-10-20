@@ -1,62 +1,95 @@
 <template>
-   <!-- Button trigger modal -->
-<button type="button" :class="['btn', 'btn-primary', styles]" @click="sendEvent1(id)" data-bs-toggle="modal" :data-bs-target="('#').concat(target)">
-   <slot name="button"></slot>
-</button>
+    <!-- Button trigger modal -->
+    <button
+        type="button"
+        :class="['btn',  styles]"
+        @click="sendEvent1(id)"
+        data-bs-toggle="modal"
+        :data-bs-target="'#'.concat(target)"
+    >
+        <slot name="button"></slot>
+    </button>
 
-<!-- Modal -->
-<div :class="['modal', 'fade', width]" :id="target" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark">
-      <div class="modal-header">
-         <slot name="head"></slot>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-          <slot name="body"></slot>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" @click="sendEvent2(id)">Aceptar</button>
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Cerrar</button>
-      </div>
+    <!-- Modal -->
+    <div
+        :class="['modal', 'fade', width]"
+        :id="target"
+        data-bs-backdrop="static"
+        data-bs-keyboard="false"
+        tabindex="-1"
+        aria-labelledby="staticBackdropLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog">
+            <div class="modal-content text-light bg-dark">
+                <div class="modal-header">
+                    <slot name="head"></slot> 
+                </div>
+                <div class="modal-body">
+                    <slot name="body"></slot>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        @click="sendEvent2(id)"
+                        v-show="button_accept_show"
+                    >
+                        Aceptar
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    >
+                        {{ button_cancel_name }}
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 </template>
 <script>
 export default {
+    emits: ["isClicked", "isAccepted",'isCancel'],
 
-    emits:['isClicked', 'isAccepted'],
+    props: {
+        target: {
+            type: [String, Array],
+            required: true,
+        },
 
-     props:{
-        target:{
-            type:[String, Array],
-            required:true
-        }, 
-        
-        width:{
+        width: {
+            type: String,
+            default: "modal-lg",
+        },
+        styles: {
+            type: [String, Array],
+            default: "btn-sm btn-success",
+        },
+        button_accept_show: {
+            type: Boolean,
+            default: true,
+        },
+        button_cancel_name:{
             type:String,
-            default: "modal-lg"
-        },
-        styles:{
-          type:[String, Array],
-          default: 'btn-sm'
+            default: "Cerrar"
         }
-     },
- 
-     methods: {
-        sendEvent1(id){
-            this.$emit('isClicked', id)
+    },
+
+    methods: {
+        sendEvent1(id) {
+            this.$emit("isClicked", id);
         },
 
-        sendEvent2(id){
-            this.$emit('isAccepted', id)
-        }
-     },
+        sendEvent2(id) {
+            this.$emit("isAccepted", id);
+        },
 
-
-}
-</script>
-<style lang="">
-    
-</style>
+        sendEvent3(id) {
+            this.$emit("isCancel", id);
+        },
+    },
+};
+</script> 
