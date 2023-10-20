@@ -4,6 +4,7 @@
         styles="bg-warning btn-sm mx-2"
         :button_accept_show="false"
         width="modal-xl"
+        @is-closed="clean"
     >
         <template v-slot:button> Resfresh token </template>
         <template v-slot:head>
@@ -33,6 +34,14 @@
                         Obtener Nuevo token
                     </button>
                 </div>
+            </div>
+            <div class="col-12">
+                <span
+                    class="errors d-block"
+                    v-for="(item, index) in errors"
+                    :key="index"
+                    >{{ item }}</span
+                >
             </div>
             <div class="col-12 my-4">
                 <span>
@@ -89,6 +98,7 @@ export default {
             },
             scopeSelected: [],
             scopes: {},
+            errors: {},
         };
     },
 
@@ -103,7 +113,12 @@ export default {
             this.scopeSelected = scopes;
         },
 
+        clean(){
+            this.errors = {} 
+        },
+
         tokenGenerate(client) {
+            this.errors = {};
             window.axios
                 .post("/oauth/token", {
                     grant_type: "refresh_token",
@@ -117,7 +132,9 @@ export default {
                     this.form_token.credentials = res.data;
                 })
                 .catch((e) => {
-                    console.log(e);
+                    if (e.response && e.response.data.error) {
+                        this.errors = e.response.data;
+                    }
                 });
         },
 
@@ -127,7 +144,9 @@ export default {
                 .then((res) => {
                     this.scopes = res.data;
                 })
-                .catch((e) => {});
+                .catch((e) => {
+                    console.log(e);
+                });
         },
     },
 };

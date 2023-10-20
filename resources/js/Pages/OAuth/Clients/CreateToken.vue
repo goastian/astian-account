@@ -4,6 +4,7 @@
         styles="bg-info btn-sm mx-2"
         :button_accept_show="false"
         width="modal-xl"
+        @is-closed="clean"
     >
         <template v-slot:button> Generar Token </template>
         <template v-slot:head>
@@ -30,6 +31,14 @@
                         Obtener token
                     </button>
                 </div>
+            </div>
+            <div class="col-12">
+                <span
+                    class="errors d-block"
+                    v-for="(item, index) in errors"
+                    :key="index"
+                    >{{ item }}</span
+                >
             </div>
             <div class="col-12 my-4">
                 <span>
@@ -58,7 +67,7 @@
                         :value="form_token.credentials.refresh_token"
                     ></textarea>
                     <label for="floatingTextarea2">refresh token</label>
-                </div> 
+                </div>
             </div>
         </template>
     </v-modal>
@@ -82,6 +91,7 @@ export default {
                 code: "",
                 credentials: "",
             },
+            errors: {},
         };
     },
 
@@ -91,8 +101,13 @@ export default {
             token.select();
             document.execCommand("copy");
         },
+        
+        clean() {
+            this.errors = {};
+        },
 
         tokenGenerate(client) {
+            this.errors = {}
             window.axios
                 .post("/oauth/token", {
                     grant_type: "authorization_code",
@@ -105,7 +120,9 @@ export default {
                     this.form_token.credentials = res.data;
                 })
                 .catch((e) => {
-                    console.log(e);
+                    if (e.response && e.response.data.error) {
+                        this.errors = e.response.data;
+                    }
                 });
         },
     },

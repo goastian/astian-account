@@ -2,7 +2,7 @@
     <!-- Button trigger modal -->
     <button
         type="button"
-        :class="['btn',  styles]"
+        :class="['btn mx-1 my-1',  styles]"
         @click="sendEvent1(id)"
         data-bs-toggle="modal"
         :data-bs-target="'#'.concat(target)"
@@ -42,6 +42,7 @@
                         class="btn btn-danger"
                         data-bs-dismiss="modal"
                         aria-label="Close"
+                        @click="sendEvent3(id)"
                     >
                         {{ button_cancel_name }}
                     </button>
@@ -52,7 +53,7 @@
 </template>
 <script>
 export default {
-    emits: ["isClicked", "isAccepted",'isCancel'],
+    emits: ["isClicked", "isAccepted",'isClosed'],
 
     props: {
         target: {
@@ -88,7 +89,7 @@ export default {
         },
 
         sendEvent3(id) {
-            this.$emit("isCancel", id);
+            this.$emit("isClosed", id);
         },
     },
 };
