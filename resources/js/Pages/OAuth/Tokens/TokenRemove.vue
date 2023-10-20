@@ -12,7 +12,7 @@
                 Estas seguro que deseas revocar el acceso a este token?
             </span>
             <span class="text-info h6">
-                Cuando revocas el token todos los usuarios perderan el acceso a
+                Cuando revocas el token todos los usuarios que lo esten usando perderan el acceso a
                 los recursos que esten ejecutando.
             </span>
             <br /><br />
