@@ -22,15 +22,12 @@ class OAuthController extends Controller
 
     public function clientes()
     {
-        return Inertia::render('OAuth/Clients', [
-            'URL' => env('APP_URL'),
-            'session' => route('session.update'),
-        ]);
+        return Inertia::render('OAuth/Clients/Index');
     }
 
     public function tokens()
     {
-        return Inertia::render('OAuth/Tokens');
+        return Inertia::render('OAuth/Tokens/Index');
     }
 
     public function sessionState(Request $request)
