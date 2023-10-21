@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\OAuth;
 
 use App\Http\Controllers\Controller;
+use App\Transformers\Auth\EmployeeTransformer;
 use Inertia\Inertia;
 
 class OAuthController extends Controller
@@ -15,17 +16,6 @@ class OAuthController extends Controller
 
     public function dashboard()
     {
-        return Inertia::render('OAuth/Personal/Index');
+        return Inertia::render('Dashboard');
     }
-
-    public function clientes()
-    {
-        return Inertia::render('OAuth/Clients/Index');
-    }
-
-    public function tokens()
-    {
-        return Inertia::render('OAuth/Tokens/Index');
-    }
-
 }

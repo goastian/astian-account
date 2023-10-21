@@ -62,7 +62,7 @@ class AuthenticatedSessionController extends Controller
 
         LogoutEvent::dispatch(Auth::user());
  
-        return redirect(env('APP_URL'));
+        return $request->wantsJson() ? route('login') : redirect(env('APP_URL'));
     }
 
     public function profile()
