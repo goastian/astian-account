@@ -1,5 +1,5 @@
 <template>
-    <div class="row row-cols-2 col-12 text-start">
+    <div class="row row-cols-2 col-12 text-start px-3 py-2">
         <div
             class="col form-check"
             v-for="(item, index) in scopes"
@@ -22,7 +22,7 @@
 <script>
 export default {
     emits: ["scopesSelected"],
- 
+
     data() {
         return {
             scopes: {},
@@ -30,9 +30,9 @@ export default {
         };
     },
 
-    mounted() { 
-            this.getScopes();
-            this.scopesSelected = [];        
+    mounted() {
+        this.getScopes();
+        this.scopesSelected = [];
     },
 
     methods: {

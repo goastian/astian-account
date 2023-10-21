@@ -21,12 +21,11 @@
     @inertiaHead
 </head>
 
-<body class="font-sans antialiased bg-dark text-info">
+<body class="font-sans antialiased bg-dark text-light">
     <nav class="navbar navbar-dark navbar-expand-sm px-0">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-xl text-success" href="{{ route('dashboard') }}">
-                <v-icon styles="fa-home pull-left"></v-icon>
-                Home
+            <a class="navbar-brand text-md fw-bold text-xl" href="{{ route('dashboard') }}">
+                Personal Access token
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">

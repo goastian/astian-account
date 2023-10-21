@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <v-form
-            :target="client.name.concat(`_6_${client.id}`)" 
+            :target="`_6_${client.id}`" 
             @is-accepted="sendRequestForAuthorize(client)"
         >
             <template v-slot:button> Authorize </template>

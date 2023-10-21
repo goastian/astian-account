@@ -1,6 +1,6 @@
 <template>
     <v-update
-        :target="client.name.concat(`_1_${client.id}`)"
+        :target="`_1_${client.id}`"
         @is-accepted="updateClient(client.id)"
         styles="bg-warning btn-sm"
         :button_accept_show="false"
