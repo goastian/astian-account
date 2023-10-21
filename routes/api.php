@@ -3,8 +3,7 @@
 use App\Enum\EnumType;
 use Illuminate\Support\Facades\Route; 
 use App\Http\Controllers\User\RoleController;
-use App\Http\Controllers\User\UserController; 
-use App\Http\Controllers\Auth\TokensController;
+use App\Http\Controllers\User\UserController;  
 use App\Http\Controllers\User\UserRoleController; 
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController; 
@@ -13,9 +12,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 Route::get('document-type', [EnumType::class, 'documento_type']);
 
 Route::post('login', [AuthorizationController::class, 'store'])->name('signin');
-Route::post('logout', [AuthorizationController::class, 'destroy']);
-Route::delete('tokens', [TokensController::class, 'destroyAllTokens'])->name('tokens.destroyAll');
-Route::resource('tokens', TokensController::class)->only('index', 'store', 'destroy');
+Route::post('logout', [AuthorizationController::class, 'destroy']); 
  
 Route::get('about', [AuthenticatedSessionController::class, 'profile']);
  
