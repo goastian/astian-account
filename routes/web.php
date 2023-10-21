@@ -1,7 +1,7 @@
 <?php
- 
-use Illuminate\Support\Facades\Route; 
+
 use App\Http\Controllers\OAuth\OAuthController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,9 +13,7 @@ use App\Http\Controllers\OAuth\OAuthController;
 | contains the "web" middleware group. Now create something great!
 |
  */
-Route::get('/', [OAuthController::class, 'dashboard'])->name('dashboard');
-Route::get('/clientes', [OAuthController::class, 'clientes'])->name('clientes');
-Route::get('/tokens', [OAuthController::class, 'tokens'])->name('tokens');
-Route::get('/session',[OAuthController::class, 'sessionState'])->name('session.update');
-
 require __DIR__ . '/auth.php';
+
+Route::get("/{any}", [OAuthController::class, 'dashboard'])->where('any', '.*');
+
