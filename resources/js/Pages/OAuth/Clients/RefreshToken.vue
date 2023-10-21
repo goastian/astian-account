@@ -1,6 +1,6 @@
 <template>
     <v-modal
-        :target="client.name.concat(`_4_${client.id}`)"
+        :target="`_4_${client.id}`"
         styles="bg-warning btn-sm mx-2"
         :button_accept_show="false"
         width="modal-xl"

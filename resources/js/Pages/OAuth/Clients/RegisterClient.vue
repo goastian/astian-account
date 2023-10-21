@@ -8,7 +8,7 @@
                 <span>Registrar cliente</span>
             </div>
             <div class="class py-0 card-body">
-                <div class="class text-center py-0 row row-cols-3 col-sm-12">
+                <div class="class text-center row row-cols-3 col-sm-12">
                     <div class="col-4">
                         <label for="cliente">Cliente</label>
                         <input
