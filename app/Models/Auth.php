@@ -95,6 +95,14 @@ class Auth extends Authenticatable
         $this->attributes['address'] = strtolower($value);
     }
 
+     /**
+     * verifica si contiene el role de administrador
+     */
+    public function isAdmin()
+    {
+        return $this->roles()->get()->contains('name', 'admin');
+    }
+    
     /**
      * Send the password reset notification.
      *

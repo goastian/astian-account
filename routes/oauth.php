@@ -1,93 +1,93 @@
 <?php
 
+use App\Http\Controllers\OAuth\ScopeController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Passport\Http\Controllers\ScopeController;
-use Laravel\Passport\Http\Controllers\ClientController;
-use Laravel\Passport\Http\Controllers\AccessTokenController;
-use Laravel\Passport\Http\Controllers\AuthorizationController;
-use Laravel\Passport\Http\Controllers\TransientTokenController;
-use Laravel\Passport\Http\Controllers\DenyAuthorizationController;
-use Laravel\Passport\Http\Controllers\PersonalAccessTokenController;
-use Laravel\Passport\Http\Controllers\ApproveAuthorizationController;
-use Laravel\Passport\Http\Controllers\AuthorizedAccessTokenController;
 
-Route::post('/oauth/token', [
-    'uses' => [AccessTokenController::class,'issueToken'],
-    'as' => 'token',
-    'middleware' => 'throttle',
-]);
+Route::group([
+    'as' => 'passport.',
+    'prefix' => config('passport.path', 'oauth'),
+  //  'namespace' => '\Laravel\Passport\Http\Controllers',
+], function () {
 
-Route::get('/oauth/authorize', [
-    'uses' => [AuthorizationController::class, 'authorize'],
-    'as' => 'authorizations.authorize',
-    'middleware' => 'web',
-]);
-
-$guard = config('passport.guard', null);
-
-Route::middleware(['web', $guard ? 'auth:'.$guard : 'auth'])->group(function () {
-    Route::post('/oauth/token/refresh', [
-        'uses' => [TransientTokenController::class,'refresh'],
-        'as' => 'token.refresh',
+    Route::post('/token', [
+        'uses' => '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken',
+        'as' => 'token',
+        'middleware' => 'throttle',
     ]);
 
-    Route::post('/oauth/authorize', [
-        'uses' => [ApproveAuthorizationController::class, 'approve'],
-        'as' => 'authorizations.approve',
+    Route::get('/authorize', [
+        'uses' => '\Laravel\Passport\Http\Controllers\AuthorizationController@authorize',
+        'as' => 'authorizations.authorize',
+        'middleware' => 'web',
     ]);
 
-    Route::delete('/oauth/authorize', [
-        'uses' => [DenyAuthorizationController::class,'deny'],
-        'as' => 'authorizations.deny',
-    ]);
+    $guard = config('passport.guard', null);
 
-    Route::get('/oauth/tokens', [
-        'uses' => [AuthorizedAccessTokenController::class, 'forUser'],
-        'as' => 'tokens.index',
-    ]);
+    Route::middleware(['web', $guard ? 'auth:' . $guard : 'auth'])->group(function () {
+        Route::post('/token/refresh', [
+            'uses' => '\Laravel\Passport\Http\Controllers\TransientTokenController@refresh',
+            'as' => 'token.refresh',
+        ]);
 
-    Route::delete('/oauth/tokens/{token_id}', [
-        'uses' => [AuthorizedAccessTokenController::class, 'destroy'],
-        'as' => 'tokens.destroy',
-    ]);
+        Route::post('/authorize', [
+            'uses' => '\Laravel\Passport\Http\Controllers\ApproveAuthorizationController@approve',
+            'as' => 'authorizations.approve',
+        ]);
 
-    Route::get('/oauth/clients', [
-        'uses' => [ClientController::class,'forUser'],
-        'as' => 'clients.index',
-    ]);
+        Route::delete('/authorize', [
+            'uses' => '\Laravel\Passport\Http\Controllers\DenyAuthorizationController@deny',
+            'as' => 'authorizations.deny',
+        ]);
 
-    Route::post('/oauth/clients', [
-        'uses' => [ClientController::class, 'store'],
-        'as' => 'clients.store',
-    ]);
+        Route::get('/tokens', [
+            'uses' => '\Laravel\Passport\Http\Controllers\AuthorizedAccessTokenController@forUser',
+            'as' => 'tokens.index',
+        ]);
 
-    Route::put('/oauth/clients/{client_id}', [
-        'uses' => [ClientController::class,'update'],
-        'as' => 'clients.update',
-    ]);
+        Route::delete('/tokens/{token_id}', [
+            'uses' => '\Laravel\Passport\Http\Controllers\AuthorizedAccessTokenController@destroy',
+            'as' => 'tokens.destroy',
+        ]);
 
-    Route::delete('/oauth/clients/{client_id}', [
-        'uses' => [ClientController::class,'destroy'],
-        'as' => 'clients.destroy',
-    ]);
+        Route::get('/clients', [
+            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@forUser',
+            'as' => 'clients.index',
+        ]);
 
-    Route::get('/oauth/scopes', [
-        'uses' => [ScopeController::class, 'all'],
-        'as' => 'scopes.index',
-    ]);
+        Route::post('/clients', [
+            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@store',
+            'as' => 'clients.store',
+        ]);
 
-    Route::get('/oauth/personal-access-tokens', [
-        'uses' => [PersonalAccessTokenController::class, 'forUser'],
-        'as' => 'personal.tokens.index',
-    ]);
+        Route::put('/clients/{client_id}', [
+            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@update',
+            'as' => 'clients.update',
+        ]);
 
-    Route::post('/oauth/personal-access-tokens', [
-        'uses' => [PersonalAccessTokenController::class, 'store'],
-        'as' => 'personal.tokens.store',
-    ]);
+        Route::delete('/clients/{client_id}', [
+            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@destroy',
+            'as' => 'clients.destroy',
+        ]);
 
-    Route::delete('/oauth/personal-access-tokens/{token_id}', [
-        'uses' => [PersonalAccessTokenController::class,'destroy'],
-        'as' => 'personal.tokens.destroy',
-    ]);
+        Route::get('/scopes', [
+            'uses' => '\App\Http\Controllers\OAuth\ScopeController@all',
+            'as' => 'scopes.index',
+        ]);
+
+        Route::get('/personal-access-tokens', [
+            'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser',
+            'as' => 'personal.tokens.index',
+        ]);
+
+        Route::post('/personal-access-tokens', [
+            'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store',
+            'as' => 'personal.tokens.store',
+        ]);
+
+        Route::delete('/personal-access-tokens/{token_id}', [
+            'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy',
+            'as' => 'personal.tokens.destroy',
+        ]);
+    });
+
 });
