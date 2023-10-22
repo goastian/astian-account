@@ -15,7 +15,7 @@
     </v-table>
 </template>
 <script>
-import VTable from "../Components/table.vue";
+import VTable from "../../Components/table.vue";
 import VCreate from "./Create.vue"
 import VRemove from "./Remove.vue"
 

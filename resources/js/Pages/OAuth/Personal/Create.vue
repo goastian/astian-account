@@ -63,7 +63,7 @@
     </div>
 </template>
 <script>
-import VScopes from "../Components/scopes.vue";
+import VScopes from "../../Components/scopes.vue";
 export default {
     emits: ["tokenWasCreated"],
 
@@ -104,5 +104,4 @@ export default {
         },
     },
 };
-</script>
-<style lang=""></style>
+</script> 

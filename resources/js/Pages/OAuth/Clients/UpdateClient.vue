@@ -41,7 +41,7 @@
     </v-update>
 </template>
 <script>
-import VUpdate from "../Components/modal.vue";
+import VUpdate from "../../Components/modal.vue";
 
 export default {
     emits: ["isUpdated"],

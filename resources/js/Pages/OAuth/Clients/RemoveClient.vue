@@ -31,7 +31,7 @@
     </v-form>
 </template>
 <script>
-import VForm from "../Components/modal.vue";
+import VForm from "../../Components/modal.vue";
 
 export default {
     emits: ["clientWasRemove"],
