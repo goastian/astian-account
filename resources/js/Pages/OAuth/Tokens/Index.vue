@@ -20,7 +20,7 @@
     </v-table>
 </template>
 <script>
-import VTable from "../Components/table.vue";
+import VTable from "../../Components/table.vue";
 import VTokenRemove from "./TokenRemove.vue";
 
 export default {

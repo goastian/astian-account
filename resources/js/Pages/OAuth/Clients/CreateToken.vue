@@ -73,7 +73,7 @@
     </v-modal>
 </template>
 <script>
-import VModal from "../Components/modal.vue";
+import VModal from "../../Components/modal.vue";
 
 export default {
     props: {

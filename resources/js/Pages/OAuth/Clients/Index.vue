@@ -36,7 +36,7 @@
 </template>
 <script>
 import VRegisterClient from "./RegisterClient.vue";
-import VTable from "../Components/table.vue";
+import VTable from "../../Components/table.vue";
 import VUpdate from "./UpdateClient.vue";
 import VToken from "./CreateToken.vue";
 import VRefreshToken from "./RefreshToken.vue";

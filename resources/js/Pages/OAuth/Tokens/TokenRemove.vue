@@ -30,7 +30,7 @@
     </v-token-remove>
 </template>
 <script>
-import VTokenRemove from "../Components/modal.vue";
+import VTokenRemove from "../../Components/modal.vue";
 export default {
     emits: ["tokenWasRevoked"],
 

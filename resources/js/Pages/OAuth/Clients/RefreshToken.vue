@@ -76,8 +76,8 @@
     </v-modal>
 </template>
 <script>
-import VModal from "../Components/modal.vue";
-import VScopes from "../Components/scopes.vue";
+import VModal from "../../Components/modal.vue";
+import VScopes from "../../Components/scopes.vue";
 
 export default {
     props: {

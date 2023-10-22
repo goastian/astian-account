@@ -15,8 +15,8 @@
     </div>
 </template>
 <script>
-import VForm from "../Components/modal.vue";
-import VScopes from "../Components/scopes.vue";
+import VForm from "../../Components/modal.vue";
+import VScopes from "../../Components/scopes.vue";
 
 export default {
     props: {
