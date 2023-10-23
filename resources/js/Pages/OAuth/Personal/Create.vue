@@ -1,9 +1,7 @@
 <template>
     <div class="row row-cols-2 col-12 border-bottom border-bottom-1">
         <div class="col">
-            <div
-                class="card bg-dark text-sm text-light  px-4 py-2"
-            >
+            <div class="card bg-dark text-sm text-light px-4 py-2">
                 <div class="card-head h6">Crear Personal Access Token</div>
                 <div class="body">
                     <div class="row row-cols-1 col-12">
@@ -14,13 +12,7 @@
                                 placeholder="Nombre del token"
                                 v-model="name"
                             />
-
-                            <span
-                                class="errors"
-                                v-for="(item, index) in errors.name"
-                                :key="index"
-                                >{{ item }}</span
-                            >
+                            <v-error :error="errors.name"></v-error>
                         </div>
 
                         <div class="col-12">
@@ -44,7 +36,7 @@
         <div class="col">
             <div class="row row-cols-1 col-12">
                 <div class="col my-4">
-                expires: {{ tokens.token ? tokens.token.expires_at : null }}
+                    expires: {{ tokens.token ? tokens.token.expires_at : null }}
                 </div>
                 <div class="col">
                     <div class="form-floating py-0 text-black">
@@ -53,23 +45,18 @@
                             class="form-control py-0"
                             name="token"
                             id="token"
-                            v-model="tokens.accessToken" 
-                            style="width: 100% ;height: 14rem;"
+                            v-model="tokens.accessToken"
+                            style="width: 100%; height: 14rem"
                         ></textarea>
                     </div>
-                </div> 
+                </div>
             </div>
         </div>
     </div>
 </template>
 <script>
-import VScopes from "../../Components/scopes.vue";
 export default {
     emits: ["tokenWasCreated"],
-
-    components: {
-        VScopes,
-    },
 
     data() {
         return {
@@ -94,7 +81,7 @@ export default {
                 .then((res) => {
                     this.name = "";
                     this.tokens = res.data;
-                    this.$emit("tokenWasCreated", res.data); 
+                    this.$emit("tokenWasCreated", res.data);
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {
@@ -104,4 +91,4 @@ export default {
         },
     },
 };
-</script> 
+</script>
