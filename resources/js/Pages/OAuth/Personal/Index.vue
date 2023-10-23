@@ -14,14 +14,13 @@
         </template>
     </v-table>
 </template>
-<script>
-import VTable from "../../Components/table.vue";
+<script> 
+
 import VCreate from "./Create.vue"
 import VRemove from "./Remove.vue"
 
 export default {
-    components: {
-        VTable,
+    components: { 
         VCreate,
         VRemove,
     },

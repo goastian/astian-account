@@ -30,8 +30,7 @@
         </template>
     </v-modal>
 </template>
-<script>
-import VModal from "../../Components/modal.vue";
+<script> 
 
 export default {
     emits: ["TokenWasRemove"],
@@ -41,10 +40,6 @@ export default {
             type: Object,
             required: true,
         },
-    },
-
-    components: {
-        VModal,
     },
 
     methods: {
