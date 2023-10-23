@@ -1,5 +1,5 @@
 <template>
-    <v-form
+    <v-modal
         :target="`_2_${client.id}`"
         @is-accepted="deleteClient(item)"
         styles="bg-danger btn-sm"
@@ -28,11 +28,9 @@
                 </button>
             </div>
         </template>
-    </v-form>
+    </v-modal>
 </template>
-<script>
-import VForm from "../../Components/modal.vue";
-
+<script> 
 export default {
     emits: ["clientWasRemove"],
 
@@ -41,10 +39,6 @@ export default {
             type: Object,
             required: true,
         },
-    },
-
-    components: {
-        VForm,
     },
 
     methods: {

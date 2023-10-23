@@ -35,8 +35,7 @@
     </div>
 </template>
 <script>
-import VRegisterClient from "./RegisterClient.vue";
-import VTable from "../../Components/table.vue";
+import VRegisterClient from "./RegisterClient.vue"; 
 import VUpdate from "./UpdateClient.vue";
 import VToken from "./CreateToken.vue";
 import VRefreshToken from "./RefreshToken.vue";
@@ -44,8 +43,7 @@ import VRemove from "./RemoveClient.vue";
 import VAuthorize from "./Authorization.vue";
 
 export default {
-    components: {
-        VTable,
+    components: { 
         VToken,
         VRefreshToken,
         VUpdate,
