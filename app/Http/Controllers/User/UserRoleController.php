@@ -47,7 +47,7 @@ class UserRoleController extends Controller
             $user->roles()->syncWithoutDetaching($request->role_id);
         });
 
-        StoreEmployeeRoleEvent::dispatch($this->AuthKey());
+        StoreEmployeeRoleEvent::dispatch($this->authenticated_user());
         
         return $this->showOne(Role::find($request->role_id), RoleTransformer::class, 201);
     }
@@ -65,7 +65,7 @@ class UserRoleController extends Controller
             $user->roles()->detach($role->id);
         });
 
-        DestroyEmployeeRoleEvent::dispatch($this->AuthKey());
+        DestroyEmployeeRoleEvent::dispatch($this->authenticated_user());
 
         return $this->showOne($role, $role->transformer);
     }

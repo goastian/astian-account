@@ -1,6 +1,6 @@
 <?php
 
-namespace {{ namespace }};
+namespace App\Events\Role;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels; 
 
 
-class {{ class }} implements ShouldBroadcast
+class StoreRoleEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -44,6 +44,6 @@ class {{ class }} implements ShouldBroadcast
      */
     public function broadcastAs()
     {
-        return '{{ class }}';
+        return 'StoreRoleEvent';
     }
 }
