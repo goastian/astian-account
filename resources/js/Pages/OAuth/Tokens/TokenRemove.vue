@@ -1,5 +1,5 @@
 <template>
-    <v-token-remove
+    <v-modal
         styles="bg-danger btn-sm"
         :button_accept_show="false"
         :target="'token__' + token.id"
@@ -27,10 +27,9 @@
                 </button>
             </div>
         </template>
-    </v-token-remove>
+    </v-modal>
 </template>
-<script>
-import VTokenRemove from "../../Components/modal.vue";
+<script> 
 export default {
     emits: ["tokenWasRevoked"],
 
@@ -40,10 +39,7 @@ export default {
             required: true,
         },
     },
-
-    components: {
-        VTokenRemove,
-    },
+ 
 
     methods: {
         removeToken(token) {
