@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <v-form
+        <v-modal
             :target="`_6_${client.id}`" 
             @is-accepted="sendRequestForAuthorize(client)"
         >
@@ -11,12 +11,10 @@
             <template v-slot:body>
                 <v-scopes @scopes-selected="getScopes"></v-scopes>
             </template>
-        </v-form>
+        </v-modal>
     </div>
 </template>
-<script>
-import VForm from "../../Components/modal.vue";
-import VScopes from "../../Components/scopes.vue";
+<script> 
 
 export default {
     props: {
@@ -25,12 +23,7 @@ export default {
             required: true,
         },
     },
-
-    components: {
-        VForm,
-        VScopes,
-    },
-
+ 
     data() {
         return {
             form: {

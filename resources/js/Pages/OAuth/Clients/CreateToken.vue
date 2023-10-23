@@ -16,11 +16,11 @@
                     <div class="form-floating">
                         <textarea
                             class="form-control"
-                            id="floatingTextarea2"
+                            id="code" 
                             style="height: 5rem"
                             v-model="form_token.code"
                         ></textarea>
-                        <label for="floatingTextarea2"> Code </label>
+                        <label for="code"> Code </label>
                     </div>
                 </div>
                 <div class="col-2">
@@ -33,12 +33,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <span
-                    class="errors d-block"
-                    v-for="(item, index) in errors"
-                    :key="index"
-                    >{{ item }}</span
-                >
+                <v-error :error="errors"></v-error> 
             </div>
             <div class="col-12 my-4">
                 <span>
@@ -72,8 +67,7 @@
         </template>
     </v-modal>
 </template>
-<script>
-import VModal from "../../Components/modal.vue";
+<script> 
 
 export default {
     props: {
@@ -81,10 +75,8 @@ export default {
             type: Object,
             required: true,
         },
-    },
-    components: {
-        VModal,
-    },
+    }, 
+
     data() {
         return {
             form_token: {

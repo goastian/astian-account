@@ -17,13 +17,7 @@
                             class="form-control form-sm"
                             @keyup.enter="storeClients"
                         />
-                        <span
-                            class="errors"
-                            v-for="(item, index) in errors.name"
-                            :key="index"
-                        >
-                            {{ item }}</span
-                        >
+                        <v-error :error="errors.name"></v-error>                       
                     </div>
                     <div class="col-6">
                         <label for="redirect">Redirect</label>
@@ -34,13 +28,7 @@
                             class="form-control"
                             @keyup.enter="storeClients"
                         />
-                        <span
-                            class="errors"
-                            v-for="(item, index) in errors.redirect"
-                            :key="index"
-                        >
-                            {{ item }}</span
-                        >
+                        <v-error :error="errors.redirect"></v-error>                        
                     </div>
                     <div class="col-2 py-4">
                         <button

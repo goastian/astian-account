@@ -36,12 +36,7 @@
                 </div>
             </div>
             <div class="col-12">
-                <span
-                    class="errors d-block"
-                    v-for="(item, index) in errors"
-                    :key="index"
-                    >{{ item }}</span
-                >
+                <v-error :error="errors"></v-error> 
             </div>
             <div class="col-12 my-4">
                 <span>
@@ -75,9 +70,7 @@
         </template>
     </v-modal>
 </template>
-<script>
-import VModal from "../../Components/modal.vue";
-import VScopes from "../../Components/scopes.vue";
+<script> 
 
 export default {
     props: {
@@ -86,10 +79,7 @@ export default {
             required: true,
         },
     },
-    components: {
-        VModal,
-        VScopes,
-    },
+  
     data() {
         return {
             form_token: {

@@ -1,5 +1,5 @@
 <template>
-    <v-update
+    <v-modal
         :target="`_1_${client.id}`"
         @is-accepted="updateClient(client.id)"
         styles="bg-warning btn-sm"
@@ -13,7 +13,7 @@
             <div class="class row row-cols-3 col-sm-12">
                 <div class="col-4">
                     <label for="cliente">cliente</label>
-                    <input
+                    <input 
                         type="text"
                         v-model="client.name"
                         class="form-control"
@@ -38,11 +38,9 @@
                 <span>{{ message }}</span>
             </div>
         </template>
-    </v-update>
+    </v-modal>
 </template>
 <script>
-import VUpdate from "../../Components/modal.vue";
-
 export default {
     emits: ["isUpdated"],
 
@@ -51,9 +49,6 @@ export default {
             type: Object,
             required: true,
         },
-    },
-    components: {
-        VUpdate,
     },
 
     data() {
