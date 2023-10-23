@@ -19,13 +19,12 @@
         </template>
     </v-table>
 </template>
-<script>
-import VTable from "../../Components/table.vue";
+<script> 
+
 import VTokenRemove from "./TokenRemove.vue";
 
 export default {
-    components: {
-        VTable,
+    components: { 
         VTokenRemove,
     },
 
