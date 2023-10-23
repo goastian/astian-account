@@ -17,7 +17,7 @@ Route::post('logout', [AuthorizationController::class, 'destroy']);
 Route::get('about', [AuthenticatedSessionController::class, 'profile']);
  
 //Roles
-Route::resource('roles', RoleController::class)->only('index');
+Route::resource('roles', RoleController::class)->only('index', 'store', 'update');
 
 //Employees
 Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');

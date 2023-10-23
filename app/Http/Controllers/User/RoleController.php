@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\User\Role; 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Events\Role\StoreRoleEvent;
 use App\Events\Role\UpdateRoleEvent;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Models\User\Role;
+use App\Transformers\Role\RoleTransformer;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
@@ -15,6 +16,10 @@ class RoleController extends Controller
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('transform.request:' . RoleTransformer::class)->only('store', 'update');
+        $this->middleware('scope:admin,account_read')->only('index');
+        $this->middleware('scope:admin,scopes_register')->only('store');
+        $this->middleware('scope:admin,scopes_update')->only('store');
     }
 
     /**
@@ -67,6 +72,10 @@ class RoleController extends Controller
             if ($this->is_diferent($role->description, $request->description)) {
                 $this->can_update[] = true;
                 $role->description = $request->description;
+            }
+
+            if (in_array(true, $this->can_update)) {
+                 $role->push();
             }
 
         });

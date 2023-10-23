@@ -14,7 +14,7 @@ class RoleTransformer extends TransformerAbstract
     protected array $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -23,7 +23,7 @@ class RoleTransformer extends TransformerAbstract
     protected array $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -33,16 +33,22 @@ class RoleTransformer extends TransformerAbstract
     {
         return [
             'id' => $role->id,
-            'role' => $role->name, 
-            'descripcion' => $role->description, 
+            'role' => $role->name,
+            'descripcion' => $role->description,
+            'links' => [
+                'parent' => route('roles.index'),
+                'store' => route('roles.store'),
+                'update' => route('roles.update', ['role' => $role->id]),
+            ],
         ];
     }
-
 
     public static function transformRequest($index)
     {
         $attribute = [
-            'role' => 'role_id'
+            'role' => 'role_id',
+            'role' => 'name',
+            'descripcion' => 'description',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -50,8 +56,10 @@ class RoleTransformer extends TransformerAbstract
 
     public static function transformResponse($index)
     {
-       $attribute = [
-            'role_id' => 'role'
+        $attribute = [
+            'role_id' => 'role',
+            'name' => 'role',
+            'description' => 'descripcion',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
