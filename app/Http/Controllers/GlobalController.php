@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Transformers\Auth\EmployeeTransformer;
 use Elyerr\ApiResponse\Assets\Asset;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class GlobalController extends Controller
 {
@@ -26,9 +28,9 @@ class GlobalController extends Controller
         $this->middleware('scope:admin,enable')->only('enable');
     }
 
-    public function AuthKey()
+    public function authenticated_user()
     {
-        return request()->user()->id;
+        return factral(Auth::user(), EmployeeTransformer::class);
     }
 
     public function lowercase($value)

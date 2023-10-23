@@ -38,6 +38,15 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Employee\DestroyEmployeeRoleEvent::class => [
             \App\Listeners\Employee\DestroyEmployeeRoleListener::class,
         ],
+
+        //roles
+        \App\Events\Role\StoreRoleEvent::class => [
+            \App\Listeners\Role\StoreRoleListener::class,
+        ], 
+
+        \App\Events\Role\UpdateRoleEvent::class => [
+            \App\Listeners\Role\UpdateRoleListener::class,
+        ], 
     ];
 
     /**

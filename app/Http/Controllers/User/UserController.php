@@ -2,31 +2,31 @@
 
 namespace App\Http\Controllers\User;
 
-use Error;
-use App\Models\User\Employee; 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use App\Events\Employee\StoreEmployeeEvent;
-use App\Events\Employee\EnableEmployeeEvent;
-use App\Events\Employee\UpdateEmployeeEvent;
-use App\Http\Requests\Employee\IndexRequest;
-use App\Http\Requests\Employee\ShowRequest; 
-use App\Http\Requests\Employee\StoreRequest;
-use Illuminate\Support\Facades\Notification;
 use App\Events\Employee\DisableEmployeeEvent;
-use App\Http\Requests\Employee\EnableRequest;
-use App\Http\Requests\Employee\UpdateRequest;
+use App\Events\Employee\EnableEmployeeEvent;
+use App\Events\Employee\StoreEmployeeEvent;
+use App\Events\Employee\UpdateEmployeeEvent;
+use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Employee\DisableRequest;
+use App\Http\Requests\Employee\EnableRequest;
+use App\Http\Requests\Employee\IndexRequest;
+use App\Http\Requests\Employee\ShowRequest;
+use App\Http\Requests\Employee\StoreRequest;
+use App\Http\Requests\Employee\UpdateRequest;
+use App\Models\User\Employee;
 use App\Notifications\Employee\CreatedNewUser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
-use App\Http\Controllers\GlobalController as Controller;
+use Error;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 
 class UserController extends Controller
 {
 
     public function __construct(Employee $user)
     {
-        parent::__construct(); 
+        parent::__construct();
         $this->middleware('transform.request:' . $user->transformer)->only('store', 'update');
     }
 
@@ -63,7 +63,7 @@ class UserController extends Controller
             $user->roles()->syncWithoutDetaching($request->role);
         });
 
-        StoreEmployeeEvent::dispatch($this->AuthKey());
+        StoreEmployeeEvent::dispatch($this->authenticated_user());
 
         Notification::send($user, new CreatedNewUser($temp_password));
 
@@ -118,7 +118,7 @@ class UserController extends Controller
                 $this->can_update[] = true;
                 $user->document_number = $request->document_number;
             }
- 
+
             if (request()->user()->tokenCan('admin') && $this->is_diferent($user->country, $request->country)) {
                 $this->can_update[] = true;
                 $user->country = $request->country;
@@ -146,9 +146,9 @@ class UserController extends Controller
         });
 
         if (in_array(true, $this->can_update)) {
-            UpdateEmployeeEvent::dispatch($this->AuthKey());
+            UpdateEmployeeEvent::dispatch($this->authenticated_user());
         }
-        
+
         return $this->showOne($user, $user->transformer, 201);
     }
 
@@ -167,7 +167,7 @@ class UserController extends Controller
     {
         $user->delete();
 
-        DisableEmployeeEvent::dispatch($this->AuthKey());
+        DisableEmployeeEvent::dispatch($this->authenticated_user());
 
         return $this->showOne($user, $user->transformer);
     }
@@ -180,7 +180,7 @@ class UserController extends Controller
 
             $user->restore();
 
-            EnableEmployeeEvent::dispatch($this->AuthKey());
+            EnableEmployeeEvent::dispatch($this->authenticated_user());
 
             return $this->showOne($user, $user->transformer);
 
@@ -189,7 +189,8 @@ class UserController extends Controller
         }
     }
 
-    public function can_access(){
+    public function can_access()
+    {
         return request()->user()->tokenCan('admin') || request()->user->id == request()->user()->id;
     }
 }
