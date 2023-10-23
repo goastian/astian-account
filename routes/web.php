@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\OAuth\OAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,7 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
  */
 require __DIR__ . '/auth.php';
-require __DIR__ . '/oauth.php'; 
+require __DIR__ . '/oauth.php';
 
-Route::get("/{any}", [OAuthController::class, 'dashboard'])->where('any', '.*');
-
+Route::get("/{any}", function () {
+    return view('app');
+})->where('any', '.*')->middleware('auth');

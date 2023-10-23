@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Clients from "../OAuth/Clients/Index.vue";
-import Tokens from "../OAuth/Tokens/Index.vue";
-import PersonalTokens from "../OAuth/Personal/Index.vue";
-import Users from "../Users/Index.vue";
+import Clients from "../Pages/OAuth/Clients/Index.vue";
+import Tokens from "../Pages/OAuth/Tokens/Index.vue";
+import PersonalTokens from "../Pages/OAuth/Personal/Index.vue";
+import Users from "../Pages/Users/Index.vue";
 
 const routes = [
     { path: "/", name: "clients", component: Clients },
