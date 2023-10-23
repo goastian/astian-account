@@ -37,7 +37,7 @@ class StoreEmployeeRoleEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('spondylus');
+        return new PrivateChannel(env('CHANNEL_NAME','auth'));
     }
 
      /**

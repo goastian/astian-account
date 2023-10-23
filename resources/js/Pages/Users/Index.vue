@@ -42,22 +42,27 @@ export default {
             items: ["nombre", "apellido", "correo", "telefono", "registrado"],
             users: {},
             pages: {},
+            actual_page: 1,
         };
     },
 
+    beforeMount() {
+        this.actual_page = 1;
+    },
+
     mounted() {
-        this.getUsers();
-        this.changeList()
-        //this.listenEvents();
+        this.getUsers(this.actual_page);
+        this.listenEvents();
     },
 
     methods: {
-        getUsers(id = 1) {
+        getUsers(id) {
             window.axios
                 .get("/api/users", { params: { page: id } })
-                .then((res) => { 
+                .then((res) => {
                     this.users = res.data.data;
                     this.pages = res.data.meta.pagination;
+                    this.actual_page = res.data.meta.pagination.current_page;
                 })
                 .catch((e) => {
                     console.log(e.response);
@@ -65,46 +70,31 @@ export default {
         },
 
         changeList(id) {
-            this.getUsers(id)
+            this.pagination = id;
         },
 
-        /*  listenEvents() {
+        listenEvents() {
             this.$echo
-                .private(this.$channels.ch_0())
+                .private(`auth`)
                 .listen(".UpdateEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-
-            this.$echo
-                .private(this.$channels.ch_0())
+                    this.getUsers(this.pagination);
+                })
                 .listen(".StoreEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-
-            this.$echo
-                .private(this.$channels.ch_0())
+                    this.getUsers(this.actual_page);
+                })
                 .listen(".EnableEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-
-            this.$echo
-                .private(this.$channels.ch_0())
+                    this.getUsers(this.actual_page);
+                })
                 .listen(".DisableEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-
-            this.$echo
-                .private(this.$channels.ch_0())
+                    this.getUsers(this.actual_page);
+                })
                 .listen(".StoreEmployeeRoleEvent", (e) => {
-                    this.getUsers();
-                });
-
-            this.$echo
-                .private(this.$channels.ch_0())
+                    this.getUsers(this.actual_page);
+                })
                 .listen(".DestroyEmployeeRoleEvent", (e) => {
-                    this.getUsers();
+                    this.getUsers(this.actual_page);
                 });
-        },*/
+        },
     },
 };
 </script>
