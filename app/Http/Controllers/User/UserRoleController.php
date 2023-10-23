@@ -21,6 +21,10 @@ class UserRoleController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . RoleTransformer::class);
+        $this->middleware('scope:admin,account_read')->only('index');
+        $this->middleware('scope:admin,account_register')->only('store');
+        $this->middleware('scope:admin,account_update')->only('update');
+
     }
 
     /**

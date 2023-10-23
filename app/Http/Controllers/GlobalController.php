@@ -20,17 +20,11 @@ class GlobalController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
-        $this->middleware('scope:admin,read')->only('index', 'show');
-        $this->middleware('scope:admin,write')->only('store');
-        $this->middleware('scope:admin,update')->only('update');
-        $this->middleware('scope:admin,destroy')->only('destroy');
-        $this->middleware('scope:admin,disable')->only('disable');
-        $this->middleware('scope:admin,enable')->only('enable');
     }
 
     public function authenticated_user()
     {
-        return factral(Auth::user(), EmployeeTransformer::class);
+        return fractal(Auth::user(), EmployeeTransformer::class);
     }
 
     public function lowercase($value)

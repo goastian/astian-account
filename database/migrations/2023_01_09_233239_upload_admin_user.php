@@ -17,14 +17,15 @@ return new class extends Migration
          * datos del user administrador
          */
         $roles = [
-            'admin' => "acceso total al sistema", 
-            'read' => "acceso para leer informacion", 
-            'write' => "acceso para registrar informacion",
-            'update' => "acceso para actualizar informacion",
-            'destroy' => "acceso para borrar informacion",
-            'disable' => "acceso para deshabilitar un recurso",
-            'enable' => "acceso para habilitar recursos",
-            'download' => "acceso para descargar informacion"
+            "admin" => "acceso total al sistema", 
+            "account" => "administrar cuentas de usuario",
+            "account_read" => "acceso a ver informacion de los usuarios",
+            "account_register" => "registra un nuevo usuario",
+            "account_update" => "actualiza informacion de usaurios",
+            "account_enable" => "permite habilitar usuarios",
+            "account_disable" => "permite deshabilitar usuarios",
+            "scopes_register" => "permite registrar nuevos scopes",
+            "scopes_update" => "permite registrar nuevos scopes",
         ];
 
         foreach ($roles as $key => $value) {
@@ -37,7 +38,7 @@ return new class extends Migration
         Employee::create([
             'name' => 'admin',
             'last_name' => 'admin',
-            'email' => 'spondylus@admin.com',
+            'email' => 'test@admin.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'document_type' => 'DNI',
             'document_number' => '00000000',
