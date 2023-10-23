@@ -5,8 +5,7 @@
     "dev": "vite",
     "build": "vite build"
   },
-  "devDependencies": {
-    "@inertiajs/vue3": "^1.0.0",
+  "devDependencies": { 
     "@tailwindcss/forms": "^0.5.3",
     "@vitejs/plugin-vue": "^4.0.0",
     "autoprefixer": "^10.4.12",
@@ -22,8 +21,7 @@
     "sass": "^1.69.4",
     "vue": "^3.2.41"
   },
-  "dependencies": {
-    "i": "^0.3.7",
+  "dependencies": { 
     "js-cookie": "^3.0.5",
     "npm": "^10.1.0",
     "vue-router": "^4.2.5"
