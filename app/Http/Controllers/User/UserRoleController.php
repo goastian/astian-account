@@ -49,7 +49,7 @@ class UserRoleController extends Controller
 
         StoreEmployeeRoleEvent::dispatch($this->AuthKey());
         
-        return $this->showOne(Role::findOrFail($request->role_id), RoleTransformer::class, 201);
+        return $this->showOne(Role::find($request->role_id), RoleTransformer::class, 201);
     }
 
 
@@ -67,6 +67,6 @@ class UserRoleController extends Controller
 
         DestroyEmployeeRoleEvent::dispatch($this->AuthKey());
 
-        return $this->message("El permiso ha sido revocado", 200);
+        return $this->showOne($role, $role->transformer);
     }
 }
