@@ -6,18 +6,12 @@
         <v-item :path="{ name: 'users' }">Usuarios</v-item>
     </v-nav>
     <section class="container-fulid px-1 py-2">
-        <router-view></router-view>
+        <router-view /> 
     </section>
 </template>
-<script>
-import VNav from "./Dashboad/Navbar.vue";
-import VItem from "./Dashboad/NavItem.vue";
-
+<script> 
 export default {
-    components: {
-        VNav,
-        VItem,
-    },
+    
 };
 </script>
 
