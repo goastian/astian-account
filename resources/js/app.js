@@ -7,6 +7,7 @@ import { resolvePageComponent } from "laravel-vite-plugin/inertia-helpers";
 import { ZiggyVue } from "../../vendor/tightenco/ziggy/dist/vue.m";
 import { router } from "./Pages/config/rutes.js";
 import { components } from "./Pages/config/globalComponents";
+//import { $channels, $echo} from "./Pages/config/laravel-echo"
 
 const appName = import.meta.env.VITE_APP_NAME || "Laravel";
 
@@ -19,7 +20,8 @@ createInertiaApp({
         ),
     setup({ el, App, props, plugin }) {
         app = createApp({ render: () => h(App, props) });
-
+       // app.config.globalProperties.$echo = $echo
+       // app.config.globalProperties.$channels = $channels;
         app.use(plugin);
         app.use(router);
         app.use(ZiggyVue, Ziggy);
