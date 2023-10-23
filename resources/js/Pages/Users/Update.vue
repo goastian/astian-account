@@ -26,12 +26,7 @@
                                     name="nombre"
                                     class="form-control-sm form-control"
                                 />
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.nombre"
-                                    :key="index"
-                                    >{{ errors.nombre }}</span
-                                >
+                                <v-error :error="errors.nombre"></v-error> 
                             </div>
                             <div class="col">
                                 <label
@@ -46,12 +41,7 @@
                                     name="apellido"
                                     class="form-control-sm form-control"
                                 />
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.apellido"
-                                    :key="index"
-                                    >{{ errors.apellido }}</span
-                                >
+                                <v-error :error="errors.apellido"></v-error> 
                             </div>
                             <div class="col">
                                 <label class="text-capitalize fw-bold" for=""
@@ -64,14 +54,7 @@
                                     name="correo_electronico"
                                     class="form-control-sm form-control"
                                 />
-                                <span
-                                    class="errors"
-                                    v-for="(
-                                        item, index
-                                    ) in errors.correo_electronico"
-                                    :key="index"
-                                    >{{ errors.correo_electronico }}</span
-                                >
+                                <v-error :error="errors.correo_electronico"></v-error> 
                             </div>
 
                             <div class="col">
@@ -85,12 +68,7 @@
                                     name="telefono"
                                     class="form-control-sm form-control"
                                 />
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.telefono"
-                                    :key="index"
-                                    >{{ errors.telefono }}</span
-                                >
+                                <v-error :error="errors.telefono"></v-error>                            
                             </div>
 
                             <div class="col">
@@ -112,12 +90,7 @@
                                         {{ item }}
                                     </option>
                                 </select>
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.documento"
-                                    :key="index"
-                                    >{{ errors.documento }}</span
-                                >
+                                <v-error :error="errors.documento"></v-error> 
                             </div>
                             <div class="col">
                                 <label
@@ -132,12 +105,7 @@
                                     name="numero"
                                     class="form-control-sm form-control"
                                 />
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.numero"
-                                    :key="index"
-                                    >{{ errors.numero }}</span
-                                >
+                                <v-error :error="errors.numero"></v-error> 
                             </div>
                             <div class="col">
                                 <label
@@ -152,13 +120,7 @@
                                     name="departamento"
                                     class="form-control-sm form-control"
                                 />
-
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.departamento"
-                                    :key="index"
-                                    >{{ errors.departamento }}</span
-                                >
+                                <v-error :error="errors.departamento"></v-error> 
                             </div>
                             <div class="col">
                                 <label
@@ -173,12 +135,7 @@
                                     name="pais"
                                     class="form-control-sm form-control"
                                 />
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.pais"
-                                    :key="index"
-                                    >{{ errors.pais }}</span
-                                >
+                                <v-error :error="errors.pais"></v-error> 
                             </div>
                             <div class="col">
                                 <label
@@ -193,12 +150,7 @@
                                     name="direccion"
                                     class="form-control-sm form-control"
                                 />
-                                <span
-                                    class="errors"
-                                    v-for="(item, index) in errors.direccion"
-                                    :key="index"
-                                    >{{ errors.direccion }}</span
-                                >
+                                <v-error :error="errors.direccion"></v-error> 
                             </div>
                             <div class="col">
                                 <label
@@ -233,29 +185,29 @@
                         </div>
                     </div>
                     <div class="col">
-                        <div class="row row-cols-3 col-12">
+                        <div class="row row-cols-4 col-12">
                             <div
                                 class="col-12 border-bottom h5 mb-4 border-top"
                             >
                                 Permisos del usuario
                             </div>
                             <div
-                                class="col text-start"
+                                class="col form-check text-start my-1"
                                 v-for="(item, index) in roles"
                             >
                                 <input
                                     @click="addOrRemoveRoles(item.role)"
-                                    class="form-check-input mx-2"
-                                    :id="item.role"
+                                    class="form-check-input"
+                                    :id="'_s_' + item.id"
                                     :value="item.id"
                                     type="checkbox"
                                 />
                                 <label
-                                    class="text-capitalize fw-bold"
-                                    :for="item.role"
+                                    class="form-check-label"
+                                    :for="'_s_' + item.id"
                                 >
-                                    <strong>{{ item.role }}:</strong>
-                                    <span> {{ item.descripcion }} </span></label
+                                    <span class="fw-bold">{{ item.role }}:</span>
+                                      {{ item.descripcion }}  </label
                                 >
                             </div>
                             <div
