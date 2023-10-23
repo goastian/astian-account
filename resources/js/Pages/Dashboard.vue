@@ -1,7 +1,7 @@
 <template>
     <v-nav class="px-0 py-0">
         <v-item :path="{ name: 'clients' }">Clientes</v-item>
-        <v-item :path="{ name: 'tokens' }">Tokens</v-item>
+        <v-item :path="{ name: 'tokens' }">Clientes Tokens</v-item>
         <v-item :path="{ name: 'personalTokens' }">Personal Tokens</v-item>
         <v-item :path="{ name: 'users' }">Usuarios</v-item>
     </v-nav>
@@ -20,3 +20,4 @@ export default {
     },
 };
 </script>
+
