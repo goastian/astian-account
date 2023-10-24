@@ -171,6 +171,8 @@ class UserController extends Controller
 
     public function disable(DisableRequest $request, Employee $user)
     {
+        $this->removeCredentials();
+        
         $user->delete();
 
         DisableEmployeeEvent::dispatch($this->authenticated_user());

@@ -13,6 +13,7 @@ use App\Events\Employee\StoreEmployeeRoleEvent;
 use App\Events\Employee\DestroyEmployeeRoleEvent;
 use App\Transformers\Auth\EmployeeRoleTransformer;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Transformers\Auth\EmployeeTransformer;
 
 class UserRoleController extends Controller
 {
@@ -20,7 +21,7 @@ class UserRoleController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('transform.request:' . RoleTransformer::class);
+        $this->middleware('transform.request:' . EmployeeRoleTransformer::class)->only('store', 'update');
         $this->middleware('scope:admin,account_read')->only('index');
         $this->middleware('scope:admin,account_register')->only('store');
         $this->middleware('scope:admin,account_update')->only('update');

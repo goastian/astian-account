@@ -46,7 +46,6 @@ class RoleTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
-            'role' => 'role_id',
             'role' => 'name',
             'descripcion' => 'description',
         ];
@@ -57,7 +56,6 @@ class RoleTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attribute = [
-            'role_id' => 'role',
             'name' => 'role',
             'description' => 'descripcion',
         ];
