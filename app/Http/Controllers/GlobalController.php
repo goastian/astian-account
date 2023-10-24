@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Routing\Controller;
-use Elyerr\ApiResponse\Assets\Asset;
-use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\TokenRepository;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Laravel\Passport\RefreshTokenRepository;
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use App\Transformers\Auth\EmployeeTransformer;
+use Elyerr\ApiResponse\Assets\Asset;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests; 
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\RefreshTokenRepository;
+use Laravel\Passport\TokenRepository;
 
 class GlobalController extends Controller
 {
@@ -26,7 +26,7 @@ class GlobalController extends Controller
 
     public function authenticated_user()
     {
-        return fractal(Auth::user(), EmployeeTransformer::class);
+        return fractal(Auth::user(), EmployeeTransformer::class)->toArray();
     }
 
     public function lowercase($value)

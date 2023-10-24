@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;  
 use App\Http\Controllers\User\UserRoleController; 
+use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController; 
 
@@ -24,3 +25,6 @@ Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name(
 Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
 Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
 Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
+
+//credenciales
+Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentiasl"])->name('passport.revoke-credentials'); 

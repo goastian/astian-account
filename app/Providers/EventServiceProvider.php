@@ -2,8 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider; 
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -12,7 +11,7 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<class-string, array<int, class-string>>
      */
-    protected $listen = [  
+    protected $listen = [
 
         //Employee
         \App\Events\Employee\StoreEmployeeEvent::class => [
@@ -42,15 +41,20 @@ class EventServiceProvider extends ServiceProvider
         //roles
         \App\Events\Role\StoreRoleEvent::class => [
             \App\Listeners\Role\StoreRoleListener::class,
-        ], 
+        ],
 
         \App\Events\Role\UpdateRoleEvent::class => [
             \App\Listeners\Role\UpdateRoleListener::class,
-        ], 
+        ],
 
         \App\Events\Role\DestroyRoleEvent::class => [
             \App\Listeners\Role\DestroyRoleListener::class,
-        ], 
+        ],
+
+        //reesset tokens
+        \App\Events\OAuth\RevokeCredentialsEvent::class => [
+            \App\Listeners\OAuth\RevokeCredentialsListener::class,
+        ],
     ];
 
     /**
