@@ -58,7 +58,7 @@ export default {
     methods: {
         getUsers(id) {
             window.axios
-                .get("/api/users", { params: { page: id } })
+                .get("/api/users", { params: { page: id} })
                 .then((res) => {
                     this.users = res.data.data;
                     this.pages = res.data.meta.pagination;
@@ -70,7 +70,7 @@ export default {
         },
 
         changeList(id) {
-            this.pagination = id;
+           this.getUsers(id)
         },
 
         listenEvents() {
