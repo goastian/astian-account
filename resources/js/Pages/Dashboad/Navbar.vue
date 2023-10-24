@@ -36,6 +36,14 @@
                             class="dropdown-menu dropdown-menu-lg-end dropdown-menu-dark"
                         >
                             <li>
+                                <router-link
+                                    class="px-2 text-light"
+                                    style="text-decoration: none"
+                                    :to="{ name: 'info' }"
+                                    >Configuracion</router-link
+                                >
+                            </li>
+                            <li>
                                 <hr class="dropdown-divider" />
                             </li>
                             <li>

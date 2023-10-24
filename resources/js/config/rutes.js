@@ -5,6 +5,7 @@ import Tokens from "../Pages/OAuth/Tokens/Index.vue";
 import PersonalTokens from "../Pages/OAuth/Personal/Index.vue";
 import Users from "../Pages/Users/Index.vue";
 import Roles from "../Pages/Role/Index.vue"
+import Info from "../Pages/Config/Index.vue"
 
 const routes = [
     { path: "/", name: "clients", component: Clients },
@@ -16,6 +17,7 @@ const routes = [
     },
     { path: "/users", name: "users", component: Users },
     { path: "/scopes", name: "scopes", component: Roles },
+    { path: "/info", name: "info", component: Info },
 ];
 
 export const router = createRouter({
