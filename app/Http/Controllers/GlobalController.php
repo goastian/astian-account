@@ -36,4 +36,20 @@ class GlobalController extends Controller
     {
         return strtoupper($value);
     }
+
+    public function removeCredentials()
+    {
+        $tokens = Auth::user()->tokens;
+
+        $tokenRepository = app(TokenRepository::class);
+        $refreshTokenRepository = app(RefreshTokenRepository::class);
+
+        foreach ($tokens as $token) {
+
+            $tokenRepository->revokeAccessToken($token->id);
+
+            $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
+        }
+
+    }
 }
