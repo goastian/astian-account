@@ -64,6 +64,9 @@ export default {
                 })
                 .listen(".UpdateRoleEvent", (e) => {
                     this.getScopes();
+                })
+                .listen(".DestroyRoleEvent", (e) => {
+                    this.getScopes();
                 });
         },
     },

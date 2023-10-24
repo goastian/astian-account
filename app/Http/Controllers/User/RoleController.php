@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Events\Role\DestroyRoleEvent;
 use App\Events\Role\StoreRoleEvent;
 use App\Events\Role\UpdateRoleEvent;
 use App\Http\Controllers\GlobalController as Controller;
@@ -20,6 +21,7 @@ class RoleController extends Controller
         $this->middleware('scope:admin,account_read')->only('index');
         $this->middleware('scope:admin,scopes_register')->only('store');
         $this->middleware('scope:admin,scopes_update')->only('store');
+        $this->middleware('scope:admin,scopes_destroy')->only('destory');
     }
 
     /**
@@ -75,7 +77,7 @@ class RoleController extends Controller
             }
 
             if (in_array(true, $this->can_update)) {
-                 $role->push();
+                $role->push();
             }
 
         });
@@ -84,6 +86,15 @@ class RoleController extends Controller
             UpdateRoleEvent::dispatch($this->authenticated_user());
         }
         return $this->showOne($role, $role->transformer, 201);
+    }
+
+    public function destroy(Role $role)
+    {
+        $role->delete();
+
+        DestroyRoleEvent::dispatch($this->authenticated_user());
+
+        $this->showOne($role, $role->transformer);
     }
 
 }

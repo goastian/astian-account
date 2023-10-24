@@ -39,6 +39,7 @@ class RoleTransformer extends TransformerAbstract
                 'parent' => route('roles.index'),
                 'store' => route('roles.store'),
                 'update' => route('roles.update', ['role' => $role->id]),
+                'destroy' => route('roles.destroy', ['role' => $role->id]),
             ],
         ];
     }
@@ -63,13 +64,12 @@ class RoleTransformer extends TransformerAbstract
         return isset($attribute[$index]) ? $attribute[$index] : null;
     }
 
-
-     public static function getOriginalAttributes($index)
+    public static function getOriginalAttributes($index)
     {
         $attributes = [
             'id' => 'id',
-            'nombre' => 'name', 
-            'descripcion' => 'description'
+            'nombre' => 'name',
+            'descripcion' => 'description',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

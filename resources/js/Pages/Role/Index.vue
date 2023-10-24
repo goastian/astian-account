@@ -14,6 +14,10 @@
                         :role="item"
                         @scope-was-updated="getScopes(actual_page)"
                     ></v-update>
+                    <v-remove
+                        :role="item"
+                        @scope-was-remove="getScopes(actual_page)"
+                    ></v-remove>
                 </td>
             </tr>
         </template>
@@ -23,11 +27,13 @@
 <script>
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
+import VRemove from "./Remove.vue";
 
 export default {
     components: {
         VCreate,
         VUpdate,
+        VRemove,
     },
 
     data() {
@@ -78,6 +84,9 @@ export default {
                     this.getScopes(this.actual_page);
                 })
                 .listen(".UpdateRoleEvent", (e) => {
+                    this.getScopes(this.actual_page);
+                })
+                .listen(".DestroyRoleEvent", (e) => {
                     this.getScopes(this.actual_page);
                 });
         },

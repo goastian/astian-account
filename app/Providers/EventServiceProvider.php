@@ -47,6 +47,10 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Role\UpdateRoleEvent::class => [
             \App\Listeners\Role\UpdateRoleListener::class,
         ], 
+
+        \App\Events\Role\DestroyRoleEvent::class => [
+            \App\Listeners\Role\DestroyRoleListener::class,
+        ], 
     ];
 
     /**
