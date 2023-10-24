@@ -62,4 +62,16 @@ class RoleTransformer extends TransformerAbstract
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
     }
+
+
+     public static function getOriginalAttributes($index)
+    {
+        $attributes = [
+            'id' => 'id',
+            'nombre' => 'name', 
+            'descripcion' => 'description'
+        ];
+
+        return isset($attributes[$index]) ? $attributes[$index] : null;
+    }
 }
