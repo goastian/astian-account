@@ -26,6 +26,7 @@ return new class extends Migration
             "account_disable" => "permite deshabilitar usuarios",
             "scopes_register" => "permite registrar nuevos scopes",
             "scopes_update" => "permite registrar nuevos scopes",
+            "scopes_destroy" => "Permite eliminar scopes",
         ];
 
         foreach ($roles as $key => $value) {
@@ -39,7 +40,7 @@ return new class extends Migration
             'name' => 'admin',
             'last_name' => 'admin',
             'email' => 'test@admin.com',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',//password
             'document_type' => 'DNI',
             'document_number' => '00000000',
             'country' => 'peru',

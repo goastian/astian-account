@@ -3,7 +3,6 @@
         :items="items"
         class="text-center table-sm text-sm"
         style="width: 75%; margin: 0% auto"
-        
     >
         <template v-slot:body>
             <tr v-for="(item, index) in tokens" :key="index">
@@ -12,19 +11,21 @@
                 <td>{{ item.created_at }}</td>
                 <td>{{ item.expires_at }}</td>
                 <td>
-                    <v-token-remove :token="item" @token-was-revoked="getTokens">
+                    <v-token-remove
+                        :token="item"
+                        @token-was-revoked="getTokens"
+                    >
                     </v-token-remove>
                 </td>
             </tr>
         </template>
     </v-table>
 </template>
-<script> 
-
+<script>
 import VTokenRemove from "./TokenRemove.vue";
 
 export default {
-    components: { 
+    components: {
         VTokenRemove,
     },
 
@@ -37,6 +38,7 @@ export default {
 
     created() {
         this.getTokens();
+        this.listenEvents()
     },
 
     methods: {
@@ -53,6 +55,14 @@ export default {
 
         storeToken() {
             window.axios.post("/oauth/tokens", this.form).then((res) => {});
+        },
+
+        listenEvents() {
+            this.$echo
+                .private(this.$channels.ch_1(window.$auth.id))
+                .listen(".RevokeCredentialsEvent", (e) => {
+                    this.getTokens();
+                });
         },
     },
 };
