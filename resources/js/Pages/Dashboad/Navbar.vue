@@ -1,8 +1,8 @@
 <template>
     <nav class="navbar navbar-dark navbar-expand-sm px-0">
         <div class="container-fluid">
-            <router-link to="#" class="navbar-brand text-md fw-bold text-xl">                
-            </router-link>             
+            <router-link to="#" class="navbar-brand text-md fw-bold text-xl">
+            </router-link>
             <button
                 class="navbar-toggler"
                 type="button"
@@ -56,14 +56,8 @@
 </template>
 <script>
 export default {
-    data() {
-        return {
-            user: {},
-        };
-    },
-
-    mounted() {
-        this.authenticated();
+    props: {
+        user: { type: Object, required: true },
     },
 
     methods: {
@@ -72,17 +66,6 @@ export default {
                 .post("/logout")
                 .then((res) => {
                     window.location.href = res.data.data;
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        },
-
-        authenticated() {
-            window.axios
-                .get("/api/about")
-                .then((res) => {
-                    this.user = res.data.data;
                 })
                 .catch((e) => {
                     console.log(e);

@@ -1,5 +1,5 @@
 <template>
-    <v-nav class="px-0 py-0">
+    <v-nav class="px-0 py-0" :user="user">
         <v-item :path="{ name: 'clients' }">Clientes</v-item>
         <v-item :path="{ name: 'tokens' }">Clientes Tokens</v-item>
         <v-item :path="{ name: 'personalTokens' }">Personal Tokens</v-item>
@@ -7,12 +7,33 @@
         <v-item :path="{ name: 'scopes' }">Scopes</v-item>
     </v-nav>
     <section class="container-fulid px-1 py-2">
-        <router-view /> 
+        <router-view />
     </section>
 </template>
-<script> 
+<script>
 export default {
-    
+    data() {
+        return {
+            user: {},
+        };
+    },
+
+    created() {
+        this.authenticated();
+    },
+
+    methods: {
+        authenticated() {
+            window.axios
+                .get("/api/about")
+                .then((res) => {
+                    this.user = res.data.data;
+                    window.$auth = res.data.data;
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        },
+    },
 };
 </script>
-
