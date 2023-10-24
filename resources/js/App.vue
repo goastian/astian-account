@@ -4,6 +4,7 @@
         <v-item :path="{ name: 'tokens' }">Clientes Tokens</v-item>
         <v-item :path="{ name: 'personalTokens' }">Personal Tokens</v-item>
         <v-item :path="{ name: 'users' }">Usuarios</v-item>
+        <v-item :path="{ name: 'scopes' }">Scopes</v-item>
     </v-nav>
     <section class="container-fulid px-1 py-2">
         <router-view /> 

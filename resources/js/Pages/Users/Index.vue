@@ -58,7 +58,7 @@ export default {
     methods: {
         getUsers(id) {
             window.axios
-                .get("/api/users", { params: { page: id} })
+                .get("/api/users", { params: { page: id } })
                 .then((res) => {
                     this.users = res.data.data;
                     this.pages = res.data.meta.pagination;
@@ -70,14 +70,15 @@ export default {
         },
 
         changeList(id) {
-           this.getUsers(id)
+            this.actual_page = id;
+            this.getUsers(id);
         },
 
         listenEvents() {
             this.$echo
-                .private(`auth`)
+                .private(this.$channels.ch_0())
                 .listen(".UpdateEmployeeEvent", (e) => {
-                    this.getUsers(this.pagination);
+                    this.getUsers(this.actual_page);
                 })
                 .listen(".StoreEmployeeEvent", (e) => {
                     this.getUsers(this.actual_page);
