@@ -26,7 +26,7 @@
                                     name="nombre"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.nombre"></v-error> 
+                                <v-error :error="errors.nombre"></v-error>
                             </div>
                             <div class="col">
                                 <label
@@ -41,7 +41,7 @@
                                     name="apellido"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.apellido"></v-error> 
+                                <v-error :error="errors.apellido"></v-error>
                             </div>
                             <div class="col">
                                 <label class="text-capitalize fw-bold" for=""
@@ -54,7 +54,9 @@
                                     name="correo_electronico"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.correo_electronico"></v-error> 
+                                <v-error
+                                    :error="errors.correo_electronico"
+                                ></v-error>
                             </div>
 
                             <div class="col">
@@ -68,7 +70,7 @@
                                     name="telefono"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.telefono"></v-error>                            
+                                <v-error :error="errors.telefono"></v-error>
                             </div>
 
                             <div class="col">
@@ -90,7 +92,7 @@
                                         {{ item }}
                                     </option>
                                 </select>
-                                <v-error :error="errors.documento"></v-error> 
+                                <v-error :error="errors.documento"></v-error>
                             </div>
                             <div class="col">
                                 <label
@@ -105,7 +107,7 @@
                                     name="numero"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.numero"></v-error> 
+                                <v-error :error="errors.numero"></v-error>
                             </div>
                             <div class="col">
                                 <label
@@ -120,7 +122,7 @@
                                     name="departamento"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.departamento"></v-error> 
+                                <v-error :error="errors.departamento"></v-error>
                             </div>
                             <div class="col">
                                 <label
@@ -135,7 +137,7 @@
                                     name="pais"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.pais"></v-error> 
+                                <v-error :error="errors.pais"></v-error>
                             </div>
                             <div class="col">
                                 <label
@@ -150,7 +152,7 @@
                                     name="direccion"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.direccion"></v-error> 
+                                <v-error :error="errors.direccion"></v-error>
                             </div>
                             <div class="col">
                                 <label
@@ -196,19 +198,18 @@
                                 v-for="(item, index) in roles"
                             >
                                 <input
-                                    @click="addOrRemoveRoles(item.role)"
+                                    @click="addOrRemoveRoles(item.id)"
                                     class="form-check-input"
-                                    :id="'_s_' + item.id"
+                                    :id="item.id"
                                     :value="item.id"
                                     type="checkbox"
                                 />
-                                <label
-                                    class="form-check-label"
-                                    :for="'_s_' + item.id"
-                                >
-                                    <span class="fw-bold">{{ item.role }}:</span>
-                                      {{ item.descripcion }}  </label
-                                >
+                                <label class="form-check-label" :for="item.id">
+                                    <span class="fw-bold"
+                                        >{{ item.role }}:</span
+                                    >
+                                    {{ item.descripcion }}
+                                </label>
                             </div>
                             <div
                                 v-if="message"
@@ -234,8 +235,7 @@
 </template>
 <script>
 export default {
-    
-    emits:['userWasUpdated'],
+    emits: ["userWasUpdated"],
 
     props: {
         user: {
@@ -261,11 +261,11 @@ export default {
         addOrRemoveRoles(id) {
             this.message = null;
             this.status = null;
-            const checked = document.getElementById(id).checked;
-            const value = document.getElementById(id).value;
+            const checked = document.getElementById(id).checked; 
+            
             if (checked) {
                 window.axios
-                    .post(this.user.links.roles, { role: value })
+                    .post(this.user.links.roles, { role: id })
                     .then((res) => {
                         this.message = `Se asigno un nuevo role ${res.data.data.role} ha sido asignado`;
                     })
@@ -276,7 +276,7 @@ export default {
                     });
             } else {
                 window.axios
-                    .delete(`${this.user.links.roles}/${value}`)
+                    .delete(`${this.user.links.roles}/${id}`)
                     .then((res) => {
                         this.message = `Se elimino el role ${res.data.data.role}`;
                     })
@@ -295,9 +295,9 @@ export default {
         },
 
         loadData(user) {
-            this.getUserRoles(user);
             this.getRoles();
             this.getDocuments();
+            this.getUserRoles(user);
         },
 
         getRoles() {
@@ -320,7 +320,7 @@ export default {
                 .put(item.links.update, this.user)
                 .then((res) => {
                     this.status = "Usuario Actualizado";
-                    this.$emit('userWasUpdated', res.data.data)
+                    this.$emit("userWasUpdated", res.data.data);
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {
