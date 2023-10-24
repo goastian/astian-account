@@ -13,7 +13,7 @@
         <template v-slot:body>
             <div class="row row-cols-2 col-12">
                 <div class="col-12 my-3">
-                    <v-scopes @scopes-selected="setScopes"></v-scopes>
+                    <v-scopes class="row row-cols-3 col-sm-12" @scopes-selected="setScopes"></v-scopes>
                 </div>
                 <div class="col-10">
                     <div class="form-floating">

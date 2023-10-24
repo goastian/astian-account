@@ -33,6 +33,7 @@ export default {
     mounted() {
         this.getScopes();
         this.scopesSelected = [];
+        this.listenEvent();
     },
 
     methods: {
@@ -53,6 +54,17 @@ export default {
                     this.scopes = res.data;
                 })
                 .catch((e) => {});
+        },
+
+        listenEvent() {
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen(".StoreRoleEvent", (e) => {
+                    this.getScopes();
+                })
+                .listen(".UpdateRoleEvent", (e) => {
+                    this.getScopes();
+                });
         },
     },
 };
