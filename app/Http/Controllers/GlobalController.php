@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Transformers\Auth\EmployeeTransformer;
-use Elyerr\ApiResponse\Assets\Asset;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller;
+use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\TokenRepository;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use Laravel\Passport\RefreshTokenRepository;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use App\Transformers\Auth\EmployeeTransformer;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests; 
 
 class GlobalController extends Controller
 {
@@ -37,10 +39,8 @@ class GlobalController extends Controller
         return strtoupper($value);
     }
 
-    public function removeCredentials()
+    public function removeCredentials($tokens)
     {
-        $tokens = Auth::user()->tokens;
-
         $tokenRepository = app(TokenRepository::class);
         $refreshTokenRepository = app(RefreshTokenRepository::class);
 
