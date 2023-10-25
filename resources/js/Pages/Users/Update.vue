@@ -49,13 +49,13 @@
                                 >
                                 <input
                                     @keypress.enter="update(user)"
-                                    v-model="user.correo_electronico"
+                                    v-model="user.correo"
                                     type="email"
-                                    name="correo_electronico"
+                                    name="correo"
                                     class="form-control-sm form-control"
                                 />
                                 <v-error
-                                    :error="errors.correo_electronico"
+                                    :error="errors.correo"
                                 ></v-error>
                             </div>
 
