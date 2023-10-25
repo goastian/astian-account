@@ -33,12 +33,12 @@
                             <input
                                 type="email"
                                 id="email"
-                                v-model="form.correo_electronico"
+                                v-model="form.correo"
                                 placeholder="email@admin.com "
                                 class="form-control"
                             />
                             <v-error
-                                :error="errors.correo_electronico"
+                                :error="errors.correo"
                             ></v-error>
                         </div>
                         <div class="col my-1">
