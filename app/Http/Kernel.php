@@ -64,7 +64,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         'transform.request' => \Elyerr\ApiResponse\Middleware\TransformRequest::class,
-        'client' => Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
+        'client' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
         'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
         'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
