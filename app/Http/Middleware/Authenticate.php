@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
@@ -14,8 +15,21 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
+        $this->denyRedirectForGatways($request);
+
+        if (!$request->expectsJson()) {
             return route('login');
+        }
+    }
+
+    protected function denyRedirectForGatways($request)
+    {
+
+        $URI = $_SERVER['REQUEST_URI'];
+
+        if (strpos($URI, 'gateway')) {
+
+            throw new ReportError("unauthenticated", 401);
         }
     }
 }
