@@ -11,10 +11,13 @@ use App\Http\Controllers\User\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 //gateways
-Route::get('/gateway/check-authentication', [PasspotConnectController::class, 'check_authentication']);
-Route::get('/gateway/check-scope', [PasspotConnectController::class, 'check_scope']);
-Route::get('/gateway/check-scopes', [PasspotConnectController::class, 'check_scopes']);
-Route::get('/gateway/check-client-credentials', [PasspotConnectController::class, 'check_client_credentials']);
+Route::prefix('gateway')->group(function () {
+    Route::get('/check-authentication', [PasspotConnectController::class, 'check_authentication']);
+    Route::get('/check-scope', [PasspotConnectController::class, 'check_scope']);
+    Route::get('/check-scopes', [PasspotConnectController::class, 'check_scopes']);
+    Route::get('/check-client-credentials', [PasspotConnectController::class, 'check_client_credentials']);
+    Route::get('/token-can', [PasspotConnectController::class, 'token_can']);
+});
 
 //Valores absolutos
 Route::get('document-type', [EnumType::class, 'documento_type']);
