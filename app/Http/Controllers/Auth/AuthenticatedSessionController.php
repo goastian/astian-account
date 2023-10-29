@@ -25,14 +25,7 @@ class AuthenticatedSessionController extends Controller
 
     public function create()
     {
-        return view('auth.login');
-        /*return Inertia::render('Auth/Login', [
-    'reset_password' => route('password.email'),
-    'login' => route('signin'),
-    'token_name' => env('TOKEN_NAME'),
-    'frontend' => env('FRONTEND_URL'),
-    'domain' => env('SESSION_DOMAIN'),
-    ]);*/
+        return view('auth.login'); 
     }
 
     /**
