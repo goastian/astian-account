@@ -55,12 +55,12 @@ Route::group([
         ]);
 
         Route::post('/clients', [
-            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@store',
+            'uses' => '\App\Http\Controllers\OAuth\ClientController@store',
             'as' => 'clients.store',
         ]);
 
         Route::put('/clients/{client_id}', [
-            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@update',
+            'uses' => '\App\Http\Controllers\OAuth\ClientController@update',
             'as' => 'clients.update',
         ]);
 

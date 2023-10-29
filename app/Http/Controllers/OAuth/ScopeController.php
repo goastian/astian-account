@@ -1,14 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\OAuth;
-
-use App\Models\User\Role;
-use Illuminate\Support\Facades\Auth;
+ 
+use App\Http\Controllers\OAuth\Scopes;
 use Laravel\Passport\Http\Controllers\ScopeController as ControllersScopeController;
-use Laravel\Passport\Scope;
 
 class ScopeController extends ControllersScopeController
 {
+    use Scopes;
     /**
      * Get all of the available scopes for the application.
      *
@@ -16,14 +15,6 @@ class ScopeController extends ControllersScopeController
      */
     public function all()
     {
-        if (Auth::user()->isAdmin()) {
-            return collect(Role::all())->map(function ($role) {
-                return new Scope($role->name, $role->description);
-            })->values();
-        }
-
-        return collect(Auth::user()->roles()->get())->map(function ($role) {
-            return new Scope($role->name, $role->description);
-        })->values();
+         return $this->scopes();
     }
 }
