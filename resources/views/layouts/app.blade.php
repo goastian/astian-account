@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-      <!-- Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -19,20 +19,10 @@
     </script>
 </head>
 
-<body>
-    <div id="app" class="container-fluid">
+<body class="font-sans antialiased bg-dark text-light">
+    <div class="container-fluid">
         @yield('content')
     </div>
-
-
-    @env(['prod', 'production'])
-    <script src="{{ secure_asset('dist/app.js') }}"></script>
-    @endenv
-
-    @env(['local', 'dev'])
-    <script src="{{ asset('dist/app.js') }}"></script>
-    @endenv
-
 </body>
 
 </html>
