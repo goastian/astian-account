@@ -13,12 +13,13 @@
             <div class="class row row-cols-3 col-sm-12">
                 <div class="col-4">
                     <label for="cliente">cliente</label>
-                    <input 
+                    <input
                         type="text"
                         v-model="client.name"
                         class="form-control"
                         @keyup.enter="updateClient(client.id)"
                     />
+                    <v-error :error="errors.name"></v-error>
                 </div>
                 <div class="col-8">
                     <label for="redirect">redirect</label>
@@ -29,6 +30,7 @@
                         class="form-control"
                         @keyup.enter="updateClient(client.id)"
                     />
+                    <v-error :error="errors.redirect"></v-error>
                 </div>
             </div>
             <div
@@ -54,7 +56,10 @@ export default {
     data() {
         return {
             message: "",
-            errors: {},
+            errors: {
+                name:'',
+                redirect:''
+            },
         };
     },
 
@@ -72,7 +77,9 @@ export default {
                     this.sendEventIsUpdated();
                 })
                 .catch((e) => {
-                    console.log(e);
+                    if (e.response && e.response.data.errors) {
+                        this.errors = e.response.data.errors;
+                    }
                 });
         },
     },
