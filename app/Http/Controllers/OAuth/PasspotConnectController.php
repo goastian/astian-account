@@ -76,4 +76,13 @@ class PasspotConnectController extends GlobalController
 
         return $status ? response(null, 200) : response(null, 401);
     }
+
+    /**
+     * gateway que permite obtener los datos del usuario autenticado
+     *
+     */
+    public function auth()
+    {
+        return $this->authenticated_user()['data'];
+    }
 }
