@@ -7,12 +7,6 @@ Route::group([
     'prefix' => config('passport.path', 'oauth'),
 ], function () {
 
-    Route::post('/token', [
-        'uses' => '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken',
-        'as' => 'token',
-        'middleware' => 'throttle',
-    ]);
-
     Route::get('/authorize', [
         'uses' => '\Laravel\Passport\Http\Controllers\AuthorizationController@authorize',
         'as' => 'authorizations.authorize',
@@ -22,14 +16,16 @@ Route::group([
     $guard = config('passport.guard', null);
 
     Route::middleware(['web', $guard ? 'auth:' . $guard : 'auth'])->group(function () {
+
         Route::post('/token/refresh', [
             'uses' => '\Laravel\Passport\Http\Controllers\TransientTokenController@refresh',
             'as' => 'token.refresh',
-        ]);
+        ]); 
 
         Route::post('/authorize', [
             'uses' => '\Laravel\Passport\Http\Controllers\ApproveAuthorizationController@approve',
             'as' => 'authorizations.approve',
+            'middleware' => 'passport.timesup',
         ]);
 
         Route::delete('/authorize', [
@@ -40,7 +36,7 @@ Route::group([
         Route::get('/tokens', [
             'uses' => '\Laravel\Passport\Http\Controllers\AuthorizedAccessTokenController@forUser',
             'as' => 'tokens.index',
-            'middleware' =>'wants.json'
+            'middleware' => 'wants.json',
         ]);
 
         Route::delete('/tokens/{token_id}', [
@@ -49,9 +45,9 @@ Route::group([
         ]);
 
         Route::get('/clients', [
-            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@forUser',
+            'uses' => '\App\Http\Controllers\OAuth\ClientController@forUser',
             'as' => 'clients.index',
-            'middleware' =>'wants.json'
+            'middleware' => 'wants.json',
         ]);
 
         Route::post('/clients', [
@@ -72,13 +68,13 @@ Route::group([
         Route::get('/scopes', [
             'uses' => '\App\Http\Controllers\OAuth\ScopeController@all',
             'as' => 'scopes.index',
-            'middleware' =>'wants.json'
+            'middleware' => 'wants.json',
         ]);
 
         Route::get('/personal-access-tokens', [
             'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser',
             'as' => 'personal.tokens.index',
-            'middleware' =>'wants.json'
+            'middleware' => 'wants.json',
         ]);
 
         Route::post('/personal-access-tokens', [

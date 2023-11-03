@@ -25,10 +25,10 @@ export default {
     methods: {
         authenticated() {
             window.axios
-                .get("/api/about")
+                .get("/api/gateway/user")
                 .then((res) => {
-                    this.user = res.data.data;
-                    window.$auth = res.data.data;
+                    this.user = res.data;
+                    window.$auth = res.data;
                 })
                 .catch((e) => {
                     console.log(e);

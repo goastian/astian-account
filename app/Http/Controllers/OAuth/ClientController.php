@@ -2,13 +2,43 @@
 
 namespace App\Http\Controllers\OAuth;
 
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\Http\Controllers\ClientController as Controller;
 use Laravel\Passport\Passport;
 
 class ClientController extends Controller
 {
+
+    /**
+     * Get all of the clients for the authenticated user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function forUser(Request $request)
+    {
+        if ($request->redirect) {
+            return $this->searchByUri($request);
+        }
+
+        $userId = $request->user()->getAuthIdentifier();
+
+        $clients = $this->clients->activeForUser($userId);
+
+        if (Passport::$hashesClientSecrets) {
+            return $clients;
+        }
+
+        $clients->each(function ($client) {
+            $client->secret = Hash::make($client->secret);
+        });
+
+        return $clients->makeVisible('secret');
+    }
+
     /**
      * Store a new client.
      *
@@ -81,6 +111,20 @@ class ClientController extends Controller
         return $this->clients->update(
             $client, $request->name, $request->redirect
         );
+    }
+
+    public function searchByUri(Request $request)
+    {
+        $userId = $request->user()->getAuthIdentifier();
+        $clients = $this->clients->activeForUser($userId);
+
+        if (Passport::$hashesClientSecrets) {
+            return $clients;
+        }
+
+        $client = $clients->where('redirect', $request->redirect)->first();
+
+        return $client ?: throw new ReportError("Usuario no Encontrado", 400);
     }
 
 }

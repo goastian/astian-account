@@ -18,13 +18,15 @@ class Authenticate extends Middleware
         $this->denyRedirectForGatways($request);
 
         if (!$request->expectsJson()) {
-            return route('login');
+            return route('login', [
+                'redirect_uri' => $request->redirect_uri,
+                'state' => $request->state,
+            ]);
         }
     }
 
     protected function denyRedirectForGatways($request)
     {
-
         $URI = $_SERVER['REQUEST_URI'];
 
         if (strpos($URI, 'gateway')) {

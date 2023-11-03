@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\OAuth;
 
 use App\Events\OAuth\RevokeCredentialsEvent;
-use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Controllers\GlobalController as Controller; 
 use Illuminate\Support\Facades\Auth;
 
 class CredentialsController extends Controller
@@ -28,5 +28,5 @@ class CredentialsController extends Controller
 
         return $this->message("Todas tus credenciales han sido revocadas exitosamente con fecha " . now());
 
-    }
+    } 
 }

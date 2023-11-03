@@ -2,21 +2,26 @@
     <div class="container-fluid">
         <v-register-client @client-registered="getClients"></v-register-client>
 
-        <v-table
-            :items="items"
-            class="text-sm table-sm text-center py-0"
-            style="width: 75%; margin: auto;"
-        >
+        <v-table :items="items" class="text-sm table-sm text-center py-0" style="width: 70%; margin: auto;">
             <template v-slot:body>
-                <tr v-for="(item, index) in clients" :key="index">
-                    <td class="col-3">
+                <tr
+                    v-for="(item, index) in clients"
+                    :key="index"
+                    class="align-middle"
+                >
+                    <td>
                         {{ item.name }}
                     </td>
-                    <td class="col-3">
+                    <td>
                         {{ item.redirect }}
                     </td>
-                    <td class="col-6">
-                        <v-authorize :client="item"></v-authorize>
+                    <td class=" ">
+                        <button
+                            class="btn btn-primary btn-sm"
+                            @click="redirectForAuthorize(item)"
+                        >
+                            Authorizar
+                        </button>
 
                         <v-remove
                             :client="item"
@@ -24,10 +29,6 @@
                         ></v-remove>
 
                         <v-update :client="item"></v-update>
-
-                        <v-token :client="item"></v-token>
-
-                        <v-refresh-token :client="item"></v-refresh-token>
                     </td>
                 </tr>
             </template>
@@ -35,21 +36,15 @@
     </div>
 </template>
 <script>
-import VRegisterClient from "./RegisterClient.vue"; 
-import VUpdate from "./UpdateClient.vue";
-import VToken from "./CreateToken.vue";
-import VRefreshToken from "./RefreshToken.vue";
-import VRemove from "./RemoveClient.vue";
-import VAuthorize from "./Authorization.vue";
+import VRegisterClient from "./RegisterClient.vue"
+import VRemove from "./RemoveClient.vue" 
+import VUpdate from "./UpdateClient.vue"
 
 export default {
     components: { 
-        VToken,
-        VRefreshToken,
-        VUpdate,
         VRegisterClient,
         VRemove,
-        VAuthorize,
+        VUpdate
     },
 
     data() {
@@ -73,6 +68,10 @@ export default {
                 .catch((e) => {
                     console.log(e);
                 });
+        },
+
+        redirectForAuthorize(item) {
+            window.open(item.redirect);
         },
     },
 };

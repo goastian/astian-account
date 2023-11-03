@@ -68,5 +68,7 @@ class Kernel extends HttpKernel
         'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
         'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
         'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
+        'passport.timesup' => \App\Http\Middleware\PassportTimesUp::class,
+        'passport.csrf' => \App\Http\Middleware\PassportCsrf::class,
     ];
 }
