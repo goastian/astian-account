@@ -52,6 +52,27 @@ class RouteServiceProvider extends ServiceProvider
 
     public static function home()
     {
-        return  redirect(env('FRONTEND_URL'));
+        if (Request()->redirect_uri && Request()->state) {
+            return RouteServiceProvider::redirectToAskForAuthorization();
+        }
+
+        return redirect(env('FRONTEND_URL'));
+    }
+
+    /**
+     * redirecciona a una vista para que el cliente seleccione los scopes
+     * o permisos que desea otorgarle al cliente
+     * @param  \Illuminate\Http\Request  $request
+     * @param Closure $next
+     * @return null
+     */
+    public static function redirectToAskForAuthorization()
+    {
+        $query = http_build_query([
+            'redirect_uri' => Request()->redirect_uri,
+            'state' => Request()->state,
+        ]);
+
+        return redirect(env('APP_URL') . '/grant-access?' . $query);
     }
 }

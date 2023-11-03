@@ -35,6 +35,14 @@
                         @endif
                     </div>
 
+                    @isset(request()->redirect_uri)
+                        <input type="hidden" id="redirect_uri" name="redirect_uri"
+                            value="{{ request()->redirect_uri ?: null }}">
+                    @endisset
+                    @isset(request()->state)
+                        <input type="hidden" id="state" name="state" value="{{ request()->state ?: null }}">
+                    @endisset
+
                     <div class="col my-4">
 
                         <button class="btn btn-block d-block btn-secondary" type="submit" style="width: 40%">

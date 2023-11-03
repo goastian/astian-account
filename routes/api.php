@@ -1,14 +1,14 @@
 <?php
 
 use App\Enum\EnumType;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\OAuth\CredentialsController;
-use App\Http\Controllers\OAuth\PasspotConnectController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRoleController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OAuth\CredentialsController;
+use App\Http\Controllers\Auth\AuthorizationController; 
+use App\Http\Controllers\OAuth\PasspotConnectController;
+use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 //gateways
 Route::prefix('gateway')->group(function () {
@@ -21,13 +21,20 @@ Route::prefix('gateway')->group(function () {
 
 });
 
+Route::prefix('oauth')->group(function () {
+    Route::post('/token', [AccessTokenController::class, 'issueToken'])
+        ->name('passport.token')
+        ->middleware('passport.csrf');
+
+    Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentiasl"])
+        ->name('passport.revoke-credentials');
+});
+
 //Valores absolutos
 Route::get('document-type', [EnumType::class, 'documento_type']);
 
 Route::post('login', [AuthorizationController::class, 'store'])->name('signin');
 Route::post('logout', [AuthorizationController::class, 'destroy']);
-
-Route::get('about', [AuthenticatedSessionController::class, 'profile']);
 
 //Roles
 Route::resource('roles', RoleController::class)->only('index', 'store', 'update', 'destroy');
@@ -39,4 +46,3 @@ Route::resource('users', UserController::class)->except('edit', 'create', 'destr
 Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
 
 //credenciales
-Route::delete('credentials/revoke', [CredentialsController::class, "revokeCredentiasl"])->name('passport.revoke-credentials');
