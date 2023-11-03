@@ -12,7 +12,7 @@ class PasspotConnectController extends GlobalController
     public function __construct()
     {
         //headers
-        $scopes = request()->header('Scopes');
+        $scopes = request()->header('X-SCOPES');
 
         parent::__construct();
         $this->middleware('scope:' . $scopes)->only('check_scope');
@@ -70,11 +70,11 @@ class PasspotConnectController extends GlobalController
      */
     public function token_can(Request $request)
     {
-        $scope = $request->header('Scope');
+        $scope = $request->header('X-SCOPE');
 
         $status = request()->user()->tokenCan($scope);
 
-        return $status ? response(null, 200) : response(null, 401);
+        return $status ? response(null, 200) : response(null, 403);
     }
 
     /**
