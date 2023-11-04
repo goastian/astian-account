@@ -296,8 +296,8 @@ export default {
 
         loadData(user) {
             this.getRoles();
-            this.getDocuments();
             this.getUserRoles(user);
+            this.getDocuments();
         },
 
         getRoles() {
