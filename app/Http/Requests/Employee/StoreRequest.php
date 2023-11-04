@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return request()->user()->tokenCan('admin');
+        return true;
     }
 
     /**

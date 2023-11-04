@@ -1,4 +1,4 @@
-## Authorization Server [En desarrollo Aun]
+# Authorization Server [En desarrollo Aun]
 Servidor de autorización centralizado usando aouth-sever a través de laravel y laravel passport como capa de abstracción o capa puente.
 
 **Documentacion oficial**
@@ -6,7 +6,7 @@ Servidor de autorización centralizado usando aouth-sever a través de laravel y
 - [Laravel Passport](https://laravel.com/docs/10.x/passport)
 
 
-## OAuth2
+### OAuth2
 Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros sistemas, si bien se manejan varios **grant_types** en **oauth2** para authorizar aplicaciones solo se dejaran los metodos seguros:
 - **authorization_code**: diponible
 - **refresh_token**: disponible
@@ -15,6 +15,16 @@ Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros
 - **implicit**: Inseguro - no disponible 
 - **password**: Inseguro - integrar capa extra de seguridad para aplicaciones moviles
 
+### SCOPES
+Los escopes debera registrarse llevando el siguiente standar **PREFIJO_ACCION**, 
+- el PREFIJO, este puede llevar el nombre del client, o caulquier otro que lo identifique
+- ACCION, debe ser algo relacionado con lo que va a permitir hacer el scope en una sola palara
+  - Por ejemplo, si hay un cliente dedicado a la administracion de personal podia ser asi
+    - EMPLOYEE  : cuando se coloca solo el prefijo debe ser usado como el rango mas alto en ese cliente donde se este usando ese scope y tendra el control total sin necesida de asignarle mas scope
+    - EMPLOYEE_CREATE : permitiria solo crear empleados
+    - EMPLOYEE_READ: permitiria leer solo la informacion del empleado
+    - EMPLOYEE_UPDATE: perimitiria solo actualizar informacion de un empleado
+    - EMPLOYEE_DISABLE: permitiria solo desabilitar empleados 
 
 ### Gateways
 Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro servicios que se conecten al servidor principal sin necesidad de crear un sistema de autentificación y autorización para cada uno ellos, dando la facilidad para que puedan ser desarrolladas en cualquier lenguaje de programación con diferentes sistemas de administradores de base de datos. Estos Gateway para su mejor uso se pueden implementar a través de middleware en el cliente a desarrollar para dejar procesar la petición o denegarla dependiendo de la respuesta
@@ -27,7 +37,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
     - **401** : No Authenticado 
   
 - `/api/gateway/check-scope` : 
-  - verifca la authenticacion de un usuario y authorizacion del cliente a travez de scopes, verifica si almenos un **scope** esta presente
+  - verifca la authenticacion de un usuario y authorizacion del cliente a travez de scopes, verifica si almenos un **scope** esta presente, este gateway replican la funcionalidad de los [middlware de laravel](https://laravel.com/docs/10.x/passport#check-for-any-scopes)
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope1 scope2 scope3 scope-N'
@@ -36,7 +46,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
     - **403** : No Authorizado
   
 - `/api/gateway/check-scopes` : 
-  - igual al anterior pero verifica si todos los scopes estan prensentes antes de procesar la peticion
+  - igual al anterior pero verifica si todos los scopes estan prensentes antes de procesar la peticion, este gateway replican la funcionalidad del este [middlware de laravel](https://laravel.com/docs/10.x/passport#check-for-all-scopes)
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope1 scope2 scope3 scope-N'
@@ -45,7 +55,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
     - **403** : No Authorizado
   
 - `/api/gateway/check-client-credentials` :
-  - verifica si el usuario authorizado a travez del grant_type client_credentials este autorizado, el header X-SCOPE es opcional
+  - verifica si el usuario authorizado a travez del grant_type client_credentials este autorizado, el header X-SCOPES es opcional, este gateway replican la funcionalidad de este [middlware de laravel](https://laravel.com/docs/10.x/passport#client-credentials-grant-tokens)
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope1 scope2 scope3 scopeN'
@@ -54,7 +64,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
     - **403** : No Authorizado
   
 - `/api/gateway/token-can` : 
-  - verifica si un usuario tiene tiene acceso algun scope en el cliente
+  - verifica si un usuario tiene tiene acceso algun scope en el cliente, este gateway replica la funcionalidad este [metdo de laravel](https://laravel.com/docs/10.x/passport#checking-scopes-on-a-token-instance)
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope'
