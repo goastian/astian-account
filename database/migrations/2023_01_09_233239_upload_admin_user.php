@@ -24,6 +24,8 @@ return new class extends Migration
             "account_update" => "actualiza informacion de usaurios",
             "account_enable" => "permite habilitar usuarios",
             "account_disable" => "permite deshabilitar usuarios",
+            "scopes" => "administrar scopes",
+            "scopes_read" => "permite ver todos los scopes",
             "scopes_register" => "permite registrar nuevos scopes",
             "scopes_update" => "permite registrar nuevos scopes",
             "scopes_destroy" => "Permite eliminar scopes",

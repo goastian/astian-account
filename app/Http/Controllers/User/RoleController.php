@@ -18,10 +18,10 @@ class RoleController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . RoleTransformer::class)->only('store', 'update');
-        $this->middleware('scope:admin,account_read')->only('index');
-        $this->middleware('scope:admin,scopes_register')->only('store');
-        $this->middleware('scope:admin,scopes_update')->only('store');
-        $this->middleware('scope:admin,scopes_destroy')->only('destory');
+        $this->middleware('scope:account,scopes,scopes_read')->only('index');
+        $this->middleware('scope:scopes,scopes_register')->only('store');
+        $this->middleware('scope:scopes,scopes_update')->only('store');
+        $this->middleware('scope:scopes,scopes_destroy')->only('destory');
     }
 
     /**

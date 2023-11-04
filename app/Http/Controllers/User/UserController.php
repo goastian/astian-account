@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\Employee\DisableEmployeeEvent;
-use App\Events\Employee\EnableEmployeeEvent;
-use App\Events\Employee\StoreEmployeeEvent;
-use App\Events\Employee\UpdateEmployeeEvent;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Employee\DisableRequest;
-use App\Http\Requests\Employee\EnableRequest;
-use App\Http\Requests\Employee\IndexRequest;
-use App\Http\Requests\Employee\ShowRequest;
-use App\Http\Requests\Employee\StoreRequest;
-use App\Http\Requests\Employee\UpdateRequest;
-use App\Models\User\Employee;
-use App\Notifications\Employee\CreatedNewUser;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Error;
+use Illuminate\Http\Request;
+use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Events\Employee\StoreEmployeeEvent; 
+use App\Events\Employee\EnableEmployeeEvent;
+use App\Events\Employee\UpdateEmployeeEvent;
+use App\Http\Requests\Employee\StoreRequest;
 use Illuminate\Support\Facades\Notification;
+use App\Events\Employee\DisableEmployeeEvent; 
+use App\Http\Requests\Employee\UpdateRequest; 
+use App\Notifications\Employee\CreatedNewUser;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Http\Controllers\GlobalController as Controller;
 
 class UserController extends Controller
 {
@@ -28,11 +25,11 @@ class UserController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . $user->transformer)->only('store', 'update');
-        $this->middleware('scope:admin,account_read')->only('index', 'show');
-        $this->middleware('scope:admin,account_register')->only('store');
-        $this->middleware('scope:admin,account_update')->only('update');
-        $this->middleware('scope:admin,account_disable')->only('disable');
-        $this->middleware('scope:admin,account_enable')->only('enable');
+        $this->middleware('scopes:account,account_read')->only('index', 'show');
+        $this->middleware('scope:account,account_register')->only('store');
+        $this->middleware('scope:account,account_update')->only('update');
+        $this->middleware('scope:account,account_disable')->only('disable');
+        $this->middleware('scope:account,account_enable')->only('enable');
 
     }
 
@@ -41,7 +38,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(IndexRequest $request, Employee $user)
+    public function index(Employee $user)
     {
         $params = $this->filter_transform($user->transformer);
 
@@ -82,7 +79,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(ShowRequest $request, $id)
+    public function show($id)
     {
         $user = Employee::withTrashed()->find($id);
 
@@ -100,42 +97,42 @@ class UserController extends Controller
     {
         DB::transaction(function () use ($request, $user) {
 
-            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->name, $request->name)) {
+            if ($this->is_admin() && $this->is_diferent($user->name, $request->name)) {
                 $this->can_update[] = true;
                 $user->name = $request->name;
             }
 
-            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->last_name, $request->last_name)) {
+            if ($this->is_admin() && $this->is_diferent($user->last_name, $request->last_name)) {
                 $this->can_update[] = true;
                 $user->last_name = $request->last_name;
             }
 
-            if ($this->can_access() && $this->is_diferent($user->email, $request->email)) {
+            if ($this->user_can() && $this->is_diferent($user->email, $request->email)) {
                 $this->can_update[] = true;
                 $user->email = $request->email;
             }
 
-            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->document_type, $request->document_type)) {
+            if ($this->is_admin() && $this->is_diferent($user->document_type, $request->document_type)) {
                 $this->can_update[] = true;
                 $user->document_type = $request->document_type;
             }
 
-            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->document_number, $request->document_number)) {
+            if ($this->is_admin() && $this->is_diferent($user->document_number, $request->document_number)) {
                 $this->can_update[] = true;
                 $user->document_number = $request->document_number;
             }
 
-            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->country, $request->country)) {
+            if ($this->is_admin() && $this->is_diferent($user->country, $request->country)) {
                 $this->can_update[] = true;
                 $user->country = $request->country;
             }
 
-            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->department, $request->department)) {
+            if ($this->is_admin() && $this->is_diferent($user->department, $request->department)) {
                 $this->can_update[] = true;
                 $user->department = $request->department;
             }
 
-            if (request()->user()->tokenCan('admin') && $this->is_diferent($user->address, $request->address)) {
+            if ($this->is_admin() && $this->is_diferent($user->address, $request->address)) {
                 $this->can_update[] = true;
                 $user->address = $request->address;
             }
@@ -169,8 +166,16 @@ class UserController extends Controller
         //
     }
 
-    public function disable(DisableRequest $request, Employee $user)
-    {
+    /**
+     * deshabilita un usuario
+     * @return Bool
+     */
+    public function disable(Request $request, Employee $user)
+    {   
+        if($request->user()->id == $user->id){
+            throw new ReportError(__('No puede desabilitarse asi mismo'), 406);
+        }
+
         $tokens = $user->tokens;
 
         $this->removeCredentials($tokens);
@@ -182,7 +187,11 @@ class UserController extends Controller
         return $this->showOne($user, $user->transformer);
     }
 
-    public function enable(EnableRequest $request, $id)
+    /**
+     * habilita un usuario deshabilitado
+     * @return Json
+     */
+    public function enable($id)
     {
         try {
 
@@ -199,8 +208,24 @@ class UserController extends Controller
         }
     }
 
-    public function can_access()
+    /**
+     * verifica que tanto el usuario que esta logeado y que no tenga permisos administrado y administradores
+     * puedan cambian algun dato en especifico
+     * @return Bool
+     */
+    public function user_can()
     {
-        return request()->user()->tokenCan('admin') || request()->user->id == request()->user()->id;
+        return $this->is_admin() || request()->user->id == request()->user()->id;
+    }
+
+    /**
+     * verifica que el usuario tenga los scopes necesarios para realizar la accion
+     * @return Bool
+     */
+    public function is_admin()
+    {
+        return request()->user()->tokenCan('admin') ||
+        request()->user()->tokenCan('account') ||
+        request()->user()->tokenCan('account_update');
     }
 }

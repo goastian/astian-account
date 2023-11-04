@@ -6,14 +6,12 @@ use App\Models\User\Role;
 use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\Role\RoleTransformer;
-use App\Http\Requests\UserRole\IndexRequest;
 use App\Http\Requests\UserRole\StoreRequest;
 use App\Http\Requests\UserRole\DestroyRequest;
 use App\Events\Employee\StoreEmployeeRoleEvent;
 use App\Events\Employee\DestroyEmployeeRoleEvent;
 use App\Transformers\Auth\EmployeeRoleTransformer;
 use App\Http\Controllers\GlobalController as Controller;
-use App\Transformers\Auth\EmployeeTransformer;
 
 class UserRoleController extends Controller
 {
@@ -22,9 +20,9 @@ class UserRoleController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . EmployeeRoleTransformer::class)->only('store', 'update');
-        $this->middleware('scope:admin,account_read')->only('index');
-        $this->middleware('scope:admin,account_register')->only('store');
-        $this->middleware('scope:admin,account_update')->only('update');
+        $this->middleware('scope:account,account_read')->only('index');
+        $this->middleware('scope:account,account_register')->only('store');
+        $this->middleware('scope:account,account_update')->only('update');
 
     }
 
@@ -33,7 +31,7 @@ class UserRoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(IndexRequest $request, Employee $user)
+    public function index(Employee $user)
     {
         $roles = $user->roles()->get();
 

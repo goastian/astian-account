@@ -64,11 +64,11 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         'transform.request' => \Elyerr\ApiResponse\Middleware\TransformRequest::class,
-        'client' => \Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
-        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
-        'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
+        'client' => \App\Http\Middleware\CheckClientCredentials::class,
+        'scopes' => \App\Http\Middleware\CheckScopes::class,
+        'scope' => \App\Http\Middleware\CheckForAnyScope::class,
         'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
         'passport.timesup' => \App\Http\Middleware\PassportTimesUp::class,
-        'passport.csrf' => \App\Http\Middleware\PassportCsrf::class,
+        'passport.csrf' => \App\Http\Middleware\PassportCsrf::class
     ];
 }
