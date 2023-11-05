@@ -10,10 +10,10 @@ Servidor de autorización centralizado usando aouth-sever a través de laravel y
 Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros sistemas, si bien se manejan varios **grant_types** en **oauth2** para authorizar aplicaciones solo se dejaran los metodos seguros:
 - **authorization_code**: diponible
 - **refresh_token**: disponible
-- **client_credential**: por implementar
-- **code** : PKCE(Proof Key for Code Exchange) por implementar
-- **implicit**: Inseguro - no disponible 
-- **password**: Inseguro - integrar capa extra de seguridad para aplicaciones moviles
+- ~~**client_credential**: por implementar~~
+- **code** : PKCE(Proof Key for Code Exchange) Disponible
+- ~~**implicit**: Inseguro - no disponible~~
+- ~~**password**: Inseguro - integrar capa extra de seguridad para aplicaciones moviles~~
 
 ### SCOPES
 Los escopes debera registrarse llevando el siguiente standar **PREFIJO_ACCION**, 
