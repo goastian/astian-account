@@ -21,8 +21,8 @@ class PassportCsrf
     public function handle(Request $request, Closure $next)
     {
         $this->verifyCsrfToken($request);
-        
-        if ($this->isRefreshTokenOrAuthorizationCode($request)) {
+
+        if ($this->isRefreshTokenOrAuthorizationCode($request) && isset($request->client_secret)) {
 
             $request->merge(['client_secret' => $this->verifyClientSecret($request)]);
         }
@@ -53,7 +53,7 @@ class PassportCsrf
     {
         //get csrf headers
         $csrf = $request->header('X-CSRF-TOKEN') ?: $request->header('X-CSRF-REFRESH');
-
+        
         if (!CsrfToken::findToken($csrf, $request->client_id, $request->grant_type)) {
             throw new ReportError(__("El tiempo esperado para que el cliente solitara el token ha caducado"), 406);
         }
