@@ -19,19 +19,23 @@ class PassportTimesUp
      */
     public function handle(Request $request, Closure $next)
     {
-        $client = Client::find($request->client_id);
-
         $response = $next($request);
 
         if ($response->isRedirection()) {
 
+            $client = Client::find($request->client_id);
+
             $url = $response->headers->get('Location');
+
             $id = $client->id;
-            $secret = Hash::make($client->secret);
 
             $csrfToken = $this->CsrfToken($client);
 
-            $url = $url . "?id=$id?secret=$secret?csrf=$csrfToken";
+            $secret = Hash::make($client->secret);
+
+            $url .= isset($client->secret) ?
+            "?id=$id?secret=$secret?csrf=$csrfToken" :
+            "?id=$id?csrf=$csrfToken";
 
             return redirect($url, 302);
         }
