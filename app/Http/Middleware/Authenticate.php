@@ -18,20 +18,36 @@ class Authenticate extends Middleware
         $this->denyRedirectForGatways($request);
 
         if (!$request->expectsJson()) {
-            return route('login', [
-                'redirect_uri' => $request->redirect_uri,
-                'state' => $request->state,
-            ]);
+
+            $param = $this->sendParamsIfExist($request);
+
+            return route('login', $param);
         }
     }
 
+    /**
+     * denegar la redireccion cuando se estableca la coneccion desde un gateway y darles
+     * una respuesta 401, para informar que no esta authenticado y necesita crear credenciales
+     * @param \Illuminate\Http\Request  $request
+     * @return void
+     */
     protected function denyRedirectForGatways($request)
     {
         $URI = $_SERVER['REQUEST_URI'];
 
         if (strpos($URI, 'gateway')) {
 
-            throw new ReportError("unauthenticated", 401);
+            throw new ReportError("Por favor para consumir el cliente debes tener credenciales validas", 401);
         }
+    }
+
+    /**
+     * reenvia todos los datos que vaya en la url al login
+     * @param  \Illuminate\Http\Request  $request
+     * @return Array
+     */
+    protected function sendParamsIfExist($request)
+    {
+        return $request->all();
     }
 }

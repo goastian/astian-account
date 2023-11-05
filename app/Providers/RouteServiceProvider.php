@@ -52,7 +52,7 @@ class RouteServiceProvider extends ServiceProvider
 
     public static function home()
     {
-        if (Request()->redirect_uri && Request()->state) {
+        if (RouteServiceProvider::query()) {
             return RouteServiceProvider::redirectToAskForAuthorization();
         }
 
@@ -68,11 +68,17 @@ class RouteServiceProvider extends ServiceProvider
      */
     public static function redirectToAskForAuthorization()
     {
-        $query = http_build_query([
-            'redirect_uri' => Request()->redirect_uri,
-            'state' => Request()->state,
-        ]);
+        $query = http_build_query(RouteServiceProvider::query());
 
         return redirect(env('APP_URL') . '/grant-access?' . $query);
+    }
+
+    /**
+     * recupera los parametros de la url
+     * @return Array
+     */
+    public static function query()
+    {
+        return request()->except(['_token', 'email', 'password']);
     }
 }
