@@ -23,9 +23,14 @@ class AuthenticatedSessionController extends Controller
         $this->middleware('auth')->only('destroy');
     }
 
+    /**
+     * login del sistema
+     */
     public function create()
     {
-        return view('auth.login'); 
+        $params = request()->all();
+
+        return view('auth.login', [ 'query' => $params]); 
     }
 
     /**
