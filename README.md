@@ -6,7 +6,7 @@ Servidor de autorización centralizado usando aouth-sever a través de laravel y
 - [Laravel Passport](https://laravel.com/docs/10.x/passport)
 
 
-### OAuth2
+## OAUTH2
 Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros sistemas, si bien se manejan varios **grant_types** en **oauth2** para authorizar aplicaciones solo se dejaran los metodos seguros:
 - **authorization_code**: diponible
 - **refresh_token**: disponible
@@ -15,7 +15,7 @@ Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros
 - ~~**implicit**: Inseguro - no disponible~~
 - ~~**password**: Inseguro - integrar capa extra de seguridad para aplicaciones moviles~~
 
-### SCOPES
+## CREACION DE SCOPES
 Los escopes debera registrarse llevando el siguiente standar **PREFIJO_ACCION**, 
 - el PREFIJO, este puede llevar el nombre del client, o caulquier otro que lo identifique
 - ACCION, debe ser algo relacionado con lo que va a permitir hacer el scope en una sola palara
@@ -26,7 +26,7 @@ Los escopes debera registrarse llevando el siguiente standar **PREFIJO_ACCION**,
     - EMPLOYEE_UPDATE: perimitiria solo actualizar informacion de un empleado
     - EMPLOYEE_DISABLE: permitiria solo desabilitar empleados 
 
-### Gateways
+## GATEWAYS
 Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro servicios que se conecten al servidor principal sin necesidad de crear un sistema de autentificación y autorización para cada uno ellos, dando la facilidad para que puedan ser desarrolladas en cualquier lenguaje de programación con diferentes sistemas de administradores de base de datos. Estos Gateway para su mejor uso se pueden implementar a través de middleware en el cliente a desarrollar para dejar procesar la petición o denegarla dependiendo de la respuesta
 
 - `/api/gateway/check-authentication` : 
@@ -78,8 +78,9 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
     - **Authorization** : token
   - Errores: 
     - **401** : No Authenticado  
-  
-### Solicitar codigo de Authorizacion para consumir un cliente
+
+## AUTHORIZATION_CODE
+#### SOLICITAR CÓDIGO DE AUTORIZACIÓN PARA CONSUMIR UN CLIENTE
 El cliente para solicitar acceso debera implementar una ruta en su aplicacion con el siguiente codigo: **Ejemplo en laravel**
 - Parametros:
   - **redirect_uri** : requerido, ruta en la aplicacion cliente donde desea que redireccione el codigo que sera intercambiado luego por credenciales
@@ -95,7 +96,7 @@ $query = http_build_query([
 return redirect('auth.dominio.dev/grant-access?' . $query);
 ```
 
-### Cambiar codigo de authorizacion por tokens (grant_type:authorization_code)
+#### CAMBIAR CODIGO DE AUTHORIZACION POR TOKENS
 El cliente deberá agregar este codigo en la ruta que agrego en el parametro redirect_uri en la seccion anterior. 
 ```
 /**
@@ -165,7 +166,7 @@ $response = Http::withHeaders([
 return $response->json();
 ```
 
-### Ronovar token con el refesh_token
+#### RONOVAR TOKEN CON EL REFESH_TOKEN
 ```
 /**
 * Se realiza una peticion usando el metodo POST hacia el servidor de authorizacion con los siguientes
