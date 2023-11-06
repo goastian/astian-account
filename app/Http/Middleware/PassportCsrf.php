@@ -20,6 +20,12 @@ class PassportCsrf
      */
     public function handle(Request $request, Closure $next)
     {
+        $this->abortRequest($request);
+
+        if ($request->grant_type == 'client_credentials') {
+            return $next($request);
+        }
+
         $this->verifyCsrfToken($request);
 
         if ($this->isRefreshTokenOrAuthorizationCode($request) && isset($request->client_secret)) {
@@ -45,7 +51,7 @@ class PassportCsrf
     }
 
     /**
-     * verifica el csrf token
+     * verifica el csrf token 
      * @param  Illuminate\Http\Request $request
      * @return void
      */
@@ -53,7 +59,7 @@ class PassportCsrf
     {
         //get csrf headers
         $csrf = $request->header('X-CSRF-TOKEN') ?: $request->header('X-CSRF-REFRESH');
-        
+
         if (!CsrfToken::findToken($csrf, $request->client_id, $request->grant_type)) {
             throw new ReportError(__("El tiempo esperado para que el cliente solitara el token ha caducado"), 406);
         }
@@ -89,5 +95,18 @@ class PassportCsrf
 
             $response->header('X-CSRF-REFRESH', $csrf->token);
         }
+    }
+
+    /**
+     * deniega la authorizacion si el grantype no corresponde a los permitidos
+     * @param \Illuminate\Http\Request $request
+     */
+    public function abortRequest(Request $request)
+    {
+        $grant_types = ['authorization_code', 'refresh_token', 'client_credentials'];
+
+        throw_unless(in_array($request->grant_type, $grant_types),
+            new ReportError('El grantype ingresado no esta permitido', 406));
+
     }
 }

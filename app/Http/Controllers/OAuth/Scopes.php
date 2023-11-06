@@ -8,7 +8,6 @@ use Laravel\Passport\Scope;
 
 trait Scopes
 {
-
     public function scopes()
     {
         $roles = Role::all();
@@ -33,6 +32,8 @@ trait Scopes
             }
         }
 
-        return $scopes;
+        return collect($scopes)->map(function ($scope) {
+            return new Scope($scope['id'], $scope['description']);
+        })->values();
     }
 }
