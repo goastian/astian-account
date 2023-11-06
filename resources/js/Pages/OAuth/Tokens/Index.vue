@@ -1,13 +1,13 @@
 <template>
-    <v-table
-        :items="items"
-        class="text-center table-sm text-sm"
-        style="width: 75%; margin: 0% auto"
-    >
+    <v-table :items="items" class="text-center text-sm">
         <template v-slot:body>
             <tr v-for="(item, index) in tokens" :key="index">
-                <td>{{ item.scopes.join(",") }}</td>
-                <td>{{ item.name }}</td>
+                <td>
+                    <span class="px-1" v-for="(scope, index) in item.scopes"
+                        >{{ scope }} <br v-if="index % 5 == 0">
+                    </span>
+                </td>
+
                 <td>{{ item.created_at }}</td>
                 <td>{{ item.expires_at }}</td>
                 <td>
@@ -31,14 +31,14 @@ export default {
 
     data() {
         return {
-            items: ["scopes", "name", "created", "expires"],
+            items: ["scopes", "created", "expires"],
             tokens: {},
         };
     },
 
     created() {
         this.getTokens();
-        this.listenEvents()
+        this.listenEvents();
     },
 
     methods: {

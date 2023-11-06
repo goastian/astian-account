@@ -6,9 +6,12 @@
         <v-item :path="{ name: 'users' }">Usuarios</v-item>
         <v-item :path="{ name: 'scopes' }">Scopes</v-item>
     </v-nav>
-    <section class="container-fulid px-1 py-2">
+    <section >
         <router-view />
     </section>
+    <footer>
+        
+    </footer>
 </template>
 <script>
 export default {
