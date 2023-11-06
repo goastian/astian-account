@@ -8,12 +8,13 @@ Servidor de autorización centralizado usando aouth-sever a través de laravel y
 
 ## OAUTH2
 Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros sistemas, si bien se manejan varios **grant_types** en **oauth2** para authorizar aplicaciones solo se dejaran los metodos seguros:
-- **authorization_code**: diponible
-- **refresh_token**: disponible
-- ~~**client_credential**: por implementar~~
-- **code** : PKCE(Proof Key for Code Exchange) Disponible
-- ~~**implicit**: Inseguro - no disponible~~
-- ~~**password**: Inseguro - integrar capa extra de seguridad para aplicaciones moviles~~
+- **code** : PKCE(Proof Key for Code Exchange), response type
+- **confidential**: response type para entornos seguros
+- **authorization_code**: intercambia codigo por token jwt
+- **refresh_token**: renova el token vencido
+- **client_credential**: uso de recursos controlados
+- ~~**implicit**: Inseguro~~
+- ~~**password**: Inseguro~~
 
 ## CREACION DE SCOPES
 Los escopes debera registrarse llevando el siguiente standar **PREFIJO_ACCION**, 
@@ -79,107 +80,261 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - Errores: 
     - **401** : No Authenticado  
 
-## AUTHORIZATION_CODE
-#### SOLICITAR CÓDIGO DE AUTORIZACIÓN PARA CONSUMIR UN CLIENTE
-El cliente para solicitar acceso debera implementar una ruta en su aplicacion con el siguiente codigo: **Ejemplo en laravel**
+## RESPONSE TYPE CONFIDENTIAL
+#### SOLICITAR CÓDIGO DE AUTORIZACIÓN 
+Para usar este metodo primero se debe registrar al cliente en tu panel administrativos en la session clientes, luego en la aplicacion cliente el desarrollador debera crear una ruta con el codigo proporcionado debajo.
 - Parametros:
-  - **redirect_uri** : requerido, ruta en la aplicacion cliente donde desea que redireccione el codigo que sera intercambiado luego por credenciales
-  - **state**: requerido, session de cliente que viaja a traves de la petición hasta el retorno del codigo con la finalidad de verificar la autenticidad de la aplicación
+  - **redirect_uri** : URI de tu aplicacion donde recibiras el codigo y lo intercambiaras con el token jwt
+  - **state**: session generada en tu aplicacion, su funcion es verificar la autenticidad de la peticion.
+  - **response_type**: metodo de respuesta que el cliente procesa para generar un codigo
+- Siguiente codigo: **Ejemplo en laravel con php**, debes asignar esta funcion a una URI
 ```
-$request->session()->put('state', $state = Str::random(40));
+    /**
+     * enevia una solicituda para obtener un codigo
+     * @param \Illuminate\Http\Request $request
+     * @return response(null, 302)
+     */
+    public function sendRequestForAuthorization(Request $request)
+    {
+        $request->session()->put('state', $state = Str::random(40));
 
-$query = http_build_query([
-    'redirect_uri' => 'cliente.dominio.dev/callback', //puedes usar variables de entorno
-    'state' => $state, //requerido
+        $query = http_build_query([
+            'redirect_uri' => 'http://micliente.dominio.dev/callback',
+            'state' => $state,
+            'response_type' => 'confidential'
+        ]);
+
+        return redirect('http://auth.dominio.dev/grant-access?' . $query);
+    }
+```
+
+#### CAMBIAR CODIGO DE AUTHORIZACION POR TOKENS JWT
+El server de authorizacion generará una respuesta con un codigo redireccionando a la URI proporcionada en el primer paso en **redirect_uri**
+- El siguiente codigo esta en laravel con php, la funcion le debes asignar a la URI que colocaste en **redirect_uri** cuando solicitaste el codigo por ejemplo en  **http://micliente.dominio.dev/callback**
+- **Datos que devulve la peticion**
+  - **token_type**: Bearer
+  - **expires_in**: tiempo en segundo de expiracion
+  - **access_token**: token jwt el cual debe ser usado para realizar peticiones en el header Authorization
+  - **refresh_token**: token que permite renovar el access_token caducado, debe almacenarce en un ligar seguro 
+  - **X-CSRF-REFRESH**: Header que debe ser enviado junto con el refresh_token en los headers, el X-CSRF-REFRESH es de un solo uso, implementacion adicional de seguridad
+```
+/**
+  * realiza una solicitud para intercambiar el codigo con credenciales
+  * @param \Illuminate\Http\Request $request
+  * @return response(null, 201)
+  */
+ public function changeCodeForAuthorization(Request $request)
+    {
+        /**
+         * obteniedo data
+         */
+        $data = explode('?', $request->state);
+
+        /**
+         * csrf token enviado desde el cliente
+         */
+        $transport_state = $data[0];
+
+        /**
+         * identificador unico del cliente
+         */
+        $client_id = str_replace('id=', '', $data[1]);
+
+        /**
+         * secret del client hasheado
+         */
+        $client_secret = str_replace('secret=', '', $data[2]);
+
+        /**
+         * token temporal valido por 10 Segundos despues de ese tiempo
+         * la peticion va ser invalida
+         */
+        $csrf = str_replace('csrf=', '', $data[3]);
+
+        /**
+         * session actual
+         */
+        $state = $request->session()->pull('state');
+
+        /**
+         * verificacion de la sesion enviada con la actual
+         */
+        throw_unless(
+            strlen($state) > 0 && $state === $transport_state,
+            InvalidArgumentException::class,
+            'Invalid state value.'
+        );
+
+        /**
+         * intercambiando codigo por credenciales para la autorizacion
+         */
+        $response = Http::withHeaders([
+            'X-CSRF-TOKEN' => $csrf,
+        ])->asForm()->post('http://auth.dominio.dev/api/oauth/token', [
+            'grant_type' => 'authorization_code',
+            'client_id' => $client_id,
+            'client_secret' => $client_secret,
+            'redirect_uri' => env('APP_URL'),
+            'code' => $request->code,
+        ]);
+
+        /**
+         * recibiras las credenciales, en este punto eres libre de manipular el codigo 
+         * para automatizar el manejo de las credenciales
+         */
+        return $response->json();
+
+    }
+```
+#### RONOVAR TOKEN CON EL REFESH_TOKEN (valido para code y confidentials)
+Este proceso se usa para renovar el token caducado, todos los datos o variables usadas aqui ya se obtubieron en la peticion cuando generaste el codigo, por lo que debieron ser almacenas en un logar seguro.
+- Parametros
+  - X-CSRF-REFRESH: requerido, retornado en la cabecera de las peticiones
+  - grant_type: requerido 
+  - client_id: requerido
+  - client_secret: solo para response type **confidential**
+  - refresh_token: requerido
+
+``` 
+public function refreshToken(){
+
+    $response = Http::withHeaders([
+        'X-CSRF-REFRESH' => $csrf,
+    ])->asForm()->post('auth.dominio.dev/api/oauth/token', [
+        'grant_type' => 'refresh_token', //esto queda asi
+        'client_id' => $client_id, // identificador del cliente
+        'client_secret' => $client_secret, // 
+        'refresh_token' => 'refresh_token', // obtenido en la peticion anterior
+    ]);
+    
+    /**
+     * genera lo mismo de la peticion de arriba
+     */
+    return $response->json();
+}
+
+```
+## RESPONSE TYPE CODE (PKCE)
+Este metodo se usa mayormente para entornos donde el cliente no es seguros para generar un cliente de este tipo puede escribir en la terminal la siguiente instruncion `php artisan passport:client --public`, puedes leer en [Laravel Passport](https://laravel.com/docs/10.x/passport#code-grant-pkce) acerca de este metodo, funciona igual pero con algunas mejoras que se incorporaron.
+
+#### SOLICITAR CODIGO
+Este metdodo debe ser incorporado en una URI en la aplicacion cliente que el desarrollador quiere implementar.
+- Parametros
+  - **client_id**: indentificador del cliente
+  - **redirect_uri**: URI donde redireccionará cuando genere el codigo
+  - **response_type**: tipo de respuesta 
+  - **state**: stado del la aplicacion, verifica la autenticidad del sitio
+  - **code_challenge**: codigo de desafio para generar el codigo
+  - **code_challenge_method**: metodo del codigo de desafio
+
+```
+public function pkce(Request $request)
+    {
+        /**
+         * creamos una session
+         */
+        $request->session()->put('state', $state = Str::random(40));
+
+        /**
+         * creamos una propiedad que contendra el code_verifier, el cual
+         * se intercambiara con el server de authorizacion
+         */
+        $request->session()->put(
+            'code_verifier', $code_verifier = Str::random(128)
+        );
+
+        /**
+         * ahora creamos un code challenge
+         */
+        $codeChallenge = strtr(rtrim(
+            base64_encode(hash('sha256', $code_verifier, true))
+            , '='), '+/', '-_');
+
+        $query = http_build_query([
+            'client_id' => 'client_id',
+            'redirect_uri' => 'http://micliente.dominio.dev/callback',
+            'response_type' => 'code',
+            'state' => $state,
+            'code_challenge' => $codeChallenge,
+            'code_challenge_method' => 'S256',
+        ]);
+
+        return redirect('http://auth.dominio.dev/grant-access?' . $query);
+
+    }
+```
+
+#### INTERCAMBIAR CODIGO POR CRDENCIALES
+Se intercambia el codigo para obtener crdenciales vbalidas, este metodo que se proporciona debera ser empleadp en la URI que se porporciono en **redirect_uri**
+
+- **Datos que devulve la peticion**
+  - **token_type**: Bearer
+  - **expires_in**: tiempo en segundo de expiracion
+  - **access_token**: token jwt el cual debe ser usado para realizar peticiones en el header Authorization
+  - **refresh_token**: token que permite renovar el access_token caducado, debe almacenarce en un ligar seguro 
+  - **X-CSRF-REFRESH**: Header que debe ser enviado junto con el refresh_token en los headers, el X-CSRF-REFRESH es de un solo uso, implementacion adicional de seguridad
+```
+public function callback(Request $request)
+    {
+        /**
+         * get paramas
+         */
+        $data = explode('?', $request->state);
+        /**
+         * csrf token enviado desde el cliente
+         */
+        $transport_state = $data[0];
+        //echo " estate $transport_state<br>";
+        /**
+         * identificador unico del cliente
+         */
+        $client_id = str_replace('id=', '', $data[1]);
+        //echo "client_id $client_id <br>";
+        /**
+         * token temporal valido por 10 Segundos despues de ese tiempo
+         * la peticion va ser invalida
+         */
+        $csrf = str_replace('csrf=', '', $data[2]);
+        //echo "csrf $csrf <br>";
+
+        $state = $request->session()->pull('state');
+
+        $codeVerifier = $request->session()->pull('code_verifier');
+        //echo "codeVerifier $codeVerifier <br>";
+        // echo "code $request->code <br>";
+
+        throw_unless(
+            strlen($state) > 0 && $state === $transport_state,
+            InvalidArgumentException::class
+        );
+
+        $response = Http::withHeaders([
+            'X-CSRF-TOKEN' => $csrf,
+        ])
+            ->asForm()->post('http://auth.dominio.dev/api/oauth/token', [
+            'grant_type' => 'authorization_code',
+            'client_id' => $client_id,
+            'redirect_uri' => 'http://micliente.dominio.dev/callback',
+            'code_verifier' => $codeVerifier,
+            'code' => $request->code,
+        ]);
+
+        return $response->json();
+
+```
+## Client credential
+Este grant type suele se empleado en entornos controlados donde no represente un peligo al server de authorizacion o al cliente que este en uso, a diferencia de los demas este tipo de credencial no realiza intercambio de datos con el server de authorizacion y se debe a la forma de empleo que este tiene, por ejemplo puede emplearse para que un usuario lee informacion publica, o genenere reservas en un sistema de aerolineas, etc. 
+- para mas informacion puedes leer en [Laravel Passport](https://laravel.com/docs/10.x/passport#client-credentials-grant-tokens) su funcionamiento es el mismo y no ha sido modificado.
+  
+```
+use Illuminate\Support\Facades\Http;
+ 
+$response = Http::asForm()->post('http://passport-app.test/oauth/token', [
+    'grant_type' => 'client_credentials',
+    'client_id' => 'client-id',
+    'client_secret' => 'client-secret',
+    'scope' => 'your-scope',
 ]);
-
-return redirect('auth.dominio.dev/grant-access?' . $query);
-```
-
-#### CAMBIAR CODIGO DE AUTHORIZACION POR TOKENS
-El cliente deberá agregar este codigo en la ruta que agrego en el parametro redirect_uri en la seccion anterior. 
-```
-/**
- * obteniedo data desde la url
-*/
-$data = explode('?', $request->state);
-
-/**
- * variable que fue enviada desde el cliente en el parametro state
-*/
-$transport_state = $data[0];
-
-/**
-* Identificador unico del cliente
-*/
-$client_id = str_replace('id=', '', $data[1]);
-
-/**
-* Clave secreta del cliente, la clave ha sido hasheada antes de enviarse
-*/
-$client_secret = str_replace('secret=', '', $data[2]);
-
-/**
-* token temporal valido por 10 Segundos, despues de ese tiempo la peticion sera invalida a si los
-* los demas datos sean correctos este token debe enviarse en una cabecera **X-CSRF-TOKEN** y es de un
-* solo uso, esto no esta contemplado en el protocolo oauth2, siendo una implementacion extra de seguridad
-*/
-$csrf = str_replace('csrf=', '', $data[3]);
-
-/**
-* procedimiento para obtener el estado de la sesion actual
-*/
-$state = $request->session()->pull('state');
-
-/**
-* verificacion de la sesion enviada con la actual estas deben coicidar para que la peticion 
-* pueda realizar
-*/
-throw_unless(
-    strlen($state) > 0 && $state === $transport_state,
-    InvalidArgumentException::class,
-    'Invalid state value.'
-);
-
-/**
-* Se realiza una peticion usando el metodo POST hacia el servidor de authorizacion
-* 
-*/
-$response = Http::withHeaders([
-    'X-CSRF-TOKEN' => $csrf,
-])->asForm()->post('auth.dominio.dev/api/oauth/token', [
-    'grant_type' => 'authorization_code',
-    'client_id' => $client_id,
-    'client_secret' => $client_secret,
-    'redirect_uri' => cliente.dominio.dev/callback, //puedes usar variables de entorno
-    'code' => $request->code,
-]);
-
-/**
-* Obtiene las credenciales de autorizacion, esta peticion retornoa los siguientes valores
-* token_type: Bearer
-* expires_in: tiempo en segundo de expiracion
-* access_token: token jwt el cual debe ser usado para realizar peticiones en el Header Authorization
-* refresh_token: token que permite renovar el access_token caducado, debe almacenarce en un ligar seguro
-* X-CSRF-REFRESH: Header que debe ser enviado junto con el refresh_token en los headers, el X-CSRF-REFRESH es de un solo uso, implementacion adicional de seguridad
-*/
-return $response->json();
-```
-
-#### RONOVAR TOKEN CON EL REFESH_TOKEN
-```
-/**
-* Se realiza una peticion usando el metodo POST hacia el servidor de authorizacion con los siguientes
-* datos
-*/
-
-$response = Http::withHeaders([
-    'X-CSRF-REFRESH' => $csrf,
-])->asForm()->post('auth.dominio.dev/api/oauth/token', [
-    'grant_type' => 'refresh_token', //tipo de authorizacion
-    'client_id' => $client_id, //obtenido cuando se genero el code de intercambio por token
-    'client_secret' => $client_secret, //obtenido cuando se genero el code de intercambio por token
-    'refresh_token' => 'refresh_token', //refresh token obtenido cuand se intercabio el codigo
-]);
-
+ 
+return $response->json()['access_token'];
 ```
