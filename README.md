@@ -62,6 +62,7 @@ php artisan serve
 Los siguientes comandos puedes usar **supervisor** para mantenerlos en ejecucion, pero si solo es para testear puedes usarlos directos en una terminal.
 Antes debes configurar  [laraver-echo-server.json](https://github.com/tlaverdure/laravel-echo-server) con los parametros de tu servidory tambien instalarlo, en el link esta la documentacion necesaria
 
+Luego de instalarlo y configurarlo en la raiz del projecto o en donde tu lo haya creado, dentro de esa ruta ejecutas el siguiente comando
 ```
 laravel-echo-server start
 ```
