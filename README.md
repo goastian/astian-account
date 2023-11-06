@@ -1,10 +1,9 @@
-# Authorization Server [En desarrollo Aun]
-Servidor de autorización centralizado usando aouth-sever a través de laravel y laravel passport como capa de abstracción o capa puente.
+# Authorization Server [Testing]
+Servidor de autorización centralizado usando aouth-sever a través de laravel y laravel passport como capa de abstracción o capa puente, implemeta broadcasting usando **laravel-echo-server** y **laravel-echo**
 
 **Documentacion oficial**
 - [Laravel Documentation](https://laravel.com/docs/10.x)
 - [Laravel Passport](https://laravel.com/docs/10.x/passport)
-
 
 ## OAUTH2
 Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros sistemas, si bien se manejan varios **grant_types** en **oauth2** para authorizar aplicaciones solo se dejaran los metodos seguros:
@@ -13,8 +12,69 @@ Protocolo de authorizacion que permite conectar aplicaciones seguras en nuestros
 - **authorization_code**: intercambia codigo por token jwt
 - **refresh_token**: renova el token vencido
 - **client_credential**: uso de recursos controlados
-- ~~**implicit**: Inseguro~~
-- ~~**password**: Inseguro~~
+- ~~**implicit**: Inseguro~~ No disponible
+- ~~**password**: Inseguro~~ No disponible
+  
+## CONFIGURACION
+Toda la configuracion de las variable esta especificada en el archivo **.env.example**, todo lo siguiente debe realizar luego de configurar en archivo **.env**
+
+#### INSTALAR LO NECESARIO
+Dependecias de composer
+```
+composer install
+```
+Dependencias de javascrip
+```
+npm install
+```
+Generar llave o identificador de la aplicacion
+```
+php artisan key:generate
+```
+Crear las tablas en la BD
+```
+php artisan migrate
+```
+Generar llaves de passport para generar tokens a cliente y personal accces token, 
+```
+php artisan passport:install
+```
+Despues de ejecutar el comando anterior quedaran dos tipos de clientes
+```
+Personal access client created successfully.
+Client ID: id
+Client secret: secret
+Password grant client created successfully.
+Client ID: id
+Client secret: secret
+
+```
+En las variables de entonrno en el archivo env deberas agregar los datos del **Personal Access Client**, esto te permitira crear token de acceso para consumir mediante algun cliente como postman u otro.
+```
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID="id"
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET="secret"
+```
+
+Si es solo para testear puedes ejecutarlo desde el terminal, pero lo recomendable es usarlo a traves de un servidor nginx o apache y asignarle un dominio
+```
+php artisan serve
+```
+Los siguientes comandos puedes usar **supervisor** para mantenerlos en ejecucion, pero si solo es para testear puedes usarlos directos en una terminal.
+Antes debes configurar  [laraver-echo-server.json](https://github.com/tlaverdure/laravel-echo-server) con los parametros de tu servidory tambien instalarlo, en el link esta la documentacion necesaria
+
+```
+laravel-echo-server start
+```
+Esto hara que las colas traten de enviar 3 veces el envento si este falla 2 veces
+```
+php artisan queue:listen --tries=3
+```  
+Para terminar, despues de que tengas todo configurado debes, compilar los archivos js y scss con vite
+```
+npm run build
+```
+
+
 
 ## CREACION DE SCOPES
 Los escopes debera registrarse llevando el siguiente standar **PREFIJO_ACCION**, 
