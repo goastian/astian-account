@@ -37,10 +37,10 @@ class AppServiceProvider extends ServiceProvider
         Passport::useAuthCodeModel(AuthCode::class);
         Passport::useClientModel(Client::class);
         Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
-
-        Passport::tokensExpireIn(now()->addHour(24));
-        Passport::refreshTokensExpireIn(now()->addDays(5));
-        Passport::personalAccessTokensExpireIn(now()->addDays(10));
+        
+        Passport::tokensExpireIn(now()->addSeconds(env('PASSPORT_TOKEN_EXPIRE')));
+        Passport::refreshTokensExpireIn(now()->addDays(env('PASSPORT_REFRESH_EXPIRE')));
+        Passport::personalAccessTokensExpireIn(now()->addDays(env('PASSPORT_PERSONAL_EXPIRE')));
 
         $scopes = [];
 
