@@ -95,6 +95,8 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - verifica si un usuario esta authenticado
   - Headers
       - **Authorization** : token
+  - Success
+    - **200**: conexion exitosa
   - Errores:
     - **401** : No Authenticado 
   
@@ -103,6 +105,8 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope1 scope2 scope3 scope-N'
+  - Success
+    - **200**: conexion exitosa
   - Errores:
     - **401** : No Authenticado
     - **403** : No Authorizado
@@ -112,6 +116,8 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope1 scope2 scope3 scope-N'
+  - Success
+    - **200**: conexion exitosa
   - Errores:
     - **401** : No Authenticado
     - **403** : No Authorizado
@@ -121,6 +127,8 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope1 scope2 scope3 scopeN'
+  - Success
+    - **200**: conexion exitosa
   - Errores:
     - **401** : No Authenticado
     - **403** : No Authorizado
@@ -130,6 +138,8 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - Headers
     - **Authorization** : token
     - **X-SCOPES** : 'scope'
+  - Success
+    - **200**: conexion exitosa
   - Errores:
     - **401** : No Authenticado
     - **403** : No Authorizado
@@ -138,8 +148,18 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - retorna los datos del usuario autenticado en ese momento
   - Headers
     - **Authorization** : token
+  - Success
+    - **201**: conexion exitosa
   - Errores: 
-    - **401** : No Authenticado  
+    - **401** : No Authenticado 
+- `/api/gateway/logout`
+  - Elimina la session actual en el microservicio
+  - Headers
+    - **Authorization**
+  - Success
+    - **201** : credenciales revocadas
+  - Errores
+    - **401**: No authenticado
 
 ## RESPONSE TYPE CONFIDENTIAL
 #### SOLICITAR CÓDIGO DE AUTORIZACIÓN 
