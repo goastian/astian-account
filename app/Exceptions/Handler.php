@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Support\Responsable;
@@ -74,16 +75,14 @@ class Handler extends ExceptionHandler
      * @throws \Throwable
      */
     public function render($request, Throwable $e)
-    { 
-        if ($request->wantsJson()) {
+    {
 
-            if ($e instanceof ModelNotFoundException) {
-                return response()->json(['data' => ['message' => __("No se puede procesar la petición")]], 400);
-            }
+        if ($e instanceof ModelNotFoundException) {
+            throw new ReportError(__("No se puede procesar la petición"), 400);
+        }
 
-            if($e instanceof AuthorizationException){
-                return response()->json(['data' => ['message' => __("No cuenta con los persmios requeridos")]], 403);
-            }
+        if ($e instanceof AuthorizationException) {
+            throw new ReportError(__("No cuenta con los persmios requeridos"), 403);
         }
 
         if (method_exists($e, 'render') && $response = $e->render($request)) {
@@ -92,6 +91,10 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof Responsable) {
             return $e->toResponse($request);
+        }
+
+        if ($e instanceof AccessDeniedHttpException) {
+            throw new ReportError(__("Acceso denegado"), 401);
         }
 
         $e = $this->prepareException($this->mapException($e));
