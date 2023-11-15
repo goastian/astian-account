@@ -20,13 +20,3 @@ Broadcast::channel(env("CHANNEL_NAME") . ".{id}", function ($user, $id) {
 Broadcast::channel(env("CHANNEL_NAME"), function ($user) {
     return (int) $user->id === (int) request()->user()->id;
 });
-
-
-Broadcast::channel("assets.{id}", function ($user, $id) {
-    return (int) $user->id === (int) $id;
-});
-
-Broadcast::channel("assets", function ($user) {
-    return (int) $user->id === (int) request()->user()->id;
-});
-
