@@ -18,6 +18,7 @@ return new class extends Migration
          */
         $roles = [
             "admin" => "acceso total al sistema", 
+            "broadcast" => "administrar canales",
             "account" => "administrar cuentas de usuario",
             "account_read" => "acceso a ver informacion de los usuarios",
             "account_register" => "registra un nuevo usuario",

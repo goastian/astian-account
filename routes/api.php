@@ -2,6 +2,7 @@
 
 use App\Enum\EnumType;
 use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\Broadcasting\BroadcastController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
 use App\Http\Controllers\User\RoleController;
@@ -31,14 +32,19 @@ Route::prefix('oauth')->group(function () {
         ->name('passport.revoke-credentials');
 });
 
-//Roles
-Route::resource('roles', RoleController::class)->only('index', 'store', 'update', 'destroy');
 
-//Employees
+/**
+ * rutas que permiten administrar usuarios dentro del sistema
+ */
+Route::resource('roles', RoleController::class)->only('index', 'store', 'update', 'destroy');
 Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
 Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
 Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
 Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
-
-//Valores absolutos
 Route::get('document-type', [EnumType::class, 'documento_type']);
+
+/**
+ * rutas que permiten administrar los canales de difusion dentro 
+ * del sistema a traves de eventos
+ */
+Route::resource('broadcasts', BroadcastController::class)->only('index','store', 'destroy');
