@@ -1,5 +1,5 @@
 <?php
- 
+
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -11,11 +11,22 @@ use Illuminate\Support\Facades\Broadcast;
 | application supports. The given channel authorization callbacks are
 | used to check if an authenticated user can listen to the channel.
 |
-*/
- Broadcast::channel(env("CHANNEL_NAME") . ".{id}", function ($user, $id) {
-	return (int) $user->id === (int) $id;
+ */
+
+Broadcast::channel(env("CHANNEL_NAME") . ".{id}", function ($user, $id) {
+    return (int) $user->id === (int) $id;
 });
 
 Broadcast::channel(env("CHANNEL_NAME"), function ($user) {
-	return (int) $user->id === (int) request()->user()->id; 
+    return (int) $user->id === (int) request()->user()->id;
 });
+
+
+Broadcast::channel("assets.{id}", function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
+
+Broadcast::channel("assets", function ($user) {
+    return (int) $user->id === (int) request()->user()->id;
+});
+
