@@ -18,6 +18,7 @@ Route::prefix('gateway')->group(function () {
     Route::get('/check-client-credentials', [PasspotConnectController::class, 'check_client_credentials']);
     Route::get('/token-can', [PasspotConnectController::class, 'token_can']);
     Route::get('/user', [PasspotConnectController::class, 'auth']);
+    Route::post('/logout', [AuthorizationController::class, 'destroy']);
 
 });
 
@@ -41,4 +42,3 @@ Route::resource('users.roles', UserRoleController::class)->only('index', 'store'
 
 //Valores absolutos
 Route::get('document-type', [EnumType::class, 'documento_type']);
-Route::post('logout', [AuthorizationController::class, 'destroy']);
