@@ -31,7 +31,9 @@ Generar llave o identificador de la aplicacion
 ```
 php artisan key:generate
 ```
-Crear las tablas en la BD
+Crear las tablas en la BD, antes de realizar esta accion deberas comentar la siguiente
+linea `Broadcast::register()` en **routes/channels.php** y luego de realizar la migracion deberas
+dejarala como estaba antes.
 ```
 php artisan migrate
 ```
