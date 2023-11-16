@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Broadcasting;
 
+use App\Events\Broadcast\DestroyBroadcastEvent;
+use App\Events\Broadcast\StoreBroadcastEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Broadcasting\Broadcast;
 use Illuminate\Http\Request;
@@ -49,6 +51,8 @@ class BroadcastController extends Controller
             $broadcast->save();
         });
 
+        StoreBroadcastEvent::dispatch();
+
         return $this->showOne($broadcast, $broadcast->transformer, 201);
     }
 
@@ -85,6 +89,8 @@ class BroadcastController extends Controller
     {
         DB::transaction(function () use ($broadcast) {
             $broadcast->delete();
+
+            DestroyBroadcastEvent::dispatch();
         });
 
         return $this->showOne($broadcast, $broadcast->transformer);

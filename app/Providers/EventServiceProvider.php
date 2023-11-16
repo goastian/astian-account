@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider; 
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -54,6 +54,15 @@ class EventServiceProvider extends ServiceProvider
         //reesset tokens
         \App\Events\OAuth\RevokeCredentialsEvent::class => [
             \App\Listeners\OAuth\RevokeCredentialsListener::class,
+        ],
+
+        //broadcast
+        \App\Events\Broadcast\StoreBroadcastEvent::class => [
+            \App\Listeners\Broadcast\StoreBroadcastListener::class,
+        ],
+
+        \App\Events\Broadcast\DestroyBroadcastEvent::class => [
+            \App\Listeners\Broadcast\DestroyBroadcastListener::class,
         ],
     ];
 
