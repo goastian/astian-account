@@ -21,7 +21,7 @@
                 >
                     <slot></slot>
                 </ul>
-                <ul class="navbar-nav me-auto text-md navbar-nav-scroll">
+                <ul class="navbar-nav text-md navbar-nav-scroll">
                     <li class="nav-item dropdown">
                         <a
                             class="nav-link dropdown-toggle"
