@@ -37,8 +37,8 @@ class BroadcastTransformer extends TransformerAbstract
             'id' => $broadcast->id,
             'canal' => $broadcast->channel,
             'descripcion' => $broadcast->description,
-            'created_at' => $this->format_date($broadcast->created_at),
-            'updated_at' => $this->format_date($broadcast->updated_at),
+            'registrado' => $this->format_date($broadcast->created_at),
+            'actualizado' => $this->format_date($broadcast->updated_at),
             'links' => [
                 'parent' => route('broadcasts.index'),
                 'store' => route('broadcasts.store'),
