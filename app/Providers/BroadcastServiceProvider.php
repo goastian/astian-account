@@ -14,7 +14,12 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-		Broadcast::routes(['middleware' => ['web', 'auth:api']]);
+
+        $middleware = request()->cookie(env('COOKIE_NAME', 'auth_server')) ?
+        ['middleware' => ['web']] :
+        ['middleware' => ['auth:api']];
+
+        Broadcast::routes($middleware);
 
         require base_path('routes/channels.php');
     }
