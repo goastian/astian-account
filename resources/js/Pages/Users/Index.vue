@@ -1,13 +1,7 @@
 <template>
-    <div class="container-fuid" style="width: 90%; margin: auto">
-        <div class="row row-cols-5 col-sm-12">
-            <div class="col-1">
-                <v-register @user-was-registered="getUsers"></v-register>
-            </div>
-            <div class="col-10">
-                <v-search @searching="searching"></v-search>
-            </div>
-        </div>
+    <div class="container-fuid mx-1">
+        <v-register @user-was-registered="getUsers"></v-register>
+        <v-search @searching="searching"></v-search>
 
         <v-table :items="items" class="table-sm text-sm text-center">
             <template v-slot:body>

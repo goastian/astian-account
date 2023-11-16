@@ -1,5 +1,5 @@
 <template>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation">
         <ul class="pagination justify-content-center">
             <li :class="['page-item', disabled_prev]">
                 <a href="#" class="page-link" v-on:click="getPage(pages.current_page - 1)">
