@@ -97,6 +97,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - verifica si un usuario esta authenticado
   - Headers
       - **Authorization** : token
+      - **X-Verify-Transaction**: csrf_refresh
   - Success
     - **200**: conexion exitosa
   - Errores:
@@ -106,6 +107,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - verifca la authenticacion de un usuario y authorizacion del cliente a travez de scopes, verifica si almenos un **scope** esta presente, este gateway replican la funcionalidad de los [middlware de laravel](https://laravel.com/docs/10.x/passport#check-for-any-scopes)
   - Headers
     - **Authorization** : token
+    - **X-Verify-Transaction**: csrf_refresh
     - **X-SCOPES** : 'scope1 scope2 scope3 scope-N'
   - Success
     - **200**: conexion exitosa
@@ -117,6 +119,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - igual al anterior pero verifica si todos los scopes estan prensentes antes de procesar la peticion, este gateway replican la funcionalidad del este [middlware de laravel](https://laravel.com/docs/10.x/passport#check-for-all-scopes)
   - Headers
     - **Authorization** : token
+    - **X-Verify-Transaction**: csrf_refresh
     - **X-SCOPES** : 'scope1 scope2 scope3 scope-N'
   - Success
     - **200**: conexion exitosa
@@ -128,6 +131,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - verifica si el usuario authorizado a travez del grant_type client_credentials este autorizado, el header X-SCOPES es opcional, este gateway replican la funcionalidad de este [middlware de laravel](https://laravel.com/docs/10.x/passport#client-credentials-grant-tokens)
   - Headers
     - **Authorization** : token
+    - **X-Verify-Transaction**: csrf_refresh
     - **X-SCOPES** : 'scope1 scope2 scope3 scopeN'
   - Success
     - **200**: conexion exitosa
@@ -139,6 +143,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - verifica si un usuario tiene tiene acceso algun scope en el cliente, este gateway replica la funcionalidad este [metdo de laravel](https://laravel.com/docs/10.x/passport#checking-scopes-on-a-token-instance)
   - Headers
     - **Authorization** : token
+    - **X-Verify-Transaction**: csrf_refresh
     - **X-SCOPES** : 'scope'
   - Success
     - **200**: conexion exitosa
@@ -150,6 +155,7 @@ Permiten desarrollar una gran variedad de aplicaciones monolíticas o micro serv
   - retorna los datos del usuario autenticado en ese momento
   - Headers
     - **Authorization** : token
+    - **X-Verify-Transaction**: csrf_refresh
   - Success
     - **201**: conexion exitosa
   - Errores: 
