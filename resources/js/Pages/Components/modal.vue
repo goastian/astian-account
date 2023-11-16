@@ -2,7 +2,7 @@
     <!-- Button trigger modal -->
     <button
         type="button"
-        :class="['btn mx-1 my-1',  styles]"
+        :class="['btn me-2 my-1',  styles]"
         @click="sendEvent1(id)"
         data-bs-toggle="modal"
         :data-bs-target="'#'.concat(target)"

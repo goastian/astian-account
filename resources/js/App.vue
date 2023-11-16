@@ -5,6 +5,7 @@
         <v-item :path="{ name: 'personalTokens' }">Personal Tokens</v-item>
         <v-item :path="{ name: 'users' }">Usuarios</v-item>
         <v-item :path="{ name: 'scopes' }">Scopes</v-item>
+        <v-item :path="{ name: 'channels' }">Broadcasts</v-item>
     </v-nav>
     <section >
         <router-view />
