@@ -28,8 +28,8 @@ return new class extends Migration
             "scopes" => "administrar scopes",
             "scopes_read" => "permite ver todos los scopes",
             "scopes_register" => "permite registrar nuevos scopes",
-            "scopes_update" => "permite registrar nuevos scopes",
-            "scopes_destroy" => "Permite eliminar scopes",
+            "scopes_update" => "permite actualizar nuevos scopes",
+            "scopes_destroy" => "Permite eliminar un scope",
         ];
 
         foreach ($roles as $key => $value) {
