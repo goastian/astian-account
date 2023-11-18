@@ -80,6 +80,14 @@ class Auth extends Authenticatable
         $this->attributes['email'] = strtolower($value);
     }
 
+    public function setDocumentTypeAttribute($value){
+        $this->attributes['document_type'] = strtolower($value);
+    }
+
+     public function getDocumentTypeAttribute($value){
+        return strtoupper($value);
+    }
+
     public function setCountryAttribute($value)
     {
         $this->attributes['country'] = strtolower($value);

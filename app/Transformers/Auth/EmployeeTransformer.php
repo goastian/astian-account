@@ -40,7 +40,7 @@ class EmployeeTransformer extends TransformerAbstract
             'nombre' => $user->name,
             'apellido' => $user->last_name,
             'correo' => $user->email,
-            'documento' => $user->document_type,
+            'documento' => strtoupper($user->document_type),
             'numero' => $user->document_number,
             'pais' => $user->country,
             'departamento' => $user->department,
