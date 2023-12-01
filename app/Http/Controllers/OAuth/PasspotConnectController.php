@@ -34,7 +34,7 @@ class PasspotConnectController extends GlobalController
      */
     public function check_authentication(Request $request)
     {
-        $this->verify_transaction($request);
+        //$this->verify_transaction($request);
     }
 
     /**
@@ -44,7 +44,7 @@ class PasspotConnectController extends GlobalController
      */
     public function check_scope(Request $request)
     {
-        $this->verify_transaction($request);
+       // $this->verify_transaction($request);
     }
 
     /**
@@ -54,7 +54,7 @@ class PasspotConnectController extends GlobalController
      */
     public function check_scopes(Request $request)
     {
-        $this->verify_transaction($request);
+       // $this->verify_transaction($request);
     }
 
     /**
@@ -64,7 +64,7 @@ class PasspotConnectController extends GlobalController
      */
     public function check_client_credentials(Request $request)
     {
-        $this->verify_transaction($request);
+        //$this->verify_transaction($request);
     }
 
     /**
@@ -76,7 +76,7 @@ class PasspotConnectController extends GlobalController
      */
     public function token_can(Request $request)
     {
-        $this->verify_transaction($request);
+       // $this->verify_transaction($request);
 
         $scope = $request->header('X-SCOPE');
 
@@ -92,10 +92,10 @@ class PasspotConnectController extends GlobalController
      */
     public function auth(Request $request)
     {
-        if ($request->header('Authorization')) {
+        /*if ($request->header('Authorization')) {
 
             $this->verify_transaction($request);
-        }
+        }*/
 
         return $this->authenticated_user()['data'];
     }
