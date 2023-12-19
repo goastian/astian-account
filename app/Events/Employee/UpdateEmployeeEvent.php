@@ -15,19 +15,19 @@ class UpdateEmployeeEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $id = null;
+    public $soket = null;
 
-    public $data = null;
+    public $user = null;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($id, $data = null)
+    public function __construct($user = null)
     {
-        $this->id =$id;
-        $this->data = $data;
+        $this->soket = uniqid();
+        $this->user = $user;
     }
 
     /**

@@ -3,7 +3,7 @@ import App from "./App.vue";
 
 import { router } from "./config/rutes.js";
 import { components } from "./config/globalComponents";
-import { $channels, $echo } from "./config/laravelEcho";
+import { $channels, $echo } from "./config/echo.js";
 
 import "./bootstrap";
 import "../scss/app.scss";

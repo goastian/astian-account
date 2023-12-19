@@ -4,7 +4,7 @@
             <tr v-for="(item, index) in tokens" :key="index">
                 <td>
                     <span class="px-1" v-for="(scope, index) in item.scopes"
-                        >{{ scope }} <br v-if="index % 5 == 0">
+                        >{{ scope }} <br v-if="index % 5 == 0" />
                     </span>
                 </td>
 
@@ -60,7 +60,7 @@ export default {
         listenEvents() {
             this.$echo
                 .private(this.$channels.ch_1(window.$auth.id))
-                .listen(".RevokeCredentialsEvent", (e) => {
+                .listen("RevokeCredentialsEvent", (e) => {
                     this.getTokens();
                 });
         },

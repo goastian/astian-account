@@ -93,22 +93,32 @@ export default {
         listenEvents() {
             this.$echo
                 .private(this.$channels.ch_0())
-                .listen(".UpdateEmployeeEvent", (e) => {
+                .listen("UpdateEmployeeEvent", (e) => {
                     this.getUsers();
-                })
-                .listen(".StoreEmployeeEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("StoreEmployeeEvent", (e) => {
                     this.getUsers();
-                })
-                .listen(".EnableEmployeeEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("EnableEmployeeEvent", (e) => {
                     this.getUsers();
-                })
-                .listen(".DisableEmployeeEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("DisableEmployeeEvent", (e) => {
                     this.getUsers();
-                })
-                .listen(".StoreEmployeeRoleEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("StoreEmployeeRoleEvent", (e) => {
                     this.getUsers();
-                })
-                .listen(".DestroyEmployeeRoleEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("DestroyEmployeeRoleEvent", (e) => {
                     this.getUsers();
                 });
         },

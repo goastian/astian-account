@@ -80,13 +80,17 @@ export default {
         listenEvent() {
             this.$echo
                 .private(this.$channels.ch_0())
-                .listen(".StoreRoleEvent", (e) => {
+                .listen("StoreRoleEvent", (e) => {
                     this.getScopes(this.actual_page);
-                })
-                .listen(".UpdateRoleEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("UpdateRoleEvent", (e) => {
                     this.getScopes(this.actual_page);
-                })
-                .listen(".DestroyRoleEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("DestroyRoleEvent", (e) => {
                     this.getScopes(this.actual_page);
                 });
         },
