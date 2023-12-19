@@ -73,10 +73,12 @@ export default {
         listenChannels() {
             this.$echo
                 .private(this.$channels.ch_0())
-                .listen(".StoreBroadcastEvent", (e) => {
+                .listen("StoreBroadcastEvent", (e) => {
                     this.updateList();
-                })
-                .listen(".DestroyBroadcastEvent", (e) => {
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("DestroyBroadcastEvent", (e) => {
                     this.updateList();
                 });
         },

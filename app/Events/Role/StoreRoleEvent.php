@@ -16,6 +16,7 @@ class StoreRoleEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $user = null;
+    public $socket = null;
 
     /**
      * Create a new event instance.
@@ -25,6 +26,7 @@ class StoreRoleEvent implements ShouldBroadcast
     public function __construct($user = null)
     { 
         $this->user = $user;
+        $this->socket = uniqid();
     }
 
     /**
