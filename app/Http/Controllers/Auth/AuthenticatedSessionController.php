@@ -18,7 +18,6 @@ class AuthenticatedSessionController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest')->except('destroy', 'profile');
         $this->middleware('auth:api')->only('profile');
         $this->middleware('auth')->only('destroy');
     }
@@ -28,9 +27,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
+        if (request()->user()) {
+            return redirect(env('FRONTEND_URL'));
+        }
+
         $params = request()->all();
 
-        return view('auth.login', [ 'query' => $params]); 
+        return view('auth.login', ['query' => $params]);
     }
 
     /**
@@ -59,7 +62,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
         LogoutEvent::dispatch(Auth::user());
- 
+
         return $request->wantsJson() ? route('login') : redirect(env('APP_URL'));
     }
 
