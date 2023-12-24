@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'client' => \App\Http\Middleware\CheckClientCredentials::class,
         'scopes' => \App\Http\Middleware\CheckScopes::class,
         'scope' => \App\Http\Middleware\CheckForAnyScope::class,
-        'wants.json' => \App\Http\Middleware\ResponseIsJson::class
+        'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
+        'authorize' => \App\Http\Middleware\DenyGrantType::class,
     ];
 }
