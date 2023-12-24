@@ -2,12 +2,9 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController; 
 use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\OAuth\ClientAuthorizationController;
+use App\Http\Controllers\Auth\PasswordResetLinkController; 
 use Illuminate\Support\Facades\Route;
-
  
-
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 
@@ -18,6 +15,3 @@ Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])-
 Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-
-Route::get('/grant-access', [ClientAuthorizationController::class, 'grantAccess'])->name('grant.access');
-Route::get('/redirect', [ClientAuthorizationController::class, 'sendForAuthorize'])->name('send.for.authorize');
