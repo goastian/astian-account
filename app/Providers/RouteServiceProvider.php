@@ -70,7 +70,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $query = http_build_query(RouteServiceProvider::query());
 
-        return redirect(env('APP_URL') . '/grant-access?' . $query);
+        return redirect(env('APP_URL') . '/oauth/authorize?' . $query);
     }
 
     /**
@@ -80,5 +80,15 @@ class RouteServiceProvider extends ServiceProvider
     public static function query()
     {
         return request()->except(['_token', 'email', 'password']);
+    }
+
+    /**
+     *
+     */
+    public static function redirectToLogin()
+    {
+        $params = RouteServiceProvider::query();
+
+        return redirect()->route('login', $params);
     }
 }
