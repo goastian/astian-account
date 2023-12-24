@@ -8,9 +8,9 @@ Route::group([
 ], function () {
 
     Route::get('/authorize', [
-        'uses' => '\Laravel\Passport\Http\Controllers\AuthorizationController@authorize',
+        'uses' => '\App\Http\Controllers\OAuth\AuthorizationController@authorize',
         'as' => 'authorizations.authorize',
-        'middleware' => ['web'],
+        'middleware' => ['web','auth:web'],
     ]);
 
     $guard = config('passport.guard', null);
@@ -25,7 +25,6 @@ Route::group([
         Route::post('/authorize', [
             'uses' => '\Laravel\Passport\Http\Controllers\ApproveAuthorizationController@approve',
             'as' => 'authorizations.approve',
-            'middleware' => 'passport.timesup',
         ]);
 
         Route::delete('/authorize', [

@@ -25,8 +25,7 @@ Route::prefix('gateway')->group(function () {
 
 Route::prefix('oauth')->group(function () {
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
-        ->name('passport.token')
-        ->middleware('passport.csrf');
+        ->name('passport.token');
 
     Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentiasl"])
         ->name('passport.revoke-credentials');

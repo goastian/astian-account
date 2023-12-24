@@ -67,8 +67,6 @@ class Kernel extends HttpKernel
         'client' => \App\Http\Middleware\CheckClientCredentials::class,
         'scopes' => \App\Http\Middleware\CheckScopes::class,
         'scope' => \App\Http\Middleware\CheckForAnyScope::class,
-        'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
-        'passport.timesup' => \App\Http\Middleware\PassportTimesUp::class,
-        'passport.csrf' => \App\Http\Middleware\PassportCsrf::class
+        'wants.json' => \App\Http\Middleware\ResponseIsJson::class
     ];
 }

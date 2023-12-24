@@ -2,25 +2,26 @@
 
 namespace App\Exceptions;
 
-use Elyerr\ApiResponse\Exceptions\ReportError;
-use Illuminate\Auth\Access\AuthorizationException;
+use Throwable;
+use Psr\Log\LogLevel;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Router;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
-use Illuminate\Routing\Router;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
-use Psr\Log\LogLevel;
-use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Illuminate\Database\RecordsNotFoundException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Throwable;
+use Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
 
 class Handler extends ExceptionHandler
 {
@@ -83,6 +84,11 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof AuthorizationException) {
             throw new ReportError(__("No cuenta con los persmios requeridos"), 403);
+        }
+
+        if ($e instanceof OAuthAuthenticationException) {
+             
+             return RouteServiceProvider::redirectToLogin();
         }
 
         if (method_exists($e, 'render') && $response = $e->render($request)) {
