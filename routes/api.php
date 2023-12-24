@@ -20,12 +20,12 @@ Route::prefix('gateway')->group(function () {
     Route::get('/token-can', [PasspotConnectController::class, 'token_can']);
     Route::get('/user', [PasspotConnectController::class, 'auth']);
     Route::post('/logout', [AuthorizationController::class, 'destroy']);
-
 });
 
 Route::prefix('oauth')->group(function () {
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
-        ->name('passport.token');
+        ->name('passport.token')
+        ->middleware('authorize');
 
     Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentiasl"])
         ->name('passport.revoke-credentials');
