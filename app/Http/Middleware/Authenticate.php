@@ -37,7 +37,7 @@ class Authenticate extends Middleware
 
         if (strpos($URI, 'gateway')) {
 
-            throw new ReportError("Por favor para consumir el cliente debes tener credenciales validas", 401);
+            throw new ReportError(__("Unauthorized"), 401);
         }
     }
 
