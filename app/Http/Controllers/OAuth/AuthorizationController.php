@@ -1,21 +1,43 @@
 <?php
 namespace App\Http\Controllers\OAuth;
 
+use App\Exceptions\OAuthAuthenticationException;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; 
+use Illuminate\Support\Str;
 use Laravel\Passport\Bridge\User;
-use Laravel\Passport\TokenRepository;
-use Laravel\Passport\ClientRepository; 
-use Psr\Http\Message\ServerRequestInterface; 
-use App\Exceptions\OAuthAuthenticationException; 
-use Nyholm\Psr7\Response as Psr7Response;
-use League\OAuth2\Server\Exception\OAuthServerException;
+use Laravel\Passport\ClientRepository;
+use Laravel\Passport\Contracts\AuthorizationViewResponse;
 use Laravel\Passport\Http\Controllers\AuthorizationController as Controller;
+use Laravel\Passport\TokenRepository;
+use League\OAuth2\Server\AuthorizationServer;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use Nyholm\Psr7\Response as Psr7Response;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AuthorizationController extends Controller
 {
-   
-  /**
+
+    use Scopes;
+
+    /**
+     * Create a new controller instance.
+     *
+     * @param  \League\OAuth2\Server\AuthorizationServer  $server
+     * @param  \Illuminate\Contracts\Auth\StatefulGuard  $guard
+     * @param  \Laravel\Passport\Contracts\AuthorizationViewResponse  $response
+     * @return void
+     */
+    public function __construct(AuthorizationServer $server,
+        StatefulGuard $guard,
+        AuthorizationViewResponse $response) {
+        parent::__construct($server, $guard, $response);
+        
+        $this->scopes_can_granted(request());    
+        
+    }
+
+    /**
      * Authorize a client to access the user's account.
      *
      * @param  \Psr\Http\Message\ServerRequestInterface  $psrRequest
@@ -25,22 +47,22 @@ class AuthorizationController extends Controller
      * @return \Illuminate\Http\Response|\Laravel\Passport\Contracts\AuthorizationViewResponse
      */
     public function authorize(ServerRequestInterface $psrRequest,
-                              Request $request,
-                              ClientRepository $clients,
-                              TokenRepository $tokens)
-    {
+        Request $request,
+        ClientRepository $clients,
+        TokenRepository $tokens) {
+    
         $authRequest = $this->withErrorHandling(function () use ($psrRequest) {
             return $this->server->validateAuthorizationRequest($psrRequest);
         });
 
         if ($this->guard->guest()) {
             return $request->get('prompt') === 'none'
-                    ? $this->denyRequest($authRequest)
-                    : $this->promptForLogin($request);
+            ? $this->denyRequest($authRequest)
+            : $this->promptForLogin($request);
         }
 
         if ($request->get('prompt') === 'login' &&
-            ! $request->session()->get('promptedForLogin', false)) {
+            !$request->session()->get('promptedForLogin', false)) {
             $this->guard->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -53,9 +75,9 @@ class AuthorizationController extends Controller
         $scopes = $this->parseScopes($authRequest);
 
         $user = $this->guard->user();
-        
+
         $client = $clients->find($authRequest->getClient()->getIdentifier());
-        
+
         if ($request->get('prompt') !== 'consent' &&
             ($client->skipsAuthorization() || $this->hasValidToken($tokens, $user, $client, $scopes))) {
             return $this->approveRequest($authRequest, $user);
@@ -77,8 +99,7 @@ class AuthorizationController extends Controller
         ]);
     }
 
-
-     /**
+    /**
      * Prompt the user to login by throwing an OAuthAuthenticationException.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,13 +107,11 @@ class AuthorizationController extends Controller
      * @throws \App\Exceptions\OAuthAuthenticationException
      */
     protected function promptForLogin($request)
-    { 
+    {
         $request->session()->put('promptedForLogin', true);
- 
+
         throw new OAuthAuthenticationException;
     }
-
-
 
     /**
      * Deny the authorization request.
@@ -102,24 +121,23 @@ class AuthorizationController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected function denyRequest($authRequest, $user = null)
-    {   
+    {
         if (is_null($user)) {
-            $uri = $authRequest->getRedirectUri()
-            ?? (is_array($authRequest->getClient()->getRedirectUri())
-            ? $authRequest->getClient()->getRedirectUri()[0]
-                    : $authRequest->getClient()->getRedirectUri());
-                    
+            $uri = $authRequest->getRedirectUri() ?? (is_array($authRequest->getClient()->getRedirectUri())
+                ? $authRequest->getClient()->getRedirectUri()[0]
+                : $authRequest->getClient()->getRedirectUri());
+
             $separator = $authRequest->getGrantTypeId() === 'implicit' ? '#' : '?';
 
-            $uri = $uri.(str_contains($uri, $separator) ? '&' : $separator).'state='.$authRequest->getState();
-            
+            $uri = $uri . (str_contains($uri, $separator) ? '&' : $separator) . 'state=' . $authRequest->getState();
+
             return $this->withErrorHandling(function () use ($uri) {
                 throw OAuthServerException::accessDenied('Unauthenticated', $uri);
             });
         }
-         
+
         $authRequest->setUser(new User($user->getAuthIdentifier()));
-         
+
         $authRequest->setAuthorizationApproved(true);
 
         return $this->withErrorHandling(function () use ($authRequest) {
@@ -128,4 +146,26 @@ class AuthorizationController extends Controller
             );
         });
     }
+
+    /**
+     * verifica los scopes entrantes y solo asignara al los que el cliente tenga acceso
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return string
+     */
+    public function scopes_can_granted(Request $request)
+    {
+        $scopes_accepted = [];
+        $request_scopes = explode(' ', $request->scope);
+        $owner_scopes = collect($this->scopes())->pluck('id');
+
+        foreach ($owner_scopes as $key) {
+            if (in_array($key, $request_scopes)) {
+                array_push($scopes_accepted, $key);
+            }
+        }
+
+        $request->merge(['scope' => implode(" ", $scopes_accepted)]);
+    }
+
 }
