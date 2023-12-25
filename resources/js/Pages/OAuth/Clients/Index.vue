@@ -2,13 +2,23 @@
     <div class="container-fluid">
         <v-register-client @client-registered="getClients"></v-register-client>
 
-        <v-table :items="items" class="text-sm table-sm text-center py-0" style="width: 70%; margin: auto;">
+        <v-table
+            :items="items"
+            class="text-sm table-sm text-center py-0"
+            style="width: 70%; margin: auto"
+        >
             <template v-slot:body>
                 <tr
                     v-for="(item, index) in clients"
                     :key="index"
                     class="align-middle"
                 >
+                    <td>
+                        {{ item.id }}
+                    </td>
+                    <td>
+                        {{ item.secret }}
+                    </td>
                     <td>
                         {{ item.name }}
                     </td>
@@ -36,20 +46,20 @@
     </div>
 </template>
 <script>
-import VRegisterClient from "./RegisterClient.vue"
-import VRemove from "./RemoveClient.vue" 
-import VUpdate from "./UpdateClient.vue"
+import VRegisterClient from "./RegisterClient.vue";
+import VRemove from "./RemoveClient.vue";
+import VUpdate from "./UpdateClient.vue";
 
 export default {
-    components: { 
+    components: {
         VRegisterClient,
         VRemove,
-        VUpdate
+        VUpdate,
     },
 
     data() {
         return {
-            items: ["name", "redirect"],
+            items: ["id", "secret", "name", "redirect"],
             clients: {},
         };
     },
