@@ -40,7 +40,7 @@
                                     class="px-2 text-light"
                                     style="text-decoration: none"
                                     :to="{ name: 'info' }"
-                                    >Configuracion</router-link
+                                    >Security</router-link
                                 >
                             </li>
                             <li>

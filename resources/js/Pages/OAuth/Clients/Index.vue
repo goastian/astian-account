@@ -5,7 +5,7 @@
         <v-table
             :items="items"
             class="text-sm table-sm text-center py-0"
-            style="width: 70%; margin: auto"
+            style="width: 100%; margin: auto"
         >
             <template v-slot:body>
                 <tr
@@ -27,7 +27,7 @@
                     </td>
                     <td class=" ">
                         <button
-                            class="btn btn-primary btn-sm"
+                            class="btn btn-primary btn-sm mx-1"
                             @click="redirectForAuthorize(item)"
                         >
                             Authorizar
