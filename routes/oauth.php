@@ -28,8 +28,8 @@ Route::group([
         ]);
 
         Route::delete('/authorize', [
-            'uses' => '\Laravel\Passport\Http\Controllers\DenyAuthorizationController@deny',
-            'as' => 'authorizations.deny',
+            'uses' => '\App\Http\Controllers\OAuth\DenyAuthorizationController@deny',
+            'as' => 'authorizations.deny'
         ]);
 
         Route::get('/tokens', [
