@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Listeners\Auth;
-
-use App\Events\Auth\LoginEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
+ 
 use Illuminate\Queue\InteractsWithQueue;
+use Elyerr\ApiResponse\Events\LoginEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class LoginListener
+class LoginListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -28,4 +28,13 @@ class LoginListener
     {
         //
     }
+
+    /**
+     * Get the name of the listener's queue.
+     */
+    public function viaQueue(): string
+    {
+        return env('REDIS_QUEUE_EVENTS', 'events');
+    }
+    
 }
