@@ -3,10 +3,11 @@
 namespace App\Listeners\Employee;
 
 use App\Events\Employee\DisableEmployeeEvent;
+use App\Notifications\Auth\UserDisableNotification;
+use App\Notifications\Client\ClientDisableNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class DisableEmployeeListener
+class DisableEmployeeListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -26,7 +27,11 @@ class DisableEmployeeListener
      */
     public function handle(DisableEmployeeEvent $event)
     {
-        //
+        if ($event->user->client) {
+            $event->user->notify(new ClientDisableNotification());
+        } else {
+            $event->user->notify(new UserDisableNotification());
+        }
     }
 
     /**

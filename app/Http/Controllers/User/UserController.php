@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\Employee\DestroyEmployeeEvent;
 use App\Events\Employee\DisableEmployeeEvent;
 use App\Events\Employee\EnableEmployeeEvent;
 use App\Events\Employee\StoreEmployeeEvent;
@@ -11,10 +10,7 @@ use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Employee\StoreRequest;
 use App\Http\Requests\Employee\UpdateRequest;
 use App\Models\User\Employee;
-use App\Notifications\Client\DestroyClientNotification;
 use App\Notifications\Employee\CreatedNewUser;
-use DateInterval;
-use DateTime;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Error;
 use Illuminate\Http\Request;
@@ -188,19 +184,38 @@ class UserController extends Controller
      */
     public function disable(Request $request, Employee $user)
     {
+        /**
+         * si no es cliente no podra desactivarse a si mismo
+         */
         if (!$user->isClient() and $request->user()->id == $user->id) {
             throw new ReportError(__("Can´t disable by yourself"), 406);
         }
 
-        $tokens = $user->tokens;
+        /**
+         * si no es cliente no podra desactivar clientes
+         */
+        if (!$request->user()->isClient() and $user->isClient()) {
+            throw new ReportError(__("Unauthorize"), 403);
+        }
 
-        $this->removeCredentials($tokens);
+        /**
+         * si es un cliente se podra desactivar solo a si mismo
+         */
+        if ($request->user()->isClient() and $request->user()->id != $user->id) {
+            throw new ReportError(__("Unauthorize"), 403);
+        }
 
-        $user->delete();
+        DB::transaction(function () use ($user) {
 
-        //send an email to notify to remove his account
+            $tokens = $user->tokens;
 
-        DisableEmployeeEvent::dispatch();
+            $this->removeCredentials($tokens);
+
+            $user->delete();
+
+            DisableEmployeeEvent::dispatch($user);
+
+        });
 
         return $this->showOne($user, $user->transformer);
     }
