@@ -6,7 +6,7 @@ use App\Events\Broadcast\DestroyBroadcastEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DestroyBroadcastListener
+class DestroyBroadcastListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -23,4 +23,13 @@ class DestroyBroadcastListener
     {
         //
     }
+
+    /**
+     * Get the name of the listener's queue.
+     */
+    public function viaQueue(): string
+    {
+        return env('REDIS_QUEUE_EVENTS', 'events');
+    }
+
 }
