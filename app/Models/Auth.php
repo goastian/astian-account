@@ -38,12 +38,12 @@ class Auth extends Authenticatable
         'last_name',
         'email',
         'password',
-        'document_type',
-        'document_number',
         'country',
-        'department',
+        'city',
         'address',
         'phone',
+        'birthday',
+        'client',
     ];
 
     /**
@@ -53,7 +53,6 @@ class Auth extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -62,7 +61,7 @@ class Auth extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'verified_at' => 'datetime',
     ];
 
     public function setNameAttribute($value)
@@ -80,17 +79,14 @@ class Auth extends Authenticatable
         $this->attributes['email'] = strtolower($value);
     }
 
-    public function setDocumentTypeAttribute($value){
-        $this->attributes['document_type'] = strtolower($value);
-    }
-
-     public function getDocumentTypeAttribute($value){
-        return strtoupper($value);
-    }
-
     public function setCountryAttribute($value)
     {
         $this->attributes['country'] = strtolower($value);
+    }
+
+     public function setCityAttribute($value)
+    {
+        $this->attributes['city'] = strtolower($value);
     }
 
     public function setDepartmentAttribute($value)
@@ -109,6 +105,14 @@ class Auth extends Authenticatable
     public function isAdmin()
     {
         return $this->roles()->get()->contains('name', 'admin');
+    }
+
+    /**
+     * verify if the user is a client
+     * @return boolean
+     */
+    public function isClient(){
+        return $this->client;
     }
     
     /**

@@ -1,6 +1,5 @@
 <?php
 
-use App\Enum\EnumType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,12 +19,13 @@ return new class extends Migration
             $table->string('last_name', 100);
             $table->string('email', 100)->unique();
             $table->string('password');
-            $table->string('document_type');
-            $table->string('document_number', 12);
-            $table->string('country', 100);
-            $table->string('department', 100);
-            $table->string('address', 150);
-            $table->string('phone', 15);
+            $table->string('country', 100)->nullable();
+            $table->string('city', 100)->nullable();
+            $table->string('address', 150)->nullable();
+            $table->string('phone', 15)->nullable();
+            $table->date('birthday')->nullable();
+            $table->date('verified_at')->nullable();
+            $table->boolean('client')->default(1);
             $table->timestamps();
             $table->softDeletes(); 
             $table->primary('id');

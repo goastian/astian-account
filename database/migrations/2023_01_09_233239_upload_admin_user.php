@@ -44,11 +44,8 @@ return new class extends Migration
             'last_name' => 'admin',
             'email' => 'test@admin.com',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',//password
-            'document_type' => 'DNI',
-            'document_number' => '00000000',
-            'country' => 'peru',
-            'department' => 'lima',
             'address' => 'su casa en la tierra',
+            'client' => 0,
             'phone' => '789526352',
         ])->save();
 
