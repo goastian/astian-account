@@ -30,6 +30,10 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Employee\EnableEmployeeListener::class,
         ],
 
+        \App\Events\Employee\DestroyEmployeeEvent::class => [
+            \App\Listeners\Employee\DestroyEmployeeListener::class,
+        ],
+
         \App\Events\Employee\StoreEmployeeRoleEvent::class => [
             \App\Listeners\Employee\StoreEmployeeRoleListener::class,
         ],
