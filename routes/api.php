@@ -8,6 +8,7 @@ use App\Http\Controllers\OAuth\PasspotConnectController;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRoleController;
+use App\Models\User\Employee;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 
@@ -40,7 +41,6 @@ Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name(
 Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
 Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
 Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
-Route::get('document-type', [EnumType::class, 'documento_type']);
 
 /**
  * rutas que permiten administrar los canales de difusion dentro 
