@@ -84,7 +84,7 @@ class Auth extends Authenticatable
         $this->attributes['country'] = strtolower($value);
     }
 
-     public function setCityAttribute($value)
+    public function setCityAttribute($value)
     {
         $this->attributes['city'] = strtolower($value);
     }
@@ -99,7 +99,7 @@ class Auth extends Authenticatable
         $this->attributes['address'] = strtolower($value);
     }
 
-     /**
+    /**
      * verifica si contiene el role de administrador
      */
     public function isAdmin()
@@ -111,10 +111,11 @@ class Auth extends Authenticatable
      * verify if the user is a client
      * @return boolean
      */
-    public function isClient(){
+    public function isClient()
+    {
         return $this->client;
     }
-    
+
     /**
      * Send the password reset notification.
      *
@@ -124,5 +125,5 @@ class Auth extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
-    } 
+    }
 }
