@@ -11,6 +11,8 @@ use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 
 class ResetPassword extends  ResetPasswordNotification implements ShouldQueue
 {
+    use Queueable;
+    
     /**
      * The password reset token.
      *
@@ -41,6 +43,9 @@ class ResetPassword extends  ResetPasswordNotification implements ShouldQueue
     public function __construct($token)
     {
         $this->token = $token;
+
+        $this->queue = env('REDIS_QUEUE_NOTIFICATIONS', 'notify');
+
     }
 
     /**
