@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('address', 150)->nullable();
             $table->string('phone', 15)->nullable();
             $table->date('birthday')->nullable();
-            $table->date('verified_at')->nullable();
+            $table->datetime('verified_at')->nullable();
             $table->boolean('client')->default(1);
             $table->timestamps();
             $table->softDeletes(); 
