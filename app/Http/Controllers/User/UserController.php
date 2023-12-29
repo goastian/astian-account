@@ -69,6 +69,7 @@ class UserController extends Controller
 
             $user = $user->fill($request->except('password', 'role'));
             $user->client = 0;
+            $user->verified_at = now();
             $user->password = Hash::make($temp_password);
             $user->save();
 
