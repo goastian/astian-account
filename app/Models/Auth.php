@@ -3,13 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Elyerr\ApiResponse\Assets\Asset;
-use Illuminate\Auth\Notifications\ResetPassword;
+use Laravel\Passport\HasApiTokens;
+use Elyerr\ApiResponse\Assets\Asset; 
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\Auth\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
 
 class Auth extends Authenticatable
 {
