@@ -68,6 +68,11 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Broadcast\DestroyBroadcastEvent::class => [
             \App\Listeners\Broadcast\DestroyBroadcastListener::class,
         ],
+
+        //clients
+        \App\Events\Client\StoreClientEvent::class => [
+            \App\Listeners\Client\StoreClientListener::class
+        ]
     ];
 
     /**

@@ -1,15 +1,16 @@
 <?php
 
 use App\Enum\EnumType;
-use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\Broadcasting\BroadcastController;
-use App\Http\Controllers\OAuth\CredentialsController;
-use App\Http\Controllers\OAuth\PasspotConnectController;
+use App\Models\User\Employee;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserRoleController;
-use App\Models\User\Employee;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OAuth\CredentialsController;
+use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\Auth\RegisterClientController;
+use App\Http\Controllers\OAuth\PasspotConnectController;
+use App\Http\Controllers\Broadcasting\BroadcastController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 //gateways
@@ -47,3 +48,9 @@ Route::resource('users.roles', UserRoleController::class)->only('index', 'store'
  * del sistema a traves de eventos
  */
 Route::resource('broadcasts', BroadcastController::class)->only('index','store', 'destroy');
+
+
+/**
+ * registro de clientes
+ */
+Route::post('/register', [RegisterClientController::class, 'store'])->name('client.register');
