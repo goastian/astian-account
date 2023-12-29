@@ -58,6 +58,7 @@ class Employee extends Auth
         $fecha = $now->format('Y-m-d H:i:s');
 
         $deleted = DB::table('employees')
+            ->where('client', 1)
             ->where('verified_at', null)
             ->where('created_at', "<", $fecha)
             ->delete();
