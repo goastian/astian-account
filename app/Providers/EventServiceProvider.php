@@ -13,6 +13,15 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
 
+        //login
+        \App\Events\Auth\LoginEvent::class => [
+            \App\Listeners\Auth\LoginListener::class,
+        ],
+
+         \App\Events\Auth\LogoutEvent::class => [
+            \App\Listeners\Auth\LogoutListener::class,
+        ],
+
         //Employee
         \App\Events\Employee\StoreEmployeeEvent::class => [
             \App\Listeners\Employee\StoreEmployeeListener::class,
@@ -72,7 +81,11 @@ class EventServiceProvider extends ServiceProvider
         //clients
         \App\Events\Client\StoreClientEvent::class => [
             \App\Listeners\Client\StoreClientListener::class
-        ]
+        ],
+
+        \App\Events\Client\RemoveSessionEvent::class => [
+            \App\Listeners\Client\RemoveSessionListener::class
+        ],
     ];
 
     /**
