@@ -2,8 +2,8 @@
 
 namespace App\Listeners\Auth;
  
-use Illuminate\Queue\InteractsWithQueue;
-use Elyerr\ApiResponse\Events\LogoutEvent;
+use App\Events\Auth\LogoutEvent;
+use Illuminate\Queue\InteractsWithQueue; 
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class LogoutListener implements ShouldQueue

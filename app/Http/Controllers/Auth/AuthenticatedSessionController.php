@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use App\Transformers\Auth\EmployeeTransformer;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Elyerr\ApiResponse\Events\LoginEvent;
-use Elyerr\ApiResponse\Events\LogoutEvent;
 use Illuminate\Http\Request;
+use App\Events\Auth\LoginEvent;
+use App\Events\Auth\LogoutEvent;
 use Illuminate\Support\Facades\Auth;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use App\Transformers\Auth\EmployeeTransformer;
+use App\Http\Controllers\GlobalController as Controller;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -45,7 +45,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        LoginEvent::dispatch(Auth::user());
+        LoginEvent::dispatch($this->authenticated_user());
 
         return RouteServiceProvider::home();
     }
@@ -61,7 +61,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        LogoutEvent::dispatch(Auth::user());
+        LogoutEvent::dispatch($this->authenticated_user());
 
         return $request->wantsJson() ? route('login') : redirect(env('APP_URL'));
     }

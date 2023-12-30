@@ -1,17 +1,15 @@
 <?php
 
-namespace App\Listeners\Auth;
- 
-use App\Events\Auth\LoginEvent;
-use Illuminate\Queue\InteractsWithQueue; 
-use Illuminate\Contracts\Queue\ShouldQueue;
+namespace App\Listeners\Client;
 
-class LoginListener implements ShouldQueue
+use App\Events\Client\RemoveSessionEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+
+class RemoveSessionListener implements ShouldQueue
 {
     /**
      * Create the event listener.
-     *
-     * @return void
      */
     public function __construct()
     {
@@ -20,21 +18,17 @@ class LoginListener implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  \App\Events\Auth\LoginEvent  $event
-     * @return void
      */
-    public function handle(LoginEvent $event)
+    public function handle(RemoveSessionEvent $event): void
     {
         //
     }
 
-    /**
+     /**
      * Get the name of the listener's queue.
      */
     public function viaQueue(): string
     {
         return env('REDIS_QUEUE_EVENTS', 'events');
     }
-    
 }

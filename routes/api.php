@@ -7,6 +7,7 @@ use App\Http\Controllers\User\UserRoleController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Auth\RegisterClientController;
+use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
@@ -47,8 +48,12 @@ Route::resource('users.roles', UserRoleController::class)->only('index', 'store'
  */
 Route::resource('broadcasts', BroadcastController::class)->only('index','store', 'destroy');
 
-
 /**
  * registro de clientes
  */
 Route::post('/register', [RegisterClientController::class, 'store'])->name('client.register');
+
+/**
+ * sessiones
+ */
+Route::resource('/sessions', SessionController::class)->only('index', 'destroy');
