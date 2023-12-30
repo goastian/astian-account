@@ -1,7 +1,5 @@
 <?php
 
-use App\Enum\EnumType;
-use App\Models\User\Employee;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
