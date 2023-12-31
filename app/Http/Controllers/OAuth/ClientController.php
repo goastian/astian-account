@@ -32,9 +32,9 @@ class ClientController extends Controller
             return $clients;
         }
 
-        $clients->each(function ($client) {
+       /* $clients->each(function ($client) {
             $client->secret = Hash::make($client->secret);
-        });
+        });*/
 
         return $clients->makeVisible('secret');
     }
