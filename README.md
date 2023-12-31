@@ -3,3 +3,8 @@
 # [Astian Account Server](https://astian.org)
 
 [Astian](https://astian.org) Account Server is a service to unify the entire authentication and authorization process for Astian services.
+
+#### MIRRORS
+- Mirror 1 : [Gitlab](https://gitlab.com/elyerr/midori-server)
+- Mirror 2 : [Github](https://github.com/goastian/astian-account)
+- Mirror 3 : [Github by Elyerr](https://github.com/elyerr/midori-server)
