@@ -1,14 +1,15 @@
 <?php
 
 use App\Enum\EnumType;
-use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\Broadcasting\BroadcastController;
-use App\Http\Controllers\OAuth\CredentialsController;
-use App\Http\Controllers\OAuth\PasspotConnectController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\RoleController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\User\UserRoleController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OAuth\CredentialsController;
+use App\Http\Controllers\Auth\AuthorizationController;
+use App\Http\Controllers\OAuth\PasspotConnectController;
+use App\Http\Controllers\Broadcasting\BroadcastController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 //gateways
@@ -47,3 +48,8 @@ Route::get('document-type', [EnumType::class, 'documento_type']);
  * del sistema a traves de eventos
  */
 Route::resource('broadcasts', BroadcastController::class)->only('index','store', 'destroy');
+
+/**
+ * sessiones
+ */
+Route::resource('/sessions', SessionController::class)->only('index', 'destroy');

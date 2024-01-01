@@ -64,6 +64,11 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Broadcast\DestroyBroadcastEvent::class => [
             \App\Listeners\Broadcast\DestroyBroadcastListener::class,
         ],
+
+        //session
+        \App\Events\Auth\RemoveSessionEvent::class => [
+            \App\Listeners\Auth\RemoveSessionListener::class,
+        ],
     ];
 
     /**
