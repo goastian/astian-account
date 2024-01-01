@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('department', 100);
             $table->string('address', 150);
             $table->string('phone', 15);
+            $table->boolean('m2fa')->default(0);
+            $table->boolean('totp')->default(0);
             $table->timestamps();
             $table->softDeletes(); 
             $table->primary('id');
