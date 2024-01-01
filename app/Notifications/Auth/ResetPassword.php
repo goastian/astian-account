@@ -11,6 +11,8 @@ use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 
 class ResetPassword extends  ResetPasswordNotification implements ShouldQueue
 {
+    use Queueable;
+    
     /**
      * The password reset token.
      *
