@@ -6,7 +6,7 @@ use App\Events\Auth\LoginEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class LoginListener
+class LoginListener implements ShouldQueue
 {
     /**
      * Create the event listener.

@@ -6,7 +6,7 @@ use App\Events\Token\DestroyTokenEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DestroyTokenListener
+class DestroyTokenListener implements ShouldQueue
 {
     /**
      * Create the event listener.

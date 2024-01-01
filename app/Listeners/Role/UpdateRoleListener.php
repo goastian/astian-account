@@ -6,7 +6,7 @@ use App\Events\Role\UpdateRoleEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateRoleListener
+class UpdateRoleListener implements ShouldQueue
 {
     /**
      * Create the event listener.

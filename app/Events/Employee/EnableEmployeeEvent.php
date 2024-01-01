@@ -15,9 +15,15 @@ class EnableEmployeeEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $socket = null;
+    /**
+     * @var Employee
+     */
+    public $user;
 
-    public $user = null;
+    /**
+     * @var String
+     */
+    public $socket;
 
     /**
      * Create a new event instance.

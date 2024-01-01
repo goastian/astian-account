@@ -5,8 +5,7 @@ namespace App\Listeners\Employee;
 use App\Events\Employee\StoreEmployeeEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
-
-class StoreEmployeeListener
+class StoreEmployeeListener implements ShouldQueue
 {
     /**
      * Create the event listener.
