@@ -6,7 +6,7 @@ use App\Events\Employee\UpdateEmployeeEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateEmployeeListener
+class UpdateEmployeeListener implements ShouldQueue
 {
     /**
      * Create the event listener.

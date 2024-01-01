@@ -6,7 +6,7 @@ use App\Events\Token\StoreTokenEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class StoreTokenListener
+class StoreTokenListener implements ShouldQueue
 {
     /**
      * Create the event listener.

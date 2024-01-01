@@ -6,7 +6,7 @@ use App\Events\Broadcast\DestroyBroadcastEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DestroyBroadcastListener
+class DestroyBroadcastListener implements ShouldQueue
 {
     /**
      * Create the event listener.

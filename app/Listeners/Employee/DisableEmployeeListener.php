@@ -6,7 +6,7 @@ use App\Events\Employee\DisableEmployeeEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DisableEmployeeListener
+class DisableEmployeeListener implements ShouldQueue
 {
     /**
      * Create the event listener.

@@ -6,7 +6,7 @@ use App\Events\Role\StoreRoleEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class StoreRoleListener
+class StoreRoleListener implements ShouldQueue
 {
     /**
      * Create the event listener.

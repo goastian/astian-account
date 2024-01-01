@@ -6,7 +6,7 @@ use App\Events\OAuth\RevokeCredentialsEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class RevokeCredentialsListener
+class RevokeCredentialsListener implements ShouldQueue
 {
     /**
      * Create the event listener.

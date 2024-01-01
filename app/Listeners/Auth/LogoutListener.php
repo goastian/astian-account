@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Listeners\Auth;
-
+ 
 use App\Events\Auth\LogoutEvent;
+use Illuminate\Queue\InteractsWithQueue; 
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class LogoutListener
+class LogoutListener implements ShouldQueue
 {
     /**
      * Create the event listener.

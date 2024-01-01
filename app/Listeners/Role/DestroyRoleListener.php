@@ -6,7 +6,7 @@ use App\Events\Role\DestroyRoleEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DestroyRoleListener
+class DestroyRoleListener implements ShouldQueue
 {
     /**
      * Create the event listener.
