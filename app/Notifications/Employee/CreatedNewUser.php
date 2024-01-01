@@ -11,8 +11,10 @@ class CreatedNewUser extends Notification implements ShouldQueue
 {
     use Queueable;
     
-
-    public $password = null;
+    /**
+     * @var String
+     */
+    public $password;
 
     /**
      * Create a new notification instance.
