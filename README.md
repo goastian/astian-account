@@ -7,3 +7,5 @@ Servidor de autorización centralizado usando aouth-sever a través de laravel y
 ##### [ECHO SERVER](https://gitlab.com/elyerr/echo-server)
 ##### [ECHO CLIENT](https://gitlab.com/elyerr/echo-client-js)
 ##### [LARAVEL FRAMEWORK DOCUMENTACION](https://laravel.com/docs/10.x)
+
+##### [CONTACTO DIRECTO](https://t.me/elyerr)
