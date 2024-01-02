@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
         'scope' => \App\Http\Middleware\CheckForAnyScope::class,
         'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
         'authorize' => \App\Http\Middleware\DenyGrantType::class,
+        '2fa-mail' => \App\Http\Middleware\Auth2faMiddleware::class
     ];
 }
