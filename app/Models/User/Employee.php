@@ -9,7 +9,9 @@ use App\Transformers\Auth\EmployeeTransformer;
 use DateInterval;
 use DateTime;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class Employee extends Auth
 {
@@ -49,7 +51,7 @@ class Employee extends Auth
     }
 
     /**
-     * remove unverified accounts 
+     * remove unverified accounts
      */
     public static function remove_clients_unverified()
     {
@@ -64,9 +66,30 @@ class Employee extends Auth
             ->delete();
 
         DB::table('password_resets')->where('created_at', '<', $fecha)->delete();
-        
+
         if ($deleted) {
             DestroyEmployeeEvent::dispatch();
         }
+    }
+
+    /**
+     * Verify the correct user and check if they have activated 2FA.
+     * 
+     * @param Request $request
+     */
+    public static function validate(Request $request)
+    {
+        $request->validate([
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
+        ]);
+
+        $user = Employee::where('email', $request->email)->first();
+
+        if ($user && $user->m2fa && Hash::check($request->password, $user->password)) {
+            return true;
+        }
+
+        return false;
     }
 }

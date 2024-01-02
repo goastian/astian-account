@@ -26,10 +26,11 @@ return new class extends Migration
             $table->date('birthday')->nullable();
             $table->datetime('verified_at')->nullable();
             $table->boolean('client')->default(1);
+            $table->boolean('m2fa')->default(0);
+            $table->boolean('totp')->default(0); 
             $table->timestamps();
-            $table->softDeletes(); 
+            $table->softDeletes();
             $table->primary('id');
-
         });
     }
 
