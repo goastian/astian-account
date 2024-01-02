@@ -20,6 +20,8 @@ class AuthenticatedSessionController extends Controller
     {
         $this->middleware('auth:api')->only('profile');
         $this->middleware('auth')->only('destroy');
+        $this->middleware('2fa-mail')->only('store');
+
     }
 
     /**
