@@ -20,13 +20,14 @@ class AuthenticatedSessionController extends Controller
     {
         $this->middleware('auth:api')->only('profile');
         $this->middleware('auth')->only('destroy');
+        $this->middleware('2fa-mail')->only('store');
     }
 
     /**
      * login del sistema
      */
     public function create()
-    {
+    { 
         if (request()->user()) {
             return redirect(env('FRONTEND_URL'));
         }

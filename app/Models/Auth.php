@@ -44,6 +44,8 @@ class Auth extends Authenticatable
         'phone',
         'birthday',
         'client',
+        'm2fa',
+        'totp'
     ];
 
     /**
@@ -125,5 +127,15 @@ class Auth extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
+    }
+
+    /**
+     * 2FA activated
+     */
+    public function activateM2FA(){
+        $this->m2fa = 1;
+
+        dd($this);
+        $this->push();
     }
 }
