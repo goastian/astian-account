@@ -1,7 +1,10 @@
 <template>
-    <div class="container-fuid mx-1">
-        <v-register @user-was-registered="getUsers"></v-register>
-        <v-search @searching="searching"></v-search>
+    <div class="mx-1">
+        <v-search @searching="searching">
+            <template v-slot:button>
+                <v-register @user-was-registered="getUsers"></v-register>
+            </template>
+        </v-search>
 
         <v-table :items="items" class="table-sm text-sm text-center">
             <template v-slot:body>

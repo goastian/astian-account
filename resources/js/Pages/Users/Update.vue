@@ -9,7 +9,7 @@
         <template v-slot:button> Detalle </template>
         <template v-slot:head> Datos del usuario {{ user.nombre }} </template>
         <template v-slot:body>
-            <div class="row">
+            <div class="row" style="font-size: 12px;">
                 <div class="row row-cols-1 col-12">
                     <div class="col">
                         <div class="row row-cols-3 col-12">
@@ -54,9 +54,7 @@
                                     name="correo"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error
-                                    :error="errors.correo"
-                                ></v-error>
+                                <v-error :error="errors.correo"></v-error>
                             </div>
 
                             <div class="col">
@@ -261,8 +259,8 @@ export default {
         addOrRemoveRoles(id) {
             this.message = null;
             this.status = null;
-            const checked = document.getElementById(id).checked; 
-            
+            const checked = document.getElementById(id).checked;
+
             if (checked) {
                 window.axios
                     .post(this.user.links.roles, { role: id })
