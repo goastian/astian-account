@@ -44,6 +44,10 @@
             <div v-show="message" class="col mt-4 text-success">
                 {{ message }}
             </div>
+
+            <div v-show="errors.message" class="col mt-4 text-danger">
+                {{ errors.message }}
+            </div>
         </div>
     </div>
 </template>
@@ -69,9 +73,13 @@ export default {
                 .post("/m2fa/authorize")
                 .then((res) => {
                     this.message = res.data.message;
+                    this.errors.message = null;
                 })
                 .catch((err) => {
-                    console.log(err.response);
+                    if (err.response) {
+                        this.errors = err.response.data;
+                        this.message = null;
+                    }
                 });
         },
 
@@ -81,12 +89,12 @@ export default {
                 .then((res) => {
                     this.user = res.data;
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
+                .catch((e) => {});
         },
 
         activar() {
+            this.errors.message = null;
+
             window.axios
                 .post("/m2fa/activate", {
                     token: this.token,

@@ -21,7 +21,7 @@
                     </router-link>
                 </ul>
             </div>
-            <div class="col">
+            <div class="col-9">
                 <router-view />
             </div>
         </div>

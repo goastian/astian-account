@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="row row-cols-2 col-sm-12">
+        <div class="row row-cols-3 col-sm-12">
             <v-update :user="user" @user-was-updated="authenticated"></v-update>
             <div class="col mb-3">
                 <span class="d-block fw-bold text-capitalize text-secondary"
@@ -68,8 +68,8 @@
                 <span class="d-block fw-bold text-capitalize text-secondary"
                     >telefono</span
                 >
-                <span class="font-monospace">
-                    {{ user.telefono }}
+                <span class="font-monospace" v-for="(item, index) in user.telefono" :key="index">
+                    {{item}} 
                 </span>
             </div>
             <div class="col mb-3">
@@ -101,15 +101,11 @@
                     {{ user.actualizado }}
                 </span>
             </div>
-            <div>
+            <div class="col">
                 <span class="d-block fw-bold text-capitalize text-secondary"
                     >Roles Asignados</span
                 >
-                <ul v-for="(item, index) in roles" :key="index">
-                    <li>
-                        {{ item.role }}
-                    </li>
-                </ul>
+                <span> Tiene asignados {{ roles.length }} roles </span>
             </div>
         </div>
     </div>
@@ -163,6 +159,17 @@ export default {
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("UpdateEmployeeEvent", (e) => {
+                    this.authenticated();
+                });
+
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("StoreEmployeeRoleEvent", (e) => {
+                    this.authenticated();
+                });
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("DestroyEmployeeRoleEvent", (e) => {
                     this.authenticated();
                 });
         },
