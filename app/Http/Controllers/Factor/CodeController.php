@@ -12,6 +12,7 @@ use DateInterval;
 use DateTime;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Events\LoginEvent;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -108,6 +109,18 @@ class CodeController extends Controller
      */
     public function requestToken2FA(Request $request)
     {
+        $code = Code::where('status', $request->session()->getId())->get()->last();
+        
+        if ($code) {
+            $date = new DateTime($code->created_at);
+            $date->add(new DateInterval('PT' . env('CODE_2FA_EXPIRE') . 'M'));
+            $now = $date->format('Y-m-d H:i:s');
+
+            if (now() < $now) {
+                throw new ReportError(Lang::get("Espera un momento por favor, el siguiente deberá ser enviado despues de " . date('H:i:s', strtotime($now))), 422);
+            }
+        }
+
         Auth2faMiddleware::generateToken($request);
 
         return $this->message(Lang::get('Hemos enviado el token a tu correo electronico'), 201);
@@ -143,7 +156,7 @@ class CodeController extends Controller
         Code::destroyToken($code->status);
 
         M2FAEvent::dispatch();
-        
+
         return $this->message(Lang::get($user->m2fa ? "2FA activado" : "2FA desactivado"), 201);
     }
 }
