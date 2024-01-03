@@ -137,7 +137,7 @@ class UserController extends Controller
                 $user->address = $request->address;
             }
 
-            if ($this->can_access() && $this->is_diferent($user->phone, $request->phone)) {
+            if ($this->is_diferent($user->phone, $request->phone)) {
                 $this->can_update[] = true;
                 $user->phone = $request->phone;
             }
