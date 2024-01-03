@@ -69,6 +69,12 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\Auth\RemoveSessionEvent::class => [
             \App\Listeners\Auth\RemoveSessionListener::class,
         ],
+
+         \App\Events\Auth\M2FAEvent::class => [
+            \App\Listeners\Auth\M2FAListener::class,
+        ],
+
+
     ];
 
     /**

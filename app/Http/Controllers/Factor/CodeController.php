@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Factor;
 
+use App\Events\Auth\M2FAEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth2faMiddleware;
 use App\Models\Factor\Code;
@@ -141,7 +142,8 @@ class CodeController extends Controller
 
         Code::destroyToken($code->status);
 
-        //send notification
+        M2FAEvent::dispatch();
+        
         return $this->message(Lang::get($user->m2fa ? "2FA activado" : "2FA desactivado"), 201);
     }
 }
