@@ -15,7 +15,15 @@ class RemoveSessionEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user = null;
+    /**
+     * @var Employee
+     */
+    public $user;
+
+    /**
+     * 
+     */
+    public $socket;
 
     /**
      * Create a new event instance.
@@ -25,6 +33,7 @@ class RemoveSessionEvent implements ShouldBroadcast
     public function __construct($user = null)
     { 
         $this->user = $user;
+        $this->socket = uniqid();
     }
 
     /**
