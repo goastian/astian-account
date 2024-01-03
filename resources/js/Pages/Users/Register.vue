@@ -11,7 +11,7 @@
                             <input
                                 id="nombre"
                                 placeholder="Nombre"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                                 type="text"
                                 v-model="form.nombre"
                             />
@@ -24,7 +24,7 @@
                                 id="apellido"
                                 placeholder="Apellido"
                                 v-model="form.apellido"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.apellido"></v-error>
                         </div>
@@ -35,7 +35,7 @@
                                 id="email"
                                 v-model="form.correo"
                                 placeholder="email@admin.com "
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.correo"></v-error>
                         </div>
@@ -65,7 +65,7 @@
                                 id="numero"
                                 v-model="form.numero"
                                 placeholder="Numero"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.numero"></v-error>
                         </div>
@@ -76,7 +76,7 @@
                                 id="pais"
                                 placeholder="Pais"
                                 v-model="form.pais"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.pais"></v-error>
                         </div>
@@ -87,7 +87,7 @@
                                 id="departamento"
                                 v-model="form.departamento"
                                 placeholder="departamento"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.departamento"></v-error>
                         </div>
@@ -98,7 +98,7 @@
                                 id="Direccion"
                                 v-model="form.direccion"
                                 placeholder="Direccion"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.direccion"></v-error>
                         </div>
@@ -109,7 +109,7 @@
                                 id="telefono"
                                 v-model="form.telefono"
                                 placeholder="telefono"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.telefono"></v-error>
                         </div>
