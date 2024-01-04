@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('phone', 15)->nullable()->index();
             $table->date('birthday')->nullable();
             $table->datetime('verified_at')->nullable();
-            $table->boolean('client')->default(1);
+            //$table->boolean('client')->default(1);
             $table->boolean('m2fa')->default(0);
             $table->boolean('totp')->default(0); 
             $table->timestamps();

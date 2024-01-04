@@ -3,13 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Passport\HasApiTokens;
-use Elyerr\ApiResponse\Assets\Asset; 
-use Illuminate\Notifications\Notifiable;
+use App\Models\User\Role;
 use App\Notifications\Auth\ResetPassword;
+use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Passport\HasApiTokens;
 
 class Auth extends Authenticatable
 {
@@ -45,7 +46,7 @@ class Auth extends Authenticatable
         'birthday',
         'client',
         'm2fa',
-        'totp'
+        'totp',
     ];
 
     /**
@@ -115,7 +116,7 @@ class Auth extends Authenticatable
      */
     public function isClient()
     {
-        return $this->client;
+        return $this->roles()->get()->contains('name', 'client');
     }
 
     /**
@@ -127,5 +128,16 @@ class Auth extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
+    }
+
+    /**
+     * get scope for the client
+     * 
+     * @return Role
+     */
+    public function addClientScope()
+    {
+        $scope = Role::where('name', 'client')->first();
+        return $scope;
     }
 }

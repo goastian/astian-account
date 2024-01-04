@@ -55,6 +55,7 @@ class RegisterClientController extends Controller
             $client->password = Hash::make($request->password);
             $client->save();
 
+            $client->roles()->syncWithoutDetaching($client->addClientScope()->id);
         });
 
         $client->notify(new ClientRegistered());
@@ -93,7 +94,7 @@ class RegisterClientController extends Controller
             $user->verified_at = now();
             $user->save();
 
-            return redirect()->route('login')->with(['message' => __('Your account has been activated.')]);
+            return redirect()->route('login')->with(['status' => __('Your account has been activated.')]);
         } catch (ErrorException $e) {
             throw new ReportError(__("invalid credentials."), 403);
         }
