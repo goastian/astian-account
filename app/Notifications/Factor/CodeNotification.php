@@ -25,7 +25,8 @@ class CodeNotification extends Notification implements ShouldQueue
     public function __construct($code)
     {
         $this->code = $code;
-        $this->queue = env('REDIS_QUEUE_NOTIFICATIONS', 'notify');
+        $this->queue = 'notify';
+
     }
 
     /**

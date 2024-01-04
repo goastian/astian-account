@@ -44,7 +44,7 @@ class ResetPassword extends  ResetPasswordNotification implements ShouldQueue
     {
         $this->token = $token;
 
-        $this->queue = env('REDIS_QUEUE_NOTIFICATIONS', 'notify');
+        $this->queue = 'notify';
 
     }
 
