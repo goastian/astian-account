@@ -9,11 +9,11 @@
         <template v-slot:button> Detalle </template>
         <template v-slot:head> Datos del usuario {{ user.nombre }} </template>
         <template v-slot:body>
-            <div class="row">
+            <div class="row" style="font-size: 12px">
                 <div class="row row-cols-1 col-12">
-                    <div class="col">
+                    <div class="col mb-2">
                         <div class="row row-cols-3 col-12">
-                            <div class="col">
+                            <div class="col mb-2">
                                 <label
                                     class="text-capitalize fw-bold"
                                     for="nombre"
@@ -28,7 +28,7 @@
                                 />
                                 <v-error :error="errors.nombre"></v-error>
                             </div>
-                            <div class="col">
+                            <div class="col mb-2">
                                 <label
                                     class="text-capitalize fw-bold"
                                     for="apellido"
@@ -43,7 +43,7 @@
                                 />
                                 <v-error :error="errors.apellido"></v-error>
                             </div>
-                            <div class="col">
+                            <div class="col mb-2">
                                 <label class="text-capitalize fw-bold" for=""
                                     >Correo</label
                                 >
@@ -54,12 +54,10 @@
                                     name="correo"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error
-                                    :error="errors.correo"
-                                ></v-error>
+                                <v-error :error="errors.correo"></v-error>
                             </div>
 
-                            <div class="col">
+                            <div class="col mb-2">
                                 <label class="text-capitalize fw-bold" for=""
                                     >Telefono</label
                                 >
@@ -73,58 +71,7 @@
                                 <v-error :error="errors.telefono"></v-error>
                             </div>
 
-                            <div class="col">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="documento"
-                                    >documento</label
-                                >
-                                <select
-                                    v-model="user.documento"
-                                    class="form-select text-uppercase"
-                                    aria-label=""
-                                >
-                                    <option
-                                        v-for="(item, index) in documents"
-                                        :key="index"
-                                        :value="item"
-                                    >
-                                        {{ item }}
-                                    </option>
-                                </select>
-                                <v-error :error="errors.documento"></v-error>
-                            </div>
-                            <div class="col">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="numero"
-                                    >numero</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.numero"
-                                    type="text"
-                                    name="numero"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.numero"></v-error>
-                            </div>
-                            <div class="col">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="departamento"
-                                    >departamento</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.departamento"
-                                    type="text"
-                                    name="departamento"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.departamento"></v-error>
-                            </div>
-                            <div class="col">
+                            <div class="col mb-2">
                                 <label
                                     class="text-capitalize fw-bold"
                                     for="pais"
@@ -139,7 +86,22 @@
                                 />
                                 <v-error :error="errors.pais"></v-error>
                             </div>
-                            <div class="col">
+                            <div class="col mb-2">
+                                <label
+                                    class="text-capitalize fw-bold"
+                                    for="ciudad"
+                                    >ciudad</label
+                                >
+                                <input
+                                    @keypress.enter="update(user)"
+                                    v-model="user.ciudad"
+                                    type="text"
+                                    name="ciudad"
+                                    class="form-control-sm form-control"
+                                />
+                                <v-error :error="errors.ciudad"></v-error>
+                            </div>
+                            <div class="col mb-2">
                                 <label
                                     class="text-capitalize fw-bold"
                                     for="direccion"
@@ -154,7 +116,22 @@
                                 />
                                 <v-error :error="errors.direccion"></v-error>
                             </div>
-                            <div class="col">
+                            <div class="col mb-2">
+                                <label
+                                    class="text-capitalize fw-bold"
+                                    for="nacimiento"
+                                    >nacimiento</label
+                                >
+                                <input
+                                    @keypress.enter="update(user)"
+                                    v-model="user.nacimiento"
+                                    type="date"
+                                    name="nacimiento"
+                                    class="form-control-sm form-control"
+                                />
+                                <v-error :error="errors.direccion"></v-error>
+                            </div>
+                            <div class="col mb-2">
                                 <label
                                     class="text-capitalize fw-bold"
                                     for="registrado"
@@ -162,7 +139,7 @@
                                 >
                                 <p>{{ user.registrado }}</p>
                             </div>
-                            <div class="col">
+                            <div class="col mb-2">
                                 <label
                                     class="text-capitalize fw-bold"
                                     for="actualizado"
@@ -170,7 +147,7 @@
                                 >
                                 <p>{{ user.actualizado }}</p>
                             </div>
-                            <div class="col">
+                            <div class="col mb-2">
                                 <label
                                     class="text-capitalize fw-bold"
                                     for="actualizado"
@@ -186,7 +163,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col">
+                    <div class="col mb-2">
                         <div class="row row-cols-4 col-12">
                             <div
                                 class="col-12 border-bottom h5 mb-4 border-top"
@@ -250,7 +227,6 @@ export default {
             status: false,
             errors: {},
             roles: {},
-            documents: {},
         };
     },
 
@@ -261,8 +237,8 @@ export default {
         addOrRemoveRoles(id) {
             this.message = null;
             this.status = null;
-            const checked = document.getElementById(id).checked; 
-            
+            const checked = document.getElementById(id).checked;
+
             if (checked) {
                 window.axios
                     .post(this.user.links.roles, { role: id })
@@ -297,7 +273,6 @@ export default {
         loadData(user) {
             this.getRoles();
             this.getUserRoles(user);
-            this.getDocuments();
         },
 
         getRoles() {

@@ -1,28 +1,35 @@
 <template>
-    <v-create @scope-was-created="getScopes(actual_page)"></v-create>
-    <v-table
-        :items="items"
-        class="text-sm table-sm text-center"
-        style="width: 70%; margin: 1% auto"
-    >
-        <template v-slot:body>
-            <tr v-for="(item, index) in scopes" :key="index">
-                <td>{{ item.role }}</td>
-                <td>{{ item.descripcion }}</td>
-                <td>
-                    <v-update
-                        :role="item"
-                        @scope-was-updated="getScopes(actual_page)"
-                    ></v-update>
-                    <v-remove
-                        :role="item"
-                        @scope-was-remove="getScopes(actual_page)"
-                    ></v-remove>
-                </td>
-            </tr>
-        </template>
-    </v-table>
-    <v-pagination :pages="pages" @send-current-page="changePage"></v-pagination>
+    <div class="container-fluid">
+        <v-create @scope-was-created="getScopes(actual_page)"></v-create>
+        <v-table
+            :items="items"
+            class="text-sm table-sm text-center"
+            style="width: 70%; margin: 1% auto"
+        >
+            <template v-slot:body>
+                <tr v-for="(item, index) in scopes" :key="index">
+                    <td>{{ item.role }}</td>
+                    <td>{{ item.descripcion }}</td>
+                    <td>
+                        <v-update
+                            :role="item"
+                            @scope-was-updated="getScopes(actual_page)"
+                        ></v-update>
+                    </td>
+                    <td>
+                        <v-remove
+                            :role="item"
+                            @scope-was-remove="getScopes(actual_page)"
+                        ></v-remove>
+                    </td>
+                </tr>
+            </template>
+        </v-table>
+        <v-pagination
+            :pages="pages"
+            @send-current-page="changePage"
+        ></v-pagination>
+    </div>
 </template>
 <script>
 import VCreate from "./Create.vue";

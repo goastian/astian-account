@@ -1,9 +1,9 @@
 <template>
-    <div class="container-fuild text-center pt-5" style="">
+    <div class="container-fluid text-center">
         <button class="btn btn-danger py-3" @click="revocarCredentials">
             Revocar todos las credenciales generadas
         </button>
-       
+
         <span v-show="message" class="pt-5 d-block text-success">
             {{ message }}
         </span>
@@ -16,6 +16,7 @@ export default {
             message: null,
         };
     },
+
     methods: {
         revocarCredentials() {
             window.axios

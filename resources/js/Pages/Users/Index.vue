@@ -1,33 +1,38 @@
 <template>
-    <div class="container-fuid mx-1">
-        <v-register @user-was-registered="getUsers"></v-register>
-        <v-search @searching="searching"></v-search>
+    <div class="container-fluid">
+        <div class="mx-1">
+            <v-search @searching="searching">
+                <template v-slot:button>
+                    <v-register @user-was-registered="getUsers"></v-register>
+                </template>
+            </v-search>
 
-        <v-table :items="items" class="table-sm text-sm text-center">
-            <template v-slot:body>
-                <tr v-for="(item, index) in users" :key="index">
-                    <td>{{ item.nombre }}</td>
-                    <td>{{ item.apellido }}</td>
-                    <td>{{ item.correo }}</td>
-                    <td>{{ item.telefono }}</td>
-                    <td>{{ item.registrado }}</td>
-                    <td>
-                        <v-update
-                            :user="item"
-                            @user-was-updated="getUsers"
-                        ></v-update>
-                        <v-status
-                            :user="item"
-                            @user-status="getUsers"
-                        ></v-status>
-                    </td>
-                </tr>
-            </template>
-        </v-table>
-        <v-pagination
-            :pages="pages"
-            @send-current-page="changeList"
-        ></v-pagination>
+            <v-table :items="items" class="table-sm text-sm text-center">
+                <template v-slot:body>
+                    <tr v-for="(item, index) in users" :key="index">
+                        <td>{{ item.nombre }}</td>
+                        <td>{{ item.apellido }}</td>
+                        <td>{{ item.correo }}</td>
+                        <td>{{ item.telefono }}</td>
+                        <td>{{ item.registrado }}</td>
+                        <td>
+                            <v-update
+                                :user="item"
+                                @user-was-updated="getUsers"
+                            ></v-update>
+                            <v-status
+                                :user="item"
+                                @user-status="getUsers"
+                            ></v-status>
+                        </td>
+                    </tr>
+                </template>
+            </v-table>
+            <v-pagination
+                :pages="pages"
+                @send-current-page="changeList"
+            ></v-pagination>
+        </div>
     </div>
 </template>
 <script>

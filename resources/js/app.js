@@ -6,7 +6,8 @@ import { components } from "./config/globalComponents";
 import { $channels, $echo } from "./config/echo.js";
 
 import "./bootstrap";
-import "../scss/app.scss";
+import "../scss/app.scss"; 
+import * as bootstrap from 'bootstrap'
 
 const app = createApp(App);
 app.config.globalProperties.$echo = $echo;

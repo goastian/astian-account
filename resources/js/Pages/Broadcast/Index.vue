@@ -1,29 +1,34 @@
 <template>
-    <v-register @broadcast-was-created="getChannels"></v-register>
+    <div class="container-fluid">
+        <v-register @broadcast-was-created="getChannels"></v-register>
 
-    <v-table class="text-sm" :items="items" style="width: 70%; margin: auto">
-        <template v-slot:body>
-            <tr v-for="(item, index) in channels" :key="index">
-                <td>
-                    {{ item.canal }}
-                </td>
-                <td>
-                    {{ item.descripcion }}
-                </td>
-                <td>
-                    {{ item.registrado }}
-                </td>
-                <td>
-                    <v-remove
-                        :item="item"
-                        @broadcast-was-remove="getChannels()"
-                    ></v-remove>
-                </td>
-            </tr>
-        </template>
-    </v-table>
+        <v-table :items="items" style="width: 70%; margin: auto">
+            <template v-slot:body>
+                <tr v-for="(item, index) in channels" :key="index">
+                    <td>
+                        {{ item.canal }}
+                    </td>
+                    <td>
+                        {{ item.descripcion }}
+                    </td>
+                    <td>
+                        {{ item.registrado }}
+                    </td>
+                    <td>
+                        <v-remove
+                            :item="item"
+                            @broadcast-was-remove="getChannels()"
+                        ></v-remove>
+                    </td>
+                </tr>
+            </template>
+        </v-table>
 
-    <v-pagination :pages="pages" @send-current-page="updateList"></v-pagination>
+        <v-pagination
+            :pages="pages"
+            @send-current-page="updateList"
+        ></v-pagination>
+    </div>
 </template>
 <script>
 import VRegister from "./Register.vue";
