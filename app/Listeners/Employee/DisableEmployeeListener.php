@@ -27,11 +27,7 @@ class DisableEmployeeListener implements ShouldQueue
      */
     public function handle(DisableEmployeeEvent $event)
     {
-        if ($event->user->client) {
-            $event->user->notify(new ClientDisableNotification());
-        } else {
-            $event->user->notify(new UserDisableNotification());
-        }
+        
     }
 
    /**

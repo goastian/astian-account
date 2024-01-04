@@ -10,6 +10,8 @@ use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Employee\StoreRequest;
 use App\Http\Requests\Employee\UpdateRequest;
 use App\Models\User\Employee;
+use App\Notifications\Auth\UserDisableNotification;
+use App\Notifications\Client\ClientDisableNotification;
 use App\Notifications\Employee\CreatedNewUser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Error;
@@ -214,9 +216,11 @@ class UserController extends Controller
 
             $user->delete();
 
-            DisableEmployeeEvent::dispatch($user);
-
         });
+
+        DisableEmployeeEvent::dispatch();
+        
+        $user->client ? $user->notify(new ClientDisableNotification()) : $user->notify(new UserDisableNotification());
 
         return $this->showOne($user, $user->transformer);
     }
