@@ -4,9 +4,8 @@ namespace App\Listeners\Employee;
 
 use App\Events\Employee\UpdateEmployeeEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateEmployeeListener
+class UpdateEmployeeListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -34,6 +33,6 @@ class UpdateEmployeeListener
      */
     public function viaQueue(): string
     {
-        return env('REDIS_QUEUE_EVENTS', 'events');
+        return 'events';
     }
 }

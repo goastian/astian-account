@@ -15,9 +15,16 @@ class LogoutEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var Employee
+     */
     public $user;
-    public $socket;
 
+    /**
+     * @var String
+     */
+    public $socket;
+    
     /**
      * Create a new event instance.
      *

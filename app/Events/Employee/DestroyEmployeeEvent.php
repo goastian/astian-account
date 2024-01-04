@@ -15,7 +15,10 @@ class DestroyEmployeeEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $socket = null;
+    /**
+     * @var String
+     */
+    public $socket;
  
     /**
      * Create a new event instance.

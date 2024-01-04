@@ -6,7 +6,7 @@ use App\Events\Token\StoreTokenEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class StoreTokenListener
+class StoreTokenListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -27,5 +27,13 @@ class StoreTokenListener
     public function handle(StoreTokenEvent $event)
     {
         //
+    }
+
+    /**
+     * Get the name of the listener's queue.
+     */
+    public function viaQueue(): string
+    {
+        return 'events';
     }
 }
