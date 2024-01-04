@@ -4,17 +4,18 @@ namespace App\Events\Client;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels; 
-
+use Illuminate\Queue\SerializesModels;
 
 class RemoveSessionEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
- 
+
+    /**
+     * @var String
+     */
     public $socket;
 
     /**
@@ -23,7 +24,7 @@ class RemoveSessionEvent implements ShouldBroadcast
      * @return void
      */
     public function __construct()
-    {  
+    {
         $this->socket = uniqid();
     }
 
@@ -34,10 +35,10 @@ class RemoveSessionEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel(env('CHANNEL_NAME','auth'));
+        return new PrivateChannel(env('CHANNEL_NAME', 'auth'));
     }
 
-     /**
+    /**
      * The event's broadcast name.
      *
      * @return string

@@ -4,19 +4,24 @@ namespace App\Events\Broadcast;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels; 
-
+use Illuminate\Queue\SerializesModels;
 
 class DestroyBroadcastEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user = null;
-    public $socket = null;
+    /**
+     * @var Employee
+     */
+    public $user;
+
+    /**
+     * @var String
+     */
+    public $socket;
 
     /**
      * Create a new event instance.
@@ -24,7 +29,7 @@ class DestroyBroadcastEvent implements ShouldBroadcast
      * @return void
      */
     public function __construct($user = null)
-    { 
+    {
         $this->user = $user;
         $this->socket = uniqid();
     }
@@ -36,10 +41,10 @@ class DestroyBroadcastEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel(env('CHANNEL_NAME','auth'));
+        return new PrivateChannel(env('CHANNEL_NAME', 'auth'));
     }
 
-     /**
+    /**
      * The event's broadcast name.
      *
      * @return string

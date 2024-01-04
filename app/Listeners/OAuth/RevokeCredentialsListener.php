@@ -4,9 +4,8 @@ namespace App\Listeners\OAuth;
 
 use App\Events\OAuth\RevokeCredentialsEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class RevokeCredentialsListener
+class RevokeCredentialsListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,5 +21,13 @@ class RevokeCredentialsListener
     public function handle(RevokeCredentialsEvent $event): void
     {
         //
+    }
+
+    /**
+     * Get the name of the listener's queue.
+     */
+    public function viaQueue(): string
+    {
+        return 'events';
     }
 }

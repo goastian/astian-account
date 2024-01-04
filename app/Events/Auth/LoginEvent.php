@@ -15,7 +15,14 @@ class LoginEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var Employee
+     */
     public $user;
+
+    /**
+     * @var String
+     */
     public $socket;
 
     /**

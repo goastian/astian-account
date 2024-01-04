@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Events\Employee;
+namespace App\Events\Auth;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\SerializesModels; 
 
-class EnableEmployeeEvent implements ShouldBroadcast
+
+class M2FAEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -29,9 +31,9 @@ class EnableEmployeeEvent implements ShouldBroadcast
      * @return void
      */
     public function __construct($user = null)
-    {
-        $this->socket = uniqid();
+    { 
         $this->user = $user;
+        $this->socket = uniqid();
     }
 
     /**
@@ -41,16 +43,16 @@ class EnableEmployeeEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel(env('CHANNEL_NAME', 'auth'));
+        return new PrivateChannel(env('CHANNEL_NAME','auth'));
     }
 
-    /**
+     /**
      * The event's broadcast name.
      *
      * @return string
      */
     public function broadcastAs()
     {
-        return 'EnableEmployeeEvent';
+        return 'M2FAEvent';
     }
 }

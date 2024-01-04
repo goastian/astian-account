@@ -34,11 +34,11 @@ class DisableEmployeeListener implements ShouldQueue
         }
     }
 
-    /**
+   /**
      * Get the name of the listener's queue.
      */
     public function viaQueue(): string
     {
-        return env('REDIS_QUEUE_EVENTS', 'events');
+        return 'events';
     }
 }

@@ -30,6 +30,6 @@ class StoreClientListener implements ShouldQueue
      */
     public function viaQueue(): string
     {
-        return env('REDIS_QUEUE_EVENTS', 'events');
+        return 'events';
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Listeners\Broadcast;
+namespace App\Listeners\Auth;
 
-use App\Events\Broadcast\DestroyBroadcastEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\Auth\M2FAEvent;
 
-class DestroyBroadcastListener implements ShouldQueue
+class M2FAListener
 {
     /**
      * Create the event listener.
@@ -19,7 +17,7 @@ class DestroyBroadcastListener implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(DestroyBroadcastEvent $event): void
+    public function handle(M2FAEvent $event): void
     {
         //
     }
@@ -31,5 +29,4 @@ class DestroyBroadcastListener implements ShouldQueue
     {
         return 'events';
     }
-
 }

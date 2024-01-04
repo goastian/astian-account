@@ -6,7 +6,7 @@ use App\Events\Employee\DestroyEmployeeRoleEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DestroyEmployeeRoleListener
+class DestroyEmployeeRoleListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -34,6 +34,6 @@ class DestroyEmployeeRoleListener
      */
     public function viaQueue(): string
     {
-        return env('REDIS_QUEUE_EVENTS', 'events');
+        return 'events';
     }
 }

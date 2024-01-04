@@ -4,9 +4,8 @@ namespace App\Listeners\Role;
 
 use App\Events\Role\DestroyRoleEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class DestroyRoleListener
+class DestroyRoleListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -22,5 +21,13 @@ class DestroyRoleListener
     public function handle(DestroyRoleEvent $event): void
     {
         //
+    }
+
+    /**
+     * Get the name of the listener's queue.
+     */
+    public function viaQueue(): string
+    {
+        return 'events';
     }
 }

@@ -4,9 +4,8 @@ namespace App\Listeners\Employee;
 
 use App\Events\Employee\StoreEmployeeRoleEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class StoreEmployeeRoleListener
+class StoreEmployeeRoleListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -34,6 +33,6 @@ class StoreEmployeeRoleListener
      */
     public function viaQueue(): string
     {
-        return env('REDIS_QUEUE_EVENTS', 'events');
+        return 'events';
     }
 }

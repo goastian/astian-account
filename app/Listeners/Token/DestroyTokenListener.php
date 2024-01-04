@@ -4,9 +4,8 @@ namespace App\Listeners\Token;
 
 use App\Events\Token\DestroyTokenEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
-class DestroyTokenListener
+class DestroyTokenListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -27,5 +26,13 @@ class DestroyTokenListener
     public function handle(DestroyTokenEvent $event)
     {
         //
+    }
+
+    /**
+     * Get the name of the listener's queue.
+     */
+    public function viaQueue(): string
+    {
+        return 'events';
     }
 }
