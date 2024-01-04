@@ -19,7 +19,11 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('p
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-Route::get('/register', [RegisterClientController::class, 'register'])->name('client.register');
+/**
+ * registro de clientes
+ */
+Route::get('/register', [RegisterClientController::class, 'register'])->name('register');
+Route::post('/register', [RegisterClientController::class, 'store']);
 Route::get('/verify/account', [RegisterClientController::class, 'verify_account'])->name('verify.account');
 
 /**
