@@ -20,4 +20,5 @@ yarn-error.log
 laravel-echo*
 rutas.js
 composer.lock
+package-lock.json
 sync
