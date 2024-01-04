@@ -128,14 +128,4 @@ class Auth extends Authenticatable
     {
         $this->notify(new ResetPassword($token));
     }
-
-    /**
-     * 2FA activated
-     */
-    public function activateM2FA(){
-        $this->m2fa = 1;
-
-        dd($this);
-        $this->push();
-    }
 }
