@@ -18,7 +18,8 @@ class UserDisableNotification extends Notification implements ShouldQueue
      */
     public function __construct()
     {
-        $this->queue = env('REDIS_QUEUE_NOTIFICATIONS', 'notify');
+        $this->queue = 'notify';
+
     }
 
     /**

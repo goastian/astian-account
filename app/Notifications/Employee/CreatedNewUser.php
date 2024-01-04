@@ -10,9 +10,11 @@ use Illuminate\Notifications\Notification;
 class CreatedNewUser extends Notification implements ShouldQueue
 {
     use Queueable;
-    
 
-    public $password = null;
+    /**
+     * @var String
+     */
+    public $password;
 
     /**
      * Create a new notification instance.
@@ -22,6 +24,7 @@ class CreatedNewUser extends Notification implements ShouldQueue
     public function __construct($password = null)
     {
         $this->password = $password;
+        $this->queue = 'notify';
     }
 
     /**
