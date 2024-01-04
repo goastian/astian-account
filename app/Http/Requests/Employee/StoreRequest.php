@@ -33,7 +33,7 @@ class StoreRequest extends FormRequest
             'country' => ['required', 'max:100'],
             'city' => ['required', 'max:100'],
             'address' => ['required', 'max:150'],
-            'phone' => ['required', 'max:9', 'unique:employees,phone'],
+            'phone' => ['required', 'max:20', 'unique:employees,phone'],
             'birthday' => ['required', 'date_format:Y-m-d'],
             'role' => ['required', 'array','exists:roles,id'],
         ];
