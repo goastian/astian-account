@@ -10,9 +10,7 @@
                     <h4 class="text-center fw-bold mb-4">Solicitud para cambiar la contraseña</h4
                         class="text-center fw-bold mb-4">
                     <p>
-                        Si olvidaste tu contraseña o deseas cambiarla, por favor envianos
-                        una peticion para el cambio de la misma y te llegara un correo electonico
-                        para que que lo puedas realizar
+                        {{__("Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.")}}
                     </p>
                 </div>
                 <div class="row row-cols-1 col-lg-12">
