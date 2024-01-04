@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Factor;
 
-use App\Http\Controllers\Controller;
-use App\Http\Middleware\Auth2faMiddleware;
-use App\Models\Factor\Code;
-use App\Models\User\Employee;
-use App\Providers\RouteServiceProvider;
-use DateInterval;
 use DateTime;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Elyerr\ApiResponse\Events\LoginEvent;
+use DateInterval;
+use App\Models\Factor\Code;
 use Illuminate\Http\Request;
+use App\Models\User\Employee;
+use App\Events\Auth\M2FAEvent;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
+use App\Providers\RouteServiceProvider;
+use Elyerr\ApiResponse\Events\LoginEvent;
+use App\Http\Middleware\Auth2faMiddleware;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class CodeController extends Controller
 {
@@ -107,6 +109,18 @@ class CodeController extends Controller
      */
     public function requestToken2FA(Request $request)
     {
+        $code = Code::where('status', $request->session()->getId())->get()->last();
+
+        if ($code) {
+            $date = new DateTime($code->created_at);
+            $date->add(new DateInterval('PT' . env('CODE_2FA_EXPIRE') . 'M'));
+            $now = $date->format('Y-m-d H:i:s');
+
+            if (now() < $now) {
+                throw new ReportError(Lang::get("Espera un momento por favor, el siguiente deberá ser enviado despues de " . date('H:i:s', strtotime($now))), 422);
+            }
+        }
+
         Auth2faMiddleware::generateToken($request);
 
         return $this->message(Lang::get('Hemos enviado el token a tu correo electronico'), 201);
@@ -141,7 +155,8 @@ class CodeController extends Controller
 
         Code::destroyToken($code->status);
 
-        //send notification
+        M2FAEvent::dispatch();
+
         return $this->message(Lang::get($user->m2fa ? "2FA activado" : "2FA desactivado"), 201);
     }
 }
