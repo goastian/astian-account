@@ -1,8 +1,7 @@
 <template>
-    <!-- Button trigger modal -->
     <button
         type="button"
-        :class="['btn me-2 my-1',  styles]"
+        :class="['btn me-1 my-1', styles]"
         @click="sendEvent1(id)"
         data-bs-toggle="modal"
         :data-bs-target="'#'.concat(target)"
@@ -23,7 +22,7 @@
         <div class="modal-dialog">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header">
-                    <slot name="head"></slot> 
+                    <slot name="head"></slot>
                 </div>
                 <div class="modal-body">
                     <slot name="body"></slot>
@@ -53,7 +52,7 @@
 </template>
 <script>
 export default {
-    emits: ["isClicked", "isAccepted",'isClosed'],
+    emits: ["isClicked", "isAccepted", "isClosed"],
 
     props: {
         target: {
@@ -73,10 +72,10 @@ export default {
             type: Boolean,
             default: true,
         },
-        button_cancel_name:{
-            type:String,
-            default: "Cerrar"
-        }
+        button_cancel_name: {
+            type: String,
+            default: "Cerrar",
+        },
     },
 
     methods: {
@@ -93,4 +92,4 @@ export default {
         },
     },
 };
-</script> 
+</script>

@@ -1,21 +1,19 @@
 <template>
-    <v-nav class="px-0 py-0" :user="user">
-        <v-item :path="{ name: 'clients' }">Clientes</v-item>
-        <v-item :path="{ name: 'tokens' }">Clientes Tokens</v-item>
-        <v-item :path="{ name: 'personalTokens' }">Personal Tokens</v-item>
-        <v-item :path="{ name: 'users' }">Usuarios</v-item>
-        <v-item :path="{ name: 'scopes' }">Scopes</v-item>
-        <v-item :path="{ name: 'channels' }">Broadcasts</v-item>
-    </v-nav>
-    <section >
+    <v-nav :user="user"></v-nav>
+    <section class="container-fluid px-0 py-0">
         <router-view />
     </section>
-    <footer>
-        
+    <footer class="fixed-bottom">
     </footer>
 </template>
 <script>
+import VNav from "./Pages/Dashboad/Navbar.vue";
+
 export default {
+    components: {
+        VNav,
+    },
+
     data() {
         return {
             user: {},
@@ -24,6 +22,7 @@ export default {
 
     created() {
         this.authenticated();
+        this.authenticated()
     },
 
     methods: {
@@ -36,6 +35,14 @@ export default {
                 })
                 .catch((e) => {
                     console.log(e);
+                });
+        },
+
+        listener() {
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("UpdateEmployeeEvent", (e) => {
+                    this.authenticated();
                 });
         },
     },

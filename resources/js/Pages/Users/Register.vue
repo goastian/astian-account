@@ -5,69 +5,39 @@
         <template v-slot:body>
             <div class="row row-cols-1 col-sm-12">
                 <div class="col">
-                    <div class="row row-cols-2 col-sm-12">
+                    <div class="row row-cols-3 col-sm-12">
                         <div class="col my-1">
-                            <label for="nombre">Nombre</label>
+                            <label for="nombre">nombre</label>
                             <input
                                 id="nombre"
-                                placeholder="Nombre"
-                                class="form-control"
+                                placeholder="nombre"
+                                class="form-control form-control-sm py-0 my-0"
                                 type="text"
                                 v-model="form.nombre"
                             />
                             <v-error :error="errors.nombre"></v-error>
                         </div>
                         <div class="col my-1">
-                            <label for="apellido">Apellido</label>
+                            <label for="apellido">apellido</label>
                             <input
                                 type="text"
                                 id="apellido"
-                                placeholder="Apellido"
+                                placeholder="apellido"
                                 v-model="form.apellido"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.apellido"></v-error>
                         </div>
                         <div class="col my-1">
-                            <label for="email">Email</label>
+                            <label for="email">email</label>
                             <input
                                 type="email"
                                 id="email"
                                 v-model="form.correo"
                                 placeholder="email@admin.com "
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.correo"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="documento">Tipo de documento</label>
-                            <select
-                                @click="getDocuments"
-                                name="documento"
-                                id="documento"
-                                v-model="form.documento"
-                                class="form-select"
-                            >
-                                <option
-                                    :value="item"
-                                    v-for="(item, index) in documents"
-                                    :key="index"
-                                >
-                                    {{ item }}
-                                </option>
-                            </select>
-                            <v-error :error="errors.documento"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="numero">Numero de documento</label>
-                            <input
-                                type="text"
-                                id="numero"
-                                v-model="form.numero"
-                                placeholder="Numero"
-                                class="form-control"
-                            />
-                            <v-error :error="errors.numero"></v-error>
                         </div>
                         <div class="col my-1">
                             <label for="pais">pais</label>
@@ -76,42 +46,53 @@
                                 id="pais"
                                 placeholder="Pais"
                                 v-model="form.pais"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.pais"></v-error>
                         </div>
                         <div class="col my-1">
-                            <label for="departamento">Departamento</label>
+                            <label for="ciudad">ciudad</label>
                             <input
                                 type="text"
-                                id="departamento"
-                                v-model="form.departamento"
-                                placeholder="departamento"
-                                class="form-control"
+                                id="ciudad"
+                                v-model="form.ciudad"
+                                placeholder="ciudad"
+                                class="form-control form-control-sm py-0 my-0"
                             />
-                            <v-error :error="errors.departamento"></v-error>
+                            <v-error :error="errors.ciudad"></v-error>
                         </div>
                         <div class="col my-1">
-                            <label for="Direccion">Direccion</label>
+                            <label for="direccion">direccion</label>
                             <input
                                 type="text"
-                                id="Direccion"
+                                id="direccion"
                                 v-model="form.direccion"
-                                placeholder="Direccion"
-                                class="form-control"
+                                placeholder="direccion"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.direccion"></v-error>
                         </div>
                         <div class="col my-1">
-                            <label for="telefono">Telefono</label>
+                            <label for="telefono">telefono</label>
                             <input
                                 type="text"
                                 id="telefono"
                                 v-model="form.telefono"
                                 placeholder="telefono"
-                                class="form-control"
+                                class="form-control form-control-sm py-0 my-0"
                             />
                             <v-error :error="errors.telefono"></v-error>
+                        </div>
+                        <div class="col my-1">
+                            <label for="nacimiento">nacimiento</label>
+                            <input
+                                type="date"
+                                id="nacimiento"
+                                v-model="form.nacimiento"
+                                placeholder="nacimiento"
+                                class="form-control form-control-sm py-0 my-0"
+                            />
+                            <v-error :error="errors.nacimiento"></v-error>
                         </div>
                     </div>
                 </div>
@@ -123,7 +104,7 @@
                             <span class="">Permisos de usuario</span>
                         </div>
                         <div
-                            class="col form-check"
+                            class="col form-check text-start"
                             v-for="(item, index) in roles"
                             :key="index"
                         >
@@ -156,8 +137,7 @@ export default {
     emits: ["userWasRegistered"],
 
     data() {
-        return {
-            documents: {},
+        return { 
             form: { acceso: [] },
             errors: {},
             roles: {},
@@ -165,24 +145,10 @@ export default {
     },
 
     mounted() {
-        this.getDocuments();
         this.getRoles();
     },
 
     methods: {
-        getDocuments() {
-            window.axios
-                .get("api/document-type")
-                .then((res) => {
-                    this.documents = res.data;
-                })
-                .catch((e) => {
-                    if (e.response) {
-                        console.log(e.response);
-                    }
-                });
-        },
-
         getRoles() {
             window.axios
                 .get("/api/roles")

@@ -1,21 +1,23 @@
 <template>
-    <div class="row row-cols-2 col-12 text-start px-3 py-2">
-        <div
-            class="col form-check"
-            v-for="(item, index) in scopes"
-            :key="index"
-        >
-            <input
-                class="form-check-input px-0"
-                type="checkbox"
-                :value="item.id"
-                :id="item.id"
-                @click="isSelected(item.id)"
-            />
-            <label class="form-check-label" :for="item.id">
-                <span class="fw-bold">{{ item.id }}</span>
-                : {{ item.description }}
-            </label>
+    <div class="container-fluid">
+        <div class="row row-cols-3 col-12 text-start">
+            <div
+                class="col form-check"
+                v-for="(item, index) in scopes"
+                :key="index"
+            >
+                <input
+                    class="form-check-input px-0"
+                    type="checkbox"
+                    :value="item.id"
+                    :id="item.id"
+                    @click="isSelected(item.id)"
+                />
+                <label class="form-check-label" :for="item.id">
+                    <span class="fw-bold">{{ item.id }}</span>
+                    : {{ item.description }}
+                </label>
+            </div>
         </div>
     </div>
 </template>
@@ -72,4 +74,8 @@ export default {
     },
 };
 </script>
-<style lang=""></style>
+<style lang="css" scoped>
+label {
+    font-size: 12px;
+}
+</style>
