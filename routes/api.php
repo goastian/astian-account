@@ -49,11 +49,6 @@ Route::resource('users.roles', UserRoleController::class)->only('index', 'store'
 Route::resource('broadcasts', BroadcastController::class)->only('index','store', 'destroy');
 
 /**
- * registro de clientes
- */
-Route::post('/register', [RegisterClientController::class, 'store'])->name('client.register');
-
-/**
  * sessiones
  */
 Route::resource('/sessions', SessionController::class)->only('index', 'destroy');
