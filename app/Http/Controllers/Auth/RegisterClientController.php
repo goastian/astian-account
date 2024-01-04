@@ -10,6 +10,7 @@ use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Lang;
 use App\Events\Client\StoreClientEvent;
 use App\Notifications\Client\ClientRegistered;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -19,8 +20,9 @@ class RegisterClientController extends Controller
 
     public function __construct(Employee $client)
     {
-        $this->middleware('transform.request:' . $client->transformer)->only('store');
+        //$this->middleware('transform.request:' . $client->transformer)->only('store');
     }
+    
     /**
      * show view to register information
      */
@@ -52,13 +54,13 @@ class RegisterClientController extends Controller
             $client = $client->fill($request->all());
             $client->password = Hash::make($request->password);
             $client->save();
-            
-            $client->notify(new ClientRegistered());
-            StoreClientEvent::dispatch($client);
 
         });
 
-        return $this->message(__('we send an email to verify your account.'), 201);
+        $client->notify(new ClientRegistered());
+        StoreClientEvent::dispatch($client);
+
+        return redirect()->route('login')->with('status', Lang::get("Hemos enviado un email para que verifiques tu cuenta"));
     }
 
     /**
