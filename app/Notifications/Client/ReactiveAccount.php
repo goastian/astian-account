@@ -3,12 +3,11 @@
 namespace App\Notifications\Client;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Lang;
 
-class ClientDisableNotification extends Notification implements ShouldQueue
+class ReactiveAccount extends Notification
 {
     use Queueable;
 
@@ -17,7 +16,7 @@ class ClientDisableNotification extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data = null)
     {
         $this->queue = 'notify';
 
@@ -43,13 +42,11 @@ class ClientDisableNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(__('Cuenta desactivada'))
-            ->line(__("Lamentamos su decision ") . $notifiable->name . " " . $notifiable->last_name)
-            ->line(__("Esperemos cambie de opnion"))
-            ->line(__("Por medidas de seguridad su cuenta no se eliminara inmediatamente, Su cuenta se eliminará en los proximos ") . env('DESTROY_CLIENTS_AFTER', 30) . __("dias"))
-            ->line(__("Para reactivar tu cuenta, en caso cambies de opinion inicia session antes del tiempo establecido para la eliminacion total") )
-            ->action(Lang::get('Midori Account'), url(env('FRONTEND_URL')))
-            ->line(__('Agracemos su instancia y muchas gracias por haber usado nuestors servicios'));
+            ->subject(Lang::get("Cuenta re-activada"))
+            ->line(Lang::get("Hola $notifiable->name"))
+            ->line(Lang::get("Es un placer tenerte de vuelta, nos alegra que hayas cambiado de opinion, tu cuenta ha sido re-activada."))
+            ->action(Lang::get('Midori Account'), url(env('APP_URL')))
+            ->line('Gracias por ser parte de nosotros.');
 
     }
 

@@ -3,9 +3,10 @@
 namespace App\Notifications\Client;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class DestroyClientNotification extends Notification 
 {
@@ -47,7 +48,7 @@ class DestroyClientNotification extends Notification
             ->line(__('Ningun dato proporcionado por usted ha sido almacenado'))
             ->line(__('toda su informacion ha sido eliminada, si desea volver con nosotros'))
             ->line(__('deberá registrarse otra vez, realizando el mismo proceso.'))
-            ->action(__('Ir a Midori'), url(env('FRONTEND_URL')))
+            ->action(Lang::get('Midori Account'), url(env('FRONTEND_URL')))
             ->line(__('Agracemos su instancia y muchas gracias por haber usado nuestors servicios'));
     }
 
