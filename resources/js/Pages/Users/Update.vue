@@ -163,7 +163,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col mb-2">
+                    <div class="col mb-2" v-show="user.cliente == 0">
                         <div class="row row-cols-4 col-12">
                             <div
                                 class="col-12 border-bottom h5 mb-4 border-top"
@@ -214,12 +214,7 @@
 export default {
     emits: ["userWasUpdated"],
 
-    props: {
-        user: {
-            type: Object,
-            required: true,
-        },
-    },
+    props: ["user"],
 
     data() {
         return {
