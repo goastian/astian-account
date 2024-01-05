@@ -1,122 +1,115 @@
 <template>
     <div class="container-fluid">
-        <div class="row row-cols-3 col-sm-12">
-            <div class="col">
-                <v-update :user="user" @user-was-updated="authenticated"></v-update>
-            </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >nombre</span
-                >
-                <span>{{ user.nombre }}</span>
-            </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >apellido</span
-                >
-                <span class="font-monospace">
-                    {{ user.apellido }}
-                </span>
-            </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >email</span
-                >
-                <span class="font-monospace">
-                    {{ user.correo }}
-                </span>
-            </div>
+        <div class="row row-cols-2 col-sm-12">
+            <div class="col-4 px-0">
+                <div class="card">
+                    <div class="card-head text-center rounded border py-5">
+                        photo
+                    </div>
+                    <div class="card-body text-center">
+                        <ul class="list-group">
+                            <li class="list-group-item text-capitalize">
+                                <strong>
+                                    {{ user.nombre }} {{ user.apellido }}
+                                </strong>
+                            </li>
+                            <v-update
+                                :user="user"
+                                @user-was-updated="authenticated"
+                            ></v-update>
 
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >pais</span
-                >
-                <span class="font-monospace">
-                    {{ user.pais }}
-                </span>
+                            <li class="list-group-item">{{ user.telefono }}</li>
+                            <li class="list-group-item">{{ user.correo }}</li>
+
+                            <v-remove
+                                :user="user"
+                                @status="showMessage"
+                            ></v-remove>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >ciudad</span
-                >
-                <span class="font-monospace">
-                    {{ user.ciudad }}
-                </span>
+            <div class="col-8">
+                <ul class="list-group">
+                    <li class="list-group-item active text-center">
+                        <strong> Datos </strong>
+                    </li>
+                    <li class="list-group-item">
+                        <strong> Desde : </strong>{{ user.registrado }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong> Ultima Actualizacion : </strong
+                        >{{ user.actualizado }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong> Pais : </strong>{{ user.pais }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong> Ciudad: </strong>{{ user.ciudad }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong> Direccion: </strong>{{ user.direccion }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong> Nacimiento: </strong>{{ user.nacimiento }}
+                    </li>
+                    <li
+                        :class="[
+                            'list-group-item',
+                            user.totp ? 'text-success' : 'text-danger',
+                        ]"
+                    >
+                        <strong> 2FA - Two Factor Authentication: </strong>
+                        <span>
+                            {{ user.m2fa ? "Activado" : "Inactivo" }}
+                        </span>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>TOTP - Time-based One-Time Passwords : </strong>
+                        No disponible
+                    </li>
+                </ul>
             </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >direccion</span
-                >
-                <span class="font-monospace">
-                    {{ user.direccion }}
-                </span>
+            <div class="col-12 my-4 px-0">
+                <ul class="list-group">
+                    <li class="list-group-item active text-center">
+                        Permisos del ususario
+                    </li>
+                    <li class="list-group-item">
+                        <span
+                            class="line"
+                            v-for="(item, index) in roles"
+                            :key="index"
+                        >
+                            {{ item.role }}</span
+                        >
+                    </li>
+                </ul>
             </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >nacimiento</span
-                >
-                <span class="font-monospace">
-                    {{ user.nacimiento }}
-                </span>
-            </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >telefono</span
-                >
-                <span class="font-monospace" v-for="(item, index) in user.telefono" :key="index">
-                    {{item}} 
-                </span>
-            </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >2FA - Two Factor Authentication</span
-                >
-                <span
-                    :class="[
-                        'font-monospace',
-                        user.m2fa ? 'text-success' : 'text-danger',
-                    ]"
-                >
-                    {{ user.m2fa ? "Activado" : "Inactivo" }}
-                </span>
-            </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >registrado</span
-                >
-                <span class="font-monospace">
-                    {{ user.registrado }}
-                </span>
-            </div>
-            <div class="col mb-3">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >actualizado</span
-                >
-                <span class="font-monospace">
-                    {{ user.actualizado }}
-                </span>
-            </div>
-            <div class="col">
-                <span class="d-block fw-bold text-capitalize text-secondary"
-                    >Roles Asignados</span
-                >
-                <span> Tiene asignados {{ roles.length }} roles </span>
+            <div
+                v-show="message"
+                class="col-12 py-3 fixed-top bg-danger text-capitalize text-center"
+            >
+                <span>{{ message }}</span>
             </div>
         </div>
     </div>
 </template>
 <script>
 import VUpdate from "../Users/Update.vue";
+import VRemove from "./Remove.vue";
 
 export default {
     components: {
         VUpdate,
+        VRemove,
     },
 
     data() {
         return {
             user: {},
             roles: {},
+            message: null,
         };
     },
 
@@ -139,6 +132,14 @@ export default {
                 });
         },
 
+        showMessage(event) {
+            this.message = event;
+
+            setTimeout(() => {
+                window.location.href = window.location.host;
+            }, 5000);
+        },
+
         scopes(link) {
             window.axios
                 .get(link)
@@ -146,7 +147,9 @@ export default {
                     this.roles = res.data.data;
                 })
                 .catch((e) => {
-                    console.log(e);
+                    if (e.response) {
+                        console.log(e.response);
+                    }
                 });
         },
 
@@ -171,4 +174,12 @@ export default {
     },
 };
 </script>
-<style lang=""></style>
+<style lang="css" scoped>
+.line {
+    display: inline-block;
+    margin: 0.5%;
+    padding: 0.5%;
+    border-radius: 5%;
+    background-color: aqua;
+}
+</style>
