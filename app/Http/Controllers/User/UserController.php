@@ -27,10 +27,10 @@ class UserController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . $user->transformer)->only('store', 'update');
-        $this->middleware('scope:account,account_read')->only('index', 'show');
+        $this->middleware('scope:account,account_read,client')->only('index', 'show');
         $this->middleware('scope:account,account_register')->only('store');
-        $this->middleware('scope:account,account_update')->only('update');
-        $this->middleware('scope:account,account_disable')->only('disable');
+        $this->middleware('scope:account,account_update,client')->only('update');
+        $this->middleware('scope:account,account_disable,client')->only('disable');
         $this->middleware('scope:account,account_enable')->only('enable');
 
     }
@@ -70,7 +70,6 @@ class UserController extends Controller
         DB::transaction(function () use ($request, $user, $temp_password) {
 
             $user = $user->fill($request->except('password', 'role'));
-            $user->client = 0;
             $user->verified_at = now();
             $user->password = Hash::make($temp_password);
             $user->save();
@@ -78,7 +77,7 @@ class UserController extends Controller
             $user->roles()->syncWithoutDetaching($request->role);
         });
 
-        StoreEmployeeEvent::dispatch($this->authenticated_user());
+        StoreEmployeeEvent::dispatch();
 
         Notification::send($user, new CreatedNewUser($temp_password));
 
@@ -171,41 +170,20 @@ class UserController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Employee $user)
-    {
-
-    }
-
-    /**
      * deshabilita un usuario
      * @return Bool
      */
     public function disable(Request $request, Employee $user)
     {
-        /**
-         * si no es cliente no podra desactivarse a si mismo
-         */
-        if (!$user->isClient() and $request->user()->id == $user->id) {
-            throw new ReportError(__("Can´t disable by yourself"), 406);
+        if ((!$user->isClient() && $request->user()->id == $user->id) ||
+            (!$request->user()->isClient() && $user->isClient()) ||
+            ($request->user()->isClient() && $request->user()->id != $user->id)
+        ) {
+            throw new ReportError(__("Unauthorize"), 406);
         }
 
-        /**
-         * si no es cliente no podra desactivar clientes
-         */
-        if (!$request->user()->isClient() and $user->isClient()) {
-            throw new ReportError(__("Unauthorize"), 403);
-        }
-
-        /**
-         * si es un cliente se podra desactivar solo a si mismo
-         */
-        if ($request->user()->isClient() and $request->user()->id != $user->id) {
-            throw new ReportError(__("Unauthorize"), 403);
+        if ($request->user()->isClient() and $request->user()->m2fa) {
+            throw new ReportError(__("Before doing this action, you must disable Two Factor Authentication."), 403);
         }
 
         DB::transaction(function () use ($user) {
@@ -219,20 +197,22 @@ class UserController extends Controller
         });
 
         DisableEmployeeEvent::dispatch();
-        
-        $user->client ? $user->notify(new ClientDisableNotification()) : $user->notify(new UserDisableNotification());
+
+        $user->isClient() ? $user->notify(new ClientDisableNotification()) : $user->notify(new UserDisableNotification());
 
         return $this->showOne($user, $user->transformer);
     }
 
     /**
      * habilita un usuario deshabilitado
+     * 
      * @return Json
      */
     public function enable($id)
     {
-        if (request()->user()->isClient()) {
-            throw new ReportError("Unauthorize", 403);
+        if ((!request()->user()->isClient() && request()->user()->isClient()) ||
+            request()->user()->isClient()) {
+            throw new ReportError(__("Unauthorize"), 403);
         }
 
         try {
@@ -251,7 +231,8 @@ class UserController extends Controller
     }
 
     /**
-     * deny acction if the user is a client
+     * deny the acction if the user is a client and has diferent ID.
+     *
      * @param String $id
      * @return Exception
      */
