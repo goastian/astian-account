@@ -163,7 +163,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col mb-2" v-show="user.cliente == 0">
+                    <div class="col mb-2" v-show="client == 0">
                         <div class="row row-cols-4 col-12">
                             <div
                                 class="col-12 border-bottom h5 mb-4 border-top"
@@ -222,6 +222,7 @@ export default {
             status: false,
             errors: {},
             roles: {},
+            client: false,
         };
     },
 
@@ -266,6 +267,7 @@ export default {
         },
 
         loadData(user) {
+            this.authenticated();
             this.getRoles();
             this.getUserRoles(user);
         },
@@ -299,10 +301,15 @@ export default {
                 });
         },
 
-        getDocuments() {
-            window.axios.get("/api/document-type").then((res) => {
-                this.documents = res.data;
-            });
+        authenticated() {
+            window.axios
+                .get("/api/gateway/user")
+                .then((res) => {
+                    this.client = res.data.cliente;
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         },
 
         /**
