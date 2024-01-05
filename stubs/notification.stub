@@ -18,7 +18,7 @@ class {{ class }} extends Notification
      */
     public function __construct($data=null)
     {
-        $this->queue = env('REDIS_QUEUE_NOTIFICATIONS', 'notify');
+        $this->queue = 'notify';
 
     }
 
