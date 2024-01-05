@@ -23,13 +23,13 @@ class CheckClientCredentials extends middleware
     protected function validateScopes($token, $scopes)
     {
         if (in_array('*', $token->scopes)) {
-            return;
+            throw new ReportError(__('Forbidden scope'), 403);
         }
 
         if (request()->user()->isAdmin()) {
             return;
         }
-        //session sin token
+
         if (!request()->header('Authorization')) {
             $can_access = [];
             foreach ($scopes as $scope) {
@@ -37,7 +37,7 @@ class CheckClientCredentials extends middleware
             }
 
             return in_array(true, $can_access) ?:
-            throw new ReportError('No cuenta con los permisos necesarios', 403);
+            throw new ReportError(__('Forbidden action'), 403);
         }
 
         foreach ($scopes as $scope) {
