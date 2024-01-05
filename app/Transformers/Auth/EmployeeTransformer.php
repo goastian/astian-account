@@ -2,7 +2,7 @@
 
 namespace App\Transformers\Auth;
 
-  
+use App\Models\User\Employee;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
@@ -45,7 +45,8 @@ class EmployeeTransformer extends TransformerAbstract
             'direccion' => $user->address,
             'nacimiento' => $user->birthday,
             'telefono' => $user->phone,
-            'verificado' => $user->verified_at, 
+            'verificado' => $user->verified_at,
+            'cliente' => Employee::withTrashed()->find($user->id)->isClient(),
             'm2fa' => $user->m2fa,
             'registrado' => $this->format_date($user->created_at),
             'actualizado' => $this->format_date($user->updated_at),
