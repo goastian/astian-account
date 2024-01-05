@@ -2,12 +2,13 @@
 
 namespace App\Notifications\Client;
 
+use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class ClientRegistered extends Notification implements ShouldQueue
 {
@@ -50,7 +51,7 @@ class ClientRegistered extends Notification implements ShouldQueue
             ->line(__("Bienvenid@ " . $notifiable->name . " " . $notifiable->last_name))
             ->line(__("Para poder verificar que eres una persona, sigue las instrucciones, que permitiran activar tu cuenta."))
             ->line(__("Para verificar su cuenta solo tiene un tiempo maximo de " . env('TIME_TO_VERIFY_ACCOUNT') . " minutos, si no la activa se procederá a borrar toda su informacion y tendra que registrarse otra vez."))
-            ->action(__('Activar cuenta'), url($link))
+            ->action(Lang::get('Midori Account'), url($link))
             ->line('Gracias por ser parte de nosotros.');
     }
 
