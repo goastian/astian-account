@@ -17,11 +17,18 @@ return new class extends Migration
         /**
          * datos del user administrador
          */
-        
+
         foreach (Role::rolesByDefault() as $key => $value) {
             Role::create([
                 'name' => $key,
-                'description' => $value
+                'description' => $value,
+            ])->save();
+        }
+
+        foreach (Broadcast::channelsByDefault() as $key => $value) {
+            Broadcast::create([
+                'channel' => $key,
+                'description' => $value,
             ])->save();
         }
 
@@ -29,11 +36,10 @@ return new class extends Migration
             'name' => 'admin',
             'last_name' => 'administrador',
             'email' => 'test@admin.com',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',//password
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', //password
         ])->save();
 
         Employee::first()->roles()->syncWithoutDetaching(Role::first()->id);
- 
 
     }
 
