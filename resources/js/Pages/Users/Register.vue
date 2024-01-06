@@ -134,7 +134,7 @@
 </template>
 <script>
 export default {
-    emits: ["userWasRegistered"],
+    emits: ["success", "errors"],
 
     data() {
         return { 
@@ -164,7 +164,7 @@ export default {
                 .then((res) => {
                     this.form = { acceso: [] };
                     this.errors = {};
-                    this.$emit("userWasRegistered", res.data.data);
+                    this.$emit("success", res.data.data);
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {

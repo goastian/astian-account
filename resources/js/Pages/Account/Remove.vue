@@ -44,7 +44,7 @@ export default {
                 })
                 .catch((e) => {
                     if (e.response) {
-                        console.log(e.response);
+                        this.$emit("status", e.response);
                     }
                 });
         },

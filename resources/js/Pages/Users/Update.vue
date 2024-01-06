@@ -212,7 +212,7 @@
 </template>
 <script>
 export default {
-    emits: ["userWasUpdated"],
+    emits: ["success"],
 
     props: ["user"],
 
