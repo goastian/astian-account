@@ -5,6 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\User\Role;
 use App\Notifications\Auth\ResetPassword;
+use DateInterval;
+use DateTime;
 use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -132,12 +134,25 @@ class Auth extends Authenticatable
 
     /**
      * get scope for the client
-     * 
+     *
      * @return Role
      */
     public function addClientScope()
     {
         $scope = Role::where('name', 'client')->first();
         return $scope;
+    }
+
+    /**
+     * Setting the date for registered users
+     *
+     * @param Int $years
+     * @return date
+     */
+    public static function setBirthday($years = 13)
+    {
+        $date = new DateTime();
+        $date->sub(new DateInterval('P' . $years . 'Y'));
+        return $date->format('Y-m-d');
     }
 }
