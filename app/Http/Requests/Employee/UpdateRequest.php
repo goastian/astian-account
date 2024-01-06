@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Employee;
 
 use App\Enum\EnumType; 
+use App\Models\User\Employee;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -32,7 +33,7 @@ class UpdateRequest extends FormRequest
             'country' => ['nullable', 'max:100'],
             'city' => ['nullable', 'max:100'],
             'address' => ['nullable', 'max:150'],
-            'birthday' => ['nullable', 'date_format:Y-m-d'],
+            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
             'phone' => ['nullable', 'max:9', 'unique:employees,phone,' . request()->user->id]
         ];
     }
