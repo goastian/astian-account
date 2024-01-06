@@ -3,7 +3,7 @@
         <div class="mx-1">
             <v-search @searching="searching">
                 <template v-slot:button>
-                    <v-register @user-was-registered="getUsers"></v-register>
+                    <v-register @success="getUsers"></v-register>
                 </template>
             </v-search>
 
@@ -18,11 +18,12 @@
                         <td>
                             <v-update
                                 :user="item"
-                                @user-was-updated="getUsers"
+                                @success="getUsers"
                             ></v-update>
                             <v-status
                                 :user="item"
-                                @user-status="getUsers"
+                                @success="getUsers"
+                                @errors="alert"
                             ></v-status>
                         </td>
                     </tr>
@@ -34,6 +35,8 @@
             ></v-pagination>
         </div>
     </div>
+
+    <v-message :message="message" @message-send="close"></v-message>
 </template>
 <script>
 import VRegister from "./Register.vue";
@@ -57,6 +60,7 @@ export default {
             search: {
                 page: 1,
             },
+            message: null,
         };
     },
 
@@ -75,7 +79,18 @@ export default {
             this.getUsers();
         },
 
+        alert(event) {
+            if (event.status) {
+                this.message = event.data.message;
+            }
+        },
+
+        close() {
+            this.message = null;
+        },
+
         getUsers() {
+            this.message = null;
             window.axios
                 .get("/api/users", {
                     params: this.search,

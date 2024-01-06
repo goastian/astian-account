@@ -87,6 +87,8 @@
                 </ul>
             </div>
 
+            <v-message :message="message"  @message-send="close"></v-message>
+
             <div class="col-12 px-0">
                 <ul class="list-group">
                     <li class="list-group-item active text-center">
@@ -111,12 +113,6 @@
                         </button>
                     </li>
                 </ul>
-            </div>
-            <div
-                v-show="message"
-                class="col-12 py-3 fixed-top bg-danger text-capitalize text-center"
-            >
-                <span>{{ message }}</span>
             </div>
         </div>
     </div>
@@ -145,12 +141,6 @@ export default {
         this.session();
     },
 
-    mounted() {
-        setTimeout(() => {
-            this.listener();
-        }, 1000);
-    },
-
     methods: {
         authenticated() {
             window.axios
@@ -165,12 +155,18 @@ export default {
                 });
         },
 
-        showMessage(event) {
-            this.message = event;
+        close() {
+            this.message = null;
+        },
 
-            setTimeout(() => {
-                window.location.href = window.location.host;
-            }, 5000);
+        showMessage(event) {
+            if (!event.status) {
+                this.message = event;
+                setTimeout(() => {
+                    window.location.href = window.location.host;
+                }, 5000);
+            }
+            this.message = event.data.message;
         },
 
         session() {
@@ -190,7 +186,7 @@ export default {
             window.axios
                 .delete(link)
                 .then((res) => {
-                    this.session()
+                    this.session();
                 })
                 .catch((e) => {
                     if (e.response) {
@@ -247,4 +243,5 @@ export default {
     border-radius: 5%;
     background-color: aqua;
 }
+
 </style>

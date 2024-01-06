@@ -32,29 +32,36 @@
 </template>
 <script>
 export default {
-    emits: ["userStatus"],
+    emits: ["success", "errors"],
 
     props: {
         user: { type: Object, requered: true },
     },
 
     methods: {
-        
         enableOrDisable(item) {
             if (item.inactivo) {
                 window.axios
                     .get(item.links.enable)
                     .then((res) => {
-                        this.$emit("userStatus", res.data.data);
+                        this.$emit("success", res.data.data);
                     })
-                    .catch((e) => {});
+                    .catch((e) => {
+                        if (e.response) {
+                            this.$emit("errors", e.response);
+                        }
+                    });
             } else {
                 window.axios
                     .delete(item.links.disable)
                     .then((res) => {
-                        this.$emit("userStatus", res.data.data);
+                        this.$emit("success", res.data.data);
                     })
-                    .catch((e) => {});
+                    .catch((e) => {
+                        if (e.response) {
+                            this.$emit("errors", e.response);
+                        }
+                    });
             }
         },
     },

@@ -59,7 +59,7 @@
 </template>
 <script>
 export default {
-    emits: ["searching"],
+    emits: ["success"],
 
     data() {
         return {
@@ -74,7 +74,7 @@ export default {
 
     methods: {
         searching() {
-            this.$emit("searching", this.search);
+            this.$emit("success", this.search);
         },
 
         clear() {
