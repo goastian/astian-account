@@ -129,7 +129,7 @@
                                     name="nacimiento"
                                     class="form-control-sm form-control"
                                 />
-                                <v-error :error="errors.direccion"></v-error>
+                                <v-error :error="errors.nacimiento"></v-error>
                             </div>
                             <div class="col mb-2">
                                 <label
@@ -292,7 +292,8 @@ export default {
                 .put(item.links.update, this.user)
                 .then((res) => {
                     this.status = "Usuario Actualizado";
-                    this.$emit("userWasUpdated", res.data.data);
+                    this.$emit("success", res.data.data);
+                    this.errors = {};
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {

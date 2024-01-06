@@ -15,7 +15,7 @@
                             </li>
                             <v-update
                                 :user="user"
-                                @user-was-updated="authenticated"
+                                @success="authenticated"
                             ></v-update>
 
                             <li class="list-group-item">{{ user.telefono }}</li>
@@ -23,7 +23,8 @@
 
                             <v-remove
                                 :user="user"
-                                @status="showMessage"
+                                @success="showMessage"
+                                @errors = "showMessage"
                             ></v-remove>
                         </ul>
                     </div>
