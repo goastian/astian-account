@@ -32,7 +32,7 @@
 </template>
 <script>
 export default {
-    emits: ["scopeWasCreated"],
+    emits: ["success"],
 
     data() {
         return {
@@ -48,7 +48,7 @@ export default {
                 .then((res) => {
                     this.errors = {};
                     this.form = {};
-                    this.$emit("scopeWasCreated", res.data.data);
+                    this.$emit("success", res.data.data);
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {

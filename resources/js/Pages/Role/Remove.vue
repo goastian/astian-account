@@ -34,7 +34,7 @@
 </template>
 <script>
 export default {
-    emits: ["scopeWasRemove"],
+    emits: ["success", "errors"],
 
     props: {
         role: {
@@ -48,10 +48,12 @@ export default {
             window.axios
                 .delete(role.links.destroy)
                 .then((res) => {
-                    this.$emit("scopeWasRemove", res.data.data);
+                    this.$emit("success", res.data.data);
                 })
                 .catch((e) => {
-                    console.error(e.response);
+                    if (e.response) {
+                        this.$emit("errors", e.response);
+                    }
                 });
         },
     },
