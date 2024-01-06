@@ -42,4 +42,11 @@ class Broadcast extends Master
         };
     }
 
+    public static function channelsByDefault()
+    {
+        return [
+            'auth' => "default channel in the system"
+        ];
+    }
+
 }
