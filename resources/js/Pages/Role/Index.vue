@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <v-create @scope-was-created="getScopes(actual_page)"></v-create>
+        <v-create @success="getScopes(actual_page)"></v-create>
         <v-table
             :items="items"
             class="text-sm table-sm text-center"
@@ -13,13 +13,15 @@
                     <td>
                         <v-update
                             :role="item"
-                            @scope-was-updated="getScopes(actual_page)"
+                            @success="getScopes(actual_page)"
+                            @errors="showMessage"
                         ></v-update>
                     </td>
                     <td>
                         <v-remove
                             :role="item"
-                            @scope-was-remove="getScopes(actual_page)"
+                            @success="getScopes(actual_page)"
+                            @errors="showMessage"
                         ></v-remove>
                     </td>
                 </tr>
@@ -29,6 +31,8 @@
             :pages="pages"
             @send-current-page="changePage"
         ></v-pagination>
+
+        <v-message :message="message" @close="close"></v-message>
     </div>
 </template>
 <script>
@@ -49,6 +53,7 @@ export default {
             scopes: {},
             pages: {},
             actual_page: 1,
+            message: null,
         };
     },
 
@@ -62,6 +67,14 @@ export default {
     },
 
     methods: {
+        showMessage(event) {
+            this.message = event.data.message;
+        },
+
+        close(){
+            this.message = null
+        },
+
         changePage(page) {
             this.actual_page = page;
             this.getScopes(page);

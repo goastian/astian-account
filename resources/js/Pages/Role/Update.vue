@@ -30,7 +30,7 @@
 </template>
 <script>
 export default {
-    emits: ["scopeWasUpdated"],
+    emits: ["success", 'errors'],
 
     props: {
         role: { type: Object, required: true },
@@ -48,11 +48,15 @@ export default {
                 .put(role.links.update, this.role)
                 .then((res) => {
                     this.errors = {};
-                    this.$emit("scopeWasUpdated", res.data.data);
+                    this.$emit("success", res.data.data);
                 })
                 .catch((e) => {
-                    if (e.response && e.response.data.errors) {
+                    if (e.response && e.response.status != 403 && e.response.data.errors) {
                         this.errors = e.response.data.errors;
+                    }
+
+                    if (e.response.status == 403) {
+                        this.$emit('errors', e.response)
                     }
                 });
         },

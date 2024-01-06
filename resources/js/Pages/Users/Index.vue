@@ -36,7 +36,7 @@
         </div>
     </div>
 
-    <v-message :message="message" @message-send="close"></v-message>
+    <v-message :message="message" @close="close"></v-message>
 </template>
 <script>
 import VRegister from "./Register.vue";

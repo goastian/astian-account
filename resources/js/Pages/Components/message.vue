@@ -1,7 +1,7 @@
 <template lang="">
     <div
         v-show="message"
-        class="col-12 py-3 message fixed-top bg-danger text-capitalize text-center"
+        class="col-12 py-3 message fixed-top bg-danger text-center"
     >
         <span>{{ message }}</span>
         <button class="btn btn-warning mx-5 message-close" @click="close">X</button>
@@ -11,11 +11,11 @@
 export default {
     props: ["message"],
 
-    emits: ["messageSend"],
+    emits: ["close"],
 
     methods: {
         close() {
-            this.$emit("messageSend");
+            this.$emit("close");
         },
     },
 };
