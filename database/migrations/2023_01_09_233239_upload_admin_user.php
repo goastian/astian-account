@@ -17,24 +17,8 @@ return new class extends Migration
         /**
          * datos del user administrador
          */
-        $roles = [
-            "admin" => "acceso total al sistema", 
-            "client" => "acceso defecto para el cliente", 
-            "broadcast" => "administrar canales",
-            "account" => "administrar cuentas de usuario",
-            "account_read" => "acceso a ver informacion de los usuarios",
-            "account_register" => "registra un nuevo usuario",
-            "account_update" => "actualiza informacion de usaurios",
-            "account_enable" => "permite habilitar usuarios",
-            "account_disable" => "permite deshabilitar usuarios",
-            "scopes" => "administrar scopes",
-            "scopes_read" => "permite ver todos los scopes",
-            "scopes_register" => "permite registrar nuevos scopes",
-            "scopes_update" => "permite actualizar nuevos scopes",
-            "scopes_destroy" => "Permite eliminar un scope",
-        ];
-
-        foreach ($roles as $key => $value) {
+        
+        foreach (Role::rolesByDefault() as $key => $value) {
             Role::create([
                 'name' => $key,
                 'description' => $value
