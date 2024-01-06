@@ -86,6 +86,32 @@
                     </li>
                 </ul>
             </div>
+
+            <div class="col-12 px-0">
+                <ul class="list-group">
+                    <li class="list-group-item active text-center">
+                        Dispositivos conectados {{ sessions.length }}
+                    </li>
+                    <li class="list-group-item">
+                        <button
+                            class="btn-secondary btn mx-1 mb-1"
+                            v-for="(item, index) in sessions"
+                            :key="index"
+                        >
+                            <span style="display: inline-block">
+                                {{ item.ip }} <br />
+                                {{ item.agente }} <br />
+                                {{ item.ultima_coneccion }}
+                            </span>
+                            <a
+                                @click="destroySession(item.links.destroy)"
+                                class="btn btn-danger text-white"
+                                >X</a
+                            >
+                        </button>
+                    </li>
+                </ul>
+            </div>
             <div
                 v-show="message"
                 class="col-12 py-3 fixed-top bg-danger text-capitalize text-center"
@@ -110,12 +136,19 @@ export default {
             user: {},
             roles: {},
             message: null,
+            sessions: {},
         };
     },
 
     created() {
         this.authenticated();
-        this.listener();
+        this.session();
+    },
+
+    mounted() {
+        setTimeout(() => {
+            this.listener();
+        }, 1000);
     },
 
     methods: {
@@ -138,6 +171,32 @@ export default {
             setTimeout(() => {
                 window.location.href = window.location.host;
             }, 5000);
+        },
+
+        session() {
+            window.axios
+                .get("/api/sessions")
+                .then((res) => {
+                    this.sessions = res.data.data;
+                })
+                .catch((e) => {
+                    if (e.response) {
+                        console.log(e.response);
+                    }
+                });
+        },
+
+        destroySession(link) {
+            window.axios
+                .delete(link)
+                .then((res) => {
+                    this.session()
+                })
+                .catch((e) => {
+                    if (e.response) {
+                        console.log(e.response);
+                    }
+                });
         },
 
         scopes(link) {
@@ -169,6 +228,12 @@ export default {
                 .private(this.$channels.ch_0())
                 .listen("DestroyEmployeeRoleEvent", (e) => {
                     this.authenticated();
+                });
+
+            this.$echo
+                .private(this.$channels.ch_1(window.$auth.id))
+                .listen("authorize", (e) => {
+                    this.session();
                 });
         },
     },
