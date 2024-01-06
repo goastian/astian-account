@@ -48,7 +48,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        LoginEvent::dispatch($this->authenticated_user());
+        LoginEvent::dispatch();
 
         return RouteServiceProvider::home();
     }
@@ -64,7 +64,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        LogoutEvent::dispatch($this->authenticated_user());
+        LogoutEvent::dispatch();
 
         return $request->wantsJson() ? route('login') : redirect(env('APP_URL'));
     }
