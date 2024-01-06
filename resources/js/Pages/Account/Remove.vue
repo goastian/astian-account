@@ -28,7 +28,7 @@
 </template>
 <script>
 export default {
-    emits: ["status"],
+    emits: ["success","errors"],
 
     props: ["user"],
 
@@ -38,13 +38,13 @@ export default {
                 .delete(item.links.disable)
                 .then((res) => {
                     this.$emit(
-                        "status",
+                        "success",
                         "Su cuenta ha sido eliminada, recibira un email con la confirmacion, en 5 segundo se cerrara tu session."
                     );
                 })
                 .catch((e) => {
                     if (e.response) {
-                        this.$emit("status", e.response);
+                        this.$emit("errors", e.response);
                     }
                 });
         },
