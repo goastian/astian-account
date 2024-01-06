@@ -8,8 +8,10 @@ use App\Events\Role\UpdateRoleEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\User\Role;
 use App\Transformers\Role\RoleTransformer;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 
 class RoleController extends Controller
 {
@@ -68,6 +70,13 @@ class RoleController extends Controller
 
             if ($this->is_diferent($role->name, $request->name)) {
                 $this->can_update[] = true;
+
+                collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
+                    if ($role->name == $key) {
+                        throw new ReportError(Lang::get("This role ($key) belongs to the system by default and the scope name cannot be updated."), 403);
+                    }
+                });
+
                 $role->name = $request->name;
             }
 
@@ -90,6 +99,12 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
+        collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
+            if ($key === $role->name) {
+                throw new ReportError(Lang::get("This role ($key) belongs to the system by default and cannot be deleted from the system"), 403);
+            }
+        });
+
         $role->delete();
 
         DestroyRoleEvent::dispatch($this->authenticated_user());
