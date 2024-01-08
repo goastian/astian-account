@@ -23,7 +23,7 @@ class Role extends master
 
     public function users()
     {
-        return $this->belongsToMany(Employee::class, 'employee_role');
+        return $this->belongsToMany(Employee::class, 'role_user', 'role_id', 'user_id');
     }
 
     public static function rolesByDefault()

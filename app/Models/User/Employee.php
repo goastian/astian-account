@@ -17,7 +17,7 @@ class Employee extends Auth
 {
     use SoftDeletes;
 
-    public $table = "employees";
+    public $table = "users";
 
     //public $view = "";
 
@@ -25,7 +25,7 @@ class Employee extends Auth
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'employee_role');
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id','role_id');
     }
 
     /**
@@ -74,7 +74,7 @@ class Employee extends Auth
 
     /**
      * Verify the correct user and check if they have activated 2FA.
-     * 
+     *
      * @param Request $request
      */
     public static function validate(Request $request)
