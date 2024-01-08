@@ -81,7 +81,7 @@ export default {
         },
 
         getScopes(id) {
-            window.axios
+            this.$server
                 .get("/api/roles", {
                     params: {
                         page: id,

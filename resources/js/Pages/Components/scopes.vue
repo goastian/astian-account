@@ -50,7 +50,7 @@ export default {
         },
 
         getScopes() {
-            window.axios
+            this.$server
                 .get("oauth/scopes")
                 .then((res) => {
                     this.scopes = res.data;

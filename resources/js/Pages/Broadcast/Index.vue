@@ -62,7 +62,7 @@ export default {
         },
 
         getChannels() {
-            window.axios
+            this.$server
                 .get("/api/broadcasts", {
                     params: this.search,
                 })

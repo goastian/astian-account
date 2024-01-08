@@ -44,7 +44,7 @@ export default {
 
     methods: {
         removeToken(token) {
-            window.axios
+            this.$server
                 .delete("/oauth/personal-access-tokens/" + token.id)
                 .then((res) => {
                     this.$emit("TokenWasRemove", res.data);

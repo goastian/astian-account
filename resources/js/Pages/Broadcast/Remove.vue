@@ -32,7 +32,7 @@ export default {
 
     methods: {
         remove(item) {
-            window.axios
+            this.$server
                 .delete(item.links.destroy)
                 .then((res) => {
                     this.$emit("broadcastWasRemove", res.data.data);

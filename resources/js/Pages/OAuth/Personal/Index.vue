@@ -48,7 +48,7 @@ export default {
 
     methods: {
         getPersonalAccessToken() {
-            window.axios
+            this.$server
                 .get("/oauth/personal-access-tokens")
                 .then((res) => {
                     this.tokens = res.data;
