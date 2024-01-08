@@ -150,7 +150,7 @@ export default {
 
     methods: {
         getRoles() {
-            window.axios
+            this.$server
                 .get("/api/roles")
                 .then((res) => {
                     this.roles = res.data.data;
@@ -159,7 +159,7 @@ export default {
         },
 
         createUser() {
-            window.axios
+            this.$server
                 .post("/api/users", this.form)
                 .then((res) => {
                     this.form = { acceso: [] };

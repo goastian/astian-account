@@ -34,7 +34,7 @@ export default {
 
     methods: {
         remove(item) {
-            window.axios
+            this.$server
                 .delete(item.links.disable)
                 .then((res) => {
                     this.$emit(

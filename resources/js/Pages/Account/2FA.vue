@@ -66,7 +66,7 @@ export default {
 
     methods: {
         requestCode() {
-            window.axios
+            this.$server
                 .post("/m2fa/authorize")
                 .then((res) => {
                     this.message = res.data.message;
@@ -81,7 +81,7 @@ export default {
         },
 
         authenticated() {
-            window.axios
+            this.$server
                 .get("/api/gateway/user")
                 .then((res) => {
                     this.user = res.data;
@@ -92,7 +92,7 @@ export default {
         activar() {
             this.errors.message = null;
 
-            window.axios
+            this.$server
                 .post("/m2fa/activate", {
                     token: this.token,
                 })

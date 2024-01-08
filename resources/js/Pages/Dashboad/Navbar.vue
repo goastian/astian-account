@@ -123,7 +123,7 @@ export default {
 
     methods: {
         logout() {
-            window.axios
+            this.$server
                 .post("/logout")
                 .then((res) => {
                     window.location.href = res.data.data;

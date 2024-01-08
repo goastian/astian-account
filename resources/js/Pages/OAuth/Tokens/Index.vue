@@ -43,7 +43,7 @@ export default {
 
     methods: {
         getTokens() {
-            window.axios
+            this.$server
                 .get("/oauth/tokens")
                 .then((res) => {
                     this.tokens = res.data;
@@ -54,7 +54,7 @@ export default {
         },
 
         storeToken() {
-            window.axios.post("/oauth/tokens", this.form).then((res) => {});
+            this.$server.post("/oauth/tokens", this.form).then((res) => {});
         },
 
         listenEvents() {

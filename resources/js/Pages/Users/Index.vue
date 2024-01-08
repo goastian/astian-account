@@ -91,7 +91,7 @@ export default {
 
         getUsers() {
             this.message = null;
-            window.axios
+            this.$server
                 .get("/api/users", {
                     params: this.search,
                 })

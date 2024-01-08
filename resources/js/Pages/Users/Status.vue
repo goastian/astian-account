@@ -41,7 +41,7 @@ export default {
     methods: {
         enableOrDisable(item) {
             if (item.inactivo) {
-                window.axios
+                this.$server
                     .get(item.links.enable)
                     .then((res) => {
                         this.$emit("success", res.data.data);
@@ -52,7 +52,7 @@ export default {
                         }
                     });
             } else {
-                window.axios
+                this.$server
                     .delete(item.links.disable)
                     .then((res) => {
                         this.$emit("success", res.data.data);

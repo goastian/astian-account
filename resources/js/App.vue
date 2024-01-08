@@ -27,7 +27,7 @@ export default {
 
     methods: {
         authenticated() {
-            window.axios
+            this.$server
                 .get("/api/gateway/user")
                 .then((res) => {
                     this.user = res.data;

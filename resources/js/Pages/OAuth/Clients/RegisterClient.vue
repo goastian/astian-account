@@ -59,7 +59,7 @@ export default {
 
     methods: {
         storeClients() {
-            window.axios
+            this.$server
                 .post("/oauth/clients", this.client)
                 .then((res) => {
                     this.client = { name: "", redirect: "" };

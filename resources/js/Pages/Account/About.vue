@@ -88,7 +88,7 @@
                 </ul>
             </div>
 
-            <v-message :message="message"  @message-send="close"></v-message>
+            <v-message :message="message"  @close="close"></v-message>
 
             <div class="col-12 px-0">
                 <ul class="list-group">
@@ -144,7 +144,7 @@ export default {
 
     methods: {
         authenticated() {
-            window.axios
+            this.$server
                 .get("/api/gateway/user")
                 .then((res) => {
                     this.user = res.data;
@@ -171,7 +171,7 @@ export default {
         },
 
         session() {
-            window.axios
+            this.$server
                 .get("/api/sessions")
                 .then((res) => {
                     this.sessions = res.data.data;
@@ -184,7 +184,7 @@ export default {
         },
 
         destroySession(link) {
-            window.axios
+            this.$server
                 .delete(link)
                 .then((res) => {
                     this.session();
@@ -197,7 +197,7 @@ export default {
         },
 
         scopes(link) {
-            window.axios
+            this.$server
                 .get(link)
                 .then((res) => {
                     this.roles = res.data.data;
