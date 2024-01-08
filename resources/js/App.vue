@@ -21,8 +21,7 @@ export default {
     },
 
     created() {
-        this.authenticated();
-        this.authenticated()
+        this.authenticated(); 
     },
 
     methods: {
