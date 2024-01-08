@@ -7,8 +7,10 @@
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-    @vite(['resources/js/app.js'])
+    <link rel="stylesheet"
+        href="{{ app()->environment('production') ? secure_asset('css/app.css') : asset('css/app.css') }}">
 
+    <script src="{{ app()->environment('production') ? secure_asset('js/app.js') : asset('js/app.js') }}" defer></script>
 </head>
 
 <body class="font-sans antialiased bg-dark text-light">
