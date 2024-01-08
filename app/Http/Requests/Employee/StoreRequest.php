@@ -30,11 +30,11 @@ class StoreRequest extends FormRequest
         return [
             'name' => ['required', 'max:100'],
             'last_name' => ['required', 'max:100'],
-            'email' => ['required', 'email', 'max:100', 'unique:employees,email'],
+            'email' => ['required', 'email', 'max:100', 'unique:users,email'],
             'country' => ['required', 'max:100'],
-            'city' => ['required', 'max:100'],
+            'city' => ['nullable', 'max:100'],
             'address' => ['nullable', 'max:150'],
-            'phone' => ['required', 'max:20', 'unique:employees,phone'],
+            'phone' => ['nullable', 'max:20', 'unique:users,phone'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
             'role' => ['required', 'array','exists:roles,id'],
         ];

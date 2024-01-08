@@ -29,12 +29,12 @@ class UpdateRequest extends FormRequest
         return [
             'name' => ['nullable', 'max:100'],
             'last_name' => ['nullable', 'max:100'],
-            'email' => ['nullable', 'email', 'max:100', 'unique:employees,email,' . Request('user')->id],
+            'email' => ['nullable', 'email', 'max:100', 'unique:users,email,' . Request('user')->id],
             'country' => ['nullable', 'max:100'],
             'city' => ['nullable', 'max:100'],
             'address' => ['nullable', 'max:150'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
-            'phone' => ['nullable', 'max:9', 'unique:employees,phone,' . request()->user->id]
+            'phone' => ['nullable', 'max:9', 'unique:users,phone,' . request()->user->id]
         ];
     }
 }
