@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->unique();
             $table->string('name', 100)->index();
             $table->string('last_name', 100)->index();
@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('phone', 15)->nullable()->index();
             $table->date('birthday')->nullable();
             $table->datetime('verified_at')->nullable();
-            //$table->boolean('client')->default(1);
             $table->boolean('m2fa')->default(0);
             $table->boolean('totp')->default(0); 
             $table->timestamps();
@@ -41,6 +40,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('users');
     }
 };
