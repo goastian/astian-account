@@ -101,7 +101,7 @@ class RoleController extends Controller
     {
         collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
             if ($key === $role->name) {
-                throw new ReportError(Lang::get("This role ($key) belongs to the system by default and cannot be deleted from the system"), 403);
+                throw new ReportError(Lang::get("This role ($key) belongs to the system by default and cannot be deleted"), 403);
             }
         });
 
