@@ -318,8 +318,7 @@ export default {
          */
         getUserRoles(item) {
             this.message = null;
-            window
-                .axios(item.links.roles)
+            this.$server.get(item.links.roles)
                 .then((res) => {
                     this.role_selected(res.data.data);
                 })
