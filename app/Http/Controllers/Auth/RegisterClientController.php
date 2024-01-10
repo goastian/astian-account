@@ -40,7 +40,7 @@ class RegisterClientController extends Controller
         $this->validate($request, [
             'name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'email', 'unique:employees,email'],
+            'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'min:8'],
             'country' => ['nullable', 'max:100'],
             'city' => ['nullable', 'max:100'],
