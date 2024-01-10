@@ -25,7 +25,7 @@ class Employee extends Auth
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id','role_id');
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
 
     /**
@@ -37,14 +37,16 @@ class Employee extends Auth
         $now->sub(new DateInterval('P' . env('DESTROY_CLIENTS_AFTER', 30) . 'D'));
         $fecha = $now->format('Y-m-d H:i:s');
 
-        $users = Employee::onlyTrashed()->where('client', 1)->where('deleted_at', "<", $fecha)->get();
+        $users = Employee::onlyTrashed()->where('deleted_at', "<", $fecha)->get();
 
         if (count($users) > 0) {
 
             foreach ($users as $user) {
-                $user->notify(new DestroyClientNotification());
-                DestroyEmployeeEvent::dispatch();
-                $user->forceDelete();
+                if ($user->isClient()) {
+                    $user->notify(new DestroyClientNotification());
+                    DestroyEmployeeEvent::dispatch();
+                    $user->forceDelete();
+                }
             }
 
         }
@@ -59,8 +61,7 @@ class Employee extends Auth
         $now->sub(new DateInterval('PT' . env('TIME_TO_VERIFY_ACCOUNT', 5) . 'M'));
         $fecha = $now->format('Y-m-d H:i:s');
 
-        $deleted = DB::table('employees')
-            ->where('client', 1)
+        $deleted = DB::table('users')
             ->where('verified_at', null)
             ->where('created_at', "<", $fecha)
             ->delete();
