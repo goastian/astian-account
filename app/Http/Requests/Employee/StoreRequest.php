@@ -34,7 +34,7 @@ class StoreRequest extends FormRequest
             'country' => ['required', 'max:100'],
             'city' => ['nullable', 'max:100'],
             'address' => ['nullable', 'max:150'],
-            'phone' => ['nullable', 'max:20', 'unique:users,phone'],
+            'phone' => ['nullable', 'max:25', 'unique:users,phone'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
             'role' => ['required', 'array','exists:roles,id'],
         ];

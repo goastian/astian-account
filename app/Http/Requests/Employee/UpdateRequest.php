@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
             'city' => ['nullable', 'max:100'],
             'address' => ['nullable', 'max:150'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
-            'phone' => ['nullable', 'max:9', 'unique:users,phone,' . request()->user->id]
+            'phone' => ['nullable', 'max:25', 'unique:users,phone,' . request()->user->id]
         ];
     }
 }
