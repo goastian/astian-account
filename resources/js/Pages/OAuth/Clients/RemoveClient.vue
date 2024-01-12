@@ -43,7 +43,7 @@ export default {
 
     methods: {
         deleteClient(client) {
-            window.axios
+            this.$server
                 .delete("/oauth/clients/" + client.id)
                 .then((res) => {
                     this.$emit("clientWasRemove", res.data);

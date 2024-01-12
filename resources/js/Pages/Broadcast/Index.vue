@@ -46,8 +46,9 @@ export default {
         };
     },
 
-    created() {
-        this.getChannels();
+    mounted() {
+        this.getChannels()
+        this.listenChannels()
     },
 
     methods: {
@@ -57,7 +58,7 @@ export default {
         },
 
         getChannels() {
-            window.axios
+            this.$server
                 .get("/api/broadcasts", {
                     params: this.search,
                 })

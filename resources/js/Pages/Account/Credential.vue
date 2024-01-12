@@ -19,7 +19,7 @@ export default {
 
     methods: {
         revocarCredentials() {
-            window.axios
+            this.$server
                 .delete("/api/oauth/credentials/revoke")
                 .then((res) => {
                     this.message = res.data.message;

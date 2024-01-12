@@ -1,6 +1,5 @@
-<template>
-    <div class="container-fluid fixed-bottom">
-        <nav aria-label="Page navigation">
+<template> 
+        <nav aria-label="Page navigation"  class=" mt-5 position-relative">
             <ul class="pagination justify-content-center">
                 <li :class="['page-item', disabled_prev]">
                     <a
@@ -33,8 +32,7 @@
                     </a>
                 </li>
             </ul>
-        </nav>
-    </div>
+        </nav> 
 </template>
 <script>
 export default {

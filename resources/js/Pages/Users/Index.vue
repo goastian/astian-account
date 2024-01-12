@@ -74,7 +74,7 @@ export default {
         },
 
         getUsers() {
-            window.axios
+            this.$server
                 .get("/api/users", {
                     params: this.search,
                 })

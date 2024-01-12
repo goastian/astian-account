@@ -262,7 +262,7 @@ export default {
             const checked = document.getElementById(id).checked;
 
             if (checked) {
-                window.axios
+                this.$server
                     .post(this.user.links.roles, { role: id })
                     .then((res) => {
                         this.message = `Se asigno un nuevo role ${res.data.data.role} ha sido asignado`;
@@ -273,7 +273,7 @@ export default {
                         }
                     });
             } else {
-                window.axios
+                this.$server
                     .delete(`${this.user.links.roles}/${id}`)
                     .then((res) => {
                         this.message = `Se elimino el role ${res.data.data.role}`;
@@ -299,7 +299,7 @@ export default {
         },
 
         getRoles() {
-            window.axios
+            this.$server
                 .get("/api/roles")
                 .then((res) => {
                     this.roles = res.data.data;
@@ -314,7 +314,7 @@ export default {
         update(item) {
             this.status = null;
             this.message = null;
-            window.axios
+            this.$server
                 .put(item.links.update, this.user)
                 .then((res) => {
                     this.status = "Usuario Actualizado";
@@ -328,7 +328,7 @@ export default {
         },
 
         getDocuments() {
-            window.axios.get("/api/document-type").then((res) => {
+            this.$server.get("/api/document-type").then((res) => {
                 this.documents = res.data;
             });
         },
@@ -338,8 +338,7 @@ export default {
          */
         getUserRoles(item) {
             this.message = null;
-            window
-                .axios(item.links.roles)
+            this.$server.get(item.links.roles)
                 .then((res) => {
                     this.role_selected(res.data.data);
                 })

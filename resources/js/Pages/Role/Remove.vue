@@ -45,7 +45,7 @@ export default {
 
     methods: {
         remove(role) {
-            window.axios
+            this.$server
                 .delete(role.links.destroy)
                 .then((res) => {
                     this.$emit("scopeWasRemove", res.data.data);

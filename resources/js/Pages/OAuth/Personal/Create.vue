@@ -69,7 +69,7 @@ export default {
         },
 
         createToken() {
-            window.axios
+            this.$server
                 .post("/oauth/personal-access-tokens", {
                     name: this.name,
                     scopes: this.scopeSelected,
