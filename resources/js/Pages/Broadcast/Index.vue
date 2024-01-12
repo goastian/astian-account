@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <v-register @broadcast-was-created="getChannels"></v-register>
+        <v-register @success="getChannels"></v-register>
 
         <v-table :items="items" style="width: 70%; margin: auto">
             <template v-slot:body>
@@ -17,7 +17,7 @@
                     <td>
                         <v-remove
                             :item="item"
-                            @broadcast-was-remove="getChannels()"
+                            @success="getChannels()"
                         ></v-remove>
                     </td>
                 </tr>
@@ -51,8 +51,9 @@ export default {
         };
     },
 
-    created() {
-        this.getChannels();
+    mounted() {
+        this.getChannels()
+        this.listenChannels()
     },
 
     methods: {
@@ -78,12 +79,12 @@ export default {
         listenChannels() {
             this.$echo
                 .private(this.$channels.ch_0())
-                .listen("StoreBroadcastEvent", (e) => {
+                .listen("StoreBroadcastEvent", (e) => { 
                     this.updateList();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
-                .listen("DestroyBroadcastEvent", (e) => {
+                .listen("DestroyBroadcastEvent", (e) => { 
                     this.updateList();
                 });
         },
