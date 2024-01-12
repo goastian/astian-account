@@ -32,7 +32,7 @@
 </template>
 <script>
 export default {
-    emits: ["broadcastWasCreated"],
+    emits: ["success"],
 
     data() {
         return {
@@ -52,7 +52,7 @@ export default {
                     this.form.canal = "";
                     this.form.descripcion = "";
                     this.errors = {};
-                    this.$emit("broadcastWasCreated", res.data.data);
+                    this.$emit("success", res.data.data);
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {

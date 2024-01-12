@@ -28,14 +28,14 @@ export default {
 
     props: ["item"],
 
-    emits: ["broadcastWasRemove"],
+    emits: ["success"],
 
     methods: {
         remove(item) {
             this.$server
                 .delete(item.links.destroy)
                 .then((res) => {
-                    this.$emit("broadcastWasRemove", res.data.data);
+                    this.$emit("success", res.data.data);
                 })
                 .catch((e) => {
                     console.error(e.response);
