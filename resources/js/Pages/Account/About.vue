@@ -132,7 +132,7 @@ export default {
 
     methods: {
         authenticated() {
-            window.axios
+            this.$server
                 .get("/api/gateway/user")
                 .then((res) => {
                     this.user = res.data;
@@ -145,7 +145,7 @@ export default {
         },
 
         scopes(link) {
-            window.axios
+            this.$server
                 .get(link)
                 .then((res) => {
                     this.roles = res.data.data;

@@ -42,14 +42,14 @@ export default {
         
         enableOrDisable(item) {
             if (item.inactivo) {
-                window.axios
+                this.$server
                     .get(item.links.enable)
                     .then((res) => {
                         this.$emit("userStatus", res.data.data);
                     })
                     .catch((e) => {});
             } else {
-                window.axios
+                this.$server
                     .delete(item.links.disable)
                     .then((res) => {
                         this.$emit("userStatus", res.data.data);

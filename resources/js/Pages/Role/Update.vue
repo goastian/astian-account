@@ -44,7 +44,7 @@ export default {
 
     methods: {
         update(role) {
-            window.axios
+            this.$server
                 .put(role.links.update, this.role)
                 .then((res) => {
                     this.errors = {};

@@ -43,7 +43,7 @@ export default {
 
     methods: {
         removeToken(token) {
-            axios
+            this.$server
                 .delete("/oauth/tokens/" + token.id)
                 .then((res) => {
                     this.$emit("tokenWasRevoked", token);

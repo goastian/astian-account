@@ -21,13 +21,12 @@ export default {
     },
 
     created() {
-        this.authenticated();
-        this.authenticated()
+        this.authenticated(); 
     },
 
     methods: {
         authenticated() {
-            window.axios
+             this.$server
                 .get("/api/gateway/user")
                 .then((res) => {
                     this.user = res.data;

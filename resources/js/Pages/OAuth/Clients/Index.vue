@@ -70,7 +70,7 @@ export default {
 
     methods: {
         getClients() {
-            window.axios
+            this.$server
                 .get("/oauth/clients")
                 .then((res) => {
                     this.clients = res.data;

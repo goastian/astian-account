@@ -70,7 +70,7 @@ export default {
 
         updateClient(id) {
             this.message = null;
-            window.axios
+            this.$server
                 .put("/oauth/clients/" + id, this.client)
                 .then((res) => {
                     this.message = "datos actualizados";

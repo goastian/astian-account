@@ -46,7 +46,7 @@ export default {
 
     methods: {
         storeBroadcast() {
-            window.axios
+            this.$server
                 .post("/api/broadcasts", this.form)
                 .then((res) => {
                     this.form.canal = "";
