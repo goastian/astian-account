@@ -1,40 +1,38 @@
 <template>
-    <div class="container-fluid fixed-bottom">
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li :class="['page-item', disabled_prev]">
-                    <a
-                        href="#"
-                        class="page-link"
-                        v-on:click="getPage(pages.current_page - 1)"
-                    >
-                        Anterior
-                    </a>
-                </li>
-                <li
-                    :class="[
-                        'page-item',
-                        pages.current_page == index + 1 ? 'active' : '',
-                    ]"
-                    v-for="(item, index) in pages.total_pages"
-                    :key="index"
-                    v-on:click="getPage(index + 1)"
+    <nav aria-label="Page navigation" class=" mt-5 position-relative">
+        <ul class="pagination justify-content-center">
+            <li :class="['page-item', disabled_prev]">
+                <a
+                    href="#"
+                    class="page-link"
+                    v-on:click="getPage(pages.current_page - 1)"
                 >
-                    <a class="page-link" href="#"> {{ index + 1 }}</a>
-                </li>
+                    Anterior
+                </a>
+            </li>
+            <li
+                :class="[
+                    'page-item',
+                    pages.current_page == index + 1 ? 'active' : '',
+                ]"
+                v-for="(item, index) in pages.total_pages"
+                :key="index"
+                v-on:click="getPage(index + 1)"
+            >
+                <a class="page-link" href="#"> {{ index + 1 }}</a>
+            </li>
 
-                <li :class="['page-item', disabled_next]">
-                    <a
-                        class="page-link"
-                        v-on:click="getPage(pages.current_page + 1)"
-                        href="#"
-                    >
-                        Siguiente
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+            <li :class="['page-item', disabled_next]">
+                <a
+                    class="page-link"
+                    v-on:click="getPage(pages.current_page + 1)"
+                    href="#"
+                >
+                    Siguiente
+                </a>
+            </li>
+        </ul>
+    </nav>
 </template>
 <script>
 export default {
