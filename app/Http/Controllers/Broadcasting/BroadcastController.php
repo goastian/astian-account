@@ -6,6 +6,7 @@ use App\Events\Broadcast\DestroyBroadcastEvent;
 use App\Events\Broadcast\StoreBroadcastEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Broadcasting\Broadcast;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -57,29 +58,6 @@ class BroadcastController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -87,11 +65,13 @@ class BroadcastController extends Controller
      */
     public function destroy(Broadcast $broadcast)
     {
-        DB::transaction(function () use ($broadcast) {
-            $broadcast->delete();
+        if ($broadcast->channel == 'auth') {
+            throw new ReportError(__('es un canal por defecto del sistema y no puede ser eliminado'), 403);
+        }
 
-            DestroyBroadcastEvent::dispatch();
-        });
+        $broadcast->delete();
+
+        DestroyBroadcastEvent::dispatch();
 
         return $this->showOne($broadcast, $broadcast->transformer);
     }

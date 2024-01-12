@@ -8,6 +8,7 @@ use App\Events\Role\UpdateRoleEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\User\Role;
 use App\Transformers\Role\RoleTransformer;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -90,6 +91,12 @@ class RoleController extends Controller
 
     public function destroy(Role $role)
     {
+        collect(Role::default())->map(function ($value, $key) use ($role) {
+            if ($key === $role->name) {
+                throw new ReportError(__("Este role ($key) pertenece por defecto al sistema y no puede ser eliminado"), 403);
+            }
+        });
+
         $role->delete();
 
         DestroyRoleEvent::dispatch($this->authenticated_user());
