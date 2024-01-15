@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Notification;
 class NotificationController extends Controller
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('scope:notify');
+    }
+
     /**
      * send notification to the users by roles
      *
