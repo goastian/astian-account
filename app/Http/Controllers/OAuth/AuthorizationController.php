@@ -1,19 +1,20 @@
 <?php
 namespace App\Http\Controllers\OAuth;
 
-use App\Exceptions\OAuthAuthenticationException;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Http\Request;
+use App\Models\User\Role;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Laravel\Passport\Bridge\User;
+use Laravel\Passport\TokenRepository;
 use Laravel\Passport\ClientRepository;
+use Nyholm\Psr7\Response as Psr7Response;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Psr\Http\Message\ServerRequestInterface;
+use League\OAuth2\Server\AuthorizationServer;
+use App\Exceptions\OAuthAuthenticationException;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Laravel\Passport\Contracts\AuthorizationViewResponse;
 use Laravel\Passport\Http\Controllers\AuthorizationController as Controller;
-use Laravel\Passport\TokenRepository;
-use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Exception\OAuthServerException;
-use Nyholm\Psr7\Response as Psr7Response;
-use Psr\Http\Message\ServerRequestInterface;
 
 class AuthorizationController extends Controller
 {
@@ -163,6 +164,10 @@ class AuthorizationController extends Controller
             if (in_array($key, $request_scopes)) {
                 array_push($scopes_accepted, $key);
             }
+        }
+
+        foreach (Role::ignore_verification_scopes() as $key) {
+            array_push($scopes_accepted, $key);
         }
 
         $request->merge(['scope' => implode(" ", $scopes_accepted)]);

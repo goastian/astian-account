@@ -45,4 +45,13 @@ class Role extends master
             "scopes_destroy" => "ganted to delete roles",
         ];
     }
+
+    /**
+     * devulve una lista de scopes que seran ingnorados en la verificacion
+     * 
+     * @return array
+     */
+    public static function ignore_verification_scopes(){
+        return explode(',', env('INGNORE_VERIFICATION_SCOPES'));
+    }
 }
