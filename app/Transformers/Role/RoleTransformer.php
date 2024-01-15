@@ -40,6 +40,7 @@ class RoleTransformer extends TransformerAbstract
                 'store' => route('roles.store'),
                 'update' => route('roles.update', ['role' => $role->id]),
                 'destroy' => route('roles.destroy', ['role' => $role->id]),
+                'users' => route('roles.users.index', ['role' => $role->id])
             ],
         ];
     }
