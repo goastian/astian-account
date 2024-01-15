@@ -1,15 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\RoleController;
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\User\UserRoleController;
-use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\Auth\RegisterClientController;
 use App\Http\Controllers\Auth\SessionController;
-use App\Http\Controllers\OAuth\PasspotConnectController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
+use App\Http\Controllers\OAuth\CredentialsController;
+use App\Http\Controllers\OAuth\PasspotConnectController;
+use App\Http\Controllers\Push\NotificationController;
+use App\Http\Controllers\Role\RoleController;
+use App\Http\Controllers\Role\RoleUserController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserNotificationController;
+use App\Http\Controllers\User\UserRoleController;
+use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 
 //gateways
@@ -32,23 +34,42 @@ Route::prefix('oauth')->group(function () {
         ->name('passport.revoke-credentials');
 });
 
-
 /**
- * rutas que permiten administrar usuarios dentro del sistema
+ * rutas que permiten administrar roles
  */
 Route::resource('roles', RoleController::class)->only('index', 'store', 'update', 'destroy');
+Route::resource('roles.users', RoleUserController::class)->only('index');
+
+/**
+ * rutas que permiten administrar usuarios
+ */
 Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
 Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
 Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
 Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
 
 /**
- * rutas que permiten administrar los canales de difusion dentro 
+ * rutas que permiten administrar los canales de difusion dentro
  * del sistema a traves de eventos
  */
-Route::resource('broadcasts', BroadcastController::class)->only('index','store', 'destroy');
+Route::resource('broadcasts', BroadcastController::class)->only('index', 'store', 'destroy');
 
 /**
  * sessiones
  */
 Route::resource('/sessions', SessionController::class)->only('index', 'destroy');
+
+/**
+ * enviar notificaciones push
+ */
+Route::post('push', [NotificationController::class, 'push'])->name('notifications.push');
+
+/**
+ * notifications
+ */
+Route::get('notifications', [UserNotificationController::class, 'index'])->name('notifications.index');
+Route::get('notifications/unread', [UserNotificationController::class, 'show_unread_notifications'])->name('notifications.unread');
+Route::get('notifications/{notification}', [UserNotificationController::class, 'show'])->name('notifications.show');
+Route::post('notifications/{notification}', [UserNotificationController::class, 'mark_as_read_notification'])->name('notifications.read');
+Route::post('notifications/mark_as_read', [UserNotificationController::class, 'mark_as_read_notifications'])->name('notifications.read_all');
+Route::delete('notifications', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');

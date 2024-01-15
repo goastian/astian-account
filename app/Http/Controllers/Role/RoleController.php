@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers\Role;
 
 use App\Events\Role\DestroyRoleEvent;
 use App\Events\Role\StoreRoleEvent;

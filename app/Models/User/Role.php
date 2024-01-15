@@ -43,6 +43,7 @@ class Role extends master
             "scopes_register" => "granted to register new roles",
             "scopes_update" => "granted to update scopes, just only aplly for description",
             "scopes_destroy" => "ganted to delete roles",
+            "notify" => "granted to send notification push"
         ];
     }
 
