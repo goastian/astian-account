@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title inertia>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
     <link rel="stylesheet"
         href="{{ app()->environment('production') ? secure_asset('css/app.css') : asset('css/app.css') }}">
