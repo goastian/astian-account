@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\OAuth;
 
 use App\Http\Controllers\GlobalController;
-use App\Models\OAuth\CsrfToken;
-use DateInterval;
+use App\Models\User\Employee;
+use App\Models\User\Role;
+use App\Notifications\Notify\Notify;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\Rule;
 
 class PasspotConnectController extends GlobalController
 {
@@ -88,4 +91,69 @@ class PasspotConnectController extends GlobalController
     {
         return $this->authenticated_user()['data'];
     }
+
+    /**
+     * getway para el envio de notificaciones
+     *
+     * @param Request $request
+     */
+
+    public function send_notification(Request $request)
+    {   
+        $X_HEADER = $request->header('X-VERIFY-NOTIFICATION');
+         
+        throw_unless($X_HEADER == env('VERIFY_NOTIFICATION'), new ReportError("Unsupported header", 422));
+
+        $this->validate($request, [
+            'via' => ['required', 'array', Rule::in(['database', 'mail'])],
+            'subject' => ['required', 'max:50'],
+            'message' => ['required', 'max:500'],
+            'resource' => ['nullable', 'url:https'],
+            'users' => ['required'],
+        ]);
+
+        $data = json_decode(json_encode($request->all()));
+
+        $notifiable = null;
+
+        if ($data->users == '*') {
+            $notifiable = Employee::where('id', '!=', $request->user()->id)->get();
+
+        } elseif ($this->is_email($data->users)) {
+            $notifiable = Employee::where('email', $data->users)->first();
+            if (!$notifiable) {
+                throw new ReportError("the email does not exists", 422);
+            }
+        } elseif (Role::get()->contains('name', $data->users)) {
+            $notifiable = Role::where('name', $data->users)->first()->users()->get();
+        } else {
+            throw new ReportError("Unsupported data", 422);
+        }
+
+        Notification::send($notifiable, new Notify($data));
+    }
+
+    /**
+     * verify the email key
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function is_email($value)
+    {
+        $valid_email = filter_var($value, FILTER_VALIDATE_EMAIL);
+
+        if ($valid_email) {
+            list($usuario, $dominio) = explode('@', $value);
+
+            if (strpos($dominio, '.') !== false) {
+                list($dominio, $extension) = explode('.', $dominio);
+                if (strlen($extension) >= 2) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

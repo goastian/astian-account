@@ -22,6 +22,7 @@ Route::prefix('gateway')->group(function () {
     Route::get('/check-client-credentials', [PasspotConnectController::class, 'check_client_credentials']);
     Route::get('/token-can', [PasspotConnectController::class, 'token_can']);
     Route::get('/user', [PasspotConnectController::class, 'auth']);
+    Route::post('/send-notification', [PasspotConnectController::class, 'send_notification']);
     Route::post('/logout', [AuthorizationController::class, 'destroy']);
 });
 
