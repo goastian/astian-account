@@ -2,7 +2,7 @@
 
 
 @section('content')
-    <div class="card mt-5 bg-light" style="width: 50%; margin:auto">
+    <div class="card mt-5 bg-light" style="margin:auto">
         <form action="{{ route('password.email') }}" method="post">
             @csrf
             <div class="card-body">
@@ -15,17 +15,19 @@
                 </div>
                 <div class="row row-cols-1 col-lg-12">
                     <div class="col">
-                        <label for="">{{ __('Email') }}</label>
-                        <input type="text" class="form-control" name="email" placeholder="admin@email.com">
+                        <label for="email" class="fw-bold">{{ __('Email') }}</label>
+                        <input type="email" class="form-control" name="email" placeholder="admin@email.com">
                         @if ($errors->has('email'))
                             @foreach ($errors->get('email') as $item)
-                                <span class="error">{{ $item }}</span>
+                                <span class="errors">{{ $item }}</span>
                             @endforeach
                         @endif
                     </div>
 
-                    <div class="col mt-4 text-center">
-                        <button class="btn btn-success" style="width: 80%">{{ __('Submit') }}</button>
+                    <div class="col mt-4 text-center d-grid ">
+                        <button class="btn btn-success mb-3">{{ __('Submit') }}</button>
+                        <a class="btn btn-warning mx-2" href="{{ route('login') }}">{{ __('Regresar') }}</a>
+
                     </div>
                 </div>
             </div>

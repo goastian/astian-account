@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card w-50 mt-4" style="margin: auto">
-        <div class="card-head text-center">
+    <div class="card regitered mt-4" style="margin: auto">
+        <div class="title text-center">
             <h3>{{ __('Midori') }}</h3> 
         </div>
-        <div class="card-body mt-4">
+        <div class="mt-4">
             <form action="/register" method="post">
                 @csrf
-                <div class="row row-cols-2 col-sm-12">
+                <div class="row">
                     <div class="col pb-2">
                         <label for="name">{{ __('Name') }} <span class="text-secondary">{{ __('Required') }}</span></label>
                         <input type="text" id="name" name="name" placeholder="{{ __('Nombre') }}"
@@ -103,10 +103,10 @@
                             @endforeach
                         @endif
                     </div>
-                    <div class="col-12 text-center mt-5">
-                        <button class="btn btn-primary btn-block">{{ __('Registrate') }}</button>
+                    <div class="col-12 mt-5 text-center d-grip ">
+                        <button class="btn btn-success mb2">{{ __('Registrate') }}</button>
 
-                        <a class="btn btn-warning mx-2" href="{{ route('login') }}">{{ __('Regresar') }}</a>
+                        <a class="btn btn-secondary mx-2" href="{{ route('login') }}">{{ __('Regresar') }}</a>
 
                     </div>
 
