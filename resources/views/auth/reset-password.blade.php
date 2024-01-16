@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card mt-5" style="width: 40%; margin: auto">
+    <div class="card mt-5" style="margin: auto">
         <div class="card-body">
             <div class="card-title text-center">
                 <h5>Camibar la contraseña</h5>
@@ -35,7 +35,7 @@
                     </div>
 
                     <div class="col mt-5 text-center">
-                        <button class="btn btn-success" type="submit" style="width: 50%">{{ __('Change Password') }}</button>
+                        <button class="btn btn-success" type="submit">{{ __('Change Password') }}</button>
                     </div>
                 </div>
             </form>

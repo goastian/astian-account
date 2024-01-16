@@ -14,4 +14,51 @@
 .text-md {
     font-size: 1rem !important;
 }
+
+
+.card {
+    padding: 1%;
+
+    @media (min-width:750px) {
+        width: 80%;
+    }
+
+    @media (min-width: 800px) {
+        width: 70%;
+    }
+
+    @media (min-width:992px) {
+        width: 50%;
+    }
+
+}
+
+.card .col {
+    flex: 0 0 auto;
+    width: 100%;
+
+    @media (min-width:360px) {
+        width: 100%;
+    }
+
+    @media (min-width:992px) {
+        width: 50% !important;
+    }
+
+}
  
+@media (min-width: 360px) {}
+
+@media (min-width: 400px) {}
+
+@media (min-width: 576px) {}
+
+@media (min-width: 768px) {}
+
+@media (min-width: 800px) {}
+
+@media (min-width: 992px) {}
+
+@media (min-width: 1200px) {}
+
+@media (min-width: 1400px) {}

@@ -7,15 +7,15 @@
         </div>
     @endif
 
-    <div class="card mt-5" style="width: 40%; margin:auto">
+    <div class="card mt-5" style="margin:auto">
         <form action="{{ route('login') }}" method="post">
             @csrf
             <div class="card-body">
                 <div class="card-title fw-bold text-center">
                     {{ __('Login') }}
                 </div>
-                <div class="row row-cols-1 col-lg-12">
-                    <div class="col my-2">
+                <div class="row mb-5">
+                    <div class="col-12">
                         <label class="fw-bold" for="email">{{ __('Email') }}</label>
                         <input class="form-control" type="email" name="email" placeholder="admin@email.com">
                         @if ($errors->has('email'))
@@ -25,7 +25,7 @@
                         @endif
                     </div>
 
-                    <div class="col my-2">
+                    <div class="col-12">
                         <label class="fw-bold" for="password">{{ __('Password') }}</label>
                         <input class="form-control" type="password" name="password" placeholder="{{ __('Password') }}">
                         @if ($errors->has('password'))
@@ -42,13 +42,13 @@
                         @endforeach
 
                     </div>
-                    <div class="col my-4 text-center">
+                    <div class="col-12 mt-5 text-center d-grid">
 
-                        <button class="btn  btn-primary" type="submit" style="width: 40%">
+                        <button class="btn  btn-primary mb-2" type="submit" >
                             {{ __('Login') }}
                         </button>
 
-                        <a class="btn btn-success mx-2" href="{{ route('register')}}" style="width: 40%">
+                        <a class="btn btn-success mb-2 mx-2" href="{{ route('register')}}"  >
                             {{ __('Register') }}
                         </a>
                         <p>
