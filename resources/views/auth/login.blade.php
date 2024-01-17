@@ -7,15 +7,15 @@
         </div>
     @endif
 
-    <div class="card mt-5" style="margin:auto">
+    <div class="login mt-5" style="margin:auto">
         <form action="{{ route('login') }}" method="post">
             @csrf
-            <div class="card-body">
-                <div class="card-title fw-bold text-center">
-                    {{ __('Login') }}
-                </div>
-                <div class="row mb-5">
-                    <div class="col-12">
+            <div class="py-3">
+                <div class="login-title h1 fw-bold text-center">
+                    {{ __('Login') }} 
+                 </div>
+                <div class="row mt-5 mb-5">
+                    <div class="col-12 mb-3">
                         <label class="fw-bold" for="email">{{ __('Email') }}</label>
                         <input class="form-control" type="email" name="email" placeholder="admin@email.com">
                         @if ($errors->has('email'))
@@ -25,7 +25,7 @@
                         @endif
                     </div>
 
-                    <div class="col-12">
+                    <div class="col-12 mb-3">
                         <label class="fw-bold" for="password">{{ __('Password') }}</label>
                         <input class="form-control" type="password" name="password" placeholder="{{ __('Password') }}">
                         @if ($errors->has('password'))
@@ -42,19 +42,22 @@
                         @endforeach
 
                     </div>
-                    <div class="col-12 mt-5 text-center d-grid">
-
-                        <button class="btn  btn-primary mb-2" type="submit" >
-                            {{ __('Login') }}
-                        </button>
-
-                        <a class="btn btn-success mb-2 mx-2" href="{{ route('register')}}"  >
-                            {{ __('Register') }}
-                        </a>
-                        <p>
-                            <a class="btn btn-link pt-4" style="padding-left: 0"
+                    <div class="col-12 mt-4 text-center">
+                        <div>
+                            <button class="btn btn-success mb-2" type="submit">
+                                {{ __('Login') }}
+                            </button>
+                        </div>
+                        <div>
+                            <a class="btn btn-link my-2 mx-2" href="{{ route('register') }}">
+                                {{ __('Register') }}
+                            </a>
+                        </div>
+                        <div>
+                            <a class="btn btn-link" style="padding-left: 0"
                                 href="/forgot-password">{{ __('Forgot your password?') }}</a>
-                        </p>
+
+                        </div>
                     </div>
                 </div>
             </div>
