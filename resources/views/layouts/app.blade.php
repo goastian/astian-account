@@ -8,7 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    
     <link rel="stylesheet"
         href="{{ app()->environment('production') ? secure_asset('css/app.css') : asset('css/app.css') }}">
 
