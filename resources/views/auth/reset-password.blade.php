@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="card mt-5" style="margin: auto">
-        <div class="card-head text-center">
-            <h5>Camibar la contraseña</h5>
+    <div class="reset mt-5" style="margin: auto">
+        <div class="reset-head text-center">
+            <h5>{{__('Change Password')}}</h5>
         </div>
-        <div class="card-body">
+        <div class="reset-body">
             <form action="{{ route('password.store') }}" method="post">
                 @csrf
                 <div class="row">

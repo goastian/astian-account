@@ -2,15 +2,15 @@
 
 
 @section('content')
-    <div class="card mt-5 bg-light" style="margin:auto">
+    <div class="forgot mt-5" style="margin:auto">
         <form action="{{ route('password.email') }}" method="post">
             @csrf
-            <div class="card-body">
-                <div class="card-title">
-                    <h4 class="text-center fw-bold mb-4">Solicitud para cambiar la contraseña</h4
+            <div class="forgot-body">
+                <div class="forgot-title">
+                    <h4 class="text-center fw-bold mb-4">{{ __('Request to change password') }}</h4
                         class="text-center fw-bold mb-4">
                     <p>
-                        {{__("Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.")}}
+                        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
                     </p>
                 </div>
                 <div class="row row-cols-1 col-lg-12">
@@ -24,10 +24,13 @@
                         @endif
                     </div>
 
-                    <div class="col mt-4 text-center d-grid ">
-                        <button class="btn btn-success mb-3">{{ __('Submit') }}</button>
-                        <a class="btn btn-warning mx-2" href="{{ route('login') }}">{{ __('Regresar') }}</a>
-
+                    <div class="col mt-4 text-center">
+                        <div>
+                            <button class="btn btn-secondary mb-4">{{ __('Send Password Reset Link') }}</button>
+                        </div>
+                        <div>
+                            <a class="btn btn-link mx-2" href="{{ route('login') }}">{{ __('Go back') }}</a>
+                        </div>
                     </div>
                 </div>
             </div>
