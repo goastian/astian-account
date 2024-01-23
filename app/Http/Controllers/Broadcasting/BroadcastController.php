@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Broadcasting;
 
-use App\Events\Broadcast\DestroyBroadcastEvent;
-use App\Events\Broadcast\StoreBroadcastEvent;
-use App\Http\Controllers\GlobalController as Controller;
-use App\Models\Broadcasting\Broadcast;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use App\Models\Broadcasting\Broadcast;
+use App\Events\Broadcast\StoreBroadcastEvent;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Events\Broadcast\DestroyBroadcastEvent;
+use App\Http\Controllers\GlobalController as Controller;
 
 class BroadcastController extends Controller
 {
@@ -64,6 +66,12 @@ class BroadcastController extends Controller
      */
     public function destroy(Broadcast $broadcast)
     {
+
+        collect(Broadcast::channelsByDefault())->map(function ($value, $key) use ($broadcast) {
+            if ($key == $broadcast->channel) {
+                throw new ReportError(Lang::get('This channel cannot be removed; this channel belongs by default to the system.'), 403);
+            }
+        });
 
         $broadcast->delete();
 
