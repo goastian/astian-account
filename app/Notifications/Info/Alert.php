@@ -2,10 +2,12 @@
 
 namespace App\Notifications\Info;
 
+use ErrorException;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Lang;
 
 class Alert extends Notification implements ShouldQueue
 {
@@ -35,7 +37,7 @@ class Alert extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return $this->data->method;
     }
 
     /**
@@ -46,10 +48,22 @@ class Alert extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+        try {
+            return (new MailMessage)
+                ->subject($this->data->title)
+                ->greeting(Lang::get("Hi $notifiable->name"))
+                ->line(Lang::get($this->data->message))
+                ->action('Go to page', url($this->data->resource ?: '/'))
+                ->line(Lang::get('Thank you for using our application!'));
+        } catch (ErrorException $e) {
+            return (new MailMessage)
+                ->subject($this->data->title)
+                ->greeting(Lang::get("Hi $notifiable->name"))
+                ->line(Lang::get($this->data->message))
+                ->action('Go to page', url('/'))
+                ->line(Lang::get('Thank you for using our application!'));
+        }
+
     }
 
     /**
@@ -60,7 +74,6 @@ class Alert extends Notification implements ShouldQueue
      */
     public function toDatabase($notifiable)
     {
-        
         return [
             'title' => $this->data->title,
             'message' => $this->data->message,
