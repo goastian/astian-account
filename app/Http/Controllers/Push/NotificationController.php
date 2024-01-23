@@ -11,6 +11,7 @@ use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Validation\Rule;
 
 class NotificationController extends Controller
 {
@@ -30,6 +31,7 @@ class NotificationController extends Controller
     public function push(Request $request)
     {
         $this->validate($request, [
+            'method' => ['required', Rule::in(['database', 'mail'])],
             'scope' => ['required'],
             'title' => ['required', 'max:50'],
             'message' => ['required', 'max:200'],
