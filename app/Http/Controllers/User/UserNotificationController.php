@@ -11,10 +11,10 @@ use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Support\Facades\Lang;
 
 class UserNotificationController extends Controller
-{   
+{
     /**
-     * show all notification 
-     * 
+     * show all notification
+     *
      * @return Object
      */
     public function index()
@@ -26,7 +26,7 @@ class UserNotificationController extends Controller
 
     /**
      * show unread notificatios
-     * 
+     *
      * @return Object
      */
     public function show_unread_notifications()
@@ -38,7 +38,7 @@ class UserNotificationController extends Controller
 
     /**
      * show a notification
-     * 
+     *
      * @return Json
      */
     public function show(Notification $notification)
@@ -53,7 +53,7 @@ class UserNotificationController extends Controller
 
     /**
      * mark as read a notification
-     * 
+     *
      * @return Json
      */
     public function mark_as_read_notification(Notification $notification)
@@ -66,18 +66,19 @@ class UserNotificationController extends Controller
         $notification->push();
 
         ReadNotificationEvent::dispatch();
-        
+
         return $this->message(Lang::get('notification marked as read'), 201);
     }
 
     /**
      * mark as read all notifications
-     * 
+     *
      * @return Json
      */
     public function mark_as_read_notifications()
     {
-        $notification = request()->user()->unreadNotifications->markAsRead();
+
+        request()->user()->unreadNotifications->markAsRead();
 
         ReadNotificationEvent::dispatch();
 
@@ -86,10 +87,26 @@ class UserNotificationController extends Controller
 
     /**
      * destroy all notifications
-     * 
+     *
      * @return json
      */
-    public function destroy()
+    public function destroy(Notification $notification)
+    {
+        $notification = Notification::where('notifiable_id', request()->user()->id)->where('id', $notification->id)->first();
+
+        $notification->delete();
+
+        DestroyNotificationEvent::dispatch();
+
+        return $this->message(Lang::get('notifications removed'), 200);
+    }
+
+    /**
+     * destroy all notifications
+     *
+     * @return json
+     */
+    public function clean()
     {
         request()->user()->notifications()->delete();
 
