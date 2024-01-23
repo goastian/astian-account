@@ -18,7 +18,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\Auth\LoginListener::class,
         ],
 
-         \App\Events\Auth\LogoutEvent::class => [
+        \App\Events\Auth\LogoutEvent::class => [
             \App\Listeners\Auth\LogoutListener::class,
         ],
 
@@ -80,15 +80,28 @@ class EventServiceProvider extends ServiceProvider
 
         //clients
         \App\Events\Client\StoreClientEvent::class => [
-            \App\Listeners\Client\StoreClientListener::class
+            \App\Listeners\Client\StoreClientListener::class,
         ],
 
         \App\Events\Client\RemoveSessionEvent::class => [
-            \App\Listeners\Client\RemoveSessionListener::class
+            \App\Listeners\Client\RemoveSessionListener::class,
         ],
 
-         \App\Events\Auth\M2FAEvent::class => [
+        \App\Events\Auth\M2FAEvent::class => [
             \App\Listeners\Auth\M2FAListener::class,
+        ],
+
+        //notification
+        \App\Events\Notification\PushNotificationEvent::class => [
+            \App\Listeners\Notification\PushNotificationListener::class,
+        ],
+
+        \App\Events\Notification\ReadNotificationEvent::class => [
+            \App\Listeners\Notification\ReadNotificationListener::class,
+        ],
+
+        \App\Events\Notification\DestroyNotificationEvent::class => [
+            \App\Listeners\Notification\DestroyNotificationListener::class,
         ],
     ];
 

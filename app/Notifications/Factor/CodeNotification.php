@@ -15,7 +15,7 @@ class CodeNotification extends Notification implements ShouldQueue
     /**
      * @var String
      */
-    private $code;
+    public $code;
 
     /**
      * Create a new notification instance.
