@@ -41,12 +41,10 @@ class RegisterClientController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'confirmed', 'min:8'],
-            'country' => ['nullable', 'max:100'],
-            'city' => ['nullable', 'max:100'],
+            'password' => ['required', 'confirmed', 'min:8'], 
             'address' => ['nullable', 'max:150'],
             'phone' => ['nullable', 'max:25'],
-            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
+            'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
         ]);
 
         DB::transaction(function () use ($request, $client) {
