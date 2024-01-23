@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Push;
 
+use App\Events\Notification\PushNotificationEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\User\Employee;
 use App\Models\User\Role;
@@ -47,6 +48,8 @@ class NotificationController extends Controller
                 $data = json_decode(json_encode($request->except('scope')));
 
                 Notification::send($users, new Alert($data));
+
+                PushNotificationEvent::dispatch();
 
                 return $this->message(Lang::get('Notificaciones enviadas'), 200);
             }
