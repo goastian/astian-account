@@ -2,11 +2,15 @@
 
 namespace App\Transformers\Notification;
 
+use Elyerr\ApiResponse\Assets\Asset;
 use ErrorException;
 use League\Fractal\TransformerAbstract;
 
 class NotificationTransformer extends TransformerAbstract
 {
+
+    use Asset;
+
     /**
      * List of resources to automatically include
      *
@@ -37,17 +41,19 @@ class NotificationTransformer extends TransformerAbstract
 
             return [
                 'id' => $notification->id,
-                'leido' => $notification->read_at,
                 'titulo' => $data->title,
                 'mensaje' => $data->message,
                 'recurso' => $data->resource,
+                'leido' => $this->format_date($notification->read_at),
+                'recibido' => $this->format_date($notification->created_at),
                 'links' => [
                     'parent' => route('notifications.index'),
                     'unread' => route('notifications.unread'),
                     'show' => route('notifications.show', ['notification' => $notification->id]),
                     'read' => route('notifications.read', ['notification' => $notification->id]),
                     'mark_as_read' => route('notifications.read_all'),
-                    'destroy' => route('notifications.destroy'),
+                    'destroy' => route('notifications.destroy', ['notification' => $notification->id]),
+                    'clean' => route('notifications.clean'),
                 ],
             ];
 
@@ -57,17 +63,19 @@ class NotificationTransformer extends TransformerAbstract
 
             return [
                 'id' => $notification->id,
-                'leido' => $notification->read_at,
                 'titulo' => $data->title,
                 'mensaje' => $data->message,
                 'recurso' => $data->resource,
+                'recibido' => $this->format_date($notification->created_at),
+                'leido' => $this->format_date($notification->read_at),
                 'links' => [
                     'parent' => route('notifications.index'),
                     'unread' => route('notifications.unread'),
                     'show' => route('notifications.show', ['notification' => $notification->id]),
                     'read' => route('notifications.read', ['notification' => $notification->id]),
                     'mark_as_read' => route('notifications.read_all'),
-                    'destroy' => route('notifications.destroy'),
+                    'destroy' => route('notifications.destroy', ['notification' => $notification->id]),
+                    'clean' => route('notifications.clean'),
                 ],
             ];
         }
