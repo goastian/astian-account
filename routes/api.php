@@ -71,6 +71,7 @@ Route::post('push', [NotificationController::class, 'push'])->name('notification
 Route::get('notifications', [UserNotificationController::class, 'index'])->name('notifications.index');
 Route::get('notifications/unread', [UserNotificationController::class, 'show_unread_notifications'])->name('notifications.unread');
 Route::get('notifications/{notification}', [UserNotificationController::class, 'show'])->name('notifications.show');
-Route::post('notifications/{notification}', [UserNotificationController::class, 'mark_as_read_notification'])->name('notifications.read');
 Route::post('notifications/mark_as_read', [UserNotificationController::class, 'mark_as_read_notifications'])->name('notifications.read_all');
-Route::delete('notifications', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
+Route::post('notifications/{notification}', [UserNotificationController::class, 'mark_as_read_notification'])->name('notifications.read');
+Route::delete('notifications/clean', [UserNotificationController::class, 'clean'])->name('notifications.clean');
+Route::delete('notifications/{notification}', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
