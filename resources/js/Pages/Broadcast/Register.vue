@@ -1,27 +1,27 @@
 <template>
-    <div class="card bg-dark text-light mb-2 border-bottom" style="width: 100%; margin: auto">
-        <div class="card-head text-center fw-bold">Registrar nuevo canal</div>
+    <div class="card mb-2 border-bottom">
+        <div class="card-head">Registrar nuevo canal</div>
         <div class="card-body">
-            <div class="row row-cols-3 col-12">
-                <div class="col-3">
+            <div class="row broadcast-register">
+                <div class="col">
                     <input
                         v-model="form.canal"
                         type="text"
-                        class="form-control form-control-sm"
+                        class="form-control"
                         placeholder="Canal"
                     />
                     <v-error :error="errors.canal"></v-error>
                 </div>
-                <div class="col-7">
+                <div class="col">
                     <input
                         v-model="form.descripcion"
-                        class="form-control form-control-sm"
+                        class="form-control"
                         placeholder="Descripcion"
                     />
 
                     <v-error :error="errors.descripcion"></v-error>
                 </div>
-                <div class="col-1">
+                <div class="col">
                     <button class="btn btn-success" @click="storeBroadcast">
                         Agregar
                     </button>

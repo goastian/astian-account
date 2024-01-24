@@ -1,10 +1,6 @@
 <template>
     <v-create @token-was-created="getPersonalAccessToken"></v-create>
-    <v-table
-        :items="head"
-        class="table-sm text-sm"
-        style="width: 75%; margin: 1% auto"
-    >
+    <v-table :items="head">
         <template v-slot:body>
             <tr v-for="(item, index) in tokens" :key="index">
                 <td>{{ item.name }}</td>
@@ -35,11 +31,12 @@ export default {
         return {
             head: ["name", "scopes", "created", "expires"],
             tokens: {},
+            user_id: null,
         };
     },
-
+  
     mounted() {
-        this.listenEvents();
+       // this.listenEvents();
     },
 
     created() {
@@ -47,6 +44,19 @@ export default {
     },
 
     methods: {
+        authenticated() {
+            this.$server
+                .get("/api/gateway/user")
+                .then((res) => {
+                    window.$auth = res.data;
+                    console.log(window.$auth.id);
+                    
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
+        },
+
         getPersonalAccessToken() {
             this.$server
                 .get("/oauth/personal-access-tokens")

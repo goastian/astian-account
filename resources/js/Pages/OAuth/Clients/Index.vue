@@ -1,49 +1,43 @@
 <template>
-    <div class="container-fluid">
-        <v-register-client @client-registered="getClients"></v-register-client>
+    <v-register-client @client-registered="getClients"></v-register-client>
 
-        <v-table
-            :items="items"
-            class="text-sm table-sm text-center py-0"
-            style="width: 100%; margin: auto"
-        >
-            <template v-slot:body>
-                <tr
-                    v-for="(item, index) in clients"
-                    :key="index"
-                    class="align-middle"
-                >
-                    <td>
-                        {{ item.id }}
-                    </td>
-                    <td>
-                        {{ item.secret }}
-                    </td>
-                    <td>
-                        {{ item.name }}
-                    </td>
-                    <td>
-                        {{ item.redirect }}
-                    </td>
-                    <td class=" ">
-                        <button
-                            class="btn btn-primary btn-sm mx-1"
-                            @click="redirectForAuthorize(item)"
-                        >
-                            Authorizar
-                        </button>
+    <v-table :items="items">
+        <template v-slot:body>
+            <tr
+                v-for="(item, index) in clients"
+                :key="index"
+                class="align-middle"
+            >
+                <td>
+                    {{ item.id }}
+                </td>
+                <td>
+                    {{ item.secret }}
+                </td>
+                <td>
+                    {{ item.name }}
+                </td>
+                <td>
+                    {{ item.redirect }}
+                </td>
+                <td class=" ">
+                    <button
+                        class="btn btn-primary btn-sm mx-1"
+                        @click="redirectForAuthorize(item)"
+                    >
+                        Authorizar
+                    </button>
 
-                        <v-remove
-                            :client="item"
-                            @clientWasRemove="getClients"
-                        ></v-remove>
+                    <v-remove
+                        :client="item"
+                        @clientWasRemove="getClients"
+                    ></v-remove>
 
-                        <v-update :client="item"></v-update>
-                    </td>
-                </tr>
-            </template>
-        </v-table>
-    </div>
+                    <v-update :client="item"></v-update>
+                </td>
+            </tr>
+        </template>
+    </v-table>
 </template>
 <script>
 import VRegisterClient from "./RegisterClient.vue";

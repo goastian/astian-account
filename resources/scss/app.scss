@@ -1,142 +1,100 @@
 @import "bootstrap/scss/bootstrap";
 @import "bootstrap-icons";
+@import "__colors";
+@import "__pagination";
+@import "__table";
+@import "__logins";
+@import "__users";
+@import "__aside";
+@import "__navbar";
+@import "__search";
+@import "__roles";
+@import "__broadcast";
+@import "__oauth_clients";
+@import "__accounts";
+@import "__notification";
 
 .errors {
-    color: rgb(226, 14, 14);
+    color: rgb(199, 50, 50);
     display: block;
     font-size: 12px;
     font-weight: bold;
 }
 
-.text-sm {
-    font-size: 0.78rem !important;
+body {
+    background-color: $white;
+    color: $dark;
 }
 
-.text-md {
-    font-size: 1rem !important;
+a {
+    color: $white ;
 }
 
-
-.login {
-    padding: 1%;
-
-    @media (min-width: 600px) {
-        width: 70%;
-    }
-
-    @media (min-width:750px) {
-        width: 70%;
-    }
-
-    @media (min-width: 800px) {
-        width: 50%;
-    }
-
-    @media (min-width:992px) {
-        width: 30%;
-    }
-
+.form-check-label {
+    font-size: 12px;
 }
 
-.login .col {
-    flex: 0 0 auto;
+.router-link-exact-active,
+.router-link-exact-active {
+    color: #312c2c;
+    font-weight: bold;
+    background-color: #10201321;
+    padding: 1% 50% 1% 1%;
     width: 100%;
-
-    @media (min-width:360px) {
-        width: 100%;
-    }
-
-    @media (min-width:992px) {
-        width: 50% !important;
-    }
+    border-radius: 4%;
 }
 
-.register,
-.forgot,
-.reset {
-    padding: 0%;
-    width: 100%;
-
-    @media (min-width:750px) {
-        width: 70%;
-    }
-
-    @media (min-width: 800px) {
-        width: 60%;
-    }
-
-    @media (min-width:992px) {
-        width: 60%;
-    }
-
-    @media (min-width:1440px) {
-        width: 50% !important;
-    }
+.modal {
+    --bs-modal-width: 80%;
 }
 
-.register .col {
-    flex: 0 0 auto;
-    width: 100%;
-
-    @media (min-width:360px) {
-        width: 100%;
-    }
-
-    @media (min-width:992px) {
-        width: 50% !important;
-    }
-}
-
-.reset {
-    padding: 0%;
-    width: 100%;
-
-    @media (min-width:750px) {
-        width: 70%;
-    }
-
-    @media (min-width: 800px) {
-        width: 60%;
-    }
-
-    @media (min-width:992px) {
-        width: 30%;
-    }
-
-    @media (min-width:1440px) {
-        width: 30% !important;
-    }
-}
-
-.factor {
-    width: 80%;
-    padding: 0%;
+.modal-dialog {
 
     @media (min-width:240px) {
-            width: 100%;
-        }
+        width: 95%;
+    }
+ 
+    @media (min-width:360px) {
+        width: 89%;
+    }
 
-    @media (min-width:320px) {
+    @media (min-width:375px) {
+        width: 92%;
+    }
+
+    @media (min-width:940px) {
         width: 100%;
     }
+}
 
-    @media (min-width:400px) {
-        width: 100%;
-    }
+.modal-header {
+    font-size: 25px;
+    color: #000000ab;
+    font-weight: bold;
+    justify-content: center;
+}
 
-    @media (min-width:750px) {
-        width: 70%;
-    }
+.modal-body label {
+    text-align: left;
+    width: 100%;
 
-    @media (min-width: 800px) {
-        width: 60%;
+    @media (min-width:940px) {
+        text-align: center;
     }
+}
 
-    @media (min-width:992px) {
-        width: 30%;
-    }
 
-    @media (min-width:1440px) {
-        width: 30% !important;
+.modal-footer {
+    justify-content: center;
+
+    @media (min-width:940px) {
+        justify-content: end;
     }
+}
+
+.card-head {
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #282626c9;
 }

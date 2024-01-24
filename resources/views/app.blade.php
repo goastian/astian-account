@@ -7,14 +7,14 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    
+
     <link rel="stylesheet"
         href="{{ app()->environment('production') ? secure_asset('css/app.css') : asset('css/app.css') }}">
 
     <script src="{{ app()->environment('production') ? secure_asset('js/app.js') : asset('js/app.js') }}" defer></script>
 </head>
 
-<body class="font-sans antialiased bg-dark text-light">
+<body>
     <div id="app"></div>
 </body>
 

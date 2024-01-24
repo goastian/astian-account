@@ -1,0 +1,183 @@
+.account-security-2fa .col {
+    flex: 0 0 auto;
+    width: 100%;
+    text-align: center;
+}
+
+.account-security-2fa .col .form-control {
+    display: inline;
+    border: 1px solid $secondary;
+
+    @media (min-width:240px) {
+        width: 95%;
+    }
+
+    @media (min-width:800px) {
+        width: 30%;
+    }
+}
+
+.account-security-tokens .card-body {
+    text-align: center;
+}
+
+.account-security-remove .card-body {
+    text-align: center;
+}
+
+.profile {
+    width: 98%;
+    margin: auto;
+    background: linear-gradient(to top left, #03102052, rgba(40, 132, 230, 0.68), rgba(48, 106, 217, 0.93), rgba(17, 101, 191, 0.87), #527bdd80);
+    color: white;
+
+    @media (min-width: 240px) {
+        text-align: center;
+        height: 400px;
+    }
+
+    @media (min-width: 400px) {
+        text-align: center;
+        height: 450px;
+    }
+
+    @media (min-width: 412px) {
+        text-align: center;
+        height: 430px;
+    }
+
+    @media (min-width: 550px) {
+        text-align: center;
+        height: 500px;
+    }
+
+    @media (min-width: 600px) {
+        text-align: center;
+        height: 410px;
+    }
+
+    @media (min-width: 640px) {
+        text-align: center;
+        height: 420px;
+    }
+
+    @media (min-width: 667px) {
+        text-align: center;
+        height: 430px;
+    }
+
+    @media (min-width: 667px) {
+        text-align: center;
+        height: 450px;
+    }
+
+    @media (min-width:800px) {
+        height: 230px;
+        text-align: left;
+    }
+
+    @media (min-width:896px) {
+        height: 250px;
+        text-align: left;
+    }
+
+    @media (min-width:1280px) {
+        height: 278px;
+        text-align: left;
+    }
+
+    @media (min-width:1440px) {
+        height: 300px;
+        text-align: left;
+    }
+}
+
+.profile .profile-info {
+
+    @media (min-width:240px) {
+        margin: auto;
+    }
+
+    @media (min-width:800px) {
+        margin-left: 1%;
+    }
+}
+
+.profile .body .btn {
+    @media (min-width:600px) {
+        position: relative;
+        left: 41%;
+    }
+
+    @media (min-width:800px) {
+        position: static;
+    }
+
+}
+
+.profile .profile-info ul li {
+
+    @media (min-width:240px) {
+        display: block;
+        margin-top: 5%;
+    }
+
+    @media (min-width:800px) {
+        display: inline;
+    }
+}
+
+.profile .head img {
+    margin: 2%;
+    padding: 1%;
+    border-radius: 2%;
+    width: 50%;
+
+    @media (min-width:600px) {
+        width: 30%;
+
+    }
+
+    @media (min-width:800px) {
+        width: 15%;
+
+    }
+
+}
+
+
+.profile .user-update .col {
+    margin: 0 1% 0% 1%;
+    flex: 0 0 auto;
+
+    @media (min-width:800px) {
+        width: 47%;
+    }
+
+    @media (min-width:950px) {
+        width: 30%;
+    }
+}
+
+.profile .user-update label,
+.profile .user-update p {
+    margin: 4% 0 0 0;
+    color: #131212ba;
+    text-transform: uppercase !important;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: justify;
+}
+
+.profile .user-update input {
+
+    @media (min-width:240px) {
+        padding: 1%;
+        text-align: left;
+    }
+
+    @media (min-width:800px) {
+        padding: 1%;
+        text-align: left;
+    }
+}

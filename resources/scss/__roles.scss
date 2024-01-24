@@ -1,0 +1,8 @@
+.role-register .col {
+    flex: 0 0 auto;
+    margin: 1%;
+
+    @media (min-width:850px) {
+        width: 47%;
+    }
+}

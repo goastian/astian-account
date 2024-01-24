@@ -1,7 +1,7 @@
 <template lang="">
     <v-modal
         :target="'__X_' + user.id"
-        styles="btn-sm btn-danger"
+        styles="btn btn-link"
         :button_accept_show="false"
         button_cancel_name="Cancelar operacion"
     >
@@ -9,13 +9,10 @@
         <template v-slot:head> Eliminar cuenta permanentemente </template>
 
         <template v-slot:body>
-            <div>
-                La cuenta será eliminada permanente, una vez eliminada se
-                borrará cualquier informacion que hayas guardado, no almacenamos
-                tu informacion como otros servicios para nuestros beneficios,
-                aparte que si la almacenamos ocuparía espacio en nuestros
-                servidores que son limitados. te enviaremos un email.
-            </div>
+            <p>
+                La cuenta será eliminada permanente. Una vez eliminada se
+                borrará cualquier informacion que hayas guardado. te enviaremos un email.
+            </p>
             <button
                 @click="remove(user)"
                 data-bs-dismiss="modal"

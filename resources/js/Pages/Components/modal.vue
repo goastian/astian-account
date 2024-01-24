@@ -11,7 +11,7 @@
 
     <!-- Modal -->
     <div
-        :class="['modal', 'fade', width]"
+        class="modal fade"
         :id="target"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
@@ -20,7 +20,7 @@
         aria-hidden="true"
     >
         <div class="modal-dialog">
-            <div class="modal-content text-light bg-dark">
+            <div class="modal-content">
                 <div class="modal-header">
                     <slot name="head"></slot>
                 </div>

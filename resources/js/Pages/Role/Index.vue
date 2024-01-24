@@ -1,39 +1,30 @@
 <template>
-    <div class="container-fluid">
-        <v-create @success="getScopes(actual_page)"></v-create>
-        <v-table
-            :items="items"
-            class="text-sm table-sm text-center"
-            style="width: 70%; margin: 1% auto"
-        >
-            <template v-slot:body>
-                <tr v-for="(item, index) in scopes" :key="index">
-                    <td>{{ item.role }}</td>
-                    <td>{{ item.descripcion }}</td>
-                    <td>
-                        <v-update
-                            :role="item"
-                            @success="getScopes(actual_page)"
-                            @errors="showMessage"
-                        ></v-update>
-                    </td>
-                    <td>
-                        <v-remove
-                            :role="item"
-                            @success="getScopes(actual_page)"
-                            @errors="showMessage"
-                        ></v-remove>
-                    </td>
-                </tr>
-            </template>
-        </v-table>
-        <v-pagination
-            :pages="pages"
-            @send-current-page="changePage"
-        ></v-pagination>
+    <v-create @success="getScopes(actual_page)"></v-create>
+    <v-table :items="items">
+        <template v-slot:body>
+            <tr v-for="(item, index) in scopes" :key="index">
+                <td>{{ item.role }}</td>
+                <td>{{ item.descripcion }}</td>
+                <td>
+                    <v-update
+                        :role="item"
+                        @success="getScopes(actual_page)"
+                        @errors="showMessage"
+                    ></v-update>
+                </td>
+                <td>
+                    <v-remove
+                        :role="item"
+                        @success="getScopes(actual_page)"
+                        @errors="showMessage"
+                    ></v-remove>
+                </td>
+            </tr>
+        </template>
+    </v-table>
+    <v-pagination :pages="pages" @send-current-page="changePage"></v-pagination>
 
-        <v-message :message="message" @close="close"></v-message>
-    </div>
+    <v-message :message="message" @close="close"></v-message>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -71,8 +62,8 @@ export default {
             this.message = event.data.message;
         },
 
-        close(){
-            this.message = null
+        close() {
+            this.message = null;
         },
 
         changePage(page) {

@@ -6,8 +6,7 @@ import { components } from "./config/globalComponents";
 import { $channels, $echo } from "./config/echo.js";
 import { $server } from './config/axios.js'
 
-import "./config/axios.js"; 
-
+import "./config/axios.js";  
 import * as bootstrap from 'bootstrap'
 
 const app = createApp(App);

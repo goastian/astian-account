@@ -21,7 +21,7 @@
                                 @csrf
                                 <input type="hidden" id="email" name="email"
                                     value="{{ session('email') ?: old('email') }}">
-                                <input type="number" id="token" name="token" class="form-control w-75 d-inline"
+                                <input type="text" id="token" name="token" class="form-control w-75 d-inline"
                                     style="margin: auto">
                             </div>
                             <div class="col-12 mt-3 text-sm errors">

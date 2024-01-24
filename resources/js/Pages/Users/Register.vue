@@ -1,133 +1,114 @@
 <template>
-    <v-modal target="create" width="modal-xl" @is-accepted="createUser">
+    <v-modal target="create" @is-accepted="createUser">
         <template v-slot:button> Registrar </template>
         <template v-slot:head> Registrar un nuevo usaurio </template>
         <template v-slot:body>
-            <div class="row row-cols-1 col-sm-12">
-                <div class="col">
-                    <div class="row row-cols-3 col-sm-12">
-                        <div class="col my-1">
-                            <label for="nombre">nombre</label>
-                            <input
-                                id="nombre"
-                                placeholder="nombre"
-                                class="form-control form-control-sm py-0 my-0"
-                                type="text"
-                                v-model="form.nombre"
-                            />
-                            <v-error :error="errors.nombre"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="apellido">apellido</label>
-                            <input
-                                type="text"
-                                id="apellido"
-                                placeholder="apellido"
-                                v-model="form.apellido"
-                                class="form-control form-control-sm py-0 my-0"
-                            />
-                            <v-error :error="errors.apellido"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="email">email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                v-model="form.correo"
-                                placeholder="email@admin.com "
-                                class="form-control form-control-sm py-0 my-0"
-                            />
-                            <v-error :error="errors.correo"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="pais">pais</label>
-                            <input
-                                type="text"
-                                id="pais"
-                                placeholder="Pais"
-                                v-model="form.pais"
-                                class="form-control form-control-sm py-0 my-0"
-                            />
-                            <v-error :error="errors.pais"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="ciudad">ciudad</label>
-                            <input
-                                type="text"
-                                id="ciudad"
-                                v-model="form.ciudad"
-                                placeholder="ciudad"
-                                class="form-control form-control-sm py-0 my-0"
-                            />
-                            <v-error :error="errors.ciudad"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="direccion">direccion</label>
-                            <input
-                                type="text"
-                                id="direccion"
-                                v-model="form.direccion"
-                                placeholder="direccion"
-                                class="form-control form-control-sm py-0 my-0"
-                            />
-                            <v-error :error="errors.direccion"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="telefono">telefono</label>
-                            <input
-                                type="text"
-                                id="telefono"
-                                v-model="form.telefono"
-                                placeholder="telefono"
-                                class="form-control form-control-sm py-0 my-0"
-                            />
-                            <v-error :error="errors.telefono"></v-error>
-                        </div>
-                        <div class="col my-1">
-                            <label for="nacimiento">nacimiento</label>
-                            <input
-                                type="date"
-                                id="nacimiento"
-                                v-model="form.nacimiento"
-                                placeholder="nacimiento"
-                                class="form-control form-control-sm py-0 my-0"
-                            />
-                            <v-error :error="errors.nacimiento"></v-error>
-                        </div>
-                    </div>
+            <div class="row user-register">
+                <div class="col my-1">
+                    <input
+                        id="nombre"
+                        placeholder="nombre"
+                        class="form-control text-capitalize"
+                        type="text"
+                        v-model="form.nombre"
+                    />
+                    <v-error :error="errors.nombre"></v-error>
                 </div>
-                <div class="col my-2">
-                    <div class="row row-cols-3 cols-sm-12">
-                        <div
-                            class="col-12 text-center h5 border-bottom border-top"
-                        >
-                            <span class="">Permisos de usuario</span>
-                        </div>
-                        <div
-                            class="col form-check text-start"
-                            v-for="(item, index) in roles"
-                            :key="index"
-                        >
-                            <input
-                                class="form-check-input"
-                                type="checkbox"
-                                :value="item.id"
-                                :id="index"
-                                v-model="form.acceso"
-                            />
-                            <label
-                                class="form-check-label text-sm"
-                                :for="index"
-                            >
-                                <strong>{{ item.role }}: </strong>
-                                <span>{{ item.descripcion }}</span>
-                            </label>
-                        </div>
-                    </div>
+                <div class="col my-1">
+                    <input
+                        type="text"
+                        id="apellido"
+                        placeholder="apellido"
+                        v-model="form.apellido"
+                        class="form-control text-capitalize"
+                    />
+                    <v-error :error="errors.apellido"></v-error>
                 </div>
-                <div>
-                    <v-error :error="errors.acceso"></v-error>
+                <div class="col my-1">
+                    <input
+                        type="email"
+                        id="email"
+                        v-model="form.correo"
+                        placeholder="correo electronico"
+                        class="form-control text-capitalize"
+                    />
+                    <v-error :error="errors.correo"></v-error>
                 </div>
+                <div class="col my-1">
+                    <input
+                        type="text"
+                        id="pais"
+                        placeholder="Pais"
+                        v-model="form.pais"
+                        class="form-control text-capitalize"
+                    />
+                    <v-error :error="errors.pais"></v-error>
+                </div>
+                <div class="col my-1">
+                    <input
+                        type="text"
+                        id="ciudad"
+                        v-model="form.ciudad"
+                        placeholder="ciudad"
+                        class="form-control text-capitalize"
+                    />
+                    <v-error :error="errors.ciudad"></v-error>
+                </div>
+                <div class="col my-1">
+                    <input
+                        type="text"
+                        id="direccion"
+                        v-model="form.direccion"
+                        placeholder="direccion"
+                        class="form-control text-capitalize"
+                    />
+                    <v-error :error="errors.direccion"></v-error>
+                </div>
+                <div class="col my-1">
+                    <input
+                        type="text"
+                        id="telefono"
+                        v-model="form.telefono"
+                        placeholder="telefono"
+                        class="form-control text-capitalize"
+                    />
+                    <v-error :error="errors.telefono"></v-error>
+                </div>
+                <div class="col my-1">
+                    <input
+                        type="date"
+                        id="nacimiento"
+                        v-model="form.nacimiento"
+                        placeholder="nacimiento"
+                        class="form-control text-capitalize"
+                    />
+                    <v-error :error="errors.nacimiento"></v-error>
+                </div>
+            </div>
+            <div class="m-2 p-2">
+                    <span class="">Permisos de usuario</span>
+                </div>
+            <div class="row user-scopes border p-1">
+                <div
+                    class="col form-check"
+                    v-for="(item, index) in roles"
+                    :key="index"
+                >
+                    <input
+                        class="form-check-input"
+                        type="checkbox"
+                        :value="item.id"
+                        :id="index"
+                        v-model="form.acceso"
+                    />
+                    <label class="form-check-label" :for="index">
+                        <strong>{{ item.role }}: </strong>
+                        <span>{{ item.descripcion }}</span>
+                    </label>
+                </div>
+            </div>
+            <div>
+                <v-error :error="errors.acceso"></v-error>
             </div>
         </template>
     </v-modal>
@@ -137,7 +118,7 @@ export default {
     emits: ["success", "errors"],
 
     data() {
-        return { 
+        return {
             form: { acceso: [] },
             errors: {},
             roles: {},
@@ -175,9 +156,3 @@ export default {
     },
 };
 </script>
-
-<style scoped lang="css">
-label {
-    color: white;
-}
-</style>
