@@ -26,6 +26,7 @@
   "dependencies": {
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
+    "bootstrap-icons": "^1.11.3",
     "echo-client-js": "^1.2.0",
     "js-cookie": "^3.0.5",
     "vue-router": "^4.2.5"
