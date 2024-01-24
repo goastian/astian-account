@@ -1,43 +1,38 @@
 <template>
-    <div class="container-fluid">
-        <div
-            class="card bg-dark card-sm py-0 py-0 w-75"
-            style="margin: 1% auto"
-        >
-            <div class="class card-head h5 py-0 text-light text-center">
-                <span>Registrar cliente</span>
-            </div>
-            <div class="class py-0 card-body">
-                <div class="class text-center row row-cols-3 col-sm-12">
-                    <div class="col-4">
-                        <label for="cliente">Cliente</label>
-                        <input
-                            type="text"
-                            v-model="client.name"
-                            class="form-control form-sm"
-                            @keyup.enter="storeClients"
-                        />
-                        <v-error :error="errors.name"></v-error>                       
-                    </div>
-                    <div class="col-6">
-                        <label for="redirect">Redirect</label>
-                        <input
-                            type="text"
-                            v-model="client.redirect"
-                            id="redirect"
-                            class="form-control"
-                            @keyup.enter="storeClients"
-                        />
-                        <v-error :error="errors.redirect"></v-error>                        
-                    </div>
-                    <div class="col-2 py-4">
-                        <button
-                            class="btn btn-block btn-success"
-                            @click="storeClients"
-                        >
-                            registrar
-                        </button>
-                    </div>
+    <div class="card">
+        <div class="card-head">
+            <span>Registrar cliente</span>
+        </div>
+        <div class="card-body aouth-clients-register">
+            <div class="row">
+                <div class="col">
+                    <input
+                        type="text"
+                        v-model="client.name"
+                        class="form-control form-sm"
+                        @keyup.enter="storeClients"
+                        placeholder="Nombre"
+                    />
+                    <v-error :error="errors.name"></v-error>
+                </div>
+                <div class="col">
+                    <input
+                        type="text"
+                        v-model="client.redirect"
+                        id="redirect"
+                        class="form-control"
+                        @keyup.enter="storeClients"
+                        placeholder="Redirect"
+                    />
+                    <v-error :error="errors.redirect"></v-error>
+                </div>
+                <div class="col">
+                    <button
+                        class="btn btn-block btn-success"
+                        @click="storeClients"
+                    >
+                        registrar
+                    </button>
                 </div>
             </div>
         </div>

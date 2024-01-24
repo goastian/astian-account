@@ -17,11 +17,10 @@
 
 </head>
 
-<body class="font-sans antialiased bg-dark text-light">
-    <div class="container-fluid">
+<body>
+    <div class="content">
         @yield('content')
     </div>
-
 </body>
 
 </html>

@@ -1,0 +1,15 @@
+.broadcast-register .col {
+    flex: 0 0 auto;
+    width: 90%;
+    
+    @media (min-width:240px) {
+        width: 98%;
+        margin: 1% 0;
+        padding: 0;
+    }
+    
+    @media (min-width:850px) {
+        width: 48%;
+        margin: 1%;
+    }
+}

@@ -1,137 +1,181 @@
 <template>
-    <nav class="navbar navbar-dark bg-dark sticky-top">
-        <div class="container-fluid">
-            <router-link class="navbar-brand" :to="{ name: 'home.about' }"
-                >Home</router-link
+    <ul class="nav">
+        <li class="nav-item" @click="Expand">
+            <a href="#" class="btn btn-primary"
+                ><i class="bi bi-list h5"></i
+            ></a>
+        </li>
+        <li class="nav-item ms-auto">
+            <v-apps></v-apps>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
             >
-            <a href="#"> </a>
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasNavbar"
-                aria-controls="offcanvasNavbar"
-                aria-label="Toggle navigation"
+                <i class="bi bi-bell-fill h5" @click="unreadNotification"></i>
+                <span
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                >
+                    {{ unread_notifications.length }}
+                    <span class="visually-hidden">unread messages</span>
+                </span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-notify">
+                <li class="dropdown-item h5">
+                    <router-link :to="{ name: 'notify.unread' }">
+                        Ver todas
+                        <span class="badge text-bg-danger">{{
+                            unread_notifications.length
+                        }}</span>
+                    </router-link>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li
+                    class="dropdown-item"
+                    v-for="(item, index) in unread_notifications"
+                    :key="index"
+                >
+                    <a
+                        :href="item.recurso"
+                        target="_blank"
+                        @click="readNotification(item.links.read)"
+                    >
+                        <strong class=""
+                            >{{ item.titulo }}
+                            <i
+                                :class="[
+                                    'bi h5 mx-2',
+                                    item.leido ? 'bi-eye' : 'bi-eye-slash',
+                                ]"
+                            ></i>
+                        </strong>
+                        <p>
+                            {{ item.mensaje }}
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="nav-item dropdown">
+            <a
+                class="btn btn-primary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
             >
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div
-                class="offcanvas offcanvas-end bg-dark text-light"
-                tabindex="-1"
-                id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel"
-            >
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
-                        {{ user.nombre }}
-                    </h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="offcanvas"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item">
-                            <router-link
-                                class="nav-link"
-                                :to="{ name: 'home.about' }"
-                                >Profile</router-link
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <router-link
-                                class="nav-link"
-                                :to="{ name: 'users' }"
-                                >Users</router-link
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <router-link
-                                class="nav-link"
-                                :to="{ name: 'scopes' }"
-                                >Roles</router-link
-                            >
-                        </li>
-                        <li class="nav-item">
-                            <router-link
-                                class="nav-link"
-                                :to="{ name: 'channels' }"
-                                >Broadcasts</router-link
-                            >
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a
-                                class="nav-link dropdown-toggle"
-                                href="#"
-                                role="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                Servicios
-                            </a>
-                            <ul class="dropdown-menu bg-primary">
-                                <li>
-                                    <router-link
-                                        class="dropdown-item"
-                                        :to="{ name: 'clients' }"
-                                        >Registrar</router-link
-                                    >
-                                </li>
-                                <li>
-                                    <router-link
-                                        class="dropdown-item"
-                                        :to="{ name: 'tokens' }"
-                                        >Sessiones de
-                                        microservicios</router-link
-                                    >
-                                </li>
-                                <li>
-                                    <router-link
-                                        class="dropdown-item"
-                                        :to="{ name: 'personalTokens' }"
-                                        >API Tokens</router-link
-                                    >
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item">
-                            <button
-                                class="nav-link text-danger"
-                                @click="logout"
-                            >
-                                Logout
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </nav>
+                <i class="bi bi-box-arrow-in-right h3"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark">
+                <li>
+                    <a class="dropdown-item" href="#" @click="logout">Logout</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
 </template>
 <script>
+import VApps from "./Apps.vue";
+
 export default {
-    props: ["user"],
+    emits: ["expand"],
+
+    components: {
+        VApps,
+    },
 
     data() {
         return {
-            data: {},
+            expand: false,
+            notifications: {},
+            unread_notifications: {},
         };
     },
 
+    mounted() {
+        window.addEventListener("resize", this.screenIsChanging);
+        this.screenIsChanging();
+        this.notification();
+        this.unreadNotification();
+        this.listenEvents();
+    },
+
     methods: {
+        Expand() {
+            this.expand = !this.expand;
+            this.$emit("expand", this.expand);
+        },
+
+        screenIsChanging() {
+            this.expand = window.innerWidth < 940;
+        },
+
         logout() {
             this.$server
-                .post("/logout")
+                .post("logout")
                 .then((res) => {
-                    window.location.href = res.data.data;
+                    window.location.href = process.env.APP_URL;
                 })
-                .catch((e) => {
-                    if (e.response) {
-                        console.log(e.response);
-                    }
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+
+        notification() {
+            this.$server
+                .get("api/notifications")
+                .then((res) => {
+                    this.notifications = res.data.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+
+        unreadNotification() {
+            this.$server
+                .get("api/notifications/unread")
+                .then((res) => {
+                    this.unread_notifications = res.data.data;
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+
+        readNotification(link) {
+            this.$server
+                .post(link)
+                .then((res) => {
+                    this.notification();
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        },
+
+        listenEvents() {
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("PushNotificationEvent", (e) => {
+                    this.notification();
+                    this.unreadNotification();
+                });
+
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("ReadNotificationEvent", (e) => {
+                    this.notification();
+                    this.unreadNotification();
+                });
+
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("DestroyNotificationEvent", (e) => {
+                    this.notification();
+                    this.unreadNotification();
                 });
         },
     },

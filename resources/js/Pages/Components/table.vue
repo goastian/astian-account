@@ -1,6 +1,6 @@
 <template>
     <div class="table-responsive">
-        <table class="table table-hover table-dark">
+        <table class="table table-hover">
             <thead>
                 <th
                     class="text-uppercase"
@@ -20,20 +20,3 @@ export default {
     props: ["items"],
 };
 </script>
-<styles scoped lang="css">
-.table {
-    font-size: 12px !important;
-    padding: 0px;
-    margin: 0px;
-}
-
-thead {
-    padding: 0px;
-    margin: 0px;
-}
-
-tbody {
-    padding: 0px;
-    margin: 0px;
-}
-</styles>

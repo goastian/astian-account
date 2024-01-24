@@ -4,208 +4,128 @@
         :target="'__C__' + user.id"
         @is-clicked="loadData(user)"
         @is-accepted="update(user)"
-        width="modal-xl"
     >
         <template v-slot:button> Detalle </template>
         <template v-slot:head> Datos del usuario {{ user.nombre }} </template>
         <template v-slot:body>
-            <div class="row" style="font-size: 12px">
-                <div class="row row-cols-1 col-12">
-                    <div class="col mb-2">
-                        <div class="row row-cols-3 col-12">
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="nombre"
-                                    >nombre</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.nombre"
-                                    type="text"
-                                    name="nombre"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.nombre"></v-error>
-                            </div>
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="apellido"
-                                    >apellido</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.apellido"
-                                    type="text"
-                                    name="apellido"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.apellido"></v-error>
-                            </div>
-                            <div class="col mb-2">
-                                <label class="text-capitalize fw-bold" for=""
-                                    >Correo</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.correo"
-                                    type="email"
-                                    name="correo"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.correo"></v-error>
-                            </div>
-
-                            <div class="col mb-2">
-                                <label class="text-capitalize fw-bold" for=""
-                                    >Telefono</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.telefono"
-                                    type="text"
-                                    name="telefono"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.telefono"></v-error>
-                            </div>
-
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="pais"
-                                    >pais</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.pais"
-                                    type="text"
-                                    name="pais"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.pais"></v-error>
-                            </div>
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="ciudad"
-                                    >ciudad</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.ciudad"
-                                    type="text"
-                                    name="ciudad"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.ciudad"></v-error>
-                            </div>
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="direccion"
-                                    >direccion</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.direccion"
-                                    type="text"
-                                    name="direccion"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.direccion"></v-error>
-                            </div>
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="nacimiento"
-                                    >nacimiento</label
-                                >
-                                <input
-                                    @keypress.enter="update(user)"
-                                    v-model="user.nacimiento"
-                                    type="date"
-                                    name="nacimiento"
-                                    class="form-control-sm form-control"
-                                />
-                                <v-error :error="errors.nacimiento"></v-error>
-                            </div>
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="registrado"
-                                    >registrado</label
-                                >
-                                <p>{{ user.registrado }}</p>
-                            </div>
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="actualizado"
-                                    >actualizado</label
-                                >
-                                <p>{{ user.actualizado }}</p>
-                            </div>
-                            <div class="col mb-2">
-                                <label
-                                    class="text-capitalize fw-bold"
-                                    for="actualizado"
-                                    >Deshabilitado</label
-                                >
-                                <p class="fw-bold text-primary">
-                                    {{
-                                        user.inactivo
-                                            ? `Usuario inactivo desde ${user.inactivo}`
-                                            : "Usuario Activo"
-                                    }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col mb-2" v-show="client == 0">
-                        <div class="row row-cols-4 col-12">
-                            <div
-                                class="col-12 border-bottom h5 mb-4 border-top"
-                            >
-                                Permisos del usuario
-                            </div>
-                            <div
-                                class="col form-check text-start my-1"
-                                v-for="(item, index) in roles"
-                            >
-                                <input
-                                    @click="addOrRemoveRoles(item.id)"
-                                    class="form-check-input"
-                                    :id="item.id"
-                                    :value="item.id"
-                                    type="checkbox"
-                                />
-                                <label class="form-check-label" :for="item.id">
-                                    <span class="fw-bold"
-                                        >{{ item.role }}:</span
-                                    >
-                                    {{ item.descripcion }}
-                                </label>
-                            </div>
-                            <div
-                                v-if="message"
-                                class="col-12 mt-4 py-4 fw-bold bg-success"
-                            >
-                                <span class="text-light">{{ message }}</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="row user-update">
+                <div class="col mb-2">
+                    <label for="nombre">nombre</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.nombre"
+                        type="text"
+                        name="nombre"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.nombre"></v-error>
+                </div>
+                <div class="col mb-2">
+                    <label for="apellido">apellido</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.apellido"
+                        type="text"
+                        name="apellido"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.apellido"></v-error>
+                </div>
+                <div class="col mb-2">
+                    <label for="">Correo</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.correo"
+                        type="email"
+                        name="correo"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.correo"></v-error>
                 </div>
 
-                <div
-                    :class="[
-                        'col-12 bg-success text-center mx-2 py-3',
-                        [status ? 'show' : 'hide'],
-                    ]"
-                >
-                    <span class="text-light">{{ status }}</span>
+                <div class="col mb-2">
+                    <label for="">Telefono</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.telefono"
+                        type="text"
+                        name="telefono"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.telefono"></v-error>
                 </div>
+
+                <div class="col mb-2">
+                    <label for="pais">pais</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.pais"
+                        type="text"
+                        name="pais"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.pais"></v-error>
+                </div>
+                <div class="col mb-2">
+                    <label for="ciudad">ciudad</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.ciudad"
+                        type="text"
+                        name="ciudad"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.ciudad"></v-error>
+                </div>
+                <div class="col mb-2">
+                    <label for="direccion">direccion</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.direccion"
+                        type="text"
+                        name="direccion"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.direccion"></v-error>
+                </div>
+                <div class="col mb-2">
+                    <label for="nacimiento">nacimiento</label>
+                    <input
+                        @keypress.enter="update(user)"
+                        v-model="user.nacimiento"
+                        type="date"
+                        name="nacimiento"
+                        class="form-control"
+                    />
+                    <v-error :error="errors.nacimiento"></v-error>
+                </div>
+                <div class="col mb-2">
+                    <label for="registrado">registrado</label>
+                    <p>{{ user.registrado }}</p>
+                </div>
+                <div class="col mb-2">
+                    <label for="actualizado">actualizado</label>
+                    <p>{{ user.actualizado }}</p>
+                </div>
+                <div class="col mb-2">
+                    <label for="actualizado">Deshabilitado</label>
+                    <p class="fw-bold text-primary">
+                        {{
+                            user.inactivo
+                                ? `Usuario inactivo desde ${user.inactivo}`
+                                : "Usuario Activo"
+                        }}
+                    </p>
+                </div>
+            </div>
+
+            <div
+                :class="[
+                    'col-12 bg-success text-center mx-2 py-3',
+                    [status ? 'show' : 'hide'],
+                ]"
+            >
+                <span class="text-light">{{ status }}</span>
             </div>
         </template>
     </v-modal>
@@ -318,7 +238,8 @@ export default {
          */
         getUserRoles(item) {
             this.message = null;
-            this.$server.get(item.links.roles)
+            this.$server
+                .get(item.links.roles)
                 .then((res) => {
                     this.role_selected(res.data.data);
                 })

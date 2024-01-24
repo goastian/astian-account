@@ -7,17 +7,21 @@
         </div>
     @endif
 
-    <div class="login mt-5" style="margin:auto">
+    <div class="login">
         <form action="{{ route('login') }}" method="post">
             @csrf
             <div class="py-3">
-                <div class="login-title h1 fw-bold text-center">
-                    {{ __('Login') }} 
-                 </div>
+                <div class="login-head h1 mb-4">
+                    <img src="images/fuentes.svg" alt="astian-fuente" class="astian-fuentes">
+                    <img src="favicon.svg" alt="astian-logo" class="astian-logo">
+                </div>
+
+                <div class="login-title h3 fw-bold text-center">
+                    {{ __('Login') }}
+                </div>
                 <div class="row mt-5 mb-5">
                     <div class="col-12 mb-3">
-                        <label class="fw-bold" for="email">{{ __('Email') }}</label>
-                        <input class="form-control" type="email" name="email" placeholder="admin@email.com">
+                        <input class="form-control" type="email" name="email" placeholder="{{ __('Email') }}">
                         @if ($errors->has('email'))
                             @foreach ($errors->get('email') as $item)
                                 <span class="errors">{{ $item }}</span>
@@ -26,7 +30,6 @@
                     </div>
 
                     <div class="col-12 mb-3">
-                        <label class="fw-bold" for="password">{{ __('Password') }}</label>
                         <input class="form-control" type="password" name="password" placeholder="{{ __('Password') }}">
                         @if ($errors->has('password'))
                             @foreach ($errors->get('password') as $item)
