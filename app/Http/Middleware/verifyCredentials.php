@@ -39,16 +39,29 @@ class verifyCredentials
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->header('Authorization') || $this->verifyCookie($request)) {
+        /**
+         * ignore if the andpoint is 'aouth/token
+         */
+        $URI = $_SERVER['REQUEST_URI'];
+
+        if (strpos($URI, 'oauth/token')) {
 
             return $next($request);
         }
 
+        /**
+         * check credential cookie and authorization
+         */
+        if ($request->header('Authorization') || $this->verifyCookie($request)) {
+
+            return $next($request);
+        }
+        
         throw new ReportError(__('Unauthenticated'), 401);
     }
 
     /**
-     * verifying if the credentials are correct in the session
+     * Deny cookie if the session has been destroyed
      *
      * @param Request $request
      * @return Boolean
@@ -63,4 +76,5 @@ class verifyCredentials
 
         return $session && $user_id == $session->user_id;
     }
+
 }
