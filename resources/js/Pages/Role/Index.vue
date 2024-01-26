@@ -8,8 +8,7 @@
                 <td>
                     <v-update
                         :role="item"
-                        @success="getScopes(actual_page)"
-                        @errors="showMessage"
+                        @success="getScopes(actual_page)" 
                     ></v-update>
                 </td>
                 <td>

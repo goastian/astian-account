@@ -12,7 +12,7 @@
             <div class="row user-scopes">
                 <div
                     class="col form-check text-start"
-                    v-for="(item, index) in roles"
+                    v-for="(item, index) in roles" v-show="!item.publico"
                 >
                     <input
                         @click="addOrRemoveRoles(item.id)"
@@ -74,8 +74,11 @@ export default {
                         this.message = `Se asigno un nuevo role ${res.data.data.role}`;
                     })
                     .catch((e) => {
-                        if (e.response && e.response.data.data.status == 403) {
-                            this.message = e.response.data.data.message;
+                        if (e.response && e.response.data.status == 403) {
+                            this.message = e.response.data.errors.message;
+                        }
+                        if (e.response && e.response.data.message) {
+                            this.message = e.response.data.message;
                         }
                     });
             } else {
@@ -86,8 +89,8 @@ export default {
                     })
                     .catch((e) => {
                         if (e.response && e.response.status == 403) {
-                            if (e.response && e.response.data.data.message) {
-                                this.message = e.response.data.data.message;
+                            if (e.response && e.response.data.message) {
+                                this.message = e.response.data.message;
                             }
 
                             if (e.response && e.response.data.errors) {
@@ -105,11 +108,19 @@ export default {
 
         getRoles() {
             this.$server
-                .get("/api/roles")
+                .get("/api/roles", {
+                    params: {
+                        per_page: 100,
+                    },
+                })
                 .then((res) => {
                     this.roles = res.data.data;
                 })
-                .catch((e) => {});
+                .catch((e) => {
+                    if (e.response) {
+                        console.log(e.response);
+                    }
+                });
         },
 
         /**
@@ -139,7 +150,11 @@ export default {
         getUserRoles(item) {
             this.message = null;
             this.$server
-                .get(item.links.roles)
+                .get(item.links.roles, {
+                    params: {
+                        per_page: 100,
+                    },
+                })
                 .then((res) => {
                     this.role_selected(res.data.data);
                 })

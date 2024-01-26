@@ -22,6 +22,21 @@
                     <v-error :error="errors.descripcion"></v-error>
                 </div>
                 <div class="col">
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="1"
+                            id="categoria"
+                            v-model="form.publico"
+                        />
+                        <label class="form-check-label" for="categoria">
+                            Para todos los usuarios
+                        </label>
+                    </div>
+                </div>
+                <div class="col-12"></div>
+                <div class="col">
                     <button class="btn btn-sm btn-primary" @click="create">
                         registrar
                     </button>
