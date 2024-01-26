@@ -111,7 +111,7 @@ export default {
 
         getScopes() {
             this.$server
-                .get("oauth/scopes")
+                .get("/api/oauth/scopes")
                 .then((res) => {
                     this.scopes = res.data;
                 })

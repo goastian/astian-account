@@ -29,8 +29,8 @@
                         type="email"
                         id="email"
                         v-model="form.correo"
-                        placeholder="correo electronico"
-                        class="form-control text-capitalize"
+                        placeholder="Correo Electronico"
+                        class="form-control"
                     />
                     <v-error :error="errors.correo"></v-error>
                 </div>
@@ -86,13 +86,14 @@
                 </div>
             </div>
             <div class="m-2 p-2">
-                    <span class="">Permisos de usuario</span>
-                </div>
+                <span class="">Permisos de usuario</span>
+            </div>
             <div class="row user-scopes border p-1">
                 <div
                     class="col form-check"
                     v-for="(item, index) in roles"
                     :key="index"
+                    v-show="!item.publico"
                 >
                     <input
                         class="form-check-input"
