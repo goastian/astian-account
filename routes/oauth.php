@@ -62,14 +62,8 @@ Route::group([
         Route::delete('/clients/{client_id}', [
             'uses' => '\Laravel\Passport\Http\Controllers\ClientController@destroy',
             'as' => 'clients.destroy',
-        ]);
-
-        Route::get('/scopes', [
-            'uses' => '\App\Http\Controllers\OAuth\ScopeController@all',
-            'as' => 'scopes.index',
-            'middleware' => 'wants.json',
-        ]);
-
+        ]); 
+        
         Route::get('/personal-access-tokens', [
             'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser',
             'as' => 'personal.tokens.index',
