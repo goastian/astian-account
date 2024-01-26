@@ -1,6 +1,6 @@
 <template>
     <ul class="nav">
-        <li class="nav-item" @click="Expand">
+        <li class="nav-item" @click="Expand(status)">
             <a href="#" class="btn btn-primary"
                 ><i class="bi bi-list h5"></i
             ></a>
@@ -82,6 +82,8 @@ import VApps from "./Apps.vue";
 export default {
     emits: ["expand"],
 
+    props: ["status"],
+
     components: {
         VApps,
     },
@@ -103,8 +105,8 @@ export default {
     },
 
     methods: {
-        Expand() {
-            this.expand = !this.expand;
+        Expand(status = false) {
+            this.expand = !status;
             this.$emit("expand", this.expand);
         },
 
