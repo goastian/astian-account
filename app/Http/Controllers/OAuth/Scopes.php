@@ -11,7 +11,6 @@ trait Scopes
     public function scopes()
     {
         $roles = Role::all();
-        $userRoles = Auth::user()->roles()->get();
 
         if (Auth::user()->isAdmin()) {
             return collect($roles)->map(function ($role) {
@@ -20,15 +19,21 @@ trait Scopes
         }
 
         $scopes = array();
+        //roles asignado
+        foreach (Auth::user()->roles()->get() as $scope) {
+            array_push($scopes, [
+                'id' => $scope->name,
+                'description' => $scope->description,
+            ]);
+        }
 
+        //roles publicos
         foreach ($roles as $role) {
-            foreach ($userRoles as $scope) {
-                if (str_starts_with($role->name, $scope->name)) {
-                    array_push($scopes, [
-                        'id' => $role->name,
-                        'description' => $role->description,
-                    ]);
-                }
+            if ($role->public) {
+                array_push($scopes, [
+                    'id' => $role->name,
+                    'description' => $role->description,
+                ]);
             }
         }
 

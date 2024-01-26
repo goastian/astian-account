@@ -12,7 +12,7 @@ class RoleUserController extends Controller
 
     public function __construct(){
         parent::__construct();
-        $this->middleware('scope:');
+        $this->middleware('scope:account_read,scope_read');
     }
 
     /**

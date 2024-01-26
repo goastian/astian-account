@@ -20,10 +20,10 @@ class RoleController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . RoleTransformer::class)->only('store', 'update');
-        $this->middleware('scope:account,scopes,scopes_read')->only('index');
-        $this->middleware('scope:scopes,scopes_register')->only('store');
-        $this->middleware('scope:scopes,scopes_update')->only('store');
-        $this->middleware('scope:scopes,scopes_destroy')->only('destory');
+        $this->middleware('scope:scopes_read')->only('index');
+        $this->middleware('scope:scopes_register')->only('store');
+        $this->middleware('scope:scopes_update')->only('store');
+        $this->middleware('scope:scopes_destroy')->only('destory');
     }
 
     /**
@@ -40,12 +40,17 @@ class RoleController extends Controller
         return $this->showAll($roles, $role->transformer);
     }
 
+    public function show(Role $role)
+    {
+        return $this->showOne($role, $role->transformer);
+    }
+
     public function store(Request $request, Role $role)
     {
-
         $this->validate($request, [
             'name' => ['required', 'unique:roles,name'],
             'description' => ['required', 'max:300'],
+            'public' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($request, $role) {
@@ -64,6 +69,7 @@ class RoleController extends Controller
         $this->validate($request, [
             'name' => ['nullable', 'unique:roles,name,' . $role->id],
             'description' => ['nullable', 'max:300'],
+            'public' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($request, $role) {
@@ -71,6 +77,9 @@ class RoleController extends Controller
             if ($this->is_diferent($role->name, $request->name)) {
                 $this->can_update[] = true;
 
+                /**
+                 * verifica que el nombre del escope no sea uno por defecto
+                 */
                 collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
                     if ($role->name == $key) {
                         throw new ReportError(Lang::get("This role ($key) belongs to the system by default and the scope name cannot be updated."), 403);
@@ -83,6 +92,11 @@ class RoleController extends Controller
             if ($this->is_diferent($role->description, $request->description)) {
                 $this->can_update[] = true;
                 $role->description = $request->description;
+            }
+
+            if ($role->public != $request->public) {
+                $this->can_update[] = true;
+                $role->public = $request->public;
             }
 
             if (in_array(true, $this->can_update)) {

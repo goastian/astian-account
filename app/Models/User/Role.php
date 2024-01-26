@@ -19,6 +19,7 @@ class Role extends master
     protected $fillable = [
         'name',
         'description',
+        'public',
     ];
 
     public function users()
@@ -32,27 +33,16 @@ class Role extends master
             "admin" => "full system access",
             "client" => "default access for the client",
             "broadcast" => "full access to manage broadcasting channels",
-            "account" => "full access to manage user accounts",
             "account_read" => "granted to read user data",
             "account_register" => "granted to register new users",
             "account_update" => "granted to update users data",
             "account_enable" => "granted to eanble just the only users, this does not apply for clients",
             "account_disable" => "granted to disable users accounts, this does not apply for clients",
-            "scopes" => "full acces to manage roles",
             "scopes_read" => "granted to read scopes",
             "scopes_register" => "granted to register new roles",
             "scopes_update" => "granted to update scopes, just only aplly for description",
-            "scopes_destroy" => "ganted to delete roles",
-            "notify" => "granted to send notification push"
+            "scopes_destroy" => "granted to delete roles",
+            "notify" => "granted to send notification push",
         ];
-    }
-
-    /**
-     * devulve una lista de scopes que seran ingnorados en la verificacion
-     * 
-     * @return array
-     */
-    public static function ignore_verification_scopes(){
-        return explode(',', env('INGNORE_VERIFICATION_SCOPES'));
     }
 }

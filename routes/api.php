@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
+use App\Http\Controllers\OAuth\ScopeController;
 use App\Http\Controllers\Push\NotificationController;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Role\RoleUserController;
@@ -31,6 +32,10 @@ Route::prefix('oauth')->group(function () {
         ->name('passport.token')
         ->middleware('authorize');
 
+    Route::get('/scopes', [ScopeController::class, 'all'])
+        ->name('scopes.index')
+        ->middleware('wants.json');
+
     Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentiasl"])
         ->name('passport.revoke-credentials');
 });
@@ -38,7 +43,7 @@ Route::prefix('oauth')->group(function () {
 /**
  * rutas que permiten administrar roles
  */
-Route::resource('roles', RoleController::class)->only('index', 'store', 'update', 'destroy');
+Route::resource('roles', RoleController::class)->except('create', 'edit');
 Route::resource('roles.users', RoleUserController::class)->only('index');
 
 /**
