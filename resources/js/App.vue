@@ -5,7 +5,7 @@
         </div>
         <div class="section">
             <div class="navbar py-0">
-                <v-nav @expand="Expand"></v-nav>
+                <v-nav @expand="Expand" :status="expand"></v-nav>
             </div>
             <div class="content p-2">
                 <router-view></router-view>
@@ -40,7 +40,7 @@ export default {
 
     methods: {
         Expand(event) {
-            this.expand = event;
+            this.expand = event; 
         },
 
         screenIsChanging() {
