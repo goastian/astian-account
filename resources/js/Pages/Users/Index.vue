@@ -92,7 +92,9 @@ export default {
                     this.search.page = res.data.meta.pagination.current_page;
                 })
                 .catch((e) => {
-                    console.log(e.response);
+                   if(e.response && e.response.status == 403){
+                    this.message = e.response.data.message
+                   }
                 });
         },
 
