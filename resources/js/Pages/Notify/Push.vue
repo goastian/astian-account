@@ -96,8 +96,12 @@ export default {
                     this.message = res.data.message;
                 })
                 .catch((err) => {
-                    if (err.response) {
+                    if (err.response && err.response.data.errors) {
                         this.errors = err.response.data.errors;
+                    }
+
+                    if (err.response && err.response.status == 403) {
+                        this.message = err.response.data.message;
                     }
                 });
         },

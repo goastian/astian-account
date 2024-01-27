@@ -21,6 +21,8 @@
     </v-table>
 
     <v-pagination :pages="pages" @send-current-page="updateList"></v-pagination>
+
+    <v-message :message="message" @close="close"></v-message>
 </template>
 <script>
 import VRegister from "./Register.vue";
@@ -40,6 +42,7 @@ export default {
             search: {
                 page: 1,
             },
+            message: null,
         };
     },
 
@@ -54,6 +57,10 @@ export default {
             this.getChannels();
         },
 
+        close() {
+            this.message = null;
+        },
+
         getChannels() {
             this.$server
                 .get("/api/broadcasts", {
@@ -64,7 +71,9 @@ export default {
                     this.pages = res.data.meta.pagination;
                 })
                 .catch((e) => {
-                    console.error(e.response);
+                    if (e.response && e.response.status == 403) {
+                        this.message = e.response.data.message;
+                    }
                 });
         },
 
