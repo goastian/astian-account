@@ -99,9 +99,9 @@ class PasspotConnectController extends GlobalController
      */
 
     public function send_notification(Request $request)
-    {   
+    {
         $X_HEADER = $request->header('X-VERIFY-NOTIFICATION');
-         
+
         throw_unless($X_HEADER == env('VERIFY_NOTIFICATION'), new ReportError("Unsupported header", 422));
 
         $this->validate($request, [
@@ -131,6 +131,8 @@ class PasspotConnectController extends GlobalController
         }
 
         Notification::send($notifiable, new Notify($data));
+
+        return $this->message(__('notification sent successfully'), 201);
     }
 
     /**
@@ -155,5 +157,4 @@ class PasspotConnectController extends GlobalController
         }
         return false;
     }
-
 }
