@@ -121,7 +121,9 @@ export default {
                     window.location.href = process.env.APP_URL;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 
@@ -132,7 +134,9 @@ export default {
                     this.notifications = res.data.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 
@@ -143,7 +147,9 @@ export default {
                     this.unread_notifications = res.data.data;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 
@@ -154,7 +160,9 @@ export default {
                     this.notification();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 

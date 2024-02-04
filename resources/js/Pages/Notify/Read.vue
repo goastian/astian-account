@@ -70,7 +70,9 @@ export default {
                     this.read();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 
@@ -84,7 +86,9 @@ export default {
                     this.pages = res.data.meta.pagination;
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 
@@ -95,7 +99,9 @@ export default {
                     this.read();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 
@@ -106,7 +112,9 @@ export default {
                     this.read();
                 })
                 .catch((err) => {
-                    console.log(err);
+                    if (err.response) {
+                        console.log(err.response);
+                    }
                 });
         },
 
