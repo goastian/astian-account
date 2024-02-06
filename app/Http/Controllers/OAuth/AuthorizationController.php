@@ -155,16 +155,31 @@ class AuthorizationController extends Controller
      */
     public function scopes_can_granted(Request $request)
     {
+        //variable para lo nuevos scopes
         $scopes_accepted = [];
+
+        //convertimos los scopes a un array
         $request_scopes = explode(' ', $request->scope);
+
+        //obtenemos todos los scopes a los que el usuario tiene acceso
         $owner_scopes = collect($this->scopes())->pluck('id');
 
-        foreach ($owner_scopes as $key) {
-            if (in_array($key, $request_scopes)) {
+        /**
+         * cuando alguien solicite un token global en el scope debe venir un asterisco (*)
+         */
+        if (str_contains($request->scope, '*')) {
+            foreach ($owner_scopes as $key) {
                 array_push($scopes_accepted, $key);
             }
-        }
+        } else { //si no es un token global
+            //verificamos si el scope que ingreso el usuario tiene accesso
+            foreach ($owner_scopes as $key) {
 
+                if (in_array($key, $request_scopes)) { //si tiene accesso se le asigna
+                    array_push($scopes_accepted, $key);
+                }
+            }
+        }
         $request->merge(['scope' => implode(" ", $scopes_accepted)]);
     }
 
