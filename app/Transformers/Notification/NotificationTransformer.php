@@ -3,7 +3,6 @@
 namespace App\Transformers\Notification;
 
 use Elyerr\ApiResponse\Assets\Asset;
-use ErrorException;
 use League\Fractal\TransformerAbstract;
 
 class NotificationTransformer extends TransformerAbstract
@@ -36,48 +35,25 @@ class NotificationTransformer extends TransformerAbstract
      */
     public function transform($notification)
     {
-        try {
-            $data = json_decode(json_encode($notification->data));
+        $data = json_decode(json_encode($notification->data));
 
-            return [
-                'id' => $notification->id,
-                'titulo' => $data->title,
-                'mensaje' => $data->message,
-                'recurso' => $data->resource,
-                'leido' => $this->format_date($notification->read_at),
-                'recibido' => $this->format_date($notification->created_at),
-                'links' => [
-                    'parent' => route('notifications.index'),
-                    'unread' => route('notifications.unread'),
-                    'show' => route('notifications.show', ['notification' => $notification->id]),
-                    'read' => route('notifications.read', ['notification' => $notification->id]),
-                    'mark_as_read' => route('notifications.read_all'),
-                    'destroy' => route('notifications.destroy', ['notification' => $notification->id]),
-                    'clean' => route('notifications.clean'),
-                ],
-            ];
+        return [
+            'id' => $notification->id,
+            'titulo' => $data->title,
+            'mensaje' => $data->message,
+            'recurso' => isset($data->resource) ? $data->resource : null,
+            'leido' => $this->format_date($notification->read_at),
+            'recibido' => $this->format_date($notification->created_at),
+            'links' => [
+                'parent' => route('notifications.index'),
+                'unread' => route('notifications.unread'),
+                'show' => route('notifications.show', ['notification' => $notification->id]),
+                'read' => route('notifications.read', ['notification' => $notification->id]),
+                'mark_as_read' => route('notifications.read_all'),
+                'destroy' => route('notifications.destroy', ['notification' => $notification->id]),
+                'clean' => route('notifications.clean'),
+            ],
+        ];
 
-        } catch (ErrorException $e) {
-
-            $data = json_decode($notification->data);
-
-            return [
-                'id' => $notification->id,
-                'titulo' => $data->title,
-                'mensaje' => $data->message,
-                'recurso' => $data->resource,
-                'recibido' => $this->format_date($notification->created_at),
-                'leido' => $this->format_date($notification->read_at),
-                'links' => [
-                    'parent' => route('notifications.index'),
-                    'unread' => route('notifications.unread'),
-                    'show' => route('notifications.show', ['notification' => $notification->id]),
-                    'read' => route('notifications.read', ['notification' => $notification->id]),
-                    'mark_as_read' => route('notifications.read_all'),
-                    'destroy' => route('notifications.destroy', ['notification' => $notification->id]),
-                    'clean' => route('notifications.clean'),
-                ],
-            ];
-        }
     }
 }
