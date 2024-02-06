@@ -122,6 +122,19 @@ class Auth extends Authenticatable
     }
 
     /**
+     * User can
+     */
+    public function userCan($scope)
+    {
+        foreach (Role::rolesByDefault() as $key => $value) {
+            if (str_contains($key, $scope)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Send the password reset notification.
      *
      * @param  string  $token

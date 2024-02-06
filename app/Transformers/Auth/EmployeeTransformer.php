@@ -9,7 +9,7 @@ use League\Fractal\TransformerAbstract;
 class EmployeeTransformer extends TransformerAbstract
 {
     use Asset;
-    
+
     /**
      * List of resources to automatically include
      *
@@ -35,6 +35,8 @@ class EmployeeTransformer extends TransformerAbstract
      */
     public function transform($user)
     {
+        $user = Employee::withTrashed()->find($user->id);
+
         return [
             'id' => $user->id,
             'nombre' => $user->name,
@@ -46,26 +48,33 @@ class EmployeeTransformer extends TransformerAbstract
             'nacimiento' => $user->birthday,
             'telefono' => $user->phone,
             'verificado' => $user->verified_at,
-            'cliente' => Employee::withTrashed()->find($user->id)->isClient(),
             'm2fa' => $user->m2fa,
             'registrado' => $this->format_date($user->created_at),
             'actualizado' => $this->format_date($user->updated_at),
             'inactivo' => $this->format_date($user->deleted_at),
-            'links' =>[
+            'can' => [
+                'client' => $user->isClient(),
+                'admin' => $user->isAdmin(),
+                'users' => $user->userCan('account'),
+                'roles' => $user->userCan('scope'),
+                'broadcast' => $user->userCan('broadcast'),
+                'notification' => $user->userCan('notify'),
+            ],
+            'links' => [
                 'parent' => route('users.index'),
                 'store' => route('users.store'),
-                'show' => route('users.show', ['user' => $user->id]), 
-                'update' => route('users.update', ['user' => $user->id]), 
+                'show' => route('users.show', ['user' => $user->id]),
+                'update' => route('users.update', ['user' => $user->id]),
                 'disable' => route('users.disable', ['user' => $user->id]),
                 'enable' => route('users.enable', ['id' => $user->id]),
-                'roles' => route('users.roles.index',['user' => $user->id]),
-            ]
+                'roles' => route('users.roles.index', ['user' => $user->id]),
+            ],
         ];
     }
 
     public static function transformRequest($index)
     {
-        $attributes = [ 
+        $attributes = [
             'nombre' => 'name',
             'apellido' => 'last_name',
             'correo' => 'email',
@@ -76,12 +85,11 @@ class EmployeeTransformer extends TransformerAbstract
             'direccion' => 'address',
             'telefono' => 'phone',
             'nacimiento' => 'birthday',
-            'acceso' => 'role', 
+            'acceso' => 'role',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
-
 
     public static function transformResponse($index)
     {
@@ -96,12 +104,11 @@ class EmployeeTransformer extends TransformerAbstract
             'address' => 'direccion',
             'birthday' => 'nacimiento',
             'phone' => 'telefono',
-            'role' => 'acceso'
+            'role' => 'acceso',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
-
 
     public static function getOriginalAttributes($index)
     {
@@ -113,7 +120,7 @@ class EmployeeTransformer extends TransformerAbstract
             'pais' => 'country',
             'ciudad' => 'city',
             'direccion' => 'address',
-            'telefono' => 'phone', 
+            'telefono' => 'phone',
             'nacimiento' => 'birthday',
             'verificado' => 'verified_at',
             'm2fa' => 'm2fa',
