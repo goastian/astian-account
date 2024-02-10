@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use DateTime;
+use App\Events\Client\StoreClientEvent;
+use App\Http\Controllers\Controller;
+use App\Models\User\Employee;
+use App\Notifications\Client\ClientRegistered;
 use DateInterval;
+use DateTime;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use ErrorException;
 use Illuminate\Http\Request;
-use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
-use App\Events\Client\StoreClientEvent;
-use App\Notifications\Client\ClientRegistered;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class RegisterClientController extends Controller
 {
@@ -22,7 +22,7 @@ class RegisterClientController extends Controller
     {
         //$this->middleware('transform.request:' . $client->transformer)->only('store');
     }
-    
+
     /**
      * show view to register information
      */
@@ -41,7 +41,7 @@ class RegisterClientController extends Controller
             'name' => ['required', 'string', 'max:100'],
             'last_name' => ['required', 'string', 'max:100'],
             'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'confirmed', 'min:8'], 
+            'password' => ['required', 'confirmed', 'min:8'],
             'address' => ['nullable', 'max:150'],
             'phone' => ['nullable', 'max:25'],
             'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
@@ -54,10 +54,10 @@ class RegisterClientController extends Controller
             $client->save();
 
             $client->roles()->syncWithoutDetaching($client->addClientScope()->id);
-        });
 
-        $client->notify(new ClientRegistered());
-        StoreClientEvent::dispatch($client);
+            $client->notify(new ClientRegistered());
+            StoreClientEvent::dispatch($client);
+        });
 
         return redirect()->route('login')->with('status', Lang::get("Hemos enviado un email para que verifiques tu cuenta"));
     }
