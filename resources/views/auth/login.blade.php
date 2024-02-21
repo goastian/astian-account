@@ -7,20 +7,15 @@
         </div>
     @endif
 
-    <div class="login">
-        <form action="{{ route('login') }}" method="post">
-            @csrf
-            <div class="py-3">
-                <div class="login-head h1 mb-4">
-                    <img src="images/fuentes.svg" alt="astian-fuente" class="astian-fuentes">
-                    <img src="favicon.svg" alt="astian-logo" class="astian-logo">
-                </div>
-
-                <div class="login-title h3 fw-bold text-center">
-                    {{ __('Login') }}
-                </div>
-                <div class="row mt-5 mb-5">
-                    <div class="col-12 mb-3">
+    <div class="card login">
+        <div class="card-head">
+            <p class="h3 fw-bold text-color">{{ config('app.name') }}</p>
+        </div>
+        <div class="card-body">
+            <form action="{{ route('login') }}" method="post">
+                @csrf
+                <div class="row">
+                    <div class="col">
                         <input class="form-control" type="email" name="email" placeholder="{{ __('Email') }}">
                         @if ($errors->has('email'))
                             @foreach ($errors->get('email') as $item)
@@ -29,7 +24,9 @@
                         @endif
                     </div>
 
-                    <div class="col-12 mb-3">
+                    <div class="col">
+                        <a class="btn btn-link float-end" style="padding-left: 0"
+                            href="/forgot-password">{{ __('Forgot your password?') }}</a>
                         <input class="form-control" type="password" name="password" placeholder="{{ __('Password') }}">
                         @if ($errors->has('password'))
                             @foreach ($errors->get('password') as $item)
@@ -37,33 +34,27 @@
                             @endforeach
                         @endif
                     </div>
+                    <!--Do not remove this lines-->
                     <div>
-
                         @foreach ($query as $item => $value)
                             <input type="hidden" id="{{ $item }}" name="{{ $item }}"
                                 value="{{ $value }}">
                         @endforeach
-
                     </div>
-                    <div class="col-12 mt-4 text-center">
+                    <!--end of the lines-->
+                    <div class="col text-center">
                         <div>
-                            <button class="btn btn-success mb-2" type="submit">
-                                {{ __('Login') }}
+                            <button class="btn btn-primary px-5" type="submit">
+                                {{ __('Sing in') }}
                             </button>
-                        </div>
-                        <div>
-                            <a class="btn btn-link my-2 mx-2" href="{{ route('register') }}">
-                                {{ __('Register') }}
-                            </a>
-                        </div>
-                        <div>
-                            <a class="btn btn-link" style="padding-left: 0"
-                                href="/forgot-password">{{ __('Forgot your password?') }}</a>
 
+                            <a class="btn btn-link my-2 mx-2" href="{{ route('register') }}">
+                                {{ __("Don't have an account? Sign up.") }}
+                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 @endsection
