@@ -1,9 +1,9 @@
-import VPagination from "../Pages/Components/pagination.vue";
-import VTable from "../Pages/Components/table.vue";
-import VModal from "../Pages/Components/modal.vue";
-import VScopes from "../Pages/Components/scopes.vue";
-import VError from "../Pages/Components/errors.vue";
-import VMessage from "../Pages/Components/message.vue"
+import VPagination from "../components/pagination.vue";
+import VTable from "../components/table.vue";
+import VModal from "../components/modal.vue";
+import VScopes from "../components/scopes.vue";
+import VError from "../components/errors.vue";
+import VMessage from "../components/message.vue";  
 
 export const components = [
     ["VPagination", VPagination],
@@ -11,5 +11,5 @@ export const components = [
     ["VModal", VModal],
     ["VScopes", VScopes],
     ["VError", VError],
-    ["VMessage", VMessage],
+    ["VMessage", VMessage], 
 ];

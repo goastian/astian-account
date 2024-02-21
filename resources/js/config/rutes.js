@@ -1,42 +1,80 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Clients from "../Pages/OAuth/Clients/Index.vue";
-import Tokens from "../Pages/OAuth/Tokens/Index.vue";
-import PersonalTokens from "../Pages/OAuth/Personal/Index.vue";
-import Users from "../Pages/Users/Index.vue";
-import Roles from "../Pages/Role/Index.vue";
-import Channel from "../Pages/Broadcast/Index.vue";
-import Profile from "../Pages/Account/Profile.vue";
-import Security from "../Pages/Account/Security.vue";
-import Devices from "../Pages/Account/Devices.vue";
-import Push from "../Pages/Notify/Push.vue";
-import Read from "../Pages/Notify/Read.vue";
-import Unread from "../Pages/Notify/Unread.vue";
+import Clients from "../pages/OAuth/Clients/Index.vue";
+import Tokens from "../pages/OAuth/Tokens/Index.vue";
+import PersonalTokens from "../pages/OAuth/Personal/Index.vue";
+import Users from "../pages/Users/Index.vue";
+import Roles from "../pages/Role/Index.vue";
+import Channel from "../pages/Broadcast/Index.vue";
+import Profile from "../pages/Account/Profile.vue";
+import Security from "../pages/Account/Security.vue";
+import Devices from "../pages/Account/Devices.vue";
+import Push from "../pages/Notify/Push.vue";
+import Read from "../pages/Notify/Read.vue";
+import Unread from "../pages/Notify/Unread.vue";
 
 const routes = [
+
+    { path: "/", name: "home", component: Profile, meta: { auth: true } },
+
     {
-        path: "/",
-        name: "profile",
-        component: Profile,
+        path: "/notifications",
+        name: "notify",
+        component: Push,
+        meta: { auth: true },
+    },
+    {
+        path: "/notifications/Read",
+        name: "notify.read",
+        component: Read,
+        meta: { auth: true },
+    },
+    {
+        path: "/notifications/unread",
+        name: "notify.unread",
+        component: Unread,
+        meta: { auth: true },
     },
 
-    { path: "/notifications", name: "notify", component: Push },
-    { path: "/notifications/Read", name: "notify.read", component: Read },
-    { path: "/notifications/unread", name: "notify.unread", component: Unread },
+    {
+        path: "/security",
+        name: "security",
+        component: Security,
+        meta: { auth: true },
+    },
+    {
+        path: "/devices",
+        name: "devices",
+        component: Devices,
+        meta: { auth: true },
+    },
 
-    { path: "/security", name: "security", component: Security },
-    { path: "/devices", name: "devices", component: Devices },
-
-    { path: "/clients", name: "clients", component: Clients },
-    { path: "/tokens", name: "tokens", component: Tokens },
+    {
+        path: "/private-clients",
+        name: "clients",
+        component: Clients,
+        meta: { auth: true },
+    },
+    {
+        path: "/tokens",
+        name: "tokens",
+        component: Tokens,
+        meta: { auth: true },
+    },
     {
         path: "/personal-tokens",
         name: "personalTokens",
         component: PersonalTokens,
+        meta: { auth: true },
     },
-    { path: "/users", name: "users", component: Users },
-    { path: "/scopes", name: "scopes", component: Roles },
-    { path: "/channels", name: "channels", component: Channel },
+    { path: "/users", name: "users", component: Users, meta: { auth: true } },
+    { path: "/scopes", name: "scopes", component: Roles, meta: { auth: true } },
+    {
+        path: "/channels",
+        name: "channels",
+        component: Channel,
+        meta: { auth: true },
+    },
 ];
 
 export const router = createRouter({
