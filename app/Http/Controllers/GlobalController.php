@@ -28,16 +28,6 @@ class GlobalController extends Controller
     {
         return fractal(Auth::user(), EmployeeTransformer::class)->toArray();
     }
-
-    public function lowercase($value)
-    {
-        return strtolower($value);
-    }
-
-    public function uppercase($value)
-    {
-        return strtoupper($value);
-    }
     
     /**
      * revoca todas las credenciales generadas del usuario authenticado

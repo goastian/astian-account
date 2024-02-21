@@ -1,29 +1,35 @@
 <template>
-    <div class="devices">
-        <div class="col-12">
-            <ul class="list-group">
-                <li class="list-group-item active text-center">
-                    Devices Conected {{ sessions.length }}
-                </li>
-                <li class="list-group-item">
+    <div class="card text-color">
+        <div class="card-head fw-bold text-center">
+            Devices Conected {{ sessions.length }}
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div
+                    v-for="(item, index) in sessions"
+                    :key="index"
+                    :class="[
+                        'col btn mx-1 mb-1',
+                        [item.actual ? 'btn-primary card' : 'btn-secondary'],
+                    ]"
+                >
                     <button
-                        class="btn-secondary btn mx-1 mb-1"
-                        v-for="(item, index) in sessions"
-                        :key="index"
+                        @click="destroySession(item.links.destroy, $event)"
+                        class="btn btn-ternary text-white float-end"
                     >
-                        <span style="display: inline-block">
-                            {{ item.ip }} <br />
-                            {{ item.agente }} <br />
-                            {{ item.ultima_coneccion }}
-                        </span>
-                        <a
-                            @click="destroySession(item.links.destroy)"
-                            class="btn btn-danger text-white"
-                            >X</a
-                        >
+                        X
                     </button>
-                </li>
-            </ul>
+                    <span>
+                        {{ item.ip }}
+                    </span>
+                    <span>
+                        {{ item.agente }}
+                    </span>
+                    <span>
+                        {{ item.ultima_coneccion }}
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -43,30 +49,35 @@ export default {
     methods: {
         session() {
             this.$server
-                .get("/api/sessions")
+                .get("sessions")
                 .then((res) => {
                     this.sessions = res.data.data;
                 })
-                .catch((e) => {
-                    if (e.response) {
-                        console.log(e.response);
-                    }
-                });
+                .catch((e) => {});
         },
 
-        destroySession(link) {
+        destroySession(link, event) {
+            const button = event.target;
+            button.disabled = true;
+
             this.$server
                 .delete(link)
                 .then((res) => {
                     this.session();
+                    button.disabled = false;
                 })
                 .catch((e) => {
-                    if (e.response) {
-                        console.log(e.response);
-                    }
+                    button.disabled = false;
                 });
         },
     },
 };
 </script>
-<style lang=""></style>
+
+<style lang="scss" scoped>
+.col {
+    flex: 0 0 auto;
+    width: 30%;
+    margin-right: 1%;
+}
+</style>

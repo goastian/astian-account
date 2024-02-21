@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Events\Client\RemoveSessionEvent;
-use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Controllers\Controller as Controller;
 use App\Models\Auth\Session;
 use Illuminate\Http\Request;
 
@@ -12,7 +12,7 @@ class SessionController extends Controller
 
     public function __construct()
     {
-        parent::__construct();
+        $this->middleware('auth:web');
     }
 
     /**
@@ -26,7 +26,6 @@ class SessionController extends Controller
 
         return $this->showAll($sessions, $session->transformer);
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -42,6 +41,6 @@ class SessionController extends Controller
 
         RemoveSessionEvent::dispatch();
 
-        return $this->message(__("Session closed " . date('Y-m-d H:i:s', strtotime(now())) ), 200);
+        return $this->message(__("Session closed " . date('Y-m-d H:i:s', strtotime(now()))), 200);
     }
 }

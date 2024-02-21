@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
@@ -59,11 +58,6 @@ Route::resource('users.roles', UserRoleController::class)->only('index', 'store'
  * del sistema a traves de eventos
  */
 Route::resource('broadcasts', BroadcastController::class)->only('index', 'store', 'destroy');
-
-/**
- * sessiones
- */
-Route::resource('/sessions', SessionController::class)->only('index', 'destroy');
 
 /**
  * enviar notificaciones push
