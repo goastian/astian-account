@@ -8,7 +8,6 @@
         <router-view></router-view>
     </div>
 
-    <v-footer></v-footer>
 </template>
 <script>
 import VHome from "./dashboad/Index.vue";

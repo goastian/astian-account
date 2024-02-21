@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthenticatedSessionController; 
-use App\Http\Controllers\Auth\NewPasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisterClientController;
-use App\Http\Controllers\Factor\CodeController;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
+use App\Providers\RouteServiceProvider;
+use App\Http\Controllers\Factor\CodeController;
+use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\RegisterClientController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController; 
  
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
@@ -35,3 +36,8 @@ Route::post('/verify/2fa-factor', [CodeController::class, 'loginBy2FA'])->name('
 Route::post('/m2fa/authorize', [CodeController::class, 'requestToken2FA'])->name('m2fa.authorize');
 Route::post('/m2fa/activate', [CodeController::class, 'factor2faEnableOrDisable'])->name('m2fa.activate');
 
+
+/**
+ * sessiones
+ */
+Route::resource('/sessions', SessionController::class)->only('index', 'destroy');
