@@ -1,6 +1,6 @@
 <template>
     <div class="card text-color">
-        <div class="card-head fw-bold text-center">
+        <div class="card-head fw-bold text-center border-bottom">
             Devices Conected {{ sessions.length }}
         </div>
         <div class="card-body">
@@ -14,6 +14,7 @@
                     ]"
                 >
                     <button
+                        v-show="!item.actual"
                         @click="destroySession(item.links.destroy, $event)"
                         class="btn btn-ternary text-white float-end"
                     >
