@@ -18,7 +18,7 @@ Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->
 Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
 Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.store');
 
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+//Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 /**
  * registro de clientes
