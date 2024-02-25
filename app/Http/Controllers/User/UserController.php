@@ -75,11 +75,11 @@ class UserController extends Controller
             $user->save();
 
             $user->roles()->syncWithoutDetaching($request->role);
+
+            StoreEmployeeEvent::dispatch();
+
+            Notification::send($user, new CreatedNewUser($temp_password));
         });
-
-        StoreEmployeeEvent::dispatch();
-
-        Notification::send($user, new CreatedNewUser($temp_password));
 
         return $this->showOne($user, $user->transformer, 201);
     }
@@ -116,61 +116,61 @@ class UserController extends Controller
                 throw new ReportError("Unauthorize", 403);
             }
 
+            $can_update = false;
+
             if ($this->is_diferent($user->name, $request->name)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->name = $request->name;
             }
 
             if ($this->is_diferent($user->last_name, $request->last_name)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->last_name = $request->last_name;
             }
 
             if ($this->is_diferent($user->email, $request->email)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->email = $request->email;
             }
 
             if ($this->is_diferent($user->country, $request->country)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->country = $request->country;
             }
 
             if ($this->is_diferent($user->city, $request->city)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->city = $request->city;
             }
 
             if ($this->is_diferent($user->address, $request->address)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->address = $request->address;
             }
 
             if ($this->is_diferent($user->birthday, $request->birthday)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->birthday = $request->birthday;
             }
 
             if ($this->is_diferent($user->phone, $request->phone)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $user->phone = $request->phone;
             }
 
-            if (in_array(true, $this->can_update)) {
+            if ($can_update) {
                 $user->push();
+                UpdateEmployeeEvent::dispatch();
             }
 
         });
-
-        if (in_array(true, $this->can_update)) {
-            UpdateEmployeeEvent::dispatch();
-        }
 
         return $this->showOne($user, $user->transformer, 201);
     }
 
     /**
-     * deshabilita un usuario
+     * Disable an active user
+     *
      * @return Bool
      */
     public function disable(Request $request, Employee $user)
@@ -194,9 +194,8 @@ class UserController extends Controller
 
             $user->delete();
 
+            DisableEmployeeEvent::dispatch();
         });
-
-        DisableEmployeeEvent::dispatch();
 
         $user->isClient() ? $user->notify(new ClientDisableNotification()) : $user->notify(new UserDisableNotification());
 
@@ -205,7 +204,7 @@ class UserController extends Controller
 
     /**
      * habilita un usuario deshabilitado
-     * 
+     *
      * @return Json
      */
     public function enable($id)
@@ -226,7 +225,7 @@ class UserController extends Controller
             return $this->showOne($user, $user->transformer);
 
         } catch (Error $e) {
-            throw new ReportError("Error al procesar la petición", 404);
+            throw new ReportError("Error processing the request.", 404);
         }
     }
 

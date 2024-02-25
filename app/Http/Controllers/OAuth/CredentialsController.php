@@ -26,7 +26,7 @@ class CredentialsController extends Controller
 
         RevokeCredentialsEvent::dispatch($this->authenticated_user());
 
-        return $this->message("Todas tus credenciales han sido revocadas exitosamente con fecha " . now());
+        return $this->message(_("Every one of your credentials has been canceled.") . now());
 
     } 
 }

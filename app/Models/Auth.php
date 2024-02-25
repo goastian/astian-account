@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Http\Controllers\OAuth\Scopes;
 use App\Models\User\Role;
 use App\Notifications\Auth\ResetPassword;
 use DateInterval;
@@ -16,7 +18,7 @@ use Laravel\Passport\HasApiTokens;
 
 class Auth extends Authenticatable
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable, Asset;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -69,41 +71,6 @@ class Auth extends Authenticatable
         'verified_at' => 'datetime',
     ];
 
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtolower($value);
-    }
-
-    public function setLastNameAttribute($value)
-    {
-        $this->attributes['last_name'] = strtolower($value);
-    }
-
-    public function setEmailAttribute($value)
-    {
-        $this->attributes['email'] = strtolower($value);
-    }
-
-    public function setCountryAttribute($value)
-    {
-        $this->attributes['country'] = strtolower($value);
-    }
-
-    public function setCityAttribute($value)
-    {
-        $this->attributes['city'] = strtolower($value);
-    }
-
-    public function setDepartmentAttribute($value)
-    {
-        $this->attributes['department'] = strtolower($value);
-    }
-
-    public function setAddressAttribute($value)
-    {
-        $this->attributes['address'] = strtolower($value);
-    }
-
     /**
      * verifica si contiene el role de administrador
      */
@@ -122,16 +89,25 @@ class Auth extends Authenticatable
     }
 
     /**
-     * User can
+     * Checking if the user has an access for any scope
+     *
+     * @return Boolean
      */
     public function userCan($scope)
     {
-        foreach (Role::rolesByDefault() as $key => $value) {
-            if (str_contains($key, $scope)) {
-                return true;
+        $roles = $this->scopes();
+        
+        if (is_array($scope)) {
+            foreach ($scope as $value) {
+                if ($roles->contains('id', $value)) {
+                    return true;
+                }
             }
+
+            return false;
         }
-        return false;
+
+       return $this->scopes()->contains('id', $scope);
     }
 
     /**

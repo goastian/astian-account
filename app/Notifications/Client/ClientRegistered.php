@@ -47,12 +47,12 @@ class ClientRegistered extends Notification
         $link = $this->link_generate($notifiable);
 
         return (new MailMessage)
-            ->subject(__('Usuario registrado'))
-            ->line(__("Bienvenid@ " . $notifiable->name . " " . $notifiable->last_name))
-            ->line(__("Para poder verificar que eres una persona, sigue las instrucciones, que permitiran activar tu cuenta."))
-            ->line(__("Para verificar su cuenta solo tiene un tiempo maximo de " . env('TIME_TO_VERIFY_ACCOUNT') . " minutos, si no la activa se procederá a borrar toda su informacion y tendra que registrarse otra vez."))
-            ->action(Lang::get('Midori Account'), url($link))
-            ->line('Gracias por ser parte de nosotros.');
+            ->subject(__('Welcome to Astian'))
+            ->greeting(__("Welcome " . $notifiable->name . " " . $notifiable->last_name))
+            ->line(__("To be able to verify that you are a person, follow the instructions, to allow you to activate your account."))
+            ->line(__("To verify your account you only have a maximum time of") . " " . env('TIME_TO_VERIFY_ACCOUNT') . __("Minutes, if not the active will proceed to erase all its information and will have to register again."))
+            ->action(__('Go to ') . config('ap.name'), url($link))
+            ->line(__('Thank you for being a part of us.'));
     }
 
     /**

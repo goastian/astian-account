@@ -17,8 +17,6 @@ class GlobalController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
 
-    public $can_update = array();
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -28,7 +26,7 @@ class GlobalController extends Controller
     {
         return fractal(Auth::user(), EmployeeTransformer::class)->toArray();
     }
-    
+
     /**
      * revoca todas las credenciales generadas del usuario authenticado
      * @param mixed $tokens

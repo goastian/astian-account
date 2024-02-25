@@ -51,17 +51,17 @@ class Alert extends Notification implements ShouldQueue
         try {
             return (new MailMessage)
                 ->subject($this->data->title)
-                ->greeting(Lang::get("Hi $notifiable->name"))
-                ->line(Lang::get($this->data->message))
+                ->greeting(__("Hi $notifiable->name"))
+                ->line(__($this->data->message))
                 ->action('Go to page', url($this->data->resource ?: '/'))
-                ->line(Lang::get('Thank you for using our application!'));
+                ->line(__('Thank you for using our application!'));
         } catch (ErrorException $e) {
             return (new MailMessage)
                 ->subject($this->data->title)
-                ->greeting(Lang::get("Hi $notifiable->name"))
-                ->line(Lang::get($this->data->message))
+                ->greeting(__("Hi $notifiable->name"))
+                ->line(__($this->data->message))
                 ->action('Go to page', url('/'))
-                ->line(Lang::get('Thank you for using our application!'));
+                ->line(__('Thank you for using our application!'));
         }
 
     }
