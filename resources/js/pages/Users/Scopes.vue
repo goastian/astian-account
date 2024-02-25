@@ -72,16 +72,18 @@ export default {
                 );
                 if (add_role) {
                     this.addOrRemoveRoles(id);
+                } else {
+                    checkbox.checked = false;
                 }
-                checkbox.checked = false;
             } else {
                 const remove_role = confirm(
                     "Are you sure you want to remove this Scope?"
                 );
                 if (remove_role) {
                     this.addOrRemoveRoles(id);
+                } else {
+                    checkbox.checked = true;
                 }
-                checkbox.checked = true;
             }
         },
 
