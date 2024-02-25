@@ -65,16 +65,23 @@ export default {
     methods: {
         confirmAction(id, event) {
             const checkbox = event.target;
+
             if (checkbox.checked) {
                 const add_role = confirm(
                     "Are you sure you want to add a new Scope?"
                 );
-                this.addOrRemoveRoles(id);
+                if (add_role) {
+                    this.addOrRemoveRoles(id);
+                }
+                checkbox.checked = false;
             } else {
                 const remove_role = confirm(
                     "Are you sure you want to remove this Scope?"
                 );
-                this.addOrRemoveRoles(id);
+                if (remove_role) {
+                    this.addOrRemoveRoles(id);
+                }
+                checkbox.checked = true;
             }
         },
 
