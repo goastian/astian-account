@@ -19,7 +19,7 @@
                     v-show="!item.publico"
                 >
                     <input
-                        @click="addOrRemoveRoles(item.id)"
+                        @click="confirmAction(item.id, $event)"
                         class="form-check-input"
                         :id="item.id"
                         :value="item.id"
@@ -30,14 +30,14 @@
                         {{ item.descripcion }}
                     </label>
                 </div>
-                <div v-if="message" class="col-12 mt-4 py-4 fw-bold bg-success">
-                    <span class="text-light">{{ message }}</span>
+                <div v-if="message" class="col-12 mt-4 py-4 fw-bold bg-info">
+                    <span class="text-color">{{ message }}</span>
                 </div>
             </div>
 
             <div
                 :class="[
-                    'col-12 bg-success text-center mx-2 py-3',
+                    'col-12 bg-info text-center h3 mx-2 py-3',
                     [status ? 'show' : 'hide'],
                 ]"
             >
@@ -63,6 +63,21 @@ export default {
     },
 
     methods: {
+        confirmAction(id, event) {
+            const checkbox = event.target;
+            if (checkbox.checked) {
+                const add_role = confirm(
+                    "Are you sure you want to add a new Scope?"
+                );
+                this.addOrRemoveRoles(id);
+            } else {
+                const remove_role = confirm(
+                    "Are you sure you want to remove this Scope?"
+                );
+                this.addOrRemoveRoles(id);
+            }
+        },
+
         /**
          * agrega o elimina permisos
          */
@@ -75,7 +90,7 @@ export default {
                 this.$server
                     .post(this.user.links.roles, { role: id })
                     .then((res) => {
-                        this.message = `Se asigno un nuevo role ${res.data.data.role}`;
+                        this.message = `A new Scope was added (${res.data.data.role})`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.data.status == 403) {
@@ -89,7 +104,7 @@ export default {
                 this.$server
                     .delete(`${this.user.links.roles}/${id}`)
                     .then((res) => {
-                        this.message = `Se elimino el role ${res.data.data.role}`;
+                        this.message = `The Scope ${res.data.data.role} was removed`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.status == 403) {
