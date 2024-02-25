@@ -42,14 +42,12 @@ class DestroyClientNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(__("Eliminacion de cuenta"))
-            ->line(__('Lamentamos su despedida ') . $notifiable->name . " " . $notifiable->last_name)
-            ->line(__('Su cuenta ha sido eliminada de nuestro sistema'))
-            ->line(__('Ningun dato proporcionado por usted ha sido almacenado'))
-            ->line(__('toda su informacion ha sido eliminada, si desea volver con nosotros'))
-            ->line(__('deberá registrarse otra vez, realizando el mismo proceso.'))
-            ->action(Lang::get('Midori Account'), url(env('FRONTEND_URL')))
-            ->line(__('Agracemos su instancia y muchas gracias por haber usado nuestors servicios'));
+            ->subject(__("Deleted account."))
+            ->greeting(__("We're sorry to see you go"). " ". $notifiable->name . " " . $notifiable->last_name)
+            ->line(__('Your account has been eliminated from our system'))
+            ->line(__('All your data will be deleted')) 
+            ->action(__('Go to') . " " . config('ap.name'), url(env('FRONTEND_URL')))
+            ->line(__('We appreciate your instance and thank you very much for having used our services'));
     }
 
     /**

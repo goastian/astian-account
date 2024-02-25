@@ -43,13 +43,13 @@ class ClientDisableNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(__('Cuenta desactivada'))
-            ->line(__("Lamentamos su decision ") . $notifiable->name . " " . $notifiable->last_name)
-            ->line(__("Esperemos cambie de opnion"))
-            ->line(__("Por medidas de seguridad su cuenta no se eliminara inmediatamente, Su cuenta se eliminará en los proximos ") . env('DESTROY_CLIENTS_AFTER', 30) . __("dias"))
-            ->line(__("Para reactivar tu cuenta, en caso cambies de opinion inicia session antes del tiempo establecido para la eliminacion total") )
-            ->action(Lang::get('Midori Account'), url(env('FRONTEND_URL')))
-            ->line(__('Agracemos su instancia y muchas gracias por haber usado nuestors servicios'));
+            ->subject(__('Account deactivated'))
+            ->greeting(__("We regret your decision ") . $notifiable->name . " " . $notifiable->last_name)
+            ->line(__("Hopefully change your mind"))
+            ->line(__("By security measures your account is not removed immediately, your account will be deleted in the next") ." ". env('DESTROY_CLIENTS_AFTER', 30) . " " . __("days"))
+            ->line(__("To reactivate your account, if you change opinion, start session before the time established for total elimination") )
+            ->action(__('Go to ') . config('ap.name'), url(env('FRONTEND_URL')))
+            ->line(__('We appreciate your instance and thank you very much for having used our services'));
 
     }
 

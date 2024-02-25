@@ -42,11 +42,11 @@ class ReactiveAccount extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(Lang::get("Cuenta re-activada"))
-            ->line(Lang::get("Hola $notifiable->name"))
-            ->line(Lang::get("Es un placer tenerte de vuelta, nos alegra que hayas cambiado de opinion, tu cuenta ha sido re-activada."))
-            ->action(Lang::get('Midori Account'), url(env('APP_URL')))
-            ->line('Gracias por ser parte de nosotros.');
+            ->subject("Account activated")
+            ->greeting(__("Dear") . " " . $notifiable->name)
+            ->line(__("It is a pleasure to have you back, we are glad that you have changed opinion, your account has been re-activated."))
+            ->action(__('Go to') . " " . config('ap.name'), url(env('FRONTEND_URL')))
+            ->line(__('Thank you for being a part of us.'));
 
     }
 

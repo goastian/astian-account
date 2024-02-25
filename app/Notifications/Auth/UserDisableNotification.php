@@ -42,11 +42,11 @@ class UserDisableNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(__("Cuenta deshabilita"))
-            ->line(__("Estimad@ usuario su cuenta ha sido suspendida y todas sus credenciales han sido revocadas"))
-            ->line(__("si cree que es un error, puede comunicarse con nuestro soporte técnico para que soluciones el inconveniente en la brevedad posible"))
-            ->action(__('Ir a Midori'), url(env('FRONTEND_URL')))
-            ->line('Gracias por ser parte de la familia de Midori.');
+            ->subject(__("Account disabled"))
+            ->line(__("Dear user your account has been suspended and all its credentials have been revoked"))
+            ->line(__("If you think it is a mistake, you can communicate with our technical support so that solutions the inconvenience in the brevity possible"))
+            ->action(__('Go to ') . config('ap.name'), url(env('FRONTEND_URL')))
+            ->line(__("Thanks for being part of Midori's family."));
     }
 
     /**

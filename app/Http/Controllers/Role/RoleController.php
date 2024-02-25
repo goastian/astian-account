@@ -74,8 +74,10 @@ class RoleController extends Controller
 
         DB::transaction(function () use ($request, $role) {
 
+            $can_update = false;
+
             if ($this->is_diferent($role->name, $request->name)) {
-                $this->can_update[] = true;
+                $can_update = true;
 
                 /**
                  * verifica que el nombre del escope no sea uno por defecto
@@ -90,24 +92,22 @@ class RoleController extends Controller
             }
 
             if ($this->is_diferent($role->description, $request->description)) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $role->description = $request->description;
             }
 
             if ($role->public != $request->public) {
-                $this->can_update[] = true;
+                $can_update = true;
                 $role->public = $request->public;
             }
 
-            if (in_array(true, $this->can_update)) {
+            if ($can_update) {
                 $role->push();
+                UpdateRoleEvent::dispatch($this->authenticated_user());
             }
 
         });
 
-        if (in_array(true, $this->can_update)) {
-            UpdateRoleEvent::dispatch($this->authenticated_user());
-        }
         return $this->showOne($role, $role->transformer, 201);
     }
 

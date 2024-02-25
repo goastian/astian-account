@@ -60,7 +60,7 @@ Route::group([
         ]);
 
         Route::delete('/clients/{client_id}', [
-            'uses' => '\Laravel\Passport\Http\Controllers\ClientController@destroy',
+            'uses' => '\App\Http\Controllers\OAuth\ClientController@destroy',
             'as' => 'clients.destroy',
         ]); 
         

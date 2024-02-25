@@ -47,16 +47,27 @@ class EmployeeTransformer extends TransformerAbstract
             'direccion' => $user->address,
             'nacimiento' => $user->birthday,
             'telefono' => $user->phone,
-            'verificado' => $user->verified_at,
             'm2fa' => $user->m2fa,
+            'verificado' => $this->format_date($user->verified_at),
             'registrado' => $this->format_date($user->created_at),
             'actualizado' => $this->format_date($user->updated_at),
             'inactivo' => $this->format_date($user->deleted_at),
-            'can' => [
+            'access' => [
                 'client' => $user->isClient(),
                 'admin' => $user->isAdmin(),
-                'users' => $user->userCan('account'),
-                'roles' => $user->userCan('scope'),
+                'users' => $user->userCan([
+                    'account_read',
+                    'account_register',
+                    'account_update',
+                    'account_enable',
+                    'account_disable',
+                ]),
+                'roles' => $user->userCan([
+                    'scopes_read',
+                    'scopes_register',
+                    'scopes_update',
+                    'scopes_destroy'
+                ]),
                 'broadcast' => $user->userCan('broadcast'),
                 'notification' => $user->userCan('notify'),
             ],

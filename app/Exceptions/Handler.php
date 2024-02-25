@@ -79,11 +79,11 @@ class Handler extends ExceptionHandler
     {
 
         if ($e instanceof ModelNotFoundException) {
-            throw new ReportError(__("No se puede procesar la petición"), 400);
+            throw new ReportError(__("Not Found"), 404);
         }
 
         if ($e instanceof AuthorizationException) {
-            throw new ReportError(__("No cuenta con los persmios requeridos"), 403);
+            throw new ReportError(__("Don't have the access rights"), 403);
         }
 
         if ($e instanceof OAuthAuthenticationException) {
@@ -100,7 +100,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof AccessDeniedHttpException) {
-            throw new ReportError(__("Acceso denegado"), 401);
+            throw new ReportError(__("Unauthorized"), 401);
         }
 
         $e = $this->prepareException($this->mapException($e));
