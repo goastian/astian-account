@@ -20,14 +20,7 @@
                 <td>
                     {{ item.redirect }}
                 </td>
-                <td class=" ">
-                    <button
-                        class="btn btn-primary btn-sm mx-1"
-                        @click="redirectForAuthorize(item)"
-                    >
-                        Authorize
-                    </button>
-
+                <td>
                     <v-remove
                         :client="item"
                         @clientWasRemove="getClients"
@@ -72,10 +65,6 @@ export default {
                 .catch((e) => {
                     console.log(e);
                 });
-        },
-
-        redirectForAuthorize(item) {
-            window.open(item.redirect);
         },
     },
 };

@@ -5,7 +5,7 @@
             <v-left-bar @selected-menu="taggleLefbar"></v-left-bar>
         </div>
         <div
-            :class="['p-2 content', [toggle_lef_bar ? 'body-expand' : 'body']]"
+            :class="['pt-2 content', [toggle_lef_bar ? 'body-expand' : 'body']]"
         >
             <router-view></router-view>
         </div>
@@ -57,11 +57,6 @@ export default {
 }
 
 .body {
-    flex: 0 0 auto;
-    height: 100vh;
-    margin: 0;
-    padding: 0;
-
     @media (min-width: 240px) {
         width: 100%;
     }
@@ -71,9 +66,8 @@ export default {
     }
 }
 
-.body-expand {
-    flex: 0 0 auto;
+.body-expand { 
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
 }
 </style>

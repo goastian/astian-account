@@ -1,43 +1,67 @@
 <template>
-    <div class="row profile">
-        <div class="col">
-            <div class="card about">
-                <div class="card-head">Acerca de</div>
-                <div class="card-body">
-                    <p>
-                        <span>Nombre: </span>{{ user.nombre }}
-                        {{ user.apellido }}
-                    </p>
-
-                    <p><span>Apellido: </span> {{ user.correo }}</p>
-                    <p><span>Miembro desde: </span>{{ user.registrado }}</p>
-
-                    <p>
-                        <v-update
-                            styles="btn px-0 mx-0 btn-link"
-                            :user="user"
-                            @success="authenticated"
-                        ></v-update>
-                    </p>
-                </div>
-            </div>
+    <div class="card text-color">
+        <div class="card-head h3 fw-bold border-bottom px-3 bg-primary">
+            About Me
+            <span class="h5 text-primary">
+                <i class="bi bi-person-check h2"></i>
+            </span>
         </div>
-        <div class="col">
-            <div class="card roles">
-                <div class="card-head">Roles</div>
-                <div class="card-body">
-                    <a
-                        href="#"
-                        class="btn btn-link"
-                        v-for="(item, index) in roles"
-                        :key="index"
-                        >{{ item.id }}</a
-                    >
-                </div>
-            </div>
+        <div class="card-body">
+            <span class="h5 name">
+                <i class="bi bi-person-bounding-box text-primary"></i>
+                {{ user.nombre }}
+                {{ user.apellido }}
+            </span>
+
+            <span class="h5 email">
+                <i class="bi bi-envelope-at-fill text-primary"></i>
+                {{ user.correo }}
+            </span>
+
+            <span v-show="user.telefono" class="h5 phone">
+                <i class="bi bi-telephone-plus text-primary"></i>
+                {{ user.telefono }}
+            </span>
+
+            <span v-show="user.nacimiento" class="h5 birth">
+                <i class="bi bi-cake2 text-primary"></i>
+                {{ user.nacimiento }}
+            </span>
+
+            <span v-show="user.pais" class="h5 address">
+                <i class="bi bi-houses text-primary"></i>
+                {{ user.pais }} - {{ user.ciudad }} -
+
+                {{ user.direccion }}
+            </span>
         </div>
-        <div class="col-12"></div>
-        <div class="col"></div>
+        <div class="card-footer align-content-between">
+            <span class="h5">
+                <i class="bi bi-arrow-through-heart text-primary"></i>
+                Join us {{ user.registrado }}
+            </span>
+
+            <v-update
+                styles="btn btn-link float-end"
+                :user="user"
+                @success="authenticated"
+            ></v-update>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-head h4 fw-bold px-3 border-bottom bg-primary py-2">
+            My Scopes <i class="bi bi-shield-lock h3 text-primary"></i>
+        </div>
+        <div class="card-body">
+            <a
+                href="#"
+                class="btn btn-link"
+                v-for="(item, index) in roles"
+                :key="index"
+                >{{ item.id }}</a
+            >
+        </div>
     </div>
 
     <v-message :message="message" @close="close"></v-message>
@@ -132,3 +156,29 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.card {
+    margin-bottom: 1%;
+}
+
+.name,
+.address,
+.email,
+.phone,
+.birth {
+    margin-right: 4%;
+    @media (min-width: 240px) {
+        display: block;
+    }
+
+    @media (min-width: 800px) {
+        display: inline;
+    }
+}
+
+.address {
+    display: block;
+    margin: 2% 0%;
+}
+</style>

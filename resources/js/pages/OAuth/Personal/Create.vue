@@ -47,7 +47,7 @@
                 </div>
                 <div class="col-12"></div>
                 <div class="col py-2">
-                    <button class="btn btn-sm btn-success" @click="createToken">
+                    <button class="btn btn-sm btn-primary" @click="createToken">
                         New Token
                     </button>
                 </div>
@@ -80,7 +80,10 @@ export default {
             this.scopeSelected = scopes;
         },
 
-        createToken() {
+        createToken(event) {
+            const button = event.target;
+            button.disabled = true;
+
             this.$server
                 .post("/oauth/personal-access-tokens", {
                     name: this.name,
@@ -90,11 +93,13 @@ export default {
                     this.name = "";
                     this.tokens = res.data;
                     this.$emit("tokenWasCreated", res.data);
+                    button.disabled = false;
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {
                         this.errors = e.response.data.errors;
                     }
+                    button.disabled = false;
                 });
         },
 
@@ -122,10 +127,16 @@ export default {
                 .private(this.$channels.ch_0())
                 .listen(".StoreRoleEvent", (e) => {
                     this.getScopes();
-                })
+                });
+
+            this.$echo
+                .private(this.$channels.ch_0())
                 .listen(".UpdateRoleEvent", (e) => {
                     this.getScopes();
-                })
+                });
+
+            this.$echo
+                .private(this.$channels.ch_0())
                 .listen(".DestroyRoleEvent", (e) => {
                     this.getScopes();
                 });
@@ -135,7 +146,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .card {
     width: 98%;
     margin: 0 auto;
@@ -155,12 +165,12 @@ export default {
 
 .roles .col {
     flex: 0 0 auto;
-    
+
     @media (min-width: 240px) {
         width: 98%;
         margin: 0.5% 0% 0% 4%;
     }
-    
+
     @media (min-width: 800px) {
         margin: 0.5% 0% 0% 2%;
         width: 48%;
