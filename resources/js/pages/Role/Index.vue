@@ -5,6 +5,7 @@
             <tr v-for="(item, index) in scopes" :key="index">
                 <td>{{ item.role }}</td>
                 <td>{{ item.descripcion }}</td>
+                <td>{{ item.publico ? 'Yes' : 'No'}}</td>
                 <td>
                     <v-update
                         :role="item"
@@ -21,7 +22,11 @@
             </tr>
         </template>
     </v-table>
-    <v-pagination v-show="pages.total > pages.per_page" :pages="pages" @send-current-page="changePage"></v-pagination>
+    <v-pagination
+        v-show="pages.total > pages.per_page"
+        :pages="pages"
+        @send-current-page="changePage"
+    ></v-pagination>
 
     <v-message :message="message" @close="close"></v-message>
 </template>
@@ -39,7 +44,7 @@ export default {
 
     data() {
         return {
-            items: ["id", "Description"],
+            items: ["id", "Description", "public"],
             scopes: {},
             pages: {},
             actual_page: 1,

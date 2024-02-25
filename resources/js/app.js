@@ -9,14 +9,13 @@ import { $server } from "./config/axios.js";
 import * as bootstrap from "bootstrap";
 import "./config/matomo.js";
 
-//checking the routes
+//checking changes in the routes
 router.beforeEach((to, from, next) => {
     //Checking if the user is authenticated
     if (to.meta.auth) {
         $server
-            .get("/api/gateway/user")
+            .get("/api/gateway/check-authentication")
             .then((res) => {
-                window.$auth = res.data; //global key
                 next();
             })
             .catch((err) => {
@@ -24,20 +23,36 @@ router.beforeEach((to, from, next) => {
                 window.location.href = "/login";
             });
     } else {
+        //the user is not authenticated continue to the route
         next();
     }
 });
 
-const app = createApp(App);
+/**
+ * Loading application
+ */
+$server
+    .get("/api/gateway/user")
+    .then((res) => {
+        //Global ID from the authenticated user
+        window.$id = res.data.id; 
+        
+        //Loading App
+        const app = createApp(App);
 
-app.config.globalProperties.$echo = $echo;
-app.config.globalProperties.$channels = $channels;
-app.config.globalProperties.$server = $server;
+        app.config.globalProperties.$echo = $echo;
+        app.config.globalProperties.$channels = $channels;
+        app.config.globalProperties.$server = $server;
 
-app.use(router);
+        app.use(router);
 
-components.forEach((index) => {
-    app.component(index[0], index[1]);
-});
+        components.forEach((index) => {
+            app.component(index[0], index[1]);
+        });
 
-app.mount("#app");
+        app.mount("#app");
+    })
+    .catch((err) => {
+        //redirect tyo the login if the user is no authenticated
+        console.log("redirect to the login");
+    });

@@ -15,28 +15,32 @@
 </head>
 
 <body>
-    @yield('content')
+    <div class="wrapper">
 
-    <footer class="footer text-color bg-primary py-3 mt-4">
-        <ul class="nav">
-            <li class="nav-item mx-2">
-                <a href="{{ env('MIX_HOME_POLICY') }}">Privacy Policy</a>
-            </li>
-            <li class="nav-item mx-2">
-                <a href="{{ env('MIX_HOME_DEVELOPER') }}">Developers</a>
-            </li>
-            <li class="nav-item mx-2">
-                <a href="{{ env('MIX_HOME_TERMS') }}">Terms of Service</a>
-            </li>
-            <li class="nav-item mx-2">
-                <a href="{{ env('MIX_HOME_CONTACT') }}">Contact Us</a>
-            </li>
-        </ul>
-        <div class="text-center text-light fw-bold">
-            Copyright © {{ date('Y') }} - <strong> {{ config('app.name') }} </strong>, All Rights
-            Reserved
+        <div class="content">
+            @yield('content')
         </div>
-    </footer>
+        <footer class="footer text-color bg-primary pt-4">
+            <ul class="nav">
+                <li class="nav-item mx-2">
+                    <a href="{{ env('MIX_HOME_POLICY') }}">Privacy Policy</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a href="{{ env('MIX_HOME_DEVELOPER') }}">Developers</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a href="{{ env('MIX_HOME_TERMS') }}">Terms of Service</a>
+                </li>
+                <li class="nav-item mx-2">
+                    <a href="{{ env('MIX_HOME_CONTACT') }}">Contact Us</a>
+                </li>
+            </ul>
+            <div class="text-center text-light fw-bold">
+                Copyright © {{ date('Y') }} - <strong> {{ config('app.name') }} </strong>, All Rights
+                Reserved
+            </div>
+        </footer>
+    </div>
 </body>
 
 </html>

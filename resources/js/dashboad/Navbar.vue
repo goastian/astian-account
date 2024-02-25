@@ -59,7 +59,7 @@
             </ul>
         </li>
 
-        <li class="nav-item dropdown icon">
+        <li class="nav-item dropdown">
             <a
                 class="btn btn-primary dropdown-toggle"
                 data-bs-toggle="dropdown"
@@ -135,9 +135,9 @@ export default {
 
         logout() {
             this.$server
-                .post("/logout")
+                .post("/api/gateway/logout")
                 .then((res) => {
-                    window.location.href = "/"
+                    //window.location.href = "/"
                 })
                 .catch((err) => {});
         },
@@ -213,7 +213,13 @@ export default {
 }
 
 .nav-item {
-    margin-right: 2%;
+    @media (min-width: 240px) {
+        margin-right: 0.5%;
+    }
+
+    @media (min-width: 800px) {
+        margin-right: 2%;
+    }
 }
 
 .dropdown-item img {

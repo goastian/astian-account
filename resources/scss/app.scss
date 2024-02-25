@@ -19,9 +19,36 @@
     --font-size: "12px";
 }
 
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     background-image: url("https://cloud.astian.org/build/assets/auth-bg-8529ec0e.svg");
     background-size: auto;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+    margin: 0;
+}
+ 
+/** footer **/
+.footer {
+    font-size: 0.8em;
+}
+
+.footer a {
+    color: var(--white) !important;
+    font-weight: bold !important;
 }
 
 .btn-primary,
@@ -74,15 +101,6 @@ body {
 .astian-ligth {
     background-color: var(--white);
     color: var(--code);
-}
-
-.ql-syntax {
-    background-color: var(--code);
-    color: var(--white);
-    overflow: visible !important;
-    padding: 1%;
-    border-radius: 0.2%;
-    font-family: var(--font);
 }
 
 .errors {
@@ -138,7 +156,7 @@ label {
     }
 
     @media (min-width: 940px) {
-        margin: 5.5% auto;
+        margin: 6.5% auto;
         width: 30%;
     }
 }
@@ -215,27 +233,18 @@ label {
 /****end of register****/
 
 
-/** footer **/
-.footer {
-    font-size: 0.8em;
-    margin: 0;
-}
 
-.footer a {
-    color: var(--white) !important;
-    font-weight: bold !important;
-}
 
 /*** facto **/
 .factor {
     text-align: center;
     padding: 1%;
-    
+
     @media (min-width:240px) {
         width: 98%;
         margin: 10% auto;
     }
-    
+
     @media (min-width:800px) {
         margin: 7% auto;
         width: 50%;

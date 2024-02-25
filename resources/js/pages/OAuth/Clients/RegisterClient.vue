@@ -7,7 +7,6 @@
                         type="text"
                         v-model="client.name"
                         class="form-control form-control-sm"
-                        @keyup.enter="storeClients"
                         placeholder="Application Name"
                     />
                     <v-error :error="errors.name"></v-error>
@@ -16,19 +15,36 @@
                     <input
                         type="text"
                         v-model="client.redirect"
-                        id="redirect"
                         class="form-control form-control-sm"
-                        @keyup.enter="storeClients"
                         placeholder="https://app.dominio.dom/callback"
                     />
                     <v-error :error="errors.redirect"></v-error>
+                </div>
+                <div class="col">
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="confidential"
+                            v-model="client.confidential"
+                        />
+                        <label
+                            class="form-check-label text-color"
+                            for="flexCheckDefault"
+                        >
+                            Private Client (<strong
+                                >By default Public Client</strong
+                            >)
+                        </label>
+                    </div>
+                    <v-error :error="errors.confidential"></v-error>
                 </div>
                 <div class="col">
                     <button
                         class="btn btn-sm btn-primary"
                         @click="storeClients"
                     >
-                        Add new private client
+                        Add new client
                     </button>
                 </div>
             </div>
@@ -41,27 +57,32 @@ export default {
 
     data() {
         return {
-            client: {
-                name: "",
-                redirect: "",
-            },
+            client: {},
             errors: {},
         };
     },
 
     methods: {
-        storeClients() {
+        storeClients(event) {
+            const button = event.target;
+            button.disabled = true;
+
+            this.client.confidential =
+                document.getElementById("confidential").checked;
+
             this.$server
                 .post("/oauth/clients", this.client)
                 .then((res) => {
-                    this.client = { name: "", redirect: "" };
-                    this.errors = { name: "", redirect: "" };
+                    this.client = {};
+                    this.errors = {};
                     this.$emit("clientRegistered", res.data);
+                    button.disabled = false;
                 })
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {
                         this.errors = e.response.data.errors;
                     }
+                    button.disabled = false;
                 });
         },
     },

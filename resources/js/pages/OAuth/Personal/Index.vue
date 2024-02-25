@@ -34,43 +34,24 @@ export default {
             user_id: null,
         };
     },
-  
-    mounted() {
-       // this.listenEvents();
-    },
 
     created() {
         this.getPersonalAccessToken();
     },
 
     methods: {
-        authenticated() {
-            this.$server
-                .get("/api/gateway/user")
-                .then((res) => {
-                    window.$auth = res.data;
-                    console.log(window.$auth.id);
-                    
-                })
-                .catch((e) => {
-                    console.log(e);
-                });
-        },
-
         getPersonalAccessToken() {
             this.$server
                 .get("/oauth/personal-access-tokens")
                 .then((res) => {
                     this.tokens = res.data;
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
+                .catch((e) => {});
         },
 
         listenEvents() {
             this.$echo
-                .private(this.$channels.ch_1(window.$auth.id))
+                .private(this.$channels.ch_1(window.$id))
                 .listen("RevokeCredentialsEvent", (e) => {
                     this.getPersonalAccessToken();
                 });

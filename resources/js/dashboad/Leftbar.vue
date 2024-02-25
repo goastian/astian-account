@@ -3,7 +3,7 @@
         <div class="menu text-color">
             <ul>
                 <li class="sub-menu">
-                    Dashboard
+                    <span class="fw-bold">Dashboard</span>
                     <ul class="sub-menu">
                         <li>
                             <router-link
@@ -13,7 +13,7 @@
                                 <i class="bi bi-person-circle"></i> Profile
                             </router-link>
                         </li>
-                        <li>
+                        <li v-show="user_can.users">
                             <router-link
                                 :to="{ name: 'users' }"
                                 @click="screenIsChanging"
@@ -21,7 +21,7 @@
                                 <i class="bi bi-people"></i> Users
                             </router-link>
                         </li>
-                        <li>
+                        <li v-show="user_can.roles">
                             <router-link
                                 :to="{ name: 'scopes' }"
                                 @click="screenIsChanging"
@@ -29,7 +29,7 @@
                                 <i class="bi bi-shield-shaded"></i> Roles
                             </router-link>
                         </li>
-                        <li>
+                        <li v-show="user_can.broadcast">
                             <router-link
                                 :to="{ name: 'channels' }"
                                 @click="screenIsChanging"
@@ -40,7 +40,7 @@
                     </ul>
                 </li>
                 <li class="sub-menu">
-                    Micro Services
+                    <span class="fw-bold"> Micro Services </span>
                     <ul class="sub-menu">
                         <li>
                             <router-link
@@ -69,9 +69,9 @@
                     </ul>
                 </li>
                 <li class="sub-menu">
-                    Notifications
+                    <span class="fw-bold"> Notifications </span>
                     <ul class="sub-menu">
-                        <li>
+                        <li v-show="user_can.notification">
                             <router-link
                                 :to="{ name: 'notify' }"
                                 @click="screenIsChanging"
@@ -99,7 +99,7 @@
                     </ul>
                 </li>
                 <li class="sub-menu">
-                    Settings
+                    <span class="fw-bold"> Settings </span>
                     <ul class="sub-menu">
                         <li>
                             <router-link
@@ -127,6 +127,16 @@
 export default {
     emits: ["selectedMenu"],
 
+    data() {
+        return {
+            user_can: {},
+        };
+    },
+
+    created() {
+        this.userCan();
+    },
+
     mounted() {
         window.addEventListener("resize", this.screenIsChanging);
         this.screenIsChanging();
@@ -138,11 +148,25 @@ export default {
                 this.$emit("selectedMenu", window.innerWidth < 940);
             }
         },
+
+        userCan() {
+            this.$server
+                .get("/api/gateway/user")
+                .then((res) => {
+                    this.user_can = res.data.access;
+                })
+                .catch((err) => {});
+        },
     },
 };
 </script>
 
 <style lang="scss" scoped>
+.side {
+    width: 100%;
+    min-height: 100vh;
+}
+
 .side ul {
     padding: 0;
     margin: 0;
@@ -154,18 +178,20 @@ export default {
     margin: 0;
 }
 
-.side {
-    width: 100%;
-    height: 100vh;
-}
-
 .side .menu {
     margin-left: 1%;
 }
 
 .side .sub-menu {
     margin-left: 2%;
-    padding: 2%;
+
+    @media (min-width: 240px) {
+        padding: 0%;
+    }
+
+    @media (min-width: 800px) {
+        padding: 2%;
+    }
 }
 
 .side .sub-menu li {

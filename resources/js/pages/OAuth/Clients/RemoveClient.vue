@@ -1,7 +1,7 @@
 <template>
     <v-modal
         :target="`_2_${client.id}`"
-        @is-accepted="deleteClient(item)"
+        @is-accepted="deleteClient(item, $event)"
         styles="bg-danger btn-sm"
         :button_accept_show="false"
     >
@@ -41,14 +41,18 @@ export default {
     },
 
     methods: {
-        deleteClient(client) {
+        deleteClient(client, event) {
+            const button = event.target;
+            button.disabled = true;
+
             this.$server
                 .delete("/oauth/clients/" + client.id)
                 .then((res) => {
                     this.$emit("clientWasRemove", res.data);
+                    button.disabled = false;
                 })
                 .catch((e) => {
-                    console.log(e);
+                    button.disabled = false;
                 });
         },
     },
