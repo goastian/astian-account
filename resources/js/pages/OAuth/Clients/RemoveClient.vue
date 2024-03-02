@@ -19,7 +19,7 @@
                 </h5>
                 <button
                     class="btn mt-5 btn-danger btn-block"
-                    @click="deleteClient(client)"
+                    @click="deleteClient(client, $event)"
                     data-bs-dismiss="modal"
                     aria-label="Close"
                 >

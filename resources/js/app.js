@@ -54,5 +54,5 @@ $server
     })
     .catch((err) => {
         //redirect tyo the login if the user is no authenticated
-        console.log("redirect to the login");
+       // console.log("redirect to the login");
     });
