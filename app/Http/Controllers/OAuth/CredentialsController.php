@@ -18,7 +18,7 @@ class CredentialsController extends Controller
      * revoca todas las credenciales del usuario autnteicado
      * @return Json
      */
-    public function revokeCredentiasl()
+    public function revokeCredentials()
     {
         $tokens = Auth::user()->tokens;
 
@@ -26,7 +26,7 @@ class CredentialsController extends Controller
 
         RevokeCredentialsEvent::dispatch($this->authenticated_user());
 
-        return $this->message(_("Every one of your credentials has been canceled.") . now());
+        return $this->message(__("Every one of your credentials has been canceled.") . now());
 
     } 
 }
