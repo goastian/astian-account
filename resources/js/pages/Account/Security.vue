@@ -70,7 +70,7 @@ export default {
                 .then((res) => {
                     this.message = res.data.message;
                     this.errors.message = null;
-                    this.errors = {}
+                    this.errors = {};
                 })
                 .catch((err) => {
                     if (err.response) {
@@ -122,14 +122,19 @@ export default {
         },
 
         revocarCredentials() {
-            this.$server
-                .delete("/api/oauth/credentials/revoke")
-                .then((res) => {
-                    this.message = res.data.message;
-                })
-                .catch((e) => {
-                    console.error(e.response);
-                });
+            const ask = confirm(
+                "Are you sure you want to destroy all sessions?"
+            );
+            if (ask) {
+                this.$server
+                    .delete("/api/oauth/credentials/revoke")
+                    .then((res) => {
+                        this.message = res.data.message;
+                    })
+                    .catch((e) => {
+                        console.error(e.response);
+                    });
+            }
         },
 
         listener() {

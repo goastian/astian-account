@@ -35,7 +35,7 @@ Route::prefix('oauth')->group(function () {
         ->name('scopes.index')
         ->middleware('wants.json');
 
-    Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentiasl"])
+    Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentials"])
         ->name('passport.revoke-credentials');
 });
 
