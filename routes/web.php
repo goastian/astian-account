@@ -17,4 +17,4 @@ require __DIR__ . '/oauth.php';
 
 Route::get("/{any}", function () {
     return view('app');
-})->where('any', '.*')->middleware('auth');
+})->where('any', '.*');
