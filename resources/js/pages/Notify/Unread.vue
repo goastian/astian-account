@@ -1,48 +1,58 @@
 <template>
-    <div class="border-bottom clearfix">
-        <strong class="float-start text-capitalize text-color">Notifications</strong>
-        <a href="#" class="btn btn-link float-end" @click="clean">
-            Mark all as read
-        </a>
-    </div>
-    <div class="notification-read">
-        <div
-            :class="['card', item.leido ? 'border-success' : 'border-danger']"
-            v-for="(item, index) in notifications"
-            :key="index"
-        >
-            <div class="card-head text-color py-0 my-0 text-center">
-                {{ item.titulo }}
-                <a
-                    class="btn btn-link text-danger float-end"
-                    href="#"
+    <div>
+        <p class="border-bottom text-color fw-bold">
+            Notifications
+            <span
+                @click="clean"
+                class="float-end text-primary fw-lighter"
+                style="cursor: pointer"
+            >
+                Mark all as read
+            </span>
+        </p>
+
+        <ul class="read">
+            <li
+                class="text-color"
+                v-for="(item, index) in notifications"
+                :key="index"
+            >
+                <strong class="p-0 m-0 border-bottom">{{
+                    item.subject
+                }}</strong>
+
+                <i
+                    class="bi bi-x-circle-fill float-end"
+                    style="cursor: pointer"
                     @click="remove(item.links.destroy)"
-                    ><i class="bi bi-x-circle-fill h2"></i
-                ></a>
-            </div>
-            <div class="card-body py-0 my-0 text-color text-center text-sm">
-                <span>{{ item.mensaje }}</span>
-                <a
-                    class="btn btn-link"
-                    :href="item.recurso"
-                    target="_blank"
-                    @click="mark_as_read(item.links.read)"
-                    >Read more ...</a
+                ></i>
+
+                <p class="m-0 text-sm">
+                    {{ item.message }}
+                    <a
+                        class="btn btn-link text-sm"
+                        :href="item.resource"
+                        target="_blank"
+                        @click="mark_as_read(item.links.read)"
+                    >
+                        Read more ...
+                    </a>
+                </p>
+                <span class="text-primary text-sm date"
+                    >Received {{ item.created }}</span
                 >
-            </div>
-            <div class="card-footer text-color">
-                <span class="float-start">received {{ item.recibido }}</span>
-                <span class="ms-auto float-end mx-2"
-                    >{{ item.leido ? "Leida" : "" }} {{ item.leido }}</span
+                <span class="text-success text-sm date"
+                    >{{ item.read ? "Read" : "" }} {{ item.read }}</span
                 >
-            </div>
-        </div>
+            </li>
+        </ul>
+
+        <v-pagination
+            v-show="pages.total > pages.per_page"
+            :pages="pages"
+            @send-current-page="changePage"
+        ></v-pagination>
     </div>
-    <v-pagination
-        v-show="pages.total > pages.per_page"
-        :pages="pages"
-        @send-current-page="changePage"
-    ></v-pagination>
 </template>
 <script>
 export default {
@@ -73,11 +83,7 @@ export default {
                 .then((res) => {
                     this.unread();
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         unread() {
@@ -89,11 +95,7 @@ export default {
                     this.notifications = res.data.data;
                     this.pages = res.data.meta.pagination;
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         mark_as_read(link) {
@@ -102,11 +104,7 @@ export default {
                 .then((res) => {
                     this.unread();
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         remove(link) {
@@ -115,11 +113,7 @@ export default {
                 .then((res) => {
                     this.unread();
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         listenEvents() {
@@ -144,3 +138,21 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.read {
+    list-style: none;
+    padding: 0 2%;
+}
+
+.read li {
+    margin-bottom: 2%;
+}
+
+.date:last-child {
+    display: block;
+    @media (min-width: 800px) {
+        float: inline-end;
+    }
+}
+</style>

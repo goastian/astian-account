@@ -10,13 +10,8 @@
         <template v-slot:body>
             <div class="text-center text-md">
                 <span class="text-danger"
-                    >Estas seguro de revocar el token?</span
+                    >Are you sure to destroy this token?</span
                 >
-                <span
-                    > Una vez haya sido revocado todos los usuarios que esten
-                    haciendo uso del token se les restringira el acceso a
-                    cualquier tarea.
-                </span>
                 <br />
                 <br />
                 <button

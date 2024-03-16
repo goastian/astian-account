@@ -8,9 +8,9 @@
     <v-table :items="items">
         <template v-slot:body>
             <tr v-for="(item, index) in users" :key="index">
-                <td>{{ item.nombre }}</td>
-                <td>{{ item.apellido }}</td>
-                <td>{{ item.correo }}</td>
+                <td class="fw-light">{{ item.name }}</td>
+                <td class="fw-light">{{ item.last_name }}</td>
+                <td class="fw-light">{{ item.email }}</td>
                 <td>
                     <v-scopes :user="item" @success="getUsers"></v-scopes>
                     <v-update :user="item" @success="getUsers"></v-update>
@@ -23,7 +23,11 @@
             </tr>
         </template>
     </v-table>
-    <v-pagination v-show="pages.total > pages.per_page" :pages="pages" @send-current-page="changeList"></v-pagination>
+    <v-pagination
+        v-show="pages.total > pages.per_page"
+        :pages="pages"
+        @send-current-page="changeList"
+    ></v-pagination>
 
     <v-message :message="message" @close="close"></v-message>
 </template>
@@ -92,9 +96,9 @@ export default {
                     this.search.page = res.data.meta.pagination.current_page;
                 })
                 .catch((e) => {
-                   if(e.response && e.response.status == 403){
-                    this.message = e.response.data.message
-                   }
+                    if (e.response && e.response.status == 403) {
+                        this.message = e.response.data.message;
+                    }
                 });
         },
 

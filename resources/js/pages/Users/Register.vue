@@ -8,73 +8,73 @@
                         placeholder="Firs Name"
                         class="form-control form-control-sm"
                         type="text"
-                        v-model="form.nombre"
+                        v-model="form.name"
                     />
-                    <v-error :error="errors.nombre"></v-error>
+                    <v-error :error="errors.name"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="text"
                         placeholder="Last Name"
-                        v-model="form.apellido"
+                        v-model="form.last_name"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.apellido"></v-error>
+                    <v-error :error="errors.last_name"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="email"
-                        v-model="form.correo"
+                        v-model="form.email"
                         placeholder="Email Address"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.correo"></v-error>
+                    <v-error :error="errors.email"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="text"
-                        id="pais"
+                        id="country"
                         placeholder="Country"
-                        v-model="form.pais"
+                        v-model="form.country"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.pais"></v-error>
+                    <v-error :error="errors.country"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="text"
-                        v-model="form.ciudad"
+                        v-model="form.city"
                         placeholder="City"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.ciudad"></v-error>
+                    <v-error :error="errors.city"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="text"
-                        v-model="form.direccion"
+                        v-model="form.address"
                         placeholder="Home Address"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.direccion"></v-error>
+                    <v-error :error="errors.address"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="text"
-                        v-model="form.telefono"
+                        v-model="form.phone"
                         placeholder="Phone Number"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.telefono"></v-error>
+                    <v-error :error="errors.phone"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="date"
-                        v-model="form.nacimiento"
+                        v-model="form.birthday"
                         placeholder="Birthday"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.nacimiento"></v-error>
+                    <v-error :error="errors.birthday"></v-error>
                 </div>
             </div>
             <div class="m-2 p-2">
@@ -85,14 +85,14 @@
                     class="col form-check"
                     v-for="(item, index) in roles"
                     :key="index"
-                    v-show="!item.publico"
+                    v-show="!item.public"
                 >
                     <input
                         class="form-check-input"
                         type="checkbox"
                         :value="item.id"
                         :id="index"
-                        v-model="form.acceso"
+                        v-model="form.scope"
                     />
                     <label class="form-check-label text-sm" :for="index">
                         <strong class="text-color">{{ item.role }}: </strong>
@@ -101,7 +101,7 @@
                 </div>
             </div>
             <div>
-                <v-error :error="errors.acceso"></v-error>
+                <v-error :error="errors.scope"></v-error>
             </div>
         </template>
     </v-modal>
@@ -112,7 +112,7 @@ export default {
 
     data() {
         return {
-            form: { acceso: [] },
+            form: { scope: [] },
             errors: {},
             roles: {},
         };
@@ -136,7 +136,7 @@ export default {
             this.$server
                 .post("/api/users", this.form)
                 .then((res) => {
-                    this.form = { acceso: [] };
+                    this.form = { scope: [] };
                     this.errors = {};
                     this.$emit("success", res.data.data);
                 })

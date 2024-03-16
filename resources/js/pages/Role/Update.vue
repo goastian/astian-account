@@ -1,7 +1,7 @@
 <template>
     <v-modal
-        :target="role.role.trim()"
-        @is-clicked="loadData(role)"
+        :target="scope.scope.trim()"
+        @is-clicked="loadData(scope)"
         @is-accepted="update(form)"
         @is-closed="clean"
     >
@@ -9,38 +9,38 @@
         <template v-slot:body>
             <div class="row">
                 <div class="col">
-                    <label for="role">Scope Name</label>
+                    <label for="scope">Scope Name</label>
                     <input
                         type="text"
                         class="form-control form-control-sm"
                         placeholder="Role"
-                        id="role"
-                        v-model="form.role"
+                        id="scope"
+                        v-model="form.scope"
                     />
-                    <v-error :error="errors.role"></v-error>
+                    <v-error :error="errors.scope"></v-error>
                 </div>
                 <div class="col">
-                    <label for="descripcion">Description</label>
+                    <label for="description">Description</label>
                     <input
                         type="text"
                         class="form-control form-control-sm"
-                        placeholder="descripcion"
-                        v-model="form.descripcion"
+                        placeholder="description"
+                        v-model="form.description"
                     />
-                    <v-error :error="errors.descripcion"></v-error>
+                    <v-error :error="errors.description"></v-error>
                 </div>
                 <div class="col">
                     <label for="public">Make available for all Users (Public Scope)</label>
                     <select
-                        v-model="form.publico"
-                        name="publico"
-                        id="publico"
+                        v-model="form.public"
+                        name="public"
+                        id="public"
                         class="form-control form-control-sm"
                     >
-                        <option value="1">Si</option>
+                        <option value="1">Yes</option>
                         <option value="0">No</option>
                     </select>
-                    <v-error :error="errors.publico"></v-error>
+                    <v-error :error="errors.public"></v-error>
                 </div>
             </div>
             <div v-show="message" class="my-3 py-2 bg-secondary text-light h6">
@@ -53,16 +53,16 @@
 export default {
     emits: ["success"],
 
-    props: ["role"],
+    props: ["scope"],
 
     data() {
         return {
             errors: {},
             message: null,
             form: {
-                role: null,
-                descripcion: null,
-                publico: 0,
+                scope: null,
+                description: null,
+                public: 0,
             },
         };
     },
@@ -74,9 +74,9 @@ export default {
             this.message = null;
         },
 
-        loadData(role) {
+        loadData(scope) {
             this.$server
-                .get(role.links.show)
+                .get(scope.links.show)
                 .then((res) => {
                     this.form = res.data.data;
                 })
@@ -85,9 +85,9 @@ export default {
                 });
         },
 
-        update(role) {
+        update(scope) {
             this.$server
-                .put(role.links.update, this.form)
+                .put(scope.links.update, this.form)
                 .then((res) => {
                     this.message = "actualizacion exitosa";
                     this.errors = {};

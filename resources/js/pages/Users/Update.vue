@@ -10,7 +10,7 @@
             <p class="text-color">
                 About
 
-                {{ user.nombre }}
+                {{ user.name }}
             </p>
         </template>
 
@@ -20,98 +20,98 @@
                     <label>First Name</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.nombre"
+                        v-model="user.name"
                         type="text"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.nombre"></v-error>
+                    <v-error :error="errors.name"></v-error>
                 </div>
                 <div class="col">
                     <label>Last Name</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.apellido"
+                        v-model="user.last_name"
                         type="text"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.apellido"></v-error>
+                    <v-error :error="errors.last_name"></v-error>
                 </div>
                 <div class="col">
                     <label>Email Address</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.correo"
+                        v-model="user.email"
                         type="email"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.correo"></v-error>
+                    <v-error :error="errors.email"></v-error>
                 </div>
 
                 <div class="col">
                     <label>Phone Number</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.telefono"
+                        v-model="user.phone"
                         type="text"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.telefono"></v-error>
+                    <v-error :error="errors.phone"></v-error>
                 </div>
 
                 <div class="col">
                     <label>Country</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.pais"
+                        v-model="user.country"
                         type="text"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.pais"></v-error>
+                    <v-error :error="errors.country"></v-error>
                 </div>
                 <div class="col">
                     <label>City Or State</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.ciudad"
+                        v-model="user.city"
                         type="text"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.ciudad"></v-error>
+                    <v-error :error="errors.city"></v-error>
                 </div>
                 <div class="col">
                     <label>Home Address</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.direccion"
+                        v-model="user.address"
                         type="text"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.direccion"></v-error>
+                    <v-error :error="errors.address"></v-error>
                 </div>
                 <div class="col">
                     <label>Date of birth</label>
                     <input
                         @keypress.enter="update(user)"
-                        v-model="user.nacimiento"
+                        v-model="user.birthday"
                         type="date"
                         class="form-control form-control-sm"
                     />
-                    <v-error :error="errors.nacimiento"></v-error>
+                    <v-error :error="errors.birthday"></v-error>
                 </div>
                 <div class="col">
                     <label>Join us</label>
-                    <p>{{ user.registrado }}</p>
+                    <p>{{ user.created }}</p>
                 </div>
                 <div class="col">
                     <label>Last Update</label>
-                    <p>{{ user.actualizado }}</p>
+                    <p>{{ user.updated }}</p>
                 </div>
                 <div class="col">
                     <label>Disabled</label>
                     <p class="fw-bold text-color">
                         {{
-                            user.inactivo
-                                ? `User inactive since ${user.inactivo}`
+                            user.disabled
+                                ? `User inactive since ${user.disabled}`
                                 : "Active User"
                         }}
                     </p>

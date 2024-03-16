@@ -1,22 +1,24 @@
 <template>
     <v-modal
-        :target="item.canal"
+        :target="'XXX_'.concat(item.canal)"
         styles="btn btn-sm btn-danger"
         :button_accept_show="false"
     >
         <template v-slot:button> remover </template>
         <template v-slot:head>
-            <span>Eliminar canal</span>
+            <span>Remove Channel</span>
         </template>
         <template v-slot:body>
             <div class="text-center">
                 <p>
-                    estas seguro que deseas eliminar este canal? ten en cuenta
-                    que si este canal esta en uso deconectará a todos los
-                    usuarios o aplicaciones que esten emitiendo por esa señal.
+                    Are you sure to destroy this channel?
                 </p>
 
-                <button class="mt-4 btn-primary btn" @click="remove(item)" data-bs-dismiss="modal">
+                <button
+                    class="mt-4 btn-primary btn"
+                    @click="remove(item)"
+                    data-bs-dismiss="modal"
+                >
                     Aceptar
                 </button>
             </div>
@@ -25,7 +27,6 @@
 </template>
 <script>
 export default {
-
     props: ["item"],
 
     emits: ["success"],

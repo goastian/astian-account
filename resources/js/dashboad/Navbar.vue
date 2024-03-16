@@ -46,11 +46,11 @@
                         @click="readNotification(item.links.read)"
                     >
                         <strong class=""
-                            >{{ item.titulo }}
+                            >{{ item.subject }}
                             <i
                                 :class="[
                                     'bi h5 mx-2',
-                                    item.leido ? 'bi-eye' : 'bi-eye-slash',
+                                    item.read ? 'bi-eye' : 'bi-eye-slash',
                                 ]"
                             ></i>
                         </strong>
@@ -65,7 +65,7 @@
                 data-bs-toggle="dropdown"
                 aria-expanded="true"
             >
-                {{ user.nombre }}
+                {{ user.name }}
                 <i class="bi bi-box-arrow-in-right h4 m-0"></i>
             </a>
             <ul class="dropdown-menu expand bg-light">
@@ -126,11 +126,7 @@ export default {
                     this.notification();
                     this.unreadNotification();
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         logout() {

@@ -16,7 +16,7 @@
                 <div
                     class="col form-check text-start"
                     v-for="(item, index) in roles"
-                    v-show="!item.publico"
+                    v-show="!item.public"
                 >
                     <input
                         @click="confirmAction(item.id, $event)"
@@ -26,8 +26,8 @@
                         type="checkbox"
                     />
                     <label class="form-check-label" :for="item.id">
-                        <span class="fw-bold">{{ item.role }}:</span>
-                        {{ item.descripcion }}
+                        <span class="fw-bold">{{ item.scope }}:</span>
+                        {{ item.description }}
                     </label>
                 </div>
                 <div v-if="message" class="col-12 mt-4 py-4 fw-bold bg-info">
@@ -97,9 +97,9 @@ export default {
 
             if (checked) {
                 this.$server
-                    .post(this.user.links.roles, { role: id })
+                    .post(this.user.links.roles, { scope: id })
                     .then((res) => {
-                        this.message = `A new Scope was added (${res.data.data.role})`;
+                        this.message = `A new Scope was added (${res.data.data.scope})`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.data.status == 403) {
@@ -113,7 +113,7 @@ export default {
                 this.$server
                     .delete(`${this.user.links.roles}/${id}`)
                     .then((res) => {
-                        this.message = `The Scope ${res.data.data.role} was removed`;
+                        this.message = `The Scope ${res.data.data.scope} was removed`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.status == 403) {

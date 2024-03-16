@@ -24,10 +24,10 @@
                         {{ item.ip }}
                     </span>
                     <span>
-                        {{ item.agente }}
+                        {{ item.agent }}
                     </span>
                     <span>
-                        {{ item.ultima_coneccion }}
+                        {{ item.last_activity }}
                     </span>
                 </div>
             </div>
