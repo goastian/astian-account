@@ -39,11 +39,11 @@ class NotificationTransformer extends TransformerAbstract
 
         return [
             'id' => $notification->id,
-            'titulo' => $data->title,
-            'mensaje' => $data->message,
-            'recurso' => isset($data->resource) ? $data->resource : null,
-            'leido' => $this->format_date($notification->read_at),
-            'recibido' => $this->format_date($notification->created_at),
+            'subject' => $data->title,
+            'message' => $data->message,
+            'resource' => isset($data->resource) ? $data->resource : null,
+            'read' => $this->format_date($notification->read_at),
+            'created' => $this->format_date($notification->created_at),
             'links' => [
                 'parent' => route('notifications.index'),
                 'unread' => route('notifications.unread'),

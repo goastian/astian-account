@@ -39,19 +39,19 @@ class EmployeeTransformer extends TransformerAbstract
 
         return [
             'id' => $user->id,
-            'nombre' => $user->name,
-            'apellido' => $user->last_name,
-            'correo' => $user->email,
-            'pais' => $user->country,
-            'ciudad' => $user->city,
-            'direccion' => $user->address,
-            'nacimiento' => $user->birthday,
-            'telefono' => $user->phone,
+            'name' => $user->name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'country' => $user->country,
+            'city' => $user->city,
+            'address' => $user->address,
+            'birthday' => $user->birthday,
+            'phone' => $user->phone,
             'm2fa' => $user->m2fa,
-            'verificado' => $this->format_date($user->verified_at),
-            'registrado' => $this->format_date($user->created_at),
-            'actualizado' => $this->format_date($user->updated_at),
-            'inactivo' => $this->format_date($user->deleted_at),
+            'verified' => $this->format_date($user->verified_at),
+            'created' => $this->format_date($user->created_at),
+            'updated' => $this->format_date($user->updated_at),
+            'disabled' => $this->format_date($user->deleted_at),
             'access' => [
                 'client' => $user->isClient(),
                 'admin' => $user->isAdmin(),
@@ -66,7 +66,7 @@ class EmployeeTransformer extends TransformerAbstract
                     'scopes_read',
                     'scopes_register',
                     'scopes_update',
-                    'scopes_destroy'
+                    'scopes_destroy',
                 ]),
                 'broadcast' => $user->userCan('broadcast'),
                 'notification' => $user->userCan('notify'),
@@ -86,17 +86,17 @@ class EmployeeTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attributes = [
-            'nombre' => 'name',
-            'apellido' => 'last_name',
-            'correo' => 'email',
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'email' => 'email',
             'password' => 'password',
             'password_confirmation' => 'password_confirmation',
-            'pais' => 'country',
-            'ciudad' => 'city',
-            'direccion' => 'address',
-            'telefono' => 'phone',
-            'nacimiento' => 'birthday',
-            'acceso' => 'role',
+            'country' => 'country',
+            'city' => 'city',
+            'address' => 'address',
+            'phone' => 'phone',
+            'birthday' => 'birthday',
+            'scope' => 'scope',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
@@ -105,17 +105,17 @@ class EmployeeTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attributes = [
-            'name' => 'nombre',
-            'last_name' => 'apellido',
-            'email' => 'correo',
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'email' => 'email',
             'password' => 'password',
             'password_confirmation' => 'password_confirmation',
-            'country' => 'pais',
-            'city' => 'ciudad',
-            'address' => 'direccion',
-            'birthday' => 'nacimiento',
-            'phone' => 'telefono',
-            'role' => 'acceso',
+            'country' => 'country',
+            'city' => 'city',
+            'address' => 'address',
+            'birthday' => 'birthday',
+            'phone' => 'phone',
+            'scope' => 'scope',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
@@ -125,19 +125,19 @@ class EmployeeTransformer extends TransformerAbstract
     {
         $attributes = [
             'id' => 'id',
-            'nombre' => 'name',
-            'apellido' => 'last_name',
-            'correo' => 'email',
-            'pais' => 'country',
-            'ciudad' => 'city',
-            'direccion' => 'address',
-            'telefono' => 'phone',
-            'nacimiento' => 'birthday',
-            'verificado' => 'verified_at',
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'email' => 'email',
+            'country' => 'country',
+            'city' => 'city',
+            'address' => 'address',
+            'phone' => 'phone',
+            'birthday' => 'birthday',
+            'verified' => 'verified_at',
             'm2fa' => 'm2fa',
-            'registrado' => 'created_at',
-            'actualizado' => 'updated_at',
-            'inactivo' => 'deleted_at',
+            'created' => 'created_at',
+            'updated' => 'updated_at',
+            'disabled' => 'deleted_at',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
