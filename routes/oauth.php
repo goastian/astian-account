@@ -71,7 +71,7 @@ Route::group([
         ]);
 
         Route::post('/personal-access-tokens', [
-            'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@store',
+            'uses' => '\App\Http\Controllers\OAuth\PersonalAccessTokenController@store',
             'as' => 'personal.tokens.store',
         ]);
 
