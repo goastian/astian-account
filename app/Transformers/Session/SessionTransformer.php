@@ -34,8 +34,8 @@ class SessionTransformer extends TransformerAbstract
         return [
             'id' => $session->id,
             'ip' => $session->ip_address,
-            'agente' => $session->user_agent,
-            'ultima_coneccion' => $session->last_activity,
+            'agent' => $session->user_agent,
+            'last_activity' => $session->last_activity,
             'actual' => request()->session()->getId() == $session->id ?: false,
             'links' => [
                 'parent' => route('sessions.index'),

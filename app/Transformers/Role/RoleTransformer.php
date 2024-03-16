@@ -33,16 +33,16 @@ class RoleTransformer extends TransformerAbstract
     {
         return [
             'id' => $role->id,
-            'role' => $role->name,
-            'descripcion' => $role->description,
-            'publico' => $role->public,
+            'scope' => $role->name,
+            'description' => $role->description,
+            'public' => $role->public,
             'links' => [
                 'parent' => route('roles.index'),
                 'store' => route('roles.store'),
                 'show' => route('roles.update', ['role' => $role->id]),
                 'update' => route('roles.update', ['role' => $role->id]),
                 'destroy' => route('roles.destroy', ['role' => $role->id]),
-                'users' => route('roles.users.index', ['role' => $role->id])
+                'users' => route('roles.users.index', ['role' => $role->id]),
             ],
         ];
     }
@@ -50,9 +50,9 @@ class RoleTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
-            'role' => 'name',
-            'descripcion' => 'description',
-            'publico' => 'public',
+            'scope' => 'name',
+            'description' => 'description',
+            'public' => 'public',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -61,9 +61,9 @@ class RoleTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attribute = [
-            'name' => 'role',
-            'description' => 'descripcion',
-            'public' => 'publico',
+            'name' => 'scope',
+            'description' => 'description',
+            'public' => 'public',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -73,9 +73,9 @@ class RoleTransformer extends TransformerAbstract
     {
         $attributes = [
             'id' => 'id',
-            'nombre' => 'name',
-            'descripcion' => 'description',
-            'publico' => 'public'
+            'scope' => 'name',
+            'description' => 'description',
+            'public' => 'public',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

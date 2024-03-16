@@ -175,7 +175,7 @@ return [
      */
 
     'attributes' => [
-        'name' => 'First Name',
+      /*  'name' => 'First Name',
         'last_name' => 'Last Name',
         'email' => 'Email Address',
         'country' => 'Country Name',
@@ -195,7 +195,7 @@ return [
         'private' => 'Private',
         'ip' => 'IP Address',
         'ipv6' => 'IPV6 Address',
-        'agent' => 'Agent',
+        'agent' => 'Agent',*/
     ],
 
 ];
