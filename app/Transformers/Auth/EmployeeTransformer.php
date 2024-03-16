@@ -96,7 +96,7 @@ class EmployeeTransformer extends TransformerAbstract
             'address' => 'address',
             'phone' => 'phone',
             'birthday' => 'birthday',
-            'scope' => 'scope',
+            'scope' => 'role',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
@@ -115,7 +115,7 @@ class EmployeeTransformer extends TransformerAbstract
             'address' => 'address',
             'birthday' => 'birthday',
             'phone' => 'phone',
-            'scope' => 'scope',
+            'role' => 'scope',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

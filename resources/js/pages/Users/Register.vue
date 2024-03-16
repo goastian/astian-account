@@ -95,14 +95,15 @@
                         v-model="form.scope"
                     />
                     <label class="form-check-label text-sm" :for="index">
-                        <strong class="text-color">{{ item.role }}: </strong>
-                        <span>{{ item.descripcion }}</span>
+                        <strong class="text-color">{{ item.scope }}: </strong>
+                        <span>{{ item.description }}</span>
                     </label>
                 </div>
             </div>
             <div>
                 <v-error :error="errors.scope"></v-error>
             </div>
+            <v-message :message="message" @close="close"></v-message>
         </template>
     </v-modal>
 </template>
@@ -115,6 +116,7 @@ export default {
             form: { scope: [] },
             errors: {},
             roles: {},
+            message: null,
         };
     },
 
@@ -123,6 +125,9 @@ export default {
     },
 
     methods: {
+        close() {
+            this.message = null;
+        },
         getRoles() {
             this.$server
                 .get("/api/roles")
@@ -136,6 +141,7 @@ export default {
             this.$server
                 .post("/api/users", this.form)
                 .then((res) => {
+                    this.message = "A new user has been registered";
                     this.form = { scope: [] };
                     this.errors = {};
                     this.$emit("success", res.data.data);
@@ -153,21 +159,19 @@ export default {
 <style lang="scss" scoped>
 .col {
     flex: 0 0 auto;
-    
+
     @media (min-width: 320px) {
         margin-bottom: 2%;
         width: 98%;
     }
-    
+
     @media (min-width: 800px) {
         width: 45%;
     }
-    
+
     @media (min-width: 940px) {
         margin-bottom: 1%;
         width: 30%;
     }
 }
-
-
 </style>
