@@ -51,7 +51,7 @@ export default {
 
         listenEvents() {
             this.$echo
-                .private(this.$channels.ch_1(window.$id))
+                .private(this.$channels.ch_1(this.$id))
                 .listen("RevokeCredentialsEvent", (e) => {
                     this.getPersonalAccessToken();
                 });

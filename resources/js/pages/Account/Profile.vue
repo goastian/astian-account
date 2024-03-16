@@ -2,43 +2,43 @@
     <div class="card text-color">
         <div class="card-head h3 fw-bold border-bottom px-3 bg-primary">
             About Me
-            <span class="h5 text-primary">
+            <span class="h5 fw-light text-primary">
                 <i class="bi bi-person-check h2"></i>
             </span>
         </div>
         <div class="card-body">
-            <span class="h5 name">
+            <span class="h5 fw-light name">
                 <i class="bi bi-person-bounding-box text-primary"></i>
-                {{ user.nombre }}
-                {{ user.apellido }}
+                {{ user.name }}
+                {{ user.last_name }}
             </span>
 
-            <span class="h5 email">
+            <span class="h5 fw-light email">
                 <i class="bi bi-envelope-at-fill text-primary"></i>
-                {{ user.correo }}
+                {{ user.email }}
             </span>
 
-            <span v-show="user.telefono" class="h5 phone">
+            <span v-show="user.phone" class="h5 fw-light phone">
                 <i class="bi bi-telephone-plus text-primary"></i>
-                {{ user.telefono }}
+                {{ user.phone }}
             </span>
 
-            <span v-show="user.nacimiento" class="h5 birth">
+            <span v-show="user.birthday" class="h5 fw-light birth">
                 <i class="bi bi-cake2 text-primary"></i>
-                {{ user.nacimiento }}
+                {{ user.birthday }}
             </span>
 
-            <span v-show="user.pais" class="h5 address">
+            <span v-show="user.country" class="h5 fw-light address">
                 <i class="bi bi-houses text-primary"></i>
-                {{ user.pais }} - {{ user.ciudad }} -
+                {{ user.country }} - {{ user.city }} -
 
-                {{ user.direccion }}
+                {{ user.address }}
             </span>
         </div>
         <div class="card-footer align-content-between">
             <span class="h5">
                 <i class="bi bi-arrow-through-heart text-primary"></i>
-                Join us {{ user.registrado }}
+                Join us {{ user.created }}
             </span>
 
             <v-update
@@ -56,7 +56,7 @@
         <div class="card-body">
             <a
                 href="#"
-                class="btn btn-link"
+                class="btn btn-link fw-light"
                 v-for="(item, index) in roles"
                 :key="index"
                 >{{ item.id }}</a
@@ -96,9 +96,7 @@ export default {
                     this.user = res.data;
                     window.$auth = res.data;
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
+                .catch((e) => {});
         },
 
         close() {
@@ -121,12 +119,7 @@ export default {
                 .then((res) => {
                     this.roles = res.data;
                 })
-                .catch((e) => {
-                    console.log(e);
-                    if (e.response) {
-                        console.log(e.response);
-                    }
-                });
+                .catch((e) => {});
         },
 
         listener() {

@@ -62,9 +62,7 @@ export default {
                 .then((res) => {
                     this.clients = res.data;
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
+                .catch((e) => {});
         },
     },
 };

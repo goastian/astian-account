@@ -4,21 +4,21 @@
             <div class="row">
                 <div class="col">
                     <input
-                        v-model="form.canal"
+                        v-model="form.channel"
                         type="text"
                         class="form-control form-control-sm"
                         placeholder="Channel"
                     />
-                    <v-error :error="errors.canal"></v-error>
+                    <v-error :error="errors.channel"></v-error>
                 </div>
                 <div class="col">
                     <input
-                        v-model="form.descripcion"
+                        v-model="form.description"
                         class="form-control form-control-sm"
                         placeholder="Description"
                     />
 
-                    <v-error :error="errors.descripcion"></v-error>
+                    <v-error :error="errors.description"></v-error>
                 </div>
                 <div class="col">
                     <button
@@ -38,10 +38,7 @@ export default {
 
     data() {
         return {
-            form: {
-                descripcion: "",
-                canal: "",
-            },
+            form: {},
             errors: {},
         };
     },
@@ -51,8 +48,7 @@ export default {
             this.$server
                 .post("/api/broadcasts", this.form)
                 .then((res) => {
-                    this.form.canal = "";
-                    this.form.descripcion = "";
+                    this.form = {};
                     this.errors = {};
                     this.$emit("success", res.data.data);
                 })

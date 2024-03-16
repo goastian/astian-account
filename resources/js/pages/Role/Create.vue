@@ -1,24 +1,24 @@
 <template>
     <div class="card">
         <div class="card-body">
-            <div class="row role-register">
+            <div class="row scope-register">
                 <div class="col">
                     <input
                         type="text"
                         class="form-control form-control-sm"
                         placeholder="New scope Or Role"
-                        v-model="form.role"
+                        v-model="form.scope"
                     />
-                    <v-error :error="errors.role"></v-error>
+                    <v-error :error="errors.scope"></v-error>
                 </div>
                 <div class="col">
                     <input
                         type="text"
                         class="form-control form-control-sm"
                         placeholder="No lengthy description"
-                        v-model="form.descripcion"
+                        v-model="form.description"
                     />
-                    <v-error :error="errors.descripcion"></v-error>
+                    <v-error :error="errors.description"></v-error>
                 </div>
                 <div class="col">
                     <div class="form-check">
@@ -27,7 +27,7 @@
                             type="checkbox"
                             value="1"
                             id="categoria"
-                            v-model="form.publico"
+                            v-model="form.public"
                         />
                         <label class="form-check-label text-color" for="categoria">
                             Make available for all users (Public Scope)

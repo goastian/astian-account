@@ -3,18 +3,18 @@
     <v-table :items="items">
         <template v-slot:body>
             <tr v-for="(item, index) in scopes" :key="index">
-                <td>{{ item.role }}</td>
-                <td>{{ item.descripcion }}</td>
-                <td>{{ item.publico ? 'Yes' : 'No'}}</td>
+                <td class="fw-light">{{ item.scope }}</td>
+                <td class="fw-light">{{ item.description }}</td>
+                <td class="fw-light">{{ item.public ? 'Yes' : 'No'}}</td>
                 <td>
                     <v-update
-                        :role="item"
+                        :scope="item"
                         @success="getScopes(actual_page)"
                     ></v-update>
                 </td>
                 <td>
                     <v-remove
-                        :role="item"
+                        :scope="item"
                         @success="getScopes(actual_page)"
                         @errors="showMessage"
                     ></v-remove>

@@ -5,27 +5,28 @@
         :button_accept_show="false"
         button_cancel_name="Cancelar operacion"
     >
-        <template v-slot:button> Eliminar cuenta </template>
-        <template v-slot:head> Eliminar cuenta permanentemente </template>
+        <template v-slot:button> Destroy Account </template>
+        <template v-slot:head> Delete permanently </template>
 
         <template v-slot:body>
-            <p>
-                La cuenta será eliminada permanente. Una vez eliminada se
-                borrará cualquier informacion que hayas guardado. te enviaremos un email.
-            </p>
+            <div class="text-center text-color">
+                The account will be eliminated permanent. Once eliminated any
+                information you have saved will be deleted. We will send you an
+                email.
+            </div>
             <button
                 @click="remove(user)"
                 data-bs-dismiss="modal"
                 class="btn btn-success mt-4"
             >
-                Aceptar
+                Accep
             </button>
         </template>
     </v-modal>
 </template>
 <script>
 export default {
-    emits: ["success","errors"],
+    emits: ["success", "errors"],
 
     props: ["user"],
 
@@ -36,7 +37,7 @@ export default {
                 .then((res) => {
                     this.$emit(
                         "success",
-                        "Su cuenta ha sido eliminada, recibira un email con la confirmacion, en 5 segundo se cerrara tu session."
+                        "Your account has been destoryed, we're sending an email confimation. in 5 seconds your session will be destroy"
                     );
                 })
                 .catch((e) => {

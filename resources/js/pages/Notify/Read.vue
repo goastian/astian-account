@@ -1,46 +1,55 @@
 <template>
-    <div class="border-bottom text-color">
-        <strong class="float-start text-capitalize">Notifications</strong>
-        <a href="#" class="btn btn-link float-end" @click="clean">
-            Remove all</a
-        >
-    </div>
-    <div class="notification-read">
-        <div
-            :class="['card', item.leido ? 'border-success' : 'border-danger']"
-            v-for="(item, index) in notifications"
-            :key="index"
-        >
-            <div class="card-head text-color">
-                {{ item.titulo }}
-                <a
-                    class="btn btn-link text-danger float-end"
-                    href="#"
+    <div>
+        <p class="text-capitalize text-color fw-bold border-bottom">
+            Notifications
+
+            <a href="#" class="btn btn-link float-end p-0 m-0" @click="clean">
+                Remove all
+            </a>
+        </p>
+
+        <ul class="read">
+            <li
+                class="text-color"
+                v-for="(item, index) in notifications"
+                :key="index"
+            >
+                <strong class="p-0 m-0 border-bottom">{{
+                    item.subject
+                }}</strong>
+
+                <i
+                    class="bi bi-x-circle-fill float-end"
+                    style="cursor: pointer"
                     @click="remove(item.links.destroy)"
-                    ><i class="bi bi-x-circle-fill h2"></i
-                ></a>
-            </div>
-            <div class="card-body py-0 text-color text-center text-sm">
-                <span>{{ item.mensaje }}</span>
-                <a
-                    class="btn btn-link"
-                    :href="item.recurso"
-                    target="_blank"
-                    @click="mark_as_read(item.links.read)"
-                    >Read more ...</a
+                ></i>
+
+                <p class="m-0 text-sm">
+                    {{ item.message }}
+                    <a
+                        class="btn btn-link text-sm"
+                        :href="item.resource"
+                        target="_blank"
+                        @click="mark_as_read(item.links.read)"
+                    >
+                        Read more ...
+                    </a>
+                </p>
+                <span class="text-primary text-sm date"
+                    >Received {{ item.created }}</span
                 >
-            </div>
-            <div class="card-footer my-0 py-0 text-color">
-                <span>Recibida {{ item.recibido }}</span>
-                <span>{{ item.leido ? "Leida" : "" }} {{ item.leido }}</span>
-            </div>
-        </div>
+                <span class="text-success text-sm date"
+                    >{{ item.read ? "Read" : "" }} {{ item.read }}</span
+                >
+            </li>
+        </ul>
+
+        <v-pagination
+            v-show="pages.total > pages.per_page"
+            :pages="pages"
+            @send-current-page="changePage"
+        ></v-pagination>
     </div>
-    <v-pagination
-        v-show="pages.total > pages.per_page"
-        :pages="pages"
-        @send-current-page="changePage"
-    ></v-pagination>
 </template>
 <script>
 export default {
@@ -73,11 +82,7 @@ export default {
                 .then((res) => {
                     this.read();
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         read() {
@@ -89,11 +94,7 @@ export default {
                     this.notifications = res.data.data;
                     this.pages = res.data.meta.pagination;
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         mark_as_read(link) {
@@ -102,11 +103,7 @@ export default {
                 .then((res) => {
                     this.read();
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         remove(link) {
@@ -115,11 +112,7 @@ export default {
                 .then((res) => {
                     this.read();
                 })
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .catch((err) => {});
         },
 
         listenEvents() {
@@ -146,35 +139,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.notification-read .card {
-    width: 100% !important;
-    text-align: center;
-    margin: 2% auto;
-    padding: 0% 1%;
+.read {
+    list-style: none;
+    padding: 0 2%;
 }
 
-.notification-read .card-footer {
-    padding: 0% 0;
+.read li {
+    margin-bottom: 2%;
 }
 
-.notification-read .card-footer span {
+.date:last-child {
     display: block;
-    margin-top: 2%;
-
     @media (min-width: 800px) {
-        display: inline;
-    }
-}
-
-.notification-read .card-footer span:nth-child(1) {
-    @media (min-width: 800px) {
-        float: left;
-    }
-}
-
-.notification-read .card-footer span:nth-child(2) {
-    @media (min-width: 800px) {
-        float: right;
+        float: inline-end;
     }
 }
 </style>

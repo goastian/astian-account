@@ -2,11 +2,7 @@
     <v-table :items="items" class="text-center text-sm">
         <template v-slot:body>
             <tr v-for="(item, index) in tokens" :key="index">
-                <td>
-                    <span class="px-1" v-for="(scope, index) in item.scopes"
-                        >{{ scope }} <br v-if="index % 5 == 0" />
-                    </span>
-                </td>
+                <td>{{ item.name }}</td>
 
                 <td>{{ item.created_at }}</td>
                 <td>{{ item.expires_at }}</td>
@@ -31,7 +27,7 @@ export default {
 
     data() {
         return {
-            items: ["scopes", "created", "expires"],
+            items: ["name", "created", "expires"],
             tokens: {},
         };
     },
@@ -48,18 +44,12 @@ export default {
                 .then((res) => {
                     this.tokens = res.data;
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
+                .catch((e) => {});
         },
-
-        storeToken() {
-            this.$server.post("/oauth/tokens", this.form).then((res) => {});
-        },
-
+  
         listenEvents() {
             this.$echo
-                .private(this.$channels.ch_1(window.$id))
+                .private(this.$channels.ch_1(this.$id))
                 .listen("RevokeCredentialsEvent", (e) => {
                     this.getTokens();
                 });

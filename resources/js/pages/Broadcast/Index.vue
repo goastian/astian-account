@@ -4,15 +4,9 @@
     <v-table :items="items">
         <template v-slot:body>
             <tr v-for="(item, index) in channels" :key="index">
-                <td>
-                    {{ item.canal }}
-                </td>
-                <td>
-                    {{ item.descripcion }}
-                </td>
-                <td>
-                    {{ item.registrado }}
-                </td>
+                <td class="fw-light"> {{ item.channel }} </td>
+                <td class="fw-light"> {{ item.description }} </td>
+                <td class="fw-light"> {{ item.created }} </td>
                 <td>
                     <v-remove :item="item" @success="getChannels"></v-remove>
                 </td>

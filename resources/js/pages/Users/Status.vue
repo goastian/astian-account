@@ -1,21 +1,21 @@
 <template lang="">
     <v-modal
         :target="'__X_' + user.id"
-        :styles="['btn-sm', [user.inactivo ? 'btn-danger' : 'btn-primary']]"
+        :styles="['btn-sm', [user.disabled ? 'btn-danger' : 'btn-primary']]"
         :button_accept_show="false"
         button_cancel_name="Abort operation"
     >
         <template v-slot:button>
-            {{ user.inactivo ? "Inactive" : "Active" }}
+            {{ user.disabled ? "Inactive" : "Active" }}
         </template>
         <template v-slot:head>
-            {{ user.inactivo ? "Enable user account" : "disable user account" }}
+            {{ user.disabled ? "Enable user account" : "disable user account" }}
         </template>
 
         <template v-slot:body>
             <div>
                 {{
-                    user.inactivo
+                    user.disabled
                         ? "Are you sure you want to enable this user?"
                         : "Are you sure you want to dasable this user? For security reasons we're removing all credentials for this user."
                 }}
@@ -40,7 +40,7 @@ export default {
 
     methods: {
         enableOrDisable(item) {
-            if (item.inactivo) {
+            if (item.disabled) {
                 this.$server
                     .get(item.links.enable)
                     .then((res) => {

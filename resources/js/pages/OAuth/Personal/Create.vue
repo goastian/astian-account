@@ -65,7 +65,7 @@ export default {
             tokens: {},
             errors: {},
             scopes: {},
-            scopesSelected: [],
+            scopesSelected: {},
         };
     },
 
@@ -76,10 +76,6 @@ export default {
     },
 
     methods: {
-        setScopes(scopes) {
-            this.scopeSelected = scopes;
-        },
-
         createToken(event) {
             const button = event.target;
             button.disabled = true;
@@ -87,12 +83,22 @@ export default {
             this.$server
                 .post("/oauth/personal-access-tokens", {
                     name: this.name,
-                    scopes: this.scopeSelected,
+                    scopes: this.scopesSelected,
                 })
                 .then((res) => {
-                    this.name = "";
                     this.tokens = res.data;
                     this.$emit("tokenWasCreated", res.data);
+                    this.scopesSelected = {};
+                    this.name = "";
+                    /**
+                     * clean checked
+                     */
+                    let element =
+                        document.getElementsByClassName("form-check-input");
+                    for (let index = 0; index < element.length; index++) {
+                        element[index].checked = false;
+                    }
+
                     button.disabled = false;
                 })
                 .catch((e) => {
@@ -110,7 +116,6 @@ export default {
             } else {
                 this.scopesSelected.push(id);
             }
-            this.$emit("scopesSelected", this.scopesSelected);
         },
 
         getScopes() {
