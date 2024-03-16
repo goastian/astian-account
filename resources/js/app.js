@@ -11,7 +11,9 @@ import "./config/matomo.js";
 
 //checking changes in the routes
 router.beforeEach((to, from, next) => {
-    //Checking if the user is authenticated
+    /**
+     * Chechin the auth routes
+     */
     if (to.meta.auth) {
         $server
             .get("/api/gateway/check-authentication")
@@ -19,40 +21,49 @@ router.beforeEach((to, from, next) => {
                 next();
             })
             .catch((err) => {
-                //if the user is not authenticated, redirect to the login
                 window.location.href = "/login";
             });
     } else {
-        //the user is not authenticated continue to the route
-        next();
+        /**
+         * Cheking no auth routes and redirect if the user is in login view to home route
+         * in another case go to the route
+         */
+        if (to.path === "/login") {
+            $server
+                .get("/api/gateway/check-authentication")
+                .then((res) => {
+                    return next({ name: "home" });
+                })
+                .catch((err) => {});
+        } else {
+            next();
+        }
     }
 });
 
+//Loading App
+const app = createApp(App);
 /**
- * Loading application
+ * Get the user id
  */
 $server
     .get("/api/gateway/user")
     .then((res) => {
-        //Global ID from the authenticated user
-        window.$id = res.data.id; 
-        
-        //Loading App
-        const app = createApp(App);
-
-        app.config.globalProperties.$echo = $echo;
-        app.config.globalProperties.$channels = $channels;
-        app.config.globalProperties.$server = $server;
-
-        app.use(router);
-
-        components.forEach((index) => {
-            app.component(index[0], index[1]);
-        });
-
-        app.mount("#app");
+        app.config.globalProperties.$id = id;
     })
-    .catch((err) => {
-        //redirect tyo the login if the user is no authenticated
-       // console.log("redirect to the login");
-    });
+    .catch((err) => {});
+
+app.config.globalProperties.$echo = $echo;
+app.config.globalProperties.$channels = $channels;
+app.config.globalProperties.$server = $server;
+
+app.use(router);
+
+/**
+ * Global components
+ */
+components.forEach((index) => {
+    app.component(index[0], index[1]);
+});
+
+app.mount("#app");
