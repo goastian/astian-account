@@ -73,7 +73,7 @@ class AppServiceProvider extends ServiceProvider
          * Custom time for laravel passport tokens
          */
         Passport::tokensExpireIn(now()->addSeconds(env('PASSPORT_TOKEN_EXPIRE')));
-        Passport::refreshTokensExpireIn(now()->addDays(env('PASSPORT_REFRESH_EXPIRE')));
+        Passport::refreshTokensExpireIn(now()->addSeconds(env('PASSPORT_REFRESH_EXPIRE')));
         Passport::personalAccessTokensExpireIn(now()->addDays(env('PASSPORT_PERSONAL_EXPIRE')));
 
         /**
