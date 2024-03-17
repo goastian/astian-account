@@ -7,5 +7,6 @@ export const $server = axios.create({
     responseEncoding: "utf8",
     headers: {
         Accept: "application/json",
+        "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
 });
