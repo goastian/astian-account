@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="icon" href="favicon.png" type="image/png">
+    <link rel="icon" href="{{ config('app.url') }}/favicon.svg" type="image/svg+xml">
 
     <link rel="stylesheet"
         href="{{ app()->environment('production') ? secure_asset('css/app.css') : asset('css/app.css') }}">
