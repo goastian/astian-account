@@ -95,13 +95,13 @@ class ClientController extends Controller
         if (!$client) {
             return new Response('', 404);
         }
-        $clientForDB = $this->existsForThisUser($request);
+        /*$clientForDB = $this->existsForThisUser($request);
 
         if ($clientForDB->user_id == $client->user_id and $clientForDB->redirect != $client->redirect) {
             $this->validation->make($request->only('redirect'), [
                 'redirect' => ['unique:oauth_clients,redirect'],
             ])->validate();
-        }
+        }*/
 
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
