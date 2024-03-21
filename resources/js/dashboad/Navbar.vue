@@ -1,13 +1,15 @@
 <template>
-    <ul class="nav bg-primary">
+    <ul class="nav pt-2">
         <li class="nav-item" @click="Expand(status)">
-            <a href="#" class="btn btn-primary">
-                <span class="mx-2">
+            <a href="#" class="btn">
+                <span class="text-light">
                     {{ app_name }}
                 </span>
-
-                <i class="bi bi-list h5"></i
-            ></a>
+            </a>
+            <i
+                class="bi bi-list h5 mx-1 text-light"
+                style="cursor: pointer"
+            ></i>
         </li>
         <li class="nav-item ms-auto">
             <v-apps></v-apps>
@@ -15,7 +17,7 @@
 
         <li class="nav-item dropdown">
             <a
-                class="btn btn-primary dropdown-toggle"
+                class="btn dropdown-toggle text-light"
                 data-bs-toggle="dropdown"
                 aria-expanded="true"
             >
@@ -26,8 +28,8 @@
                 </span>
             </a>
             <ul class="dropdown-menu expand">
-                <li class="dropdown-item h5">
-                    <a href="/notifications/unread">
+                <li class="dropdown-item text-color">
+                    <a :href="host + '/notifications/unread'">
                         Notifications
                         <span class="badge text-bg-danger">{{
                             unread_notifications.length
@@ -36,41 +38,49 @@
                 </li>
                 <li class="dropdown-divider"></li>
                 <li
-                    class="dropdown-item p-0"
+                    class="dropdown-item"
+                    style="cursor: pointer"
                     v-for="(item, index) in unread_notifications"
                     :key="index"
                 >
                     <a
-                        :href="item.recurso"
+                        class="text-sm text-color px-1"
+                        :href="item.resource"
                         target="_blank"
                         @click="readNotification(item.links.read)"
                     >
-                        <strong class=""
-                            >{{ item.subject }}
-                            <i
-                                :class="[
-                                    'bi h5 mx-2',
-                                    item.read ? 'bi-eye' : 'bi-eye-slash',
-                                ]"
-                            ></i>
-                        </strong>
+                        {{ item.subject }}
+                        <i
+                            :class="{
+                                'bi h5 mx-2': true,
+                                'bi-eye': item.read,
+                                'bi-eye-slash': !item.read,
+                            }"
+                        ></i>
                     </a>
                 </li>
             </ul>
         </li>
 
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown icon">
             <a
-                class="btn btn-primary dropdown-toggle"
+                class="btn dropdown-toggle text-light"
                 data-bs-toggle="dropdown"
                 aria-expanded="true"
             >
                 {{ user.name }}
-                <i class="bi bi-box-arrow-in-right h4 m-0"></i>
+                <i class="bi bi-box-arrow-in-right m-0"></i>
             </a>
-            <ul class="dropdown-menu expand bg-light">
+            <ul class="dropdown-menu expand">
                 <li class="dropdown-item">
-                    <a @click="logout" href="#">
+                    <a class="text-color" :href="host"
+                        ><i class="bi bi-house-lock mx-1"></i>
+                        My Account
+                    </a>
+                </li>
+                <li class="dropdown-divider"></li>
+                <li class="dropdown-item">
+                    <a class="text-color" @click="logout" href="#">
                         <i class="bi bi-lock-fill mx-1"></i>
                         Logout
                     </a>
@@ -93,10 +103,11 @@ export default {
 
     data() {
         return {
-            app_name: process.env.MIX_APP_NAME,
             expand: false,
             notifications: {},
             unread_notifications: {},
+            host: process.env.MIX_APP_SERVER,
+            app_name: process.env.MIX_APP_NAME,
             user: {},
         };
     },
@@ -104,8 +115,8 @@ export default {
     mounted() {
         window.addEventListener("resize", this.screenIsChanging);
         this.screenIsChanging();
-        this.listenEvents();
         this.auth();
+        this.listenEvents();
     },
 
     methods: {
@@ -126,16 +137,22 @@ export default {
                     this.notification();
                     this.unreadNotification();
                 })
-                .catch((err) => {});
+                .catch((err) => {
+                    if (err.response && err.response.status == 401) {
+                        console.log(err.response.data);
+                    }
+                });
         },
 
         logout() {
             this.$server
-                .post("/api/gateway/logout")
-                .then((res) => {
-                    //window.location.href = "/"
-                })
-                .catch((err) => {});
+                .post("api/gateway/logout")
+                .then((res) => {})
+                .catch((err) => {
+                    if (err.response) {
+                        console.log(err.response);
+                    }
+                });
         },
 
         notification() {
@@ -144,7 +161,11 @@ export default {
                 .then((res) => {
                     this.notifications = res.data.data;
                 })
-                .catch((err) => {});
+                .catch((err) => {
+                    if (err.response && err.response.status == 401) {
+                        console.log(err.response.data);
+                    }
+                });
         },
 
         unreadNotification() {
@@ -153,7 +174,11 @@ export default {
                 .then((res) => {
                     this.unread_notifications = res.data.data;
                 })
-                .catch((err) => {});
+                .catch((err) => {
+                    if (err.response && err.response.status == 401) {
+                        console.log(err.response.data);
+                    }
+                });
         },
 
         readNotification(link) {
@@ -162,7 +187,11 @@ export default {
                 .then((res) => {
                     this.notification();
                 })
-                .catch((err) => {});
+                .catch((err) => {
+                    if (err.response && err.response.status == 401) {
+                        console.log(err.response.data);
+                    }
+                });
         },
 
         listenEvents() {
@@ -193,7 +222,8 @@ export default {
 
 <style lang="scss" scoped>
 .nav {
-    padding-top: 0.5%;
+    background-color: var(--nav-top-bg) !important;
+    color: var(--nav-top-color) !important;
 }
 .expand {
     padding: 5% 30% 7% 0% !important;
@@ -210,10 +240,10 @@ export default {
 
 .nav-item {
     @media (min-width: 240px) {
-        margin-right: 0.5%;
+        margin-top: 0%;
     }
 
-    @media (min-width: 800px) {
+    @media (min-width: 240px) {
         margin-right: 2%;
     }
 }

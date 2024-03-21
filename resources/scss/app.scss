@@ -4,6 +4,7 @@
 @import "__table";
 
 :root {
+    --theme: #e3eeedec;
     --primary: #00b9b5;
     --secondary: #e36159;
     --ternary: #8dc73f;
@@ -14,9 +15,39 @@
     --dark: #191a1f;
     --blue: #4c8ff4;
     --skyblue: #5177ccb5;
-    --code: #091226b5;
-    --font: 'monospace';
-    --font-size: "12px";
+    --first-color: #091226b5;
+    --second-color: #281cb0;
+    --third-color: #828282;
+    --fourth-color: #404040;
+    --last-color: #7b1bab;
+    --input-color: #091226b5;
+    --link-title: #00b9b5;
+    --dropdown-bg: #f3e9e9b4;
+    --dropdown-color: #3a3030;
+    --dropdown-hover-color: #0ab4ca;
+    --sugestions-bg: #fff;
+    --sugestions-color: #091226b5;
+    --footer-bg: #5cb659;
+    --footer-color: #fff;
+    --footer-hover: #3ee7cb;
+    --nav-top-bg: #0cb2c4;
+    --nav-top-color: #b7b6b6;
+    --nav-top-hover-color: #51699c;
+    --nav-left-bg: #f1f8f9;
+    --nav-left-color: #4c5563;
+    --nav-left-hover-color: #693838;
+    --apps-title: #fff;
+    --apps-bg: #4370aa;
+    --app-color: #f7eded;
+    --apps-hover-color: #2b2828;
+    --apps-menu-bg: #fff;
+    --apps-menu-color: #524949;
+    --apps-shadow-color: #8f6868;
+    --calendar-bg: #9797b6;
+    --calendar-color: #faf7f7;
+    --calendar-hover-color: #c7d0d1;
+    --calendar-day-bg: #3ec2bb;
+    --calendar-day-color: #fff;
 }
 
 html,
@@ -26,7 +57,7 @@ body {
 }
 
 body {
-//    background-image: url("https://cloud.astian.org/build/assets/auth-bg-8529ec0e.svg");
+    //    background-image: url("https://cloud.astian.org/build/assets/auth-bg-8529ec0e.svg");
     background-size: auto;
 }
 
@@ -40,7 +71,7 @@ body {
     flex: 1;
     margin: 0;
 }
- 
+
 /** footer **/
 .footer {
     font-size: 0.8em;
@@ -69,7 +100,7 @@ body {
 .bg-ternary {
     background-color: var(--ternary) !important;
     border: var(--ternary);
-    color: var(--code);
+    color: var(--first-color);
 }
 
 .btn-quaternary,
@@ -81,11 +112,11 @@ body {
 
 .bg-light {
     background-color: var(--white) !important;
-    color: var(--code) !important;
+    color: var(--first-color) !important;
 }
 
 .text-color {
-    color: var(--code) !important
+    color: var(--first-color) !important
 }
 
 .router-link-active.router-link-exact-active {
@@ -95,12 +126,12 @@ body {
 
 .astian-primary {
     background-color: var(--primary);
-    color: var(--code);
+    color: var(--first-color);
 }
 
 .astian-ligth {
     background-color: var(--white);
-    color: var(--code);
+    color: var(--first-color);
 }
 
 .errors {
@@ -249,4 +280,33 @@ label {
         margin: 7% auto;
         width: 50%;
     }
+}
+
+/***** footer ******/
+.footer {
+
+    font-size: 0.8em;
+    min-height: 5vh;
+    background-color: var(--footer-bg);
+    color: var(--footer-color);
+}
+
+.footer ul {
+    display: block !important;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.footer ul:first-child li {
+    display: inline-block;
+    margin: 0.5% 2%;
+}
+
+.footer ul:first-child li a {
+    color: inherit;
+}
+
+.footer ul:last-child li {
+    display: inline;
 }

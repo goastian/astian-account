@@ -1,5 +1,5 @@
 <template>
-    <aside class="side bg-light">
+    <aside class="side">
         <div class="menu text-color">
             <ul>
                 <li class="sub-menu">
@@ -202,5 +202,6 @@ export default {
 
 a {
     text-decoration: none;
+    color: var(--nav-left-color) !important;
 }
 </style>

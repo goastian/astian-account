@@ -1,12 +1,12 @@
 <template>
     <div class="row p-0 m-0">
-        <v-nav @expand="taggleLefbar" :status="toggle_left_bar"></v-nav>
+        <v-nav class="nav-top" @expand="taggleLefbar" :status="toggle_left_bar"></v-nav>
         <div class="left" v-show="!toggle_left_bar">
             <v-left-bar @selected-menu="taggleLefbar"></v-left-bar>
         </div>
         <div
             :class="{
-                'pt-2 content': true,
+                'pt-2 ': true,
                 'body-expand': toggle_left_bar,
                 body: !toggle_left_bar,
             }"
@@ -45,6 +45,7 @@ export default {
     overflow-y: scroll;
     padding: 0;
     margin: 0;
+    background-color: var(--nav-left-bg);
 
     @media (min-width: 240px) {
         width: 100%;
@@ -52,12 +53,12 @@ export default {
 
     @media (min-width: 850px) {
         width: 15%;
-        height: 100vh;
+        min-height: 100vh;
     }
 }
 
-.content {
-    overflow-y: auto;
+.route {
+    overflow-y: auto; 
 }
 
 .body {

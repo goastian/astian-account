@@ -4,7 +4,7 @@
         styles="btn btn-sm btn-danger"
         :button_accept_show="false"
     >
-        <template v-slot:button> remover </template>
+        <template v-slot:button> remove </template>
         <template v-slot:head>
             <span>Remove Channel</span>
         </template>
