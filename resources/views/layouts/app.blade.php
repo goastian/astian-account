@@ -20,25 +20,30 @@
         <div class="content">
             @yield('content')
         </div>
-        <footer class="footer text-color bg-primary pt-4">
-            <ul class="nav">
-                <li class="nav-item mx-2">
-                    <a href="{{ env('MIX_HOME_POLICY') }}">Privacy Policy</a>
+        <footer class="footer">
+            <ul>
+                <li class="footer-hover">
+                    <a href="{{ env('MIX_HOME_POLICY') }}" target="_blank">{{ __('Privacy Policy') }}</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ env('MIX_HOME_DEVELOPER') }}">Developers</a>
+                <li class="footer-hover">
+                    <a href="{{ env('MIX_HOME_DEVELOPER') }}" target="_blank">{{ __('Developers') }}</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ env('MIX_HOME_TERMS') }}">Terms of Service</a>
+                <li class="footer-hover">
+                    <a href="{{ env('MIX_HOME_TERMS') }}" target="_blank">{{ __('Terms of Service') }}</a>
                 </li>
-                <li class="nav-item mx-2">
-                    <a href="{{ env('MIX_HOME_CONTACT') }}">Contact Us</a>
+                <li class="footer-hover">
+                    <a href="{{ env('MIX_HOME_CONTACT') }}" target="_blank">{{ __('Contact Us') }}</a>
                 </li>
             </ul>
-            <div class="text-center text-light fw-bold">
-                Copyright © {{ date('Y') }} - <strong> {{ config('app.name') }} </strong>, All Rights
-                Reserved
-            </div>
+
+            <ul>
+                <li>
+                    Copyright ©
+                    {{ date('Y') }}
+                    -
+                    <strong> {{ config('app.name') }} </strong>, All Rights Reserved
+                </li>
+            </ul>
         </footer>
     </div>
 </body>

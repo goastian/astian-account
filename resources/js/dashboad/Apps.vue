@@ -1,27 +1,27 @@
 <script setup>
 import { ref } from "vue";
 
-const CLOUD = process.env.MIX_MENU_CLOUD;
-const CALENDAR = process.env.MIX_MENU_CALENDAR;
-const CONTACTS = process.env.MIX_MENU_CONTACTS;
-const NOTES = process.env.MIX_MENU_NOTES;
-const OFFICE = process.env.MIX_MENU_OFFICE;
-const CHAT = process.env.MIX_MENU_CHAT;
+const CLOUD = ref(process.env.MIX_MENU_CLOUD);
+const CALENDAR = ref(process.env.MIX_MENU_CALENDAR);
+const CONTACTS = ref(process.env.MIX_MENU_CONTACTS);
+const NOTES = ref(process.env.MIX_MENU_NOTES);
+const OFFICE = ref(process.env.MIX_MENU_OFFICE);
+const CHAT = ref(process.env.MIX_MENU_CHAT);
 </script>
 
 <template>
     <button
-        type="button"
-        class="btn btn-primary py-1 px-2"
+        type="button p-0 m-0"
+        class="btn btn-sm text-light"
         data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
+        data-bs-target="#apps"
     >
-        <i class="bi bi-box h3"></i>
+        <i class="bi bi-box h5"></i>
     </button>
 
     <div
         class="modal fade"
-        id="staticBackdrop"
+        id="apps"
         data-bs-backdrop="static"
         data-bs-keyboard="false"
         tabindex="-1"
@@ -31,13 +31,6 @@ const CHAT = process.env.MIX_MENU_CHAT;
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header text-center">
-                    <span>
-                        <img
-                            src="../../img/favicon.svg"
-                            alt="astian icon"
-                            class="icon mx-3"
-                        />
-                    </span>
                     <span> APPS</span>
                     <button
                         type="button"
@@ -47,49 +40,50 @@ const CHAT = process.env.MIX_MENU_CHAT;
                     ></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col">
-                            <a :href="CLOUD" class="btn btn-link">
-                                <span>Cloud</span>
+                    <ul>
+                        <li>
+                            <a class="text-decoration-none" :href="CLOUD">
+                                Cloud
                                 <i class="bi bi-cloud-fill"> </i>
                             </a>
-                        </div>
-                        <div class="col">
-                            <a :href="CALENDAR" class="btn btn-link">
-                                <span>Calendar</span>
+                        </li>
+                        <li>
+                            <a class="text-decoration-none" :href="CALENDAR">
+                                Calendar
                                 <i class="bi bi-calendar-date"> </i>
                             </a>
-                        </div>
-                        <div class="col">
-                            <a :href="CONTACTS" class="btn btn-link">
-                                <span>Contacts</span>
+                        </li>
+                        <li>
+                            <a class="text-decoration-none" :href="CONTACTS">
+                                Contacts
                                 <i class="bi bi-person-lines-fill"> </i>
                             </a>
-                        </div>
-                        <div class="col">
-                            <a :href="NOTES" class="btn btn-link">
-                                <span>Notes</span>
+                        </li>
+                        <li>
+                            <a class="text-decoration-none" :href="NOTES">
+                                Notes
                                 <i class="bi bi-journal-bookmark-fill"></i>
                             </a>
-                        </div>
-                        <div class="col">
-                            <a :href="OFFICE" class="btn btn-link">
-                                <span>Office</span>
+                        </li>
+                        <li>
+                            <a class="text-decoration-none" :href="OFFICE">
+                                Office
                                 <i class="bi bi-file-earmark-richtext-fill">
                                 </i>
                             </a>
-                        </div>
-
-                        <div class="col">
-                            <a :href="CHAT" class="btn btn-link">
-                                <span>Chat</span>
+                        </li>
+                        <li>
+                            <a class="text-decoration-none" :href="CHAT">
+                                Chat
                                 <i class="bi bi-chat-dots-fill"></i>
                             </a>
-                        </div>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="modal-footer text-center">
-                    <a href="#" class="btn btn-link text-light border-bottom"> More Apps </a>
+                    <a href="#" class="btn text-light border-bottom">
+                        More Apps
+                    </a>
                 </div>
             </div>
         </div>
@@ -97,47 +91,34 @@ const CHAT = process.env.MIX_MENU_CHAT;
 </template>
 
 <style lang="scss" scoped>
-a {
-    text-decoration: none;
+.modal {
+    --bs-modal-bg: var(--apps-bg) !important;
+    --bs-modal-color: var(--apps-title) !important;
 }
 
-.col {
-    flex: 0 0 auto;
-    width: 48%;
-    border-radius: 50%;
+ul a {
+    color: inherit;
+    padding: 1%;
 }
-.col span {
+
+ul a:hover {
+    color: var(--apps-hover-color);
+}
+
+ul a i {
+    font-size: 3em;
     display: block;
 }
 
-.icon {
-    width: 30px;
-}
-
-.col i {
-    font-size: 50px;
-    text-align: center;
-}
-.modal {
-    --bs-modal-bg: $alpha;
-    text-align: center;
-    text-shadow: 15% 15% var(--skyblue);
-}
-
-.modal-content {
-    background-color: var(--skyblue);
-}
-
-.modal .col a {
-    width: 100%;
-    border-radius: 5%;
-    color: var(--white);
+ul {
     padding: 0;
     margin: 0;
+    list-style: none;
 }
 
-.modal .col a:hover {
-    color: var(--secondary);
-    text-shadow: 2px 2px 2px var(--white);
+ul li {
+    display: inline-block;
+    width: 25%;
+    padding: 4% 1%;
 }
 </style>
