@@ -24,7 +24,9 @@ class GlobalController extends Controller
 
     public function authenticated_user()
     {
-        return fractal(Auth::user(), EmployeeTransformer::class)->toArray();
+        $user = fractal(Auth::user(), EmployeeTransformer::class);
+         
+        return  json_decode(json_encode($user))->data;
     }
 
     /**

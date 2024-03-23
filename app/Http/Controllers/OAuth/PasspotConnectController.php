@@ -89,7 +89,7 @@ class PasspotConnectController extends GlobalController
      */
     public function auth(Request $request)
     {
-        return $this->authenticated_user()['data'];
+        return $this->authenticated_user();
     }
 
     /**
