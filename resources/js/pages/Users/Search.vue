@@ -4,7 +4,7 @@
             <input
                 type="text"
                 placeholder="First Name"
-                v-model="search.last_name"
+                v-model="search.name"
                 class="form-control form-control-sm"
                 @keyup.enter="searching()"
             />
@@ -13,7 +13,7 @@
             <input
                 type="text"
                 placeholder="Last Name"
-                v-model="search.name"
+                v-model="search.last_name"
                 class="form-control form-control-sm"
                 @keyup.enter="searching()"
             />
@@ -56,7 +56,7 @@ export default {
 
     methods: {
         searching() {
-            this.$emit("success", this.search);
+            this.$emit("searching", this.search);
         },
 
         clear() {
