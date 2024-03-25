@@ -64,7 +64,7 @@
 
         <li class="nav-item dropdown icon">
             <a
-                class="btn dropdown-toggle text-light"
+                class="btn dropdown-toggle text-light text-capitalize"
                 data-bs-toggle="dropdown"
                 aria-expanded="true"
             >
