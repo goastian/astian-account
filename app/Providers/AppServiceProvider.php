@@ -8,6 +8,7 @@ use App\Models\OAuth\PersonalAccessClient;
 use App\Models\OAuth\RefreshToken;
 use App\Models\OAuth\Token;
 use App\Models\User\Role;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -77,13 +78,15 @@ class AppServiceProvider extends ServiceProvider
         Passport::personalAccessTokensExpireIn(now()->addDays(env('PASSPORT_PERSONAL_EXPIRE')));
 
         /**
-         * default scopes for laravel passport 
+         * default scopes for laravel passport
          */
         $scopes = [];
 
-        foreach (Role::all() as $key => $value) {
-            $scopes += array($value->name => $value->description);
-        }
+        try {
+            foreach (Role::all() as $key => $value) {
+                $scopes += array($value->name => $value->description);
+            }
+        } catch (QueryException $e) {}
 
         Passport::tokensCan($scopes);
 
