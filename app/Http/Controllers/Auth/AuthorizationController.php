@@ -104,7 +104,7 @@ class AuthorizationController extends GlobalController
                 }
             }
             Session::find($session_id)->delete();
-        } catch (Error $e) {}
+        } catch (Error $e) {} catch (ErrorException $e) {}
 
     }
 }
