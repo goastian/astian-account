@@ -29,17 +29,23 @@ class Scope implements Arrayable, Jsonable
     public $public;
 
     /**
+     * @var Boolean
+     */
+    public $required_payment;
+
+    /**
      * Create a new scope instance.
      *
      * @param  string  $id
      * @param  string  $description
      * @return void
      */
-    public function __construct($id, $description, $public)
+    public function __construct($id, $description, $public, $required_payment)
     {
         $this->id = $id;
         $this->description = $description;
         $this->public = $public;
+        $this->required_payment = $required_payment;
     }
 
     /**
@@ -53,6 +59,7 @@ class Scope implements Arrayable, Jsonable
             'id' => $this->id,
             'description' => $this->description,
             'public' => $this->public,
+            'required_payment' => $this->required_payment,
         ];
     }
 

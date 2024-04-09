@@ -51,10 +51,12 @@ class RoleController extends Controller
             'name' => ['required', 'unique:roles,name'],
             'description' => ['required', 'max:300'],
             'public' => ['nullable', 'boolean'],
+            'required_payment' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($request, $role) {
-            $role = $role->fill($request->all());
+            $role = $role->fill($request->except('name'));
+            $role->name = preg_replace('/[\s\-,*;?!¡}\]\[{]/', '_', $request->name);
             $role->save();
         });
 
@@ -70,6 +72,7 @@ class RoleController extends Controller
             'name' => ['nullable', 'unique:roles,name,' . $role->id],
             'description' => ['nullable', 'max:300'],
             'public' => ['nullable', 'boolean'],
+            'required_payment' => ['nullable', 'boolean'],
         ]);
 
         DB::transaction(function () use ($request, $role) {
@@ -88,7 +91,7 @@ class RoleController extends Controller
                     }
                 });
 
-                $role->name = $request->name;
+                $role->name = preg_replace('/[\s\-,*;?!¡}\]\[{]/', '_', $request->name);
             }
 
             if ($this->is_diferent($role->description, $request->description)) {
@@ -100,6 +103,12 @@ class RoleController extends Controller
                 $can_update = true;
                 $role->public = $request->public;
             }
+
+            if ($role->required_payment != $request->required_payment) {
+                $can_update = true;
+                $role->required_payment = $request->required_payment;
+            }
+
 
             if ($can_update) {
                 $role->push();
