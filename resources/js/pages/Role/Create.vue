@@ -29,10 +29,33 @@
                             id="categoria"
                             v-model="form.public"
                         />
-                        <label class="form-check-label text-color" for="categoria">
+                        <label
+                            class="form-check-label text-color"
+                            for="categoria"
+                        >
                             Make available for all users (Public Scope)
                         </label>
                     </div>
+                     <v-error :error="errors.public"></v-error>
+                </div>
+
+                <div class="col">
+                    <div class="form-check">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="1"
+                            id="required_payment"
+                            v-model="form.required_payment"
+                        />
+                        <label
+                            class="form-check-label text-color"
+                            for="required_payment"
+                        >
+                            Required payement
+                        </label>
+                    </div>
+                     <v-error :error="errors.required_payment"></v-error>
                 </div>
                 <div class="col">
                     <button class="btn btn-sm btn-primary" @click="create">
@@ -78,9 +101,8 @@ export default {
     flex: 0 0 auto;
     margin: 1%;
 
-    @media (min-width:800px) {
+    @media (min-width: 800px) {
         width: 30%;
     }
 }
- 
 </style>

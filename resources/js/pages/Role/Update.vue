@@ -30,7 +30,9 @@
                     <v-error :error="errors.description"></v-error>
                 </div>
                 <div class="col">
-                    <label for="public">Make available for all Users (Public Scope)</label>
+                    <label for="public"
+                        >Make available for all Users (Public Scope)</label
+                    >
                     <select
                         v-model="form.public"
                         name="public"
@@ -41,6 +43,21 @@
                         <option value="0">No</option>
                     </select>
                     <v-error :error="errors.public"></v-error>
+                </div>
+                <div class="col">
+                    <label for="required_payment"
+                        >Required payment</label
+                    >
+                    <select
+                        v-model="form.required_payment"
+                        name="required_payment"
+                        id="required_payment"
+                        class="form-control form-control-sm"
+                    >
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                    <v-error :error="errors.required_payment"></v-error>
                 </div>
             </div>
             <div v-show="message" class="my-3 py-2 bg-secondary text-light h6">
@@ -86,10 +103,11 @@ export default {
         },
 
         update(scope) {
+            this.message = null
             this.$server
                 .put(scope.links.update, this.form)
                 .then((res) => {
-                    this.message = "actualizacion exitosa";
+                    this.message = "Successful update.";
                     this.errors = {};
                     this.$emit("success", res.data.data);
                 })

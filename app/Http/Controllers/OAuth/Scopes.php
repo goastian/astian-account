@@ -18,7 +18,12 @@ trait Scopes
          */
         if (Auth::user()->isAdmin()) {
             return collect($roles)->map(function ($role) {
-                return new Scope($role->name, $role->description, $role->public);
+                return new Scope(
+                    $role->name,
+                    $role->description,
+                    $role->public,
+                    $role->required_payment
+                );
             })->values();
         }
 
@@ -30,6 +35,7 @@ trait Scopes
                 'id' => $scope->name,
                 'description' => $scope->description,
                 'public' => $scope->public,
+                'required_payment' => $scope->required_payment,
             ]);
         }
 
@@ -42,6 +48,7 @@ trait Scopes
                     'id' => $role->name,
                     'description' => $role->description,
                     'public' => $role->public,
+                    'required_payment' => $scope->required_payment,
                 ]);
             }
         }
@@ -50,7 +57,12 @@ trait Scopes
          *
          */
         return collect($scopes)->map(function ($scope) {
-            return new Scope($scope['id'], $scope['description'], $scope['public']);
+            return new Scope(
+                $scope['id'],
+                $scope['description'],
+                $scope['public'],
+                $scope['required_payment']
+            );
         })->values();
     }
 }

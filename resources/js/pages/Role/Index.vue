@@ -5,14 +5,14 @@
             <tr v-for="(item, index) in scopes" :key="index">
                 <td class="fw-light">{{ item.scope }}</td>
                 <td class="fw-light">{{ item.description }}</td>
-                <td class="fw-light">{{ item.public ? 'Yes' : 'No'}}</td>
+                <td class="fw-light">{{ item.public ? "Yes" : "No" }}</td>
+                <td class="fw-light">{{ item.required_payment ? "Yes" : "No" }}</td>
                 <td>
                     <v-update
                         :scope="item"
                         @success="getScopes(actual_page)"
                     ></v-update>
-                </td>
-                <td>
+
                     <v-remove
                         :scope="item"
                         @success="getScopes(actual_page)"
@@ -44,7 +44,7 @@ export default {
 
     data() {
         return {
-            items: ["id", "Description", "public"],
+            items: ["id", "Description", "Public", "Required payment"],
             scopes: {},
             pages: {},
             actual_page: 1,

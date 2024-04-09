@@ -36,6 +36,7 @@ class RoleTransformer extends TransformerAbstract
             'scope' => $role->name,
             'description' => $role->description,
             'public' => $role->public,
+            'required_payment' => $role->required_payment,
             'links' => [
                 'parent' => route('roles.index'),
                 'store' => route('roles.store'),
@@ -53,6 +54,7 @@ class RoleTransformer extends TransformerAbstract
             'scope' => 'name',
             'description' => 'description',
             'public' => 'public',
+            'required_payment' => 'required_payment',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -64,6 +66,7 @@ class RoleTransformer extends TransformerAbstract
             'name' => 'scope',
             'description' => 'description',
             'public' => 'public',
+            'required_payment' => 'required_payment',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -76,6 +79,7 @@ class RoleTransformer extends TransformerAbstract
             'scope' => 'name',
             'description' => 'description',
             'public' => 'public',
+            'required_payment' => 'required_payment',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

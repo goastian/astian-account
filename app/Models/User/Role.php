@@ -20,6 +20,7 @@ class Role extends master
         'name',
         'description',
         'public',
+        'required_payment',
     ];
 
     public function users()
