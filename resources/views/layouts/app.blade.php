@@ -8,10 +8,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="{{ config('app.url') }}/favicon.svg" type="image/svg+xml">
 
-    <link rel="stylesheet"
-        href="{{ app()->environment('production') ? secure_asset('css/app.css') : asset('css/app.css') }}">
-
-    <script src="{{ app()->environment('production') ? secure_asset('js/app.js') : asset('js/app.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 </head>
 
 <body>
@@ -46,6 +43,8 @@
             </ul>
         </footer>
     </div>
+
+    <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 
 </html>
