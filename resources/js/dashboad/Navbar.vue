@@ -73,7 +73,7 @@
             </a>
             <ul class="dropdown-menu expand">
                 <li class="dropdown-item">
-                    <a class="text-color" :href="host"
+                    <a class="text-color" :href="host" target="_self"
                         ><i class="bi bi-house-lock mx-1"></i>
                         My Account
                     </a>
