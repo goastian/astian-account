@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->call([Employee::class, 'remove_accounts'])->everyMinute();
         $schedule->call([Employee::class, 'remove_clients_unverified'])->everyMinute();
+        $schedule->command('passport:purge')->everyMinute();
     }
 
     /**
