@@ -263,7 +263,19 @@ label {
 
 /****end of register****/
 
+/***********/
+.reset {
+    width: 90%;
+    margin: 2% auto;
 
+    @media (min-width:800px) {
+        width: 50%;
+    }
+
+    @media (min-width:940px) {
+        width: 30%;
+    }
+}
 
 
 /*** facto **/

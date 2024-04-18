@@ -3,11 +3,7 @@
 @section('content')
     <div class="reset mt-5" style="margin: auto">
         <div class="reset-head text-center">
-            <div class="reset-head h1 mb-4">
-                <img src="/images/fuentes.svg" alt="astian-fuente" class="astian-fuentes">
-                <img src="/favicon.svg" alt="astian-logo" class="astian-logo">
-            </div>
-            <h5>{{ __('Change Password') }}</h5>
+            <h5>{{ __('Update Password') }}</h5>
         </div>
         <div class="reset-body">
             <form action="{{ route('password.store') }}" method="post">
