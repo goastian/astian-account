@@ -49,7 +49,7 @@ const app = createApp(App);
 $server
     .get("/api/gateway/user")
     .then((res) => {
-        app.config.globalProperties.$id = id;
+        app.config.globalProperties.$id = res.data.id;
     })
     .catch((err) => {});
 
