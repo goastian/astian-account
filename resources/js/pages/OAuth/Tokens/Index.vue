@@ -34,6 +34,9 @@ export default {
 
     created() {
         this.getTokens();
+    },
+
+    mounted() {
         this.listenEvents();
     },
 
@@ -46,7 +49,7 @@ export default {
                 })
                 .catch((e) => {});
         },
-  
+
         listenEvents() {
             this.$echo
                 .private(this.$channels.ch_1(this.$id))
