@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\Client\RemoveSessionEvent;
 use App\Http\Controllers\Controller as Controller;
 use App\Models\Auth\Session;
 use Illuminate\Http\Request;
@@ -38,8 +37,6 @@ class SessionController extends Controller
         $session = Session::find($id);
 
         $session->delete();
-
-        RemoveSessionEvent::dispatch();
 
         return $this->message(__("Session closed " . date('Y-m-d H:i:s', strtotime(now()))), 200);
     }

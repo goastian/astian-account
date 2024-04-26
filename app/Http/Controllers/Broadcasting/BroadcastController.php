@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Broadcasting;
 
+use App\Http\Controllers\GlobalController as Controller;
+use App\Models\Broadcasting\Broadcast;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
-use App\Models\Broadcasting\Broadcast;
-use App\Events\Broadcast\StoreBroadcastEvent;
-use Elyerr\ApiResponse\Exceptions\ReportError;
-use App\Events\Broadcast\DestroyBroadcastEvent;
-use App\Http\Controllers\GlobalController as Controller;
 
 class BroadcastController extends Controller
 {
@@ -53,7 +51,7 @@ class BroadcastController extends Controller
             $broadcast->save();
         });
 
-        StoreBroadcastEvent::dispatch();
+        $this->privateChannel("StoreBroadcastEvent", "New channel created");
 
         return $this->showOne($broadcast, $broadcast->transformer, 201);
     }
@@ -75,7 +73,7 @@ class BroadcastController extends Controller
 
         $broadcast->delete();
 
-        DestroyBroadcastEvent::dispatch();
+        $this->privateChannel("DestroyBroadcastEvent", "Channel deleted");
 
         return $this->showOne($broadcast, $broadcast->transformer);
     }

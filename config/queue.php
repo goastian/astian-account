@@ -71,16 +71,6 @@ return [
             'after_commit' => false,
         ],
 
-        'redis_events' => [
-            'driver' => 'redis',
-            'connection' => 'default',
-            'queue' => env('REDIS_QUEUE_EVENTS', 'events'),
-            'retry_after' => 90,
-            'block_for' => null,
-            'after_commit' => false,
-        ],
-
-
         'redis_notifications' => [
             'driver' => 'redis',
             'connection' => 'default',

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Push;
 
-use App\Events\Notification\PushNotificationEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\User\Employee;
 use App\Models\User\Role;
@@ -37,6 +36,7 @@ class NotificationController extends Controller
             'message' => ['required', 'max:200'],
             'resource' => ['required', 'url:https'],
         ]);
+
         try {
 
             if ($request->scope == '*') {
@@ -51,7 +51,7 @@ class NotificationController extends Controller
 
                 Notification::send($users, new Alert($data));
 
-                PushNotificationEvent::dispatch();
+                $this->privateChannel("PushNotificationEvent", "New notification");
 
                 return $this->message(Lang::get('Notificaciones enviadas'), 200);
             }

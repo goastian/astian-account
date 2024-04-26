@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\Client\StoreClientEvent;
 use App\Http\Controllers\Controller;
 use App\Models\User\Employee;
 use App\Notifications\Client\ClientRegistered;
@@ -56,7 +55,8 @@ class RegisterClientController extends Controller
             $client->roles()->syncWithoutDetaching($client->addClientScope()->id);
 
             $client->notify(new ClientRegistered());
-            StoreClientEvent::dispatch($client);
+
+            $this->privateChannel("StoreClientEvent", "New client registered");
         });
 
         return redirect()->route('login')->with('status', Lang::get("Hemos enviado un email para que verifiques tu cuenta"));

@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers\Factor;
 
-use DateTime;
-use DateInterval;
-use App\Models\Factor\Code;
-use Illuminate\Http\Request;
-use App\Models\User\Employee;
-use App\Events\Auth\M2FAEvent;
-use App\Events\Auth\LoginEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Auth2faMiddleware;
+use App\Models\Factor\Code;
+use App\Models\User\Employee;
+use App\Providers\RouteServiceProvider;
+use DateInterval;
+use DateTime;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Lang;
-use App\Providers\RouteServiceProvider;
-use App\Http\Middleware\Auth2faMiddleware;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class CodeController extends Controller
 {
@@ -96,8 +94,6 @@ class CodeController extends Controller
 
         Code::destroyToken($code->status);
 
-        LoginEvent::dispatch();
-
         return RouteServiceProvider::home();
     }
 
@@ -154,8 +150,6 @@ class CodeController extends Controller
         $user->push();
 
         Code::destroyToken($code->status);
-
-        M2FAEvent::dispatch();
 
         return $this->message(Lang::get($user->m2fa ? "2FA activado" : "2FA desactivado"), 201);
     }

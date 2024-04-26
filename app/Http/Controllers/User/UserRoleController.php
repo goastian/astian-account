@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\Employee\DestroyEmployeeRoleEvent;
-use App\Events\Employee\StoreEmployeeRoleEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\UserRole\DestroyRequest;
 use App\Http\Requests\UserRole\StoreRequest;
@@ -54,7 +52,7 @@ class UserRoleController extends Controller
             $user->roles()->syncWithoutDetaching($request->role_id);
         });
 
-        StoreEmployeeRoleEvent::dispatch($this->authenticated_user());
+        $this->privateChannel("StoreEmployeeRoleEvent", "Added new role");
 
         return $this->showOne(Role::find($request->role_id), RoleTransformer::class, 201);
     }
@@ -71,7 +69,7 @@ class UserRoleController extends Controller
             $user->roles()->detach($role->id);
         });
 
-        DestroyEmployeeRoleEvent::dispatch($this->authenticated_user());
+        $this->privateChannel("DestroyEmployeeRoleEvent", "Role remove");
 
         return $this->showOne($role, $role->transformer);
     }
