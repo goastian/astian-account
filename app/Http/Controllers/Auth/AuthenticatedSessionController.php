@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Events\Auth\LoginEvent;
-use App\Events\Auth\LogoutEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -48,8 +46,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        LoginEvent::dispatch();
-
         return RouteServiceProvider::home();
     }
 
@@ -63,8 +59,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-
-        LogoutEvent::dispatch();
 
         return $request->wantsJson() ? route('login') : redirect(env('APP_URL'));
     }

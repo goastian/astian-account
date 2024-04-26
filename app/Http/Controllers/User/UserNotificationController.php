@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\Notification\DestroyNotificationEvent;
-use App\Events\Notification\ReadNotificationEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Notify\Notification;
 use App\Transformers\Notification\NotificationTransformer;
@@ -65,7 +63,7 @@ class UserNotificationController extends Controller
         $notification->read_at = now();
         $notification->push();
 
-        ReadNotificationEvent::dispatch();
+        $this->privateChannel("ReadNotificationEvent", "Notification read");
 
         return $this->message(Lang::get('notification marked as read'), 201);
     }
@@ -80,7 +78,7 @@ class UserNotificationController extends Controller
 
         request()->user()->unreadNotifications->markAsRead();
 
-        ReadNotificationEvent::dispatch();
+        $this->privateChannel("ReadNotificationEvent", "Notification read");
 
         return $this->message(Lang::get('notifications marked as read'), 201);
     }
@@ -96,7 +94,7 @@ class UserNotificationController extends Controller
 
         $notification->delete();
 
-        DestroyNotificationEvent::dispatch();
+        $this->privateChannel("DestroyNotificationEvent", "Notification deleted");
 
         return $this->message(Lang::get('notifications removed'), 200);
     }
@@ -110,7 +108,7 @@ class UserNotificationController extends Controller
     {
         request()->user()->notifications()->delete();
 
-        DestroyNotificationEvent::dispatch();
+        $this->privateChannel("DestroyNotificationEvent", "Notifications deleted");
 
         return $this->message(Lang::get('notifications removed'), 200);
     }

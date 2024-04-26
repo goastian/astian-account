@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Events\Employee\DisableEmployeeEvent;
-use App\Events\Employee\EnableEmployeeEvent;
-use App\Events\Employee\StoreEmployeeEvent;
-use App\Events\Employee\UpdateEmployeeEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\Employee\StoreRequest;
 use App\Http\Requests\Employee\UpdateRequest;
@@ -76,7 +72,7 @@ class UserController extends Controller
 
             $user->roles()->syncWithoutDetaching($request->role);
 
-            StoreEmployeeEvent::dispatch();
+            $this->privateChannel("StoreEmployeeEvent", "New user created");
 
             Notification::send($user, new CreatedNewUser($temp_password));
         });
@@ -160,7 +156,7 @@ class UserController extends Controller
 
             if ($can_update) {
                 $user->push();
-                UpdateEmployeeEvent::dispatch();
+                $this->privateChannel("UpdateEmployeeEvent", "User updated");
             }
 
         });
@@ -194,7 +190,7 @@ class UserController extends Controller
 
             $user->delete();
 
-            DisableEmployeeEvent::dispatch();
+            $this->privateChannel("DisableEmployeeEvent", "User disabled");
         });
 
         $user->isClient() ? $user->notify(new ClientDisableNotification()) : $user->notify(new UserDisableNotification());
@@ -220,7 +216,7 @@ class UserController extends Controller
 
             $user->restore();
 
-            EnableEmployeeEvent::dispatch();
+            $this->privateChannel("EnableEmployeeEvent", "User enabled");
 
             return $this->showOne($user, $user->transformer);
 

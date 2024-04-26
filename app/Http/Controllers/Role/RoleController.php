@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Role;
 
-use App\Events\Role\DestroyRoleEvent;
-use App\Events\Role\StoreRoleEvent;
-use App\Events\Role\UpdateRoleEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\User\Role;
 use App\Transformers\Role\RoleTransformer;
@@ -60,7 +57,7 @@ class RoleController extends Controller
             $role->save();
         });
 
-        StoreRoleEvent::dispatch($this->authenticated_user());
+        $this->privateChannel("StoreRoleEvent", "New role created");
 
         return $this->showOne($role, $role->transformer, 201);
     }
@@ -109,10 +106,9 @@ class RoleController extends Controller
                 $role->required_payment = $request->required_payment;
             }
 
-
             if ($can_update) {
                 $role->push();
-                UpdateRoleEvent::dispatch($this->authenticated_user());
+                $this->privateChannel("UpdateRoleEvent", "Role updated");
             }
 
         });
@@ -130,7 +126,7 @@ class RoleController extends Controller
 
         $role->delete();
 
-        DestroyRoleEvent::dispatch($this->authenticated_user());
+        $this->privateChannel("DestroyRoleEvent", "Role deleted");
 
         $this->showOne($role, $role->transformer);
     }

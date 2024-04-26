@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Events\OAuth\RevokeCredentialsEvent;
-use App\Http\Controllers\GlobalController as Controller; 
+use App\Http\Controllers\GlobalController as Controller;
 use Illuminate\Support\Facades\Auth;
 
 class CredentialsController extends Controller
@@ -24,9 +23,8 @@ class CredentialsController extends Controller
 
         $this->removeCredentials($tokens);
 
-        RevokeCredentialsEvent::dispatch($this->authenticated_user());
-
+        $this->privateChannel("RevokeCredentialsEvent." . request()->user()->id, "Credentials remove");
+        
         return $this->message(__("Every one of your credentials has been canceled.") . now());
-
-    } 
+    }
 }
