@@ -34,7 +34,7 @@ class RoleController extends Controller
 
         $roles = $this->search($role->table, $params);
 
-        return $this->showAll($roles, $role->transformer);
+        return $this->showAll($roles, $role->transformer, 200, false);
     }
 
     public function show(Role $role)

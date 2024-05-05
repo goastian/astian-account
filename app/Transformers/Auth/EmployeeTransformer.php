@@ -47,6 +47,8 @@ class EmployeeTransformer extends TransformerAbstract
             'address' => $user->address,
             'birthday' => $user->birthday,
             'phone' => $user->phone,
+            'dial_code' => $user->dial_code,
+            'full_phone' => $user->dial_code . " " .$user->phone,
             'm2fa' => $user->m2fa,
             'verified' => $this->format_date($user->verified_at),
             'created' => $this->format_date($user->created_at),
@@ -95,6 +97,7 @@ class EmployeeTransformer extends TransformerAbstract
             'city' => 'city',
             'address' => 'address',
             'phone' => 'phone',
+            'dial_code' => 'dial_code',
             'birthday' => 'birthday',
             'scope' => 'role',
         ];
@@ -115,6 +118,7 @@ class EmployeeTransformer extends TransformerAbstract
             'address' => 'address',
             'birthday' => 'birthday',
             'phone' => 'phone',
+            'dial_code' => 'dial_code',
             'role' => 'scope',
         ];
 
@@ -132,6 +136,7 @@ class EmployeeTransformer extends TransformerAbstract
             'city' => 'city',
             'address' => 'address',
             'phone' => 'phone',
+            'dial_code' => 'dial_code',
             'birthday' => 'birthday',
             'verified' => 'verified_at',
             'm2fa' => 'm2fa',

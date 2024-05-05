@@ -43,8 +43,6 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:240,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\VerifyAccount::class,
-            \App\Http\Middleware\verifyCredentials::class,
         ],
     ];
 
@@ -73,8 +71,9 @@ class Kernel extends HttpKernel
         'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
         'authorize' => \App\Http\Middleware\DenyGrantType::class,
         'verify.account' => \App\Http\Middleware\VerifyAccount::class,
+        'verify.credentials' => \App\Http\Middleware\verifyCredentials::class,
         '2fa-mail' => \App\Http\Middleware\Auth2faMiddleware::class,
-        'reactive.account' => \App\Http\Middleware\ReactiveAccount::class,
+        'reactive.account' => \App\Http\Middleware\ReactiveAccount::class, 
 
     ];
 }

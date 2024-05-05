@@ -17,6 +17,6 @@ class ScopeController extends Controller
      */
     public function all()
     {
-        return $this->scopes();
+        return $this->showAll($this->scopes(), null, 200, false);
     }
 }

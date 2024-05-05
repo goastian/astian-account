@@ -2,12 +2,12 @@
 
 namespace App\Models\User;
 
-use App\Events\Employee\DestroyEmployeeEvent;
 use App\Models\Auth;
 use App\Notifications\Client\DestroyClientNotification;
 use App\Transformers\Auth\EmployeeTransformer;
 use DateInterval;
 use DateTime;
+use Elyerr\Echo\Client\PHP\Socket\Socket;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Hash;
 
 class Employee extends Auth
 {
-    use SoftDeletes;
+    use SoftDeletes, Socket;
 
     public $table = "users";
 
@@ -44,7 +44,9 @@ class Employee extends Auth
             foreach ($users as $user) {
                 if ($user->isClient()) {
                     $user->notify(new DestroyClientNotification());
-                    DestroyEmployeeEvent::dispatch();
+
+                    $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
+
                     $user->forceDelete();
                 }
             }
@@ -69,7 +71,7 @@ class Employee extends Auth
         DB::table('password_resets')->where('created_at', '<', $fecha)->delete();
 
         if ($deleted) {
-            DestroyEmployeeEvent::dispatch();
+            $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
         }
     }
 

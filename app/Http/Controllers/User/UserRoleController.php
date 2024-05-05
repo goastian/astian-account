@@ -34,7 +34,7 @@ class UserRoleController extends Controller
     {
         $roles = $user->roles()->get();
 
-        return $this->showAll($roles, EmployeeRoleTransformer::class);
+        return $this->showAll($roles, EmployeeRoleTransformer::class, 200, false);
     }
 
     /**

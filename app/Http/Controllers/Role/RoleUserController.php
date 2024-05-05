@@ -24,6 +24,6 @@ class RoleUserController extends Controller
     {
         $users = $role->users()->get();
 
-        return $this->showAll($users, $employee->transformer);
+        return $this->showAll($users, $employee->transformer, 200, false);
     }
 }

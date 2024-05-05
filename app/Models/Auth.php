@@ -51,6 +51,7 @@ class Auth extends Authenticatable
         'client',
         'm2fa',
         'totp',
+        'dial_code'
     ];
 
     /**
