@@ -77,7 +77,7 @@ export default {
 
         getScopes(id) {
             this.$server
-                .get("/api/roles", {
+                .get("/api/admin/roles", {
                     params: {
                         page: id,
                     },

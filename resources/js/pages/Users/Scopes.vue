@@ -68,7 +68,7 @@ export default {
 
             if (checkbox.checked) {
                 const add_role = confirm(
-                    "Are you sure you want to add a new Scope?"
+                    "Do you really want to add this role?"
                 );
                 if (add_role) {
                     this.addOrRemoveRoles(id);
@@ -77,7 +77,7 @@ export default {
                 }
             } else {
                 const remove_role = confirm(
-                    "Are you sure you want to remove this Scope?"
+                    "Are you sure to remove this roles?"
                 );
                 if (remove_role) {
                     this.addOrRemoveRoles(id);
@@ -97,9 +97,9 @@ export default {
 
             if (checked) {
                 this.$server
-                    .post(this.user.links.roles, { scope: id })
+                    .post(this.user.links.roles, { scope_id: id })
                     .then((res) => {
-                        this.message = `A new Scope was added (${res.data.data.scope})`;
+                        this.message = `A new Scope (${res.data.data.scope}) was added`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.data.status == 403) {
@@ -136,11 +136,7 @@ export default {
 
         getRoles() {
             this.$server
-                .get("/api/roles", {
-                    params: {
-                        per_page: 100,
-                    },
-                })
+                .get("/api/admin/roles")
                 .then((res) => {
                     this.roles = res.data.data;
                 })
@@ -161,7 +157,7 @@ export default {
             this.$server
                 .put(item.links.update, this.user)
                 .then((res) => {
-                    this.status = "Usuario Actualizado";
+                    this.status = "User updated";
                     this.$emit("success", res.data.data);
                     this.errors = {};
                 })
@@ -178,11 +174,7 @@ export default {
         getUserRoles(item) {
             this.message = null;
             this.$server
-                .get(item.links.roles, {
-                    params: {
-                        per_page: 100,
-                    },
-                })
+                .get(item.links.roles)
                 .then((res) => {
                     this.role_selected(res.data.data);
                 })

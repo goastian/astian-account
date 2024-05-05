@@ -87,7 +87,7 @@ export default {
         getUsers() {
             this.message = null;
             this.$server
-                .get("/api/users", {
+                .get("/api/admin/users", {
                     params: this.search,
                 })
                 .then((res) => {
