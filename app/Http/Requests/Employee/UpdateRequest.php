@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests\Employee;
 
-use App\Enum\EnumType; 
 use App\Models\User\Employee;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateRequest extends FormRequest
 {
@@ -30,11 +29,12 @@ class UpdateRequest extends FormRequest
             'name' => ['nullable', 'max:100'],
             'last_name' => ['nullable', 'max:100'],
             'email' => ['nullable', 'email', 'max:100', 'unique:users,email,' . Request('user')->id],
-            'country' => ['nullable', 'max:100'],
+            'country' => ['nullable', 'max:100', 'exists:countries,name_en'],
+            'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
+            'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone,' . request()->user->id],
             'city' => ['nullable', 'max:100'],
             'address' => ['nullable', 'max:150'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
-            'phone' => ['nullable', 'max:25', 'unique:users,phone,' . request()->user->id]
         ];
     }
 }

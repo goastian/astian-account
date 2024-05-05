@@ -3,10 +3,9 @@
 namespace App\Http\Requests\Employee;
 
 use App\Models\Auth;
-use App\Enum\EnumType;
 use App\Models\User\Employee;
-use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -27,16 +26,18 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'name' => ['required', 'max:100'],
             'last_name' => ['required', 'max:100'],
             'email' => ['required', 'email', 'max:100', 'unique:users,email'],
-            'country' => ['required', 'max:100'],
+            'country' => ['required', 'max:100', 'exists:countries,name_en'],
             'city' => ['nullable', 'max:100'],
             'address' => ['nullable', 'max:150'],
-            'phone' => ['nullable', 'max:25', 'unique:users,phone'],
+            'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
+            'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
-            'role' => ['required', 'array','exists:roles,id'],
+            'role' => ['required', 'array', 'exists:roles,id'],
         ];
     }
 }

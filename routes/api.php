@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
+use App\Http\Controllers\Country\CountriesController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
 use App\Http\Controllers\OAuth\ScopeController;
@@ -14,8 +15,11 @@ use App\Http\Controllers\User\UserRoleController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 
-//gateways
+/**
+ * Gateways to grant access
+ */
 Route::prefix('gateway')->group(function () {
+
     Route::get('/check-authentication', [PasspotConnectController::class, 'check_authentication']);
     Route::get('/check-scope', [PasspotConnectController::class, 'check_scope']);
     Route::get('/check-scopes', [PasspotConnectController::class, 'check_scopes']);
@@ -24,8 +28,12 @@ Route::prefix('gateway')->group(function () {
     Route::get('/user', [PasspotConnectController::class, 'auth']);
     Route::post('/send-notification', [PasspotConnectController::class, 'send_notification']);
     Route::post('/logout', [AuthorizationController::class, 'destroy']);
-});
 
+})->middleware('verify.account', 'verify.credentials');
+
+/**
+ * Oauth Routes to get credentials
+ */
 Route::prefix('oauth')->group(function () {
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
         ->name('passport.token')
@@ -40,37 +48,57 @@ Route::prefix('oauth')->group(function () {
 });
 
 /**
- * rutas que permiten administrar roles
+ *
+ * Admin Routes to manages users
+ *
  */
-Route::resource('roles', RoleController::class)->except('create', 'edit');
-Route::resource('roles.users', RoleUserController::class)->only('index');
+Route::group([
+    'prefix' => 'admin',
+    'middleware' => ['verify.account', 'verify.credentials', 'wants.json']
+
+], function () {
+    Route::resource('roles', RoleController::class)->except('create', 'edit');
+    Route::resource('roles.users', RoleUserController::class)->only('index');
+
+    Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
+    Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
+    Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
+    Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
+});
 
 /**
- * rutas que permiten administrar usuarios
+ * Routes to send notifications
  */
-Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
-Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
-Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
-Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
+Route::group([
+    'prefix' => 'notifications',
+    'middleware' => ['verify.account', 'verify.credentials'],
+
+], function () {
+    Route::get('/', [UserNotificationController::class, 'index'])->name('notifications.index');
+    Route::post('push', [NotificationController::class, 'push'])->name('notifications.push');
+    Route::get('/unread', [UserNotificationController::class, 'show_unread_notifications'])->name('notifications.unread');
+    Route::get('/{notification}', [UserNotificationController::class, 'show'])->name('notifications.show');
+    Route::post('/mark_as_read', [UserNotificationController::class, 'mark_as_read_notifications'])->name('notifications.read_all');
+    Route::post('/{notification}', [UserNotificationController::class, 'mark_as_read_notification'])->name('notifications.read');
+    Route::delete('/clean', [UserNotificationController::class, 'clean'])->name('notifications.clean');
+    Route::delete('/{notification}', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
+});
 
 /**
  * rutas que permiten administrar los canales de difusion dentro
  * del sistema a traves de eventos
  */
-Route::resource('broadcasts', BroadcastController::class)->only('index', 'store', 'destroy');
 
+ Route::resource('broadcasts', BroadcastController::class)
+ ->only('index', 'store', 'destroy')
+ ->middleware('wants.json');
+ 
 /**
- * enviar notificaciones push
+ * Locations
  */
-Route::post('push', [NotificationController::class, 'push'])->name('notifications.push');
-
-/**
- * notifications
- */
-Route::get('notifications', [UserNotificationController::class, 'index'])->name('notifications.index');
-Route::get('notifications/unread', [UserNotificationController::class, 'show_unread_notifications'])->name('notifications.unread');
-Route::get('notifications/{notification}', [UserNotificationController::class, 'show'])->name('notifications.show');
-Route::post('notifications/mark_as_read', [UserNotificationController::class, 'mark_as_read_notifications'])->name('notifications.read_all');
-Route::post('notifications/{notification}', [UserNotificationController::class, 'mark_as_read_notification'])->name('notifications.read');
-Route::delete('notifications/clean', [UserNotificationController::class, 'clean'])->name('notifications.clean');
-Route::delete('notifications/{notification}', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
+Route::group([
+    'prefix' => 'locations',
+], function () {
+    
+    Route::resource('countries', CountriesController::class)->only('index');
+});

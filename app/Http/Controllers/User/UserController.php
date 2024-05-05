@@ -32,7 +32,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display all users registered
      *
      * @return \Illuminate\Http\Response
      */
@@ -61,6 +61,9 @@ class UserController extends Controller
             throw new ReportError("Unauthorize", 403);
         }
 
+        /**
+         * Generate password temp for new users
+         */
         $temp_password = $this->passwordTempGenerate();
 
         DB::transaction(function () use ($request, $user, $temp_password) {
@@ -72,8 +75,14 @@ class UserController extends Controller
 
             $user->roles()->syncWithoutDetaching($request->role);
 
+            /**
+             * Send event
+             */
             $this->privateChannel("StoreEmployeeEvent", "New user created");
 
+            /**
+             * Send notification
+             */
             Notification::send($user, new CreatedNewUser($temp_password));
         });
 
@@ -81,7 +90,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the user
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -96,7 +105,7 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified user in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -132,6 +141,11 @@ class UserController extends Controller
             if ($this->is_diferent($user->country, $request->country)) {
                 $can_update = true;
                 $user->country = $request->country;
+            }
+
+            if ($this->is_diferent($user->dial_code, $request->dial_code)) {
+                $can_update = true;
+                $user->dial_code = $request->dial_code;
             }
 
             if ($this->is_diferent($user->city, $request->city)) {
@@ -171,13 +185,19 @@ class UserController extends Controller
      */
     public function disable(Request $request, Employee $user)
     {
+        //is not client and user id is request user id
         if ((!$user->isClient() && $request->user()->id == $user->id) ||
+            //authenticated user is not client and user is client
             (!$request->user()->isClient() && $user->isClient()) ||
+            //is client and request user id is diferent
             ($request->user()->isClient() && $request->user()->id != $user->id)
         ) {
             throw new ReportError(__("Unauthorize"), 406);
         }
 
+        /**
+         * throw exception to disable 2FA
+         */
         if ($request->user()->isClient() and $request->user()->m2fa) {
             throw new ReportError(__("Before doing this action, you must disable Two Factor Authentication."), 403);
         }
@@ -192,20 +212,24 @@ class UserController extends Controller
 
             $this->privateChannel("DisableEmployeeEvent", "User disabled");
         });
-
+        /**
+         * send notification a especific user
+         */
         $user->isClient() ? $user->notify(new ClientDisableNotification()) : $user->notify(new UserDisableNotification());
 
         return $this->showOne($user, $user->transformer);
     }
 
     /**
-     * habilita un usuario deshabilitado
+     * Enable disabled users
      *
      * @return Json
      */
     public function enable($id)
     {
+        //request user is not client and request user is client a client
         if ((!request()->user()->isClient() && request()->user()->isClient()) ||
+            //request user is client
             request()->user()->isClient()) {
             throw new ReportError(__("Unauthorize"), 403);
         }
@@ -213,20 +237,21 @@ class UserController extends Controller
         try {
 
             $user = Employee::onlyTrashed()->find($id);
-
+            //enable user
             $user->restore();
 
+            //send event
             $this->privateChannel("EnableEmployeeEvent", "User enabled");
 
             return $this->showOne($user, $user->transformer);
 
-        } catch (Error $e) {
+        } catch (Error $e) { //throw exception
             throw new ReportError("Error processing the request.", 404);
         }
     }
 
     /**
-     * deny the acction if the user is a client and has diferent ID.
+     * Deny action to the client user and has a different id
      *
      * @param String $id
      * @return Exception

@@ -53,12 +53,12 @@ class NotificationController extends Controller
 
                 $this->privateChannel("PushNotificationEvent", "New notification");
 
-                return $this->message(Lang::get('Notificaciones enviadas'), 200);
+                return $this->message(__('notifications successfully dispatched'), 200);
             }
 
-            return $this->message(Lang::get('No se encontro ningun usuario para enviar notificaciones'), 200);
+            return $this->message(__('Users not found'), 200);
         } catch (Error $e) {
-            return $this->message(Lang::get('No se encontro ningun usuario para enviar notificaciones'), 200);
+            return $this->message(__('Users not found'), 200);
         }
     }
 }
