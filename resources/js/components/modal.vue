@@ -19,7 +19,7 @@
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
     >
-        <div class="modal-dialog bg-light">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <slot name="head"></slot>
@@ -97,7 +97,7 @@ export default {
 <style lang="scss" scoped>
 
 .modal-dialog {
-    --bs-modal-bg: 
+    --bs-modal-bg: var(--white) 
 }
 
 </style>

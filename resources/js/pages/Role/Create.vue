@@ -80,7 +80,7 @@ export default {
     methods: {
         create() {
             this.$server
-                .post("/api/roles", this.form)
+                .post("/api/admin/roles", this.form)
                 .then((res) => {
                     this.errors = {};
                     this.form = {};

@@ -7,124 +7,222 @@
     >
         <template v-slot:button> Details </template>
         <template v-slot:head>
-            <p class="text-color">
-                About
-
-                {{ user.name }}
+            <p class="text-color text-uppercase fw-bold">
+                INFORMATION ABOUT
+                {{ user.name }} {{ user.last_name }}
             </p>
         </template>
 
         <template v-slot:body>
-            <div class="row">
-                <div class="col">
-                    <label>First Name</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.name"
-                        type="text"
-                        class="form-control form-control-sm"
-                    />
+            <div class="user-update">
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label">First Name</label>
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.name"
+                            type="text"
+                        />
+                    </div>
                     <v-error :error="errors.name"></v-error>
                 </div>
-                <div class="col">
-                    <label>Last Name</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.last_name"
-                        type="text"
-                        class="form-control form-control-sm"
-                    />
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label">Last Name</label>
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.last_name"
+                            type="text"
+                        />
+                    </div>
                     <v-error :error="errors.last_name"></v-error>
                 </div>
-                <div class="col">
-                    <label>Email Address</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.email"
-                        type="email"
-                        class="form-control form-control-sm"
-                    />
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label"
+                                >Email Address</label
+                            >
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.email"
+                            type="email"
+                            class="input-theme"
+                        />
+                    </div>
                     <v-error :error="errors.email"></v-error>
                 </div>
 
-                <div class="col">
-                    <label>Phone Number</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.phone"
-                        type="text"
-                        class="form-control form-control-sm"
-                    />
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="label">Phone Number</label>
+                        </div>
+                        <div>
+                            <v-select-search
+                                class="label"
+                                :items="countries"
+                                param="name_en"
+                                :text="user.dial_code"
+                                @selected="setDialCode"
+                                index="0"
+                            >
+                                <template #title="slotProps">
+                                    {{
+                                        slotProps.item.name_en
+                                            ? slotProps.item.emoji +
+                                              " " +
+                                              slotProps.item.name_en +
+                                              " " +
+                                              slotProps.item.dial_code
+                                            : slotProps.text
+                                    }}
+                                </template>
+
+                                <template #options="slotProps">
+                                    <span class="">
+                                        {{ slotProps.items.emoji }}
+                                        {{ slotProps.items.name_en }}
+                                        {{ slotProps.items.dial_code }}
+                                    </span>
+                                </template>
+                            </v-select-search>
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.phone"
+                            type="text"
+                        />
+                    </div>
                     <v-error :error="errors.phone"></v-error>
                 </div>
 
-                <div class="col">
-                    <label>Country</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.country"
-                        type="text"
-                        class="form-control form-control-sm"
-                    />
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label">Country</label>
+                        </div>
+                        <div>
+                            <v-select-search
+                                class="label"
+                                :items="countries"
+                                param="name_en"
+                                :text="user.country"
+                                @selected="setContry"
+                            >
+                                <template #title="slotProps">
+                                    {{
+                                        slotProps.item.name_en
+                                            ? slotProps.item.emoji +
+                                              " " +
+                                              slotProps.item.name_en
+                                            : slotProps.text
+                                    }}
+                                </template>
+
+                                <template #options="slotProps">
+                                    <span class="">
+                                        {{ slotProps.items.emoji }}
+                                        {{ slotProps.items.name_en }}
+                                    </span>
+                                </template>
+                            </v-select-search>
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.country"
+                            type="text"
+                            class="input-theme"
+                        />
+                    </div>
                     <v-error :error="errors.country"></v-error>
                 </div>
-                <div class="col">
-                    <label>City Or State</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.city"
-                        type="text"
-                        class="form-control form-control-sm"
-                    />
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="label">City Or State</label>
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.city"
+                            type="text"
+                            class="input-theme"
+                        />
+                    </div>
                     <v-error :error="errors.city"></v-error>
                 </div>
-                <div class="col">
-                    <label>Home Address</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.address"
-                        type="text"
-                        class="form-control form-control-sm"
-                    />
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label">Home Address</label>
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.address"
+                            type="text"
+                            class="input-theme"
+                        />
+                    </div>
                     <v-error :error="errors.address"></v-error>
                 </div>
-                <div class="col">
-                    <label>Date of birth</label>
-                    <input
-                        @keypress.enter="update(user)"
-                        v-model="user.birthday"
-                        type="date"
-                        class="form-control form-control-sm"
-                    />
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label"
+                                >Date of birth</label
+                            >
+                        </div>
+                        <input
+                            @keypress.enter="update(user)"
+                            v-model="user.birthday"
+                            type="date"
+                            class="input-theme"
+                        />
+                    </div>
                     <v-error :error="errors.birthday"></v-error>
                 </div>
-                <div class="col">
-                    <label>Join us</label>
-                    <p>{{ user.created }}</p>
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="label">Join us</label>
+                        </div>
+                        <span>{{ user.created }}</span>
+                    </div>
                 </div>
-                <div class="col">
-                    <label>Last Update</label>
-                    <p>{{ user.updated }}</p>
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label">Last Update</label>
+                        </div>
+                        <span>{{ user.updated }}</span>
+                    </div>
                 </div>
-                <div class="col">
-                    <label>Disabled</label>
-                    <p class="fw-bold text-color">
-                        {{
-                            user.disabled
-                                ? `User inactive since ${user.disabled}`
-                                : "Active User"
-                        }}
-                    </p>
+                <div class="item">
+                    <div class="group">
+                        <div>
+                            <label class="text-color label">Disabled</label>
+                        </div>
+                        <span class="text-color">
+                            {{
+                                user.disabled
+                                    ? `User inactive since ${user.disabled}`
+                                    : "Active User"
+                            }}
+                        </span>
+                    </div>
                 </div>
             </div>
 
             <div
-                :class="[
-                    'col-12 bg-success text-center mx-2 py-3',
-                    [status ? 'show' : 'hide'],
-                ]"
+                class="col-12 bg-light text-center fw-bold mx-2 py-3"
+                :class="{ show: status, hide: !status }"
             >
-                <p class="text-color">{{ status }}</p>
+                <span class="text-color">{{ status }}</span>
             </div>
         </template>
     </v-modal>
@@ -137,20 +235,30 @@ export default {
 
     data() {
         return {
-            message: null,
             status: false,
             errors: {},
             roles: {},
             client: false,
+            countries: {},
         };
     },
 
+    mounted() {
+        this.getCountries();
+    },
+
     methods: {
+        setContry(event) {
+            this.user.country = event.name_en;
+        },
+
+        setDialCode(event) {
+            this.user.dial_code = event.dial_code;
+        },
         /**
          * agrega o elimina permisos
          */
         addOrRemoveRoles(id) {
-            this.message = null;
             this.status = null;
             const checked = document.getElementById(id).checked;
 
@@ -158,23 +266,23 @@ export default {
                 this.$server
                     .post(this.user.links.roles, { role: id })
                     .then((res) => {
-                        this.message = `Se asigno un nuevo role ${res.data.data.role} ha sido asignado`;
+                        this.status = `New rol ${res.data.data.role} has been added`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.data.data.status == 403) {
-                            this.message = e.response.data.data.message;
+                            this.status = e.response.data.data.message;
                         }
                     });
             } else {
                 this.$server
                     .delete(`${this.user.links.roles}/${id}`)
                     .then((res) => {
-                        this.message = `Se elimino el role ${res.data.data.role}`;
+                        this.status = `The role ${res.data.data.role} was removed`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.status == 403) {
                             if (e.response && e.response.data.data.message) {
-                                this.message = e.response.data.data.message;
+                                this.status = e.response.data.data.message;
                             }
 
                             if (e.response && e.response.data.errors) {
@@ -206,17 +314,23 @@ export default {
          */
         update(item) {
             this.status = null;
-            this.message = null;
             this.$server
                 .put(item.links.update, this.user)
                 .then((res) => {
-                    this.status = "Usuario Actualizado";
+                    this.status = "User updated";
                     this.$emit("success", res.data.data);
                     this.errors = {};
                 })
                 .catch((e) => {
-                    if (e.response && e.response.data.errors) {
+                    if (
+                        e.response &&
+                        e.response.data.errors &&
+                        e.response.status == 422
+                    ) {
                         this.errors = e.response.data.errors;
+                    }
+                    if (e.response && e.response.status == 403) {
+                        this.status = "Without authorization to perform this action";
                     }
                 });
         },
@@ -227,16 +341,14 @@ export default {
                 .then((res) => {
                     this.client = res.data.cliente;
                 })
-                .catch((e) => {
-                    console.log(e);
-                });
+                .catch((e) => {});
         },
 
         /**
          * Obtiene los roles de un usuario
          */
         getUserRoles(item) {
-            this.message = null;
+            this.status = null;
             this.$server
                 .get(item.links.roles)
                 .then((res) => {
@@ -264,35 +376,33 @@ export default {
                 }
             }
         },
+
+        getCountries() {
+            this.$server
+                .get("/api/locations/countries")
+                .then((res) => {
+                    this.countries = res.data;
+                })
+                .catch((err) => {});
+        },
     },
 };
 </script>
 <style lang="scss" scoped>
-.col {
-    flex: 0 0 auto;
-    text-align: left;
+.user-update {
+    display: flex;
+    flex-wrap: wrap;
 
-    @media (min-width: 240px) {
-        width: 98%;
-        margin-bottom: 3%;
-    }
+    .item {
+        flex: 1 1 calc(100% / 2);
+        padding: 0.3em 0.3em;
 
-    @media (min-width: 800px) {
-        margin-bottom: 1%;
-        width: 48%;
-        
-    }
-
-    @media (min-width: 940px) {
-        width: 30%;
-        
+        input {
+            padding: 0.5em 0.3em !important;
+        }
     }
 }
 
-label {
-    display: block !important;
-    text-align: justify;
-}
 .hide {
     display: none;
 }

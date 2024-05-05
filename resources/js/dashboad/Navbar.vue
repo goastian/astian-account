@@ -146,39 +146,29 @@ export default {
 
         logout() {
             this.$server
-                .post("api/gateway/logout")
-                .then((res) => {})
-                .catch((err) => {
-                    if (err.response) {
-                        console.log(err.response);
-                    }
-                });
+                .post("/api/gateway/logout")
+                .then((res) => {
+                    location.reload()
+                })
+                .catch((err) => {});
         },
 
         notification() {
             this.$server
-                .get("api/notifications")
+                .get("/api/notifications")
                 .then((res) => {
                     this.notifications = res.data.data;
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         unreadNotification() {
             this.$server
-                .get("api/notifications/unread")
+                .get("/api/notifications/unread")
                 .then((res) => {
                     this.unread_notifications = res.data.data;
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         readNotification(link) {
@@ -187,11 +177,7 @@ export default {
                 .then((res) => {
                     this.notification();
                 })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
+                .catch((err) => {});
         },
 
         listenEvents() {

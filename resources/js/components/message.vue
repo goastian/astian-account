@@ -34,13 +34,14 @@ export default {
 
 <style lang="css" scoped>
 .message {
-    position: fixed;
-    background-color: #597484;
-    top: 20%;
-    z-index: 1;
+    position: absolute;
+    background-color: #71cce8;
+    top: 21%;
+    z-index: 0;
     text-align: center;
     padding: 5%;
     border-radius: 1%;
-    color: #fff;
+    color: #262525f5;
+    width: 66%;
 }
 </style>

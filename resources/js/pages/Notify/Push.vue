@@ -91,7 +91,7 @@ export default {
 
         send() {
             this.$server
-                .post("/api/push", this.form)
+                .post("/api/notifications/push", this.form)
                 .then((res) => {
                     this.errors = {};
                     this.form = {};
