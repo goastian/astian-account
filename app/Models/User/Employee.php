@@ -45,7 +45,7 @@ class Employee extends Auth
                 if ($user->isClient()) {
                     $user->notify(new DestroyClientNotification());
 
-                    $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
+                    $user->privateChannel('DestroyEmployeeEvent', 'Account deleted');
 
                     $user->forceDelete();
                 }
@@ -71,7 +71,7 @@ class Employee extends Auth
         DB::table('password_resets')->where('created_at', '<', $fecha)->delete();
 
         if ($deleted) {
-            $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
+            (new Employee())->privateChannel('DestroyEmployeeEvent', 'Account deleted');
         }
     }
 
