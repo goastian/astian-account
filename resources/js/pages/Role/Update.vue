@@ -45,9 +45,7 @@
                     <v-error :error="errors.public"></v-error>
                 </div>
                 <div class="col">
-                    <label for="required_payment"
-                        >Required payment</label
-                    >
+                    <label for="required_payment">Required payment</label>
                     <select
                         v-model="form.required_payment"
                         name="required_payment"
@@ -98,12 +96,14 @@ export default {
                     this.form = res.data.data;
                 })
                 .catch((e) => {
-                    console.log(e);
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
+                    }
                 });
         },
 
         update(scope) {
-            this.message = null
+            this.message = null;
             this.$server
                 .put(scope.links.update, this.form)
                 .then((res) => {

@@ -96,7 +96,11 @@ export default {
                     this.user = res.data;
                     window.$auth = res.data;
                 })
-                .catch((e) => {});
+                .catch((e) => {
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
+                    }
+                });
         },
 
         close() {
@@ -119,7 +123,11 @@ export default {
                 .then((res) => {
                     this.roles = res.data;
                 })
-                .catch((e) => {});
+                .catch((e) => {
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
+                    }
+                });
         },
 
         listener() {

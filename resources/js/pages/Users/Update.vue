@@ -305,7 +305,11 @@ export default {
                 .then((res) => {
                     this.roles = res.data.data;
                 })
-                .catch((e) => {});
+                .catch((e) => {
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
+                    }
+                });
         },
 
         /**
@@ -330,7 +334,11 @@ export default {
                         this.errors = e.response.data.errors;
                     }
                     if (e.response && e.response.status == 403) {
-                        this.status = "Without authorization to perform this action";
+                        this.status =
+                            "Without authorization to perform this action";
+                    }
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
                     }
                 });
         },
@@ -341,7 +349,11 @@ export default {
                 .then((res) => {
                     this.client = res.data.cliente;
                 })
-                .catch((e) => {});
+                .catch((e) => {
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
+                    }
+                });
         },
 
         /**

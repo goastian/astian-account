@@ -141,8 +141,8 @@ export default {
                     this.roles = res.data.data;
                 })
                 .catch((e) => {
-                    if (e.response) {
-                        console.log(e.response);
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
                     }
                 });
         },
@@ -164,6 +164,9 @@ export default {
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {
                         this.errors = e.response.data.errors;
+                    }
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
                     }
                 });
         },
