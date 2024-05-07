@@ -216,7 +216,11 @@ export default {
                 .then((res) => {
                     this.roles = res.data.data;
                 })
-                .catch((e) => {});
+                .catch((e) => {
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
+                    }
+                });
         },
 
         createUser() {
@@ -231,6 +235,9 @@ export default {
                 .catch((e) => {
                     if (e.response && e.response.data.errors) {
                         this.errors = e.response.data.errors;
+                    }
+                    if (e.response && e.response.status == 401) {
+                        window.location.href = "/login";
                     }
                 });
         },
