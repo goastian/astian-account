@@ -54,7 +54,7 @@ Route::prefix('oauth')->group(function () {
  */
 Route::group([
     'prefix' => 'admin',
-    'middleware' => ['verify.account', 'verify.credentials', 'wants.json']
+    'middleware' => ['verify.account', 'verify.credentials', 'wants.json'],
 
 ], function () {
     Route::resource('roles', RoleController::class)->except('create', 'edit');
@@ -71,7 +71,7 @@ Route::group([
  */
 Route::group([
     'prefix' => 'notifications',
-    'middleware' => ['verify.account', 'verify.credentials'],
+    'middleware' => ['verify.account', 'verify.credentials', 'wants.json'],
 
 ], function () {
     Route::get('/', [UserNotificationController::class, 'index'])->name('notifications.index');
@@ -89,16 +89,16 @@ Route::group([
  * del sistema a traves de eventos
  */
 
- Route::resource('broadcasts', BroadcastController::class)
- ->only('index', 'store', 'destroy')
- ->middleware('wants.json');
- 
+Route::resource('broadcasts', BroadcastController::class)
+    ->only('index', 'store', 'destroy')
+    ->middleware('wants.json');
+
 /**
  * Locations
  */
 Route::group([
     'prefix' => 'locations',
 ], function () {
-    
+
     Route::resource('countries', CountriesController::class)->only('index');
 });
