@@ -37,12 +37,12 @@ class RegisterClientController extends Controller
     public function store(Request $request, Employee $client)
     {
         $this->validate($request, [
-            'name' => ['required', 'string', 'max:100'],
-            'last_name' => ['required', 'string', 'max:100'],
+            'name' => ['required','regex:/^[A-Za-z\s]+$/', 'min:3',  'max:100'],
+            'last_name' => ['required','regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'min:8'],
-            'address' => ['nullable', 'max:150'],
-            'phone' => ['nullable', 'max:25'],
+            //'address' => ['nullable', 'max:150'],
+            //'phone' => ['nullable', 'max:25'],
             'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
         ]);
 

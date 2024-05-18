@@ -26,13 +26,13 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['nullable', 'max:100'],
-            'last_name' => ['nullable', 'max:100'],
+            'name' => ['nullable', 'regex:/^[A-Za-z\s]+$/', 'max:100'],
+            'last_name' => ['nullable', 'regex:/^[A-Za-z\s]+$/', 'max:100'],
             'email' => ['nullable', 'email', 'max:100', 'unique:users,email,' . Request('user')->id],
             'country' => ['nullable', 'max:100', 'exists:countries,name_en'],
             'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone,' . request()->user->id],
-            'city' => ['nullable', 'max:100'],
+            'city' => ['nullable','regex:/^[A-Za-z\s]+$/', 'max:100'],
             'address' => ['nullable', 'max:150'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
         ];
