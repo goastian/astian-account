@@ -28,11 +28,11 @@ class StoreRequest extends FormRequest
     {
 
         return [
-            'name' => ['required', 'max:100'],
-            'last_name' => ['required', 'max:100'],
+            'name' => ['required','regex:/^[A-Za-z\s]+$/', 'max:100'],
+            'last_name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'max:100'],
             'email' => ['required', 'email', 'max:100', 'unique:users,email'],
             'country' => ['required', 'max:100', 'exists:countries,name_en'],
-            'city' => ['nullable', 'max:100'],
+            'city' => ['nullable','regex:/^[A-Za-z\s]+$/', 'max:100'],
             'address' => ['nullable', 'max:150'],
             'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
