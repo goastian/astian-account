@@ -16,5 +16,5 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/oauth.php';
 
 Route::get("/{any}", function () {
-    return view('app');
-})->where('any', '.*');
+    return view('layouts.app');
+})->where('any', '^(?!api).*$');

@@ -1,27 +1,32 @@
 <template>
-    <!--Start the application-->
-    <div>
-        <div v-show="authenticated">
-            <v-home></v-home>
-        </div>
-
-        <div class="guest py-1" v-show="!authenticated">
+    <div class="body">
+        <v-leftbar class="left"></v-leftbar>
+        <div class="content">
             <router-view></router-view>
         </div>
     </div>
 </template>
 <script>
 import VHome from "./dashboad/Index.vue";
+import VLeftbar from "./dashboad/Leftbar.vue";
 
 export default {
     components: {
         VHome,
-    },
-
-    computed: {
-        authenticated() {
-            return this.$route.meta.auth || false;
-        },
+        VLeftbar,
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.body {
+    display: flex;
+    .left {
+        flex: 1 1 auto;
+    }
+    .content {
+        flex: 1 1 auto;
+        padding: 0.1em;
+    }
+}
+</style>
