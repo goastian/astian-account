@@ -1,135 +1,167 @@
 <template>
-    <aside class="side">
-        <div class="menu text-color">
-            <ul>
-                <li class="sub-menu">
-                    <span class="fw-bold">Dashboard</span>
-                    <ul class="sub-menu">
-                        <li>
-                            <router-link
-                                :to="{ name: 'home' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-person-circle"></i> Profile
-                            </router-link>
-                        </li>
-                        <li v-show="user_can.users">
-                            <router-link
-                                :to="{ name: 'users' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-people"></i> Users
-                            </router-link>
-                        </li>
-                        <li v-show="user_can.roles">
-                            <router-link
-                                :to="{ name: 'scopes' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-shield-shaded"></i> Roles
-                            </router-link>
-                        </li>
-                        <li v-show="user_can.broadcast">
-                            <router-link
-                                :to="{ name: 'channels' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-broadcast"></i> Broadcast
-                            </router-link>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sub-menu">
-                    <span class="fw-bold"> Micro Services </span>
-                    <ul class="sub-menu">
-                        <li>
-                            <router-link
-                                :to="{ name: 'clients' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-window-dock"></i> Clients
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'tokens' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-filetype-key"></i> Sessions
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'personalTokens' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-hdd-network-fill"></i> Tokens
-                            </router-link>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sub-menu">
-                    <span class="fw-bold"> Notifications </span>
-                    <ul class="sub-menu">
-                        <li v-show="user_can.notification">
-                            <router-link
-                                :to="{ name: 'notify' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-send"></i> Push
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'notify.read' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-bell-fill"></i> All
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'notify.unread' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-bell-slash-fill"></i>
-                                Unread
-                            </router-link>
-                        </li>
-                    </ul>
-                </li>
-                <li class="sub-menu">
-                    <span class="fw-bold"> Settings </span>
-                    <ul class="sub-menu">
-                        <li>
-                            <router-link
-                                :to="{ name: 'security' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-lock"></i> Security
-                            </router-link>
-                        </li>
-                        <li>
-                            <router-link
-                                :to="{ name: 'devices' }"
-                                @click="screenIsChanging"
-                            >
-                                <i class="bi bi-laptop"></i> Devices
-                            </router-link>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
+    <aside class="leftbar" id="leftbar">
+        <div class="head" v-if="!large_devices">
+            <p @click="showMenu">
+                <i
+                    :class="{
+                        bi: true,
+                        'bi-three-dots-vertical': !menu_collapse,
+                        'bi-three-dots': menu_collapse,
+                    }"
+                ></i>
+            </p>
         </div>
+
+        <ul class="menu" v-if="!small_devices">
+            <li class="item">
+                <a href="#" @click.prevent="showMenu">
+                    <i class="bi bi-house-gear"></i>
+                    <span v-if="menu_collapse">Dashboard</span>
+                </a>
+                <ul v-if="menu_collapse" class="sub-menu">
+                    <li>
+                        <router-link
+                            :to="{ name: 'home' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-person-circle"></i>
+                            <span> Profile </span>
+                        </router-link>
+                    </li>
+                    <li v-show="user_can.users">
+                        <router-link
+                            :to="{ name: 'users' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-people"></i> <span> Users </span>
+                        </router-link>
+                    </li>
+                    <li v-show="user_can.roles">
+                        <router-link
+                            :to="{ name: 'scopes' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-shield-shaded"></i>
+                            <span> Roles </span>
+                        </router-link>
+                    </li>
+                    <li v-show="user_can.broadcast">
+                        <router-link
+                            :to="{ name: 'channels' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-broadcast"></i>
+                            <span> Broadcast </span>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+            <li class="item">
+                <a href="#" @click.prevent="showMenu">
+                    <i class="bi bi-hdd-stack"></i>
+                    <span v-if="menu_collapse">Micro Services</span>
+                </a>
+
+                <ul v-if="menu_collapse" class="sub-menu">
+                    <li>
+                        <router-link
+                            :to="{ name: 'clients' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-window-dock"></i>
+                            <span> Clients </span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link
+                            :to="{ name: 'tokens' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-filetype-key"></i>
+                            <span> Sessions </span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link
+                            :to="{ name: 'personalTokens' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-hdd-network-fill"></i>
+                            <span> Tokens </span>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+            <li class="item">
+                <a href="#" @click.prevent="showMenu">
+                    <i class="bi bi-bell"></i>
+                    <span v-if="menu_collapse">Notifications</span>
+                </a>
+
+                <ul v-if="menu_collapse" class="sub-menu">
+                    <li v-show="user_can.notification">
+                        <router-link
+                            :to="{ name: 'notify' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-send"></i> <span> Push </span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link
+                            :to="{ name: 'notify.read' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-bell-fill"></i> <span> All </span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link
+                            :to="{ name: 'notify.unread' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-bell-slash-fill"></i>
+                            <span> Unread </span>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+            <li class="item">
+                <a href="#" @click.prevent="showMenu">
+                    <i class="bi bi-gear-wide-connected"></i>
+                    <span v-if="menu_collapse">Settings</span>
+                </a>
+                <ul v-if="menu_collapse" class="sub-menu">
+                    <li>
+                        <router-link
+                            :to="{ name: 'security' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-lock"></i> <span> Security </span>
+                        </router-link>
+                    </li>
+                    <li>
+                        <router-link
+                            :to="{ name: 'devices' }"
+                            @click="isSmallDevices"
+                        >
+                            <i class="bi bi-laptop"></i>
+                            <span> Devices </span>
+                        </router-link>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </aside>
 </template>
 <script>
 export default {
-    emits: ["selectedMenu"],
-
     data() {
         return {
             user_can: {},
+            menu_collapse: false,
+            small_devices: false,
+            large_devices: true,
         };
     },
 
@@ -138,14 +170,36 @@ export default {
     },
 
     mounted() {
-        window.addEventListener("resize", this.screenIsChanging);
-        this.screenIsChanging();
+        window.addEventListener("resize", this.isSmallDevices);
+        this.isSmallDevices();
+
+        document.addEventListener("click", this.hideMenu);
     },
 
     methods: {
-        screenIsChanging() {
-            if (window.innerWidth < 940) {
-                this.$emit("selectedMenu", window.innerWidth < 940);
+        showMenu() {
+            this.menu_collapse = !this.menu_collapse;
+            if (window.innerWidth < 800) {
+                this.small_devices = !this.small_devices;
+            }
+        },
+
+        hideMenu(event) {
+            const menu = document.getElementById("leftbar");
+            const body = document.getElementsByTagName("body")[0];
+
+            if (event.target !== menu && !menu.contains(event.target)) {
+                this.menu_collapse = false;
+            }
+        },
+
+        isSmallDevices() {
+            if (window.innerWidth < 800) {
+                this.small_devices = true;
+                this.large_devices = false;
+            } else {
+                this.small_devices = false;
+                this.large_devices = true;
             }
         },
 
@@ -162,46 +216,85 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.side {
-    width: 100%;
-    min-height: 100vh;
-}
-
-.side ul {
-    padding: 0;
-    margin: 0;
-}
-
-.side li {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.side .menu {
-    margin-left: 1%;
-}
-
-.side .sub-menu {
-    margin-left: 2%;
-
-    @media (min-width: 240px) {
-        padding: 0%;
-    }
+.leftbar {
+    background-color: var(--white);
+    border: 1px solid var(--border-color-light);
+    border-radius: 0.3em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: fit-content;
 
     @media (min-width: 800px) {
-        padding: 2%;
+        position: relative;
+        top: 0;
+        left: 0;
     }
-}
 
-.side .sub-menu li {
-    padding-bottom: 0.4%;
-    font-weight: normal;
-    margin-left: 2%;
-}
+    .head {
+        padding: 0 0 0 0em;
 
-a {
-    text-decoration: none;
-    color: var(--nav-left-color) !important;
+        p {
+            opacity: 1 !important;
+            color: var(--first-color);
+            margin: 0 0.2em;
+
+            i {
+                font-size: 1.2em;
+            }
+        }
+    }
+    .menu {
+        margin-top: 0.5em;
+        padding: 0 0.2em;
+        list-style: none;
+
+        .item {
+            color: var(--first-color);
+            padding-right: 0.5em;
+            margin-bottom: 0.5em;
+
+            a {
+                width: 100%;
+                padding: 0.1em 0.5em;
+                display: flex;
+                flex-wrap: nowrap;
+                color: var(--first-color);
+                font-weight: bold;
+                text-decoration: none;
+
+                i {
+                    font-size: 1em;
+                }
+                span {
+                    font-weight: bold;
+                    margin-left: 0.4em;
+                    font-size: 0.8em;
+                }
+
+                &:hover {
+                    color: var(--secondary);
+                }
+            }
+
+            .sub-menu {
+                padding: 0 1em;
+                list-style: none;
+                li {
+                    a {
+                        color: var(--first-color);
+                        text-decoration: none;
+                        font-size: 0.9em;
+                    }
+
+                    span,i {
+                        &:hover {
+                            color: var(--primary);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 </style>
