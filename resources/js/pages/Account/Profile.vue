@@ -1,66 +1,55 @@
 <template>
-    <div class="card text-color">
-        <div class="card-head h3 fw-bold border-bottom px-3 bg-primary">
-            About Me
-            <span class="h5 fw-light text-primary">
-                <i class="bi bi-person-check h2"></i>
-            </span>
+    <div class="profile">
+        <div class="head">
+            <p>
+                About Me
+                <span class="h5 fw-light text-primary">
+                    <i class="bi bi-person-check h2"></i>
+                </span>
+            </p>
         </div>
-        <div class="card-body">
-            <span class="h5 fw-light name">
-                <i class="bi bi-person-bounding-box text-primary"></i>
-                {{ user.name }}
-                {{ user.last_name }}
-            </span>
+        <div class="body">
+            <div class="items">
+                <p>
+                    <i class="bi bi-person-bounding-box text-primary"></i>
+                    {{ user.name }}
+                    {{ user.last_name }}
+                </p>
+                <p>
+                    <i class="bi bi-envelope-at-fill text-primary"></i>
+                    {{ user.email }}
+                </p>
+                <p v-show="user.birthday">
+                    <i class="bi bi-cake2 text-primary"></i>
+                    {{ user.birthday }}
+                </p>
+                <p v-show="user.phone">
+                    <i class="bi bi-telephone-plus text-primary"></i>
+                    {{ user.phone }}
+                </p>
+                <p v-show="user.country">
+                    <i class="bi bi-houses text-primary"></i>
+                    {{ user.country }} - {{ user.city }} -
 
-            <span class="h5 fw-light email">
-                <i class="bi bi-envelope-at-fill text-primary"></i>
-                {{ user.email }}
-            </span>
+                    {{ user.address }}
+                </p>
+                <p>
+                    <i class="bi bi-arrow-through-heart text-primary"></i>
+                    Join us {{ user.created }}
+                </p>
 
-            <span v-show="user.phone" class="h5 fw-light phone">
-                <i class="bi bi-telephone-plus text-primary"></i>
-                {{ user.phone }}
-            </span>
-
-            <span v-show="user.birthday" class="h5 fw-light birth">
-                <i class="bi bi-cake2 text-primary"></i>
-                {{ user.birthday }}
-            </span>
-
-            <span v-show="user.country" class="h5 fw-light address">
-                <i class="bi bi-houses text-primary"></i>
-                {{ user.country }} - {{ user.city }} -
-
-                {{ user.address }}
-            </span>
-        </div>
-        <div class="card-footer align-content-between">
-            <span class="h5">
-                <i class="bi bi-arrow-through-heart text-primary"></i>
-                Join us {{ user.created }}
-            </span>
-
-            <v-update
-                styles="btn btn-link float-end"
-                :user="user"
-                @success="authenticated"
-            ></v-update>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-head h4 fw-bold px-3 border-bottom bg-primary py-2">
-            My Scopes <i class="bi bi-shield-lock h3 text-primary"></i>
-        </div>
-        <div class="card-body">
-            <a
-                href="#"
-                class="btn btn-link fw-light"
-                v-for="(item, index) in roles"
-                :key="index"
-                >{{ item.id }}</a
-            >
+                <v-update
+                    styles="btn btn-link float-end"
+                    :user="user"
+                    @success="authenticated"
+                ></v-update>
+            </div>
+            <div class="scopes">
+                <p class="title">
+                    My Scopes <i class="bi bi-shield-lock h3 text-primary"></i>
+                </p>
+                <p class="items" v-for="(item, index) in roles" :key="index">{{ item.id }}</p>
+            </div>
         </div>
     </div>
 
@@ -159,27 +148,49 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card {
-    margin-bottom: 1%;
-}
+.profile {
+    margin: auto;
+    border: 1px solid var(--border-color-light);
+    border-radius: 1em;
+    padding: 1em;
+    color: var(--first-color);
 
-.name,
-.address,
-.email,
-.phone,
-.birth {
-    margin-right: 4%;
-    @media (min-width: 240px) {
-        display: block;
+    .head {
+        font-size: 1.2em;
+
+        p {
+            font-weight: bold;
+            i {
+                font-size: 1.3em;
+            }
+        }
     }
 
-    @media (min-width: 800px) {
-        display: inline;
-    }
-}
+    .body {
+        .items {
+            display: flex;
+            flex-wrap: wrap;
 
-.address {
-    display: block;
-    margin: 2% 0%;
+            p {
+                flex: 1 1 calc(100% / 3);
+            }
+        }
+
+        .scopes {
+            display: flex;
+            flex-wrap: wrap;
+
+            .title {
+                flex: 1 1 100%;
+                font-size: 1.2em;
+                font-weight: bold;
+            }
+
+            .items {
+                flex: 1 1 auto;
+                margin: 0.3% 0;
+            }
+        }
+    }
 }
 </style>
