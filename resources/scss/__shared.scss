@@ -35,35 +35,36 @@
 }
 
 
-.input-theme {
-    width: 100%;
-    border-color: none;
-    border-radius: 0.2em;
-    border-color: var(--white);
-    border-style: solid;
-    border-width: 0.1em;
-    padding: 0.2em 0.5em;
-    border-color: var(--light);
+.input {
+    border: 1px solid var(--border-color-light);
+    color: var(--first-color);
+    padding: 0.5em;
+    border-radius: 0.3em;
+    margin: 1% 0;
+    max-width: 100%;
+    min-width: 90%;
 }
 
 .group {
-    display: flex !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border:1px solid var(--border-color-light) !important;
-    border-radius: 0.2em !important;
-    padding: 0.1em 0em !important;
-
+    display: flex;
+    margin: 1% 0;
+    max-width: max-content;
+    min-width: 93%;
 
     .label {
-        flex: 1 1 40% !important;
-        padding: 0.2em 0.5em !important;
+        border-radius: 0.5em 0 0 0.5em;
+        flex: 0 1 auto;
+        min-width: 5%;
+        border: 1px solid var(--border-color-light);
+        padding: 0.5em;
     }
 
     input {
-        flex: 1 1 60% !important;
-        border-style: none !important;
-        padding: 0.2em 0.3em !important;
+        flex: 1 0 60%;
+        padding: 0.2em 0.3em;
+        border: 1px solid var(--border-color-light);
+        border-radius: 0 0.5em 0.5em 0;
+        color: var(--first-color);
     }
 }
 
@@ -71,4 +72,137 @@
     color: var(--secondary);
     font-size: 0.8em;
     display: block;
+}
+
+.bg-primary {
+    color: var(--white) !important;
+    background-color: var(--primary);
+    border: 1px solid var(--border-color-primary);
+}
+
+.bg-secondary {
+    color: var(--white) !important;
+    background-color: var(--secondary);
+    border: 1px solid var(--border-color-secondary);
+}
+
+.bg-ternary {
+    color: var(--white) !important;
+    background-color: var(--ternary);
+    border: 1px solid var(--border-color-ternary);
+}
+
+.bg-quaternary {
+    color: var(--white) !important;
+    background-color: var(--quaternary);
+    border: 1px solid var(--border-color-quaternary);
+}
+
+.bg-light {
+    color: var(--first-color) !important;
+    background-color: var(--white);
+    border: 1px solid var(--border-color-light);
+}
+
+.bg-warning {
+    color: var(--first-color) !important;
+    background-color: var(--warning);
+    border: 1px solid var(--border-color-warning);
+}
+
+.bg-blue {
+    color: var(--first-color) !important;
+    background-color: var(--blue);
+    border: 1px solid var(--border-color-blue);
+}
+
+.btn {
+    padding: 0.3em 1em;
+    min-width: 20%;
+}
+
+.btn-primary {
+    color: var(--white) !important;
+    background-color: var(--primary);
+    border: 1px solid var(--border-color-primary);
+    border-radius: 0.5em;
+
+    &:hover {
+        background-color: #4256fa;
+    }
+}
+
+.btn-secondary {
+    color: var(--white) !important;
+    background-color: var(--secondary);
+    border: 1px solid var(--border-color-secondary);
+    border-radius: 0.5em !important;
+
+    &:hover {
+        background-color: #4256fa;
+    }
+}
+
+.btn-ternary {
+    color: var(--white) !important;
+    background-color: var(--ternary);
+    border: 1px solid var(--border-color-ternary);
+    border-radius: 0.5em !important;
+
+    &:hover {
+        background-color: #4256fa;
+    }
+}
+
+.btn-quaternary {
+    color: var(--white) !important;
+    background-color: var(--quaternary);
+    border: 1px solid var(--border-color-quaternary);
+    border-radius: 0.5em;
+
+    &:hover {
+        background-color: #4256fa;
+    }
+}
+
+.btn-light {
+    color: var(--first-color) !important;
+    background-color: var(--white);
+    border: 1px solid var(--border-color-light);
+    border-radius: 0.5em;
+
+    &:hover {
+        background-color: #4256fa;
+    }
+}
+
+.btn-warning {
+    color: var(--first-color) !important;
+    background-color: var(--warning);
+    border: 1px solid var(--border-color-warning);
+    border-radius: 0.5em;
+
+    &:hover {
+        background-color: #4256fa;
+    }
+}
+
+.btn-blue {
+    color: var(--white) !important;
+    background-color: var(--blue);
+    border: 1px solid var(--border-color-blue);
+    border-radius: 0.5em;
+
+    &:hover {
+        background-color: #4256fa;
+    }
+}
+
+.label {
+    display: block;
+    color: var(--first-color);
+}
+
+.fw-bold {
+    font-weight: bold;
 }
