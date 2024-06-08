@@ -6,6 +6,7 @@ import VError from "../components/errors.vue";
 import VMessage from "../components/message.vue";
 import VSelect from "../components/select.vue";
 import VSelectSearch from "../components/selectSearch.vue";
+import VConfirm from "../components/confirm.vue";
 
 export const components = [
     ["VPagination", VPagination],
@@ -16,4 +17,5 @@ export const components = [
     ["VMessage", VMessage],
     ["VSelect", VSelect],
     ["VSelectSearch", VSelectSearch],
+    ["VConfirm", VConfirm],
 ];
