@@ -1,50 +1,33 @@
 <template>
-    <button
-        type="button"
-        :class="['btn me-1 my-1', styles]"
-        @click="sendEvent1(id)"
-        data-bs-toggle="modal"
-        :data-bs-target="'#'.concat(target)"
-    >
-        <slot name="button"></slot>
-    </button>
+    <div class="window">
+        <button class="btn" :class="bg" @click.prevent="openWindow">
+            <slot name="button"></slot>
+        </button>
 
-    <!-- Modal -->
-    <div
-        class="modal fade"
-        :id="target"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <slot name="head"></slot>
-                </div>
-                <div class="modal-body">
-                    <slot name="body"></slot>
-                </div>
-                <div class="modal-footer">
-                    <button
-                        type="button"
-                        class="btn btn-success"
-                        @click="sendEvent2(id)"
-                        v-show="button_accept_show"
-                    >
-                        Aceptar
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-danger"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                        @click="sendEvent3(id)"
-                    >
-                        {{ button_cancel_name }}
-                    </button>
+        <div v-if="opened" class="window-content" id="window-content">
+            <div class="content">
+                <div class="head"><slot name="head"></slot></div>
+
+                <div class="box">
+                    <div class="body">
+                        <slot name="body"></slot>
+                    </div>
+
+                    <div class="foot">
+                        <button
+                            v-if="accept"
+                            class="btn btn-primary"
+                            @click.prevent="sendAcceptEvent"
+                        >
+                            accept
+                        </button>
+                        <button
+                            class="btn btn-secondary"
+                            @click.prevent="closeWindow"
+                        >
+                            close
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,52 +35,104 @@
 </template>
 <script>
 export default {
-    emits: ["isClicked", "isAccepted", "isClosed"],
+    emits: ["isClicked", "isAccepted", "isCancel"],
 
     props: {
-        target: {
-            type: [String, Array],
-            required: true,
+        bg: {
+            type: String,
+            default: "btn-primary",
         },
 
-        width: {
-            type: String,
-            default: "modal-lg",
-        },
-        styles: {
-            type: [String, Array],
-            default: "btn-sm btn-success",
-        },
-        button_accept_show: {
+        accept: {
             type: Boolean,
             default: true,
         },
-        button_cancel_name: {
-            type: String,
-            default: "Cerrar",
-        },
+    },
+
+    data() {
+        return {
+            opened: false,
+        };
     },
 
     methods: {
-        sendEvent1(id) {
-            this.$emit("isClicked", id);
+        closeWindow() {
+            this.opened = false;
+            this.sendClosedEvent(true);
         },
 
-        sendEvent2(id) {
-            this.$emit("isAccepted", id);
+        openWindow() {
+            this.opened = true;
+            this.sendClickedEvet();
         },
 
-        sendEvent3(id) {
-            this.$emit("isClosed", id);
+        sendClickedEvet() {
+            this.$emit("isClicked", true);
+        },
+
+        sendAcceptEvent() {
+            this.$emit("isAccepted", true);
+        },
+
+        sendClosedEvent() {
+            this.$emit("isClosed", true);
         },
     },
 };
 </script>
 
 <style lang="scss" scoped>
+.window-content {
+    position: fixed;
+    width: 100%;
+    padding: 0.5em;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
-.modal-dialog {
-    --bs-modal-bg: var(--white) 
+    .content {
+        background-color: white;
+        width: 95%;
+        min-height: auto;
+        border: 1px solid #cfc8c8;
+        border-radius: 1em;
+        @media (min-width: 800px) {
+            margin: 0.5% auto;
+            width: 95%;
+        }
+        @media (min-width: 940px) {
+            width: 80%;
+        }
+
+        .head {
+            color: var(--first-color);
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 1.3em;
+            margin-bottom: 1%;
+            border-bottom: 1px solid #cfc8c8;
+        }
+
+        .box {
+            padding: 1em;
+            // min-height: 20vh;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 1em;
+
+            .body {
+                width: 100%;
+                min-height: 100%;
+                border-bottom: 1px solid #cfc8c8;
+                margin-bottom: 1em;
+            }
+            .foot {
+                justify-content: space-between;
+                display: flex;
+                width: 100%;
+            }
+        }
+    }
 }
-
 </style>
