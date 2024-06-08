@@ -187,8 +187,8 @@ export default {
             }
 
             .items {
-                flex: 1 1 auto;
-                margin: 0.3% 0;
+                flex: 0 0 auto;
+                margin: 0.5%;
             }
         }
     }
