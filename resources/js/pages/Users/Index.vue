@@ -1,19 +1,31 @@
 <template>
-    <v-search @searching="searching">
-        <template v-slot:button>
-            <v-register @success="getUsers"></v-register>
+    <v-table>
+        <template v-slot:title>List of users</template>
+        <template v-slot:head>
+            <th>name</th>
+            <th>last name</th>
+            <th>email</th>
+            <th>phone</th>
+            <th>
+                <v-register
+                    @success="getUsers"
+                    bg="btn-blue"
+                ></v-register>
+            </th>
         </template>
-    </v-search>
-
-    <v-table :items="items">
         <template v-slot:body>
             <tr v-for="(item, index) in users" :key="index">
-                <td class="fw-light">{{ item.name }}</td>
-                <td class="fw-light">{{ item.last_name }}</td>
-                <td class="fw-light">{{ item.email }}</td>
+                <td v-text="item.name"></td>
+                <td v-text="item.last_name"></td>
+                <td v-text="item.email"></td>
+                <td v-text="item.full_phone"></td>
                 <td>
-                    <v-scopes :user="item" @success="getUsers"></v-scopes>
-                    <v-update :user="item" @success="getUsers"></v-update>
+                    <v-scopes :user="item" bg="btn-primary"></v-scopes>
+                    <v-update
+                        :user="item"
+                        @success="getUsers"
+                        bg="btn-secondary"
+                    ></v-update>
                     <v-status
                         :user="item"
                         @success="getUsers"
@@ -23,13 +35,12 @@
             </tr>
         </template>
     </v-table>
+
     <v-pagination
         v-show="pages.total > pages.per_page"
         :pages="pages"
         @send-current-page="changeList"
     ></v-pagination>
-
-    <v-message :message="message" @close="close"></v-message>
 </template>
 <script>
 import VRegister from "./Register.vue";
@@ -145,3 +156,35 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+th {
+    text-align: start;
+    text-transform: capitalize;
+}
+
+tr {
+    td {
+        padding: 0 0.3em;
+        text-align: start;
+
+        &:nth-child(1) {
+            text-transform: capitalize;
+        }
+        &:nth-child(2) {
+            text-transform: capitalize;
+        }
+        &:nth-child(4) {
+            min-width: 120px;
+        }
+        &:nth-child(5) {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+    &:hover {
+        background-color: var(--first-color);
+        color: var(--white);
+    }
+}
+</style>
