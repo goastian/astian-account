@@ -22,5 +22,6 @@ export default {
 <style lang="css" scoped>
 .errors {
     color: #e36159;
+    font-size: 1em;
 }
 </style>
