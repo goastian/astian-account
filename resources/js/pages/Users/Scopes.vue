@@ -1,47 +1,52 @@
 <template>
     <!-- Card para mostrar y actualizar datos del usuario-->
     <v-modal
-        :target="'_rl_C__' + user.id"
         @is-clicked="loadData(user)"
         @is-accepted="update(user)"
-        styles="btn-sm bg-warning"
+        :accept="false"
     >
         <template v-slot:button> Scopes </template>
         <template v-slot:head>
-            <h3 class="text-color">Add scopes for this user</h3>
+            Add Or remove Scopes for {{ user.name }}
         </template>
 
         <template v-slot:body>
-            <div class="row user-scopes">
+            <div class="user-scopes">
                 <div
-                    class="col form-check text-start"
+                    class="item"
                     v-for="(item, index) in roles"
                     v-show="!item.public"
                 >
-                    <input
-                        @click="confirmAction(item.id, $event)"
-                        class="form-check-input"
-                        :id="item.id"
-                        :value="item.id"
-                        type="checkbox"
-                    />
-                    <label class="form-check-label" :for="item.id">
-                        <span class="fw-bold">{{ item.scope }}:</span>
-                        {{ item.description }}
-                    </label>
-                </div>
-                <div v-if="message" class="col-12 mt-4 py-4 fw-bold bg-info">
-                    <span class="text-color">{{ message }}</span>
+                    <div class="box">
+                        <v-confirm
+                            bg="btn-light"
+                            @is-clicked="confirmAction(item)"
+                            @is-confirmed="addOrRemoveScope(item.id)"
+                            @is-cancel="cancelAction(item.id)"
+                        >
+                            <template v-slot:button>
+                                <input
+                                    :id="item.id"
+                                    :value="item.id"
+                                    type="checkbox"
+                                    class="user_roles"
+                                />
+                            </template>
+                            <template v-slot:head> Alert Scopes </template>
+                            <template v-slot:body>
+                                <p v-html="text_body"></p>
+                            </template>
+                        </v-confirm>
+                        <label class="label" :for="item.id">
+                            <span class="fw-bold">{{ item.scope }}:</span>
+                            {{ item.description }}
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div
-                :class="[
-                    'col-12 bg-info text-center h3 mx-2 py-3',
-                    [status ? 'show' : 'hide'],
-                ]"
-            >
-                <span class="text-light">{{ status }}</span>
+            <div :class="{ message: !status, hide: status }">
+                <p v-html="message"></p>
             </div>
         </template>
     </v-modal>
@@ -58,33 +63,31 @@ export default {
             status: false,
             errors: {},
             roles: {},
-            client: false,
+            text_body: {},
         };
     },
 
     methods: {
-        confirmAction(id, event) {
-            const checkbox = event.target;
+        confirmAction(item) {
+            const checked = document.getElementById(item.id).checked;
+            this.text_body = checked
+                ? `The next role <strong>${item.scope}</strong> will be removed`
+                : `The next role <strong>${item.scope}</strong> will be added`;
+        },
 
-            if (checkbox.checked) {
-                const add_role = confirm(
-                    "Do you really want to add this role?"
-                );
-                if (add_role) {
-                    this.addOrRemoveRoles(id);
-                } else {
-                    checkbox.checked = false;
-                }
+        addOrRemoveScope(id) {
+            const role = document.getElementById(id).checked;
+
+            if (role.checked) {
+                this.addOrRemoveRoles(id);
             } else {
-                const remove_role = confirm(
-                    "Are you sure to remove this roles?"
-                );
-                if (remove_role) {
-                    this.addOrRemoveRoles(id);
-                } else {
-                    checkbox.checked = true;
-                }
+                this.addOrRemoveRoles(id);
             }
+        },
+
+        cancelAction(id) {
+            var role = document.getElementById(id);
+            role.checked = !role.checked;
         },
 
         /**
@@ -99,7 +102,7 @@ export default {
                 this.$server
                     .post(this.user.links.roles, { scope_id: id })
                     .then((res) => {
-                        this.message = `A new Scope (${res.data.data.scope}) was added`;
+                        this.message = `A new Scope <strong> (${res.data.data.scope}) </strong> added`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.data.status == 403) {
@@ -113,7 +116,7 @@ export default {
                 this.$server
                     .delete(`${this.user.links.roles}/${id}`)
                     .then((res) => {
-                        this.message = `The Scope ${res.data.data.scope} was removed`;
+                        this.message = `The Scope <strong> ${res.data.data.scope} </atrong> was removed`;
                     })
                     .catch((e) => {
                         if (e.response && e.response.status == 403) {
@@ -189,7 +192,7 @@ export default {
          * @param {*} objetos
          */
         role_selected(objetos) {
-            const roles = document.querySelectorAll(".form-check-input");
+            const roles = document.querySelectorAll(".user_roles");
 
             for (let i = 0; i < roles.length; i++) {
                 roles[i].checked = false;
@@ -207,22 +210,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.col {
-    flex: 0 0 auto;
-    text-align: left;
+.user-scopes {
+    display: flex;
+    flex-wrap: wrap;
 
-    @media (min-width: 240px) {
-        width: 98%;
-        margin-bottom: 3%;
-    }
+    .item {
+        flex: 1 1 calc(100% / 2);
+        margin-bottom: 0.5em;
 
-    @media (min-width: 800px) {
-        margin-bottom: 1%;
-        width: 48%;
-    }
-
-    @media (min-width: 940px) {
-        width: 30%;
+        .box {
+            display: flex;
+        }
     }
 }
 
@@ -230,7 +228,11 @@ export default {
     display: none;
 }
 
-.show {
+.message {
     display: block;
+    border-top: 1px solid var(--border-color-light);
+    padding: 1em;
+    text-align: center;
+    color: var(--first-color);
 }
 </style>
