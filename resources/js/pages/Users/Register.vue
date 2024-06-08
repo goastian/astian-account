@@ -1,6 +1,6 @@
 <template>
     <v-modal target="create" @is-accepted="createUser">
-        <template v-slot:button> New user </template>
+        <template v-slot:button> add new user </template>
         <template v-slot:head>
             <span class="text-uppercase text-center fw-bold"
                 >panel to add new users</span
@@ -8,36 +8,37 @@
         </template>
         <template v-slot:body>
             <div class="user-register">
-                <div class="input">
-                    <input
-                        placeholder="First Name"
-                        class="input-theme"
-                        type="text"
-                        v-model="form.name"
-                    />
-                    <v-error :error="errors.name"></v-error>
-                </div>
-                <div class="input">
-                    <input
-                        type="text"
-                        placeholder="Last Name"
-                        v-model="form.last_name"
-                        class="input-theme"
-                    />
-                    <v-error :error="errors.last_name"></v-error>
-                </div>
-                <div class="input">
-                    <input
-                        type="email"
-                        v-model="form.email"
-                        placeholder="Email Address"
-                        class="input-theme"
-                    />
-                    <v-error :error="errors.email"></v-error>
-                </div>
-                <div class="input">
-                    <div class="group">
-                        <div>
+                <div class="inputs">
+                    <div class="item">
+                        <label for=""></label>
+                        <input
+                            placeholder="First Name"
+                            class="input"
+                            type="text"
+                            v-model="form.name"
+                        />
+                        <v-error :error="errors.name"></v-error>
+                    </div>
+                    <div class="item">
+                        <input
+                            type="text"
+                            placeholder="Last Name"
+                            v-model="form.last_name"
+                            class="input"
+                        />
+                        <v-error :error="errors.last_name"></v-error>
+                    </div>
+                    <div class="item">
+                        <input
+                            type="email"
+                            v-model="form.email"
+                            placeholder="Email Address"
+                            class="input"
+                        />
+                        <v-error :error="errors.email"></v-error>
+                    </div>
+                    <div class="item">
+                        <div class="group">
                             <v-select-search
                                 class="label"
                                 :items="countries"
@@ -60,42 +61,42 @@
                                     </span>
                                 </template>
                             </v-select-search>
+
+                            <input
+                                type="text"
+                                placeholder="Country"
+                                v-model="form.country"
+                            />
                         </div>
+                        <v-error :error="errors.country"></v-error>
+                    </div>
+
+                    <div class="item">
                         <input
                             type="text"
-                            placeholder="Country"
-                            v-model="form.country"
+                            v-model="form.city"
+                            placeholder="City"
+                            class="input"
                         />
+                        <v-error :error="errors.city"></v-error>
                     </div>
-                    <v-error :error="errors.country"></v-error>
-                </div>
-                <div class="input">
-                    <input
-                        type="text"
-                        v-model="form.city"
-                        placeholder="City"
-                        class="input-theme"
-                    />
-                    <v-error :error="errors.city"></v-error>
-                </div>
-                <div class="input">
-                    <input
-                        type="text"
-                        v-model="form.address"
-                        placeholder="Home Address"
-                        class="input-theme"
-                    />
-                    <v-error :error="errors.address"></v-error>
-                </div>
-                <div class="input">
-                    <div class="group">
-                        <div>
+                    <div class="item">
+                        <input
+                            type="text"
+                            v-model="form.address"
+                            placeholder="Home Address"
+                            class="input"
+                        />
+                        <v-error :error="errors.address"></v-error>
+                    </div>
+                    <div class="item">
+                        <div class="group">
                             <v-select-search
                                 class="label"
                                 :items="countries"
-                                param="name_en"
                                 text="Dial code"
                                 @selected="setCode"
+                                param="name_en"
                             >
                                 <template #title="slotProps">
                                     {{
@@ -117,54 +118,59 @@
                                     </span>
                                 </template>
                             </v-select-search>
-                        </div>
-                        <input
-                            type="text"
-                            v-model="form.phone"
-                            placeholder="Phone Number"
-                        />
-                    </div>
-                    <v-error :error="errors.phone"></v-error>
-                    <v-error :error="errors.dial_code"></v-error>
-                </div>
-                <div class="input">
-                    <input
-                        type="date"
-                        v-model="form.birthday"
-                        placeholder="Birthday"
-                        class="input-theme"
-                    />
-                    <v-error :error="errors.birthday"></v-error>
-                </div>
-            </div>
-            <div class="m-2 p-2">
-                <span class="">User Scopes</span>
-            </div>
-            <div class="user-scopes">
-                <div
-                    class="form-check"
-                    v-for="(item, index) in roles"
-                    :key="index"
-                    v-show="!item.public"
-                >
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        :value="item.id"
-                        :id="index"
-                        v-model="form.scope"
-                    />
-                    <label class="form-check-label text-sm" :for="index">
-                        <strong class="text-color">{{ item.scope }}: </strong>
-                        <span>{{ item.description }}</span>
-                    </label>
-                </div>
-            </div>
 
+                            <input
+                                class="form-input"
+                                type="text"
+                                v-model="form.phone"
+                                placeholder="Phone Number"
+                            />
+                        </div>
+                        <v-error :error="errors.phone"></v-error>
+                        <v-error :error="errors.dial_code"></v-error>
+                    </div>
+                    <div class="item">
+                        <input
+                            type="date"
+                            v-model="form.birthday"
+                            placeholder="Birthday"
+                            class="input"
+                        />
+                        <v-error :error="errors.birthday"></v-error>
+                    </div>
+                </div>
+
+                <div class="scopes">
+                    <div class="head">
+                        <p>Scopes</p>
+                    </div>
+                    <div class="items">
+                        <div
+                            class="form-check"
+                            v-for="(item, index) in roles"
+                            :key="index"
+                            v-show="!item.public"
+                        >
+                            <div>
+                                <input
+                                    type="checkbox"
+                                    :value="item.id"
+                                    :id="index"
+                                    v-model="form.scope"
+                                />
+                                <label :for="index">
+                                    <strong>{{ item.scope }}: </strong>
+                                    <span>{{ item.description }}</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div>
                 <v-error :error="errors.scope"></v-error>
             </div>
-            <v-message :message="message" @close="close"></v-message>
+            <!--  <v-message :message="message" @close="close"></v-message>-->
         </template>
     </v-modal>
 </template>
@@ -256,26 +262,58 @@ export default {
 
 <style lang="scss" scoped>
 .user-register {
-    @media (min-width: 800px) {
-        flex-wrap: wrap;
+    .inputs {
         display: flex;
-    }
-
-    .input {
-        flex: 1 1 calc(100% / 2);
-        padding: 0.2em 0.5em;
-    }
-}
-
-.user-scopes {
-    @media (min-width: 800px) {
         flex-wrap: wrap;
-        display: flex;
+        padding: 0 0.3em;
+        .item {
+            width: 100%;
+            @media (min-width: 800px) {
+                flex: 0 0 calc(100% / 2);
+            }
+        }
     }
 
-    .form-check {
-        flex: 1 1 calc(100% / 2);
-        padding: 0em 2em;
+    .scopes {
+        .head {
+            p {
+                font-size: 1.2em;
+                margin: 0.5em 0;
+                border-bottom: 1px solid var(--border-color-light);
+                border-top: 1px solid var(--border-color-light);
+                font-weight: bold;
+            }
+        }
+
+        .items {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 0em;
+
+            .form-check {
+                @media (min-width: 800px) {
+                    flex: 0 0 calc(100% / 2);
+                }
+                div {
+                    display: flex;
+                    input {
+                        flex: 0 0 auto;
+                    }
+                    label {
+                        flex: 1 1 auto;
+                        color: var(--first-color);
+                        font-size: 0.9em;
+                        text-transform: lowercase;
+                        strong {
+                            font-weight: light;
+                        }
+                        span {
+                            font-weight: lighter;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 </style>
