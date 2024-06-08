@@ -1,8 +1,11 @@
 <template>
-    <ul :id="identifier" class="select-menu" :tabindex="identifier">
-        <li @click="showMenu(items)">
-            <slot name="title" :item="value" :text="text"></slot>
+    <div class="menu" :id="identifier" :tabindex="identifier">
+        <div class="head">
+            <span @click="showMenu">
+                <slot name="title" :item="value" :text="text"></slot>
+            </span>
             <i
+                @click="showMenu"
                 :class="{
                     'mx-2': true,
                     bi: true,
@@ -10,19 +13,18 @@
                     'bi-caret-up': is_visible,
                 }"
             ></i>
-        </li>
-        <ul v-show="is_visible" class="float-menu">
-            <li class="input">
+        </div>
+        <div class="body" v-show="is_visible">
+            <div class="searcher">
                 <input
-                    class="text-capitalize"
-                    type="text"
                     id="input"
+                    type="text"
                     :placeholder="placeholder"
                     @keyup="setKey"
                     @keyup.enter="selectKey"
                 />
-            </li>
-            <ul class="options">
+            </div>
+            <ul class="list">
                 <li
                     v-for="(item, num) in collections"
                     :key="num"
@@ -32,8 +34,8 @@
                     <slot name="options" :items="item"> </slot>
                 </li>
             </ul>
-        </ul>
-    </ul>
+        </div>
+    </div>
 </template>
 <script>
 export default {
@@ -79,6 +81,7 @@ export default {
         const dom = document.getElementById(this.identifier);
         dom.addEventListener("keydown", this.handleKeyDown);
         this.hideMenu();
+        this.collections = this.items;
     },
 
     beforeDestroy() {
@@ -175,15 +178,14 @@ export default {
             }
         },
 
-        showMenu(items) {
+        showMenu() {
             this.is_visible = !this.is_visible;
-            this.collections = items;
+            this.collections = this.items;
         },
 
         selectMenu(index) {
             this.value = this.collections[index];
             this.sendSelectedData(this.value);
-            this.showMenu();
         },
 
         selectKey() {
@@ -226,56 +228,43 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.select-menu {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    min-width: 100%;
-    border-radius: 1em;
-
-    li:first-child {
-        padding: 0;
-        margin: 0;
+.menu {
+    .head {
         text-align: start;
+        text-transform: capitalize;
         cursor: pointer;
+
+        span {
+            margin-bottom: 0.5em;
+        }
     }
 
-    .float-menu {
-        list-style: none;
+    .body {
+        background-color: white;
+        border: 1px solid #e4dcdc;
+        overflow-x: none;
+        padding: 0 0.3em;
         position: absolute;
-        border: 1px solid var(--light);
-        color: var(--code);
-        padding: 0.4em 0.5em 0.5em 0.5em;
-        border-radius: 0.5em;
-        background-color: var(--theme);
+        border-radius: 0.3em;
 
-        input {
-            border: 1px solid var(--primary);
-            border-radius: 1em;
-            padding: 0.2em 0.8em;
-            width: 100%;
-
-            &.input {
-                padding: 0 !important;
-                margin: 0;
+        .searcher {
+            input {
+                width: 95%;
+                padding: 0.4em;
+                border-radius: 0.3em;
+                border-style: solid;
+                margin: 0.2em 0;
             }
         }
-
-        .options {
+        .list {
+            overflow-y: scroll;
+            max-height: 300px;
             list-style: none;
-            padding: 0;
+            padding: 0 0.3em;
             margin: 0;
-            max-height: 20em;
-            overflow-y: auto;
-
             li {
-                text-align: start;
                 cursor: pointer;
-                margin: 0.3em 0.4em;
-
-                &:hover {
-                    font-weight: bold;
-                }
+                margin-bottom: 0.5em;
             }
         }
     }
