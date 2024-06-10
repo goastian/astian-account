@@ -71,6 +71,22 @@
                         @endforeach
                     @endif
                 </div>
+                <div class="terms">
+                    <div>
+                        <input name="accept_terms" id="accept_terms" id type="checkbox">
+                    </div>
+                    <label for="accept_terms">
+                        By choosing this option, you accept the <a href="{{ env('MIX_HOME_PAGE') }}" target="_black">Astian
+                            Inc</a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_black">Services Agreement,
+                            Privacy Statement</a>, and
+                        <a href="{{ config('MIX_HOME_COOKIES') }}" target="_black"> Cookies Policy </a>.
+                    </label>
+                    @if ($errors->has('accept_terms'))
+                        @foreach ($errors->get('accept_terms') as $item)
+                            <span class="errors">{{ $item }}</span>
+                        @endforeach
+                    @endif
+                </div>
                 <div class="buttons">
                     <button type="submit">{{ __('Register') }}</button>
                 </div>
