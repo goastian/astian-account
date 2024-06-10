@@ -110,7 +110,7 @@
     border: 1px solid var(--border-color-warning);
 }
 
-.bg-blue {
+.bg-link {
     color: var(--first-color) !important;
     background-color: var(--blue);
     border: 1px solid var(--border-color-blue);
@@ -187,7 +187,7 @@
     }
 }
 
-.btn-blue {
+.btn-link {
     color: var(--white) !important;
     background-color: var(--blue);
     border: 1px solid var(--border-color-blue);
@@ -203,6 +203,62 @@
     color: var(--first-color);
 }
 
+.text-primary {
+    color: var(--primary);
+}
+
+.text-secondary {
+    color: var(--secondary);
+}
+
+.text-ternary {
+    color: var(--ternary);
+}
+
+.text-quaternary {
+    color: var(--quaternary)
+}
+
+.text-danger {
+    color:  var(--warning)
+}
+
+.text-link {
+    color: var(--blue)
+}
+
+.first-color {
+    color: var(--first-color);
+}
+
+.second-color {
+    color: var(--second-color);
+}
+
 .fw-bold {
     font-weight: bold;
+}
+
+.fw-light {
+    font-weight: light;
+}
+
+.fw-lighter {
+    font-weight: lighter;
+}
+
+.text-sm {
+    font-size: 0.8em;
+}
+
+.text-md {
+    font-size: 1em;
+}
+
+.text-xl {
+    font-size: 1.5em;
+}
+
+.text-xxl {
+    font-size: 2em;
 }
