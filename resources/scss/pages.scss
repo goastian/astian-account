@@ -1,5 +1,5 @@
 @import "__vars.scss";
-@import "__shared.scss"; 
+@import "__shared.scss";
 
 body {
     margin: 0;
@@ -60,7 +60,7 @@ body {
                 a {
                     display: block;
                     text-align: end;
-                    color: var(--first-color);
+                    color: var(--primary);
                 }
 
                 input {
@@ -88,8 +88,8 @@ body {
 
                 a {
                     display: block;
-                    padding-top: 1%;
-                    color: var(--first-color);
+                    padding-top: 5%;
+                    color: var(--primary);
                 }
             }
         }
@@ -172,7 +172,7 @@ body {
     }
 
     @media (min-width: 940px) {
-        margin: 1% auto;
+        margin: 3% auto;
         width: 50%;
     }
 
@@ -229,11 +229,26 @@ body {
                     padding: 0.6em 0.5em;
                     border-radius: 0.3em;
                 }
+
+            }
+
+            .terms {
+                display: flex;
+                justify-content: start;
+                justify-items: baseline;
+                text-align: start;
+
+                input {}
+
+                label {
+                    padding-left: 0.5em;
+                    color: var(--first-color);
+                }
             }
 
             .buttons {
                 display: flex;
-                justify-content: center;
+                justify-content: start;
                 width: 100%;
                 margin-top: 5%;
 
