@@ -5,8 +5,7 @@ import { router } from "./config/rutes.js";
 import { components } from "./config/globalComponents";
 import { $channels, $echo } from "./config/echo.js";
 import { $server } from "./config/axios.js";
-
-import * as bootstrap from "bootstrap";
+ 
 import "./config/matomo.js";
 
 //checking changes in the routes
