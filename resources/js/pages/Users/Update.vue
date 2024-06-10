@@ -2,7 +2,7 @@
     <v-modal @is-accepted="update(user)">
         <template v-slot:button> Details </template>
         <template v-slot:head>
-            <p class="label fw-bold">
+            <p class="label text-sm fw-bold">
                 ABOUT
                 {{ user.name }} {{ user.last_name }}
             </p>
@@ -11,8 +11,7 @@
         <template v-slot:body>
             <div class="user-update">
                 <div class="item">
-                    <label>First Name</label>
-
+                    <label class="text-sm fw-bold">First Name</label>
                     <input
                         @keypress.enter="update(user)"
                         v-model="user.name"
@@ -23,7 +22,7 @@
                     <v-error :error="errors.name"></v-error>
                 </div>
                 <div class="item">
-                    <label>Last Name</label>
+                    <label class="text-sm fw-bold">Last Name</label>
 
                     <input
                         @keypress.enter="update(user)"
@@ -35,7 +34,7 @@
                     <v-error :error="errors.last_name"></v-error>
                 </div>
                 <div class="item">
-                    <label>Email Address</label>
+                    <label class="text-sm fw-bold">Email Address</label>
 
                     <input
                         @keypress.enter="update(user)"
@@ -48,7 +47,7 @@
                 </div>
 
                 <div class="item">
-                    <label class="label">Phone Number</label>
+                    <label class="text-sm fw-bold">Phone Number</label>
                     <div class="group">
                         <v-select-search
                             class="label"
@@ -88,7 +87,7 @@
                 </div>
 
                 <div class="item">
-                    <label for="">Country</label>
+                    <label class="text-sm fw-bold" for="">Country</label>
                     <div class="group">
                         <v-select-search
                             class="label"
@@ -125,8 +124,7 @@
                     <v-error :error="errors.country"></v-error>
                 </div>
                 <div class="item">
-                    <label class="label">City Or State</label>
-
+                    <label class="text-sm fw-bold">City Or State</label> 
                     <input
                         @keypress.enter="update(user)"
                         v-model="user.city"
@@ -137,7 +135,7 @@
                     <v-error :error="errors.city"></v-error>
                 </div>
                 <div class="item">
-                    <label>Home Address</label>
+                    <label class="text-sm fw-bold">Home Address</label>
 
                     <input
                         @keypress.enter="update(user)"
@@ -149,7 +147,7 @@
                     <v-error :error="errors.address"></v-error>
                 </div>
                 <div class="item">
-                    <label>Date of birth</label>
+                    <label class="text-sm fw-bold">Date of birth</label>
 
                     <input
                         @keypress.enter="update(user)"
@@ -161,18 +159,18 @@
                     <v-error :error="errors.birthday"></v-error>
                 </div>
                 <div class="item">
-                    <label class="label fw-bold">Join us</label>
-                    <span>{{ user.created }}</span>
+                    <label class="label text-sm fw-bold">Join us</label>
+                    <span class="text-sm">{{ user.created }}</span>
                 </div>
                 <div class="item">
-                    <label class="label fw-bold">Last Update</label>
-                    <span>{{ user.updated }}</span>
+                    <label class="label text-sm fw-bold">Last Update</label>
+                    <span class="text-sm">{{ user.updated }}</span>
                 </div>
             </div>
             <div class="item">
-                <label class="label fw-bold">Status</label>
+                <label class="label text-sm fw-bold">Status</label>
 
-                <span class="label">
+                <span class="label text-sm">
                     {{
                         user.disabled
                             ? `User inactive since ${user.disabled}`
@@ -182,7 +180,7 @@
             </div>
 
             <div :class="{ status: status, hide: !status }">
-                <p>{{ status }}</p>
+                <p class="text-sm">{{ status }}</p>
             </div>
         </template>
     </v-modal>
