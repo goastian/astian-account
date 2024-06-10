@@ -1,38 +1,10 @@
 <template>
-    <nav aria-label="Page navigation" class=" mt-5 position-relative">
-        <ul class="pagination justify-content-center">
-            <li :class="['page-item', disabled_prev]">
-                <a
-                    href="#"
-                    class="page-link"
-                    v-on:click="getPage(pages.current_page - 1)"
-                >
-                    Anterior
-                </a>
-            </li>
-            <li
-                :class="[
-                    'page-item',
-                    pages.current_page == index + 1 ? 'active' : '',
-                ]"
-                v-for="(item, index) in pages.total_pages"
-                :key="index"
-                v-on:click="getPage(index + 1)"
-            >
-                <a class="page-link" href="#"> {{ index + 1 }}</a>
-            </li>
-
-            <li :class="['page-item', disabled_next]">
-                <a
-                    class="page-link"
-                    v-on:click="getPage(pages.current_page + 1)"
-                    href="#"
-                >
-                    Siguiente
-                </a>
-            </li>
+    <div class="pagination">
+        <ul class="pages">
+            <li class="item" @click="getPage(pages.current_page - 1)">Prev</li>
+            <li class="item" @click="getPage(pages.current_page + 1)">Next</li>
         </ul>
-    </nav>
+    </div>
 </template>
 <script>
 export default {
@@ -50,26 +22,7 @@ export default {
         };
     },
 
-    updated() {
-        this.disablePreviuous();
-    },
-
-    created() {
-        this.disablePreviuous();
-    },
-
     methods: {
-        disablePreviuous() {
-            this.disabled_prev =
-                this.pages.current_page == 1 || this.pages.total_pages == null
-                    ? "disabled"
-                    : "";
-            this.disabled_next =
-                this.pages.current_page == this.pages.total_pages
-                    ? "disabled"
-                    : "";
-        },
-
         getPage(id) {
             if (id == 0) {
                 this.$emit("sendCurrentPage", 1);
@@ -80,3 +33,32 @@ export default {
     },
 };
 </script>
+
+<style lang="scss" scoped>
+.pagination {
+    width: 100%;
+    padding: 1em;
+
+    .pages {
+        display: flex;
+        list-style: none;
+        justify-content: center;
+        padding: 0;
+
+        .item {
+            margin: 1%;
+            cursor: pointer;
+            background-color: var(--primary);
+            color: var(--white);
+            font-weight: bold;
+            border-radius: 0.3em;
+            padding: 0.3em 1em;
+            min-width: 10%;
+            text-align: center;
+            &:hover {
+                background-color: var(--warning);
+            }
+        }
+    }
+}
+</style>
