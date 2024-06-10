@@ -5,7 +5,7 @@
         v-for="(item, index) in error"
         :key="index"
     >
-        <span v-text="item"></span>
+        <p v-text="item"> </p>
     </div>
 </template>
 <script>
@@ -19,9 +19,17 @@ export default {
     },
 };
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .errors {
     color: #e36159;
-    font-size: 1em;
+    font-size: 0.8em;
+
+    p {
+        text-transform: lowercase;
+        margin: 0;
+        &::first-letter {
+            text-transform: uppercase;
+        }
+    }
 }
 </style>
