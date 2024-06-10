@@ -1,47 +1,67 @@
 <template>
-    <div v-show="message" class="message">
-        {{ message }}
-        <i
-            class="bi bi-x-lg d-block fw-bold mt-5"
-            @click="close"
-            style="cursor: pointer"
-        ></i>
+    <div v-if="message" class="message">
+        <div class="body">
+            <p class="color">
+                <slot name="body"></slot>
+            </p>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: ["message"],
-    emits: ["close"],
+    props: {
+        id: {
+            type: [String, null, Number],
+            required: true,
+        },
+    },
+
+    data() {
+        return {
+            message: false,
+        };
+    },
+
+    watch: {
+        id(value) {
+            this.showMessage(value);
+        },
+    },
+
     methods: {
-        close() {
-            this.$emit("close");
+        hideMessage() {
+            this.message = false;
         },
-        onEscapeKey(event) {
-            if (event.key === "Escape") {
-                this.close();
-            }
+
+        showMessage() {
+            this.message = true;
+            setTimeout(this.hideMessage, 5000);
         },
-    },
-    mounted() {
-        document.addEventListener("keydown", this.onEscapeKey);
-    },
-    beforeUnmount() {
-        document.removeEventListener("keydown", this.onEscapeKey);
     },
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
 .message {
-    position: absolute;
-    background-color: #71cce8;
-    top: 21%;
-    z-index: 0;
-    text-align: center;
-    padding: 5%;
-    border-radius: 1%;
-    color: #262525f5;
-    width: 66%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    min-height: 10vh;
+    z-index: 1;
+    background-color: #3a3b3b6b;
+    pointer-events: none;
+
+    .body {
+        text-align: center;
+
+        p {
+            color: white;
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+    }
 }
 </style>
