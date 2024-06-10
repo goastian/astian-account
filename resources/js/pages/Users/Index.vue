@@ -7,10 +7,7 @@
             <th>email</th>
             <th>phone</th>
             <th>
-                <v-register
-                    @success="getUsers"
-                    bg="btn-blue"
-                ></v-register>
+                <v-register @success="getUsers" bg="btn-link"></v-register>
             </th>
         </template>
         <template v-slot:body>
@@ -35,6 +32,9 @@
             </tr>
         </template>
     </v-table>
+    <v-message :id="message_show">
+        <template v-slot:body> {{ message }} </template>
+    </v-message>
 
     <v-pagination
         v-show="pages.total > pages.per_page"
@@ -60,18 +60,15 @@ export default {
 
     data() {
         return {
-            items: ["First Name", "Last Name", "Email Address"],
             users: {},
             pages: {},
             search: {
                 page: 1,
+                per_page: 2,
             },
             message: null,
+            message_show: null,
         };
-    },
-
-    beforeMount() {
-        this.search.page = 1;
     },
 
     mounted() {
@@ -79,46 +76,58 @@ export default {
         this.listenEvents();
     },
 
-    methods: {
-        searching(data) {
-            this.search = Object.assign(this.search, data);
+    watch: {
+        "search.page"(value) {
             this.getUsers();
         },
+    },
 
+    methods: {
+        /**
+         * Send event to show message
+         * @param event
+         */
         alert(event) {
             if (event.status) {
+                this.message_show = Math.floor(Math.random() * 10000);
                 this.message = event.data.message;
             }
         },
 
-        close() {
-            this.message = null;
-        },
-
-        getUsers() {
-            this.message = null;
-            this.$server
-                .get("/api/admin/users", {
+        /**
+         * Get the all users
+         */
+        async getUsers() {
+            try {
+                const res = await this.$server.get("/api/admin/users", {
                     params: this.search,
-                })
-                .then((res) => {
-                    this.users = res.data.data;
-                    this.pages = res.data.meta.pagination;
-                    this.search.page = res.data.meta.pagination.current_page;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 403) {
-                        this.message = e.response.data.message;
-                    }
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
                 });
+
+                if (res.status == 204 || !res.data.data.length) {
+                    this.message = "Cannot find results";
+                    this.message_show = Math.floor(Math.random() * 10000);
+                }
+
+                if (res.status == 200 && res.data.data.length) {
+                    const values = res.data.data;
+                    const meta = res.data.meta;
+
+                    this.users = values;
+                    this.pages = meta.pagination;
+                    this.search.page = meta.pagination.current_page;
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.alert(e.response);
+                }
+                if (e.response && e.response.status == 401) {
+                    window.location.href = "/login";
+                }
+            }
         },
 
         changeList(id) {
             this.search.page = id;
-            this.getUsers();
         },
 
         listenEvents() {
