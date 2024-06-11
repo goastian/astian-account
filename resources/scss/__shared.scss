@@ -45,6 +45,23 @@
     min-width: 90%;
 }
 
+.textarea {
+    border: 1px solid var(--border-color-light);
+    color: var(--first-color);
+    border-radius: 0.5em;
+    min-width: 90%;
+    padding: 0.5% 1em;
+}
+
+.select {
+    min-width: 90%;
+    background-color: var(--white);
+    color: var(--first-color);
+    border: 1px solid var(--border-color-light);
+    padding: 0.5em 1em;
+    border-radius: 0.3em;
+}
+
 .group {
     display: flex;
     margin: 1% 0;
@@ -220,7 +237,7 @@
 }
 
 .text-danger {
-    color:  var(--warning)
+    color: var(--warning)
 }
 
 .text-link {

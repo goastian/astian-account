@@ -1,64 +1,65 @@
 <template>
-    <v-modal
-        :target="scope.scope.trim()"
-        @is-clicked="loadData(scope)"
-        @is-accepted="update(form)"
-        @is-closed="clean"
-    >
+    <v-modal @is-clicked="loadData(scope)">
         <template v-slot:button> Details </template>
+        <template v-slot:head>
+            Update scope (<strong v-text="scope.scope"></strong>)
+        </template>
         <template v-slot:body>
-            <div class="row">
-                <div class="col">
-                    <label for="scope">Scope Name</label>
+            <div class="box">
+                <div class="item">
+                    <label class="label fw-bold" for="scope">Scope Name</label>
                     <input
                         type="text"
-                        class="form-control form-control-sm"
+                        class="input"
                         placeholder="Role"
                         id="scope"
                         v-model="form.scope"
                     />
                     <v-error :error="errors.scope"></v-error>
                 </div>
-                <div class="col">
-                    <label for="description">Description</label>
-                    <input
-                        type="text"
-                        class="form-control form-control-sm"
-                        placeholder="description"
+                <div class="item">
+                    <label class="label fw-bold" for="description"
+                        >Description</label
+                    >
+                    <textarea
+                        class="textarea"
                         v-model="form.description"
-                    />
+                    ></textarea>
+
                     <v-error :error="errors.description"></v-error>
                 </div>
-                <div class="col">
-                    <label for="public"
+                <div class="item">
+                    <label class="label fw-bold text-md" for="public"
                         >Make available for all Users (Public Scope)</label
                     >
                     <select
                         v-model="form.public"
                         name="public"
                         id="public"
-                        class="form-control form-control-sm"
+                        class="select"
                     >
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                     </select>
                     <v-error :error="errors.public"></v-error>
                 </div>
-                <div class="col">
-                    <label for="required_payment">Required payment</label>
+                <div class="item">
+                    <label class="label fw-bold text-md" for="required_payment"
+                        >Required payment</label
+                    >
                     <select
                         v-model="form.required_payment"
                         name="required_payment"
                         id="required_payment"
-                        class="form-control form-control-sm"
+                        class="select"
                     >
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
                     </select>
                     <v-error :error="errors.required_payment"></v-error>
                 </div>
             </div>
-            <div v-show="message" class="my-3 py-2 bg-secondary text-light h6">
+            <div v-show="message">
                 {{ message }}
             </div>
         </template>
@@ -130,22 +131,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.col {
-    flex: 0 0 auto;
-    width: 100%;
-    margin-bottom: 1%;
+.box {
+    display: flex;
+    flex-wrap: wrap;
 
-    @media (min-width: 240px) {
-        width: 98%;
+    .item {
+        flex: 1 1 100%;
+
+        @media (min-width: 800px) {
+            flex: 1 1 calc(100% / 2);
+        }
+        margin-bottom: 1%;
     }
-
-    @media (min-width: 800px) {
-        width: 30%;
-    }
-}
-
-label {
-    display: block !important;
-    text-align: left;
 }
 </style>

@@ -27,6 +27,7 @@ export default {};
     border-radius: 0.5em;
     margin: 1% auto;
     padding: 0.5em;
+    width: 95%;
 
     @media (min-width: 800px) {
         width: 95%;
@@ -45,12 +46,6 @@ export default {};
             width: 100%;
             @media (min-width: 800px) {
                 font-size: 1em;
-            }
-
-            thead {
-            }
-
-            tbody {
             }
         }
     }
