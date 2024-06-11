@@ -48,12 +48,12 @@
                 <p class="title">
                     My Scopes <i class="bi bi-shield-lock h3 text-primary"></i>
                 </p>
-                <p class="items" v-for="(item, index) in roles" :key="index">{{ item.id }}</p>
+                <p class="items" v-for="(item, index) in roles" :key="index">
+                    {{ item.id }}
+                </p>
             </div>
         </div>
     </div>
-
-    <v-message :message="message" @close="close"></v-message>
 </template>
 <script>
 import VUpdate from "../Users/Update.vue";
@@ -67,7 +67,6 @@ export default {
         return {
             user: {},
             roles: {},
-            message: null,
             sessions: {},
         };
     },
@@ -78,45 +77,23 @@ export default {
     },
 
     methods: {
-        authenticated() {
-            this.$server
-                .get("/api/gateway/user")
-                .then((res) => {
+        async authenticated() {
+            try {
+                const res = await this.$server.get("/api/gateway/user");
+
+                if (res.status == 200) {
                     this.user = res.data;
-                    window.$auth = res.data;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
+                }
+            } catch (e) {}
         },
+        async scopes() {
+            try {
+                const res = this.$server.get("/api/oauth/scopes");
 
-        close() {
-            this.message = null;
-        },
-
-        showMessage(event) {
-            if (!event.status) {
-                this.message = event;
-                setTimeout(() => {
-                    window.location.href = window.location.host;
-                }, 5000);
-            }
-            this.message = event.data.message;
-        },
-
-        scopes() {
-            this.$server
-                .get("/api/oauth/scopes")
-                .then((res) => {
+                if (res.status == 200) {
                     this.roles = res.data;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
+                }
+            } catch (e) {}
         },
 
         listener() {
