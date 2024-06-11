@@ -1,14 +1,24 @@
 <template>
     <v-register @success="getChannels"></v-register>
 
-    <v-table :items="items">
+    <v-table>
+        <template v-slot:title> List of channels </template>
+        <template v-slot:head>
+            <th>channel</th>
+            <th>description</th>
+            <th>created</th>
+        </template>
         <template v-slot:body>
             <tr v-for="(item, index) in channels" :key="index">
-                <td class="fw-light"> {{ item.channel }} </td>
-                <td class="fw-light"> {{ item.description }} </td>
-                <td class="fw-light"> {{ item.created }} </td>
+                <td>{{ item.channel }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.created }}</td>
                 <td>
-                    <v-remove :item="item" @success="getChannels"></v-remove>
+                    <v-remove
+                        :item="item"
+                        @success="getChannels"
+                        @errors="showMessage"
+                    ></v-remove>
                 </td>
             </tr>
         </template>
@@ -20,7 +30,11 @@
         @send-current-page="updateList"
     ></v-pagination>
 
-    <v-message :message="message" @close="close"></v-message>
+    <v-message :id="message_show">
+        <template v-slot:body>
+            {{ message }}
+        </template>
+    </v-message>
 </template>
 <script>
 import VRegister from "./Register.vue";
@@ -34,13 +48,14 @@ export default {
 
     data() {
         return {
-            items: ["Channel", "description", "registered"],
             channels: {},
             pages: {},
             search: {
                 page: 1,
+                per_page: 30,
             },
             message: null,
+            message_show: null,
         };
     },
 
@@ -55,24 +70,26 @@ export default {
             this.getChannels();
         },
 
-        close() {
-            this.message = null;
+        showMessage(event) {
+            this.message_show = Math.floor(Math.random() * 10000);
+            this.message = event.data.message;
         },
 
-        getChannels() {
-            this.$server
-                .get("/api/broadcasts", {
+        async getChannels() {
+            try {
+                const res = await this.$server.get("/api/broadcasts", {
                     params: this.search,
-                })
-                .then((res) => {
+                });
+
+                if (res.status) {
                     this.channels = res.data.data;
                     this.pages = res.data.meta.pagination;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 403) {
-                        this.message = e.response.data.message;
-                    }
-                });
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.message = e.response.data.message;
+                }
+            }
         },
 
         listenChannels() {
@@ -92,19 +109,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.col {
-    flex: 0 0 auto;
-    width: 90%;
-
-    @media (min-width: 240px) {
-        width: 98%;
-        margin: 1% 0;
-        padding: 0;
+th {
+    text-align: start;
+    &::first-letter {
+        text-transform: uppercase;
     }
+}
 
-    @media (min-width: 850px) {
-        width: 48%;
-        margin: 1%;
+tr {
+    td {
+        text-align: start;
+        &::first-letter {
+            text-transform: uppercase;
+        }
+        &:nth-child(2) {
+            min-width: 150px;
+        }
     }
 }
 </style>
