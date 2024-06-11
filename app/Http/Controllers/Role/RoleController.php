@@ -130,5 +130,4 @@ class RoleController extends Controller
 
         $this->showOne($role, $role->transformer);
     }
-
 }

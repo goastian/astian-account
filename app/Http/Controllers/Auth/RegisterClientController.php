@@ -17,11 +17,6 @@ use Illuminate\Support\Facades\Lang;
 class RegisterClientController extends Controller
 {
 
-    public function __construct(Employee $client)
-    {
-        //$this->middleware('transform.request:' . $client->transformer)->only('store');
-    }
-
     /**
      * show view to register information
      */
@@ -37,8 +32,8 @@ class RegisterClientController extends Controller
     public function store(Request $request, Employee $client)
     {
         $this->validate($request, [
-            'name' => ['required','regex:/^[A-Za-z\s]+$/', 'min:3',  'max:100'],
-            'last_name' => ['required','regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],
+            'name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],
+            'last_name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'min:8'],
             //'address' => ['nullable', 'max:150'],

@@ -20,7 +20,6 @@ class AuthenticatedSessionController extends Controller
         $this->middleware('auth')->only('destroy');
         $this->middleware('reactive.account')->only('store');
         $this->middleware('2fa-mail')->only('store');
-
     }
 
     /**

@@ -11,7 +11,6 @@ use Laravel\Passport\Passport;
 
 class ClientController extends Controller
 {
-
     /**
      * Get all of the clients for the authenticated user.
      *
@@ -98,9 +97,9 @@ class ClientController extends Controller
         /*$clientForDB = $this->existsForThisUser($request);
 
         if ($clientForDB->user_id == $client->user_id and $clientForDB->redirect != $client->redirect) {
-            $this->validation->make($request->only('redirect'), [
-                'redirect' => ['unique:oauth_clients,redirect'],
-            ])->validate();
+        $this->validation->make($request->only('redirect'), [
+        'redirect' => ['unique:oauth_clients,redirect'],
+        ])->validate();
         }*/
 
         $this->validation->make($request->all(), [
@@ -141,7 +140,7 @@ class ClientController extends Controller
         if (!$client) {
             return new Response(__('Not Found'), 404);
         }
-     
+
         DB::transaction((function () use ($client) {
 
             $this->clients->delete($client);
@@ -152,6 +151,6 @@ class ClientController extends Controller
 
         }));
 
-        return new Response(__('Success operation'), 200);
+        return new Response(__('Operation successful.'), 200);
     }
 }

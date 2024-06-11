@@ -17,7 +17,5 @@ class Notification extends Model
 
     protected $fillable = [
         //
-    ];
-    
-    
+    ];    
 }
