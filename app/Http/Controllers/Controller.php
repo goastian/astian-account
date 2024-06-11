@@ -14,5 +14,4 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Controller extends BaseController
 {
     use AuthorizesRequests, Socket, DispatchesJobs, ValidatesRequests, JsonResponser, Asset,Timestamps;
-
 }

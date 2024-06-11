@@ -29,5 +29,4 @@ class Country extends Master
         "km2",
         "emoji",
     ];
-
 }

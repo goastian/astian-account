@@ -30,5 +30,4 @@ class Session extends Master
 
         return $this->format_date($date);
     }
-
 }

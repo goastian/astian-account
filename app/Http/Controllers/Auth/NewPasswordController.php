@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\GlobalController as Controller;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
@@ -12,20 +11,20 @@ use Illuminate\Validation\ValidationException;
 
 class NewPasswordController extends Controller
 {
-
-    public function __construct()
-    {
-        //$this->middleware('guest');
-    }
-
+    /**
+     * Show view to change password
+     *
+     * @param Request $request
+     */
     public function create(Request $request)
     {
-       /* if ($request->user()) {
-            throw new ReportError(__("we're detecting an open account, please close and reload the page before " . env('RESET_PASSWORD_EXPIRED') . " minutes"), 403);
+        /* if ($request->user()) {
+        throw new ReportError(__("we're detecting an open account, please close and reload the page before " . env('RESET_PASSWORD_EXPIRED') . " minutes"), 403);
         }*/
 
         return view('auth.reset-password')->with(['token' => $request->token, 'email' => $request->email]);
     }
+
     /**
      * Handle an incoming new password request.
      *

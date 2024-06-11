@@ -26,8 +26,8 @@ class GlobalController extends Controller
     public function authenticated_user()
     {
         $user = fractal(Auth::user(), EmployeeTransformer::class);
-         
-        return  json_decode(json_encode($user))->data;
+
+        return json_decode(json_encode($user))->data;
     }
 
     /**
@@ -46,6 +46,5 @@ class GlobalController extends Controller
 
             $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
         }
-
     }
 }

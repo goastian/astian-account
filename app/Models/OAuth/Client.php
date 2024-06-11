@@ -8,5 +8,4 @@ use Laravel\Passport\Client as PassportClient;
 class Client extends PassportClient
 {
     use Timestamps;
-
 }

@@ -41,7 +41,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:240,1',
+            'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -73,7 +73,6 @@ class Kernel extends HttpKernel
         'verify.account' => \App\Http\Middleware\VerifyAccount::class,
         'verify.credentials' => \App\Http\Middleware\verifyCredentials::class,
         '2fa-mail' => \App\Http\Middleware\Auth2faMiddleware::class,
-        'reactive.account' => \App\Http\Middleware\ReactiveAccount::class, 
-
+        'reactive.account' => \App\Http\Middleware\ReactiveAccount::class,
     ];
 }

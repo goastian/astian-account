@@ -180,7 +180,7 @@ class AuthorizationController extends Controller
                 }
             }
         }
+
         $request->merge(['scope' => implode(" ", $scopes_accepted)]);
     }
-
 }

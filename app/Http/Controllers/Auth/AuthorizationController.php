@@ -40,7 +40,6 @@ class AuthorizationController extends GlobalController
      */
     public function destroy(Request $request)
     {
-
         try {
             $access_token_id = $this->decode_token($request) ?: request()->user()->token()->id;
 
@@ -65,7 +64,6 @@ class AuthorizationController extends GlobalController
      */
     public function decode_token(Request $request)
     {
-
         try {
             $token = $request->cookie(env('PASSPORT_TOKEN'));
 

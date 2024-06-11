@@ -51,5 +51,4 @@ class Broadcast extends Master
             'auth' => "default channel in the system",
         ];
     }
-
 }
