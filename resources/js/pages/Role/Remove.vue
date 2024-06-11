@@ -1,33 +1,19 @@
 <template>
-    <v-modal
-        :target="'_R_' + scope.scope.trim()"
-        styles="btn-sm btn-danger"
-        button_cancel_name="Abortar operacion"
-        :button_accept_show="false"
-    >
-        <template v-slot:button>Destroy</template>
-        <template v-slot:body>
-            <p class="fw-bold text-uppercase text-color mb-2 h4">
-                The next scope will be destroyed
-            </p>
-            <p class="fw-bold text-uppercase h5">
-                <strong>{{ scope.scope }}:</strong> {{ scope.descripcion }}
-            </p>
-            <span class="h6 text-danger mt-3 text-uppercase">
-                Please use caution when removing a scope. Deleting a scope may
-                lead to system malfunction, and should only be done if a scope
-                has been mistakenly entered
-            </span>
-            <br />
-            <button
-                class="btn btn-primary my-4"
-                @click="remove(scope)"
-                data-bs-dismiss="modal"
-            >
-                Destroy
-            </button>
+    <v-confirm bg="btn-secondary" @is-confirmed="removeScope(scope)">
+        <template v-slot:button> Delete </template>
+        <template v-slot:head>
+            The next scope (<strong>{{ scope.scope }}</strong
+            >) will be destroyed
         </template>
-    </v-modal>
+        <template v-slot:body>
+            <p class="text-xl fw-bold">Caution: System failure</p>
+            <p class="text-md">
+                Deleting this scope may cause system failures. Only delete
+                scopes that were entered by mistake or that are no longer
+                necessary for the operation of any application.
+            </p>
+        </template>
+    </v-confirm>
 </template>
 <script>
 export default {
@@ -41,17 +27,21 @@ export default {
     },
 
     methods: {
-        remove(scope) {
-            this.$server
-                .delete(scope.links.destroy)
-                .then((res) => {
+        async removeScope(item) {
+            try {
+                const res = await this.$server.delete(item.links.destroy);
+                if (res.status == 200) {
                     this.$emit("success", res.data.data);
-                })
-                .catch((e) => {
-                    if (e.response) {
-                        this.$emit("errors", e.response);
-                    }
-                });
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 401) {
+                    window.location.href = "login";
+                }
+
+                if (e.response && e.response.status == 403) {
+                    this.$emit("errors", e.response)
+                }
+            }
         },
     },
 };

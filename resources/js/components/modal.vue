@@ -94,11 +94,12 @@ export default {
     .content {
         background-color: white;
         width: 95%;
+        margin: 20% auto;
         min-height: auto;
         border: 1px solid #cfc8c8;
         border-radius: 1em;
         @media (min-width: 800px) {
-            margin: 0.5% auto;
+            margin: 5% auto;
             width: 95%;
         }
         @media (min-width: 940px) {

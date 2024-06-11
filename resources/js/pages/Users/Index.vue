@@ -17,17 +17,23 @@
                 <td v-text="item.email"></td>
                 <td v-text="item.full_phone"></td>
                 <td>
-                    <v-scopes :user="item" bg="btn-primary"></v-scopes>
-                    <v-update
-                        :user="item"
-                        @success="getUsers"
-                        bg="btn-secondary"
-                    ></v-update>
-                    <v-status
-                        :user="item"
-                        @success="getUsers"
-                        @errors="alert"
-                    ></v-status>
+                    <div>
+                        <v-scopes :user="item" bg="btn-primary"></v-scopes>
+                    </div>
+                    <div>
+                        <v-update
+                            :user="item"
+                            @success="getUsers"
+                            bg="btn-secondary"
+                        ></v-update>
+                    </div>
+                    <div>
+                        <v-status
+                            :user="item"
+                            @success="getUsers"
+                            @errors="alert"
+                        ></v-status>
+                    </div>
                 </td>
             </tr>
         </template>
@@ -64,7 +70,7 @@ export default {
             pages: {},
             search: {
                 page: 1,
-                per_page: 2,
+                per_page: 30,
             },
             message: null,
             message_show: null,
@@ -103,7 +109,7 @@ export default {
                     params: this.search,
                 });
 
-                if (res.status == 204 || !res.data.data.length) {
+                if (res.status == 204) {
                     this.message = "Cannot find results";
                     this.message_show = Math.floor(Math.random() * 10000);
                 }
@@ -189,6 +195,9 @@ tr {
         &:nth-child(5) {
             display: flex;
             justify-content: space-between;
+            div {
+                padding: 0.1em;
+            }
         }
     }
     &:hover {

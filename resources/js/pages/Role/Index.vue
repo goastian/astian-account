@@ -1,23 +1,35 @@
 <template>
-    <v-create @success="getScopes(actual_page)"></v-create>
-    <v-table :items="items">
+    <v-create @success="getScopes()"></v-create>
+    <v-table>
+        <template v-slot:title> List of Scopes </template>
+        <template v-slot:head>
+            <th>scope</th>
+            <th>description</th>
+            <th>public</th>
+            <th>require payment</th>
+        </template>
         <template v-slot:body>
             <tr v-for="(item, index) in scopes" :key="index">
-                <td class="fw-light">{{ item.scope }}</td>
-                <td class="fw-light">{{ item.description }}</td>
-                <td class="fw-light">{{ item.public ? "Yes" : "No" }}</td>
-                <td class="fw-light">{{ item.required_payment ? "Yes" : "No" }}</td>
+                <td>{{ item.scope }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.public ? "Yes" : "No" }}</td>
                 <td>
-                    <v-update
-                        :scope="item"
-                        @success="getScopes(actual_page)"
-                    ></v-update>
-
-                    <v-remove
-                        :scope="item"
-                        @success="getScopes(actual_page)"
-                        @errors="showMessage"
-                    ></v-remove>
+                    {{ item.required_payment ? "Yes" : "No" }}
+                </td>
+                <td>
+                    <div>
+                        <v-update
+                            :scope="item"
+                            @success="getScopes()"
+                        ></v-update>
+                    </div>
+                    <div>
+                        <v-remove
+                            :scope="item"
+                            @success="getScopes()"
+                            @errors="showMessage"
+                        ></v-remove>
+                    </div>
                 </td>
             </tr>
         </template>
@@ -28,7 +40,11 @@
         @send-current-page="changePage"
     ></v-pagination>
 
-    <v-message :message="message" @close="close"></v-message>
+    <v-message :id="message_show">
+        <template v-slot:body>
+            {{ message }}
+        </template>
+    </v-message>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -44,76 +60,108 @@ export default {
 
     data() {
         return {
-            items: ["id", "Description", "Public", "Required payment"],
             scopes: {},
             pages: {},
-            actual_page: 1,
+            search: {
+                page: 1,
+                per_page: 2,
+            },
             message: null,
+            message_show: null,
         };
     },
 
-    beforeMount() {
-        this.actual_page = 1;
+    mounted() {
+        this.getScopes();
+        this.listenEvent();
     },
 
-    mounted() {
-        this.getScopes(this.actual_page);
-        this.listenEvent();
+    watch: {
+        "search.page"(value) {
+            this.getScopes();
+        },
     },
 
     methods: {
         showMessage(event) {
+            this.message_show = Math.floor(Math.random() * 10000);
             this.message = event.data.message;
         },
 
-        close() {
-            this.message = null;
-        },
-
         changePage(page) {
-            this.actual_page = page;
-            this.getScopes(page);
+            this.search.page = page;
         },
 
-        getScopes(id) {
-            this.$server
-                .get("/api/admin/roles", {
-                    params: {
-                        page: id,
-                    },
-                })
-                .then((res) => {
-                    this.scopes = res.data.data;
-                    this.pages = res.data.meta.pagination;
-                    this.actual_page = res.data.meta.pagination.current_page;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 403) {
-                        this.message = e.response.data.message;
-                    }
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
+        async getScopes() {
+            try {
+                const res = await this.$server.get("/api/admin/roles", {
+                    params: this.search,
                 });
+
+                if (res.status == 204) {
+                    this.message = "Cannot find results";
+                    this.message_show = Math.floor(Math.random() * 10000);
+                }
+
+                if (res.status == 200) {
+                    const values = res.data.data;
+                    const meta = res.data.meta;
+
+                    this.scopes = values;
+                    this.pages = meta.pagination;
+                    this.actual_page = meta.pagination.current_page;
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.message = e.response.data.message;
+                }
+                if (e.response && e.response.status == 401) {
+                    window.location.href = "/login";
+                }
+            }
         },
 
         listenEvent() {
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("StoreRoleEvent", (e) => {
-                    this.getScopes(this.actual_page);
+                    this.getScopes();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("UpdateRoleEvent", (e) => {
-                    this.getScopes(this.actual_page);
+                    this.getScopes();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("DestroyRoleEvent", (e) => {
-                    this.getScopes(this.actual_page);
+                    this.getScopes();
                 });
         },
     },
 };
 </script>
+
+<style lang="scss" scoped>
+th {
+    text-align: start;
+    text-transform: capitalize;
+}
+
+tr {
+    td {
+        min-width: 100px;
+        &:nth-child(2) {
+            min-width: 200px;
+        }
+
+        &:nth-child(5) {
+            display: flex;
+            justify-content: space-around;
+            div {
+                padding: 0.1em;
+            }
+        }
+    }
+}
+</style>

@@ -170,7 +170,9 @@
             <div>
                 <v-error :error="errors.scope"></v-error>
             </div>
-            <!--  <v-message :message="message" @close="close"></v-message>-->
+            <v-message :id="message_show" @close="close">
+                <template v-slot:body> {{ message }} </template>
+            </v-message>
         </template>
     </v-modal>
 </template>
@@ -195,6 +197,7 @@ export default {
             errors: {},
             roles: {},
             message: null,
+            message_show: null,
             countries: {},
         };
     },
@@ -216,45 +219,57 @@ export default {
         close() {
             this.message = null;
         },
-        getRoles() {
-            this.$server
-                .get("/api/admin/roles")
-                .then((res) => {
+
+        async getRoles() {
+            try {
+                const res = await this.$server.get("/api/admin/roles");
+
+                if (res.status == 200) {
                     this.roles = res.data.data;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 401) {
+                    window.location.href = "/login";
+                }
+            }
         },
 
-        createUser() {
-            this.$server
-                .post("/api/admin/users", this.form)
-                .then((res) => {
+        async createUser() {
+            try {
+                const res = await this.$server.post(
+                    "/api/admin/users",
+                    this.form
+                );
+
+                if (res.status == 201) {
                     this.message = "A new user has been registered";
+                    this.message_show = Math.floor(Math.random() * 10000);
                     this.form = { scope: [] };
                     this.errors = {};
-                    this.$emit("success", res.data.data);
-                })
-                .catch((e) => {
-                    if (e.response && e.response.data.errors) {
-                        this.errors = e.response.data.errors;
-                    }
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
+                    this.$emit("success", true);
+                }
+            } catch (e) {
+                if (
+                    e.response &&
+                    e.response.data.errors &&
+                    e.response.status == 422
+                ) {
+                    this.errors = e.response.data.errors;
+                }
+                if (e.response && e.response.status == 401) {
+                    window.location.href = "/login";
+                }
+            }
         },
 
-        getCountries() {
-            this.$server
-                .get("/api/locations/countries")
-                .then((res) => {
+        async getCountries() {
+            try {
+                const res = await this.$server.get("/api/locations/countries");
+
+                if (res.status == 200) {
                     this.countries = res.data;
-                })
-                .catch((err) => {});
+                }
+            } catch (e) {}
         },
     },
 };
