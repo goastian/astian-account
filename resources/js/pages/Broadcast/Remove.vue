@@ -1,46 +1,40 @@
 <template>
-    <v-modal
-        :target="'XXX_'.concat(item.canal)"
-        styles="btn btn-sm btn-danger"
-        :button_accept_show="false"
-    >
+    
+    <v-confirm @is-confirmed="remove(item)">
         <template v-slot:button> remove </template>
+
         <template v-slot:head>
-            <span>Remove Channel</span>
+            Remove Channel (<strong>{{ item.channel }}</strong
+            >)
         </template>
         <template v-slot:body>
-            <div class="text-center">
-                <p>
-                    Are you sure to destroy this channel?
-                </p>
-
-                <button
-                    class="mt-4 btn-primary btn"
-                    @click="remove(item)"
-                    data-bs-dismiss="modal"
-                >
-                    Aceptar
-                </button>
-            </div>
+            <p class="text-xl text-center">
+                Are you sure to destroy this channel
+                <strong>{{ item.channel }}</strong
+                >?
+            </p>
         </template>
-    </v-modal>
+    </v-confirm>
 </template>
 <script>
 export default {
     props: ["item"],
 
-    emits: ["success"],
+    emits: ["success", "errors"],
 
     methods: {
-        remove(item) {
-            this.$server
-                .delete(item.links.destroy)
-                .then((res) => {
+        async remove(item) {
+            try {
+                const res = await this.$server.delete(item.links.destroy);
+
+                if (res.status == 200) {
                     this.$emit("success", res.data.data);
-                })
-                .catch((e) => {
-                    console.error(e.response);
-                });
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.$emit("errors", e.response);
+                }
+            }
         },
     },
 };
