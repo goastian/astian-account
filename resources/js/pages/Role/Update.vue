@@ -1,5 +1,5 @@
 <template>
-    <v-modal @is-clicked="loadData(scope)">
+    <v-modal @is-clicked="loadData(scope)" @is-accepted="updateRole(scope)">
         <template v-slot:button> Details </template>
         <template v-slot:head>
             Update scope (<strong v-text="scope.scope"></strong>)
@@ -38,8 +38,8 @@
                         id="public"
                         class="select"
                     >
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option :value="true">Yes</option>
+                        <option :value="false">No</option>
                     </select>
                     <v-error :error="errors.public"></v-error>
                 </div>
@@ -53,8 +53,8 @@
                         id="required_payment"
                         class="select"
                     >
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
+                        <option :value="true">Yes</option>
+                        <option :value="false">No</option>
                     </select>
                     <v-error :error="errors.required_payment"></v-error>
                 </div>
@@ -90,41 +90,43 @@ export default {
             this.message = null;
         },
 
-        loadData(scope) {
-            this.$server
-                .get(scope.links.show)
-                .then((res) => {
+        async loadData(scope) {
+           try {
+                const res = await this.$server.get(scope.links.show);
+
+                if (res.status) {
                     this.form = res.data.data;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
+                }
+            } catch (e) {}
         },
 
-        update(scope) {
+        async updateRole(scope) {
             this.message = null;
-            this.$server
-                .put(scope.links.update, this.form)
-                .then((res) => {
+
+            try {
+                const res = await this.$server.put(
+                    scope.links.update,
+                    this.form
+                );
+
+                if ([201, 200].includes(res.status)) {
                     this.message = "Successful update.";
                     this.errors = {};
                     this.$emit("success", res.data.data);
-                })
-                .catch((e) => {
-                    if (
-                        e.response &&
-                        e.response.status != 403 &&
-                        e.response.data.errors
-                    ) {
-                        this.errors = e.response.data.errors;
-                    }
+                }
+            } catch (e) {
+                if (
+                    e.response &&
+                    e.response.status == 422 &&
+                    e.response.data.errors
+                ) {
+                    this.errors = e.response.data.errors;
+                }
 
-                    if (e.response.status == 403 && e.response.data.message) {
-                        this.message = e.response.data.message;
-                    }
-                });
+                if (e.response.status == 403 && e.response.data.message) {
+                    this.message = e.response.data.message;
+                }
+            }
         },
     },
 };

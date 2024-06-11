@@ -103,6 +103,7 @@ export default {
             width: 95%;
         }
         @media (min-width: 940px) {
+            margin: 1% auto;
             width: 80%;
         }
 

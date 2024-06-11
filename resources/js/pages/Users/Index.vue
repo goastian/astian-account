@@ -126,9 +126,6 @@ export default {
                 if (e.response && e.response.status == 403) {
                     this.alert(e.response);
                 }
-                if (e.response && e.response.status == 401) {
-                    window.location.href = "/login";
-                }
             }
         },
 

@@ -115,9 +115,6 @@ export default {
                 if (e.response && e.response.status == 403) {
                     this.message = e.response.data.message;
                 }
-                if (e.response && e.response.status == 401) {
-                    window.location.href = "/login";
-                }
             }
         },
 
