@@ -1,5 +1,5 @@
 <template>
-    <v-confirm      
+    <v-confirm
         :bg="user.disabled ? 'btn-ternary' : 'btn-warning'"
         @is-confirmed="enableOrDisable(user)"
     >
@@ -27,29 +27,39 @@ export default {
     },
 
     methods: {
+        async enableUser(item) {
+            try {
+                const res = await this.$server.get(item.links.enable);
+
+                if (res.status == 200) {
+                    this.$emit("success", res.data.data);
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.$emit("errors", e.response);
+                }
+            }
+        },
+
+        async disableUser(item) {
+            try {
+                const res = await this.$server.delete(item.links.disable);
+
+                if (res.status == 200) {
+                    this.$emit("success", res.data.data);
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.$emit("errors", e.response);
+                }
+            }
+        },
+
         enableOrDisable(item) {
             if (item.disabled) {
-                this.$server
-                    .get(item.links.enable)
-                    .then((res) => {
-                        this.$emit("success", res.data.data);
-                    })
-                    .catch((e) => {
-                        if (e.response) {
-                            this.$emit("errors", e.response);
-                        }
-                    });
+                this.enableUser(item);
             } else {
-                this.$server
-                    .delete(item.links.disable)
-                    .then((res) => {
-                        this.$emit("success", res.data.data);
-                    })
-                    .catch((e) => {
-                        if (e.response) {
-                            this.$emit("errors", e.response);
-                        }
-                    });
+                this.disableUser(item);
             }
         },
     },

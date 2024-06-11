@@ -1,10 +1,6 @@
 <template>
     <!-- Card para mostrar y actualizar datos del usuario-->
-    <v-modal
-        @is-clicked="loadData(user)"
-        @is-accepted="update(user)"
-        :accept="false"
-    >
+    <v-modal @is-clicked="loadData(user)" @is-accepted="update(user)">
         <template v-slot:button> Scopes </template>
         <template v-slot:head>
             Add Or remove Scopes for {{ user.name }}
@@ -20,6 +16,7 @@
                     <div class="box">
                         <v-confirm
                             bg="btn-light"
+                            btn=""
                             @is-clicked="confirmAction(item)"
                             @is-confirmed="addOrRemoveScope(item.id)"
                             @is-cancel="cancelAction(item.id)"
@@ -68,6 +65,10 @@ export default {
     },
 
     methods: {
+        /**
+         * Show a windows confirmation
+         * @param item
+         */
         confirmAction(item) {
             const checked = document.getElementById(item.id).checked;
             this.text_body = checked
@@ -75,60 +76,69 @@ export default {
                 : `The next role <strong>${item.scope}</strong> will be added`;
         },
 
+        /**
+         * Add or remove roles
+         * @param id
+         */
         addOrRemoveScope(id) {
-            const role = document.getElementById(id).checked;
+            this.message = null;
+            this.status = null;
+            const checked = document.getElementById(id).checked;
 
-            if (role.checked) {
-                this.addOrRemoveRoles(id);
+            if (checked) {
+                this.addRoles(id);
             } else {
-                this.addOrRemoveRoles(id);
+                this.removeRoles(id);
             }
         },
 
+        /**
+         * Cancel operation
+         */
         cancelAction(id) {
             var role = document.getElementById(id);
             role.checked = !role.checked;
         },
 
         /**
-         * agrega o elimina permisos
+         * Add roles
          */
-        addOrRemoveRoles(id) {
-            this.message = null;
-            this.status = null;
-            const checked = document.getElementById(id).checked;
+        async addRoles(id) {
+            try {
+                const res = this.$server.post(this.user.links.roles, {
+                    scope_id: id,
+                });
 
-            if (checked) {
-                this.$server
-                    .post(this.user.links.roles, { scope_id: id })
-                    .then((res) => {
-                        this.message = `A new Scope <strong> (${res.data.data.scope}) </strong> added`;
-                    })
-                    .catch((e) => {
-                        if (e.response && e.response.data.status == 403) {
-                            this.message = e.response.data.errors.message;
-                        }
-                        if (e.response && e.response.data.message) {
-                            this.message = e.response.data.message;
-                        }
-                    });
-            } else {
-                this.$server
-                    .delete(`${this.user.links.roles}/${id}`)
-                    .then((res) => {
-                        this.message = `The Scope <strong> ${res.data.data.scope} </atrong> was removed`;
-                    })
-                    .catch((e) => {
-                        if (e.response && e.response.status == 403) {
-                            if (e.response && e.response.data.message) {
-                                this.message = e.response.data.message;
-                            }
+                if (res.status == 422) {
+                    this.message = `A new Scope <strong> (${res.data.data.scope}) </strong> added`;
+                }
+            } catch (e) {
+                if (e.response && e.response.data.status == 403) {
+                    this.message = e.response.data.errors.message;
+                }
+                if (e.response && e.response.status == 422) {
+                    this.message = e.response.data.message;
+                }
+            }
+        },
 
-                            if (e.response && e.response.data.errors) {
-                                this.errors = e.response.data.errors;
-                            }
-                        }
-                    });
+        async removeRoles(id) {
+            try {
+                const res = await this.$server.delete(
+                    `${this.user.links.roles}/${id}`
+                );
+
+                if (res.status == 200) {
+                    this.message = `The Scope <strong> ${res.data.data.scope} </atrong> was removed`;
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.message = e.response.data.message;
+                }
+
+                if (e.response && e.response.status == 422) {
+                    this.errors = e.response.data.errors;
+                }
             }
         },
 
@@ -137,54 +147,28 @@ export default {
             this.getUserRoles(user);
         },
 
-        getRoles() {
-            this.$server
-                .get("/api/admin/roles")
-                .then((res) => {
-                    this.roles = res.data.data;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
-        },
+        async getRoles() {
+            try {
+                const res = await this.$server.get("/api/admin/roles");
 
-        /**
-         * Actualiza a un usuario
-         * @param {*} item
-         */
-        update(item) {
-            this.status = null;
-            this.message = null;
-            this.$server
-                .put(item.links.update, this.user)
-                .then((res) => {
-                    this.status = "User updated";
-                    this.$emit("success", res.data.data);
-                    this.errors = {};
-                })
-                .catch((e) => {
-                    if (e.response && e.response.data.errors) {
-                        this.errors = e.response.data.errors;
-                    }
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
+                if (res.status == 200) {
+                    this.roles = res.data.data;
+                }
+            } catch (e) {}
         },
 
         /**
          * Obtiene los roles de un usuario
          */
-        getUserRoles(item) {
-            this.message = null;
-            this.$server
-                .get(item.links.roles)
-                .then((res) => {
+        async getUserRoles(item) {
+            try {
+                this.message = null;
+                const res = await this.$server.get(item.links.roles);
+
+                if (res.status == 200) {
                     this.role_selected(res.data.data);
-                })
-                .catch((e) => {});
+                }
+            } catch (e) {}
         },
 
         /**
@@ -220,6 +204,10 @@ export default {
 
         .box {
             display: flex;
+
+            label {
+                margin-left: 1%;
+            }
         }
     }
 }

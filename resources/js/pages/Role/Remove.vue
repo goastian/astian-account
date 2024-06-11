@@ -34,12 +34,8 @@ export default {
                     this.$emit("success", res.data.data);
                 }
             } catch (e) {
-                if (e.response && e.response.status == 401) {
-                    window.location.href = "login";
-                }
-
                 if (e.response && e.response.status == 403) {
-                    this.$emit("errors", e.response)
+                    this.$emit("errors", e.response);
                 }
             }
         },

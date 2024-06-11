@@ -1,5 +1,5 @@
 <template>
-    <v-modal @is-accepted="update(user)">
+    <v-modal @is-accepted="update(user)" @is-clicked="loadData">
         <template v-slot:button> Details </template>
         <template v-slot:head>
             <p class="label text-sm fw-bold">
@@ -124,7 +124,7 @@
                     <v-error :error="errors.country"></v-error>
                 </div>
                 <div class="item">
-                    <label class="text-sm fw-bold">City Or State</label> 
+                    <label class="text-sm fw-bold">City Or State</label>
                     <input
                         @keypress.enter="update(user)"
                         v-model="user.city"
@@ -199,10 +199,6 @@ export default {
         };
     },
 
-    mounted() {
-        this.getCountries();
-    },
-
     methods: {
         setContry(event) {
             this.user.country = event.name_en;
@@ -212,44 +208,53 @@ export default {
             this.user.dial_code = event.dial_code;
         },
 
+        loadData() {
+            this.getCountries();
+        },
+
         /**
          * Actualiza a un usuario
          * @param {*} item
          */
-        update(item) {
+        async update(item) {
             this.status = null;
-            this.$server
-                .put(item.links.update, this.user)
-                .then((res) => {
+
+            try {
+                const res = await this.$server.put(
+                    item.links.update,
+                    this.user
+                );
+
+                if ([200, 201].includes(res.status)) {
                     this.status = "User updated";
                     this.$emit("success", res.data.data);
                     this.errors = {};
-                })
-                .catch((e) => {
-                    if (
-                        e.response &&
-                        e.response.data.errors &&
-                        e.response.status == 422
-                    ) {
-                        this.errors = e.response.data.errors;
-                    }
-                    if (e.response && e.response.status == 403) {
-                        this.status =
-                            "Without authorization to perform this action";
-                    }
-                    if (e.response && e.response.status == 401) {
-                        window.location.href = "/login";
-                    }
-                });
+                }
+            } catch (e) {
+                if (
+                    e.response &&
+                    e.response.data.errors &&
+                    e.response.status == 422
+                ) {
+                    this.errors = e.response.data.errors;
+                }
+                if (e.response && e.response.status == 403) {
+                    this.status =
+                        "Without authorization to perform this action";
+                }
+                 
+            }
         },
 
-        getCountries() {
-            this.$server
-                .get("/api/locations/countries")
-                .then((res) => {
+        async getCountries() {
+            try {
+                const res = await this.$server.get("/api/locations/countries");
+                if (res.status == 200) {
                     this.countries = res.data;
-                })
-                .catch((err) => {});
+                }
+            } catch (e) {
+                 
+            }
         },
     },
 };

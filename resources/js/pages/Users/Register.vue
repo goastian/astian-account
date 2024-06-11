@@ -1,5 +1,5 @@
 <template>
-    <v-modal target="create" @is-accepted="createUser">
+    <v-modal target="create" @is-accepted="createUser" @is-clicked="loadData">
         <template v-slot:button> add new user </template>
         <template v-slot:head>
             <span class="text-uppercase text-center fw-bold"
@@ -202,11 +202,6 @@ export default {
         };
     },
 
-    mounted() {
-        this.getRoles();
-        this.getCountries();
-    },
-
     methods: {
         setCountry(event) {
             this.form.country = event.name_en;
@@ -220,6 +215,11 @@ export default {
             this.message = null;
         },
 
+        loadData() {
+            this.getRoles();
+            this.getCountries();
+        },
+
         async getRoles() {
             try {
                 const res = await this.$server.get("/api/admin/roles");
@@ -227,11 +227,7 @@ export default {
                 if (res.status == 200) {
                     this.roles = res.data.data;
                 }
-            } catch (e) {
-                if (e.response && e.response.status == 401) {
-                    window.location.href = "/login";
-                }
-            }
+            } catch (e) {}
         },
 
         async createUser() {
@@ -255,9 +251,6 @@ export default {
                     e.response.status == 422
                 ) {
                     this.errors = e.response.data.errors;
-                }
-                if (e.response && e.response.status == 401) {
-                    window.location.href = "/login";
                 }
             }
         },

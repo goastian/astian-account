@@ -1,5 +1,5 @@
 <template>
-    <button class="btn" :class="bg" @click="showMessage">
+    <button :class="[bg,btn]" @click="showMessage">
         <slot name="button"></slot>
     </button>
 
@@ -29,6 +29,7 @@
 export default {
     props: {
         bg: { required: false, type: String, default: "btn-primary" },
+        btn: { required: false, type: String, default: "btn" },
     },
 
     emits: ["isConfirmed", "isCancel", "isClicked"],
