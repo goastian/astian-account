@@ -1,36 +1,39 @@
 <template>
-    <v-register-client @client-registered="getClients"></v-register-client>
+    <div>
+        <v-register-client @client-registered="getClients"></v-register-client>
 
-    <v-table :items="items">
-        <template v-slot:body>
-            <tr
-                v-for="(item, index) in clients"
-                :key="index"
-                class="align-middle"
-            >
-                <td>
-                    {{ item.id }}
-                </td>
-                <td>
-                    {{ item.secret }}
-                </td>
-                <td>
-                    {{ item.name }}
-                </td>
-                <td>
-                    {{ item.redirect }}
-                </td>
-                <td>
-                    <v-remove
-                        :client="item"
-                        @clientWasRemove="getClients"
-                    ></v-remove>
-
-                    <v-update :client="item"></v-update>
-                </td>
-            </tr>
-        </template>
-    </v-table>
+        <v-table>
+            <template v-slot:title> List of clients </template>
+            <template v-slot:head>
+                <th>id</th>
+                <th>secret key</th>
+                <th>name</th>
+                <th>redirect</th>
+            </template>
+            <template v-slot:body>
+                <tr v-for="(item, index) in clients" :key="index">
+                    <td v-text="item.id"></td>
+                    <td v-text="item.secret"></td>
+                    <td v-text="item.name"></td>
+                    <td v-text="item.redirect"></td>
+                    <td>
+                        <div>
+                            <v-remove
+                                :client="item"
+                                @client-removed="getClients"
+                            ></v-remove>
+                        </div>
+                        <div>
+                            <v-update
+                                :client="item"
+                                @client-updated="getClients"
+                            ></v-update>
+                        </div>
+                    </td>
+                </tr>
+            </template>
+        </v-table>
+    </div>
 </template>
 <script>
 import VRegisterClient from "./RegisterClient.vue";
@@ -46,7 +49,6 @@ export default {
 
     data() {
         return {
-            items: ["id", "secret", "app name", "redirect"],
             clients: {},
         };
     },
@@ -67,4 +69,33 @@ export default {
     },
 };
 </script>
-<style></style>
+<style lang="scss" scoped>
+div {
+    width: 100%;
+    padding: 0;
+    margin-top: 1%;
+
+    th {
+        text-align: start;
+        text-transform: capitalize;
+        color: var(--first-color);
+        font-size: 1em;
+    }
+
+    tr {
+        text-align: start;
+        color: var(--first-color);
+        font-size: 1em;
+
+        td {
+            &:nth-child(5) {
+                display: flex;
+                justify-content: space-around;
+                div {
+                    padding: 0.1em;
+                }
+            }
+        }
+    }
+}
+</style>
