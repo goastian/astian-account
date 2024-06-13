@@ -1,55 +1,36 @@
 <template>
-    <v-modal
-        :target="`_1_${client.id}`"
-        @is-accepted="updateClient(client.id)"
-        styles="bg-warning btn-sm"
-        :button_accept_show="false"
-    >
+    <v-modal @is-accepted="updateClient(client.id)">
         <template v-slot:button> update </template>
         <template v-slot:body>
-            <div class="row">
-                <div class="col">
+            <div class="box">
+                <div class="item">
                     <label for="cliente">Client</label>
-                    <input
-                        type="text"
-                        v-model="client.name"
-                        class="form-control"
-                        
-                    />
+                    <input type="text" v-model="client.name" class="input" />
                     <v-error :error="errors.name"></v-error>
                 </div>
-                <div class="col">
+                <div class="item">
                     <label for="redirect">Redirect</label>
                     <input
                         type="text"
                         v-model="client.redirect"
                         id="redirect"
-                        class="form-control"
-                         
+                        class="input"
                     />
                     <v-error :error="errors.redirect"></v-error>
                 </div>
-                <div class="col">
-                    <button
-                        class="btn float-start mt-3 btn-primary"
-                        @click="updateClient(client.id, $event)"
-                    >
-                        Update Client
-                    </button>
-                </div>
             </div>
-            <div
-                v-show="message"
-                class="row py-2 my-2 text-light text-center fw-bold row-cols-1 col-12 bg-primary"
-            >
-                <span>{{ message }}</span>
-            </div>
+            <v-message :id="message_show">
+                <template v-slot:body>
+                    {{ message }}
+                </template>
+            </v-message>
         </template>
     </v-modal>
 </template>
 <script>
 export default {
-    emits: ["isUpdated"],
+
+    emits: ["clientUpdated"],
 
     props: {
         client: {
@@ -60,7 +41,8 @@ export default {
 
     data() {
         return {
-            message: "",
+            message: null,
+            message_show: null,
             errors: {
                 name: "",
                 redirect: "",
@@ -69,47 +51,35 @@ export default {
     },
 
     methods: {
-        sendEventIsUpdated() {
-            this.$emit("isUpdated", this.client);
-        },
-
         updateClient(id, event) {
-            const button = event.target;
-            button.disabled = true;
-
-            this.message = null;
             this.$server
                 .put("/oauth/clients/" + id, this.client)
                 .then((res) => {
-                    this.message = "Updated information";
-                    this.sendEventIsUpdated();
-                    button.disabled = false;
+                    this.message = "Client information updated";
+                    this.message_show = Math.floor(Math.random() * 10000);
+                    this.$emit("clientUpdated", res.data);
                 })
                 .catch((e) => {
-                    if (e.response && e.response.data.errors) {
+                    if (e.response && e.response.status == 422) {
                         this.errors = e.response.data.errors;
                     }
-                    button.disabled = false;
                 });
         },
     },
 };
 </script>
 <style lang="scss" scoped>
-.col {
-    @media (min-width: 240px) {
-        min-width: 98%;
-        margin-bottom: 2%;
-    }
+.box {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 2%;
 
-    @media (min-width: 800px) {
-        min-width: 48%;
-        margin-bottom: 2%;
-    }
-
-    @media (min-width: 940px) {
-        min-width: 30%;
-        margin-bottom: 2%;
+    .item {
+        flex: 1 1 calc(100% / 2);
+        color: var(--first-color);
+        label {
+            display: block;
+        }
     }
 }
 </style>
