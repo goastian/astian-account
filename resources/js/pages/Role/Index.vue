@@ -1,5 +1,5 @@
 <template>
-    <v-create @success="getScopes()"></v-create>
+    <v-create></v-create>
     <v-table>
         <template v-slot:title> List of Scopes </template>
         <template v-slot:head>
@@ -18,15 +18,11 @@
                 </td>
                 <td>
                     <div>
-                        <v-update
-                            :scope="item"
-                            @success="getScopes()"
-                        ></v-update>
+                        <v-update :scope="item"></v-update>
                     </div>
                     <div>
                         <v-remove
                             :scope="item"
-                            @success="getScopes()"
                             @errors="showMessage"
                         ></v-remove>
                     </div>
