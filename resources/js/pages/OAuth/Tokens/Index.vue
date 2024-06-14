@@ -1,6 +1,6 @@
 <template>
     <v-table>
-        <template v-slot:title> List of token generated </template>
+        <template v-slot:title>List of generated tokens</template>
         <template v-slot:head>
             <th>name</th>
             <th>created</th>
@@ -12,10 +12,7 @@
                 <td v-text="item.created_at"></td>
                 <td v-text="item.expires_at"></td>
                 <td>
-                    <v-token-remove
-                        :token="item"
-                        @token-revoked="getTokens"
-                    >
+                    <v-token-remove :token="item" @token-revoked="getTokens">
                     </v-token-remove>
                 </td>
             </tr>
