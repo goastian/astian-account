@@ -31,47 +31,48 @@ class PasspotConnectController extends GlobalController
     }
 
     /**
-     * gateway para verificar si un usuario esta autenticado, esta solicitud
-     * lleva encabezados Authorization
-     * @return null
+     * Gateway to verify if a user is authenticated. This request includes Authorization headers.
+     *
+     * @param Request $request
+     *
+     * @return void
      */
     public function check_authentication(Request $request)
     {
     }
 
     /**
-     * gateway para verificar si almenos tiene un scope presente, esta solicitud
-     * lleva encabezados Authorization, Scopes
-     * @return null
+     * Gateway to verify if at least one scope is present. This request includes Authorization and X-SCOPES headers.
+     *
+     * @return void
      */
     public function check_scope(Request $request)
     {
     }
 
     /**
-     * gateway para verificar si todos los scopes estan presentes, esta solicitud
-     * lleva encabezados Authorization, Scopes
-     * @return null
+     * Gateway to verify if all scopes are present. This request includes Authorization and X-SCOPES headers.
+     *
+     * @return void
      */
     public function check_scopes(Request $request)
     {
     }
 
     /**
-     * gateway para verificar si las credenciales del cliente son correctas, esta solicitud
-     * lleva encabezados Authorization y Scopes es opcional
-     * @return null
+     * Gateway to verify if client credentials are correct. This request includes Authorization header and optionally X-SCOPES header.
+     *
+     * @return void
      */
     public function check_client_credentials(Request $request)
     {
     }
 
     /**
-     * gateway para comprobar si un token puede ejecutar un scope, esta solicitud
-     * lleva encabezados Authorization, Scope
+     * Gateway to check if a token can execute a specific scope. This request includes Authorization and X-SCOPE headers.
      *
-     * @param Request $request     *
-     * @return null
+     * @param Request $request
+     * @return void
      */
     public function token_can(Request $request)
     {
@@ -83,9 +84,11 @@ class PasspotConnectController extends GlobalController
     }
 
     /**
-     * gateway que permite obtener los datos del usuario autenticado
+     * Gateway to retrieve authenticated user data. This request includes Authorization header.
      *
      * @param Request $request
+     * 
+     * @return Json
      */
     public function auth(Request $request)
     {
@@ -93,9 +96,11 @@ class PasspotConnectController extends GlobalController
     }
 
     /**
-     * getway para el envio de notificaciones
+     * Gateway for sending notifications
      *
      * @param Request $request
+     * 
+     * @return Json
      */
 
     public function send_notification(Request $request)

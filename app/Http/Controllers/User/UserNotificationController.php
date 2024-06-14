@@ -6,7 +6,6 @@ use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Notify\Notification;
 use App\Transformers\Notification\NotificationTransformer;
 use Elyerr\ApiResponse\Exceptions\ReportError;
-use Illuminate\Support\Facades\Lang;
 
 class UserNotificationController extends Controller
 {
@@ -41,12 +40,9 @@ class UserNotificationController extends Controller
      */
     public function show(Notification $notification)
     {
-        if (request()->user()->id != $notification->notifiable_id) {
-            throw new ReportError(Lang::get('Unauthorize'), 403);
-        }
+        throw_if(request()->user()->id != $notification->notifiable_id, new ReportError(__("The client does not have access rights to the content"), 403));
 
         return $this->showOne($notification, NotificationTransformer::class);
-
     }
 
     /**
@@ -56,16 +52,15 @@ class UserNotificationController extends Controller
      */
     public function mark_as_read_notification(Notification $notification)
     {
-        if (request()->user()->id != $notification->notifiable_id) {
-            throw new ReportError(Lang::get('Unauthorize'), 403);
-        }
+        throw_if(request()->user()->id != $notification->notifiable_id, new ReportError(__("The client does not have access rights to the content"), 403));
 
         $notification->read_at = now();
         $notification->push();
 
+        //send event
         $this->privateChannel("ReadNotificationEvent", "Notification read");
 
-        return $this->message(Lang::get('notification marked as read'), 201);
+        return $this->message(__('notification marked as read'), 201);
     }
 
     /**
@@ -75,12 +70,12 @@ class UserNotificationController extends Controller
      */
     public function mark_as_read_notifications()
     {
-
         request()->user()->unreadNotifications->markAsRead();
 
+        //send event
         $this->privateChannel("ReadNotificationEvent", "Notification read");
 
-        return $this->message(Lang::get('notifications marked as read'), 201);
+        return $this->message(__('notifications marked as read'), 201);
     }
 
     /**
@@ -94,9 +89,10 @@ class UserNotificationController extends Controller
 
         $notification->delete();
 
+        //send event
         $this->privateChannel("DestroyNotificationEvent", "Notification deleted");
 
-        return $this->message(Lang::get('notifications removed'), 200);
+        return $this->message(__('notifications removed'), 200);
     }
 
     /**
@@ -108,8 +104,9 @@ class UserNotificationController extends Controller
     {
         request()->user()->notifications()->delete();
 
+        //send event
         $this->privateChannel("DestroyNotificationEvent", "Notifications deleted");
 
-        return $this->message(Lang::get('notifications removed'), 200);
+        return $this->message(__('notifications removed'), 200);
     }
 }
