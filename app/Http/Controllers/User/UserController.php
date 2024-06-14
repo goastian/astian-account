@@ -28,7 +28,6 @@ class UserController extends Controller
         $this->middleware('scope:account_update,client')->only('update');
         $this->middleware('scope:account_disable,client')->only('disable');
         $this->middleware('scope:account_enable')->only('enable');
-
     }
 
     /**
@@ -38,9 +37,7 @@ class UserController extends Controller
      */
     public function index(Employee $user)
     {
-        if (request()->user()->isClient()) {
-            throw new ReportError("Unauthorize", 403);
-        }
+        throw_if(request()->user()->isClient(), new ReportError("The client does not have access rights to the content", 403));
 
         $params = $this->filter_transform($user->transformer);
 
@@ -57,9 +54,8 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request, Employee $user)
     {
-        if (request()->user()->isClient()) {
-            throw new ReportError("Unauthorize", 403);
-        }
+
+        throw_if(request()->user()->isClient(), new ReportError("The client does not have access rights to the content", 403));
 
         /**
          * Generate password temp for new users
@@ -117,9 +113,7 @@ class UserController extends Controller
 
             $this->deny_action($user->id);
 
-            if (!$request->user()->isClient() and $user->isClient()) {
-                throw new ReportError("Unauthorize", 403);
-            }
+            throw_if(!$request->user()->isClient() and $user->isClient(), new ReportError("The client does not have access rights to the content", 403));
 
             $can_update = false;
 
@@ -186,21 +180,14 @@ class UserController extends Controller
     public function disable(Request $request, Employee $user)
     {
         //is not client and user id is request user id
-        if ((!$user->isClient() && $request->user()->id == $user->id) ||
+        throw_if((!$user->isClient() && $request->user()->id == $user->id) ||
             //authenticated user is not client and user is client
             (!$request->user()->isClient() && $user->isClient()) ||
             //is client and request user id is diferent
-            ($request->user()->isClient() && $request->user()->id != $user->id)
-        ) {
-            throw new ReportError(__("Unauthorize"), 406);
-        }
+            ($request->user()->isClient() && $request->user()->id != $user->id), new ReportError("The client does not have access rights to the content", 403));
 
-        /**
-         * throw exception to disable 2FA
-         */
-        if ($request->user()->isClient() and $request->user()->m2fa) {
-            throw new ReportError(__("Before doing this action, you must disable Two Factor Authentication."), 403);
-        }
+        //Throw an exception if Two-Factor Authentication is enabled
+        throw_if($request->user()->isClient() and $request->user()->m2fa, new ReportError(__("Before performing this action, you must disable Two-Factor Authentication"), 403));
 
         DB::transaction(function () use ($user) {
 
@@ -228,11 +215,9 @@ class UserController extends Controller
     public function enable($id)
     {
         //request user is not client and request user is client a client
-        if ((!request()->user()->isClient() && request()->user()->isClient()) ||
+        throw_if((!request()->user()->isClient() && request()->user()->isClient()) ||
             //request user is client
-            request()->user()->isClient()) {
-            throw new ReportError(__("Unauthorize"), 403);
-        }
+            request()->user()->isClient(), new ReportError(__("The client does not have access rights to the content"), 403));
 
         try {
 
@@ -246,7 +231,7 @@ class UserController extends Controller
             return $this->showOne($user, $user->transformer);
 
         } catch (Error $e) { //throw exception
-            throw new ReportError("Error processing the request.", 404);
+            throw new ReportError("The server cannot find the requested resource", 404);
         }
     }
 
@@ -258,8 +243,6 @@ class UserController extends Controller
      */
     public function deny_action($id)
     {
-        if (request()->user()->isClient() and request()->user()->id != $id) {
-            throw new ReportError("Unauthorize", 403);
-        }
+        throw_if(request()->user()->isClient() and request()->user()->id != $id, new ReportError("The client does not have access rights to the content", 403));
     }
 }

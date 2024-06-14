@@ -46,7 +46,7 @@ class UserRoleController extends Controller
     public function store(StoreRequest $request, Employee $user)
     {
 
-        throw_if(Role::find($request->role_id)->public, new ReportError(Lang::get("Can't add a public role"), 403));
+        throw_if(Role::find($request->role_id)->public, new ReportError(__("this is a public role"), 403));
 
         DB::transaction(function () use ($request, $user) {
             $user->roles()->syncWithoutDetaching($request->role_id);

@@ -98,9 +98,10 @@ class CodeController extends Controller
     }
 
     /**
-     * send request to get a token to activate 2FA
+     * Send request to obtain 2FA activation token.
      *
      * @param Request $request
+     * 
      * @return Json
      */
     public function requestToken2FA(Request $request)
@@ -123,7 +124,7 @@ class CodeController extends Controller
     }
 
     /**
-     * Authorize users to activate 2FA with token
+     * Authorize users to activate 2FA using a token.
      *
      * @param Request $request
      * @return Json

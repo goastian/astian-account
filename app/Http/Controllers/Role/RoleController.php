@@ -8,7 +8,6 @@ use App\Transformers\Role\RoleTransformer;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Lang;
 
 class RoleController extends Controller
 {
@@ -57,6 +56,7 @@ class RoleController extends Controller
             $role->save();
         });
 
+        //send event
         $this->privateChannel("StoreRoleEvent", "New role created");
 
         return $this->showOne($role, $role->transformer, 201);
@@ -64,7 +64,6 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-
         $this->validate($request, [
             'name' => ['nullable', 'unique:roles,name,' . $role->id],
             'description' => ['nullable', 'max:300'],
@@ -80,12 +79,10 @@ class RoleController extends Controller
                 $can_update = true;
 
                 /**
-                 * verifica que el nombre del escope no sea uno por defecto
+                 * Check if the scope is not a default scope.
                  */
                 collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
-                    if ($role->name == $key) {
-                        throw new ReportError(Lang::get("This role ($key) belongs to the system by default and the scope name cannot be updated."), 403);
-                    }
+                    throw_if($role->name == $key, new ReportError(__("This role ($key) is a default system role and cannot be deleted."), 403));
                 });
 
                 $role->name = preg_replace('/[\s\-,*;?!¡}\]\[{]/', '_', $request->name);
@@ -108,6 +105,7 @@ class RoleController extends Controller
 
             if ($can_update) {
                 $role->push();
+                //send event
                 $this->privateChannel("UpdateRoleEvent", "Role updated");
             }
 
@@ -119,13 +117,12 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
-            if ($key === $role->name) {
-                throw new ReportError(Lang::get("This role ($key) belongs to the system by default and cannot be deleted"), 403);
-            }
+            throw_if($key === $role->name, new ReportError(__("This role ($key) is a default system role and cannot be deleted."), 403));
         });
 
         $role->delete();
 
+        //send event
         $this->privateChannel("DestroyRoleEvent", "Role deleted");
 
         $this->showOne($role, $role->transformer);
