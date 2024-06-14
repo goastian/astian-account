@@ -7,7 +7,7 @@
             <th>email</th>
             <th>phone</th>
             <th>
-                <v-register @success="getUsers" bg="btn-link"></v-register>
+                <v-register bg="btn-link"></v-register>
             </th>
         </template>
         <template v-slot:body>
@@ -21,18 +21,10 @@
                         <v-scopes :user="item" bg="btn-primary"></v-scopes>
                     </div>
                     <div>
-                        <v-update
-                            :user="item"
-                            @success="getUsers"
-                            bg="btn-secondary"
-                        ></v-update>
+                        <v-update :user="item" bg="btn-secondary"></v-update>
                     </div>
                     <div>
-                        <v-status
-                            :user="item"
-                            @success="getUsers"
-                            @errors="alert"
-                        ></v-status>
+                        <v-status :user="item" @errors="alert"></v-status>
                     </div>
                 </td>
             </tr>
@@ -137,31 +129,42 @@ export default {
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("UpdateEmployeeEvent", (e) => {
+                    console.log(e);
+
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("StoreEmployeeEvent", (e) => {
+                    console.log(e);
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("EnableEmployeeEvent", (e) => {
+                    console.log(e);
+
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("DisableEmployeeEvent", (e) => {
+                    console.log(e);
+
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("StoreEmployeeRoleEvent", (e) => {
+                    console.log(e);
+
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("DestroyEmployeeRoleEvent", (e) => {
+                    console.log(e);
+
                     this.getUsers();
                 });
         },

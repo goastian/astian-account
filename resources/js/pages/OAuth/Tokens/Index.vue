@@ -1,15 +1,20 @@
 <template>
-    <v-table :items="items" class="text-center text-sm">
+    <v-table>
+        <template v-slot:title> List of token generated </template>
+        <template v-slot:head>
+            <th>name</th>
+            <th>created</th>
+            <th>expires</th>
+        </template>
         <template v-slot:body>
             <tr v-for="(item, index) in tokens" :key="index">
-                <td>{{ item.name }}</td>
-
-                <td>{{ item.created_at }}</td>
-                <td>{{ item.expires_at }}</td>
+                <td v-text="item.name"></td>
+                <td v-text="item.created_at"></td>
+                <td v-text="item.expires_at"></td>
                 <td>
                     <v-token-remove
                         :token="item"
-                        @token-was-revoked="getTokens"
+                        @token-revoked="getTokens"
                     >
                     </v-token-remove>
                 </td>
@@ -60,4 +65,16 @@ export default {
     },
 };
 </script>
-<style lang=""></style>
+<style lang="scss">
+th {
+    color: var(--first-color);
+    text-align: start;
+    text-transform: capitalize;
+}
+
+tr {
+    color: var(--first-color);
+    text-align: start;
+    text-transform: capitalize;
+}
+</style>
