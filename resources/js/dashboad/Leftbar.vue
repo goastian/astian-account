@@ -140,7 +140,7 @@
                             <i class="bi bi-lock"></i> <span> Security </span>
                         </router-link>
                     </li>
-                    <li>
+                   <!-- <li>
                         <router-link
                             :to="{ name: 'devices' }"
                             @click="isSmallDevices"
@@ -148,7 +148,7 @@
                             <i class="bi bi-laptop"></i>
                             <span> Devices </span>
                         </router-link>
-                    </li>
+                    </li>-->
                 </ul>
             </li>
         </ul>
