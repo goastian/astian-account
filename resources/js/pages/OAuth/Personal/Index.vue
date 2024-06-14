@@ -1,16 +1,22 @@
 <template>
-    <v-create @token-was-created="getPersonalAccessToken"></v-create>
-    <v-table :items="head">
+    <v-create @token-created="getPersonalAccessToken"></v-create>
+    <v-table v-if="tokens.length > 0">
+        <template v-slot:head>
+            <th>name</th>
+            <th>scopes</th>
+            <th>created</th>
+            <th>expires</th>
+        </template>
         <template v-slot:body>
             <tr v-for="(item, index) in tokens" :key="index">
-                <td>{{ item.name }}</td>
-                <td>{{ item.scopes.join(",") }}</td>
-                <td>{{ item.created_at }}</td>
-                <td>{{ item.expires_at }}</td>
+                <td v-text="item.name"></td>
+                <td v-text="item.scopes.join(', ')"></td>
+                <td v-text="item.created_at"></td>
+                <td v-text="item.expires_at"></td>
                 <td>
                     <v-remove
                         :token="item"
-                        @token-was-remove="getPersonalAccessToken"
+                        @token-removed="getPersonalAccessToken"
                     ></v-remove>
                 </td>
             </tr>
@@ -29,7 +35,6 @@ export default {
 
     data() {
         return {
-            head: ["name", "scopes", "created", "expires"],
             tokens: {},
             user_id: null,
         };
@@ -59,4 +64,14 @@ export default {
     },
 };
 </script>
-<style lang=""></style>
+<style lang="scss" scoped>
+tr {
+    td {
+        &:nth-child(2) {
+            max-width: 200px;
+            min-width: 200px;
+            word-wrap: break-word;
+        }
+    }
+}
+</style>

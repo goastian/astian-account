@@ -29,7 +29,6 @@ export default {
 
     data() {
         return {
-            items: ["name", "created", "expires"],
             tokens: {},
         };
     },

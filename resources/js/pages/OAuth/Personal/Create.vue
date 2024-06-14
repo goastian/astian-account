@@ -1,63 +1,60 @@
 <template>
     <div class="card">
+        <div class="head">Create new token</div>
         <div class="body">
-            <div class="row token">
-                <div class="col">
+            <div class="item">
+                <div>
                     <input
                         type="text"
-                        class="form-control"
                         placeholder="Token Name"
                         v-model="name"
+                        class="input"
                     />
                     <v-error :error="errors.name"></v-error>
                 </div>
+                <div>
+                    <button class="btn btn-primary" @click="createToken">
+                        add token
+                    </button>
+                </div>
+            </div>
 
-                <div class="col">
-                    <div class="form-floating">
-                        <textarea
-                            class="form-control py-0"
-                            name="token"
-                            id="token"
-                            v-model="tokens.accessToken"
-                        ></textarea>
-                        <label for="token">Access token</label>
+            <div class="scopes">
+                <p>Scopes</p>
+                <div class="items" v-for="(item, index) in scopes" :key="index">
+                    <div>
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            :value="item.id"
+                            :id="item.id"
+                            @click="isSelected(item.id)"
+                        />
+                    </div>
+                    <div>
+                        <label class="" :for="item.id">
+                            <strong>{{ item.id }}</strong>
+                            : {{ item.description }}
+                        </label>
                     </div>
                 </div>
             </div>
-            <div class="row roles text-color">
-                <div class="col-12 text-center px-2">
-                    <span class="fw-bold">Add scopes</span>
-                </div>
-                <div
-                    class="col form-check"
-                    v-for="(item, index) in scopes"
-                    :key="index"
-                >
-                    <input
-                        class="form-check-input"
-                        type="checkbox"
-                        :value="item.id"
-                        :id="item.id"
-                        @click="isSelected(item.id)"
-                    />
-                    <label class="form-check-label text-sm" :for="item.id">
-                        <span class="fw-bold">{{ item.id }}</span>
-                        : {{ item.description }}
-                    </label>
-                </div>
-                <div class="col-12"></div>
-                <div class="col py-2">
-                    <button class="btn btn-sm btn-primary" @click="createToken">
-                        New Token
-                    </button>
-                </div>
+
+            <div class="token">
+                <label for="token">Access token generated</label>
+                <textarea
+                    name="token"
+                    id="token"
+                    v-model="tokens.accessToken"
+                    class="textarea"
+                ></textarea>
             </div>
         </div>
     </div>
 </template>
 <script>
 export default {
-    emits: ["tokenWasCreated"],
+    emits: ["tokenCreated"],
 
     data() {
         return {
@@ -76,20 +73,25 @@ export default {
     },
 
     methods: {
-        createToken(event) {
+        async createToken(event) {
             const button = event.target;
             button.disabled = true;
 
-            this.$server
-                .post("/oauth/personal-access-tokens", {
-                    name: this.name,
-                    scopes: this.scopesSelected,
-                })
-                .then((res) => {
+            try {
+                const res = await this.$server.post(
+                    "/oauth/personal-access-tokens",
+                    {
+                        name: this.name,
+                        scopes: this.scopesSelected,
+                    }
+                );
+
+                if (res.status == 200) {
                     this.tokens = res.data;
-                    this.$emit("tokenWasCreated", res.data);
-                    this.scopesSelected = {};
-                    this.name = "";
+                    this.errors = {};
+                    this.scopesSelected = [];
+                    this.name = null;
+                    this.$emit("tokenCreated", res.data);
                     /**
                      * clean checked
                      */
@@ -100,13 +102,13 @@ export default {
                     }
 
                     button.disabled = false;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.data.errors) {
-                        this.errors = e.response.data.errors;
-                    }
-                    button.disabled = false;
-                });
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 422) {
+                    this.errors = e.response.data.errors;
+                }
+                button.disabled = false;
+            }
         },
 
         isSelected(id) {
@@ -152,37 +154,68 @@ export default {
 
 <style lang="scss" scoped>
 .card {
-    width: 98%;
-    margin: 0 auto;
-}
-.token .col {
-    flex: 0 0 auto !important;
-    margin: 1%;
+    width: 95%;
+    border: 1px solid var(--border-color-light);
+    border-radius: 1em;
+    color: var(--first-color);
+    padding: 0.5em;
+    margin: auto;
 
-    @media (min-width: 240px) {
-        width: 98%;
+    .head {
+        font-size: 1.2em;
+        font-weight: bold;
     }
+    .body {
+        .item {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 1%;
 
-    @media (min-width: 800px) {
-        width: 48%;
-    }
-}
+            div {
+                flex: 1 1 100%;
 
-.roles .col {
-    flex: 0 0 auto;
+                @media (min-width: 800px) {
+                    flex: 1 1 calc(100% / 2);
+                    justify-content: center;
+                    align-content: center;
+                }
+            }
+        }
+        .scopes {
+            border: 1px solid var(--border-color-light);
+            padding: 0.5em;
+            border-radius: 0.5em;
+            display: flex;
+            flex-wrap: wrap;
 
-    @media (min-width: 240px) {
-        width: 98%;
-        margin: 0.5% 0% 0% 4%;
-    }
+            p {
+                font-weight: bold;
+                margin: 0.4%;
+                flex: 1 1 100%;
+            }
 
-    @media (min-width: 800px) {
-        margin: 0.5% 0% 0% 2%;
-        width: 48%;
-    }
+            .items {
+                flex: 0 1 100%;
 
-    @media (min-width: 940px) {
-        width: 30%;
+                @media (min-width: 800px) {
+                    flex: 0 1 calc(100% / 2);
+                }
+                display: flex;
+                font-size: 0.9em;
+            }
+        }
+
+        .token {
+            margin-top: 1%;
+            label {
+                display: block;
+                font-weight: bold;
+            }
+
+            textarea {
+                height: 100px;
+            }
+        }
     }
 }
 </style>
