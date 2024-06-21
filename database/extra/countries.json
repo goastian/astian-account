@@ -1,6 +1,5 @@
 [
 	{
-		"id": "ffce8984-5a7c-434d-8ef2-00ad7ece370d",
 		"name_en": "British Indian Ocean Territory",
 		"name_es": "Territorio Británico del Océano Índico",
 		"continent_en": "Asia",
@@ -15,7 +14,6 @@
 		"emoji": "🇮🇴"
 	},
 	{
-		"id": "ff77d4e0-276a-4c90-893a-447d6cf34273",
 		"name_en": "Saint Pierre and Miquelon",
 		"name_es": "San Pedro y Miquelón",
 		"continent_en": "North America",
@@ -30,7 +28,6 @@
 		"emoji": "🇵🇲"
 	},
 	{
-		"id": "fe02368b-bfaa-4d47-b748-4d04d3064d8f",
 		"name_en": "Palau",
 		"name_es": "Palaos",
 		"continent_en": "Oceania",
@@ -45,7 +42,6 @@
 		"emoji": "🇵🇼"
 	},
 	{
-		"id": "fc473ad7-259e-478f-94e9-b693747148d3",
 		"name_en": "Angola",
 		"name_es": "Angola",
 		"continent_en": "Africa",
@@ -60,7 +56,6 @@
 		"emoji": "🇦🇴"
 	},
 	{
-		"id": "f8816639-9244-4749-88ba-471e8d5ed1a5",
 		"name_en": "Burundi",
 		"name_es": "Burundi",
 		"continent_en": "Africa",
@@ -75,7 +70,6 @@
 		"emoji": "🇧🇮"
 	},
 	{
-		"id": "f7dd1a7e-7265-4b26-a728-2a39c6a381f5",
 		"name_en": "Somalia",
 		"name_es": "Somalia",
 		"continent_en": "Africa",
@@ -90,7 +84,6 @@
 		"emoji": "🇸🇴"
 	},
 	{
-		"id": "f73cecbb-1b2c-472c-bb01-a66736a944f8",
 		"name_en": "Ethiopia",
 		"name_es": "Etiopía",
 		"continent_en": "Africa",
@@ -105,7 +98,6 @@
 		"emoji": "🇪🇹"
 	},
 	{
-		"id": "f594db57-bc1b-44f2-a441-bdd14299fa27",
 		"name_en": "Malta",
 		"name_es": "Malta",
 		"continent_en": "Europe",
@@ -120,7 +112,6 @@
 		"emoji": "🇲🇹"
 	},
 	{
-		"id": "f576e54a-eaa9-4f7b-9f1e-f6009b8711c1",
 		"name_en": "Mayotte",
 		"name_es": "Mayotte",
 		"continent_en": "Africa",
@@ -135,7 +126,6 @@
 		"emoji": "🇾🇹"
 	},
 	{
-		"id": "f5141cc4-23c2-4911-b194-a765ccf86af9",
 		"name_en": "Belarus",
 		"name_es": "Bielorrusia",
 		"continent_en": "Europe",
@@ -150,7 +140,6 @@
 		"emoji": "🇧🇾"
 	},
 	{
-		"id": "f5105de5-c64d-4b67-98c6-bde6c11353c8",
 		"name_en": "Mauritania",
 		"name_es": "Mauritania",
 		"continent_en": "Africa",
@@ -165,7 +154,6 @@
 		"emoji": "🇲🇷"
 	},
 	{
-		"id": "f3e32a7b-ee06-4a46-b309-44f5f6bde619",
 		"name_en": "South Africa",
 		"name_es": "Sudáfrica",
 		"continent_en": "Africa",
@@ -180,7 +168,6 @@
 		"emoji": "🇿🇦"
 	},
 	{
-		"id": "f393af50-f42c-4954-b6dd-e17b47983fe5",
 		"name_en": "Tonga",
 		"name_es": "Tonga",
 		"continent_en": "Oceania",
@@ -195,7 +182,6 @@
 		"emoji": "🇹🇴"
 	},
 	{
-		"id": "f2cc0466-46b1-4131-8f66-01abc170d069",
 		"name_en": "Mali",
 		"name_es": "Mali",
 		"continent_en": "Africa",
@@ -210,7 +196,6 @@
 		"emoji": "🇲🇱"
 	},
 	{
-		"id": "ef9cb905-8b7b-4c34-8e54-b5ca1349cdd6",
 		"name_en": "Botswana",
 		"name_es": "Botsuana",
 		"continent_en": "Africa",
@@ -225,7 +210,6 @@
 		"emoji": "🇧🇼"
 	},
 	{
-		"id": "ee23aa9b-00c8-4fa0-ada4-a992076bdd0f",
 		"name_en": "Paraguay",
 		"name_es": "Paraguay",
 		"continent_en": "South America",
@@ -240,7 +224,6 @@
 		"emoji": "🇵🇾"
 	},
 	{
-		"id": "eda797a6-9898-4844-83f3-3a0fc81b17b4",
 		"name_en": "Comoros",
 		"name_es": "Comoras",
 		"continent_en": "Africa",
@@ -255,7 +238,6 @@
 		"emoji": "🇰🇲"
 	},
 	{
-		"id": "ecf6fadc-470d-4603-a0ff-e4eb0e4d4239",
 		"name_en": "Madagascar",
 		"name_es": "Madagascar",
 		"continent_en": "Africa",
@@ -270,7 +252,6 @@
 		"emoji": "🇲🇬"
 	},
 	{
-		"id": "ec8e94b2-3263-41b2-97f0-fe829db9f110",
 		"name_en": "Kazakhstan",
 		"name_es": "Kazajistán",
 		"continent_en": "Asia",
@@ -285,7 +266,6 @@
 		"emoji": "🇰🇿"
 	},
 	{
-		"id": "eb6c2959-5ed7-47d5-93a3-c250917c482d",
 		"name_en": "Papua New Guinea",
 		"name_es": "Papúa Nueva Guinea",
 		"continent_en": "Oceania",
@@ -300,7 +280,6 @@
 		"emoji": "🇵🇬"
 	},
 	{
-		"id": "eb2c557f-7f42-4adb-975a-a30f96a149bb",
 		"name_en": "Syria",
 		"name_es": "Siria",
 		"continent_en": "Asia",
@@ -315,7 +294,6 @@
 		"emoji": "🇸🇾"
 	},
 	{
-		"id": "ea8af97f-1af9-4f27-a395-6dab678c9c26",
 		"name_en": "Finland",
 		"name_es": "Finlandia",
 		"continent_en": "Europe",
@@ -330,7 +308,6 @@
 		"emoji": "🇫🇮"
 	},
 	{
-		"id": "e9b6639d-2fd0-4871-b532-ec83f44cf318",
 		"name_en": "Faroe Islands",
 		"name_es": "Islas Feroe",
 		"continent_en": "Europe",
@@ -345,7 +322,6 @@
 		"emoji": "🇫🇴"
 	},
 	{
-		"id": "e8fd03c6-3fb5-440a-bfbb-0850eaeabd36",
 		"name_en": "Algeria",
 		"name_es": "Argelia",
 		"continent_en": "Africa",
@@ -360,7 +336,6 @@
 		"emoji": "🇩🇿"
 	},
 	{
-		"id": "e88adecb-d9eb-4c2b-b068-33415eefac14",
 		"name_en": "Guinea-Bissau",
 		"name_es": "Guinea-Bissau",
 		"continent_en": "Africa",
@@ -375,7 +350,6 @@
 		"emoji": "🇬🇼"
 	},
 	{
-		"id": "e7e7d234-0764-45e2-bc69-afd22d81576e",
 		"name_en": "Italy",
 		"name_es": "Italia",
 		"continent_en": "Europe",
@@ -390,7 +364,6 @@
 		"emoji": "🇮🇹"
 	},
 	{
-		"id": "e50f8db7-943c-4c57-ade0-2d993fdd7bbd",
 		"name_en": "Kosovo",
 		"name_es": "Kosovo",
 		"continent_en": "Europe",
@@ -405,7 +378,6 @@
 		"emoji": "🇽🇰"
 	},
 	{
-		"id": "e2c23511-d271-4129-b621-c34bf7390dd3",
 		"name_en": "Guernsey",
 		"name_es": "Guernsey",
 		"continent_en": "Europe",
@@ -420,7 +392,6 @@
 		"emoji": "🇬🇬"
 	},
 	{
-		"id": "e28d4e79-6f0b-4edf-8d1e-95c7cd2e0173",
 		"name_en": "Greenland",
 		"name_es": "Groenlandia",
 		"continent_en": "North America",
@@ -435,7 +406,6 @@
 		"emoji": "🇬🇱"
 	},
 	{
-		"id": "e210d6ea-af1f-4179-b1ce-9299969af673",
 		"name_en": "Anguilla",
 		"name_es": "Anguilla",
 		"continent_en": "North America",
@@ -450,7 +420,6 @@
 		"emoji": "🇦🇮"
 	},
 	{
-		"id": "e1374fe8-0bbd-4955-b3bb-2977932e38d8",
 		"name_en": "Dominica",
 		"name_es": "Dominica",
 		"continent_en": "North America",
@@ -465,7 +434,6 @@
 		"emoji": "🇩🇲"
 	},
 	{
-		"id": "e011e9a0-4103-4df7-8f67-9b0cf3f7b878",
 		"name_en": "Libya",
 		"name_es": "Libia",
 		"continent_en": "Africa",
@@ -480,7 +448,6 @@
 		"emoji": "🇱🇾"
 	},
 	{
-		"id": "dfd29cbb-fcdc-4d15-9b43-b0a3f34b870b",
 		"name_en": "Bermuda",
 		"name_es": "Bermudas",
 		"continent_en": "North America",
@@ -495,7 +462,6 @@
 		"emoji": "🇧🇲"
 	},
 	{
-		"id": "dbe3cd1e-f999-4459-9637-e104bd58b988",
 		"name_en": "Christmas Island",
 		"name_es": "Isla de Navidad",
 		"continent_en": "Asia",
@@ -510,7 +476,6 @@
 		"emoji": "🇨🇽"
 	},
 	{
-		"id": "dab76d22-5bfe-4047-bb8e-6b34a5fc4b51",
 		"name_en": "Ascension Island",
 		"name_es": "Ascensión Island",
 		"continent_en": "Africa",
@@ -525,7 +490,6 @@
 		"emoji": "🇦🇨"
 	},
 	{
-		"id": "da28e45b-c7fa-45ab-8563-763a87d1c31b",
 		"name_en": "Tunisia",
 		"name_es": "Túnez",
 		"continent_en": "Africa",
@@ -540,7 +504,6 @@
 		"emoji": "🇹🇳"
 	},
 	{
-		"id": "d9f1bab7-6cd2-410b-95c5-19aecc65efa3",
 		"name_en": "Rwanda",
 		"name_es": "Ruanda",
 		"continent_en": "Africa",
@@ -555,7 +518,6 @@
 		"emoji": "🇷🇼"
 	},
 	{
-		"id": "d9e8a581-6bcd-4967-aa44-e17c7b613635",
 		"name_en": "Samoa",
 		"name_es": "Samoa",
 		"continent_en": "Oceania",
@@ -570,7 +532,6 @@
 		"emoji": "🇼🇸"
 	},
 	{
-		"id": "d783bb20-2985-4230-b4ef-260b584262c9",
 		"name_en": "Tajikistan",
 		"name_es": "Tayikistán",
 		"continent_en": "Asia",
@@ -585,7 +546,6 @@
 		"emoji": "🇹🇯"
 	},
 	{
-		"id": "d7509237-febf-43a2-b038-e42747ce42f4",
 		"name_en": "Brazil",
 		"name_es": "Brasil",
 		"continent_en": "South America",
@@ -600,7 +560,6 @@
 		"emoji": "🇧🇷"
 	},
 	{
-		"id": "d67b1d06-6e27-4d75-bb18-feb444b20f8d",
 		"name_en": "Cambodia",
 		"name_es": "Camboya",
 		"continent_en": "Asia",
@@ -615,7 +574,6 @@
 		"emoji": "🇰🇭"
 	},
 	{
-		"id": "d547a76d-409c-4b35-b1d6-1b5cfa68284e",
 		"name_en": "Taiwan",
 		"name_es": "Taiwán",
 		"continent_en": "Asia",
@@ -630,7 +588,6 @@
 		"emoji": "🇹🇼"
 	},
 	{
-		"id": "d48c042c-027b-44e9-89fe-be80b57a8f7a",
 		"name_en": "Saint Kitts and Nevis",
 		"name_es": "San Cristóbal y Nieves",
 		"continent_en": "North America",
@@ -645,7 +602,6 @@
 		"emoji": "🇰🇳"
 	},
 	{
-		"id": "d325dd17-b404-49bf-93db-653fea65b0a3",
 		"name_en": "Bonaire, Sint Eustatius and Saba",
 		"name_es": "Bonaire, San Eustaquio y Saba",
 		"continent_en": "North America",
@@ -660,7 +616,6 @@
 		"emoji": "🇧🇶"
 	},
 	{
-		"id": "d244dbb0-0b71-4794-a173-7912771c6116",
 		"name_en": "Gibraltar",
 		"name_es": "Gibraltar",
 		"continent_en": "Europe",
@@ -675,7 +630,6 @@
 		"emoji": "🇬🇮"
 	},
 	{
-		"id": "d223d048-9994-4c13-8415-f8113039d3a3",
 		"name_en": "Estonia",
 		"name_es": "Estonia",
 		"continent_en": "Europe",
@@ -690,7 +644,6 @@
 		"emoji": "🇪🇪"
 	},
 	{
-		"id": "d14e5bef-39a9-40b6-a9ff-e26dda8ae521",
 		"name_en": "Tuvalu",
 		"name_es": "Tuvalu",
 		"continent_en": "Oceania",
@@ -705,7 +658,6 @@
 		"emoji": "🇹🇻"
 	},
 	{
-		"id": "d0de4eb8-7315-4cb4-8945-5e966aec2124",
 		"name_en": "Liberia",
 		"name_es": "Liberia",
 		"continent_en": "Africa",
@@ -720,7 +672,6 @@
 		"emoji": "🇱🇷"
 	},
 	{
-		"id": "d0881c75-eead-4181-bd82-fda199ca7328",
 		"name_en": "French Southern Territories",
 		"name_es": "Territorios Australes Franceses",
 		"continent_en": "Antarctica",
@@ -735,7 +686,6 @@
 		"emoji": "🇹🇫"
 	},
 	{
-		"id": "d041aba9-4bbc-481a-b875-999f374857f1",
 		"name_en": "Cameroon",
 		"name_es": "Camerún",
 		"continent_en": "Africa",
@@ -750,7 +700,6 @@
 		"emoji": "🇨🇲"
 	},
 	{
-		"id": "d0234a1d-1e41-496a-84ed-b0e0428d2ab5",
 		"name_en": "Israel",
 		"name_es": "Israel",
 		"continent_en": "Asia",
@@ -765,7 +714,6 @@
 		"emoji": "🇮🇱"
 	},
 	{
-		"id": "ce6b1d59-5b40-41c0-9443-c5391aabdcbf",
 		"name_en": "Moldova",
 		"name_es": "Moldavia",
 		"continent_en": "Europe",
@@ -780,7 +728,6 @@
 		"emoji": "🇲🇩"
 	},
 	{
-		"id": "cdbcfad2-5ff3-472e-8f52-eba5ee1314cd",
 		"name_en": "Romania",
 		"name_es": "Rumania",
 		"continent_en": "Europe",
@@ -795,7 +742,6 @@
 		"emoji": "🇷🇴"
 	},
 	{
-		"id": "cda2e529-f80a-4a28-885f-f58c420d6165",
 		"name_en": "Georgia",
 		"name_es": "Georgia",
 		"continent_en": "Asia",
@@ -810,7 +756,6 @@
 		"emoji": "🇬🇪"
 	},
 	{
-		"id": "c9ed8abd-2833-45e7-8f1a-73d1c0d27f0e",
 		"name_en": "Croatia",
 		"name_es": "Croacia",
 		"continent_en": "Europe",
@@ -825,7 +770,6 @@
 		"emoji": "🇭🇷"
 	},
 	{
-		"id": "c77dd8b1-7424-4b48-b1e8-f023585d554c",
 		"name_en": "Suriname",
 		"name_es": "Surinam",
 		"continent_en": "South America",
@@ -840,7 +784,6 @@
 		"emoji": "🇸🇷"
 	},
 	{
-		"id": "c7214e45-cdb0-4ba9-9449-241213d81ea2",
 		"name_en": "United Kingdom",
 		"name_es": "Reino Unido",
 		"continent_en": "Europe",
@@ -855,7 +798,6 @@
 		"emoji": "🇬🇧"
 	},
 	{
-		"id": "c628d4c4-c676-42aa-9dea-c73f9df450e3",
 		"name_en": "Hungary",
 		"name_es": "Hungría",
 		"continent_en": "Europe",
@@ -870,7 +812,6 @@
 		"emoji": "🇭🇺"
 	},
 	{
-		"id": "c5cc977c-2b83-411a-aac4-939a8b196013",
 		"name_en": "Marshall Islands",
 		"name_es": "Islas Marshall",
 		"continent_en": "Oceania",
@@ -885,7 +826,6 @@
 		"emoji": "🇲🇭"
 	},
 	{
-		"id": "c3f6f1be-c3ea-477c-9c36-c2e478c432ce",
 		"name_en": "Norway",
 		"name_es": "Noruega",
 		"continent_en": "Europe",
@@ -900,7 +840,6 @@
 		"emoji": "🇳🇴"
 	},
 	{
-		"id": "c3d2525e-3542-40b4-834c-ab64b3014352",
 		"name_en": "Bahrain",
 		"name_es": "Baréin",
 		"continent_en": "Asia",
@@ -915,7 +854,6 @@
 		"emoji": "🇧🇭"
 	},
 	{
-		"id": "c3c4d640-2c7e-4fdd-ae8e-c3c08cb9387c",
 		"name_en": "Brunei Darussalam",
 		"name_es": "Brunéi",
 		"continent_en": "Asia",
@@ -930,7 +868,6 @@
 		"emoji": "🇧🇳"
 	},
 	{
-		"id": "c2c4f8c2-c70f-4b73-b6e8-0553646e4e92",
 		"name_en": "New Caledonia",
 		"name_es": "Nueva Caledonia",
 		"continent_en": "Oceania",
@@ -945,7 +882,6 @@
 		"emoji": "🇳🇨"
 	},
 	{
-		"id": "c21ef204-5c2b-415e-86c3-65b86601a3b8",
 		"name_en": "Pakistan",
 		"name_es": "Pakistán",
 		"continent_en": "Asia",
@@ -960,7 +896,6 @@
 		"emoji": "🇵🇰"
 	},
 	{
-		"id": "c1e410bf-d897-4154-9767-3318ba964b12",
 		"name_en": "Northern Mariana Islands",
 		"name_es": "Islas Marianas del Norte",
 		"continent_en": "Oceania",
@@ -975,7 +910,6 @@
 		"emoji": "🇲🇵"
 	},
 	{
-		"id": "c1956ce0-015b-48c7-8e12-310fb3a9ded5",
 		"name_en": "Austria",
 		"name_es": "Austria",
 		"continent_en": "Europe",
@@ -990,7 +924,6 @@
 		"emoji": "🇦🇹"
 	},
 	{
-		"id": "be01bca6-f432-4b18-9989-666ccc768da4",
 		"name_en": "Panama",
 		"name_es": "Panamá",
 		"continent_en": "North America",
@@ -1005,7 +938,6 @@
 		"emoji": "🇵🇦"
 	},
 	{
-		"id": "bde753f3-b9fa-4682-bfa0-b56dee6fbaf5",
 		"name_en": "Wallis and Futuna",
 		"name_es": "Wallis y Futuna",
 		"continent_en": "Oceania",
@@ -1020,7 +952,6 @@
 		"emoji": "🇼🇫"
 	},
 	{
-		"id": "bc7d8dfc-5ac0-4d00-88a1-fc1800250fbc",
 		"name_en": "Virgin Islands, British",
 		"name_es": "Islas Vírgenes Británicas",
 		"continent_en": "North America",
@@ -1035,7 +966,6 @@
 		"emoji": "🇻🇬"
 	},
 	{
-		"id": "ba68e6db-7c4a-4e3d-b157-6c9edf0ba64d",
 		"name_en": "North Macedonia",
 		"name_es": "Macedonia del Norte",
 		"continent_en": "Europe",
@@ -1050,7 +980,6 @@
 		"emoji": "🇲🇰"
 	},
 	{
-		"id": "b7f96673-7976-44a0-b52e-b1c17f579ad8",
 		"name_en": "China",
 		"name_es": "China",
 		"continent_en": "Asia",
@@ -1065,7 +994,6 @@
 		"emoji": "🇨🇳"
 	},
 	{
-		"id": "b402c7f6-edd1-4671-a168-54d43aa8a0e6",
 		"name_en": "Nauru",
 		"name_es": "Nauru",
 		"continent_en": "Oceania",
@@ -1080,7 +1008,6 @@
 		"emoji": "🇳🇷"
 	},
 	{
-		"id": "b1860a3d-6663-4dd0-ab7f-b31dd043d837",
 		"name_en": "Vatican City State",
 		"name_es": "Ciudad del Vaticano",
 		"continent_en": "Europe",
@@ -1095,7 +1022,6 @@
 		"emoji": "🇻🇦"
 	},
 	{
-		"id": "b181f2f8-20ee-48c0-9c7f-46239260d7dc",
 		"name_en": "Nicaragua",
 		"name_es": "Nicaragua",
 		"continent_en": "North America",
@@ -1110,7 +1036,6 @@
 		"emoji": "🇳🇮"
 	},
 	{
-		"id": "aed659b0-a304-46ae-a6f4-ddcda85645eb",
 		"name_en": "Senegal",
 		"name_es": "Senegal",
 		"continent_en": "Africa",
@@ -1125,7 +1050,6 @@
 		"emoji": "🇸🇳"
 	},
 	{
-		"id": "ade935f9-a149-4729-906e-480a529c91ab",
 		"name_en": "Niger",
 		"name_es": "Níger",
 		"continent_en": "Africa",
@@ -1140,7 +1064,6 @@
 		"emoji": "🇳🇪"
 	},
 	{
-		"id": "adaed92d-fafe-4311-be9d-6d980bc53380",
 		"name_en": "Cayman Islands",
 		"name_es": "Islas Caimán",
 		"continent_en": "North America",
@@ -1155,7 +1078,6 @@
 		"emoji": "🇰🇾"
 	},
 	{
-		"id": "ac50a708-7fb5-41c2-8433-663fc2a3d452",
 		"name_en": "Svalbard and Jan Mayen",
 		"name_es": "Svalbard y Jan Mayen",
 		"continent_en": "Europe",
@@ -1170,7 +1092,6 @@
 		"emoji": "🇸🇯"
 	},
 	{
-		"id": "abd43827-956d-4775-908e-e4cec46c635d",
 		"name_en": "Grenada",
 		"name_es": "Granada",
 		"continent_en": "North America",
@@ -1185,7 +1106,6 @@
 		"emoji": "🇬🇩"
 	},
 	{
-		"id": "a7cb1afb-daab-454a-b755-9ce0073e0e09",
 		"name_en": "Guyana",
 		"name_es": "Guyana",
 		"continent_en": "South America",
@@ -1200,7 +1120,6 @@
 		"emoji": "🇬🇾"
 	},
 	{
-		"id": "a70e1dd0-cea2-40f0-9901-3f5e46aaebcd",
 		"name_en": "Jordan",
 		"name_es": "Jordania",
 		"continent_en": "Asia",
@@ -1215,7 +1134,6 @@
 		"emoji": "🇯🇴"
 	},
 	{
-		"id": "a638793a-56a2-422a-90ef-a7ff8595d8e7",
 		"name_en": "Congo",
 		"name_es": "Congo",
 		"continent_en": "Africa",
@@ -1230,7 +1148,6 @@
 		"emoji": "🇨🇬"
 	},
 	{
-		"id": "a564de09-f57b-4162-80ce-918930b2d86d",
 		"name_en": "Djibouti",
 		"name_es": "Yibuti",
 		"continent_en": "Africa",
@@ -1245,7 +1162,6 @@
 		"emoji": "🇩🇯"
 	},
 	{
-		"id": "a29fba30-72e6-4d43-bedf-c1acc2ce847c",
 		"name_en": "Cook Islands",
 		"name_es": "Islas Cook",
 		"continent_en": "Oceania",
@@ -1260,7 +1176,6 @@
 		"emoji": "🇨🇰"
 	},
 	{
-		"id": "a28e2ecd-b1fb-4987-9a1c-df16b95bb3b7",
 		"name_en": "San Marino",
 		"name_es": "San Marino",
 		"continent_en": "Europe",
@@ -1275,7 +1190,6 @@
 		"emoji": "🇸🇲"
 	},
 	{
-		"id": "a08efe2e-e6b9-4615-b4dc-8768274a87a2",
 		"name_en": "Colombia",
 		"name_es": "Colombia",
 		"continent_en": "South America",
@@ -1290,7 +1204,6 @@
 		"emoji": "🇨🇴"
 	},
 	{
-		"id": "9f3279a2-60f5-4209-adb4-4fb9c76161a7",
 		"name_en": "Isle of Man",
 		"name_es": "Isla de Man",
 		"continent_en": "Europe",
@@ -1305,7 +1218,6 @@
 		"emoji": "🇮🇲"
 	},
 	{
-		"id": "9e749895-924b-40b5-9e9b-c0855b7f63d6",
 		"name_en": "Belgium",
 		"name_es": "Bélgica",
 		"continent_en": "Europe",
@@ -1320,7 +1232,6 @@
 		"emoji": "🇧🇪"
 	},
 	{
-		"id": "9b7113af-6393-4bc5-b508-7fed8f34f0a0",
 		"name_en": "Timor-Leste",
 		"name_es": "Timor-Leste",
 		"continent_en": "Asia",
@@ -1335,7 +1246,6 @@
 		"emoji": "🇹🇱"
 	},
 	{
-		"id": "9aca01a1-fa04-4800-8cc2-93294a7434d1",
 		"name_en": "Chile",
 		"name_es": "Chile",
 		"continent_en": "South America",
@@ -1350,7 +1260,6 @@
 		"emoji": "🇨🇱"
 	},
 	{
-		"id": "95833ca1-3d1d-4752-8b79-5e0cfdc58a20",
 		"name_en": "Namibia",
 		"name_es": "Namibia",
 		"continent_en": "Africa",
@@ -1365,7 +1274,6 @@
 		"emoji": "🇳🇦"
 	},
 	{
-		"id": "9342fc88-c9b2-4318-9b7c-713ad9ff9493",
 		"name_en": "Sri Lanka",
 		"name_es": "Sri Lanka",
 		"continent_en": "Asia",
@@ -1380,7 +1288,6 @@
 		"emoji": "🇱🇰"
 	},
 	{
-		"id": "9322bfd5-b04b-4e87-9da2-cf4bd1b8ea26",
 		"name_en": "Kyrgyzstan",
 		"name_es": "Kirguistán",
 		"continent_en": "Asia",
@@ -1395,7 +1302,6 @@
 		"emoji": "🇰🇬"
 	},
 	{
-		"id": "9261975f-8367-4673-bef7-d3bb8963b95e",
 		"name_en": "Montserrat",
 		"name_es": "Montserrat",
 		"continent_en": "North America",
@@ -1410,7 +1316,6 @@
 		"emoji": "🇲🇸"
 	},
 	{
-		"id": "92487454-a0c8-4b84-b32a-3922bffe658a",
 		"name_en": "Bosnia and Herzegovina",
 		"name_es": "Bosnia y Herzegovina",
 		"continent_en": "Europe",
@@ -1425,7 +1330,6 @@
 		"emoji": "🇧🇦"
 	},
 	{
-		"id": "90cc97d7-c9b1-4c26-8776-ea4ce13e5bcb",
 		"name_en": "French Guiana",
 		"name_es": "Guayana Francesa",
 		"continent_en": "South America",
@@ -1440,7 +1344,6 @@
 		"emoji": "🇬🇫"
 	},
 	{
-		"id": "907e8104-0a66-43d2-a54e-36c11ae387d9",
 		"name_en": "Hong Kong",
 		"name_es": "Hong Kong",
 		"continent_en": "Asia",
@@ -1455,7 +1358,6 @@
 		"emoji": "🇭🇰"
 	},
 	{
-		"id": "90792a14-b70d-484a-bae1-37440e9c7878",
 		"name_en": "Indonesia",
 		"name_es": "Indonesia",
 		"continent_en": "Asia",
@@ -1470,7 +1372,6 @@
 		"emoji": "🇮🇩"
 	},
 	{
-		"id": "8eabeb44-6133-4743-98c2-4eba4b875f81",
 		"name_en": "Jamaica",
 		"name_es": "Jamaica",
 		"continent_en": "North America",
@@ -1485,7 +1386,6 @@
 		"emoji": "🇯🇲"
 	},
 	{
-		"id": "8e857627-e35d-4102-a7a8-575531bd07f0",
 		"name_en": "Greece",
 		"name_es": "Grecia",
 		"continent_en": "Europe",
@@ -1500,7 +1400,6 @@
 		"emoji": "🇬🇷"
 	},
 	{
-		"id": "8cd4a9c8-c7c8-4f0a-8319-24bc4621eb23",
 		"name_en": "Denmark",
 		"name_es": "Dinamarca",
 		"continent_en": "Europe",
@@ -1515,7 +1414,6 @@
 		"emoji": "🇩🇰"
 	},
 	{
-		"id": "8c096903-1979-4a2c-82a8-8e35c29f8eee",
 		"name_en": "Kiribati",
 		"name_es": "Kiribati",
 		"continent_en": "Oceania",
@@ -1530,7 +1428,6 @@
 		"emoji": "🇰🇮"
 	},
 	{
-		"id": "8b67fdbe-4b22-47de-ac33-3874693aa269",
 		"name_en": "Netherlands",
 		"name_es": "Países Bajos",
 		"continent_en": "Europe",
@@ -1545,7 +1442,6 @@
 		"emoji": "🇳🇱"
 	},
 	{
-		"id": "8adc0d73-8f37-4384-9e67-ad9d4c70c16d",
 		"name_en": "Montenegro",
 		"name_es": "Montenegro",
 		"continent_en": "Europe",
@@ -1560,7 +1456,6 @@
 		"emoji": "🇲🇪"
 	},
 	{
-		"id": "8a51e094-9516-4aea-b34b-a91681fcdd93",
 		"name_en": "Lebanon",
 		"name_es": "Líbano",
 		"continent_en": "Asia",
@@ -1575,7 +1470,6 @@
 		"emoji": "🇱🇧"
 	},
 	{
-		"id": "898aecdc-060d-43d5-8af8-25b2f3da2543",
 		"name_en": "American Samoa",
 		"name_es": "Samoa Americana",
 		"continent_en": "Oceania",
@@ -1590,7 +1484,6 @@
 		"emoji": "🇦🇸"
 	},
 	{
-		"id": "886e36bb-06c6-4de7-ba6d-1083e575a96c",
 		"name_en": "Zambia",
 		"name_es": "Zambia",
 		"continent_en": "Africa",
@@ -1605,7 +1498,6 @@
 		"emoji": "🇿🇲"
 	},
 	{
-		"id": "8807286a-77d4-4753-ad8c-f4692c6564e0",
 		"name_en": "Ecuador",
 		"name_es": "Ecuador",
 		"continent_en": "South America",
@@ -1620,7 +1512,6 @@
 		"emoji": "🇪🇨"
 	},
 	{
-		"id": "86c7460b-9288-450d-ac8c-0885f4f2b89c",
 		"name_en": "Germany",
 		"name_es": "Alemania",
 		"continent_en": "Europe",
@@ -1635,7 +1526,6 @@
 		"emoji": "🇩🇪"
 	},
 	{
-		"id": "8457501c-97b0-4843-aefb-c3f0b13a2129",
 		"name_en": "Iran",
 		"name_es": "Irán",
 		"continent_en": "Asia",
@@ -1650,7 +1540,6 @@
 		"emoji": "🇮🇷"
 	},
 	{
-		"id": "84058bfc-4d58-4f42-a48b-57cc2f177e6c",
 		"name_en": "Iceland",
 		"name_es": "Islandia",
 		"continent_en": "Europe",
@@ -1665,7 +1554,6 @@
 		"emoji": "🇮🇸"
 	},
 	{
-		"id": "832cf904-d50d-46ae-83d2-2929aab3634b",
 		"name_en": "Aruba",
 		"name_es": "Aruba",
 		"continent_en": "North America",
@@ -1680,7 +1568,6 @@
 		"emoji": "🇦🇼"
 	},
 	{
-		"id": "831e882c-c0cf-4c79-bc15-8535f5411cd5",
 		"name_en": "Saint Lucia",
 		"name_es": "Santa Lucía",
 		"continent_en": "North America",
@@ -1695,7 +1582,6 @@
 		"emoji": "🇱🇨"
 	},
 	{
-		"id": "8291a810-da61-4548-9027-11fad8508523",
 		"name_en": "Honduras",
 		"name_es": "Honduras",
 		"continent_en": "North America",
@@ -1710,7 +1596,6 @@
 		"emoji": "🇭🇳"
 	},
 	{
-		"id": "828b264e-4d67-43d6-b623-0829fa8a436e",
 		"name_en": "Sao Tome and Principe",
 		"name_es": "Santo Tomé y Príncipe",
 		"continent_en": "Africa",
@@ -1725,7 +1610,6 @@
 		"emoji": "🇸🇹"
 	},
 	{
-		"id": "823ac2ee-bd4e-4111-8950-32174b5ac11f",
 		"name_en": "Sierra Leone",
 		"name_es": "Sierra Leona",
 		"continent_en": "Africa",
@@ -1740,7 +1624,6 @@
 		"emoji": "🇸🇱"
 	},
 	{
-		"id": "822a8f4a-293d-4ba3-9128-ea04410c9b7d",
 		"name_en": "Laos",
 		"name_es": "Laos",
 		"continent_en": "Asia",
@@ -1755,7 +1638,6 @@
 		"emoji": "🇱🇦"
 	},
 	{
-		"id": "7c7dc875-f894-49d0-b698-f9093bd907ff",
 		"name_en": "Saint Barthélemy",
 		"name_es": "San Bartolomé",
 		"continent_en": "North America",
@@ -1770,7 +1652,6 @@
 		"emoji": "🇧🇱"
 	},
 	{
-		"id": "7c6e7de3-0d31-4954-b459-84ec7f02d978",
 		"name_en": "India",
 		"name_es": "India",
 		"continent_en": "Asia",
@@ -1785,7 +1666,6 @@
 		"emoji": "🇮🇳"
 	},
 	{
-		"id": "7bfec213-08eb-4131-a597-5d63f2702999",
 		"name_en": "Cyprus",
 		"name_es": "Chipre",
 		"continent_en": "Europe",
@@ -1800,7 +1680,6 @@
 		"emoji": "🇨🇾"
 	},
 	{
-		"id": "7b203c31-128d-4a71-8183-ddb409239a90",
 		"name_en": "Liechtenstein",
 		"name_es": "Liechtenstein",
 		"continent_en": "Europe",
@@ -1815,7 +1694,6 @@
 		"emoji": "🇱🇮"
 	},
 	{
-		"id": "7a4f2b05-7a49-4f35-b9ef-2ee32478cb89",
 		"name_en": "Argentina",
 		"name_es": "Argentina",
 		"continent_en": "South America",
@@ -1830,7 +1708,6 @@
 		"emoji": "🇦🇷"
 	},
 	{
-		"id": "791d0b47-f7d7-410e-9196-3a742d1c50d9",
 		"name_en": "Saint Martin",
 		"name_es": "San Martín",
 		"continent_en": "North America",
@@ -1845,7 +1722,6 @@
 		"emoji": "🇲🇫"
 	},
 	{
-		"id": "78555e0e-356c-4fcf-ac88-758e271e8f4a",
 		"name_en": "Burkina Faso",
 		"name_es": "Burkina Faso",
 		"continent_en": "Africa",
@@ -1860,7 +1736,6 @@
 		"emoji": "🇧🇫"
 	},
 	{
-		"id": "761e7e7a-042d-40a6-8d31-49390bdef588",
 		"name_en": "Åland Islands",
 		"name_es": "Åland",
 		"continent_en": "Europe",
@@ -1875,7 +1750,6 @@
 		"emoji": "🇦🇽"
 	},
 	{
-		"id": "761aa9c6-7f52-4d68-84fa-55255e59c6b4",
 		"name_en": "Martinique",
 		"name_es": "Martinica",
 		"continent_en": "North America",
@@ -1890,7 +1764,6 @@
 		"emoji": "🇲🇶"
 	},
 	{
-		"id": "75c793c4-81fa-47be-8c99-6b07c50eadb6",
 		"name_en": "United Arab Emirates",
 		"name_es": "Emiratos Árabes Unidos",
 		"continent_en": "Asia",
@@ -1905,7 +1778,6 @@
 		"emoji": "🇦🇪"
 	},
 	{
-		"id": "7550abee-019a-4bf7-9434-8ed8f33481e7",
 		"name_en": "Turks and Caicos Islands",
 		"name_es": "Islas Turcas y Caicos",
 		"continent_en": "North America",
@@ -1920,7 +1792,6 @@
 		"emoji": "🇹🇨"
 	},
 	{
-		"id": "749ddc38-7d92-4607-9c04-24ce6146d76a",
 		"name_en": "Belize",
 		"name_es": "Belice",
 		"continent_en": "North America",
@@ -1935,7 +1806,6 @@
 		"emoji": "🇧🇿"
 	},
 	{
-		"id": "745e09d3-d122-4dc5-b875-4e319541d569",
 		"name_en": "Armenia",
 		"name_es": "Armenia",
 		"continent_en": "Asia",
@@ -1950,7 +1820,6 @@
 		"emoji": "🇦🇲"
 	},
 	{
-		"id": "740ec066-0db3-4494-b9ba-17ef703f2b0a",
 		"name_en": "North Korea",
 		"name_es": "Corea del Norte",
 		"continent_en": "Asia",
@@ -1965,7 +1834,6 @@
 		"emoji": "🇰🇵"
 	},
 	{
-		"id": "73c96027-e5f9-4127-8bf8-b64419c8793c",
 		"name_en": "Tristan da Cunha",
 		"name_es": "Tristán de Acuña",
 		"continent_en": "Africa",
@@ -1980,7 +1848,6 @@
 		"emoji": "🇹🇦"
 	},
 	{
-		"id": "739ee7ca-cd10-443a-b189-a905493bde0c",
 		"name_en": "Portugal",
 		"name_es": "Portugal",
 		"continent_en": "Europe",
@@ -1995,7 +1862,6 @@
 		"emoji": "🇵🇹"
 	},
 	{
-		"id": "734431a2-8ede-458e-89d1-dba31a607aa6",
 		"name_en": "Trinidad and Tobago",
 		"name_es": "Trinidad y Tobago",
 		"continent_en": "North America",
@@ -2010,7 +1876,6 @@
 		"emoji": "🇹🇹"
 	},
 	{
-		"id": "72bd93ec-625c-405f-8887-eac74898663a",
 		"name_en": "Mozambique",
 		"name_es": "Mozambique",
 		"continent_en": "Africa",
@@ -2025,7 +1890,6 @@
 		"emoji": "🇲🇿"
 	},
 	{
-		"id": "72345c3b-316d-4b5f-ae13-f516a51d0c40",
 		"name_en": "Myanmar",
 		"name_es": "Myanmar",
 		"continent_en": "Asia",
@@ -2040,7 +1904,6 @@
 		"emoji": "🇲🇲"
 	},
 	{
-		"id": "711a535a-5d52-4bc3-9783-557989f4743f",
 		"name_en": "United States",
 		"name_es": "Estados Unidos",
 		"continent_en": "North America",
@@ -2055,7 +1918,6 @@
 		"emoji": "🇺🇸"
 	},
 	{
-		"id": "70b0dbba-cf30-4369-8f8b-22b95716d35f",
 		"name_en": "Lithuania",
 		"name_es": "Lituania",
 		"continent_en": "Europe",
@@ -2070,7 +1932,6 @@
 		"emoji": "🇱🇹"
 	},
 	{
-		"id": "706651a3-e1f3-418e-a424-f9eec3e58393",
 		"name_en": "Gabon",
 		"name_es": "Gabón",
 		"continent_en": "Africa",
@@ -2085,7 +1946,6 @@
 		"emoji": "🇬🇦"
 	},
 	{
-		"id": "6dd12fb2-dd38-4a23-aff8-805d05f9f15d",
 		"name_en": "Saudi Arabia",
 		"name_es": "Arabia Saudita",
 		"continent_en": "Asia",
@@ -2100,7 +1960,6 @@
 		"emoji": "🇸🇦"
 	},
 	{
-		"id": "6d7ecca6-55e6-4787-9154-287690c55ff5",
 		"name_en": "Antarctica",
 		"name_es": "Antártida",
 		"continent_en": "Antarctica",
@@ -2115,7 +1974,6 @@
 		"emoji": "🇦🇶"
 	},
 	{
-		"id": "6d1b14ed-bb28-46e0-bb8d-1a59c0599825",
 		"name_en": "Virgin Islands, U.S.",
 		"name_es": "Islas Vírgenes de los Estados Unidos",
 		"continent_en": "North America",
@@ -2130,7 +1988,6 @@
 		"emoji": "🇻🇮"
 	},
 	{
-		"id": "6cc18a22-2557-4dd7-85d3-1e0e9e757189",
 		"name_en": "Oman",
 		"name_es": "Omán",
 		"continent_en": "Asia",
@@ -2145,7 +2002,6 @@
 		"emoji": "🇴🇲"
 	},
 	{
-		"id": "6c4be5f7-7659-4d4b-b8b4-7748c5dcef26",
 		"name_en": "Uzbekistan",
 		"name_es": "Uzbekistán",
 		"continent_en": "Asia",
@@ -2160,7 +2016,6 @@
 		"emoji": "🇺🇿"
 	},
 	{
-		"id": "6c01cfd6-0bcb-478e-93cd-90428582c406",
 		"name_en": "Curaçao",
 		"name_es": "Curazao",
 		"continent_en": "North America",
@@ -2175,7 +2030,6 @@
 		"emoji": "🇨🇼"
 	},
 	{
-		"id": "6bba89db-ba6e-4c05-9673-f3f8b8e7e3a1",
 		"name_en": "Nigeria",
 		"name_es": "Nigeria",
 		"continent_en": "Africa",
@@ -2190,7 +2044,6 @@
 		"emoji": "🇳🇬"
 	},
 	{
-		"id": "6aebb7e9-57fe-48c5-bad4-177f2dfceb01",
 		"name_en": "Central African Republic",
 		"name_es": "República Centroafricana",
 		"continent_en": "Africa",
@@ -2205,7 +2058,6 @@
 		"emoji": "🇨🇫"
 	},
 	{
-		"id": "6a458065-c0fd-431c-8a8c-f651fe8f0a26",
 		"name_en": "Chad",
 		"name_es": "Chad",
 		"continent_en": "Africa",
@@ -2220,7 +2072,6 @@
 		"emoji": "🇹🇩"
 	},
 	{
-		"id": "6a294c4e-a8f4-4362-aee4-ef2bedd55071",
 		"name_en": "Mongolia",
 		"name_es": "Mongolia",
 		"continent_en": "Asia",
@@ -2235,7 +2086,6 @@
 		"emoji": "🇲🇳"
 	},
 	{
-		"id": "688055eb-0248-4d7c-a66f-39e1ece727d5",
 		"name_en": "Norfolk Island",
 		"name_es": "Isla Norfolk",
 		"continent_en": "Oceania",
@@ -2250,7 +2100,6 @@
 		"emoji": "🇳🇫"
 	},
 	{
-		"id": "68571abd-7a6e-42c6-b6c0-9335f6794604",
 		"name_en": "Seychelles",
 		"name_es": "Seychelles",
 		"continent_en": "Africa",
@@ -2265,7 +2114,6 @@
 		"emoji": "🇸🇨"
 	},
 	{
-		"id": "675bedfa-027f-4f4f-986e-a86cfac284e1",
 		"name_en": "Barbados",
 		"name_es": "Barbados",
 		"continent_en": "North America",
@@ -2280,7 +2128,6 @@
 		"emoji": "🇧🇧"
 	},
 	{
-		"id": "65b7dcaa-401f-42a2-abf1-279ebfed9aae",
 		"name_en": "Philippines",
 		"name_es": "Filipinas",
 		"continent_en": "Asia",
@@ -2295,7 +2142,6 @@
 		"emoji": "🇵🇭"
 	},
 	{
-		"id": "64a24690-0fd3-4a8e-8118-0a3cb2be86fe",
 		"name_en": "Guinea",
 		"name_es": "Guinea",
 		"continent_en": "Africa",
@@ -2310,7 +2156,6 @@
 		"emoji": "🇬🇳"
 	},
 	{
-		"id": "639a2d8e-27da-4534-a86d-8d71316f31fa",
 		"name_en": "Bangladesh",
 		"name_es": "Bangladés",
 		"continent_en": "Asia",
@@ -2325,7 +2170,6 @@
 		"emoji": "🇧🇩"
 	},
 	{
-		"id": "63639fde-6320-4996-8a86-4ed0bedef8fe",
 		"name_en": "Equatorial Guinea",
 		"name_es": "Guinea Ecuatorial",
 		"continent_en": "Africa",
@@ -2340,7 +2184,6 @@
 		"emoji": "🇬🇶"
 	},
 	{
-		"id": "635549c7-7230-4374-bcd3-e5a3a172f694",
 		"name_en": "Saint Helena",
 		"name_es": "Santa Elena",
 		"continent_en": "Africa",
@@ -2355,7 +2198,6 @@
 		"emoji": "🇸🇭"
 	},
 	{
-		"id": "6301de9d-796c-45e8-b77d-a93c7c862bc3",
 		"name_en": "Guatemala",
 		"name_es": "Guatemala",
 		"continent_en": "North America",
@@ -2370,7 +2212,6 @@
 		"emoji": "🇬🇹"
 	},
 	{
-		"id": "621c4be1-ed89-46a7-9a59-11c03a477161",
 		"name_en": "Eswatini",
 		"name_es": "Suazilandia",
 		"continent_en": "Africa",
@@ -2385,7 +2226,6 @@
 		"emoji": "🇸🇿"
 	},
 	{
-		"id": "6187a027-9484-4d94-8b37-94c68e1bf3a2",
 		"name_en": "Maldives",
 		"name_es": "Maldivas",
 		"continent_en": "Asia",
@@ -2400,7 +2240,6 @@
 		"emoji": "🇲🇻"
 	},
 	{
-		"id": "614f8ef1-b868-4367-b6a3-6fd78f42296d",
 		"name_en": "Cocos (Keeling) Islands",
 		"name_es": "Islas Cocos",
 		"continent_en": "Asia",
@@ -2415,7 +2254,6 @@
 		"emoji": "🇨🇨"
 	},
 	{
-		"id": "5cf1efe6-7aee-412b-b5e4-79b537f12bd3",
 		"name_en": "Latvia",
 		"name_es": "Letonia",
 		"continent_en": "Europe",
@@ -2430,7 +2268,6 @@
 		"emoji": "🇱🇻"
 	},
 	{
-		"id": "5c693ade-eb32-4e82-9618-cc18b7c587a4",
 		"name_en": "Zimbabwe",
 		"name_es": "Zimbabue",
 		"continent_en": "Africa",
@@ -2445,7 +2282,6 @@
 		"emoji": "🇿🇼"
 	},
 	{
-		"id": "5a2d22c4-1565-4dd6-be8f-8be40af7307f",
 		"name_en": "Sudan",
 		"name_es": "Sudán",
 		"continent_en": "Africa",
@@ -2460,7 +2296,6 @@
 		"emoji": "🇸🇩"
 	},
 	{
-		"id": "57c9c74f-9774-49fe-b175-77b2297f4e46",
 		"name_en": "Antigua and Barbuda",
 		"name_es": "Antigua y Barbuda",
 		"continent_en": "North America",
@@ -2475,7 +2310,6 @@
 		"emoji": "🇦🇬"
 	},
 	{
-		"id": "5565a68a-a3e6-4ed7-abbf-86dd7bfb4323",
 		"name_en": "Sweden",
 		"name_es": "Suecia",
 		"continent_en": "Europe",
@@ -2490,7 +2324,6 @@
 		"emoji": "🇸🇪"
 	},
 	{
-		"id": "55219388-2860-4d09-bfa5-70e78fdaf556",
 		"name_en": "Andorra",
 		"name_es": "Andorra",
 		"continent_en": "Europe",
@@ -2505,7 +2338,6 @@
 		"emoji": "🇦🇩"
 	},
 	{
-		"id": "53ce0758-2d0a-49aa-8020-954185de609a",
 		"name_en": "Russia",
 		"name_es": "Rusia",
 		"continent_en": "Europe",
@@ -2520,7 +2352,6 @@
 		"emoji": "🇷🇺"
 	},
 	{
-		"id": "53576e81-689f-4676-83a4-cf8b6efb6bc7",
 		"name_en": "Nepal",
 		"name_es": "Nepal",
 		"continent_en": "Asia",
@@ -2535,7 +2366,6 @@
 		"emoji": "🇳🇵"
 	},
 	{
-		"id": "52cffd47-76ff-499c-8f77-5ee78b0d8e65",
 		"name_en": "Afghanistan",
 		"name_es": "Afganistán",
 		"continent_en": "Africa",
@@ -2550,7 +2380,6 @@
 		"emoji": "🇦🇫"
 	},
 	{
-		"id": "52a4f223-ffa7-48db-88a9-4cc2286932cd",
 		"name_en": "Gambia",
 		"name_es": "Gambia",
 		"continent_en": "Africa",
@@ -2565,7 +2394,6 @@
 		"emoji": "🇬🇲"
 	},
 	{
-		"id": "5238d3c2-a111-4cad-bee6-4df5a3eba404",
 		"name_en": "Saint Vincent and the Grenadines",
 		"name_es": "San Vicente y las Granadinas",
 		"continent_en": "North America",
@@ -2580,7 +2408,6 @@
 		"emoji": "🇻🇨"
 	},
 	{
-		"id": "52121954-90f7-4ef5-ae99-dff8d6cc7034",
 		"name_en": "Bhutan",
 		"name_es": "Bután",
 		"continent_en": "Asia",
@@ -2595,7 +2422,6 @@
 		"emoji": "🇧🇹"
 	},
 	{
-		"id": "50160241-2478-4262-b604-5cf99d8d651a",
 		"name_en": "Lesotho",
 		"name_es": "Lesoto",
 		"continent_en": "Africa",
@@ -2610,7 +2436,6 @@
 		"emoji": "🇱🇸"
 	},
 	{
-		"id": "4f72d3a9-83eb-45ec-8533-c4828032f089",
 		"name_en": "Bolivia",
 		"name_es": "Bolivia",
 		"continent_en": "South America",
@@ -2625,7 +2450,6 @@
 		"emoji": "🇧🇴"
 	},
 	{
-		"id": "4f62a85d-0181-4cbf-8c28-f120a41b08a8",
 		"name_en": "Morocco",
 		"name_es": "Marruecos",
 		"continent_en": "Africa",
@@ -2640,7 +2464,6 @@
 		"emoji": "🇲🇦"
 	},
 	{
-		"id": "4ea18366-ca3e-40e2-9141-da49179cd574",
 		"name_en": "Azerbaijan",
 		"name_es": "Azerbaiyán",
 		"continent_en": "Asia",
@@ -2655,7 +2478,6 @@
 		"emoji": "🇦🇿"
 	},
 	{
-		"id": "4e7ff4eb-eca6-4092-9a1b-6d19d47d8314",
 		"name_en": "Pitcairn",
 		"name_es": "Islas Pitcairn",
 		"continent_en": "Oceania",
@@ -2670,7 +2492,6 @@
 		"emoji": "🇵🇳"
 	},
 	{
-		"id": "4d38e825-4aa7-4678-b8e2-6b9c99d8333c",
 		"name_en": "France",
 		"name_es": "Francia",
 		"continent_en": "Europe",
@@ -2685,7 +2506,6 @@
 		"emoji": "🇫🇷"
 	},
 	{
-		"id": "4a9aaf47-8595-4c43-aee6-28f72b858a6e",
 		"name_en": "French Polynesia",
 		"name_es": "Polinesia Francesa",
 		"continent_en": "Oceania",
@@ -2700,7 +2520,6 @@
 		"emoji": "🇵🇫"
 	},
 	{
-		"id": "4a480e23-28f4-47a9-a0d9-ac13bce5cdfe",
 		"name_en": "Thailand",
 		"name_es": "Tailandia",
 		"continent_en": "Asia",
@@ -2715,7 +2534,6 @@
 		"emoji": "🇹🇭"
 	},
 	{
-		"id": "49e387fe-5070-4d0f-b20d-b97feb978cd7",
 		"name_en": "Micronesia",
 		"name_es": "Micronesia",
 		"continent_en": "Oceania",
@@ -2730,7 +2548,6 @@
 		"emoji": "🇫🇲"
 	},
 	{
-		"id": "49a81b66-2ee2-4316-b2be-fd78fcbe47e6",
 		"name_en": "Uruguay",
 		"name_es": "Uruguay",
 		"continent_en": "South America",
@@ -2745,7 +2562,6 @@
 		"emoji": "🇺🇾"
 	},
 	{
-		"id": "48a59040-6e5b-45bd-937e-3f8487973849",
 		"name_en": "Cape Verde",
 		"name_es": "Cabo Verde",
 		"continent_en": "Africa",
@@ -2760,7 +2576,6 @@
 		"emoji": "🇨🇻"
 	},
 	{
-		"id": "482dcf12-7115-413e-9b6d-cb37047ae80f",
 		"name_en": "Western Sahara",
 		"name_es": "Sahara Occidental",
 		"continent_en": "Africa",
@@ -2775,7 +2590,6 @@
 		"emoji": "🇪🇭"
 	},
 	{
-		"id": "46d6e1fd-4aff-45fd-89b2-78751d2e642c",
 		"name_en": "Slovenia",
 		"name_es": "Eslovenia",
 		"continent_en": "Europe",
@@ -2790,7 +2604,6 @@
 		"emoji": "🇸🇮"
 	},
 	{
-		"id": "46849b53-2e87-4df9-8c80-931bbed8c302",
 		"name_en": "Iraq",
 		"name_es": "Irak",
 		"continent_en": "Asia",
@@ -2805,7 +2618,6 @@
 		"emoji": "🇮🇶"
 	},
 	{
-		"id": "448dca87-7cdc-432e-b66a-07f104a64fe3",
 		"name_en": "Yemen",
 		"name_es": "Yemen",
 		"continent_en": "Asia",
@@ -2820,7 +2632,6 @@
 		"emoji": "🇾🇪"
 	},
 	{
-		"id": "43d24d98-4e4a-4c73-83fe-c4c8e4c2abbf",
 		"name_en": "Dominican Republic",
 		"name_es": "República Dominicana",
 		"continent_en": "North America",
@@ -2835,7 +2646,6 @@
 		"emoji": "🇩🇴"
 	},
 	{
-		"id": "42c46536-9749-4525-a411-a24844cd637b",
 		"name_en": "Bulgaria",
 		"name_es": "Bulgaria",
 		"continent_en": "Europe",
@@ -2850,7 +2660,6 @@
 		"emoji": "🇧🇬"
 	},
 	{
-		"id": "424b85a1-2469-4094-9625-f524ee908925",
 		"name_en": "Spain",
 		"name_es": "España",
 		"continent_en": "Europe",
@@ -2865,7 +2674,6 @@
 		"emoji": "🇪🇸"
 	},
 	{
-		"id": "407601e7-c558-41fb-b9e1-b0ea6f232663",
 		"name_en": "Turkmenistan",
 		"name_es": "Turkmenistán",
 		"continent_en": "Asia",
@@ -2880,7 +2688,6 @@
 		"emoji": "🇹🇲"
 	},
 	{
-		"id": "3e74e991-6cff-496c-bf06-47f92eda33e4",
 		"name_en": "Falkland Islands (Malvinas)",
 		"name_es": "Islas Malvinas",
 		"continent_en": "South America",
@@ -2895,7 +2702,6 @@
 		"emoji": "🇫🇰"
 	},
 	{
-		"id": "3cf04a7c-7c09-461f-8ab4-9725d0309c1e",
 		"name_en": "South Georgia and the South Sandwich Islands",
 		"name_es": "Islas Georgias del Sur y Sandwich del Sur",
 		"continent_en": "Antarctica",
@@ -2910,7 +2716,6 @@
 		"emoji": "🇬🇸"
 	},
 	{
-		"id": "3cce9b5f-9dbb-41e0-a445-e175bd38a79a",
 		"name_en": "Jersey",
 		"name_es": "Jersey",
 		"continent_en": "Europe",
@@ -2925,7 +2730,6 @@
 		"emoji": "🇯🇪"
 	},
 	{
-		"id": "3c07ba11-efe5-44ee-828d-e21bb221dd74",
 		"name_en": "Heard Island and McDonald Islands",
 		"name_es": "Islas Heard y McDonald",
 		"continent_en": "Antarctica",
@@ -2940,7 +2744,6 @@
 		"emoji": "🇭🇲"
 	},
 	{
-		"id": "3ac06399-77a4-4a3f-98d8-e3ed3347097b",
 		"name_en": "Ukraine",
 		"name_es": "Ucrania",
 		"continent_en": "Europe",
@@ -2955,7 +2758,6 @@
 		"emoji": "🇺🇦"
 	},
 	{
-		"id": "39e0650f-8d3f-406c-a598-d7b3392ba2f0",
 		"name_en": "Palestine",
 		"name_es": "Palestina",
 		"continent_en": "Asia",
@@ -2970,7 +2772,6 @@
 		"emoji": "🇵🇸"
 	},
 	{
-		"id": "38eedad1-6bf5-4141-bf8a-09905de8953b",
 		"name_en": "Peru",
 		"name_es": "Perú",
 		"continent_en": "South America",
@@ -2985,7 +2786,6 @@
 		"emoji": "🇵🇪"
 	},
 	{
-		"id": "37643265-1a4b-431f-8b8e-9c664d72983f",
 		"name_en": "Singapore",
 		"name_es": "Singapur",
 		"continent_en": "Asia",
@@ -3000,7 +2800,6 @@
 		"emoji": "🇸🇬"
 	},
 	{
-		"id": "36f89e38-cab7-45bc-b98f-e24657f12ccb",
 		"name_en": "Ireland",
 		"name_es": "Irlanda",
 		"continent_en": "Europe",
@@ -3015,7 +2814,6 @@
 		"emoji": "🇮🇪"
 	},
 	{
-		"id": "35cc2712-b160-4db2-b5fe-a4b39cff4470",
 		"name_en": "Egypt",
 		"name_es": "Egipto",
 		"continent_en": "Africa",
@@ -3030,7 +2828,6 @@
 		"emoji": "🇪🇬"
 	},
 	{
-		"id": "34fb4a4b-135b-4f23-8524-8cd944473cdf",
 		"name_en": "Macao",
 		"name_es": "Macao",
 		"continent_en": "Asia",
@@ -3045,7 +2842,6 @@
 		"emoji": "🇲🇴"
 	},
 	{
-		"id": "326dbee2-cbc9-43b9-bc59-56a5dafd4583",
 		"name_en": "Eritrea",
 		"name_es": "Eritrea",
 		"continent_en": "Africa",
@@ -3060,7 +2856,6 @@
 		"emoji": "🇪🇷"
 	},
 	{
-		"id": "31ec7987-dd81-40c9-af80-f324b171e57c",
 		"name_en": "Solomon Islands",
 		"name_es": "Islas Salomón",
 		"continent_en": "Oceania",
@@ -3075,7 +2870,6 @@
 		"emoji": "🇸🇧"
 	},
 	{
-		"id": "31342b85-6bea-43de-80eb-0a9b064a35d0",
 		"name_en": "Luxembourg",
 		"name_es": "Luxemburgo",
 		"continent_en": "Europe",
@@ -3090,7 +2884,6 @@
 		"emoji": "🇱🇺"
 	},
 	{
-		"id": "30c9dcee-1e9e-44af-81ac-09cbe3638019",
 		"name_en": "Canada",
 		"name_es": "Canadá",
 		"continent_en": "North America",
@@ -3105,7 +2898,6 @@
 		"emoji": "🇨🇦"
 	},
 	{
-		"id": "302f3382-528b-466f-8d89-ed156681571a",
 		"name_en": "Switzerland",
 		"name_es": "Suiza",
 		"continent_en": "Europe",
@@ -3120,7 +2912,6 @@
 		"emoji": "🇨🇭"
 	},
 	{
-		"id": "2fb027ea-4b59-4ce9-a908-085ec44ae497",
 		"name_en": "Slovakia",
 		"name_es": "Eslovaquia",
 		"continent_en": "Europe",
@@ -3135,7 +2926,6 @@
 		"emoji": "🇸🇰"
 	},
 	{
-		"id": "2fa7100c-2cbe-4569-9ab7-8e3bad5c7835",
 		"name_en": "Ghana",
 		"name_es": "Ghana",
 		"continent_en": "Africa",
@@ -3150,7 +2940,6 @@
 		"emoji": "🇬🇭"
 	},
 	{
-		"id": "2d74afdf-e225-4686-bb03-b7616bd50394",
 		"name_en": "Qatar",
 		"name_es": "Catar",
 		"continent_en": "Asia",
@@ -3165,7 +2954,6 @@
 		"emoji": "🇶🇦"
 	},
 	{
-		"id": "2c87b190-7d4d-43f4-a35a-9065fe5605df",
 		"name_en": "Bahamas",
 		"name_es": "Bahamas",
 		"continent_en": "North America",
@@ -3180,7 +2968,6 @@
 		"emoji": "🇧🇸"
 	},
 	{
-		"id": "2c320e52-330f-4c7d-9870-656285a04848",
 		"name_en": "Côte d'Ivoire",
 		"name_es": "Costa de Marfil",
 		"continent_en": "Africa",
@@ -3195,7 +2982,6 @@
 		"emoji": "🇨🇮"
 	},
 	{
-		"id": "2b825644-ebed-4160-8204-7e54e30b511e",
 		"name_en": "Serbia",
 		"name_es": "Serbia",
 		"continent_en": "Europe",
@@ -3210,7 +2996,6 @@
 		"emoji": "🇷🇸"
 	},
 	{
-		"id": "2acac171-def5-48ae-9426-6cb13d068d53",
 		"name_en": "Venezuela",
 		"name_es": "Venezuela",
 		"continent_en": "South America",
@@ -3225,7 +3010,6 @@
 		"emoji": "🇻🇪"
 	},
 	{
-		"id": "2abd8b09-6d3f-4319-8e4d-29964e1bdbf7",
 		"name_en": "Tokelau",
 		"name_es": "Tokelau",
 		"continent_en": "Oceania",
@@ -3240,7 +3024,6 @@
 		"emoji": "🇹🇰"
 	},
 	{
-		"id": "2a980b1d-52fd-4079-bafb-df9797b950f2",
 		"name_en": "Japan",
 		"name_es": "Japón",
 		"continent_en": "Asia",
@@ -3255,7 +3038,6 @@
 		"emoji": "🇯🇵"
 	},
 	{
-		"id": "2a95a19c-cc7d-4bf1-8b38-b3cbef261bb3",
 		"name_en": "Costa Rica",
 		"name_es": "Costa Rica",
 		"continent_en": "North America",
@@ -3270,7 +3052,6 @@
 		"emoji": "🇨🇷"
 	},
 	{
-		"id": "297574b0-0471-4f8a-869a-9d103f505144",
 		"name_en": "Benin",
 		"name_es": "Benin",
 		"continent_en": "Africa",
@@ -3285,7 +3066,6 @@
 		"emoji": "🇧🇯"
 	},
 	{
-		"id": "28f688c8-d6e8-4985-b428-d526e6286299",
 		"name_en": "Puerto Rico",
 		"name_es": "Puerto Rico",
 		"continent_en": "North America",
@@ -3300,7 +3080,6 @@
 		"emoji": "🇵🇷"
 	},
 	{
-		"id": "27c15bea-e46d-425b-bf22-b0c87e29fc1b",
 		"name_en": "Mexico",
 		"name_es": "México",
 		"continent_en": "North America",
@@ -3315,7 +3094,6 @@
 		"emoji": "🇲🇽"
 	},
 	{
-		"id": "252cc533-d661-4eb6-8977-ecf61aa0aa89",
 		"name_en": "South Sudan",
 		"name_es": "Sudán del Sur",
 		"continent_en": "Africa",
@@ -3330,7 +3108,6 @@
 		"emoji": "🇸🇸"
 	},
 	{
-		"id": "2496de5f-4e7c-45ce-ac8f-abf09be176ee",
 		"name_en": "Uganda",
 		"name_es": "Uganda",
 		"continent_en": "Africa",
@@ -3345,7 +3122,6 @@
 		"emoji": "🇺🇬"
 	},
 	{
-		"id": "20c9d2d8-2fcf-45f4-93d0-f151ffcc7b37",
 		"name_en": "Malawi",
 		"name_es": "Malawi",
 		"continent_en": "Africa",
@@ -3360,7 +3136,6 @@
 		"emoji": "🇲🇼"
 	},
 	{
-		"id": "204b58fe-7c32-4385-ac2c-586c6c1df3ef",
 		"name_en": "El Salvador",
 		"name_es": "El Salvador",
 		"continent_en": "North America",
@@ -3375,7 +3150,6 @@
 		"emoji": "🇸🇻"
 	},
 	{
-		"id": "1e4afbdc-3de6-422a-81e9-ae9e8f3ca58b",
 		"name_en": "Kuwait",
 		"name_es": "Kuwait",
 		"continent_en": "Asia",
@@ -3390,7 +3164,6 @@
 		"emoji": "🇰🇼"
 	},
 	{
-		"id": "1c1a0028-7a29-4b21-a739-5698d14d56de",
 		"name_en": "Tanzania",
 		"name_es": "Tanzania",
 		"continent_en": "Africa",
@@ -3405,7 +3178,6 @@
 		"emoji": "🇹🇿"
 	},
 	{
-		"id": "190611f2-82de-4997-bb59-129e0ab55604",
 		"name_en": "Mauritius",
 		"name_es": "Mauricio",
 		"continent_en": "Africa",
@@ -3420,7 +3192,6 @@
 		"emoji": "🇲🇺"
 	},
 	{
-		"id": "139e6dbd-4d03-4635-a431-7db13b10a599",
 		"name_en": "Guam",
 		"name_es": "Guam",
 		"continent_en": "Oceania",
@@ -3435,7 +3206,6 @@
 		"emoji": "🇬🇺"
 	},
 	{
-		"id": "135bb1f7-eb5f-48d9-92e1-90d090030801",
 		"name_en": "Togo",
 		"name_es": "Togo",
 		"continent_en": "Africa",
@@ -3450,7 +3220,6 @@
 		"emoji": "🇹🇬"
 	},
 	{
-		"id": "129238ca-ec2b-4d72-a678-81bf04bff86c",
 		"name_en": "Réunion",
 		"name_es": "Reunión",
 		"continent_en": "Africa",
@@ -3465,7 +3234,6 @@
 		"emoji": "🇷🇪"
 	},
 	{
-		"id": "117180b9-ce73-4d42-8262-3ecdb22f3e71",
 		"name_en": "Guadeloupe",
 		"name_es": "Guadalupe",
 		"continent_en": "North America",
@@ -3480,7 +3248,6 @@
 		"emoji": "🇬🇵"
 	},
 	{
-		"id": "1064c034-9b2e-459e-b47c-fb9c2f069400",
 		"name_en": "Vanuatu",
 		"name_es": "Vanuatu",
 		"continent_en": "Oceania",
@@ -3495,7 +3262,6 @@
 		"emoji": "🇻🇺"
 	},
 	{
-		"id": "104fc705-c6f2-427b-8b0a-a726ea87972b",
 		"name_en": "Vietnam",
 		"name_es": "Vietnam",
 		"continent_en": "Asia",
@@ -3510,7 +3276,6 @@
 		"emoji": "🇻🇳"
 	},
 	{
-		"id": "10404e8d-2e68-4496-967d-b2b6c8daeeb4",
 		"name_en": "Malaysia",
 		"name_es": "Malasia",
 		"continent_en": "Asia",
@@ -3525,7 +3290,6 @@
 		"emoji": "🇲🇾"
 	},
 	{
-		"id": "0e3c116e-a7cc-4d68-baf0-9af738409dce",
 		"name_en": "Niue",
 		"name_es": "Niue",
 		"continent_en": "Oceania",
@@ -3540,7 +3304,6 @@
 		"emoji": "🇳🇺"
 	},
 	{
-		"id": "0dd1c3a0-7115-4623-a870-f1c86e65a20c",
 		"name_en": "Albania",
 		"name_es": "Albania",
 		"continent_en": "Europe",
@@ -3555,7 +3318,6 @@
 		"emoji": "🇦🇱"
 	},
 	{
-		"id": "0ad0ca6d-46e8-402b-8219-ce8cf43b3553",
 		"name_en": "Sint Maarten",
 		"name_es": "Sint Maarten",
 		"continent_en": "North America",
@@ -3570,7 +3332,6 @@
 		"emoji": "🇸🇽"
 	},
 	{
-		"id": "09e53399-4c54-47a1-b278-5716fe31d561",
 		"name_en": "Cuba",
 		"name_es": "Cuba",
 		"continent_en": "North America",
@@ -3585,7 +3346,6 @@
 		"emoji": "🇨🇺"
 	},
 	{
-		"id": "08db9e80-4061-4e57-bc91-409c39662ef4",
 		"name_en": "Czechia",
 		"name_es": "Chequia",
 		"continent_en": "Europe",
@@ -3600,7 +3360,6 @@
 		"emoji": "🇨🇿"
 	},
 	{
-		"id": "08d15825-ddc2-4491-bc26-31f8df89a498",
 		"name_en": "South Korea",
 		"name_es": "Corea del Sur",
 		"continent_en": "Asia",
@@ -3615,7 +3374,6 @@
 		"emoji": "🇰🇷"
 	},
 	{
-		"id": "08771673-cec3-488d-89b8-6d9c8c4c8cf4",
 		"name_en": "Fiji",
 		"name_es": "Fiyi",
 		"continent_en": "Oceania",
@@ -3630,7 +3388,6 @@
 		"emoji": "🇫🇯"
 	},
 	{
-		"id": "06ad11f1-6a4f-4e38-aec3-bc7f9eb31a01",
 		"name_en": "Haiti",
 		"name_es": "Haití",
 		"continent_en": "North America",
@@ -3645,7 +3402,6 @@
 		"emoji": "🇭🇹"
 	},
 	{
-		"id": "05f05daf-0b4c-4ea0-8b2c-bd669b209ddc",
 		"name_en": "Australia",
 		"name_es": "Australia",
 		"continent_en": "Oceania",
@@ -3660,7 +3416,6 @@
 		"emoji": "🇦🇺"
 	},
 	{
-		"id": "03e7d9c2-9b4b-4af3-9083-a4fabb5c2db9",
 		"name_en": "Poland",
 		"name_es": "Polonia",
 		"continent_en": "Europe",
@@ -3675,7 +3430,6 @@
 		"emoji": "🇵🇱"
 	},
 	{
-		"id": "036d8856-b13b-41d7-a6af-ce276b54f8e2",
 		"name_en": "Kenya",
 		"name_es": "Kenia",
 		"continent_en": "Africa",
@@ -3690,7 +3444,6 @@
 		"emoji": "🇰🇪"
 	},
 	{
-		"id": "02e1718e-7642-40c4-91b7-a561d870aa00",
 		"name_en": "New Zealand",
 		"name_es": "Nueva Zelanda",
 		"continent_en": "Oceania",
@@ -3705,7 +3458,6 @@
 		"emoji": "🇳🇿"
 	},
 	{
-		"id": "02626c30-3350-4a69-9593-565676f02db9",
 		"name_en": "Monaco",
 		"name_es": "Mónaco",
 		"continent_en": "Europe",
@@ -3720,7 +3472,6 @@
 		"emoji": "🇲🇨"
 	},
 	{
-		"id": "01102ace-c254-4643-b2c9-62fab7ada47a",
 		"name_en": "Türkiye",
 		"name_es": "Turquía",
 		"continent_en": "Asia",

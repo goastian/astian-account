@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\User\Role;
-use Illuminate\Support\Str;
-use App\Models\User\Employee;
-use Illuminate\Support\Facades\DB;
 use App\Models\Broadcasting\Broadcast;
+use App\Models\User\Employee;
+use App\Models\User\Role;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -19,13 +19,12 @@ return new class extends Migration
         /**
          * datos del user administrador
          */
-
-        foreach (Role::rolesByDefault() as $key => $value) {
+        array_map(function ($role) {
             Role::create([
-                'name' => $key,
-                'description' => $value,
+                'name' => $role->scope,
+                'description' => $role->description,
             ])->save();
-        }
+        }, Role::rolesByDefault());
 
         foreach (Broadcast::channelsByDefault() as $key => $value) {
             Broadcast::create([
@@ -45,8 +44,7 @@ return new class extends Migration
             'updated_at' => now(),
         ]);
 
-        Employee::first()->roles()->syncWithoutDetaching(Role::first()->id);
-
+        Employee::first()->roles()->syncWithoutDetaching(Role::where('name','admin')->first()->id);
     }
 
     /**

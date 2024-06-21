@@ -12,24 +12,24 @@ return new class extends Migration
      */
     public function up()
     {
-        $contries = json_decode(file_get_contents(base_path('database/extra/countries.json')));
 
-        foreach ($contries as $key => $value) {
+        array_map(function ($country) {
             Country::create([
-                "name_en" => $value->name_en,
-                "name_es" => $value->name_es,
-                "continent_en" => $value->continent_en,
-                "continent_es" => $value->continent_es,
-                "capital_en" => $value->capital_en,
-                "capital_es" => $value->capital_es,
-                "dial_code" => $value->dial_code,
-                "code_2" => $value->code_2,
-                "code_3" => $value->code_3,
-                "tld" => $value->tld,
-                "km2" => $value->km2,
-                "emoji" => $value->emoji
+                "name_en" => $country->name_en,
+                "name_es" => $country->name_es,
+                "continent_en" => $country->continent_en,
+                "continent_es" => $country->continent_es,
+                "capital_en" => $country->capital_en,
+                "capital_es" => $country->capital_es,
+                "dial_code" => $country->dial_code,
+                "code_2" => $country->code_2,
+                "code_3" => $country->code_3,
+                "tld" => $country->tld,
+                "km2" => $country->km2,
+                "emoji" => $country->emoji,
             ])->save();
-        }
+        }, Country::defaultCountries());
+
     }
 
     /**
