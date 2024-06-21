@@ -31,4 +31,14 @@ class Country extends Master
         "km2",
         "emoji",
     ];
+
+    /**
+     * Default countries
+     * 
+     * @return Array
+     */
+    public static function defaultCountries()
+    {
+        return json_decode(file_get_contents(base_path('database/extra/countries.json')));
+    }
 }

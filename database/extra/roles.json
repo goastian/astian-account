@@ -1,0 +1,54 @@
+[
+    {
+        "scope": "notify",
+        "description": "granted to send notification push"
+    },
+    {
+        "scope": "scopes_destroy",
+        "description": "granted to delete roles"
+    },
+    {
+        "scope": "scopes_update",
+        "description": "granted to update scopes, just only aplly for description"
+    },
+    {
+        "scope": "scopes_register",
+        "description": "granted to register new roles"
+    },
+    {
+        "scope": "scopes_read",
+        "description": "granted to read scopes"
+    },
+    {
+        "scope": "account_disable",
+        "description": "granted to disable users accounts, this does not apply for clients"
+    },
+    {
+        "scope": "account_enable",
+        "description": "granted to eanble just the only users, this does not apply for clients"
+    },
+    {
+        "scope": "account_update",
+        "description": "granted to update users data"
+    },
+    {
+        "scope": "account_register",
+        "description": "granted to register new users"
+    },
+    {
+        "scope": "account_read",
+        "description": "granted to read user data"
+    },
+    {
+        "scope": "broadcast",
+        "description": "full access to manage broadcasting channels"
+    },
+    {
+        "scope": "client",
+        "description": "default access for the client"
+    },
+    {
+        "scope": "admin",
+        "description": "full system access"
+    }
+]
