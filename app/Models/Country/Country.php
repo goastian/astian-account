@@ -11,6 +11,8 @@ class Country extends Master
 
     public $table = "countries";
 
+    public $timestamps = false;
+
     //public $view = "";
 
     ///public $transformer = "";
