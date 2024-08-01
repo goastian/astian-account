@@ -1,187 +1,142 @@
 <template>
-    <v-modal target="create" @is-accepted="createUser" @is-clicked="loadData">
-        <template v-slot:button> add new user </template>
-        <template v-slot:head>
-            <span class="text-uppercase text-center fw-bold"
-                >panel to add new users</span
-            >
-        </template>
-        <template v-slot:body>
-            <div class="user-register">
-                <div class="inputs">
-                    <div class="item">
-                        <label for=""></label>
-                        <input
-                            placeholder="First Name"
-                            class="input"
-                            type="text"
-                            v-model="form.name"
-                        />
-                        <v-error :error="errors.name"></v-error>
-                    </div>
-                    <div class="item">
-                        <input
-                            type="text"
-                            placeholder="Last Name"
-                            v-model="form.last_name"
-                            class="input"
-                        />
-                        <v-error :error="errors.last_name"></v-error>
-                    </div>
-                    <div class="item">
-                        <input
-                            type="email"
-                            v-model="form.email"
-                            placeholder="Email Address"
-                            class="input"
-                        />
-                        <v-error :error="errors.email"></v-error>
-                    </div>
-                    <div class="item">
-                        <div class="group">
-                            <v-select-search
-                                class="label"
-                                :items="countries"
-                                param="name_en"
-                                text="Country"
-                                @selected="setCountry"
-                            >
-                                <template #title="slotProps">
-                                    {{
-                                        slotProps.item.name_en
-                                            ? slotProps.item.emoji
-                                            : null
-                                    }}
-                                </template>
+    <el-button type="primary" @click="showModal">
+        Panel to add new users
+    </el-button>
 
-                                <template #options="slotProps">
-                                    <span class="">
-                                        {{ slotProps.items.emoji }}
-                                        {{ slotProps.items.name_en }}
-                                    </span>
-                                </template>
-                            </v-select-search>
+    <el-dialog
+        v-model="show_modal"
+        title="Create new user"
+        draggable
+        destroy-on-close
+        append-to-body
+        fullscreen
+    >
+        <div class="row">
+            <div class="form">
+                <div class="item">
+                    <el-input placeholder="First Name" v-model="form.name" />
+                    <v-error :error="errors.name"></v-error>
+                </div>
+                <div class="item">
+                    <el-input
+                        placeholder="Last Name"
+                        v-model="form.last_name"
+                    />
+                    <v-error :error="errors.last_name"></v-error>
+                </div>
+                <div class="item">
+                    <el-input
+                        type="email"
+                        v-model="form.email"
+                        placeholder="Email Address"
+                    />
+                    <v-error :error="errors.email"></v-error>
+                </div>
+                <div class="item">
+                    <el-select
+                        v-model="form.country"
+                        filterable
+                        placeholder="Select"
+                    >
+                        <el-option
+                            v-for="item in countries"
+                            :key="item.value"
+                            :label="item.emoji + ' ' + item.name_en"
+                            :value="item.name_en"
+                        />
+                    </el-select>
 
-                            <input
-                                type="text"
+                    <v-error :error="errors.country"></v-error>
+                </div>
+
+                <div class="item">
+                    <el-input v-model="form.city" placeholder="City" />
+                    <v-error :error="errors.city"></v-error>
+                </div>
+                <div class="item">
+                    <el-input
+                        v-model="form.address"
+                        placeholder="Home Address"
+                    />
+                    <v-error :error="errors.address"></v-error>
+                </div>
+                <div class="item">
+                    <el-input
+                        v-model="form.phone"
+                        style="max-width: 600px"
+                        placeholder="Phone number"
+                        class="input-with-select"
+                    >
+                        <template #prepend>
+                            <el-select
+                                v-model="form.dial_code"
                                 placeholder="Country"
-                                v-model="form.country"
-                            />
-                        </div>
-                        <v-error :error="errors.country"></v-error>
-                    </div>
-
-                    <div class="item">
-                        <input
-                            type="text"
-                            v-model="form.city"
-                            placeholder="City"
-                            class="input"
-                        />
-                        <v-error :error="errors.city"></v-error>
-                    </div>
-                    <div class="item">
-                        <input
-                            type="text"
-                            v-model="form.address"
-                            placeholder="Home Address"
-                            class="input"
-                        />
-                        <v-error :error="errors.address"></v-error>
-                    </div>
-                    <div class="item">
-                        <div class="group">
-                            <v-select-search
-                                class="label"
-                                :items="countries"
-                                text="Dial code"
-                                @selected="setCode"
-                                param="name_en"
+                                style="width: 115px"
                             >
-                                <template #title="slotProps">
-                                    {{
-                                        slotProps.item.name_en
-                                            ? slotProps.item.emoji +
-                                              " " +
-                                              slotProps.item.name_en +
-                                              " " +
-                                              slotProps.item.dial_code
-                                            : slotProps.text
-                                    }}
-                                </template>
-
-                                <template #options="slotProps">
-                                    <span class="">
-                                        {{ slotProps.items.emoji }}
-                                        {{ slotProps.items.dial_code }}
-                                        {{ slotProps.items.name_en }}
-                                    </span>
-                                </template>
-                            </v-select-search>
-
-                            <input
-                                class="form-input"
-                                type="text"
-                                v-model="form.phone"
-                                placeholder="Phone Number"
-                            />
-                        </div>
-                        <v-error :error="errors.phone"></v-error>
-                        <v-error :error="errors.dial_code"></v-error>
-                    </div>
-                    <div class="item">
-                        <input
-                            type="date"
-                            v-model="form.birthday"
-                            placeholder="Birthday"
-                            class="input"
-                        />
-                        <v-error :error="errors.birthday"></v-error>
-                    </div>
-                </div>
-
-                <div class="scopes">
-                    <div class="head">
-                        <p>Scopes</p>
-                    </div>
-                    <div class="items">
-                        <div
-                            class="form-check"
-                            v-for="(item, index) in roles"
-                            :key="index"
-                            v-show="!item.public"
-                        >
-                            <div>
-                                <input
-                                    type="checkbox"
-                                    :value="item.id"
-                                    :id="index"
-                                    v-model="form.scope"
+                                <el-option
+                                    v-for="item in countries"
+                                    :key="item.value"
+                                    :label="
+                                        item.emoji +
+                                        ' ' +
+                                        item.name_en +
+                                        ' ' +
+                                        item.dial_code
+                                    "
+                                    :value="item.dial_code"
                                 />
-                                <label :for="index">
-                                    <strong>{{ item.scope }}: </strong>
-                                    <span>{{ item.description }}</span>
-                                </label>
-                            </div>
-                        </div>
+                            </el-select>
+                        </template>
+                    </el-input>
+                    <v-error :error="errors.phone"></v-error>
+                    <v-error :error="errors.dial_code"></v-error>
+                </div>
+                <div class="item">
+                    <el-date-picker
+                        v-model="birthday"
+                        type="date"
+                        placeholder="Pick a day"
+                    />
+                    <v-error :error="errors.birthday"></v-error>
+                </div>
+            </div>
+            <div class="scopes">
+                <div class="head">
+                    <p>Roles</p>
+                </div>
+                <div class="body">
+                    <div
+                        class="item"
+                        v-for="(item, index) in roles"
+                        :key="index"
+                        v-show="!item.public"
+                    >
+                        <el-checkbox-group v-model="form.scope" size="small">
+                            <el-checkbox :value="item.id" :id="item.scope">
+                                <strong>{{ item.scope }}: </strong>
+                                <span>{{ item.description }}</span>
+                            </el-checkbox>
+                        </el-checkbox-group>
                     </div>
                 </div>
             </div>
-            <div>
-                <v-error :error="errors.scope"></v-error>
+        </div>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="success" @click="createUser">Register</el-button>
+                <el-button type="warning" @click="close">Close</el-button>
             </div>
-            <v-message :id="message_show" @close="close">
-                <template v-slot:body> {{ message }} </template>
-            </v-message>
         </template>
-    </v-modal>
+    </el-dialog>
 </template>
 <script>
-export default {
-    emits: ["success", "errors"],
+import { ElMessage } from "element-plus";
 
+export default {
     data() {
         return {
+            show_modal: false,
+            birthday: null,
             form: {
                 name: null,
                 last_name: null,
@@ -196,30 +151,71 @@ export default {
             },
             errors: {},
             roles: {},
-            message: null,
-            message_show: null,
-            countries: {},
+            countries: [],
         };
     },
 
+    watch: {
+        birthday(value) {
+            this.transformaDate(value);
+        },
+    },
+
     methods: {
-        setCountry(event) {
-            this.form.country = event.name_en;
+        /**
+         * Show the modal in the windowss
+         */
+        showModal() {
+            this.show_modal = !this.show_modal;
+            this.loadData();
         },
 
-        setCode(event) {
-            this.form.dial_code = event.dial_code;
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
         },
 
+        /**
+         * Transforma the date in specific format 'Y-m-d'
+         *
+         * @param date
+         */
+        transformaDate(date) {
+            const originalDate = new Date(date);
+            const year = originalDate.getFullYear();
+            const month = String(originalDate.getMonth() + 1).padStart(2, "0");
+            const day = String(originalDate.getDate()).padStart(2, "0");
+            this.form.birthday = `${year}-${month}-${day}`;
+        },
+
+        /**
+         *  reset keys when the windows is closed
+         */
         close() {
-            this.message = null;
+            this.form = {};
+            this.form.scope = [];
+            this.countries = {};
+            this.show_modal = false;
         },
 
+        /**
+         * Load necesary data to register new users
+         */
         loadData() {
             this.getRoles();
             this.getCountries();
         },
 
+        /**
+         * Get the all roles
+         */
         async getRoles() {
             try {
                 const res = await this.$server.get("/api/admin/roles");
@@ -230,6 +226,10 @@ export default {
             } catch (e) {}
         },
 
+        /**
+         * Create a new user in the system
+         *
+         */
         async createUser() {
             try {
                 const res = await this.$server.post(
@@ -238,11 +238,12 @@ export default {
                 );
 
                 if (res.status == 201) {
-                    this.message = "A new user has been registered";
-                    this.message_show = Math.floor(Math.random() * 10000);
+                    this.popup(
+                        "New user has been registered successfully",
+                        "success"
+                    );
                     this.form = { scope: [] };
                     this.errors = {};
-                    this.$emit("success", true);
                 }
             } catch (e) {
                 if (
@@ -255,6 +256,9 @@ export default {
             }
         },
 
+        /**
+         * Get the all contries
+         */
         async getCountries() {
             try {
                 const res = await this.$server.get("/api/locations/countries");
@@ -269,57 +273,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.user-register {
-    .inputs {
+.row {
+    .form {
         display: flex;
         flex-wrap: wrap;
-        padding: 0 0.3em;
+
         .item {
-            width: 100%;
-            @media (min-width: 800px) {
-                flex: 0 0 calc(100% / 2);
-            }
+            flex: 1 1 calc(95% / 3);
+            padding: 0.5em;
         }
     }
 
     .scopes {
         .head {
             p {
-                font-size: 1.2em;
-                margin: 0.5em 0;
-                border-bottom: 1px solid var(--border-color-light);
-                border-top: 1px solid var(--border-color-light);
-                font-weight: bold;
+                font-size: 1.3em;
+                margin-bottom: 0;
             }
         }
 
-        .items {
+        .body {
             display: flex;
             flex-wrap: wrap;
-            padding: 0em;
 
-            .form-check {
-                @media (min-width: 800px) {
-                    flex: 0 0 calc(100% / 2);
-                }
-                div {
-                    display: flex;
-                    input {
-                        flex: 0 0 auto;
-                    }
-                    label {
-                        flex: 1 1 auto;
-                        color: var(--first-color);
-                        font-size: 0.9em;
-                        text-transform: lowercase;
-                        strong {
-                            font-weight: light;
-                        }
-                        span {
-                            font-weight: lighter;
-                        }
-                    }
-                }
+            .item {
+                flex: 1 0 calc(95% / 2);
             }
         }
     }

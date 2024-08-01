@@ -1,50 +1,46 @@
 <template>
-    <v-table>
-        <template v-slot:title>List of users</template>
-        <template v-slot:head>
-            <th>name</th>
-            <th>last name</th>
-            <th>email</th>
-            <th>phone</th>
-            <th>
-                <v-register bg="btn-link"></v-register>
-            </th>
-        </template>
-        <template v-slot:body>
-            <tr v-for="(item, index) in users" :key="index">
-                <td v-text="item.name"></td>
-                <td v-text="item.last_name"></td>
-                <td v-text="item.email"></td>
-                <td v-text="item.full_phone"></td>
-                <td>
-                    <div>
-                        <v-scopes :user="item" bg="btn-primary"></v-scopes>
+    <div class="users">
+        <div class="head">
+            <div>
+                <p>List of users</p>
+            </div>
+            <div>
+                <v-register></v-register>
+            </div>
+        </div>
+        <el-table :data="users" :lazy="true">
+            <el-table-column prop="name" label="Name" width="200" />
+            <el-table-column prop="last_name" label="Last Name" width="200" />
+            <el-table-column prop="email" label="Email" width="200" />
+            <el-table-column prop="full_phone" label="Phone" width="200" />
+            <el-table-column label="Operations" min-width="200">
+                <template #default="scope">
+                    <div class="actions">
+                        <div class="box">
+                            <v-scopes :user="scope.row"></v-scopes>
+                        </div>
+                        <div class="box">
+                            <v-update :user="scope.row"></v-update>
+                        </div>
+                        <div class="box">
+                            <v-status :user="scope.row"></v-status>
+                        </div>
                     </div>
-                    <div>
-                        <v-update :user="item" bg="btn-secondary"></v-update>
-                    </div>
-                    <div>
-                        <v-status :user="item" @errors="alert"></v-status>
-                    </div>
-                </td>
-            </tr>
-        </template>
-    </v-table>
-    <v-message :id="message_show">
-        <template v-slot:body> {{ message }} </template>
-    </v-message>
+                </template>
+            </el-table-column>
+        </el-table>
 
-    <v-pagination
-        v-show="pages.total > pages.per_page"
-        :pages="pages"
-        @send-current-page="changeList"
-    ></v-pagination>
+        <v-pagination
+            v-show="pages.total > pages.per_page"
+            :pages="pages"
+            @send-current-page="changeList"
+        ></v-pagination>
+    </div>
 </template>
 <script>
 import VRegister from "./Register.vue";
 import VUpdate from "./Update.vue";
 import VStatus from "./Status.vue";
-import VSearch from "./Search.vue";
 import VScopes from "./Scopes.vue";
 
 export default {
@@ -52,20 +48,17 @@ export default {
         VRegister,
         VUpdate,
         VStatus,
-        VSearch,
         VScopes,
     },
 
     data() {
         return {
-            users: {},
+            users: [],
             pages: {},
             search: {
                 page: 1,
                 per_page: 30,
             },
-            message: null,
-            message_show: null,
         };
     },
 
@@ -82,17 +75,6 @@ export default {
 
     methods: {
         /**
-         * Send event to show message
-         * @param event
-         */
-        alert(event) {
-            if (event.status) {
-                this.message_show = Math.floor(Math.random() * 10000);
-                this.message = event.data.message;
-            }
-        },
-
-        /**
          * Get the all users
          */
         async getUsers() {
@@ -100,11 +82,6 @@ export default {
                 const res = await this.$server.get("/api/admin/users", {
                     params: this.search,
                 });
-
-                if (res.status == 204) {
-                    this.message = "Cannot find results";
-                    this.message_show = Math.floor(Math.random() * 10000);
-                }
 
                 if (res.status == 200 && res.data.data.length) {
                     const values = res.data.data;
@@ -114,11 +91,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.page = meta.pagination.current_page;
                 }
-            } catch (e) {
-                if (e.response && e.response.status == 403) {
-                    this.alert(e.response);
-                }
-            }
+            } catch (e) {}
         },
 
         changeList(id) {
@@ -173,36 +146,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-th {
-    text-align: start;
-    text-transform: capitalize;
-}
+.users {
+    .head {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        div {
+            flex: 1 1 calc(100% / 2);
 
-tr {
-    td {
-        padding: 0 0.3em;
-        text-align: start;
+            p {
+                margin: 0;
+                font-size: 1.2em;
+            }
 
-        &:nth-child(1) {
-            text-transform: capitalize;
-        }
-        &:nth-child(2) {
-            text-transform: capitalize;
-        }
-        &:nth-child(4) {
-            min-width: 120px;
-        }
-        &:nth-child(5) {
-            display: flex;
-            justify-content: space-between;
-            div {
-                padding: 0.1em;
+            &:nth-child(2) {
+                text-align: right;
             }
         }
     }
-    &:hover {
-        background-color: var(--first-color);
-        color: var(--white);
+    .actions {
+        display: flex;
+        .box {
+            flex: auto;
+        }
     }
 }
 </style>

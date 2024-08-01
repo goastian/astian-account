@@ -1,27 +1,13 @@
 <template>
-    <v-confirm
-        :bg="user.disabled ? 'btn-ternary' : 'btn-warning'"
-        @is-confirmed="enableOrDisable(user)"
+    <el-button
+        :type="user.disabled ? 'danger' : 'warning'"
+        @click="open(user)"
+        >{{ user.disabled ? "Inactive" : "Active" }}</el-button
     >
-        <template v-slot:button>
-            {{ user.disabled ? "Inactive" : "Active" }}
-        </template>
-        <template v-slot:head>
-            {{ user.disabled ? "Enable user account" : "disable user account" }}
-        </template>
-        <template v-slot:body>
-            {{
-                user.disabled
-                    ? "Are you sure you want to enable this user?"
-                    : "Are you sure you want to dasable this user? For security reasons we're removing all credentials for this user."
-            }}
-        </template>
-    </v-confirm>
 </template>
 <script>
+import { ElMessage, ElMessageBox } from "element-plus";
 export default {
-    emits: ["success", "errors"],
-
     props: {
         user: { type: Object, requered: true },
     },
@@ -32,11 +18,9 @@ export default {
                 const res = await this.$server.get(item.links.enable);
 
                 if (res.status == 200) {
-                    this.$emit("success", res.data.data);
                 }
             } catch (e) {
                 if (e.response && e.response.status == 403) {
-                    this.$emit("errors", e.response);
                 }
             }
         },
@@ -46,21 +30,38 @@ export default {
                 const res = await this.$server.delete(item.links.disable);
 
                 if (res.status == 200) {
-                    this.$emit("success", res.data.data);
                 }
             } catch (e) {
                 if (e.response && e.response.status == 403) {
-                    this.$emit("errors", e.response);
                 }
             }
         },
 
-        enableOrDisable(item) {
-            if (item.disabled) {
-                this.enableUser(item);
-            } else {
-                this.disableUser(item);
-            }
+        open(item) {
+            ElMessageBox.confirm(
+                item.disabled
+                    ? "Are you sure you want to enable this user?"
+                    : "Are you sure you want to dasable this user? For security reasons we're removing all credentials for this user.",
+                item.disabled ? "Enable user account" : "disable user account",
+                {
+                    confirmButtonText: "OK",
+                    cancelButtonText: "Cancel",
+                    type: "warning",
+                }
+            )
+                .then(() => {
+                    if (item.disabled) {
+                        this.enableUser(item);
+                    } else {
+                        this.disableUser(item);
+                    }
+                })
+                .catch(() => {
+                    ElMessage({
+                        type: "info",
+                        message: "canceled",
+                    });
+                });
         },
     },
 };
