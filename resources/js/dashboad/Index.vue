@@ -1,78 +1,60 @@
 <template>
-    <div class="row p-0 m-0">
-        <v-nav class="nav-top" @expand="taggleLefbar" :status="toggle_left_bar"></v-nav>
-        <div class="left" v-show="!toggle_left_bar">
-            <v-left-bar @selected-menu="taggleLefbar"></v-left-bar>
-        </div>
-        <div
-            :class="{
-                'pt-2 ': true,
-                'body-expand': toggle_left_bar,
-                body: !toggle_left_bar,
-            }"
-        >
-            <router-view></router-view>
-        </div>
+    <div class="common-layout">
+        <el-container>
+            <el-header>
+                <v-top-bar>
+                    <template v-slot:icon>
+                        <el-icon size="25" @click="collapseMenu">
+                            <Expand />
+                        </el-icon>
+                    </template>
+                </v-top-bar>
+            </el-header>
+            <el-container>
+                <el-aside width="30" v-show="show_menu">
+                    <v-aside-left :collapse="collapse"></v-aside-left>
+                </el-aside>
+                <el-container>
+                    <div class="content">
+                        <router-view></router-view>
+                    </div>
+                </el-container>
+            </el-container>
+        </el-container>
     </div>
 </template>
 <script>
-import VNav from "./Navbar.vue";
-import VLeftBar from "./Leftbar.vue";
+import VAsideLeft from "./VAsideLeft.vue";
+import VTopBar from "./VTopBar.vue";
 
 export default {
     components: {
-        VNav,
-        VLeftBar,
+        VAsideLeft,
+        VTopBar,
     },
 
     data() {
         return {
-            toggle_left_bar: false,
+            collapse: true,
+            show_menu: true,
         };
     },
-
     methods: {
-        taggleLefbar(event) {
-            this.toggle_left_bar = event;
+        collapseMenu() {
+            this.collapse = !this.collapse;
+            this.screenIsChanging();
+        },
+
+        screenIsChanging() {
+            this.show_menu = window.innerWidth > 940;
         },
     },
 };
 </script>
 
 <style scoped lang="scss">
-.left {
-    flex: 0 0 auto;
-    overflow-y: scroll;
-    padding: 0;
-    margin: 0;
-    background-color: var(--nav-left-bg);
-
-    @media (min-width: 240px) {
-        width: 100%;
-    }
-
-    @media (min-width: 850px) {
-        width: 15%;
-        min-height: 100vh;
-    }
-}
-
-.route {
-    overflow-y: auto; 
-}
-
-.body {
-    @media (min-width: 240px) {
-        width: 100%;
-    }
-
-    @media (min-width: 800px) {
-        width: 84%;
-    }
-}
-
-.body-expand {
+.content {
     width: 100%;
-    min-height: 100vh;
+    padding: 1em;
 }
 </style>
