@@ -117,7 +117,7 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
-            throw_if($key === $role->name, new ReportError(__("This role ($key) is a default system role and cannot be deleted."), 403));
+            throw_if($value->scope == $role->name, new ReportError(__("This role ($value->scope) is a default system role and cannot be deleted."), 403));
         });
 
         $role->delete();
