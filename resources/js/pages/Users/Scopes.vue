@@ -1,54 +1,59 @@
 <template>
-    <!-- Card para mostrar y actualizar datos del usuario-->
-    <v-modal @is-clicked="loadData(user)" @is-accepted="update(user)">
-        <template v-slot:button> Scopes </template>
-        <template v-slot:head>
-            Add Or remove Scopes for {{ user.name }}
-        </template>
+    <el-button type="info" @click="showModal(user)"> Scopes </el-button>
 
-        <template v-slot:body>
-            <div class="user-scopes">
-                <div
-                    class="item"
-                    v-for="(item, index) in roles"
-                    v-show="!item.public"
-                >
-                    <div class="box">
-                        <v-confirm
-                            bg="btn-light"
-                            btn=""
-                            @is-clicked="confirmAction(item)"
-                            @is-confirmed="addOrRemoveScope(item.id)"
-                            @is-cancel="cancelAction(item.id)"
-                        >
-                            <template v-slot:button>
-                                <input
-                                    :id="item.id"
-                                    :value="item.id"
-                                    type="checkbox"
-                                    class="user_roles"
-                                />
-                            </template>
-                            <template v-slot:head> Alert Scopes </template>
-                            <template v-slot:body>
-                                <p v-html="text_body"></p>
-                            </template>
-                        </v-confirm>
-                        <label class="label" :for="item.id">
-                            <span class="fw-bold">{{ item.scope }}:</span>
-                            {{ item.description }}
-                        </label>
-                    </div>
+    <el-dialog
+        v-model="show_modal"
+        title="Manage scopes"
+        draggable
+        destroy-on-close
+        append-to-body
+        fullscreen
+    >
+        <div class="user-scopes">
+            <div
+                class="item"
+                v-for="(item, index) in roles"
+                v-show="!item.public"
+            >
+                <div class="box">
+                    <v-confirm
+                        bg="btn-none"
+                        btn=""
+                        @is-clicked="confirmAction(item)"
+                        @is-confirmed="addOrRemoveScope(item.id)"
+                        @is-cancel="cancelAction(item.id)"
+                    >
+                        <template v-slot:button>
+                            <input
+                                :id="item.id"
+                                :value="item.id"
+                                type="checkbox"
+                                class="user_roles"
+                            />
+                        </template>
+                        <template v-slot:head> Alert Scopes </template>
+                        <template v-slot:body>
+                            <p v-html="text_body"></p>
+                        </template>
+                    </v-confirm>
+                    <label class="label" :for="item.id">
+                        <span class="fw-bold">{{ item.scope }}:</span>
+                        {{ item.description }}
+                    </label>
                 </div>
             </div>
+        </div>
 
-            <div :class="{ message: !status, hide: status }">
-                <p v-html="message"></p>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button @click="show_modal = false">Close</el-button>
             </div>
         </template>
-    </v-modal>
+    </el-dialog>
 </template>
 <script>
+import { ElMessage } from "element-plus";
+
 export default {
     emits: ["success"],
 
@@ -56,8 +61,7 @@ export default {
 
     data() {
         return {
-            message: null,
-            status: false,
+            show_modal: false,
             errors: {},
             roles: {},
             text_body: {},
@@ -65,6 +69,26 @@ export default {
     },
 
     methods: {
+        /**
+         * show modal
+         */
+        showModal(user) {
+            this.loadData(user);
+            this.show_modal = !this.show_modal;
+        },
+
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
         /**
          * Show a windows confirmation
          * @param item
@@ -81,7 +105,7 @@ export default {
          * @param id
          */
         addOrRemoveScope(id) {
-            this.message = null;
+            this.popup(null);
             this.status = null;
             const checked = document.getElementById(id).checked;
 
@@ -110,14 +134,17 @@ export default {
                 });
 
                 if (res.status == 422) {
-                    this.message = `A new Scope <strong> (${res.data.data.scope}) </strong> added`;
+                    this.popup(
+                        `A new Scope <strong> (${res.data.data.scope}) </strong> added`,
+                        "warning"
+                    );
                 }
             } catch (e) {
                 if (e.response && e.response.data.status == 403) {
-                    this.message = e.response.data.errors.message;
+                    this.popup(e.response.data.errors.message, "warning");
                 }
                 if (e.response && e.response.status == 422) {
-                    this.message = e.response.data.message;
+                    this.popup(e.response.data.message, "warning");
                 }
             }
         },
@@ -129,11 +156,14 @@ export default {
                 );
 
                 if (res.status == 200) {
-                    this.message = `The Scope <strong> ${res.data.data.scope} </atrong> was removed`;
+                    this.popup(
+                        `The Scope <strong> ${res.data.data.scope} </atrong> was removed`,
+                        "success"
+                    );
                 }
             } catch (e) {
                 if (e.response && e.response.status == 403) {
-                    this.message = e.response.data.message;
+                    this.popup(e.response.data.message, "warning");
                 }
 
                 if (e.response && e.response.status == 422) {
@@ -162,7 +192,7 @@ export default {
          */
         async getUserRoles(item) {
             try {
-                this.message = null;
+                this.popup(null);
                 const res = await this.$server.get(item.links.roles);
 
                 if (res.status == 200) {
