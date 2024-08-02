@@ -1,51 +1,64 @@
 <template>
-    <v-create></v-create>
-    <v-table>
-        <template v-slot:title> List of Scopes </template>
-        <template v-slot:head>
-            <th>scope</th>
-            <th>description</th>
-            <th>public</th>
-            <th>require payment</th>
-        </template>
-        <template v-slot:body>
-            <tr v-for="(item, index) in scopes" :key="index">
-                <td>{{ item.scope }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.public ? "Yes" : "No" }}</td>
-                <td>
-                    {{ item.required_payment ? "Yes" : "No" }}
-                </td>
-                <td>
-                    <div>
-                        <v-update :scope="item"></v-update>
-                    </div>
-                    <div>
-                        <v-remove
-                            :scope="item"
-                            @errors="showMessage"
-                        ></v-remove>
-                    </div>
-                </td>
-            </tr>
-        </template>
-    </v-table>
-    <v-pagination
-        v-show="pages.total > pages.per_page"
-        :pages="pages"
-        @send-current-page="changePage"
-    ></v-pagination>
+    <div class="scopes">
+        <div class="head">
+            <div class="row">
+                <div class="col"><p>List of roles</p></div>
+                <div class="col"><v-create></v-create></div>
+            </div>
+        </div>
 
-    <v-message :id="message_show">
-        <template v-slot:body>
-            {{ message }}
-        </template>
-    </v-message>
+        <div class="table" style="margin-bottom: 1em">
+            <el-table :data="scopes" :lazy="true">
+                <el-table-column prop="scope" label="Scope" width="200" />
+                <el-table-column
+                    prop="description"
+                    label="description"
+                    width="300"
+                />
+                <el-table-column prop="public" label="public" width="100">
+                    <template #default="scope">
+                        {{ scope.row.public ? "Yes" : "No" }}
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="required_payment"
+                    label="require payment"
+                    width="200"
+                >
+                    <template #default="scope">
+                        {{ scope.row.required_payment ? "Yes" : "No" }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="Operations" min-width="200">
+                    <template #default="scope">
+                        <div class="actions">
+                            <div class="box">
+                                <v-update :scope="scope.row"></v-update>
+                            </div>
+
+                            <div class="box">                                 
+                                <v-remove :scope="scope.row"></v-remove>
+                            </div>
+                        </div>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
+
+        <div class="pagination">
+            <v-pagination
+                v-show="pages.total > pages.per_page"
+                :pages="pages"
+                @send-current-page="changePage"
+            ></v-pagination>
+        </div>
+    </div>
 </template>
 <script>
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VRemove from "./Remove.vue";
+import { ElMessage } from "element-plus";
 
 export default {
     components: {
@@ -56,14 +69,12 @@ export default {
 
     data() {
         return {
-            scopes: {},
+            scopes: [],
             pages: {},
             search: {
                 page: 1,
                 per_page: 2,
             },
-            message: null,
-            message_show: null,
         };
     },
 
@@ -79,25 +90,33 @@ export default {
     },
 
     methods: {
-        showMessage(event) {
-            this.message_show = Math.floor(Math.random() * 10000);
-            this.message = event.data.message;
-        },
-
+        /**
+         * change page on pagination
+         */
         changePage(page) {
             this.search.page = page;
         },
 
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
+        /**
+         * Get the all scopes
+         */
         async getScopes() {
             try {
                 const res = await this.$server.get("/api/admin/roles", {
                     params: this.search,
                 });
-
-                if (res.status == 204) {
-                    this.message = "Cannot find results";
-                    this.message_show = Math.floor(Math.random() * 10000);
-                }
 
                 if (res.status == 200) {
                     const values = res.data.data;
@@ -109,11 +128,14 @@ export default {
                 }
             } catch (e) {
                 if (e.response && e.response.status == 403) {
-                    this.message = e.response.data.message;
+                    this.popup(e.response.data.message, "warning");
                 }
             }
         },
 
+        /**
+         * Listen events
+         */
         listenEvent() {
             this.$echo
                 .private(this.$channels.ch_0())
@@ -136,24 +158,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-th {
-    text-align: start;
-    text-transform: capitalize;
-}
-
-tr {
-    td {
-        min-width: 100px;
-        &:nth-child(2) {
-            min-width: 200px;
-        }
-
-        &:nth-child(5) {
+.scopes {
+    .head {
+        .row {
             display: flex;
-            justify-content: space-around;
-            div {
-                padding: 0.1em;
+            flex-wrap: wrap;
+
+            .col {
+                flex: 1 1 calc(100% / 2);
+                p {
+                    margin: 0;
+                    font-size: 1.2em;
+                }
+                &:nth-child(2) {
+                    text-align: center;
+                }
             }
+        }
+    }
+    .actions {
+        display: flex;
+        .box {
+            flex: auto;
         }
     }
 }
