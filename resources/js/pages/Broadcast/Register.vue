@@ -1,45 +1,74 @@
 <template>
-    <div class="card">
-        <div class="head">Add new channel</div>
-        <div class="body">
-            <div class="box">
-                <input
-                    v-model="form.channel"
-                    type="text"
-                    class="input"
-                    placeholder="Channel"
-                />
+    <el-button type="primary" @click="showModal">
+        Panel to add new channels
+    </el-button>
+
+    <el-dialog
+        v-model="show_modal"
+        title="Panel to add channels"
+        draggable
+        destroy-on-close
+        append-to-body
+    >
+        <div class="row">
+            <div class="col">
+                <el-input v-model="form.channel" placeholder="Channel" />
                 <v-error :error="errors.channel"></v-error>
             </div>
-            <div class="box">
-                <input
+            <div class="col">
+                <el-input
+                    type="textarea"
                     v-model="form.description"
-                    class="input"
                     placeholder="Description"
                 />
 
                 <v-error :error="errors.description"></v-error>
             </div>
-            <div class="box">
-                <button class="btn btn-primary" @click="storeBroadcast">
-                    Add new channel
-                </button>
-            </div>
         </div>
-    </div>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="success" @click="storeBroadcast"
+                    >Register</el-button
+                >
+                <el-button type="warning" @click="close">Close</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 <script>
-export default {
-    emits: ["success"],
+import { ElMessage } from "element-plus";
 
+export default {
     data() {
         return {
             form: {},
             errors: {},
+            show_modal: false,
         };
     },
 
     methods: {
+        showModal() {
+            this.show_modal = !this.show_modal;
+        },
+
+        close() {
+            this.form = {};
+            this.show_modal = !this.show_modal;
+        },
+
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
         async storeBroadcast() {
             try {
                 const res = await this.$server.post(
@@ -50,11 +79,11 @@ export default {
                 if (res.status == 201) {
                     this.form = {};
                     this.errors = {};
-                    this.$emit("success", res.data.data);
+                    this.popup("New channels has been created.", "success");
                 }
             } catch (e) {
                 if (e.response && e.response.status == 422) {
-                    this.errors = e.response.data.errors;
+                    this.popup(e.response.data.errors, "warning");
                 }
             }
         },
@@ -62,28 +91,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.card {
-    width: 95%;
-    margin: 1% auto;
-    padding: 0.5em;
-    border: 1px solid var(--border-color-light);
-    border-radius: 0.5em;
-    .head {
-        color: var(--first-color);
-        font-weight: bold;
-    }
+.row {
+    display: flex;
+    flex-wrap: wrap;
 
-    .body {
-        display: flex;
-        flex-wrap: wrap;
-
-        .box {
-            flex: 1 1 100%;
-
-            @media (min-width: 800px) {
-                flex: 1 1 calc(100% / 2);
-            }
-        }
+    .col {
+        flex: 1 1 100%;
+        margin-bottom: 0.5em;
     }
 }
 </style>

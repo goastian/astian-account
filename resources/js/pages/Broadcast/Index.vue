@@ -1,40 +1,50 @@
 <template>
-    <v-register @success="getChannels"></v-register>
+    <div class="channels">
+        <div class="head">
+            <div class="row">
+                <div class="col">
+                    <p>List of Channels</p>
+                </div>
+                <div class="col">
+                    <v-register></v-register>
+                </div>
+            </div>
+        </div>
+        <div class="table">
+            <div class="table" style="margin-bottom: 1em">
+                <el-table :data="channels" :lazy="true">
+                    <el-table-column
+                        prop="channel"
+                        label="Channel"
+                        width="200"
+                    />
+                    <el-table-column
+                        prop="description"
+                        label="description"
+                        width="300"
+                    />
+                    <el-table-column
+                        prop="created"
+                        label="created"
+                        width="200"
+                    />
 
-    <v-table>
-        <template v-slot:title> List of channels </template>
-        <template v-slot:head>
-            <th>channel</th>
-            <th>description</th>
-            <th>created</th>
-        </template>
-        <template v-slot:body>
-            <tr v-for="(item, index) in channels" :key="index">
-                <td>{{ item.channel }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.created }}</td>
-                <td>
-                    <v-remove
-                        :item="item"
-                        @success="getChannels"
-                        @errors="showMessage"
-                    ></v-remove>
-                </td>
-            </tr>
-        </template>
-    </v-table>
-
-    <v-pagination
-        v-show="pages.total > pages.per_page"
-        :pages="pages"
-        @send-current-page="updateList"
-    ></v-pagination>
-
-    <v-message :id="message_show">
-        <template v-slot:body>
-            {{ message }}
-        </template>
-    </v-message>
+                    <el-table-column label="Operations" min-width="200">
+                        <template #default="scope">
+                            <v-remove :item="scope.row"></v-remove>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
+        <div class="pagination">
+            <v-pagination
+                v-show="pages.total > pages.per_page"
+                :pages="pages"
+                @send-current-page="updateList"
+            ></v-pagination>
+        </div>
+    </div>
 </template>
 <script>
 import VRegister from "./Register.vue";
@@ -48,14 +58,12 @@ export default {
 
     data() {
         return {
-            channels: {},
+            channels: [],
             pages: {},
             search: {
                 page: 1,
                 per_page: 30,
             },
-            message: null,
-            message_show: null,
         };
     },
 
@@ -68,11 +76,6 @@ export default {
         updateList(page) {
             this.search.page = page;
             this.getChannels();
-        },
-
-        showMessage(event) {
-            this.message_show = Math.floor(Math.random() * 10000);
-            this.message = event.data.message;
         },
 
         async getChannels() {
@@ -109,21 +112,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-th {
-    text-align: start;
-    &::first-letter {
-        text-transform: uppercase;
-    }
-}
+.channels {
+    .head {
+        .row {
+            display: flex;
+            flex-wrap: wrap;
 
-tr {
-    td {
-        text-align: start;
-        &::first-letter {
-            text-transform: uppercase;
-        }
-        &:nth-child(2) {
-            min-width: 150px;
+            .col {
+                flex: 1 1 calc(100% / 2);
+                &:nth-child(2) {
+                    text-align: center;
+                }
+            }
         }
     }
 }
