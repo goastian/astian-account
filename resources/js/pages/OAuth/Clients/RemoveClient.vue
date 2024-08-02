@@ -1,18 +1,9 @@
 <template>
-    <v-confirm bg="btn-secondary" @is-confirmed="deleteClient(client)">
-        <template v-slot:button>Remove</template>
-        <template v-slot:head>
-            <strong class="text-xl"> Delete client {{ client.name }}</strong>
-        </template>
-        <template v-slot:body>
-            <p class="text-xl">
-                Are you share you want to remove this client with ID
-                {{ client.id }} ?
-            </p>
-        </template>
-    </v-confirm>
+    <el-button type="danger" @click="open(client)">Destroy</el-button>
 </template>
 <script>
+import { ElMessage, ElMessageBox } from "element-plus";
+
 export default {
     emits: ["clientRemoved"],
 
@@ -24,13 +15,46 @@ export default {
     },
 
     methods: {
-        deleteClient(client) {
-            this.$server
-                .delete("/oauth/clients/" + client.id)
-                .then((res) => {
-                    this.$emit("clientRemoved", res.data);
+        open(client) {
+            ElMessageBox.confirm(
+                `Are you share you want to remove this client with ID ${client.id} ?`,
+                "Delete client",
+                {
+                    confirmButtonText: "OK",
+                    cancelButtonText: "Cancel",
+                    type: "warning",
+                }
+            )
+                .then(() => {
+                    this.destroyClient(client);
                 })
-                .catch((e) => {});
+                .catch(() => {});
+        },
+
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
+        async destroyClient(client) {
+            try {
+                const res = await this.$server.delete(
+                    "/oauth/clients/" + client.id
+                );
+
+                if (res.status == 200) {
+                    this.popup(
+                        `The client with id ${client.name} has been removed`
+                    );
+                }
+            } catch (err) {}
         },
     },
 };
