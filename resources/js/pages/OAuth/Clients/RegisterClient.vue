@@ -1,119 +1,117 @@
 <template>
-    <div class="card">
-        <div class="head">Add new clients</div>
-        <div class="body">
-            <div class="item">
-                <input
-                    type="text"
+    <el-button type="primary" @click="showModal">
+        Panel to register clients
+    </el-button>
+
+    <el-dialog
+        v-model="show_modal"
+        title="Panel to register new clients"
+        draggable
+        destroy-on-close
+        append-to-body
+    >
+        <div class="row">
+            <div class="col">
+                <el-input
                     v-model="client.name"
-                    class="input"
                     placeholder="Application Name"
                 />
                 <v-error :error="errors.name"></v-error>
             </div>
-            <div class="item">
-                <input
-                    type="text"
+
+            <div class="col">
+                <el-input
                     v-model="client.redirect"
-                    class="input"
                     placeholder="https://app.dominio.dom/callback"
                 />
                 <v-error :error="errors.redirect"></v-error>
             </div>
-            <div class="item">
-                <input
-                    type="checkbox"
-                    id="confidential"
-                    v-model="client.confidential"
-                />
-                <label for="confidential">
+
+            <div class="col">
+                <el-checkbox v-model="client.confidential">
                     Private Client (<strong>By default Public Client</strong>)
-                </label>
-                <v-error :error="errors.confidential"></v-error>
-            </div>
-            <div class="item">
-                <button class="btn btn-primary" @click="storeClients">
-                    Add new client
-                </button>
+                </el-checkbox>
             </div>
         </div>
-    </div>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="success" @click="storeClients"
+                    >Register</el-button
+                >
+                <el-button type="warning" @click="close">Close</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 <script>
-export default {
-    emits: ["clientRegistered"],
+import { ElMessage } from 'element-plus';
 
+export default {
     data() {
         return {
-            client: {},
+            client: {
+                name: null,
+                redirect: null,
+                confidential: false,
+            },
             errors: {},
+            show_modal: false,
         };
     },
 
     methods: {
-        storeClients(event) {
-            const button = event.target;
-            button.disabled = true;
+        showModal() {
+            this.show_modal = !this.show_modal;
+        },
 
-            this.client.confidential =
-                document.getElementById("confidential").checked;
+        close() {
+            this.client = {
+                name: null,
+                redirect: null,
+                confidential: false,
+            };
+            this.errors = {};
+            this.show_modal = !this.show_modal;
+        },
 
-            this.$server
-                .post("/oauth/clients", this.client)
-                .then((res) => {
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
+        async storeClients() {
+            try {
+                const res = await this.$server.post("/oauth/clients", this.client);
+
+                if (res.status == 201) {
                     this.client = {};
                     this.errors = {};
-                    this.$emit("clientRegistered", res.data);
-                    button.disabled = false;
-                })
-                .catch((e) => {
-                    if (e.response && e.response.data.errors) {
-                        this.errors = e.response.data.errors;
-                    }
-                    button.disabled = false;
-                });
+                    this.popup("New client has been registered")
+                }
+            } catch (e) {
+                if (e.response && e.response.data.errors) {
+                    this.errors = e.response.data.errors;
+                }
+            }
         },
     },
 };
 </script>
 <style lang="scss" scoped>
-.card {
-    color: var(--first-color);
-    width: 95%;
-    margin: auto;
-    border: 1px solid var(--border-color-light);
-    padding: 0.5em;
-    border-radius: 1em;
+.row {
+    display: flex;
+    flex-wrap: wrap;
 
-    .head {
-        font-size: 1.2em;
-    }
-
-    .body {
-        @media (min-width: 800px) {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        .item {
-            font-size: 0.8em;
-            margin-bottom: 1%;
-            text-align: start;
-
-            @media (min-width: 800px) {
-                flex: 1 1 calc(100% / 2);
-            }
-            @media (min-width: 940px) {
-                flex: 1 1 calc(100% / 3);
-            }
-
-            &:nth-child(3) {
-                display: flex;
-                margin-bottom: 1%;
-                @media (min-width: 800px) {
-                    display: block;
-                }
-            }
-        }
+    .col {
+        flex: 1 1 100%;
+        margin-bottom: 0.5em;
     }
 }
 </style>

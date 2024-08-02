@@ -1,38 +1,36 @@
 <template>
-    <div>
-        <v-register-client @client-registered="getClients"></v-register-client>
+    <div class="clients">
+        <div class="head">
+            <div class="row">
+                <div class="col">
+                    <p>List of clients</p>
+                </div>
+                <div class="col">
+                    <v-register-client></v-register-client>
+                </div>
+            </div>
+        </div>
+        <div class="table" style="margin-bottom: 1em">
+            <el-table :data="clients" :lazy="true">
+                <el-table-column prop="id" label="id" width="200" />
+                <el-table-column prop="secret" label="secret" width="300" />
+                <el-table-column prop="name" label="name" width="150" />
+                <el-table-column prop="redirect" label="redirect" width="300" />
+                <el-table-column label="Operations">
+                    <template #default="scope">
+                        <div class="actions">
+                            <div class="box">
+                                <v-remove :client="scope.row"></v-remove>
+                            </div>
 
-        <v-table>
-            <template v-slot:title> List of clients </template>
-            <template v-slot:head>
-                <th>id</th>
-                <th>secret key</th>
-                <th>name</th>
-                <th>redirect</th>
-            </template>
-            <template v-slot:body>
-                <tr v-for="(item, index) in clients" :key="index">
-                    <td v-text="item.id"></td>
-                    <td v-text="item.secret"></td>
-                    <td v-text="item.name"></td>
-                    <td v-text="item.redirect"></td>
-                    <td>
-                        <div>
-                            <v-remove
-                                :client="item"
-                                @client-removed="getClients"
-                            ></v-remove>
+                            <div class="box">
+                                <v-update :client="scope.row"></v-update>
+                            </div>
                         </div>
-                        <div>
-                            <v-update
-                                :client="item"
-                                @client-updated="getClients"
-                            ></v-update>
-                        </div>
-                    </td>
-                </tr>
-            </template>
-        </v-table>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </div>
     </div>
 </template>
 <script>
@@ -49,7 +47,7 @@ export default {
 
     data() {
         return {
-            clients: {},
+            clients: [],
         };
     },
 
@@ -70,31 +68,34 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-div {
-    width: 100%;
-    padding: 0;
-    margin-top: 1%;
+.clients {
+    .head {
+        margin-bottom: 1em;
 
-    th {
-        text-align: start;
-        text-transform: capitalize;
-        color: var(--first-color);
-        font-size: 1em;
-    }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
 
-    tr {
-        text-align: start;
-        color: var(--first-color);
-        font-size: 1em;
+            .col {
+                flex: 1 1 calc(100% / 2);
+                p {
+                    font-size: 1.3em;
+                    margin: 0;
+                }
 
-        td {
-            &:nth-child(5) {
-                display: flex;
-                justify-content: space-around;
-                div {
-                    padding: 0.1em;
+                &:nth-child(2) {
+                    text-align: center;
                 }
             }
+        }
+    }
+
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        .box {
+            flex: auto;
+            margin: 0.5em;
         }
     }
 }
