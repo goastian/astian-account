@@ -1,38 +1,54 @@
 <template>
-    
-    <v-confirm @is-confirmed="remove(item)">
-        <template v-slot:button> remove </template>
-
-        <template v-slot:head>
-            Remove Channel (<strong>{{ item.channel }}</strong
-            >)
-        </template>
-        <template v-slot:body>
-            <p class="text-xl text-center">
-                Are you sure to destroy this channel
-                <strong>{{ item.channel }}</strong
-                >?
-            </p>
-        </template>
-    </v-confirm>
+    <el-button type="danger" @click="open(item)">Destroy</el-button>
 </template>
 <script>
+import { ElMessage, ElMessageBox } from "element-plus";
+
 export default {
     props: ["item"],
 
-    emits: ["success", "errors"],
-
     methods: {
+        open(item) {
+            ElMessageBox.confirm(
+                `Are you sure to destroy this channel ${item.channel}`,
+                `Remove channel`,
+                {
+                    confirmButtonText: "OK",
+                    cancelButtonText: "Cancel",
+                    type: "warning",
+                }
+            )
+                .then(() => {
+                    this.remove(item);
+                })
+                .catch(() => {});
+        },
+
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
         async remove(item) {
             try {
                 const res = await this.$server.delete(item.links.destroy);
 
                 if (res.status == 200) {
-                    this.$emit("success", res.data.data);
+                    this.popup(
+                        "Channel has been removed successful",
+                        "success"
+                    );
                 }
             } catch (e) {
                 if (e.response && e.response.status == 403) {
-                    this.$emit("errors", e.response);
+                    this.popup(e.response.data.message, "warning");
                 }
             }
         },
