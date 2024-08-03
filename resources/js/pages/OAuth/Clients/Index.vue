@@ -6,7 +6,7 @@
                     <p>List of clients</p>
                 </div>
                 <div class="col">
-                    <v-register-client></v-register-client>
+                    <v-register-client @created="getClients"></v-register-client>
                 </div>
             </div>
         </div>
@@ -20,11 +20,11 @@
                     <template #default="scope">
                         <div class="actions">
                             <div class="box">
-                                <v-remove :client="scope.row"></v-remove>
+                                <v-remove :client="scope.row" @removed="getClients"></v-remove>
                             </div>
 
                             <div class="box">
-                                <v-update :client="scope.row"></v-update>
+                                <v-update :client="scope.row" @updated="getClients"></v-update>
                             </div>
                         </div>
                     </template>
