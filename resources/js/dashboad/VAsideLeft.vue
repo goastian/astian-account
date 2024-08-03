@@ -26,6 +26,7 @@
                 <el-badge :value="unread_notifications.length" class="item">
                     <el-icon><BellFilled /></el-icon>
                 </el-badge>
+                <span>Notifications</span>
             </template>
             <el-menu-item @click="goPushNotifications">Send</el-menu-item>
             <el-menu-item @click="goAllNotifications">
@@ -61,11 +62,14 @@
                     <el-icon @click.prevent="logout"><Lock /></el-icon>
                 </template>
             </el-popover>
+            <span>Logout</span>
         </el-menu-item>
     </el-menu>
 </template>
 <script>
 export default {
+    emits: ["clicked"],
+
     props: {
         collapse: {
             type: Boolean,
@@ -90,38 +94,48 @@ export default {
 
     methods: {
         goUsers() {
+            this.$emit("clicked");
             this.$router.push({ name: "users" });
         },
 
         goRoles() {
+            this.$emit("clicked");
             this.$router.push({ name: "scopes" });
         },
 
         goBroadcasts() {
+            this.$emit("clicked");
             this.$router.push({ name: "channels" });
         },
 
         goSecurity() {
+            this.$emit("clicked");
             this.$router.push({ name: "security" });
         },
 
         goClients() {
+            this.$emit("clicked");
             this.$router.push({ name: "clients" });
         },
 
         goCredentials() {
+            this.$emit("clicked");
             this.$router.push({ name: "personalTokens" });
         },
         goTokenGenerated() {
+            this.$emit("clicked");
             this.$router.push({ name: "tokens" });
         },
         goPushNotifications() {
+            this.$emit("clicked");
             this.$router.push({ name: "notify" });
         },
         goAllNotifications() {
+            this.$emit("clicked");
             this.$router.push({ name: "notify.read" });
         },
         goUnreadNotifications() {
+            this.$emit("clicked");
             this.$router.push({ name: "notify.unread" });
         },
 
@@ -148,7 +162,7 @@ export default {
             this.$server
                 .post("/api/gateway/logout")
                 .then((res) => {
-                    window.location.href = "/login"
+                    window.location.href = "/login";
                 })
                 .catch((err) => {});
         },

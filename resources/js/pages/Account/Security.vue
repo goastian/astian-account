@@ -130,7 +130,7 @@ export default {
                     this.token = "";
                     this.errors = {};
                     this.popup("2FA has been activated successful");
-                    this.getAuthUser()
+                    this.getAuthUser();
                 }
             } catch (err) {
                 if (err.response) {
@@ -216,6 +216,10 @@ export default {
 .row {
     margin: auto;
     width: 70%;
+
+    @media (max-width: 940px) {
+        width: 98%;
+    }
     .col {
         margin-bottom: 0.5em;
     }

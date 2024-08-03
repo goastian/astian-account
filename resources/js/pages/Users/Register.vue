@@ -1,6 +1,6 @@
 <template>
     <el-button type="primary" @click="showModal">
-        Panel to add new users
+       Add
     </el-button>
 
     <el-dialog
