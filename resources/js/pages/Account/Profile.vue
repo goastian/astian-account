@@ -1,56 +1,66 @@
 <template>
     <div class="profile">
-        <div class="head">
-            <p>
-                About Me
-                <span class="h5 fw-light text-primary">
-                    <i class="bi bi-person-check h2"></i>
-                </span>
-            </p>
-        </div>
-        <div class="body">
-            <div class="items">
-                <p>
-                    <i class="bi bi-person-bounding-box text-primary"></i>
-                    {{ user.name }}
-                    {{ user.last_name }}
-                </p>
-                <p>
-                    <i class="bi bi-envelope-at-fill text-primary"></i>
-                    {{ user.email }}
-                </p>
-                <p v-show="user.birthday">
-                    <i class="bi bi-cake2 text-primary"></i>
-                    {{ user.birthday }}
-                </p>
-                <p v-show="user.phone">
-                    <i class="bi bi-telephone-plus text-primary"></i>
-                    {{ user.phone }}
-                </p>
-                <p v-show="user.country">
-                    <i class="bi bi-houses text-primary"></i>
-                    {{ user.country }} - {{ user.city }} -
-
-                    {{ user.address }}
-                </p>
-                <p>
-                    <i class="bi bi-arrow-through-heart text-primary"></i>
-                    Join us {{ user.created }}
-                </p>
-
-                <v-update
-                    styles="btn btn-link float-end"
-                    :user="user"
-                    @success="authenticated"
-                ></v-update>
+        <div class="row">
+            <div class="col">
+                <el-avatar :size="100" src="https://empty">
+                    <img
+                        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+                    />
+                </el-avatar>
             </div>
-            <div class="scopes">
-                <p class="title">
-                    My Scopes <i class="bi bi-shield-lock h3 text-primary"></i>
-                </p>
-                <p class="items" v-for="(item, index) in roles" :key="index">
-                    {{ item.id }}
-                </p>
+            <div class="col">
+                <el-descriptions title="User Info">
+                    <el-descriptions-item label="Full Name">
+                        {{ user.name }}
+                        {{ user.last_name }}</el-descriptions-item
+                    >
+                    <el-descriptions-item label="Email Address">{{
+                        user.email
+                    }}</el-descriptions-item>
+                    <el-descriptions-item label="Telephone">{{
+                        user.full_phone
+                    }}</el-descriptions-item>
+                    <el-descriptions-item label="Birthday">
+                        {{ user.birthday }}</el-descriptions-item
+                    >
+
+                    <el-descriptions-item label="Address">
+                        {{ user.country }} - {{ user.city }} -
+                        {{ user.address }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="">
+                        <v-update :user="user"></v-update>
+                    </el-descriptions-item>
+                </el-descriptions>
+            </div>
+            <div class="col">
+                <el-card>
+                    <template #header>
+                        <div class="card-header">
+                            <span>My Scopes</span>
+                        </div>
+                    </template>
+                    <el-popover
+                        v-for="(item, index) in roles"
+                        :key="index"
+                        placement="top-start"
+                        :title="item.id"
+                        :width="200"
+                        trigger="hover"
+                        :content="item.description"
+                    >
+                        <template #reference>
+                            <el-button
+                                style="
+                                    margin-right: 0.5em;
+                                    margin-bottom: 0.5em;
+                                "
+                            >
+                                {{ item.id }}</el-button
+                            >
+                        </template>
+                    </el-popover>
+                </el-card>
             </div>
         </div>
     </div>
@@ -88,7 +98,7 @@ export default {
         },
         async scopes() {
             try {
-                const res = this.$server.get("/api/oauth/scopes");
+                const res = await this.$server.get("/api/oauth/scopes");
 
                 if (res.status == 200) {
                     this.roles = res.data;
@@ -126,46 +136,19 @@ export default {
 
 <style lang="scss" scoped>
 .profile {
-    margin: auto;
-    border: 1px solid var(--border-color-light);
-    border-radius: 1em;
-    padding: 1em;
-    color: var(--first-color);
+    .row {
+        display: flex;
+        flex-wrap: wrap;
 
-    .head {
-        font-size: 1.2em;
-
-        p {
-            font-weight: bold;
-            i {
-                font-size: 1.3em;
+        .col {
+            flex: 1 1 auto;
+            &:nth-child(1) {
+                text-align: center;
+                flex: 0 0 15%;
             }
-        }
-    }
 
-    .body {
-        .items {
-            display: flex;
-            flex-wrap: wrap;
-
-            p {
-                flex: 1 1 calc(100% / 3);
-            }
-        }
-
-        .scopes {
-            display: flex;
-            flex-wrap: wrap;
-
-            .title {
+            &:nth-child(3) {
                 flex: 1 1 100%;
-                font-size: 1.2em;
-                font-weight: bold;
-            }
-
-            .items {
-                flex: 0 0 auto;
-                margin: 0.5%;
             }
         }
     }
