@@ -13,18 +13,14 @@
             <el-table-column prop="last_name" label="Last Name" width="200" />
             <el-table-column prop="email" label="Email" width="200" />
             <el-table-column prop="full_phone" label="Phone" width="200" />
-            <el-table-column label="Operations" min-width="200">
-                <template #default="scope">
+            <el-table-column label="Operations" min-width="300">
+                <template #default="scope" >
                     <div class="actions">
-                        <div class="box">
-                            <v-scopes :user="scope.row"></v-scopes>
-                        </div>
-                        <div class="box">
-                            <v-update :user="scope.row"></v-update>
-                        </div>
-                        <div class="box">
-                            <v-status :user="scope.row"></v-status>
-                        </div>
+                        <v-scopes :user="scope.row"></v-scopes>
+
+                        <v-update :user="scope.row"></v-update>
+
+                        <v-status :user="scope.row"></v-status>
                     </div>
                 </template>
             </el-table-column>
@@ -155,8 +151,11 @@ export default {
     }
     .actions {
         display: flex;
+        flex-wrap: wrap;
+
         .box {
-            flex: auto;
+            flex: 1 1 100%;
+            margin: 0.2em;
         }
     }
 }

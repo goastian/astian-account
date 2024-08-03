@@ -3,13 +3,11 @@
         <div class="row">
             <div class="col">
                 <el-avatar :size="100" src="https://empty">
-                    <img
-                        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
-                    />
+                    <img src="" />
                 </el-avatar>
             </div>
             <div class="col">
-                <el-descriptions title="User Info">
+                <el-descriptions direction="vertical" title="User Info">
                     <el-descriptions-item label="Full Name">
                         {{ user.name }}
                         {{ user.last_name }}</el-descriptions-item

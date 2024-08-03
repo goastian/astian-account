@@ -24,7 +24,7 @@
             </el-table-column>
             <el-table-column prop="created_at" label="created" width="200" />
             <el-table-column prop="expires_at" label="expires" width="200" />
-            <el-table-column label="actions">
+            <el-table-column label="actions" min-width="200">
                 <template #default="scope">
                     <div class="actions">
                         <div class="box">

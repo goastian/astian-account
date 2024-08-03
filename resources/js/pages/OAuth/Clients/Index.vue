@@ -16,7 +16,7 @@
                 <el-table-column prop="secret" label="secret" width="300" />
                 <el-table-column prop="name" label="name" width="150" />
                 <el-table-column prop="redirect" label="redirect" width="300" />
-                <el-table-column label="Operations">
+                <el-table-column label="Operations" min-width="300">
                     <template #default="scope">
                         <div class="actions">
                             <div class="box">
