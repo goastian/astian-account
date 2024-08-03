@@ -8,7 +8,6 @@ export const $server = axios.create({
     httpsAgent: new https.Agent({ keepAlive: true }),
     headers: {
         Accept: "application/json",
-        "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
     },
 
     validateStatus: function (status) {
