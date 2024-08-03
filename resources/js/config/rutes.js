@@ -8,13 +8,11 @@ import Roles from "../pages/Role/Index.vue";
 import Channel from "../pages/Broadcast/Index.vue";
 import Profile from "../pages/Account/Profile.vue";
 import Security from "../pages/Account/Security.vue";
-import Devices from "../pages/Account/Devices.vue";
 import Push from "../pages/Notify/Push.vue";
 import Read from "../pages/Notify/Read.vue";
 import Unread from "../pages/Notify/Unread.vue";
 
 const routes = [
-
     { path: "/", name: "home", component: Profile, meta: { auth: true } },
 
     {
@@ -40,12 +38,6 @@ const routes = [
         path: "/security",
         name: "security",
         component: Security,
-        meta: { auth: true },
-    },
-    {
-        path: "/devices",
-        name: "devices",
-        component: Devices,
         meta: { auth: true },
     },
 
