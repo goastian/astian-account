@@ -1,92 +1,116 @@
-<template lang="">
-    <div class="notification-push">
-        <div class="card">
-            <div class="card-head fw-bold text-color text-center py-2">
-                Send notifications
+<template>
+    <el-card>
+        <template #header>
+            <div class="card-header">
+                <span>Send notifications</span>
             </div>
-            <div class="card-body text-color">
-                <div class="row">
-                    <div class="col">
-                        Method
-                        <select
-                            name="method"
-                            id="method"
-                            class="form-select"
-                            v-model="form.method"
-                        >
-                            <option value="database">Aplication</option>
-                            <option value="mail">Email</option>
-                        </select>
-                        <v-error :error="errors.method"></v-error>
-                    </div>
-                    <div class="col">
-                        <input
-                            type="text"
-                            name="title"
-                            id="title"
-                            placeholder="Title"
-                            class="form-control"
-                            v-model="form.title"
-                        />
-                        <v-error :error="errors.title"></v-error>
-                    </div>
-                    <div class="col">
-                        <textarea
-                            name="message"
-                            id="message"
-                            class="form-control"
-                            placeholder="here write the message"
-                            v-model="form.message"
-                        ></textarea>
-                        <v-error :error="errors.message"></v-error>
-                    </div>
-                </div>
-                <div class="col">
-                    <input
-                        class="form-control"
-                        type="text"
-                        name="resource"
-                        id="resource"
-                        placeholder="https://astian.com/recurso/policies"
-                        v-model="form.resource"
-                    />
-                    <v-error :error="errors.resource"></v-error>
-                </div>
-
-                <div class="col">
-                    <input
-                        class="form-control"
-                        type="text"
-                        name="scope"
-                        id="scope"
-                        placeholder="Email , Scope or * to send to all users"
-                        v-model="form.scope"
-                    />
-                    <v-error :error="errors.scope"></v-error>
-                </div>
+        </template>
+        <div class="row">
+            <div class="col">
+                <label>Select method</label>
+                <el-select v-model="form.method" placeholder="Select">
+                    <el-option label="Application" value="database" />
+                    <el-option label="Email" value="mail" />
+                </el-select>
+                <v-error :error="errors.method"></v-error>
             </div>
-            <div class="card-footer">
-                <a href="#" @click="send" class="btn btn-success"
-                    >Send notification</a
+            <div class="col">
+                <label for="">Subject</label>
+                <el-input placeholder="Subject" v-model="form.title" />
+            </div>
+            <div class="col">
+                <label for="">Message</label>
+                <el-input
+                    v-model="form.message"
+                    placeholder="Wrtie a message"
+                    type="textarea"
+                    :rows="5"
+                />
+                <v-error :error="errors.message"></v-error>
+            </div>
+            <div class="col">
+                <label for="">Resources</label>
+                <el-input placeholder="https://site.com" v-model="form.resource" />
+                <v-error :error="errors.resource"></v-error>
+            </div>
+            <div class="col">
+                <label for="">Write user or select scopes</label>
+                <el-select
+                    v-model="form.scope"
+                    multiple
+                    filterable
+                    allow-create
+                    default-first-option
+                    :reserve-keyword="false"
+                    placeholder="Choose or write an emails"
                 >
+                    <el-option
+                        v-for="item in scopes"
+                        :key="item.id"
+                        :label="item.scope + ' ' + item.description"
+                        :value="item.scope"
+                    />
+                </el-select>
+                <v-error :error="errors.scope"></v-error>
             </div>
-            <v-message :message="message" @close="close"></v-message>
         </div>
-    </div>
+        <template #footer>
+            <el-button type="primary" @click="send"> send </el-button>
+        </template>
+    </el-card>
 </template>
 <script>
+import { ElMessage } from "element-plus";
+
 export default {
     data() {
         return {
             form: {},
             message: null,
             errors: {},
+            scopes: [],
+            pages: {},
+            search: {
+                page: 1,
+            },
         };
+    },
+
+    mounted() {
+        this.getScopes();
     },
 
     methods: {
         close() {
             this.message = null;
+        },
+
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
+        async getScopes() {
+            try {
+                const res = await this.$server.get("/api/admin/roles", {
+                    params: this.search,
+                });
+
+                if (res.status == 200) {
+                    this.scopes = res.data.data;
+                }
+            } catch (e) {
+                if (e.response && e.response.status == 403) {
+                    this.popup(e.response.data.message, "warning");
+                }
+            }
         },
 
         send() {
@@ -112,23 +136,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.notification-push .col {
-    flex: 0 0 auto;
-    width: 100%;
-    margin-bottom: 4%;
+.row {
+    display: flex;
+    flex-wrap: wrap;
 
-    @media (min-width: 800px) {
-        margin-bottom: 2%;
-    }
-}
-
-.notification-push .card {
-    width: 100%;
-    margin-top: 3% !important;
-
-    @media (min-width: 800px) {
-        width: 70%;
-        margin: auto;
+    .col {
+        flex: 1 1 95%;
+        padding: 0.2em;
     }
 }
 </style>
