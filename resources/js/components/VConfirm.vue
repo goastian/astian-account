@@ -1,5 +1,5 @@
 <template>
-    <button :class="[bg,btn]" @click="showMessage">
+    <button :class="[bg, btn]" @click="showMessage">
         <slot name="button"></slot>
     </button>
 
@@ -73,8 +73,10 @@ export default {
         margin: 30% auto;
         background-color: var(--white);
         color: var(--first-color);
-        border: 1px solid var(--border-color-light);
         border-radius: 1em;
+        box-shadow: 0px 0px 5px 2px var(--code);
+        -webkit-box-shadow: 0px 0px 5px 2px var(--code);
+        -moz-box-shadow: 0px 0px 5px 2px var(--code);
 
         @media (min-width: 800px) {
             margin: 10% auto;
@@ -88,8 +90,9 @@ export default {
         .head {
             text-align: center;
             border-bottom: 1px solid var(--border-color-light);
-            min-height: 5vh;
+            // min-height: 5vh;
             font-weight: bold;
+            padding-top: 0.5em;
         }
 
         .body {
