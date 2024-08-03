@@ -47,6 +47,8 @@
 import { ElMessage } from 'element-plus';
 
 export default {
+    emits: ["created"],
+
     data() {
         return {
             client: {
@@ -94,6 +96,7 @@ export default {
                     this.client = {};
                     this.errors = {};
                     this.popup("New client has been registered")
+                    this.$emit("created")
                 }
             } catch (e) {
                 if (e.response && e.response.data.errors) {

@@ -5,7 +5,7 @@
 import { ElMessage, ElMessageBox } from "element-plus";
 
 export default {
-    emits: ["clientRemoved"],
+    emits: ["removed"],
 
     props: {
         client: {
@@ -50,6 +50,7 @@ export default {
                 );
 
                 if (res.status == 200) {
+                    this.$emit("removed")
                     this.popup(
                         `The client with id ${client.name} has been removed`
                     );

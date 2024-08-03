@@ -41,6 +41,8 @@
 import { ElMessage } from 'element-plus';
 
 export default {
+    emits: ["updated"],
+
     props: {
         client: {
             type: Object,
@@ -92,6 +94,7 @@ export default {
 
                 if (res.status == 200) {
                     this.popup("Client has been updated.");
+                    this.$emit("updated")
                 }
             } catch (e) {
                 if (e.response && e.response.status == 422) {
