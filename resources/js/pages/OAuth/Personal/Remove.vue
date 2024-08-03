@@ -1,13 +1,10 @@
 <template>
-    <v-confirm bg="btn-secondary" @is-confirmed="removeToken(token)">
-        <template v-slot:button> Revoke token</template>
-        <template v-slot:head> Revoke token </template>
-        <template v-slot:body> this token will be revoked </template>
-    </v-confirm>
+    <el-button type="danger" @click="open(token)">Revoke token</el-button>
 </template>
 <script>
+import { ElMessage, ElMessageBox } from "element-plus";
 export default {
-    emits: ["TokenRemoved"],
+    emits: ["removed"],
 
     props: {
         token: {
@@ -17,6 +14,30 @@ export default {
     },
 
     methods: {
+        open(token) {
+            ElMessageBox.confirm("this token will be revoked", "Revoke token", {
+                confirmButtonText: "OK",
+                cancelButtonText: "Cancel",
+                type: "warning",
+            })
+                .then(() => {
+                    this.removeToken(token);
+                })
+                .catch(() => {});
+        },
+
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
         async removeToken(token) {
             try {
                 const res = await this.$server.delete(
@@ -24,7 +45,7 @@ export default {
                 );
 
                 if (res.status == 204) {
-                    this.$emit("TokenRemoved", res.data);
+                    this.$emit("removed", res.data);
                 }
             } catch (e) {}
         },

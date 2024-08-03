@@ -1,23 +1,34 @@
 <template>
-    <v-table>
-        <template v-slot:title>List of generated tokens</template>
-        <template v-slot:head>
-            <th>name</th>
-            <th>created</th>
-            <th>expires</th>
-        </template>
-        <template v-slot:body>
-            <tr v-for="(item, index) in tokens" :key="index">
-                <td v-text="item.name"></td>
-                <td v-text="item.created_at"></td>
-                <td v-text="item.expires_at"></td>
-                <td>
-                    <v-token-remove :token="item" @token-revoked="getTokens">
-                    </v-token-remove>
-                </td>
-            </tr>
-        </template>
-    </v-table>
+    <div class="tokens">
+        <div class="head">
+            <p>List of sessions</p>
+        </div>
+    </div>
+    <div class="table" style="margin-bottom: 1em">
+        <el-table :data="tokens" :lazy="true">
+            <el-table-column prop="name" label="name" width="200" />
+            <el-table-column prop="scopes" label="scopes" width="400">
+                <template #default="scope">
+                    {{ scope.row.scopes.join(", ") }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="created_at" label="created" width="200" />
+            <el-table-column prop="expires_at" label="expires" width="200" />
+            <el-table-column label="actions">
+                <template #default="scope">
+                    <div class="actions">
+                        <div class="box">
+                            <v-token-remove
+                                :token="scope.row"
+                                @revoked="getTokens"
+                            >
+                            </v-token-remove>
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
 </template>
 <script>
 import VTokenRemove from "./TokenRemove.vue";
@@ -29,7 +40,7 @@ export default {
 
     data() {
         return {
-            tokens: {},
+            tokens: [],
         };
     },
 
@@ -61,16 +72,12 @@ export default {
     },
 };
 </script>
-<style lang="scss">
-th {
-    color: var(--first-color);
-    text-align: start;
-    text-transform: capitalize;
-}
-
-tr {
-    color: var(--first-color);
-    text-align: start;
-    text-transform: capitalize;
+<style lang="scss" scoped>
+.tokens {
+    .head {
+        p {
+            margin: 0;
+        }
+    }
 }
 </style>

@@ -1,60 +1,56 @@
 <template>
-    <div class="card">
-        <div class="head">Create new token</div>
-        <div class="body">
-            <div class="item">
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Token Name"
-                        v-model="name"
-                        class="input"
+    <el-button type="primary" @click="showModal"> Token Generate </el-button>
+
+    <el-dialog
+        v-model="show_modal"
+        title="Panel to generate personal tokens"
+        draggable
+        destroy-on-close
+        append-to-body
+        fullscreen
+    >
+        <div class="row">
+            <div class="col">
+                <el-input placeholder="Token Name" v-model="name" />
+                <v-error :error="errors.name"></v-error>
+            </div>
+
+            <div class="col">
+                <el-checkbox-group v-model="scopes_selected">
+                    <el-checkbox
+                        v-for="(item, index) in scopes"
+                        :key="index"
+                        :label="item.id + ' ' + item.description"
+                        :value="item.id"
                     />
-                    <v-error :error="errors.name"></v-error>
-                </div>
-                <div>
-                    <button class="btn btn-primary" @click="createToken">
-                        add token
-                    </button>
-                </div>
+                </el-checkbox-group>
+            </div>
+            <div class="col">
+                <el-button type="success" @click="createToken">
+                    Token Generate
+                </el-button>
             </div>
 
-            <div class="scopes">
-                <p>Scopes</p>
-                <div class="items" v-for="(item, index) in scopes" :key="index">
-                    <div>
-                        <input
-                            class="form-check-input"
-                            type="checkbox"
-                            :value="item.id"
-                            :id="item.id"
-                            @click="isSelected(item.id)"
-                        />
-                    </div>
-                    <div>
-                        <label class="" :for="item.id">
-                            <strong>{{ item.id }}</strong>
-                            : {{ item.description }}
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="token">
-                <label for="token">Access token generated</label>
-                <textarea
-                    name="token"
-                    id="token"
+            <div class="col" v-if="tokens.accessToken">
+                <label for="">Access token generated</label>
+                <el-input
+                    type="textarea"
                     v-model="tokens.accessToken"
-                    class="textarea"
-                ></textarea>
+                ></el-input>
             </div>
         </div>
-    </div>
+        <template #footer>
+            <div class="dialog-footer">
+                <el-button type="warning" @click="close">Close</el-button>
+            </div>
+        </template>
+    </el-dialog>
 </template>
 <script>
+import { ElMessage } from "element-plus";
+
 export default {
-    emits: ["tokenCreated"],
+    emits: ["created"],
 
     data() {
         return {
@@ -62,61 +58,68 @@ export default {
             tokens: {},
             errors: {},
             scopes: {},
-            scopesSelected: {},
+            scopes_selected: [],
+            checked: null,
+            show_modal: false,
         };
     },
 
     mounted() {
-        this.getScopes();
-        this.scopesSelected = [];
         this.listenEvent();
     },
 
     methods: {
-        async createToken(event) {
-            const button = event.target;
-            button.disabled = true;
+        showModal() {
+            this.getScopes();
+            this.token = null;
+            this.errors = {};
+            this.scopes = {};
+            this.scopes_selected = [];
+            this.show_modal = !this.show_modal;
+        },
 
+        close() {
+            this.token = null;
+            this.errors = {};
+            this.scopes = {};
+            this.scopes_selected = [];
+            this.show_modal = !this.show_modal;
+        },
+
+        /**
+         * message
+         */
+        popup(message, type = "success") {
+            if (message) {
+                ElMessage({
+                    message: message,
+                    type: type,
+                });
+            }
+        },
+
+        async createToken() {
             try {
                 const res = await this.$server.post(
                     "/oauth/personal-access-tokens",
                     {
                         name: this.name,
-                        scopes: this.scopesSelected,
+                        scopes: this.scopes_selected,
                     }
                 );
 
                 if (res.status == 200) {
                     this.tokens = res.data;
                     this.errors = {};
-                    this.scopesSelected = [];
+                    this.scopes_selected = [];
                     this.name = null;
-                    this.$emit("tokenCreated", res.data);
-                    /**
-                     * clean checked
-                     */
-                    let element =
-                        document.getElementsByClassName("form-check-input");
-                    for (let index = 0; index < element.length; index++) {
-                        element[index].checked = false;
-                    }
-
-                    button.disabled = false;
+                    this.popup("New token generated successfully");
+                    this.$emit("created");
                 }
             } catch (e) {
                 if (e.response && e.response.status == 422) {
                     this.errors = e.response.data.errors;
                 }
-                button.disabled = false;
-            }
-        },
-
-        isSelected(id) {
-            const position = this.scopesSelected.indexOf(id);
-            if (position != -1) {
-                this.scopesSelected.splice(position, 1);
-            } else {
-                this.scopesSelected.push(id);
             }
         },
 
@@ -153,67 +156,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card {
-    width: 95%;
-    border: 1px solid var(--border-color-light);
-    border-radius: 1em;
-    color: var(--first-color);
-    padding: 0.5em;
-    margin: auto;
+.row {
+    display: flex;
+    flex-wrap: wrap;
 
-    .head {
-        font-size: 1.2em;
-        font-weight: bold;
-    }
-    .body {
-        .item {
-            display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 1%;
+    .col {
+        flex: 1 1 calc(100% / 2);
+        padding: 0.5em;
 
-            div {
-                flex: 1 1 100%;
+        &:nth-child(2) {
+            flex: 1 1 95%;
 
-                @media (min-width: 800px) {
-                    flex: 1 1 calc(100% / 2);
-                    justify-content: center;
-                    align-content: center;
-                }
-            }
-        }
-        .scopes {
-            border: 1px solid var(--border-color-light);
-            padding: 0.5em;
-            border-radius: 0.5em;
-            display: flex;
-            flex-wrap: wrap;
-
-            p {
-                font-weight: bold;
-                margin: 0.4%;
-                flex: 1 1 100%;
-            }
-
-            .items {
-                flex: 0 1 100%;
-
-                @media (min-width: 800px) {
-                    flex: 0 1 calc(100% / 2);
-                }
+            .el-checkbox-group {
                 display: flex;
-                font-size: 0.9em;
-            }
-        }
+                flex-wrap: wrap;
 
-        .token {
-            margin-top: 1%;
-            label {
-                display: block;
-                font-weight: bold;
-            }
-
-            textarea {
-                height: 100px;
+                .el-checkbox {
+                    flex: 1 1 calc(95% / 3) !important;
+                    padding: 0.2em;
+                }
             }
         }
     }
