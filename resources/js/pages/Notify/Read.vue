@@ -1,61 +1,75 @@
 <template>
-    <div>
-        <p class="text-capitalize text-color fw-bold border-bottom">
-            Notifications
-
-            <a href="#" class="btn btn-link float-end p-0 m-0" @click="clean">
-                Remove all
-            </a>
-        </p>
-
-        <ul class="read">
-            <li
-                class="text-color"
-                v-for="(item, index) in notifications"
-                :key="index"
-            >
-                <strong class="p-0 m-0 border-bottom">{{
-                    item.subject
-                }}</strong>
-
-                <i
-                    class="bi bi-x-circle-fill float-end"
-                    style="cursor: pointer"
-                    @click="remove(item.links.destroy)"
-                ></i>
-
-                <p class="m-0 text-sm">
-                    {{ item.message }}
-                    <a
-                        class="btn btn-link text-sm"
-                        :href="item.resource"
-                        target="_blank"
-                        @click="mark_as_read(item.links.read)"
-                    >
-                        Read more ...
-                    </a>
-                </p>
-                <span class="text-primary text-sm date"
-                    >Received {{ item.created }}</span
-                >
-                <span class="text-success text-sm date"
-                    >{{ item.read ? "Read" : "" }} {{ item.read }}</span
-                >
-            </li>
-        </ul>
-
-        <v-pagination
-            v-show="pages.total > pages.per_page"
-            :pages="pages"
-            @send-current-page="changePage"
-        ></v-pagination>
-    </div>
+    <el-card>
+        <template #header>
+            <div class="head">
+                <div class="row">
+                    <div class="col">
+                        <el-badge
+                            :value="notifications.length"
+                            class="item"
+                            type="danger"
+                        >
+                            <el-button type="primary">Notifications</el-button>
+                        </el-badge>
+                    </div>
+                    <div class="col">
+                        <el-button @click="clean" type="danger">
+                            Clean
+                        </el-button>
+                    </div>
+                </div>
+            </div>
+        </template>
+        <el-card
+            v-for="(item, index) in notifications"
+            :key="index"
+            style="margin-bottom: 0.5em"
+        >
+            <div class="notification">
+                <div class="head">
+                    <el-text class="mx-1" tag="b"> {{ item.subject }} </el-text>
+                </div>
+                <div class="content">
+                    <el-text class="mx-1"> {{ item.message }} </el-text>
+                    <el-button type="success" link @click="open_link(item)">
+                        read more ...
+                    </el-button>
+                </div>
+                <div class="foot">
+                    <div class="row">
+                        <div class="col">
+                            <el-popover
+                                placement="top-start"
+                                title="Notification"
+                                trigger="hover"
+                                content="Maks as read"
+                            >
+                                <template #reference>
+                                    <el-button
+                                        type="success"
+                                        @click="mark_as_read(item.links.read)"
+                                        class="m-2"
+                                        >{{ item.created }}</el-button
+                                    >
+                                </template>
+                            </el-popover>
+                        </div>
+                        <div class="col">
+                            <el-text class="mx-1">
+                                Read {{ item.read }}
+                            </el-text>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </el-card>
+    </el-card>
 </template>
 <script>
 export default {
     data() {
         return {
-            notifications: {},
+            notifications: [],
             pages: {},
             search: {
                 page: 1,
@@ -80,6 +94,16 @@ export default {
                     params: this.search,
                 })
                 .then((res) => {
+                    this.read();
+                })
+                .catch((err) => {});
+        },
+
+        open_link(item) {
+            this.$server
+                .post(item.links.read)
+                .then((res) => {
+                    window.location.href = item.resource;
                     this.read();
                 })
                 .catch((err) => {});
@@ -139,19 +163,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.read {
-    list-style: none;
-    padding: 0 2%;
+.head {
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+
+        .col {
+            flex: calc(95% / 2);
+
+            &:nth-child(2) {
+                text-align: end;
+            }
+        }
+    }
 }
 
-.read li {
-    margin-bottom: 2%;
-}
+.notification {
+    .head {
+        margin-bottom: 0.2em;
+    }
 
-.date:last-child {
-    display: block;
-    @media (min-width: 800px) {
-        float: inline-end;
+    .content {
+        margin-bottom: 0.2em;
+    }
+
+    .foot {
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            .col {
+                flex: 1 1 calc(100% / 2);
+
+                &:nth-child(2) {
+                    text-align: end;
+                }
+            }
+        }
     }
 }
 </style>
