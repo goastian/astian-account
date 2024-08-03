@@ -9,18 +9,30 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="{{ config('app.url') }}/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    <style>
+        body {
+            display: none;
+        }
+
+        .app-loaded body {
+            display: block;
+        }
+    </style>
+
 </head>
 
 <body>
-    <div class="wrapper">
-
-        <div class="content" id="app">
-        </div>
-
-        @include('layouts.footer')
-
+    <div id="app">
     </div>
     <script src="{{ mix('/js/app.js') }}"></script>
+
+    @include('layouts.footer')
+
+    <script>
+        window.addEventListener('load', function() {
+            document.documentElement.classList.add('app-loaded');
+        });
+    </script>
 </body>
 
 </html>

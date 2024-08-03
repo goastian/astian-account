@@ -1,6 +1,6 @@
 .footer {
     width: 100%;
-    min-height: 15vh;
+    min-height: 10vh;
     background-color: var(--primary);
 
 
@@ -282,4 +282,8 @@
 
 .text-xxl {
     font-size: 2em;
+}
+
+label {
+    color: var(--code);
 }

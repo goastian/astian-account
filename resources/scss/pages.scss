@@ -1,4 +1,4 @@
-@import "__vars.scss";
+@import "__vars.scss"; 
 @import "__shared.scss";
 
 body {
@@ -13,7 +13,7 @@ body {
 
         .content {
             width: 100%;
-            min-height: 85vh
+            min-height: 90vh
         }
     }
 }
@@ -22,6 +22,11 @@ body {
 
     width: 98%;
     margin: 20% auto;
+    border-radius: 1em;
+    padding: 0;
+    box-shadow: 0px 1px 5px -2px var(--primary);
+    -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+    -moz-box-shadow: 0px 1px 5px -2px var(--primary);
 
     @media (min-width: 800px) {
         width: 70%;
@@ -32,9 +37,6 @@ body {
         width: 30%;
     }
 
-    border: 1px solid var(--border-color-light);
-    border-radius: 1em;
-    padding: 0;
 
     .head {
         text-align: center;
@@ -67,7 +69,6 @@ body {
                     display: block;
                     padding: 0.6em 0.6em;
                     border-radius: 0.5em;
-                    border: 1px solid var(--border-color-light);
                     width: 100%;
                 }
             }
@@ -101,6 +102,11 @@ body {
 
     width: 98%;
     margin: 20% auto;
+    border-radius: 1em;
+    padding: 0;
+    box-shadow: 0px 1px 5px -2px var(--primary);
+    -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+    -moz-box-shadow: 0px 1px 5px -2px var(--primary);
 
     @media (min-width: 800px) {
         width: 70%;
@@ -111,9 +117,6 @@ body {
         width: 50%;
     }
 
-    border: 1px solid var(--border-color-light);
-    border-radius: 1em;
-    padding: 0;
 
     .head {
         color: var(--first-color);
@@ -140,7 +143,6 @@ body {
             .item {
                 input {
                     width: 70%;
-                    border: 1px solid var(--border-color-light);
                     padding: 0.6em 0.5em;
                     border-radius: 0.3em;
                 }
@@ -165,6 +167,11 @@ body {
 .register-client {
     width: 98%;
     margin: 20% auto;
+    border-radius: 1em;
+    padding: 0;
+    box-shadow: 0px 1px 5px -2px var(--primary);
+    -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+    -moz-box-shadow: 0px 1px 5px -2px var(--primary);
 
     @media (min-width: 800px) {
         width: 80%;
@@ -176,9 +183,6 @@ body {
         width: 50%;
     }
 
-    border: 1px solid var(--border-color-light);
-    border-radius: 1em;
-    padding: 0;
 
     .head {
         color: var(--first-color);
@@ -225,7 +229,6 @@ body {
                 input {
                     display: block;
                     width: 90%;
-                    border: 1px solid var(--border-color-light);
                     padding: 0.6em 0.5em;
                     border-radius: 0.3em;
                 }
@@ -275,6 +278,11 @@ body {
 
     width: 98%;
     margin: 30% auto;
+    border-radius: 1em;
+    padding: 0;
+    box-shadow: 0px 1px 5px -2px var(--primary);
+    -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+    -moz-box-shadow: 0px 1px 5px -2px var(--primary);
 
     @media (min-width: 800px) {
         width: 50%;
@@ -286,9 +294,6 @@ body {
         width: 30%;
     }
 
-    border: 1px solid var(--border-color-light);
-    border-radius: 1em;
-    padding: 0;
 
     .head {
         color: var(--first-color);
@@ -322,7 +327,6 @@ body {
                 input {
                     display: block;
                     width: 100%;
-                    border: 1px solid var(--border-color-light);
                     padding: 0.6em 0.5em;
                     border-radius: 0.3em;
                 }
@@ -357,6 +361,11 @@ body {
 .factor-2fa {
     width: 98%;
     margin: 30% auto;
+    box-shadow: 0px 1px 5px -2px var(--primary);
+    -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+    -moz-box-shadow: 0px 1px 5px -2px var(--primary);
+    border-radius: 1em;
+    padding: 0.5em;
 
     @media (min-width: 800px) {
         width: 50%;
@@ -368,9 +377,6 @@ body {
         width: 50%;
     }
 
-    border: 1px solid var(--border-color-light);
-    border-radius: 1em;
-    padding: 0;
 
     .head {
         text-align: center;
@@ -408,7 +414,6 @@ body {
 
                 input {
                     width: 30%;
-                    border: 1px solid var(--border-color-light);
                     padding: 0.6em 0.5em;
                     border-radius: 0.3em;
                 }
@@ -448,7 +453,6 @@ body {
     }
 }
 
-
 .message-status {
     text-align: center;
     color: var(--first-color);
@@ -456,4 +460,46 @@ body {
     padding: 0.2em;
     text-transform: capitalize;
     font-size: 1em;
+    box-shadow: 0px 1px 5px -2px var(--primary);
+    -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+    -moz-box-shadow: 0px 1px 5px -2px var(--primary);
+}
+
+
+input {
+    box-shadow: 0px 1px 5px -2px var(--code);
+    -webkit-box-shadow: 0px 1px 5px -2px var(--code);
+    -moz-box-shadow: 0px 1px 5px -2px var(--code);
+    border: none;
+
+    &:hover,
+    &:active,
+    &:focus {
+        border: none;
+        box-shadow: 0px 1px 10px -2px var(--code);
+        -webkit-box-shadow: 0px 1px 10px -2px var(--code);
+        -moz-box-shadow: 0px 1px 10px -2px var(--code);
+    }
+}
+
+button {
+    box-shadow: -1px 3px 7px -1px var(--code);
+    -webkit-box-shadow: -1px 3px 7px -1px var(--code);
+    -moz-box-shadow: -1px 3px 7px -1px var(--code);
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+a {
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.errors {
+    display: block !important;
+    font-size: 1em;
+    color: var(--secondary);
 }

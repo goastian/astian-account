@@ -1,10 +1,5 @@
-@import "__vars.scss";
-//@import "bootstrap/scss/bootstrap";
-@import "__shared";
-@import "bootstrap-icons";
-//@import "__pagination";
-//@import "__table";
-
+@import "__vars.scss"; 
+@import "__shared.scss";
 body {
     margin: 0;
     padding: 0;
