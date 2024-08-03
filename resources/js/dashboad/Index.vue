@@ -16,6 +16,21 @@
                 </el-aside>
                 <el-container>
                     <div class="content">
+                        <el-breadcrumb
+                            separator="/"
+                            style="margin-bottom: 1em"
+                        >
+                            <el-breadcrumb-item :to="{ name: 'home' }"
+                                >Home</el-breadcrumb-item
+                            >
+                            <el-breadcrumb-item
+                                v-for="(item, index) in currentRoute"
+                                :key="index"
+                                :to="$router.currentRoute.value.fullPath"
+                            >
+                                {{ item }}
+                            </el-breadcrumb-item>
+                        </el-breadcrumb>
                         <router-view></router-view>
                     </div>
                 </el-container>
@@ -25,12 +40,18 @@
 </template>
 <script>
 import VAsideLeft from "./VAsideLeft.vue";
-import VTopBar from "./VTopBar.vue";
-
+import VTopBar from "./VTopBar.vue"; 
 export default {
     components: {
         VAsideLeft,
         VTopBar,
+    },
+
+    computed: {
+        currentRoute() {
+            var route = this.$router.currentRoute.value.fullPath;
+            return route.split("/");
+        },
     },
 
     data() {
