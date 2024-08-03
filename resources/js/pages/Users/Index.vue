@@ -102,42 +102,31 @@ export default {
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("UpdateEmployeeEvent", (e) => {
-                    console.log(e);
-
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("StoreEmployeeEvent", (e) => {
-                    console.log(e);
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("EnableEmployeeEvent", (e) => {
-                    console.log(e);
-
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("DisableEmployeeEvent", (e) => {
-                    console.log(e);
-
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("StoreEmployeeRoleEvent", (e) => {
-                    console.log(e);
-
                     this.getUsers();
                 });
             this.$echo
                 .private(this.$channels.ch_0())
                 .listen("DestroyEmployeeRoleEvent", (e) => {
-                    console.log(e);
-
                     this.getUsers();
                 });
         },
