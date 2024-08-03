@@ -130,6 +130,7 @@ export default {
                     this.token = "";
                     this.errors = {};
                     this.popup("2FA has been activated successful");
+                    this.getAuthUser()
                 }
             } catch (err) {
                 if (err.response) {
