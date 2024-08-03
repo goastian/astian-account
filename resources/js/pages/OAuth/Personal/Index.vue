@@ -1,27 +1,43 @@
 <template>
-    <v-create @token-created="getPersonalAccessToken"></v-create>
-    <v-table v-if="tokens.length > 0">
-        <template v-slot:head>
-            <th>name</th>
-            <th>scopes</th>
-            <th>created</th>
-            <th>expires</th>
-        </template>
-        <template v-slot:body>
-            <tr v-for="(item, index) in tokens" :key="index">
-                <td v-text="item.name"></td>
-                <td v-text="item.scopes.join(', ')"></td>
-                <td v-text="item.created_at"></td>
-                <td v-text="item.expires_at"></td>
-                <td>
-                    <v-remove
-                        :token="item"
-                        @token-removed="getPersonalAccessToken"
-                    ></v-remove>
-                </td>
-            </tr>
-        </template>
-    </v-table>
+    <div class="tokens">
+        <div class="head">
+            <div class="row">
+                <div class="col">
+                    <p>List of token</p>
+                </div>
+                <div class="col">
+                    <v-create
+                        @created="getPersonalAccessToken"
+                    ></v-create>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table" style="margin-bottom: 1em">
+        <el-table :data="tokens" :lazy="true">
+            <el-table-column prop="name" label="name" width="200" />
+            <el-table-column prop="scopes" label="scopes" width="300">
+                <template #default="scope">
+                    {{ scope.row.scopes.join(", ") }}
+                </template>
+            </el-table-column>
+            <el-table-column prop="created_at" label="created" width="200" />
+            <el-table-column prop="expires_at" label="expires" width="200" />
+            <el-table-column label="actions">
+                <template #default="scope">
+                    <div class="actions">
+                        <div class="box">
+                            <v-remove
+                                :token="scope.row"
+                                @removed="getPersonalAccessToken"
+                            ></v-remove>
+                        </div>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
+    </div>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -35,7 +51,7 @@ export default {
 
     data() {
         return {
-            tokens: {},
+            tokens: [],
             user_id: null,
         };
     },
@@ -65,12 +81,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-tr {
-    td {
-        &:nth-child(2) {
-            max-width: 200px;
-            min-width: 200px;
-            word-wrap: break-word;
+.tokens {
+    .head {
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            .col {
+                flex: calc(100% / 2);
+                p {
+                    margin: 0;
+                }
+                &:nth-child(2) {
+                    text-align: center;
+                }
+            }
         }
     }
 }
