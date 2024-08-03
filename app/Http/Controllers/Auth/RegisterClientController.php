@@ -22,6 +22,9 @@ class RegisterClientController extends Controller
      */
     public function register()
     {
+        if(request()->user()){
+            return redirect('/');
+        }
         return view('client.register');
     }
 

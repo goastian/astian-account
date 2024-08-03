@@ -14,6 +14,10 @@ class PasswordResetLinkController extends Controller
      */
     public function create()
     {
+        if (request()->user()) {
+            return redirect('/');
+        }
+
         return view('auth.forgot-password');
     }
 
