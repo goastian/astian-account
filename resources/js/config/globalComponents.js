@@ -1,21 +1,21 @@
-import VPagination from "../components/pagination.vue";
-import VTable from "../components/table.vue";
-import VModal from "../components/modal.vue";
-import VScopes from "../components/scopes.vue";
-import VError from "../components/errors.vue";
-import VMessage from "../components/message.vue";
-import VSelect from "../components/select.vue";
-import VSelectSearch from "../components/selectSearch.vue";
-import VConfirm from "../components/confirm.vue";
+function importComponents() {
+    const requireComponent = require.context(
+        "../components", //directoy
+        false, //includ subdirectories
+        /V[A-Z]\w+\.(vue|js)$/ //expresion to get files name
+    );
 
-export const components = [
-    ["VPagination", VPagination],
-    ["VTable", VTable],
-    ["VModal", VModal],
-    ["VScopes", VScopes],
-    ["VError", VError],
-    ["VMessage", VMessage],
-    ["VSelect", VSelect],
-    ["VSelectSearch", VSelectSearch],
-    ["VConfirm", VConfirm],
-];
+    const components = requireComponent.keys().map((fileName) => {         
+        // get file name in PascalCase
+        const componentName = fileName.replace(/^\.\/(.*)\.\w+$/, "$1");
+
+        // import component
+        const componentConfig = requireComponent(fileName);
+
+        return [componentName, componentConfig.default || componentConfig];
+    });
+    
+    return components;
+}
+
+export const components = importComponents();
