@@ -3,7 +3,14 @@
         <div class="head">
             <div class="row">
                 <div class="col">
-                    <p>List of Channels</p>
+                    <p>
+                        List of Channels
+                        <el-input-number
+                            v-model="search.per_page"
+                            :min="1"
+                            :max="10"
+                        />
+                    </p>
                 </div>
                 <div class="col">
                     <v-register></v-register>
@@ -37,13 +44,14 @@
                 </el-table>
             </div>
         </div>
-        <div class="pagination">
-            <v-pagination
-                v-show="pages.total > pages.per_page"
-                :pages="pages"
-                @send-current-page="updateList"
-            ></v-pagination>
-        </div>
+        <el-pagination
+            v-if="pages.total > 0"
+            background
+            layout="prev, pager, next"
+            @change="changePage"
+            :page-count="pages.total_pages"
+            :total="pages.total"
+        />
     </div>
 </template>
 <script>
@@ -70,6 +78,18 @@ export default {
     mounted() {
         this.getChannels();
         this.listenChannels();
+    },
+
+    watch: {
+        "search.page"(value) {
+            this.getChannels();
+        },
+        "search.per_page"(value) {
+            if (value) {
+                this.search.per_page = value;
+                this.getChannels();
+            }
+        },
     },
 
     methods: {

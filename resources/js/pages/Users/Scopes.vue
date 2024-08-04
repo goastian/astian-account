@@ -10,40 +10,19 @@
         fullscreen
     >
         <div class="user-scopes">
-            <div
-                class="item"
-                v-for="(item, index) in roles"
-                v-show="!item.public"
-            >
-                <div class="box">
-                    <v-confirm
-                        bg="btn-none"
-                        btn=""
-                        @is-clicked="confirmAction(item)"
-                        @is-confirmed="addOrRemoveScope(item.id)"
-                        @is-cancel="cancelAction(item.id)"
-                    >
-                        <template v-slot:button>
-                            <input
-                                :id="item.id"
-                                :value="item.id"
-                                type="checkbox"
-                                class="user_roles"
-                            />
-                        </template>
-                        <template v-slot:head> Alert Scopes </template>
-                        <template v-slot:body>
-                            <p v-html="text_body"></p>
-                        </template>
-                    </v-confirm>
-                    <label class="label" :for="item.id">
-                        <span class="fw-bold">{{ item.scope }}:</span>
-                        {{ item.description }}
-                    </label>
-                </div>
-            </div>
+            <el-checkbox-group v-model="selected_roles">
+                <el-checkbox
+                    v-for="(item, index) in roles"
+                    :key="index"
+                    v-show="!item.public"
+                    :value="item.id"
+                    @change="confirm(item, $event)"
+                >
+                    <strong>{{ item.scope }}: </strong>
+                    <span>{{ item.description }}</span>
+                </el-checkbox>
+            </el-checkbox-group>
         </div>
-
         <template #footer>
             <div class="dialog-footer">
                 <el-button @click="show_modal = false">Close</el-button>
@@ -52,8 +31,7 @@
     </el-dialog>
 </template>
 <script>
-import { ElMessage } from "element-plus";
-
+import { ElMessage, ElMessageBox } from "element-plus";
 export default {
     emits: ["success"],
 
@@ -64,7 +42,7 @@ export default {
             show_modal: false,
             errors: {},
             roles: {},
-            text_body: {},
+            selected_roles: [],
         };
     },
 
@@ -89,39 +67,36 @@ export default {
             }
         },
 
-        /**
-         * Show a windows confirmation
-         * @param item
-         */
-        confirmAction(item) {
-            const checked = document.getElementById(item.id).checked;
-            this.text_body = checked
-                ? `The next role <strong>${item.scope}</strong> will be removed`
-                : `The next role <strong>${item.scope}</strong> will be added`;
-        },
-
-        /**
-         * Add or remove roles
-         * @param id
-         */
-        addOrRemoveScope(id) {
-            this.popup(null);
-            this.status = null;
-            const checked = document.getElementById(id).checked;
-
-            if (checked) {
-                this.addRoles(id);
-            } else {
-                this.removeRoles(id);
-            }
-        },
-
-        /**
-         * Cancel operation
-         */
-        cancelAction(id) {
-            var role = document.getElementById(id);
-            role.checked = !role.checked;
+        confirm(role, event) {
+            ElMessageBox.confirm(
+                event
+                    ? `The next role (${role.scope}) will be added `
+                    : `The next role (${role.scope}) will be deleted`,
+                "Warning",
+                {
+                    confirmButtonText: "OK",
+                    cancelButtonText: "Cancel",
+                    type: "warning",
+                }
+            )
+                .then(() => {
+                    if (event) {
+                        this.addRoles(role.id);
+                    } else {
+                        this.removeRoles(role.id);
+                    }
+                })
+                .catch(() => {
+                    //the checked is true delete role
+                    if (event) {
+                        this.selected_roles = this.selected_roles.filter(
+                            (id) => id !== role.id
+                        );
+                    } else {
+                        //the checked is false add role
+                        this.selected_roles.push(role.id);
+                    }
+                });
         },
 
         /**
@@ -135,7 +110,7 @@ export default {
 
                 if (res.status == 422) {
                     this.popup(
-                        `A new Scope <strong> (${res.data.data.scope}) </strong> added`,
+                        `A new Scope  (${res.data.data.scope}) added successfully.`,
                         "warning"
                     );
                 }
@@ -157,13 +132,14 @@ export default {
 
                 if (res.status == 200) {
                     this.popup(
-                        `The Scope <strong> ${res.data.data.scope} </atrong> was removed`,
+                        `The Scope ${res.data.data.scope} deleted successfully`,
                         "success"
                     );
                 }
             } catch (e) {
                 if (e.response && e.response.status == 403) {
                     this.popup(e.response.data.message, "warning");
+                    this.selected_roles.push(id);
                 }
 
                 if (e.response && e.response.status == 422) {
@@ -172,11 +148,17 @@ export default {
             }
         },
 
+        /**
+         * Load data
+         */
         loadData(user) {
             this.getRoles();
             this.getUserRoles(user);
         },
 
+        /**
+         * Get roles
+         */
         async getRoles() {
             try {
                 const res = await this.$server.get("/api/admin/roles");
@@ -188,37 +170,16 @@ export default {
         },
 
         /**
-         * Obtiene los roles de un usuario
+         * Get user roles
          */
         async getUserRoles(item) {
             try {
-                this.popup(null);
                 const res = await this.$server.get(item.links.roles);
 
                 if (res.status == 200) {
-                    this.role_selected(res.data.data);
+                    this.selected_roles = res.data.data.map((role) => role.id);
                 }
             } catch (e) {}
-        },
-
-        /**
-         * selecciona los roles del usuario
-         * @param {*} objetos
-         */
-        role_selected(objetos) {
-            const roles = document.querySelectorAll(".user_roles");
-
-            for (let i = 0; i < roles.length; i++) {
-                roles[i].checked = false;
-            }
-
-            for (let i = 0; i < objetos.length; i++) {
-                for (let j = 0; j < roles.length; j++) {
-                    if (roles[j].value == objetos[i]["id"]) {
-                        roles[j].checked = true;
-                    }
-                }
-            }
         },
     },
 };
@@ -228,29 +189,14 @@ export default {
     display: flex;
     flex-wrap: wrap;
 
-    .item {
-        flex: 1 1 calc(100% / 2);
-        margin-bottom: 0.5em;
+    .el-checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
 
-        .box {
-            display: flex;
-
-            label {
-                margin-left: 1%;
-            }
+        .el-checkbox {
+            flex: 1 1 calc(95% / 2);
+            margin-right: 30px;
         }
     }
-}
-
-.hide {
-    display: none;
-}
-
-.message {
-    display: block;
-    border-top: 1px solid var(--border-color-light);
-    padding: 1em;
-    text-align: center;
-    color: var(--first-color);
 }
 </style>

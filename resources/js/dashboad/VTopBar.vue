@@ -19,7 +19,7 @@
                 <el-icon><Notebook /></el-icon> Contacts
             </el-menu-item>
             <el-menu-item @click="goAstiango">
-                <el-icon><Search /></el-icon> AstianGo
+                <el-icon><Search /></el-icon> AstianGO
             </el-menu-item>
             <el-menu-item @click="goMidori"> Midori </el-menu-item>
         </el-menu>

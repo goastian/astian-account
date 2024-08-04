@@ -1,12 +1,12 @@
 <template>
-    <div
+    <el-text
         v-show="!error.example"
-        class="errors"
         v-for="(item, index) in error"
         :key="index"
+        class="mx-1"
+        type="danger"
+        >{{ item }}</el-text
     >
-        <p v-text="item"> </p>
-    </div>
 </template>
 <script>
 export default {
@@ -19,17 +19,3 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
-.errors {
-    color: #e36159;
-    font-size: 0.8em;
-
-    p {
-        text-transform: lowercase;
-        margin: 0;
-        &::first-letter {
-            text-transform: uppercase;
-        }
-    }
-}
-</style>
