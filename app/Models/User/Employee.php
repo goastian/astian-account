@@ -31,7 +31,7 @@ class Employee extends Auth
     /**
      * elimina clientes luego de un tiempo determinado
      */
-    public static function remove_accounts()
+    public function remove_accounts()
     {
         $now = new DateTime();
         $now->sub(new DateInterval('P' . env('DESTROY_CLIENTS_AFTER', 30) . 'D'));
@@ -45,7 +45,7 @@ class Employee extends Auth
                 if ($user->isClient()) {
                     $user->notify(new DestroyClientNotification());
 
-                    $user->privateChannel('DestroyEmployeeEvent', 'Account deleted');
+                    // $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
 
                     $user->forceDelete();
                 }
@@ -57,7 +57,7 @@ class Employee extends Auth
     /**
      * remove unverified accounts
      */
-    public static function remove_clients_unverified()
+    public function remove_clients_unverified()
     {
         $now = new DateTime();
         $now->sub(new DateInterval('PT' . env('TIME_TO_VERIFY_ACCOUNT', 5) . 'M'));
@@ -70,9 +70,9 @@ class Employee extends Auth
 
         DB::table('password_resets')->where('created_at', '<', $fecha)->delete();
 
-        if ($deleted) {
-            (new Employee())->privateChannel('DestroyEmployeeEvent', 'Account deleted');
-        }
+        /* if ($deleted) {
+    $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
+    }*/
     }
 
     /**
