@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.php';
 require __DIR__ . '/oauth.php';
 
-Route::get("/{any}", function () {
-    return view('layouts.app');
-})->where('any', '^(?!api).*$');
+Route::group([
+    'middleware' => 'check.terms',
+], function () {
+    Route::get("/{any}", function () {
+        return view('layouts.app');
+    })->where('any', '^(?!api).*$');
+});

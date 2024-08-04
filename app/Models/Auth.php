@@ -51,7 +51,8 @@ class Auth extends Authenticatable
         'client',
         'm2fa',
         'totp',
-        'dial_code'
+        'dial_code',
+        'accept_terms'
     ];
 
     /**
@@ -70,6 +71,7 @@ class Auth extends Authenticatable
      */
     protected $casts = [
         'verified_at' => 'datetime',
+        'accept_terms' => 'boolean'
     ];
 
     /**
