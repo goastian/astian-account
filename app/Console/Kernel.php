@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Http\Controllers\User\UserController;
 use App\Models\User\Employee;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -16,11 +15,10 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        // $schedule->command('inspire')->hourly();
-        $schedule->call([Employee::class, 'remove_accounts'])->everyMinute();
-        $schedule->call([Employee::class, 'remove_clients_unverified'])->everyMinute();
-        $schedule->command('passport:purge')->everyMinute();
+    { 
+        $schedule->command("users:remove-accounts")->withoutOverlapping();
+        $schedule->command("users:remove-unverified-account")->withoutOverlapping();       
+        $schedule->command('passport:purge')->withoutOverlapping();
     }
 
     /**
@@ -30,7 +28,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
