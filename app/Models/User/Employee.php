@@ -95,4 +95,13 @@ class Employee extends Auth
 
         return false;
     }
+
+    /**
+     * Accept terms privacy
+     */
+    public function acceptTerms()
+    {
+        $this->accept_terms = true;
+        $this->push();
+    }
 }

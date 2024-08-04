@@ -12,13 +12,8 @@
 </head>
 
 <body>
-    <div class="wrapper">
-
-        <div class="content">
-            @yield('content')
-        </div>
-
-        @include('layouts.footer')
+    <div class="content">
+        @yield('content')
     </div>
 </body>
 
