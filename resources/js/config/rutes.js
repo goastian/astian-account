@@ -13,59 +13,51 @@ import Read from "../pages/Notify/Read.vue";
 import Unread from "../pages/Notify/Unread.vue";
 
 const routes = [
-    { path: "/", name: "home", component: Profile, meta: { auth: true } },
+    { path: "/", name: "home", component: Profile },
 
     {
         path: "/notifications",
         name: "notify",
         component: Push,
-        meta: { auth: true },
     },
     {
         path: "/notifications/Read",
         name: "notify.read",
         component: Read,
-        meta: { auth: true },
     },
     {
         path: "/notifications/unread",
         name: "notify.unread",
         component: Unread,
-        meta: { auth: true },
     },
 
     {
         path: "/security",
         name: "security",
         component: Security,
-        meta: { auth: true },
     },
 
     {
         path: "/private-clients",
         name: "clients",
         component: Clients,
-        meta: { auth: true },
     },
     {
         path: "/tokens",
         name: "tokens",
         component: Tokens,
-        meta: { auth: true },
     },
     {
         path: "/personal-tokens",
         name: "personalTokens",
         component: PersonalTokens,
-        meta: { auth: true },
     },
-    { path: "/users", name: "users", component: Users, meta: { auth: true } },
-    { path: "/scopes", name: "scopes", component: Roles, meta: { auth: true } },
+    { path: "/users", name: "users", component: Users },
+    { path: "/scopes", name: "scopes", component: Roles },
     {
         path: "/channels",
         name: "channels",
         component: Channel,
-        meta: { auth: true },
     },
 ];
 
