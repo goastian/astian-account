@@ -1,7 +1,5 @@
 <template>
-    <el-button type="primary" @click="showModal">
-       Add
-    </el-button>
+    <el-button type="primary" @click="showModal"> Add </el-button>
 
     <el-dialog
         v-model="show_modal"
@@ -105,25 +103,26 @@
                     <p>Roles</p>
                 </div>
                 <div class="body">
-                    <div
-                        class="item"
-                        v-for="(item, index) in roles"
-                        :key="index"
-                        v-show="!item.public"
-                    >
-                        <el-checkbox-group v-model="form.scope" size="small">
-                            <el-checkbox :value="item.id" :id="item.scope">
-                                <strong>{{ item.scope }}: </strong>
-                                <span>{{ item.description }}</span>
-                            </el-checkbox>
-                        </el-checkbox-group>
-                    </div>
+                    <el-checkbox-group v-model="form.scope" size="small">
+                        <el-checkbox
+                            v-for="(item, index) in roles"
+                            :key="index"
+                            v-show="!item.public"
+                            :value="item.id"
+                            :id="item.scope"
+                        >
+                            <strong>{{ item.scope }}: </strong>
+                            <span>{{ item.description }}</span>
+                        </el-checkbox>
+                    </el-checkbox-group>
                 </div>
             </div>
         </div>
         <template #footer>
             <div class="dialog-footer">
-                <el-button type="success" @click="createUser">Register</el-button>
+                <el-button type="success" @click="createUser"
+                    >Register</el-button
+                >
                 <el-button type="warning" @click="close">Close</el-button>
             </div>
         </template>
@@ -293,11 +292,14 @@ export default {
         }
 
         .body {
-            display: flex;
-            flex-wrap: wrap;
+            .el-checkbox-group {
+                display: flex;
+                flex-wrap: wrap;
 
-            .item {
-                flex: 1 0 calc(95% / 2);
+                .el-checkbox {
+                    flex: 1 1 calc(95% / 2);
+                    margin-right: 30px;
+                }
             }
         }
     }

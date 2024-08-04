@@ -2,7 +2,9 @@
     <div class="scopes">
         <div class="head">
             <div class="row">
-                <div class="col"><p>List of roles</p></div>
+                <div class="col">
+                    <p>List of roles</p>
+                </div>
                 <div class="col"><v-create></v-create></div>
             </div>
         </div>
@@ -36,21 +38,13 @@
                                 <v-update :scope="scope.row"></v-update>
                             </div>
 
-                            <div class="box">                                 
+                            <div class="box">
                                 <v-remove :scope="scope.row"></v-remove>
                             </div>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
-        </div>
-
-        <div class="pagination">
-            <v-pagination
-                v-show="pages.total > pages.per_page"
-                :pages="pages"
-                @send-current-page="changePage"
-            ></v-pagination>
         </div>
     </div>
 </template>
@@ -73,7 +67,7 @@ export default {
             pages: {},
             search: {
                 page: 1,
-                per_page: 2,
+                per_page: 50,
             },
         };
     },
