@@ -16,7 +16,10 @@
                 <el-icon><Calendar /></el-icon>Calendar
             </el-menu-item>
             <el-menu-item @click="goContacts">
-                <el-icon><Notebook /></el-icon> Contacts
+                <el-icon><Postcard /></el-icon> Contacts
+            </el-menu-item>
+            <el-menu-item @click="goNotes">
+                <el-icon><Notebook /></el-icon> Notes
             </el-menu-item>
             <el-menu-item @click="goAstiango">
                 <el-icon><Search /></el-icon> AstianGO
@@ -41,9 +44,14 @@ export default {
         goCalendar() {
             window.location.href = process.env.MIX_MENU_CALENDAR;
         },
-        goContacts() {
+        goNotes() {
             window.location.href = process.env.MIX_MENU_NOTES;
         },
+
+        goContacts() {
+            window.location.href = process.env.MIX_MENU_CONTACTS;
+        },
+
         goAstiango() {
             window.location.href = "https://astiango.co";
         },
