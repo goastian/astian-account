@@ -47,8 +47,6 @@ class Broadcast extends Master
 
     public static function channelsByDefault()
     {
-        return [
-            'auth' => "default channel in the system",
-        ];
+        return json_decode(file_get_contents(base_path('database/extra/channels.json')));
     }
 }
