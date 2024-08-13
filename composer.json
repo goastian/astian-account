@@ -14,6 +14,7 @@
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.2",
         "spatie/laravel-fractal": "^6.0",
+        "stevebauman/purify": "^6.2",
         "symfony/http-client": "^7.0",
         "symfony/mailgun-mailer": "^7.0"
     },

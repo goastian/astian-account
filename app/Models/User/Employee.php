@@ -3,6 +3,7 @@
 namespace App\Models\User;
 
 use App\Models\Auth;
+use App\Models\User\Group;
 use App\Notifications\Client\DestroyClientNotification;
 use App\Transformers\Auth\EmployeeTransformer;
 use DateInterval;
@@ -20,12 +21,16 @@ class Employee extends Auth
     public $table = "users";
 
     //public $view = "";
-
     public $transformer = EmployeeTransformer::class;
 
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, "group_user", "user_id", "group_id");
     }
 
     /**

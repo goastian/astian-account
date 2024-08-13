@@ -7,9 +7,12 @@ use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
 use App\Http\Controllers\OAuth\ScopeController;
 use App\Http\Controllers\Push\NotificationController;
+use App\Http\Controllers\Role\GroupController;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Role\RoleUserController;
+use App\Http\Controllers\Setting\AppController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserGroupController;
 use App\Http\Controllers\User\UserNotificationController;
 use App\Http\Controllers\User\UserRoleController;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +60,9 @@ Route::group([
     'middleware' => ['verify.account', 'verify.credentials', 'wants.json'],
 
 ], function () {
+
+    Route::resource('groups', GroupController::class)->except('edit', 'create');
+
     Route::resource('roles', RoleController::class)->except('create', 'edit');
     Route::resource('roles.users', RoleUserController::class)->only('index');
 
@@ -64,6 +70,7 @@ Route::group([
     Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
     Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
     Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
+    Route::resource('users.groups', UserGroupController::class)->only('index', 'store','destroy');
 });
 
 /**
@@ -101,4 +108,13 @@ Route::group([
 ], function () {
 
     Route::resource('countries', CountriesController::class)->only('index');
+});
+
+/**
+ * Settings
+ */
+Route::group([
+    'prefix' => 'settings',
+], function () {
+    Route::resource('apps', AppController::class)->except('edit', 'create');
 });
