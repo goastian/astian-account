@@ -48,31 +48,14 @@ class EmployeeTransformer extends TransformerAbstract
             'birthday' => $user->birthday,
             'phone' => $user->phone,
             'dial_code' => $user->dial_code,
-            'full_phone' => $user->dial_code . " " .$user->phone,
+            'full_phone' => $user->dial_code . " " . $user->phone,
             'm2fa' => $user->m2fa,
             'verified' => $this->format_date($user->verified_at),
             'created' => $this->format_date($user->created_at),
             'updated' => $this->format_date($user->updated_at),
             'disabled' => $this->format_date($user->deleted_at),
-            'access' => [
-                'client' => $user->isClient(),
-                'admin' => $user->isAdmin(),
-                'users' => $user->userCan([
-                    'account_read',
-                    'account_register',
-                    'account_update',
-                    'account_enable',
-                    'account_disable',
-                ]),
-                'roles' => $user->userCan([
-                    'scopes_read',
-                    'scopes_register',
-                    'scopes_update',
-                    'scopes_destroy',
-                ]),
-                'broadcast' => $user->userCan('broadcast'),
-                'notification' => $user->userCan('notify'),
-            ],
+            'roles' => $user->roles->makeHidden(['pivot', 'public', 'required_payment']),
+            'groups' => $user->groups->makeHidden('pivot'),
             'links' => [
                 'parent' => route('users.index'),
                 'store' => route('users.store'),
@@ -81,6 +64,7 @@ class EmployeeTransformer extends TransformerAbstract
                 'disable' => route('users.disable', ['user' => $user->id]),
                 'enable' => route('users.enable', ['id' => $user->id]),
                 'roles' => route('users.roles.index', ['user' => $user->id]),
+                'group' => route('users.groups.store', ['user' => $user->id]),
             ],
         ];
     }
