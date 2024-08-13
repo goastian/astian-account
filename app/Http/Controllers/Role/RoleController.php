@@ -16,10 +16,10 @@ class RoleController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . RoleTransformer::class)->only('store', 'update');
-        $this->middleware('scope:scopes_read')->only('index');
-        $this->middleware('scope:scopes_register')->only('store');
-        $this->middleware('scope:scopes_update')->only('store');
-        $this->middleware('scope:scopes_destroy')->only('destory');
+        $this->middleware('scope:scope_read')->only('index', 'show');
+        $this->middleware('scope:scope_create')->only('store');
+        $this->middleware('scope:scope_update')->only('update');
+        $this->middleware('scope:scope_destroy')->only('destory');
     }
 
     /**
@@ -74,19 +74,6 @@ class RoleController extends Controller
         DB::transaction(function () use ($request, $role) {
 
             $can_update = false;
-
-            if ($this->is_diferent($role->name, $request->name)) {
-                $can_update = true;
-
-                /**
-                 * Check if the scope is not a default scope.
-                 */
-                collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
-                    throw_if($role->name == $key, new ReportError(__("This role ($key) is a default system role and cannot be deleted."), 403));
-                });
-
-                $role->name = preg_replace('/[\s\-,*;?!¡}\]\[{]/', '_', $request->name);
-            }
 
             if ($this->is_diferent($role->description, $request->description)) {
                 $can_update = true;

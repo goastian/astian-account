@@ -24,7 +24,7 @@ class UserController extends Controller
         parent::__construct();
         $this->middleware('transform.request:' . $user->transformer)->only('store', 'update');
         $this->middleware('scope:account_read')->only('index', 'show');
-        $this->middleware('scope:account_register')->only('store');
+        $this->middleware('scope:account_create')->only('store');
         $this->middleware('scope:account_update,client')->only('update');
         $this->middleware('scope:account_disable,client')->only('disable');
         $this->middleware('scope:account_enable')->only('enable');

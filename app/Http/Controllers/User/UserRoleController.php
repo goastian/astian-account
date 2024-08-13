@@ -21,7 +21,7 @@ class UserRoleController extends Controller
         parent::__construct();
         $this->middleware('transform.request:' . EmployeeRoleTransformer::class)->only('store', 'update');
         $this->middleware('scope:account_read')->only('index');
-        $this->middleware('scope:account_register')->only('store');
+        $this->middleware('scope:account_create')->only('store');
         $this->middleware('scope:account_update')->only('update');
     }
 
