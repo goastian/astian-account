@@ -24,6 +24,7 @@ try {
             app.component(key, component);
         }
 
+        app.config.globalProperties.$user =  res.data
         app.config.globalProperties.$id = res.data.id;
         app.config.globalProperties.$echo = $echo;
         app.config.globalProperties.$channels = $channels;

@@ -29,6 +29,7 @@ export default {
 
     mounted() {
         this.getApps();
+        this.listenEnvents();
     },
 
     methods: {
@@ -48,6 +49,26 @@ export default {
 
         goPage(uri) {
             window.location.href = uri;
+        },
+
+        listenEnvents() {
+            this.$echo
+                .channel(this.$channels.ch_0())
+                .listen("AppCreated", (e) => {
+                    this.getApps();
+                });
+
+            this.$echo
+                .channel(this.$channels.ch_0())
+                .listen("AppUpdated", (e) => {
+                    this.getApps();
+                });
+
+            this.$echo
+                .channel(this.$channels.ch_0())
+                .listen("AppDeleted", (e) => {
+                    this.getApps();
+                });
         },
     },
 };

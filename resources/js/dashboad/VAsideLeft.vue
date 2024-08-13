@@ -5,9 +5,15 @@
                 <el-icon><UserFilled /></el-icon>
                 <span>Dashboard</span>
             </template>
-            <el-menu-item @click="goUsers">Users</el-menu-item>
-            <el-menu-item @click="goRoles">Roles</el-menu-item>
-            <el-menu-item @click="goBroadcasts">Broadcast</el-menu-item>
+            <el-menu-item v-if="checkGroup('admin')" @click="goUsers"
+                >Users</el-menu-item
+            >
+            <el-menu-item v-if="checkGroup('admin')" @click="goRoles"
+                >Roles</el-menu-item
+            >
+            <el-menu-item v-if="checkGroup('admin')" @click="goBroadcasts"
+                >Broadcast</el-menu-item
+            >
             <el-menu-item @click="goSecurity">Securiry</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="2">
@@ -28,7 +34,11 @@
                 </el-badge>
                 <span>Notifications</span>
             </template>
-            <el-menu-item @click="goPushNotifications">Send</el-menu-item>
+            <el-menu-item
+                v-if="checkGroup('admin')"
+                @click="goPushNotifications"
+                >Send</el-menu-item
+            >
             <el-menu-item @click="goAllNotifications">
                 All
                 <el-text
@@ -82,7 +92,6 @@ export default {
         return {
             notifications: {},
             unread_notifications: {},
-            user: {},
         };
     },
 
@@ -143,55 +152,40 @@ export default {
             this.expand = window.innerWidth < 940;
         },
 
-        auth() {
-            this.$server
-                .get("/api/gateway/user")
-                .then((res) => {
-                    this.user = res.data;
-                    this.notification();
-                    this.unreadNotification();
-                })
-                .catch((err) => {
-                    if (err.response && err.response.status == 401) {
-                        console.log(err.response.data);
-                    }
-                });
-        },
-
-        logout() {
-            this.$server
-                .post("/api/gateway/logout")
-                .then((res) => {
+        async logout() {
+            try {
+                const res = await this.$server.post("/api/gateway/logout");
+                if (res.status == 200) {
                     window.location.href = "/login";
-                })
-                .catch((err) => {});
+                }
+            } catch (error) {}
         },
 
-        notification() {
-            this.$server
-                .get("/api/notifications")
-                .then((res) => {
+        async notification() {
+            try {
+                const res = await this.$server.get("/api/notifications");
+                if (res.status == 200) {
                     this.notifications = res.data.data;
-                })
-                .catch((err) => {});
+                }
+            } catch (error) {}
         },
 
-        unreadNotification() {
-            this.$server
-                .get("/api/notifications/unread")
-                .then((res) => {
+        async unreadNotification() {
+            try {
+                const res = await this.$server.get("/api/notifications/unread");
+                if (res.status == 200) {
                     this.unread_notifications = res.data.data;
-                })
-                .catch((err) => {});
+                }
+            } catch (error) {}
         },
 
-        readNotification(link) {
-            this.$server
-                .post(link)
-                .then((res) => {
+        async readNotification(link) {
+            try {
+                const res = this.$server.post(link);
+                if (res.status == 200) {
                     this.notification();
-                })
-                .catch((err) => {});
+                }
+            } catch (error) {}
         },
 
         listenEvents() {
@@ -215,6 +209,10 @@ export default {
                     this.notification();
                     this.unreadNotification();
                 });
+        },
+
+        checkGroup(group) {
+            return this.$user.groups.some((g) => g.name === group);
         },
     },
 };
