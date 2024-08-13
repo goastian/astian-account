@@ -9,56 +9,45 @@
             <el-menu-item @click="goHome">
                 <el-icon><House /></el-icon> Home
             </el-menu-item>
-            <el-menu-item @click="goCloud">
-                <el-icon><Cloudy /></el-icon> Cloud
+            <el-menu-item
+                v-for="(app, index) in apps"
+                :key="index"
+                @click="goPage(app.url)"
+            >
+                <el-icon><i v-html="app.icon"></i> </el-icon> {{ app.name }}
             </el-menu-item>
-            <el-menu-item @click="goCalendar">
-                <el-icon><Calendar /></el-icon>Calendar
-            </el-menu-item>
-            <el-menu-item @click="goContacts">
-                <el-icon><Postcard /></el-icon> Contacts
-            </el-menu-item>
-            <el-menu-item @click="goNotes">
-                <el-icon><Notebook /></el-icon> Notes
-            </el-menu-item>
-            <el-menu-item @click="goAstiango">
-                <el-icon><Search /></el-icon> AstianGO
-            </el-menu-item>
-            <el-menu-item @click="goMidori"> Midori </el-menu-item>
         </el-menu>
     </div>
 </template>
 <script>
 export default {
     data() {
-        return {};
+        return {
+            apps: [],
+        };
+    },
+
+    mounted() {
+        this.getApps();
     },
 
     methods: {
+        async getApps() {
+            try {
+                const res = await this.$server.get("/api/settings/apps");
+
+                if (res.status == 200) {
+                    this.apps = res.data.data;
+                }
+            } catch (error) {}
+        },
+
         goHome() {
             this.$router.push({ name: "home" });
         },
-        goCloud() {
-            window.location.href = process.env.MIX_MENU_CLOUD;
-        },
-        goCalendar() {
-            window.location.href = process.env.MIX_MENU_CALENDAR;
-        },
-        goNotes() {
-            window.location.href = process.env.MIX_MENU_NOTES;
-        },
 
-        goContacts() {
-            window.location.href = process.env.MIX_MENU_CONTACTS;
-        },
-
-        goAstiango() {
-            window.location.href = "https://astiango.co";
-        },
-
-        goMidori() {
-            window.location.href =
-                "https://astian.org/midori-browser/download/";
+        goPage(uri) {
+            window.location.href = uri;
         },
     },
 };
