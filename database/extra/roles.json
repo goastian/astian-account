@@ -12,26 +12,26 @@
         "required_payment": 0
     },
     {
-        "name": "scopes_destroy",
+        "name": "scope_destroy",
         "description": "Delete roles",
         "public": 0,
         "required_payment": 0
     },
     {
-        "name": "scopes_update",
+        "name": "scope_update",
         "description": "Update roles",
         "public": 0,
         "required_payment": 0
     },
     {
-        "name": "scopes_register",
+        "name": "scope_create",
         "description": "Create roles",
         "public": 0,
         "required_payment": 0
     },
     {
-        "name": "scopes_read",
-        "description": "View all roles",
+        "name": "scope_read",
+        "description": "View roles",
         "public": 0,
         "required_payment": 0
     },
@@ -54,14 +54,14 @@
         "required_payment": 0
     },
     {
-        "name": "account_register",
+        "name": "account_create",
         "description": "granted to register new users",
         "public": 0,
         "required_payment": 0
     },
     {
         "name": "account_read",
-        "description": "View all users",
+        "description": "View users",
         "public": 0,
         "required_payment": 0
     },
@@ -80,6 +80,30 @@
     {
         "name": "admin",
         "description": "full system access",
+        "public": 0,
+        "required_payment": 0
+    },
+    {
+        "name": "group_read",
+        "description": "View groups",
+        "public": 0,
+        "required_payment": 0
+    },
+    {
+        "name": "gruop_create",
+        "description": "Create groups",
+        "public": 0,
+        "required_payment": 0
+    },
+    {
+        "name": "group_update",
+        "description": "Update groups",
+        "public": 0,
+        "required_payment": 0
+    },
+    {
+        "name": "group_destroy",
+        "description": "Delete groups",
         "public": 0,
         "required_payment": 0
     }
