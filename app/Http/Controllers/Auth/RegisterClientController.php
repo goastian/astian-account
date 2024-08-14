@@ -42,6 +42,7 @@ class RegisterClientController extends Controller
             //'address' => ['nullable', 'max:150'],
             //'phone' => ['nullable', 'max:25'],
             'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
+            'accept_terms' => ['required']
         ]);
 
         DB::transaction(function () use ($request, $client) {
