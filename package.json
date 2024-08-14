@@ -30,6 +30,9 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@popperjs/core": "^2.11.8",
+    "air-datepicker": "^3.5.3",
+    "animejs": "^3.2.2",
     "axios": "^1.1.2",
     "bootstrap-icons": "^1.11.3",
     "echo-client-js": "^1.2.0",
