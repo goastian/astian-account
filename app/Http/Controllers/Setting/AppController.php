@@ -52,11 +52,11 @@ class AppController extends Controller
                 $app->icon = Purify::config('icons')->clean($request->icon);
             }
             $app->save();
-            $this->publicChannel("AppCreated", "New app created", 201);
+            $this->publicChannel("AppCreated", "New app created");
 
         });
 
-        return $this->showOne($app, $app->transformer);
+        return $this->showOne($app, $app->transformer, 201);
 
     }
 
@@ -111,12 +111,12 @@ class AppController extends Controller
 
             if ($updated) {
                 $app->push();
-                $this->publicChannel("AppUpdated", "App updated", 201);
+                $this->publicChannel("AppUpdated", "App updated");
             }
 
         });
 
-        return $this->showOne($app, $app->transformer);
+        return $this->showOne($app, $app->transformer, 201);
 
     }
 
