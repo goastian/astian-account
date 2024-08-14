@@ -8,7 +8,7 @@
                         <el-input-number
                             v-model="search.per_page"
                             :min="1"
-                            :max="10"
+                            :max="50"
                         />
                     </p>
                 </div>

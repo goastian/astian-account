@@ -6,6 +6,7 @@ export const $server = axios.create({
     timeout: 5000,
     withCredentials: true,
     httpsAgent: new https.Agent({ keepAlive: true }),
+    "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
     headers: {
         Accept: "application/json",
     },
