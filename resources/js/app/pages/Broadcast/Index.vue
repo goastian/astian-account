@@ -98,6 +98,10 @@ export default {
             this.getChannels();
         },
 
+         changePage(event) {
+            this.search.page = event;
+        },
+
         async getChannels() {
             try {
                 const res = await this.$server.get("/api/broadcasts", {
