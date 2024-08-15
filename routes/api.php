@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
 use App\Http\Controllers\Country\CountriesController;
+use App\Http\Controllers\OAuth\ClientAdminController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
 use App\Http\Controllers\OAuth\ScopeController;
@@ -48,6 +49,8 @@ Route::prefix('oauth')->group(function () {
 
     Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentials"])
         ->name('passport.revoke-credentials');
+
+    Route::resource('/clients', ClientAdminController::class);
 });
 
 /**
@@ -70,7 +73,7 @@ Route::group([
     Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
     Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
     Route::resource('users.roles', UserRoleController::class)->only('index', 'store', 'destroy');
-    Route::resource('users.groups', UserGroupController::class)->only('index', 'store','destroy');
+    Route::resource('users.groups', UserGroupController::class)->only('index', 'store', 'destroy');
 });
 
 /**
