@@ -15,7 +15,7 @@
                         By choosing this option, you accept the <a href="{{ env('MIX_HOME_PAGE') }}" target="_black">Astian
                             Inc</a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_black">Services Agreement,
                             Privacy Statement</a>, and
-                        <a href="{{ config('MIX_HOME_COOKIES') }}" target="_black"> Cookies Policy </a>.
+                        <a href="{{ env('MIX_HOME_COOKIES') }}" target="_black"> Cookies Policy </a>.
                     </label>
                 </p>
                 @if ($errors->has('accept_terms'))

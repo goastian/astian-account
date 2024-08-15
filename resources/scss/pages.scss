@@ -182,13 +182,56 @@ body {
 
         &:last-child {
             display: flex;
-            background-color: var(--primary);
+            background: var(--primary);
             justify-content: center;
             align-items: center;
 
             .page {
-                padding: 0.5em;
-                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                min-height: inherit;
+
+                div {
+                    text-align: center;
+
+                    h1 {
+                        font-size: 5em;
+                        color: var(--white);
+                        // animation: slide 5s linear infinite;
+                    }
+
+                    p {
+                        font-size: large;
+                        color: var(--first-color);
+                        font-size: 2em;
+                    }
+
+
+                    @keyframes slide {
+                        0% {
+                            color: var(--white);
+                        }
+
+                        25% {
+                            color: var(--secondary);
+                        }
+
+                        50% {
+                            color: var(--ternary);
+                        }
+
+
+                        75% {
+                            color: var(--quaternary);
+                        }
+
+                        100% {
+                            color: var(--code);
+                        }
+                    }
+                }
             }
 
         }
