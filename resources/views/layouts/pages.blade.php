@@ -9,12 +9,14 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="{{ config('app.url') }}/favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="{{ mix('/css/pages.css') }}">
+
 </head>
 
 <body>
     <div class="content">
         @yield('content')
     </div>
+    <script src="{{ mix('/js/pages.js') }}"></script>
 </body>
 
 </html>

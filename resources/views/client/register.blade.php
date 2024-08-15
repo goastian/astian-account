@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <div class="register-client">
+    <div class="form-register-client">
 
         <div class="form">
 
@@ -46,7 +46,7 @@
 
                     <div class="item">
                         <label for="birthday">{{ __('Date of birth') }}</label>
-                        <input type="date" id="birthday" name="birthday" placeholder="{{ __('Birthday') }}"
+                        <input type="text" id="birthday" name="birthday" placeholder="{{ __('Birthday') }}"
                             value="{{ old('birthday') }}">
                         @if ($errors->has('birthday'))
                             @foreach ($errors->get('birthday') as $item)
@@ -75,30 +75,30 @@
                         @endif
                     </div>
                     <div class="terms">
-                        <p>
+                        <div class="box">
                             <input name="accept_terms" id="accept_terms" value="{{ true }}" type="checkbox">
+                        </div>
+                        <div class="box">
                             <label for="accept_terms">
                                 By choosing this option, you accept the <a href="{{ env('MIX_HOME_PAGE') }}"
                                     target="_black">Astian
                                     Inc</a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_black">Services Agreement,
                                     Privacy Statement</a>, and
-                                <a href="{{ config('MIX_HOME_COOKIES') }}" target="_black"> Cookies Policy </a>.
+                                <a href="{{ env('MIX_HOME_COOKIES') }}" target="_black"> Cookies Policy </a>.
                             </label>
-                        </p>
+                        </div>
                     </div>
-
                     @if ($errors->has('accept_terms'))
                         @foreach ($errors->get('accept_terms') as $item)
-                            <span class="errors">{{ $item }}</span>
+                            <p class="errors">{{ $item }}</p>
                         @endforeach
                     @endif
-
-
                     <div class="buttons">
                         <button type="submit">{{ __('Register') }}</button>
                     </div>
                 </form>
             </div>
         </div>
+
     </div>
 @endsection
