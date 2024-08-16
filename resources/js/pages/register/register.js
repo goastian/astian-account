@@ -1,11 +1,12 @@
 import AirDatepicker from "air-datepicker";
 import "air-datepicker/air-datepicker.css";
-import en from "air-datepicker/locale/en"; 
+import en from "air-datepicker/locale/en";
 import { createPopper } from "@popperjs/core";
 import anime from "animejs";
 
 new AirDatepicker("#birthday", {
     locale: en,
+    dateFormat: "yyyy-MM-dd",
     position({ $datepicker, $target, $pointer, isViewChange, done }) {
         let popper = createPopper($target, $datepicker, {
             placement: "bottom",
