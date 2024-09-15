@@ -1,0 +1,121 @@
+.form-register-client {
+    width: inherit;
+    min-height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .form {
+
+        width: 90%;
+        border-radius: 1em;
+        padding: 0.5em;
+        box-shadow: 0px 1px 5px -2px var(--primary);
+        -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+        -moz-box-shadow: 0px 1px 5px -2px var(--primary);
+
+        @media (min-width: 800px) {
+            width: 80%;
+        }
+
+        @media (min-width: 940px) {
+            width: 50%;
+        }
+
+
+        .head {
+            color: var(--first-color);
+            text-align: center;
+
+            p {
+                &:nth-child(1) {
+                    font-size: 1.3em;
+                    font-weight: bold;
+                    margin-bottom: 0;
+                }
+
+                &:nth-child(2) {
+                    font-size: 0.9em;
+                }
+            }
+        }
+
+        .body {
+            padding: 0.5em 0.5em;
+
+            @media (min-width:800px) {
+                padding: 0.5em 1em;
+
+            }
+
+            form {
+                text-align: center;
+
+                @media (min-width:800px) {
+                    flex-wrap: wrap;
+                    display: flex;
+                }
+
+                .item {
+                    flex: 1 1 calc(100% / 2);
+                    text-align: start;
+                    margin-bottom: 2%;
+
+                    label {
+                        color: var(--first-color);
+                    }
+
+                    input {
+                        display: block;
+                        width: 90%;
+                        padding: 0.6em 0.5em;
+                        border-radius: 0.3em;
+                    }
+
+                }
+
+                .terms {
+                    display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    text-align: start;
+
+                    .box {
+
+
+                        label {
+                            color: var(--first-color);
+                        }
+
+                    }
+
+                    p {
+                        display: block;
+                    }
+                }
+
+                .buttons {
+                    display: flex;
+                    justify-content: start;
+                    width: 100%;
+
+
+                    @media (min-width:800px) {
+                        margin-top: 2%;
+                    }
+
+                    button {
+                        display: block;
+                        padding: 0.5em 1em;
+                        border: 1px solid var(--primary);
+                        background-color: var(--primary);
+                        color: var(--white);
+                        border-radius: 0.4em;
+                        min-width: 30%;
+                    }
+
+                }
+            }
+        }
+    }
+}
