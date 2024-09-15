@@ -70,7 +70,7 @@ class VerifyCsrfToken extends Middleware
             $config['path'],
             $config['domain'],
             $config['secure'],
-            false,
+            $config['http_only'],
             false,
             $config['same_site'] ?? null,
             $config['partitioned'] ?? false
