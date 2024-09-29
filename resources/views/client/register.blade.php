@@ -8,7 +8,7 @@
 
             <div class="head">
                 <p>{{ __('Create a new Account') }}</p>
-                <p>{{ __('Join us and enjoy a new Astian privacy and security.') }}</p>
+                <p>{{ __('Join us and enjoy a new :name privacy and security.', ['name' => config('app.name')]) }}</p>
             </div>
             <div class="body">
                 <form action="/register" method="post">
@@ -81,8 +81,9 @@
                         <div class="box">
                             <label for="accept_terms">
                                 By choosing this option, you accept the <a href="{{ env('MIX_HOME_PAGE') }}"
-                                    target="_black">Astian
-                                    Inc</a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_black">Services Agreement,
+                                    target="_black">
+                                    {{ config('app.name') }}
+                                </a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_black">Services Agreement,
                                     Privacy Statement</a>, and
                                 <a href="{{ env('MIX_HOME_COOKIES') }}" target="_black"> Cookies Policy </a>.
                             </label>
