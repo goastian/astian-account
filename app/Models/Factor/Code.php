@@ -3,8 +3,8 @@
 namespace App\Models\Factor;
 
 use App\Models\Master;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Code extends Master
 {

@@ -3,17 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Passport\HasApiTokens;
-use Elyerr\ApiResponse\Assets\Asset; 
-use Illuminate\Notifications\Notifiable;
+
+use App\Http\Controllers\OAuth\Scopes;
+use App\Models\User\Role;
 use App\Notifications\Auth\ResetPassword;
+use DateInterval;
+use DateTime;
+use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable, Asset;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -38,12 +41,16 @@ class Auth extends Authenticatable
         'last_name',
         'email',
         'password',
-        'document_type',
-        'document_number',
         'country',
-        'department',
+        'city',
         'address',
         'phone',
+        'birthday',
+        'client',
+        'm2fa',
+        'totp',
+        'dial_code',
+        'accept_terms'
     ];
 
     /**
@@ -53,7 +60,6 @@ class Auth extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -62,55 +68,49 @@ class Auth extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'verified_at' => 'datetime',
+        'accept_terms' => 'boolean'
     ];
 
-    public function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtolower($value);
-    }
-
-    public function setLastNameAttribute($value)
-    {
-        $this->attributes['last_name'] = strtolower($value);
-    }
-
-    public function setEmailAttribute($value)
-    {
-        $this->attributes['email'] = strtolower($value);
-    }
-
-    public function setDocumentTypeAttribute($value){
-        $this->attributes['document_type'] = strtolower($value);
-    }
-
-     public function getDocumentTypeAttribute($value){
-        return strtoupper($value);
-    }
-
-    public function setCountryAttribute($value)
-    {
-        $this->attributes['country'] = strtolower($value);
-    }
-
-    public function setDepartmentAttribute($value)
-    {
-        $this->attributes['department'] = strtolower($value);
-    }
-
-    public function setAddressAttribute($value)
-    {
-        $this->attributes['address'] = strtolower($value);
-    }
-
-     /**
+    /**
      * verifica si contiene el role de administrador
      */
     public function isAdmin()
     {
         return $this->roles()->get()->contains('name', 'admin');
     }
-    
+
+    /**
+     * verify if the user is a client
+     * @return boolean
+     */
+    public function isClient()
+    {
+        return $this->roles()->get()->contains('name', 'client');
+    }
+
+    /**
+     * Checking if the user has an access for any scope
+     *
+     * @return Boolean
+     */
+    public function userCan($scope)
+    {
+        $roles = $this->scopes();
+        
+        if (is_array($scope)) {
+            foreach ($scope as $value) {
+                if ($roles->contains('id', $value)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+       return $this->scopes()->contains('id', $scope);
+    }
+
     /**
      * Send the password reset notification.
      *
@@ -120,5 +120,29 @@ class Auth extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPassword($token));
-    } 
+    }
+
+    /**
+     * get scope for the client
+     *
+     * @return Role
+     */
+    public function addClientScope()
+    {
+        $scope = Role::where('name', 'client')->first();
+        return $scope;
+    }
+
+    /**
+     * Setting the date for registered users
+     *
+     * @param Int $years
+     * @return date
+     */
+    public static function setBirthday($years = 13)
+    {
+        $date = new DateTime();
+        $date->sub(new DateInterval('P' . $years . 'Y'));
+        return $date->format('Y-m-d');
+    }
 }

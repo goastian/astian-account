@@ -5,13 +5,12 @@ namespace App\Http\Controllers\OAuth;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\Http\Controllers\ClientController as Controller;
 use Laravel\Passport\Passport;
 
 class ClientController extends Controller
 {
-
     /**
      * Get all of the clients for the authenticated user.
      *
@@ -32,8 +31,8 @@ class ClientController extends Controller
             return $clients;
         }
 
-       /* $clients->each(function ($client) {
-            $client->secret = Hash::make($client->secret);
+        /**$clients->each(function ($client) {
+        $client->secret = Hash::make($client->secret);
         });*/
 
         return $clients->makeVisible('secret');
@@ -95,13 +94,13 @@ class ClientController extends Controller
         if (!$client) {
             return new Response('', 404);
         }
-        $clientForDB = $this->existsForThisUser($request);
+        /*$clientForDB = $this->existsForThisUser($request);
 
         if ($clientForDB->user_id == $client->user_id and $clientForDB->redirect != $client->redirect) {
-            $this->validation->make($request->only('redirect'), [
-                'redirect' => ['unique:oauth_clients,redirect'],
-            ])->validate();
-        }
+        $this->validation->make($request->only('redirect'), [
+        'redirect' => ['unique:oauth_clients,redirect'],
+        ])->validate();
+        }*/
 
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
@@ -124,7 +123,34 @@ class ClientController extends Controller
 
         $client = $clients->where('redirect', $request->redirect)->first();
 
-        return $client ?: throw new ReportError("Usuario no Encontrado", 400);
+        return $client ?: throw new ReportError("Not Found", 404);
     }
 
+    /**
+     * Delete the given client.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $clientId
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Request $request, $clientId)
+    {
+        $client = $this->clients->findForUser($clientId, $request->user()->getAuthIdentifier());
+
+        if (!$client) {
+            return new Response(__('Not Found'), 404);
+        }
+
+        DB::transaction((function () use ($client) {
+
+            $this->clients->delete($client);
+
+            $client->tokens()->update(['revoked' => true]);
+
+            DB::table('oauth_clients')->where('id', $client->id)->delete();
+
+        }));
+
+        return new Response(__('Operation successful.'), 200);
+    }
 }

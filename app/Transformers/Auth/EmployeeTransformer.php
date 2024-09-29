@@ -2,14 +2,14 @@
 
 namespace App\Transformers\Auth;
 
-  
+use App\Models\User\Employee;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class EmployeeTransformer extends TransformerAbstract
 {
     use Asset;
-    
+
     /**
      * List of resources to automatically include
      *
@@ -35,90 +35,98 @@ class EmployeeTransformer extends TransformerAbstract
      */
     public function transform($user)
     {
+        $user = Employee::withTrashed()->find($user->id);
+
         return [
             'id' => $user->id,
-            'nombre' => $user->name,
-            'apellido' => $user->last_name,
-            'correo' => $user->email,
-            'documento' => strtoupper($user->document_type),
-            'numero' => $user->document_number,
-            'pais' => $user->country,
-            'departamento' => $user->department,
-            'direccion' => $user->address,
-            'telefono' => $user->phone,
+            'name' => $user->name,
+            'last_name' => $user->last_name,
+            'email' => $user->email,
+            'country' => $user->country,
+            'city' => $user->city,
+            'address' => $user->address,
+            'birthday' => $user->birthday,
+            'phone' => $user->phone,
+            'dial_code' => $user->dial_code,
+            'full_phone' => $user->dial_code . " " . $user->phone,
             'm2fa' => $user->m2fa,
-            'registrado' => $this->format_date($user->created_at),
-            'actualizado' => $this->format_date($user->updated_at),
-            'inactivo' => $this->format_date($user->deleted_at),
-            'links' =>[
+            'verified' => $this->format_date($user->verified_at),
+            'created' => $this->format_date($user->created_at),
+            'updated' => $this->format_date($user->updated_at),
+            'disabled' => $this->format_date($user->deleted_at),
+            'roles' => $user->roles->makeHidden(['pivot', 'public', 'required_payment']),
+            'groups' => $user->groups->makeHidden('pivot'),
+            'links' => [
                 'parent' => route('users.index'),
                 'store' => route('users.store'),
-                'show' => route('users.show', ['user' => $user->id]), 
-                'update' => route('users.update', ['user' => $user->id]), 
+                'show' => route('users.show', ['user' => $user->id]),
+                'update' => route('users.update', ['user' => $user->id]),
                 'disable' => route('users.disable', ['user' => $user->id]),
                 'enable' => route('users.enable', ['id' => $user->id]),
-                'roles' => route('users.roles.index',['user' => $user->id]),
-            ]
+                'roles' => route('users.roles.index', ['user' => $user->id]),
+                'group' => route('users.groups.store', ['user' => $user->id]),
+            ],
         ];
     }
 
     public static function transformRequest($index)
     {
-        $attributes = [ 
-            'nombre' => 'name',
-            'apellido' => 'last_name',
-            'correo' => 'email',
-            'contraseña' => 'password',
-            'documento' => 'document_type',
-            'numero' => 'document_number',
-            'pais' => 'country',
-            'departamento' => 'department',
-            'direccion' => 'address',
-            'telefono' => 'phone',
-            'acceso' => 'role', 
+        $attributes = [
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'email' => 'email',
+            'password' => 'password',
+            'password_confirmation' => 'password_confirmation',
+            'country' => 'country',
+            'city' => 'city',
+            'address' => 'address',
+            'phone' => 'phone',
+            'dial_code' => 'dial_code',
+            'birthday' => 'birthday',
+            'scope' => 'role',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
-
 
     public static function transformResponse($index)
     {
         $attributes = [
-            'name' => 'nombre',
-            'last_name' => 'apellido',
-            'email' => 'correo',
-            'password' => 'contraseña',
-            'document_type' => 'documento',
-            'document_number' => 'numero',
-            'country' => 'pais',
-            'department' => 'departamento',
-            'address' => 'direccion',
-            'phone' => 'telefono',
-            'role' => 'acceso'
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'email' => 'email',
+            'password' => 'password',
+            'password_confirmation' => 'password_confirmation',
+            'country' => 'country',
+            'city' => 'city',
+            'address' => 'address',
+            'birthday' => 'birthday',
+            'phone' => 'phone',
+            'dial_code' => 'dial_code',
+            'role' => 'scope',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
-
 
     public static function getOriginalAttributes($index)
     {
         $attributes = [
             'id' => 'id',
-            'nombre' => 'name',
-            'apellido' => 'last_name',
-            'correo' => 'email',
-            'documento' => 'document_type',
-            'numero' => 'document_number',
-            'pais' => 'country',
-            'departamento' => 'department',
-            'direccion' => 'address',
-            'telefono' => 'phone',
+            'name' => 'name',
+            'last_name' => 'last_name',
+            'email' => 'email',
+            'country' => 'country',
+            'city' => 'city',
+            'address' => 'address',
+            'phone' => 'phone',
+            'dial_code' => 'dial_code',
+            'birthday' => 'birthday',
+            'verified' => 'verified_at',
             'm2fa' => 'm2fa',
-            'registrado' => 'created_at',
-            'actualizado' => 'updated_at',
-            'inactivo' => 'deleted_at',
+            'created' => 'created_at',
+            'updated' => 'updated_at',
+            'disabled' => 'deleted_at',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

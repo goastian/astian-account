@@ -10,7 +10,6 @@ use Illuminate\Notifications\Notification;
 class CreatedNewUser extends Notification implements ShouldQueue
 {
     use Queueable;
-    
     /**
      * @var String
      */
@@ -24,6 +23,7 @@ class CreatedNewUser extends Notification implements ShouldQueue
     public function __construct($password = null)
     {
         $this->password = $password;
+        $this->queue = 'notify';
     }
 
     /**
@@ -46,15 +46,12 @@ class CreatedNewUser extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject("Cuenta registrada")
-            ->line("Su cuenta ha sido registrada, su contraseña es : " . $this->password)
-            ->line("Esta contraseña se genero aleatoriamente, si desea cambiarla")
-            ->line("Puede seguir los siguientes pasos:")
-            ->line("Ingrese al enlace que se encuentra debajo:")
-            ->line("Escriba su email y de click en aceptar:")
-            ->line("Llegará un email, al dar click en el enlace te redireccionará para que actualices tu contraseña:")
-            ->line("Escribe y confirma tu contraseña que luego te redireccionará al Login:")
-            ->action('Crear Contraseña', url('/forgot-password'));
+            ->subject(__("Account registered"))
+            ->line(__("Your account has been registered, your password is") . " : " . $this->password)
+            ->line(__("This password is randomly generated, if you want to change it, you can follow the following steps") . " : ")
+            ->line("Enter the link below")
+            ->action('New Password', url('/forgot-password'))
+            ->line(__("An email will arrive, clicking on the link will redirect you to update your password writes and confirms your password that will then redirect you to login"));
     }
 
     /**

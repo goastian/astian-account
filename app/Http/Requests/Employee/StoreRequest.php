@@ -3,9 +3,9 @@
 namespace App\Http\Requests\Employee;
 
 use App\Models\Auth;
-use App\Enum\EnumType;
-use Illuminate\Validation\Rule;
+use App\Models\User\Employee;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -26,17 +26,18 @@ class StoreRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
-            'name' => ['required', 'max:100'],
-            'last_name' => ['required', 'max:100'],
-            'email' => ['required', 'email', 'max:100', 'unique:employees,email'],
-            'document_type' => ['required', Rule::in(EnumType::documento_type())],
-            'document_number' => ['required', 'max:12', 'unique:employees,document_number'],
-            'country' => ['required', 'max:100'],
-            'department' => ['required', 'max:100'],
-            'address' => ['required', 'max:150'],
-            'phone' => ['required', 'max:9', 'unique:employees,phone'],
-            'role' => ['required', 'array','exists:roles,id']
+            'name' => ['required','regex:/^[A-Za-z\s]+$/', 'max:100'],
+            'last_name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'max:100'],
+            'email' => ['required', 'email', 'max:100', 'unique:users,email'],
+            'country' => ['required', 'max:100', 'exists:countries,name_en'],
+            'city' => ['nullable','regex:/^[A-Za-z\s]+$/', 'max:100'],
+            'address' => ['nullable', 'max:150'],
+            'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
+            'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
+            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
+            'role' => ['required', 'array', 'exists:roles,id'],
         ];
     }
 }

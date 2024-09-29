@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Factor;
 
-use App\Events\Auth\M2FAEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth2faMiddleware;
 use App\Models\Factor\Code;
@@ -11,7 +10,6 @@ use App\Providers\RouteServiceProvider;
 use DateInterval;
 use DateTime;
 use Elyerr\ApiResponse\Assets\JsonResponser;
-use Elyerr\ApiResponse\Events\LoginEvent;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,13 +71,13 @@ class CodeController extends Controller
 
         if ($code->email != $request->email) {
             return redirect('login')->with([
-                'status' => Lang::get('Evite recargar la pagina antes de ingresar el codigo 2FA'),
+                'status' => Lang::get('Avoid reloading the page before entering the code 2FA'),
             ]);
         }
 
         if (!Hash::check($request->token, $code->code)) {
             return redirect()->back()->with([
-                'warning' => Lang::get('El token es incorrecto.'),
+                'warning' => Lang::get('Token invalid'),
                 'email' => $request->email,
             ]);
         }
@@ -87,7 +85,7 @@ class CodeController extends Controller
         if (now() > $expire) {
             Code::destroyToken($code->status);
             return redirect()->back()->with([
-                'warning' => Lang::get('El token proporciondado ha caducado'),
+                'warning' => Lang::get('Token expired'),
                 'email' => $request->email,
             ]);
         }
@@ -96,38 +94,37 @@ class CodeController extends Controller
 
         Code::destroyToken($code->status);
 
-        LoginEvent::dispatch();
-
         return RouteServiceProvider::home();
     }
 
     /**
-     * send request to get a token to activate 2FA
+     * Send request to obtain 2FA activation token.
      *
      * @param Request $request
+     * 
      * @return Json
      */
     public function requestToken2FA(Request $request)
     {
         $code = Code::where('status', $request->session()->getId())->get()->last();
-        
+
         if ($code) {
             $date = new DateTime($code->created_at);
             $date->add(new DateInterval('PT' . env('CODE_2FA_EXPIRE') . 'M'));
             $now = $date->format('Y-m-d H:i:s');
 
             if (now() < $now) {
-                throw new ReportError(Lang::get("Espera un momento por favor, el siguiente deberá ser enviado despues de " . date('H:i:s', strtotime($now))), 422);
+                throw new ReportError(__("Please wait a moment, the next token should be sent after " . date('H:i:s', strtotime($now))), 422);
             }
         }
 
         Auth2faMiddleware::generateToken($request);
 
-        return $this->message(Lang::get('Hemos enviado el token a tu correo electronico'), 201);
+        return $this->message(__('We have sent the token to your email'), 201);
     }
 
     /**
-     * Authorize users to activate 2FA with token
+     * Authorize users to activate 2FA using a token.
      *
      * @param Request $request
      * @return Json
@@ -141,11 +138,11 @@ class CodeController extends Controller
         $expire = $date->format('Y-m-d H:i:s');
 
         if (!Hash::check($request->token, $code->code)) {
-            return $this->message(Lang::get('El token es incorrecto.'));
+            return $this->message(__('The token is incorrect.'));
         }
 
         if (now() > $expire) {
-            return $this->message(Lang::get('El token proporciondado ha caducado'));
+            return $this->message(__('Token expired'));
         }
 
         $user = Employee::find($request->user()->id);
@@ -155,8 +152,6 @@ class CodeController extends Controller
 
         Code::destroyToken($code->status);
 
-        M2FAEvent::dispatch();
-
-        return $this->message(Lang::get($user->m2fa ? "2FA activado" : "2FA desactivado"), 201);
+        return $this->message(Lang::get($user->m2fa ? "2FA activated" : "2FA unactivated"), 201);
     }
 }

@@ -2,16 +2,21 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel", "OAuth2", "Authorization"],
+    "keywords": ["framework", "laravel"],
     "license": "AGPL-3.0",
     "require": {
         "php": "^8.0.2",
         "elyerr/api-response": "^1.0",
-        "guzzlehttp/guzzle": "^7.2", 
-        "laravel/framework": "^10.0",
+        "elyerr/echo-client-php": "^1.0",
+        "guzzlehttp/guzzle": "^7.2",
+        "laravel/framework": "^10.43",
         "laravel/passport": "^11.8",
         "laravel/tinker": "^2.7",
-        "spatie/laravel-fractal": "^6.0"
+        "predis/predis": "^2.2",
+        "spatie/laravel-fractal": "^6.0",
+        "stevebauman/purify": "^6.2",
+        "symfony/http-client": "^7.0",
+        "symfony/mailgun-mailer": "^7.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

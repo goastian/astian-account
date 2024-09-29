@@ -79,7 +79,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public static function query()
     {
-        return request()->except(['_token', 'email', 'password','token']);
+        return request()->except(['_token', 'email', 'password', 'token']);
     }
 
     /**

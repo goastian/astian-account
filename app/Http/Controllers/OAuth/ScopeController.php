@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Http\Controllers\OAuth;
- 
-use App\Http\Controllers\OAuth\Scopes;
-use Laravel\Passport\Http\Controllers\ScopeController as ControllersScopeController;
 
-class ScopeController extends ControllersScopeController
+use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Controllers\OAuth\Scopes;
+
+//use Laravel\Passport\Http\Controllers\ScopeController as ControllersScopeController;
+
+class ScopeController extends Controller
 {
     use Scopes;
     /**
@@ -15,6 +17,6 @@ class ScopeController extends ControllersScopeController
      */
     public function all()
     {
-         return $this->scopes();
+        return $this->showAll($this->scopes(), null, 200, false);
     }
 }

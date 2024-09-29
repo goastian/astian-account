@@ -3,12 +3,13 @@
 namespace App\Models\Auth;
 
 use App\Models\Master;
-use App\Models\User\Employee;
 use App\Transformers\Session\SessionTransformer;
-use Illuminate\Database\Eloquent\Model;
+use Elyerr\ApiResponse\Assets\Asset;
 
 class Session extends Master
 {
+    use Asset;
+
     public $table = "sessions";
 
     public $view = "";
@@ -25,7 +26,8 @@ class Session extends Master
 
     public function getLastActivityAttribute($value)
     {
-        return date('Y-m-d H:i:s', $value);
-    }
+        $date = date('Y-m-d H:i:s', $value);
 
+        return $this->format_date($date);
+    }
 }

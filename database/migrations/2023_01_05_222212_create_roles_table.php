@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->uuid('id')->unique();
-            $table->string('name', 60);
+            $table->string('name', 60)->index();
             $table->string('description', 200);
+            $table->boolean('public')->default(0);
             $table->primary('id');
         });
     }

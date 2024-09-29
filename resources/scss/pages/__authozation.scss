@@ -1,0 +1,68 @@
+.authorization-card {
+    margin: 1em auto;
+    padding: 1em;
+    background-color: var(--light);
+    color: var(--first-color);
+    width: 95%;
+
+    @media (min-width:700px) {
+        width: 70%;
+    }
+
+    .card-head {
+        text-align: center;
+        font-weight: 800;
+        font-size: 1.3em;
+        text-transform: uppercase;
+    }
+
+    .card-body {
+        p {
+            font-size: 1.2em;
+
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+
+        .boxes {
+            display: flex;
+            justify-content: start;
+
+            ul {
+                list-style: disc;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5em;
+
+                li {
+                    flex: 1 1 100%;
+                    
+                    @media (min-width:700px) {
+                        flex: 1 1 calc(95% / 2);
+                    }
+
+                    &::first-letter {
+                        text-transform: uppercase;
+                    }
+
+                    margin-bottom: 0.2em;
+                }
+            }
+
+            .box {
+                flex: 1 1 calc(95% / 2);
+                text-align: center;
+
+                .btn {
+                    min-width: 80%;
+                    padding: 0.5em;
+                }
+            }
+
+            .box-lg {
+                flex: 1 1 100%;
+            }
+        }
+    }
+}
