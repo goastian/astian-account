@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Models\User\Role;
-use App\Models\User\Employee;
-use Illuminate\Support\Facades\DB;
-use App\Transformers\Role\RoleTransformer;
-use App\Http\Requests\UserRole\StoreRequest;
-use App\Http\Requests\UserRole\DestroyRequest;
-use App\Events\Employee\StoreEmployeeRoleEvent;
-use App\Events\Employee\DestroyEmployeeRoleEvent;
-use App\Transformers\Auth\EmployeeRoleTransformer;
 use App\Http\Controllers\GlobalController as Controller;
+use App\Http\Requests\UserRole\DestroyRequest;
+use App\Http\Requests\UserRole\StoreRequest;
+use App\Models\User\Employee;
+use App\Models\User\Role;
+use App\Transformers\Auth\EmployeeRoleTransformer;
+use App\Transformers\Role\RoleTransformer;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 
 class UserRoleController extends Controller
 {
@@ -20,10 +20,9 @@ class UserRoleController extends Controller
     {
         parent::__construct();
         $this->middleware('transform.request:' . EmployeeRoleTransformer::class)->only('store', 'update');
-        $this->middleware('scope:account,account_read')->only('index');
-        $this->middleware('scope:account,account_register')->only('store');
-        $this->middleware('scope:account,account_update')->only('update');
-
+        $this->middleware('scope:account_read')->only('index');
+        $this->middleware('scope:account_create')->only('store');
+        $this->middleware('scope:account_update')->only('update');
     }
 
     /**
@@ -35,7 +34,7 @@ class UserRoleController extends Controller
     {
         $roles = $user->roles()->get();
 
-        return $this->showAll($roles, EmployeeRoleTransformer::class);
+        return $this->showAll($roles, EmployeeRoleTransformer::class, 200, false);
     }
 
     /**
@@ -46,15 +45,17 @@ class UserRoleController extends Controller
      */
     public function store(StoreRequest $request, Employee $user)
     {
+
+        throw_if(Role::find($request->role_id)->public, new ReportError(__("this is a public role"), 403));
+
         DB::transaction(function () use ($request, $user) {
             $user->roles()->syncWithoutDetaching($request->role_id);
         });
 
-        StoreEmployeeRoleEvent::dispatch($this->authenticated_user());
-        
+        $this->privateChannel("StoreEmployeeRoleEvent", "Added new role");
+
         return $this->showOne(Role::find($request->role_id), RoleTransformer::class, 201);
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -68,7 +69,7 @@ class UserRoleController extends Controller
             $user->roles()->detach($role->id);
         });
 
-        DestroyEmployeeRoleEvent::dispatch($this->authenticated_user());
+        $this->privateChannel("DestroyEmployeeRoleEvent", "Role remove");
 
         return $this->showOne($role, $role->transformer);
     }

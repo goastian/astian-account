@@ -14,7 +14,7 @@ class SessionTransformer extends TransformerAbstract
     protected array $defaultIncludes = [
         //
     ];
-    
+
     /**
      * List of resources possible to include
      *
@@ -23,7 +23,7 @@ class SessionTransformer extends TransformerAbstract
     protected array $availableIncludes = [
         //
     ];
-    
+
     /**
      * A Fractal transformer.
      *
@@ -34,12 +34,13 @@ class SessionTransformer extends TransformerAbstract
         return [
             'id' => $session->id,
             'ip' => $session->ip_address,
-            'agente' => $session->user_agent,
-            'ultima_coneccion' => $session->last_activity,   
+            'agent' => $session->user_agent,
+            'last_activity' => $session->last_activity,
+            'actual' => request()->session()->getId() == $session->id ?: false,
             'links' => [
                 'parent' => route('sessions.index'),
-                'destroy' => route('sessions.destroy', ['session' => $session->id])
-            ]    
+                'destroy' => route('sessions.destroy', ['session' => $session->id]),
+            ],
         ];
     }
 }

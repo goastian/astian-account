@@ -2,64 +2,107 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Laravel\Passport\TokenRepository;
-use App\Http\Requests\Auth\LoginRequest;
-use Elyerr\ApiResponse\Events\LoginEvent;
-use Elyerr\ApiResponse\Events\LogoutEvent;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Laravel\Passport\RefreshTokenRepository;
+use App\Http\Controllers\GlobalController;
+use App\Models\Auth\Session;
 use App\Transformers\Auth\EmployeeTransformer;
+use Error;
+use ErrorException;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Cookie\CookieValuePrefix;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Http\Request;
+use Laravel\Passport\RefreshTokenRepository;
+use Laravel\Passport\TokenRepository;
 
-class AuthorizationController extends Controller
+class AuthorizationController extends GlobalController
 {
-    use JsonResponser;
 
-    public function __construct()
+    /**
+     * Encrypter
+     *
+     * @var \Illuminate\Contracts\Encryption\Encrypter
+     */
+    public $encrypter;
+
+    public function __construct(Encrypter $encrypter)
     {
-        $this->middleware('guest')->only('store');
-        $this->middleware('auth:api')->only('destroy');
+        parent::__construct();
+        $this->encrypter = $encrypter;
         $this->middleware('transform.request:' . EmployeeTransformer::class)->only('store');
     }
-    /**
-     * Handle an incoming authentication request.
-     *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(LoginRequest $request)
-    {
-        $request->authenticate();
-        $scoupes = $request->user()->roles()->get()->pluck('name')->implode(',');
-
-        $token = request()->user()->createToken($_SERVER['HTTP_USER_AGENT'], explode(',', $scoupes))->accessToken;
-
-        LoginEvent::dispatch(request()->user());
-
-        return response()->json(['data' => [
-            'Authorization' => $token,
-        ]], 201);
-    }
 
     /**
-     * Destruye la sesion en el cliente invalidado las credenciales.
+     * Destroy the session
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy()
+    public function destroy(Request $request)
     {
-        $accessToken = request()->user()->token();
+        try {
+            $access_token_id = $this->decode_token($request) ?: request()->user()->token()->id;
 
-        $tokenRepository = app(TokenRepository::class);
-        $refreshTokenRepository = app(RefreshTokenRepository::class);
+            $tokenRepository = app(TokenRepository::class);
+            $refreshTokenRepository = app(RefreshTokenRepository::class);
 
-        $tokenRepository->revokeAccessToken($accessToken->id);
+            $tokenRepository->revokeAccessToken($access_token_id);
+            $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($access_token_id);
 
-        $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($accessToken->id);
+        } catch (ErrorException $e) {}
 
-        LogoutEvent::dispatch();
+        $this->destroy_default_session($request);
 
-        return $this->message('La sesion ha sido cerrada.', 201);
+        return $this->message(__('Session has finished'), 200);
+    }
+
+    /**
+     * Get and decode the token jwt from the microservices
+     *
+     * @param Request $request
+     * @return String
+     */
+    public function decode_token(Request $request)
+    {
+        try {
+            $token = $request->cookie(env('PASSPORT_TOKEN'));
+
+            $token_decode = explode('.', $token);
+            $token_decode = $token_decode[1];
+            $token_decode = json_decode(base64_decode($token_decode));
+            return $token_decode->jti;
+        } catch (ErrorException $e) {
+            return null;
+        }
+    }
+
+    /**
+     * Remove default session from laravel
+     *
+     * @param Request $request
+     * @return void
+     */
+    public function destroy_default_session(Request $request)
+    {
+        /**
+         * decoding cookie from the default session from laravel
+         */
+        try {
+            if ($request->hasCookie(config('session.cookie'))) {
+                $value = $request->cookie(config('session.cookie'));
+                try {
+                    $session_id = CookieValuePrefix::remove(
+                        $this->encrypter->decrypt(
+                            $value,
+                            EncryptCookies::serialized(config('session.cookie'))
+                        )
+                    );
+                } catch (DecryptException $e) {
+                    $session_id = $value;
+                }
+            }
+            Session::find($session_id)->delete();
+        } catch (Error $e) {} catch (ErrorException $e) {}
+
     }
 }

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('broadcasts', function (Blueprint $table) {
             $table->uuid('id')->unique();
-            $table->string('channel', 100);
+            $table->string('channel', 100)->index();
             $table->string('description', 350);
             $table->timestamps();
             $table->primary('id');
