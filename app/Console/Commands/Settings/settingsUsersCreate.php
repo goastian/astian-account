@@ -15,7 +15,7 @@ class settingsUsersCreate extends Command
      *
      * @var string
      */
-    protected $signature = 'settings:create_user';
+    protected $signature = 'settings:create-user';
 
     /**
      * The console command description.

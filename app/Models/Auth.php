@@ -4,12 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Http\Controllers\OAuth\Scopes;
-use App\Models\User\Role;
-use App\Notifications\Auth\ResetPassword;
-use DateInterval;
 use DateTime;
+use DateInterval;
+use App\Models\User\Role;
+use Laravel\Passport\HasApiTokens;
 use Elyerr\ApiResponse\Assets\Asset;
+use App\Http\Controllers\OAuth\Scopes;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\Auth\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;

@@ -5,15 +5,16 @@
     <div class="terms-policy">
         <div class="form">
             <form action="{{ route('accept.terms') }}" method="post">
-                <h1>Astian .Inc</h1>
+                <h1>{{ config('app.name') }}</h1>
                 <p>
-                    {{ __('We have updated our privacy policy. To continue using our services, please accept the terms and conditions of Astian Inc.') }}
+                    {{ __('We have updated our privacy policy. To continue using our services, please accept the terms and conditions of :name.', ['name' => config('app.name')]) }}
                 </p>
                 <p>
                     <input name="accept_terms" id="accept_terms" value="{{ true }}" type="checkbox">
                     <label for="accept_terms">
-                        By choosing this option, you accept the <a href="{{ env('MIX_HOME_PAGE') }}" target="_black">Astian
-                            Inc</a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_black">Services Agreement,
+                        By choosing this option, you accept the <a href="{{ env('MIX_HOME_PAGE') }}" target="_black">
+                            {{ config('app.name') }}</a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_black">Services
+                            Agreement,
                             Privacy Statement</a>, and
                         <a href="{{ env('MIX_HOME_COOKIES') }}" target="_black"> Cookies Policy </a>.
                     </label>
