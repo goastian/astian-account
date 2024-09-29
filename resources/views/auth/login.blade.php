@@ -68,7 +68,7 @@
             <div class="page">
                 <div>
                     <h1>
-                        Astian. Inc
+                        {{ config('app.name') }}
                     </h1>
                 </div>
                 <div class="body">
