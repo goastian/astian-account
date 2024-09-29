@@ -1,24 +1,21 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthorizationController;
-use App\Http\Controllers\Broadcasting\BroadcastController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Role\RoleController;
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Role\GroupController;
+use App\Http\Controllers\OAuth\ScopeController;
+use App\Http\Controllers\Setting\AppController;
+use App\Http\Controllers\Role\RoleUserController;
+use App\Http\Controllers\User\UserRoleController;
+use App\Http\Controllers\User\UserGroupController;
 use App\Http\Controllers\Country\CountriesController;
 use App\Http\Controllers\OAuth\ClientAdminController;
 use App\Http\Controllers\OAuth\CredentialsController;
-use App\Http\Controllers\OAuth\PasspotConnectController;
-use App\Http\Controllers\OAuth\ScopeController;
 use App\Http\Controllers\Push\NotificationController;
-use App\Http\Controllers\Role\GroupController;
-use App\Http\Controllers\Role\RoleController;
-use App\Http\Controllers\Role\RoleUserController;
-use App\Http\Controllers\Setting\AppController;
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\User\UserGroupController;
-use App\Http\Controllers\User\UserNotificationController;
-use App\Http\Controllers\User\UserRoleController;
-use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\OAuth\PasspotConnectController;
+use App\Http\Controllers\User\UserNotificationController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 

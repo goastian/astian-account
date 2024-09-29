@@ -11,7 +11,7 @@ class settingsChannelsUpload extends Command
      *
      * @var string
      */
-    protected $signature = 'settings:channels_upload';
+    protected $signature = 'settings:channels-upload';
 
     /**
      * The console command description.
