@@ -1,8 +1,25 @@
-@import "bootstrap/scss/bootstrap";
+@import "__vars.scss"; 
+@import "__shared.scss";
 
-.errors {
-    color: rgb(226, 14, 14);
-    display: block;
-    font-size: 12px;
-    font-weight: bold;
-} 
+
+body {
+    margin: 0;
+    padding: 0;
+
+    .wrapper {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+
+        .content {
+            width: 100%;
+            min-height: 85vh
+        }
+    }
+}
+
+.router-link-active.router-link-exact-active {
+    color: var(--quaternary) !important;
+    font-weight: bold; 
+}

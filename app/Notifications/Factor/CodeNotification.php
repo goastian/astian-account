@@ -15,7 +15,7 @@ class CodeNotification extends Notification implements ShouldQueue
     /**
      * @var String
      */
-    private $code;
+    public $code;
 
     /**
      * Create a new notification instance.
@@ -24,7 +24,9 @@ class CodeNotification extends Notification implements ShouldQueue
      */
     public function __construct($code)
     {
-        $this->code = $code; 
+        $this->code = $code;
+        $this->queue = 'notify';
+
     }
 
     /**
@@ -47,12 +49,12 @@ class CodeNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject(Lang::get("TOKEN DE VERIFICACION 2FA"))
-                    ->line(Lang::get("Hemos recibido una solicitud de inicio de session usando el 2FA"))
-                    ->line(Lang::get("TOKEN : " . $this->code))
-                    ->line(Lang::get("Este codigo tiene un limite maximo de vida, expira en " . env('CODE_2FA_EXPIRE',1) . " minuto."))
-                    ->line(Lang::get("Si no fuiste tu, omite este mensaje y por seguridad cambia tu contraseña que ha sido vulnerada"))
-                    ->line('Gracias por usar nuestros servicios!');
+                    ->subject(__("Two Factor verification"))
+                    ->line(__("We have received a login application using the 2FA."))
+                    ->line(__("Code" . " : " . $this->code))
+                    ->line(__("This code has a maximum limit of life, it expires in") . " " . env('CODE_2FA_EXPIRE',1) . " ". __("minutes."))
+                    ->line(__("If you were not, omit this message and for security changes your password that has been violated"))
+                    ->line('Thanks for using our services!');
     }
 
     /**

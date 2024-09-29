@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Transformers\Auth\EmployeeTransformer;
 use Elyerr\ApiResponse\Assets\Asset;
 use Elyerr\ApiResponse\Assets\JsonResponser;
+use Elyerr\Echo\Client\PHP\Socket\Socket;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -15,9 +16,7 @@ use Laravel\Passport\TokenRepository;
 
 class GlobalController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
-
-    public $can_update = array();
+    use AuthorizesRequests, Socket, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
 
     public function __construct()
     {
@@ -26,19 +25,11 @@ class GlobalController extends Controller
 
     public function authenticated_user()
     {
-        return fractal(Auth::user(), EmployeeTransformer::class)->toArray();
+        $user = fractal(Auth::user(), EmployeeTransformer::class);
+
+        return json_decode(json_encode($user))->data;
     }
 
-    public function lowercase($value)
-    {
-        return strtolower($value);
-    }
-
-    public function uppercase($value)
-    {
-        return strtoupper($value);
-    }
-    
     /**
      * revoca todas las credenciales generadas del usuario authenticado
      * @param mixed $tokens
@@ -55,6 +46,5 @@ class GlobalController extends Controller
 
             $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
         }
-
     }
 }

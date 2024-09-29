@@ -1,59 +1,82 @@
-@extends('layouts.app')
+@extends('layouts.pages')
 
 @section('content')
     @if (session('status'))
-        <div class="alert alert-success my-3 text-center">
-            {{ session('status') }}
+        <div class="notify" id="notify">
+            <p>
+                {{ session('status') }}
+            </p>
         </div>
     @endif
 
-    <div class="card mt-5" style="width: 40%; margin:auto">
-        <form action="{{ route('login') }}" method="post">
-            @csrf
-            <div class="card-body">
-                <div class="card-title text-center">
-                    {{ __('Login') }}
+    <div class="login-form">
+
+        <div class="box">
+            <div class="login">
+                <div class="head">
+                    <p>
+                        {{ config('app.name') }}
+                    </p>
                 </div>
-                <div class="row row-cols-1 col-lg-12">
-                    <div class="col my-2">
-                        <label for="email">{{ __('Email') }}</label>
-                        <input class="form-control" type="email" name="email" placeholder="admin@email.com">
-                        @if ($errors->has('email'))
-                            @foreach ($errors->get('email') as $item)
-                                <span class="error">{{ $item }}</span>
+                <div class="body">
+                    <form action="{{ route('login') }}" method="post">
+                        @csrf
+
+                        <div class="item">
+                            <input type="email" name="email" placeholder="{{ __('Email') }}">
+                            @if ($errors->has('email'))
+                                @foreach ($errors->get('email') as $item)
+                                    <span class="errors">{{ $item }}</span>
+                                @endforeach
+                            @endif
+                        </div>
+
+                        <div class="item">
+                            <a class="" href="/forgot-password">{{ __('Forgot your password?') }}</a>
+                            <input type="password" name="password" placeholder="{{ __('Password') }}">
+                            @if ($errors->has('password'))
+                                @foreach ($errors->get('password') as $item)
+                                    <span class="errors">{{ $item }}</span>
+                                @endforeach
+                            @endif
+                        </div>
+                        <!--Do not remove this lines-->
+                        <div>
+                            @foreach ($query as $item => $value)
+                                <input type="hidden" id="{{ $item }}" name="{{ $item }}"
+                                    value="{{ $value }}">
                             @endforeach
-                        @endif
-                    </div>
+                        </div>
+                        <!--end of the lines-->
+                        <div class="buttons">
 
-                    <div class="col my-2">
-                        <label for="password">{{ __('Password') }}</label>
-                        <input class="form-control" type="password" name="password" placeholder="{{ __('Password') }}">
-                        @if ($errors->has('password'))
-                            @foreach ($errors->get('password') as $item)
-                                <span class="error">{{ $item }}</span>
-                            @endforeach
-                        @endif
-                    </div>
-                    <div>
+                            <button type="submit">
+                                {{ __('Sign in') }}
+                            </button>
 
-                        @foreach ($query as $item => $value)
-                            <input type="hidden" id="{{ $item }}" name="{{ $item }}"
-                                value="{{ $value }}">
-                        @endforeach
-
-                    </div>
-                    <div class="col my-4">
-
-                        <button class="btn btn-block d-block btn-secondary" type="submit" style="width: 40%">
-                            {{ __('Login') }}
-                        </button>
-                        <p>
-                            <a class="btn btn-link py-2" style="padding-left: 0"
-                                href="/forgot-password">{{ __('Forgot my Password') }}</a>
-                        </p>
-                    </div>
+                            <a href="{{ route('register') }}">
+                                {{ __("Don't have an account? Sign up.") }}
+                            </a>
+                        </div>
+                    </form>
                 </div>
             </div>
-        </form>
+        </div>
+
+        <div class="box">
+
+            <div class="page">
+                <div>
+                    <h1>
+                        Astian. Inc
+                    </h1>
+                </div>
+                <div class="body">
+                    <p>
+                        {{ __('A new way to browse the internet.') }}
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

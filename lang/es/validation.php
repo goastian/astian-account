@@ -131,7 +131,7 @@ return [
             'min' => 'La :attribute debe contener más de :min caracteres',
         ],
     ],
-    'attributes' => [
+   /* 'attributes' => [
         'address' => 'dirección',
         'age' => 'edad',
         'body' => 'contenido',
@@ -171,5 +171,5 @@ return [
         'category_id' => 'categoria_id',
         'category' => 'categoria',
         'check_out' => 'salida',
-    ],
+    ],*/
 ];

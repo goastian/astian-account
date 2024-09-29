@@ -1,0 +1,14 @@
+[
+    {
+        "name": "admin",
+        "description": "admin users"
+    },
+    {
+        "name": "client",
+        "description": "client users"
+    },
+    {
+        "name": "developer",
+        "description": "developer user"
+    }
+]

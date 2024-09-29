@@ -28,10 +28,10 @@ class CheckScopes extends middleware
         if (!$request->user() || !$request->user()->token()) {
             throw new AuthenticationException;
         }
-        //verificacion para usuarios no admins
+        //Verification for non-admin users
         if (!$request->user()->isAdmin()) {
             if (!$request->header('Authorization')) {
-                //comprueba que los scopes se encuentren en los scopes asignados al usuario
+                //Check that the scopes are within the scopes assigned to the user.
                 foreach ($scopes as $scope) {
                     throw_unless(collect($this->scopes())->contains('id', $scope),
                         new ReportError('no cuenta con los permisos para realizar esta operacion', 403));

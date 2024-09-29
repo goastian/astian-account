@@ -2,26 +2,26 @@
 
 namespace App\Exceptions;
 
-use Throwable;
-use Psr\Log\LogLevel;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Router;
 use App\Providers\RouteServiceProvider;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Support\Responsable;
-use Elyerr\ApiResponse\Exceptions\ReportError;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\RecordsNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
+use Illuminate\Routing\Router;
 use Illuminate\Session\TokenMismatchException;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Database\RecordsNotFoundException;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Routing\Exceptions\BackedEnumCaseNotFoundException;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Psr\Log\LogLevel;
 use Symfony\Component\HttpFoundation\Exception\SuspiciousOperationException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -79,16 +79,23 @@ class Handler extends ExceptionHandler
     {
 
         if ($e instanceof ModelNotFoundException) {
-            throw new ReportError(__("No se puede procesar la petición"), 400);
+            throw new ReportError(__("Not Found"), 404);
+        }
+
+        if ($e instanceof TokenMismatchException) {
+            if (request()->wantsJson()) {
+                throw new ReportError(__($e->getMessage()), 419);
+            }
+            return redirect('/');
         }
 
         if ($e instanceof AuthorizationException) {
-            throw new ReportError(__("No cuenta con los persmios requeridos"), 403);
+            throw new ReportError(__("Don't have the access rights"), 403);
         }
 
         if ($e instanceof OAuthAuthenticationException) {
-             
-             return RouteServiceProvider::redirectToLogin();
+
+            return RouteServiceProvider::redirectToLogin();
         }
 
         if (method_exists($e, 'render') && $response = $e->render($request)) {
@@ -100,7 +107,7 @@ class Handler extends ExceptionHandler
         }
 
         if ($e instanceof AccessDeniedHttpException) {
-            throw new ReportError(__("Acceso denegado"), 401);
+            throw new ReportError(__("Unauthorized"), 401);
         }
 
         $e = $this->prepareException($this->mapException($e));

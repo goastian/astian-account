@@ -22,7 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
-
+    
     /**
      * The application's route middleware groups.
      *
@@ -30,17 +30,19 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
+            \App\Http\Middleware\SecureHeaders::class,
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class, 
-            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CreateFreshApiToken::class,
+            \App\Http\Middleware\VerifyAccount::class,
         ],
 
         'api' => [
-            'throttle:api',
+            'throttle:800,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -69,6 +71,10 @@ class Kernel extends HttpKernel
         'scope' => \App\Http\Middleware\CheckForAnyScope::class,
         'wants.json' => \App\Http\Middleware\ResponseIsJson::class,
         'authorize' => \App\Http\Middleware\DenyGrantType::class,
-        '2fa-mail' => \App\Http\Middleware\Auth2faMiddleware::class
+        'verify.account' => \App\Http\Middleware\VerifyAccount::class,
+        'verify.credentials' => \App\Http\Middleware\verifyCredentials::class,
+        '2fa-mail' => \App\Http\Middleware\Auth2faMiddleware::class,
+        'reactive.account' => \App\Http\Middleware\ReactiveAccount::class,
+        'check.terms' => \App\Http\Middleware\CheckTerms::class,
     ];
 }

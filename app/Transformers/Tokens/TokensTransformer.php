@@ -35,13 +35,13 @@ class TokensTransformer extends TransformerAbstract
     public function transform($token)
     {
         return [
-            'identificador' => $token->id,
-            'agente' => $token->name,
-            'habilidad' => implode(",",$token->scopes),
-            'revocado' => $token->revoked,
-            'expira' => $token->expires_at ? $this->format_date($token->expires_at) : null,
-            'creado' => $token->created_at ? $this->format_date($token->created_at) : null,
-            'actualizado' => $token->updated_at ? $this->format_date($token->updated_at) : null,
+            'id' => $token->id,
+            'agent' => $token->name,
+            'scope' => implode(",",$token->scopes),
+            'revoked' => $token->revoked,
+            'expires' => $token->expires_at ? $this->format_date($token->expires_at) : null,
+            'created' => $token->created_at ? $this->format_date($token->created_at) : null,
+            'updated' => $token->updated_at ? $this->format_date($token->updated_at) : null,
             'links' => [
                 'self' => route('tokens.index'),
                 'store' => route('tokens.store'),

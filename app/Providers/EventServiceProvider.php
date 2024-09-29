@@ -13,68 +13,6 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
 
-        //Employee
-        \App\Events\Employee\StoreEmployeeEvent::class => [
-            \App\Listeners\Employee\StoreEmployeeListener::class,
-        ],
-
-        \App\Events\Employee\UpdateEmployeeEvent::class => [
-            \App\Listeners\Employee\UpdateEmployeeListener::class,
-        ],
-
-        \App\Events\Employee\DisableEmployeeEvent::class => [
-            \App\Listeners\Employee\DisableEmployeeListener::class,
-        ],
-
-        \App\Events\Employee\EnableEmployeeEvent::class => [
-            \App\Listeners\Employee\EnableEmployeeListener::class,
-        ],
-
-        \App\Events\Employee\StoreEmployeeRoleEvent::class => [
-            \App\Listeners\Employee\StoreEmployeeRoleListener::class,
-        ],
-
-        \App\Events\Employee\DestroyEmployeeRoleEvent::class => [
-            \App\Listeners\Employee\DestroyEmployeeRoleListener::class,
-        ],
-
-        //roles
-        \App\Events\Role\StoreRoleEvent::class => [
-            \App\Listeners\Role\StoreRoleListener::class,
-        ],
-
-        \App\Events\Role\UpdateRoleEvent::class => [
-            \App\Listeners\Role\UpdateRoleListener::class,
-        ],
-
-        \App\Events\Role\DestroyRoleEvent::class => [
-            \App\Listeners\Role\DestroyRoleListener::class,
-        ],
-
-        //reesset tokens
-        \App\Events\OAuth\RevokeCredentialsEvent::class => [
-            \App\Listeners\OAuth\RevokeCredentialsListener::class,
-        ],
-
-        //broadcast
-        \App\Events\Broadcast\StoreBroadcastEvent::class => [
-            \App\Listeners\Broadcast\StoreBroadcastListener::class,
-        ],
-
-        \App\Events\Broadcast\DestroyBroadcastEvent::class => [
-            \App\Listeners\Broadcast\DestroyBroadcastListener::class,
-        ],
-
-        //session
-        \App\Events\Auth\RemoveSessionEvent::class => [
-            \App\Listeners\Auth\RemoveSessionListener::class,
-        ],
-
-         \App\Events\Auth\M2FAEvent::class => [
-            \App\Listeners\Auth\M2FAListener::class,
-        ],
-
-
     ];
 
     /**
