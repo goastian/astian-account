@@ -5,12 +5,11 @@ import { router } from "./app/config/rutes.js";
 import { components } from "./app/config/globalComponents";
 import { $channels, $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
+import { $customElement } from "./app/config/customElements.js";
 
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";
-
-import "./app/config/matomo.js";
 
 try {
     const res = await $server.get("/api/gateway/user");
@@ -28,6 +27,7 @@ try {
         app.config.globalProperties.$echo = $echo;
         app.config.globalProperties.$channels = $channels;
         app.config.globalProperties.$server = $server;
+        app.config.globalProperties.$ce = $customElement;
         app.use(router);
         app.use(ElementPlus);
         /**
