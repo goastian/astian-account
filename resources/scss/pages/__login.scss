@@ -1,0 +1,183 @@
+.login-form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    min-height: inherit;
+
+    @media (min-width:800px) {
+        flex-wrap: nowrap;
+    }
+
+    .box {
+        flex: 1 1 100%;
+        min-height: inherit;
+
+        @media (min-width:800px) {
+            flex: 1 1 calc(100% / 2);
+        }
+
+        &:first-child {
+            display: flex;
+
+            .login {
+                margin: auto;
+                padding: 0.1em;
+                border-radius: 1em;
+                width: 90%;
+
+                @media (min-width:480px) {
+                    width: 85%;
+                    padding: 0.5em;
+                }
+
+                @media (min-width:480px) {
+                    width: 70%;
+                }
+
+                @media (min-width:700px) {
+                    width: 50%;
+                }
+
+                box-shadow: 0px 1px 5px -2px var(--primary);
+                -webkit-box-shadow: 0px 1px 5px -2px var(--primary);
+                -moz-box-shadow: 0px 1px 5px -2px var(--primary);
+
+                @media (min-width: 800px) {
+                    width: 90%;
+                }
+
+                @media (min-width: 900px) {
+                    width: 70%;
+                }
+
+                @media (min-width: 1124px) {
+                    width: 60%;
+                }
+
+                @media (min-width: 1300px) {
+                    width: 55%;
+                }
+
+
+                .head {
+                    text-align: center;
+
+                    p {
+                        color: var(--first-color);
+                        font-size: 1.5em;
+                        font-weight: bold;
+                    }
+                }
+
+                .body {
+
+                    margin-top: 5%;
+
+                    form {
+                        padding: 0.5em;
+
+                        @media (min-width:480px) {
+                            padding: 1em;
+                        }
+
+                        .item {
+
+                            padding: 0.3em 1em;
+
+                            a {
+                                display: block;
+                                text-align: end;
+                                color: var(--primary);
+                            }
+
+                            input {
+                                display: block;
+                                padding: 0.6em 0.6em;
+                                border-radius: 0.5em;
+                                width: 100%;
+                            }
+                        }
+
+                        .buttons {
+                            padding: 1em;
+
+                            button {
+                                display: block;
+                                width: 40%;
+                                border: 1px solid var(--primary);
+                                background-color: var(--primary);
+                                color: var(--white);
+                                border-radius: 0.5em;
+                                padding: 0.5em;
+                                cursor: pointer;
+                            }
+
+                            a {
+                                display: block;
+                                padding-top: 5%;
+                                color: var(--primary);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        &:last-child {
+            display: flex;
+            background: var(--primary);
+            justify-content: center;
+            align-items: center;
+
+            .page {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                min-height: inherit;
+
+                div {
+                    text-align: center;
+
+                    h1 {
+                        font-size: 5em;
+                        color: var(--white);
+                        // animation: slide 5s linear infinite;
+                    }
+
+                    p {
+                        font-size: large;
+                        color: var(--first-color);
+                        font-size: 2em;
+                    }
+
+
+                    @keyframes slide {
+                        0% {
+                            color: var(--white);
+                        }
+
+                        25% {
+                            color: var(--secondary);
+                        }
+
+                        50% {
+                            color: var(--ternary);
+                        }
+
+
+                        75% {
+                            color: var(--quaternary);
+                        }
+
+                        100% {
+                            color: var(--code);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+}

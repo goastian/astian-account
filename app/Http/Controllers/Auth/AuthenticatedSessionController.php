@@ -7,8 +7,6 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use App\Transformers\Auth\EmployeeTransformer;
 use Elyerr\ApiResponse\Assets\JsonResponser;
-use Elyerr\ApiResponse\Events\LoginEvent;
-use Elyerr\ApiResponse\Events\LogoutEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,8 +18,8 @@ class AuthenticatedSessionController extends Controller
     {
         $this->middleware('auth:api')->only('profile');
         $this->middleware('auth')->only('destroy');
+        $this->middleware('reactive.account')->only('store');
         $this->middleware('2fa-mail')->only('store');
-
     }
 
     /**
@@ -47,8 +45,6 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        LoginEvent::dispatch(Auth::user());
-
         return RouteServiceProvider::home();
     }
 
@@ -62,8 +58,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-
-        LogoutEvent::dispatch(Auth::user());
 
         return $request->wantsJson() ? route('login') : redirect(env('APP_URL'));
     }

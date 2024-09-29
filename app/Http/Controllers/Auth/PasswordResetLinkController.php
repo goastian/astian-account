@@ -3,15 +3,21 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
 class PasswordResetLinkController extends Controller
 {
+    /**
+     * Show view to sent link to change password
+     */
     public function create()
     {
+        if (request()->user()) {
+            return redirect('/');
+        }
+
         return view('auth.forgot-password');
     }
 
@@ -41,9 +47,8 @@ class PasswordResetLinkController extends Controller
 
         if ($request->wantsJson()) {
             return response()->json(['status' => __($status)]);
-        }   
+        }
 
-        return redirect('login')->with('status', __($status)); 
-       
+        return redirect('login')->with('status', __($status));
     }
 }

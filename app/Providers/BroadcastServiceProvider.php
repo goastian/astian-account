@@ -14,12 +14,14 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
-        $middleware = request()->cookie(env('COOKIE_NAME', 'auth_server')) ?
-        ['middleware' => ['web']] :
-        ['middleware' => ['auth:api']];
-
-        Broadcast::routes($middleware);
+        /**
+         * Ckeckig autorization options
+         */
+        if (request()->header('Authorization')) {
+            Broadcast::routes(['middleware' => ['auth:api']]);
+        } else {
+            Broadcast::routes();
+        }
 
         require base_path('routes/channels.php');
     }

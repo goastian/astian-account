@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Events\OAuth\RevokeCredentialsEvent;
-use App\Http\Controllers\GlobalController as Controller; 
+use App\Http\Controllers\GlobalController as Controller;
 use Illuminate\Support\Facades\Auth;
 
 class CredentialsController extends Controller
@@ -18,15 +17,15 @@ class CredentialsController extends Controller
      * revoca todas las credenciales del usuario autnteicado
      * @return Json
      */
-    public function revokeCredentiasl()
+    public function revokeCredentials()
     {
         $tokens = Auth::user()->tokens;
 
         $this->removeCredentials($tokens);
 
-        RevokeCredentialsEvent::dispatch($this->authenticated_user());
+        //send event
+        $this->privateChannel("RevokeCredentialsEvent." . request()->user()->id, "Credentials remove");
 
-        return $this->message("Todas tus credenciales han sido revocadas exitosamente con fecha " . now());
-
-    } 
+        return $this->message(__("All of your credentials have been canceled.") . now());
+    }
 }

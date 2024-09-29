@@ -34,7 +34,7 @@ class EmployeeRoleTransformer extends TransformerAbstract
 
         return [
             'id' => $data->id,
-            'role' => $data->name,
+            'scope' => $data->name,
             'links' => [
                 'parent' => route('users.roles.index', ['user' => request('user')->id]),
                 'store' => route('users.roles.store', ['user' => request('user')->id]),
@@ -47,7 +47,7 @@ class EmployeeRoleTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
-            'role' => 'role_id',
+            'scope_id' => 'role_id',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -56,7 +56,7 @@ class EmployeeRoleTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attribute = [
-            'role_id' => 'role',
+            'role_id' => 'scope_id',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;

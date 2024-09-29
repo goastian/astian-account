@@ -35,10 +35,10 @@ class BroadcastTransformer extends TransformerAbstract
     {
         return [
             'id' => $broadcast->id,
-            'canal' => $broadcast->channel,
-            'descripcion' => $broadcast->description,
-            'registrado' => $this->format_date($broadcast->created_at),
-            'actualizado' => $this->format_date($broadcast->updated_at),
+            'channel' => $broadcast->channel,
+            'description' => $broadcast->description,
+            'created' => $this->format_date($broadcast->created_at),
+            'updated' => $this->format_date($broadcast->updated_at),
             'links' => [
                 'parent' => route('broadcasts.index'),
                 'store' => route('broadcasts.store'),
@@ -50,8 +50,8 @@ class BroadcastTransformer extends TransformerAbstract
     public static function transformRequest($index)
     {
         $attribute = [
-            'canal' => 'channel',
-            'descripcion' => 'description',
+            'channel' => 'channel',
+            'description' => 'description',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -60,8 +60,8 @@ class BroadcastTransformer extends TransformerAbstract
     public static function transformResponse($index)
     {
         $attribute = [
-            'channel' => 'canal',
-            'description' => 'descripcion',
+            'channel' => 'channel',
+            'description' => 'description',
         ];
 
         return isset($attribute[$index]) ? $attribute[$index] : null;
@@ -71,8 +71,8 @@ class BroadcastTransformer extends TransformerAbstract
     {
         $attributes = [
             'id' => 'id',
-            'canal' => 'channel',
-            'descripcion' => 'description',
+            'channel' => 'channel',
+            'description' => 'description',
             'creado' => 'created_at',
             'actualizado' => 'updated_at',
         ];

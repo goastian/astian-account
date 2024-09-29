@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Broadcasting;
 
-use App\Events\Broadcast\DestroyBroadcastEvent;
-use App\Events\Broadcast\StoreBroadcastEvent;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Models\Broadcasting\Broadcast;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
 
 class BroadcastController extends Controller
 {
@@ -52,7 +51,7 @@ class BroadcastController extends Controller
             $broadcast->save();
         });
 
-        StoreBroadcastEvent::dispatch();
+        $this->privateChannel("StoreBroadcastEvent", "New channel created");
 
         return $this->showOne($broadcast, $broadcast->transformer, 201);
     }
@@ -65,13 +64,15 @@ class BroadcastController extends Controller
      */
     public function destroy(Broadcast $broadcast)
     {
-        if ($broadcast->channel == 'auth') {
-            throw new ReportError(__('es un canal por defecto del sistema y no puede ser eliminado'), 403);
-        }
+        collect(Broadcast::channelsByDefault())->map(function ($value, $key) use ($broadcast) {
+            if ($key == $broadcast->channel) {
+                throw new ReportError(Lang::get('This channel cannot be removed; this channel belongs by default to the system.'), 403);
+            }
+        });
 
         $broadcast->delete();
 
-        DestroyBroadcastEvent::dispatch();
+        $this->privateChannel("DestroyBroadcastEvent", "Channel deleted");
 
         return $this->showOne($broadcast, $broadcast->transformer);
     }
