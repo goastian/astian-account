@@ -11,12 +11,10 @@ use Illuminate\Support\Facades\Lang;
 
 class BroadcastController extends Controller
 {
-
     public function __construct(Broadcast $broadcast)
     {
         parent::__construct();
         $this->middleware('scope:broadcast');
-        $this->middleware('transform.request:' . $broadcast->transformer)->only('store');
     }
 
     /**
@@ -65,7 +63,8 @@ class BroadcastController extends Controller
     public function destroy(Broadcast $broadcast)
     {
         collect(Broadcast::channelsByDefault())->map(function ($value, $key) use ($broadcast) {
-            if ($key == $broadcast->channel) {
+            dd($key);
+            if ($value == $broadcast->channel) {
                 throw new ReportError(Lang::get('This channel cannot be removed; this channel belongs by default to the system.'), 403);
             }
         });

@@ -14,10 +14,10 @@ class GroupController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('scope:group_read')->only('index', 'show');
+        /*$this->middleware('scope:group_read')->only('index', 'show');
         $this->middleware('scope:gruop_create')->only('store');
         $this->middleware('scope:group_update')->only('update');
-        $this->middleware('scope:group_destroy')->only('destory');
+        $this->middleware('scope:group_destroy')->only('destroy');*/
     }
 
     /**

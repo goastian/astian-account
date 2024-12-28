@@ -1,14 +1,255 @@
 [
     {
-        "name": "admin",
-        "description": "admin users"
+        "name": "administrator",
+        "description": "Administrators who have full access to the system and can manage users, settings, and overall functionality.",
+        "services": [
+            {
+                "name": "admin",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "full",
+                        "description": "Comprehensive access to all system functionalities.",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "groups",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "disable",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "enable",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "users",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "disable",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "enable",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "channels",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "apps",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            }
+        ]
     },
     {
-        "name": "client",
-        "description": "client users"
+        "name": "customer",
+        "description": "Standard access permissions for client users.",
+        "services": [
+            {
+                "name": "client",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            }
+        ]
     },
     {
         "name": "developer",
-        "description": "developer user"
+        "description": "Environment for developers to build, test, and deploy applications.",
+        "services": [
+            {
+                "name": "clients",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "api",
+                "description": "",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            }
+        ]
     }
 ]

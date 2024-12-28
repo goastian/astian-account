@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,16 +12,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('apps', function (Blueprint $table) {
+        Schema::create('scopes', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('name', 150)->unique();
-            $table->string('url', 200)->unique();
-            $table->string('icon', 150);
-            $table->string("title");
-            $table->longText('description')->nullable();
+            $table->uuid('service_id');
+            $table->uuid('role_id');
+            $table->boolean('requires_payment')->default(false);
+            $table->boolean('public')->default(false);
+            $table->boolean('active')->default(false);
+            $table->decimal('price', 8, 2)->default(0);
             $table->uuid('created_by')->nullable();
             $table->uuid('updated_by')->nullable();
-            $table->timestamps(); 
+            $table->timestamps();
         });
     }
 
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('apps');
+        Schema::dropIfExists('scopes');
     }
 };

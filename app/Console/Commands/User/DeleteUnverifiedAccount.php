@@ -2,18 +2,18 @@
 
 namespace App\Console\Commands\User;
 
-use App\Models\User\Employee;
+use App\Models\User\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class RemoveUnverifiedAccount extends Command
+class DeleteUnverifiedAccount extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'users:remove-unverified-account';
+    protected $signature = 'users:delete-unverified-account';
 
     /**
      * The console command description.
@@ -25,14 +25,13 @@ class RemoveUnverifiedAccount extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
         $this->info("Delete unverified user account (Clients only)");
         Log::info("Delete unverified user account (Clients only)");
-        $user = new Employee();
+        $user = new User();
         $user->remove_clients_unverified();
-
     }
 }

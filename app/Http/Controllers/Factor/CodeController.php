@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Factor;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth2faMiddleware;
 use App\Models\Factor\Code;
-use App\Models\User\Employee;
+use App\Models\User\User;
 use App\Providers\RouteServiceProvider;
 use DateInterval;
 use DateTime;
@@ -90,7 +90,7 @@ class CodeController extends Controller
             ]);
         }
 
-        Auth::login(Employee::where('email', $code->email)->first());
+        Auth::login(User::where('email', $code->email)->first());
 
         Code::destroyToken($code->status);
 
@@ -145,7 +145,7 @@ class CodeController extends Controller
             return $this->message(__('Token expired'));
         }
 
-        $user = Employee::find($request->user()->id);
+        $user = User::find($request->user()->id);
 
         $user->m2fa = $user->m2fa ? 0 : 1;
         $user->push();

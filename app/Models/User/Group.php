@@ -21,11 +21,17 @@ class Group extends Master
     protected $fillable = [
         'name',
         'description',
+        'system',
+        'slug'
+    ];
+
+    public $casts = [
+        'system' => 'boolean',
     ];
 
     public function users()
     {
-        return $this->belongsToMany(Employee::class, "group_user", "group_id", "user_id");
+        return $this->belongsToMany(User::class, "group_user", "group_id", "user_id");
     }
 
     /**

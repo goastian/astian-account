@@ -29,10 +29,13 @@ class settingsChannelsUpload extends Command
     {
         $this->info("Upload channels");
         $this->upload_groups();
-        $this->info("Uploaded succesfully");
-
+        $this->info("Uploaded successfully");
     }
 
+    /**
+     * Upload default channels
+     * @return void
+     */
     public function upload_groups()
     {
         array_map(function ($channel) {
@@ -41,6 +44,7 @@ class settingsChannelsUpload extends Command
                 [
                     'channel' => $channel->channel,
                     'description' => $channel->description,
+                    'system' => true,
                 ])->save();
         }, Broadcast::channelsByDefault());
     }

@@ -30,11 +30,7 @@ class GlobalController extends Controller
         return json_decode(json_encode($user))->data;
     }
 
-    /**
-     * revoca todas las credenciales generadas del usuario authenticado
-     * @param mixed $tokens
-     * @return void
-     */
+    
     public function removeCredentials($tokens)
     {
         $tokenRepository = app(TokenRepository::class);

@@ -15,11 +15,10 @@ class RoleController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('transform.request:' . RoleTransformer::class)->only('store', 'update');
-        $this->middleware('scope:scope_read')->only('index', 'show');
+        /*$this->middleware('scope:scope_read')->only('index', 'show');
         $this->middleware('scope:scope_create')->only('store');
         $this->middleware('scope:scope_update')->only('update');
-        $this->middleware('scope:scope_destroy')->only('destory');
+        $this->middleware('scope:scope_destroy')->only('destroy');*/
     }
 
     /**

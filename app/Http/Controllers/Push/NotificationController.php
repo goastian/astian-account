@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Push;
 
 use App\Http\Controllers\GlobalController as Controller;
-use App\Models\User\Employee;
+use App\Models\User\User;
 use App\Models\User\Role;
 use App\Notifications\Info\Alert;
 use Error;
@@ -18,7 +18,7 @@ class NotificationController extends Controller
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('scope:notify');
+        //$this->middleware('scope:notify');
     }
 
     /**
@@ -40,7 +40,7 @@ class NotificationController extends Controller
         try {
 
             if ($request->scope == '*') {
-                $users = Employee::where('id', '!=', $request->user()->id)->get();
+                $users = User::where('id', '!=', $request->user()->id)->get();
             } else {
                 $users = Role::where('name', $request->scope)->first()->users()->get();
             }

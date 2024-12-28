@@ -1,110 +1,54 @@
 [
     {
-        "name": "assets",
-        "description": "Manage the process of new apps and configurations.",
-        "public": 0,
-        "required_payment": 0
+        "name": "full",
+        "description": "Full access"
     },
     {
-        "name": "notify",
-        "description": "Send push notifications",
-        "public": 0,
-        "required_payment": 0
+        "name": "view",
+        "description": "View and access the details of the resource."
     },
     {
-        "name": "scope_destroy",
-        "description": "Delete roles",
-        "public": 0,
-        "required_payment": 0
+        "name": "create",
+        "description": "Create new instances of the resource."
     },
     {
-        "name": "scope_update",
-        "description": "Update roles",
-        "public": 0,
-        "required_payment": 0
+        "name": "show",
+        "description": "Display detailed information about a specific resource."
     },
     {
-        "name": "scope_create",
-        "description": "Create roles",
-        "public": 0,
-        "required_payment": 0
+        "name": "update",
+        "description": "Modify existing instances of the resource."
     },
     {
-        "name": "scope_read",
-        "description": "View roles",
-        "public": 0,
-        "required_payment": 0
+        "name": "destroy",
+        "description": "Delete existing instances of the resource."
     },
     {
-        "name": "account_disable",
-        "description": "Disable user accounts",
-        "public": 0,
-        "required_payment": 0
+        "name": "disable",
+        "description": "Temporarily deactivate the resource."
     },
     {
-        "name": "account_enable",
-        "description": "Enable user accounts",
-        "public": 0,
-        "required_payment": 0
+        "name": "enable",
+        "description": "Reactivate a previously disabled resource."
     },
     {
-        "name": "account_update",
-        "description": "Update user account",
-        "public": 0,
-        "required_payment": 0
+        "name": "export",
+        "description": "Export data related to the resource in a specific format."
     },
     {
-        "name": "account_create",
-        "description": "granted to register new users",
-        "public": 0,
-        "required_payment": 0
+        "name": "import",
+        "description": "Import data into the system to create or update the resource."
     },
     {
-        "name": "account_read",
-        "description": "View users",
-        "public": 0,
-        "required_payment": 0
+        "name": "archive",
+        "description": "Move the resource to an archive state for long-term storage."
     },
     {
-        "name": "broadcast",
-        "description": "Full access to manage broadcasting channels",
-        "public": 0,
-        "required_payment": 0
+        "name": "restore",
+        "description": "Restore a previously archived or deleted resource."
     },
     {
-        "name": "client",
-        "description": "Default access for the client",
-        "public": 0,
-        "required_payment": 0
-    },
-    {
-        "name": "admin",
-        "description": "full system access",
-        "public": 0,
-        "required_payment": 0
-    },
-    {
-        "name": "group_read",
-        "description": "View groups",
-        "public": 0,
-        "required_payment": 0
-    },
-    {
-        "name": "gruop_create",
-        "description": "Create groups",
-        "public": 0,
-        "required_payment": 0
-    },
-    {
-        "name": "group_update",
-        "description": "Update groups",
-        "public": 0,
-        "required_payment": 0
-    },
-    {
-        "name": "group_destroy",
-        "description": "Delete groups",
-        "public": 0,
-        "required_payment": 0
+        "name": "share",
+        "description": "Grant access to the resource to other users or groups."
     }
 ]

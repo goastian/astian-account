@@ -4,7 +4,7 @@ namespace App\Transformers\Auth;
 
 use League\Fractal\TransformerAbstract;
 
-class EmployeeGroupTransformaer extends TransformerAbstract
+class UserGroupTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -41,4 +41,16 @@ class EmployeeGroupTransformaer extends TransformerAbstract
             ],
         ];
     }
+
+
+    /**
+     * Retrieve the all keys available for this model
+     * @param mixed $index
+     * @return string|null
+     */
+    public static function getOriginalAttributes($index)
+    {
+
+    }
+
 }

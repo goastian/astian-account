@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User\Employee;
+use App\Models\User\User;
 use App\Notifications\Client\ClientRegistered;
 use DateInterval;
 use DateTime;
@@ -32,7 +32,7 @@ class RegisterClientController extends Controller
      *
      * @param Request $request
      */
-    public function store(Request $request, Employee $client)
+    public function store(Request $request, User $client)
     {
         $this->validate($request, [
             'name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],
@@ -41,7 +41,7 @@ class RegisterClientController extends Controller
             'password' => ['required', 'confirmed', 'min:8'],
             //'address' => ['nullable', 'max:150'],
             //'phone' => ['nullable', 'max:25'],
-            'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
+            'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
             'accept_terms' => ['required']
         ]);
 
@@ -64,9 +64,9 @@ class RegisterClientController extends Controller
     /**
      *
      * @param Request $request
-     * @param Employee $user
+     * @param User $user
      */
-    public function verify_account(Request $request, Employee $user)
+    public function verify_account(Request $request, User $user)
     {
         try {
 

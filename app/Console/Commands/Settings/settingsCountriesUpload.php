@@ -23,19 +23,24 @@ class settingsCountriesUpload extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
         $this->info("Upload countries");
-        $this->upload_contries();
+        $this->upload_countries();
         $this->info("Uploaded succesfully");
-
     }
 
-    public function upload_contries()
+    /**
+     * Upload default countries
+     * @return void
+     */
+    public function upload_countries()
     {
-        array_map(function ($country) {
+        $countries = Country::defaultCountries();
+
+        foreach ($countries as $country) {
             Country::updateOrcreate(
                 ['name_en' => $country->name_en],
                 [
@@ -51,7 +56,8 @@ class settingsCountriesUpload extends Command
                     "tld" => $country->tld,
                     "km2" => $country->km2,
                     "emoji" => $country->emoji,
-                ])->save();
-        }, Country::defaultCountries());
+                ]
+            )->save();
+        }
     }
 }

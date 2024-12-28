@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,12 +12,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('2fa', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('status')->index();
-            $table->string('email')->index();
-            $table->string('code');
-            $table->dateTime('created_at'); 
+            $table->uuid('subscription_id');
+            $table->decimal('amount', 8, 2);
+            $table->string('currency');
+            $table->enum('status', ['pending', 'successful', 'failed']);
+            $table->timestamps();
         });
     }
 
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('2fa');
+        Schema::dropIfExists('transactions');
     }
 };
