@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Employee\StoreRequest;
-use App\Http\Requests\Employee\UpdateRequest;
-use App\Models\User\Employee;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
+use App\Models\User\User;
 use App\Notifications\Auth\UserDisableNotification;
 use App\Notifications\Client\ClientDisableNotification;
-use App\Notifications\Employee\CreatedNewUser;
+use App\Notifications\User\CreatedNewUser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Error;
 use Illuminate\Http\Request;
@@ -19,15 +19,14 @@ use Illuminate\Support\Facades\Notification;
 class UserController extends Controller
 {
 
-    public function __construct(Employee $user)
+    public function __construct(User $user)
     {
         parent::__construct();
-        $this->middleware('transform.request:' . $user->transformer)->only('store', 'update');
-        $this->middleware('scope:account_read')->only('index', 'show');
+        /*$this->middleware('scope:account_read')->only('index', 'show');
         $this->middleware('scope:account_create')->only('store');
         $this->middleware('scope:account_update,client')->only('update');
         $this->middleware('scope:account_disable,client')->only('disable');
-        $this->middleware('scope:account_enable')->only('enable');
+        $this->middleware('scope:account_enable')->only('enable');*/
     }
 
     /**
@@ -35,7 +34,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Employee $user)
+    public function index(User $user)
     {
         throw_if(request()->user()->isClient(), new ReportError("The client does not have access rights to the content", 403));
 
@@ -52,7 +51,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request, Employee $user)
+    public function store(StoreRequest $request, User $user)
     {
 
         throw_if(request()->user()->isClient(), new ReportError("The client does not have access rights to the content", 403));
@@ -95,7 +94,7 @@ class UserController extends Controller
     {
         $this->deny_action($id);
 
-        $user = Employee::withTrashed()->find($id);
+        $user = User::withTrashed()->find($id);
 
         return $this->showOne($user, $user->transformer);
     }
@@ -107,7 +106,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateRequest $request, Employee $user)
+    public function update(UpdateRequest $request, User $user)
     {
         DB::transaction(function () use ($request, $user) {
 
@@ -166,7 +165,6 @@ class UserController extends Controller
                 $user->push();
                 $this->privateChannel("UpdateEmployeeEvent", "User updated");
             }
-
         });
 
         return $this->showOne($user, $user->transformer, 201);
@@ -177,13 +175,13 @@ class UserController extends Controller
      *
      * @return Bool
      */
-    public function disable(Request $request, Employee $user)
+    public function disable(Request $request, User $user)
     {
         //is not client and user id is request user id
         throw_if((!$user->isClient() && $request->user()->id == $user->id) ||
-            //authenticated user is not client and user is client
+                //authenticated user is not client and user is client
             (!$request->user()->isClient() && $user->isClient()) ||
-            //is client and request user id is diferent
+                //is client and request user id is diferent
             ($request->user()->isClient() && $request->user()->id != $user->id), new ReportError("The client does not have access rights to the content", 403));
 
         //Throw an exception if Two-Factor Authentication is enabled
@@ -221,7 +219,7 @@ class UserController extends Controller
 
         try {
 
-            $user = Employee::onlyTrashed()->find($id);
+            $user = User::onlyTrashed()->find($id);
             //enable user
             $user->restore();
 

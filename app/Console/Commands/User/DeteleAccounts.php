@@ -2,18 +2,18 @@
 
 namespace App\Console\Commands\User;
 
-use App\Models\User\Employee;
+use App\Models\User\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class RemoveAccounts extends Command
+class DeteleAccounts extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'users:remove-accounts';
+    protected $signature = 'users:delete-accounts';
 
     /**
      * The console command description.
@@ -25,13 +25,13 @@ class RemoveAccounts extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
         $this->info("Delete user accounts (clients only)");
         Log::info("Delete user accounts (clients only)");
-        $user = new Employee();
+        $user = new User();
         $user->remove_accounts();
     }
 }

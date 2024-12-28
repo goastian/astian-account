@@ -5,14 +5,14 @@ namespace App\Http\Controllers\Role;
 use App\Models\User\Role;
 use Illuminate\Http\Request;
 use App\Http\Controllers\GlobalController as Controller;
-use App\Models\User\Employee;
+use App\Models\User\User;
 
 class RoleUserController extends Controller
 {
 
     public function __construct(){
         parent::__construct();
-        $this->middleware('scope:account_read,scope_read');
+       // $this->middleware('scope:account_read,scope_read');
     }
 
     /**
@@ -20,7 +20,7 @@ class RoleUserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Role $role, Employee $employee)
+    public function index(Role $role, User $employee)
     {
         $users = $role->users()->get();
 

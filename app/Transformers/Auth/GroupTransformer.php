@@ -46,6 +46,11 @@ class GroupTransformer extends TransformerAbstract
         ];
     }
 
+    /**
+     * Retrieve the all keys available for this model
+     * @param mixed $index
+     * @return string|null
+     */
     public static function getOriginalAttributes($index)
     {
         $attributes = [

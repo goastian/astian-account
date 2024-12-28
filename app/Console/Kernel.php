@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Models\User\Employee;
+use App\Models\User\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -16,8 +16,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     { 
-        $schedule->command("users:remove-accounts")->withoutOverlapping();
-        $schedule->command("users:remove-unverified-account")->withoutOverlapping();       
+        $schedule->command("users:delete-accounts")->withoutOverlapping();
+        $schedule->command("users:delete-unverified-account")->withoutOverlapping();       
         $schedule->command('passport:purge')->withoutOverlapping();
     }
 

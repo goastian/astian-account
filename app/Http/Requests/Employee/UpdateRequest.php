@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests\Employee;
+namespace App\Http\Requests\User;
 
-use App\Models\User\Employee;
+use App\Models\User\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -34,7 +34,7 @@ class UpdateRequest extends FormRequest
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone,' . request()->user->id],
             'city' => ['nullable','regex:/^[A-Za-z\s]+$/', 'max:100'],
             'address' => ['nullable', 'max:150'],
-            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
+            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
         ];
     }
 }

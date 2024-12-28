@@ -5,13 +5,12 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\GlobalController as Controller;
 use App\Http\Requests\UserRole\DestroyRequest;
 use App\Http\Requests\UserRole\StoreRequest;
-use App\Models\User\Employee;
+use App\Models\User\User;
 use App\Models\User\Role;
 use App\Transformers\Auth\EmployeeRoleTransformer;
 use App\Transformers\Role\RoleTransformer;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Lang;
 
 class UserRoleController extends Controller
 {
@@ -30,7 +29,7 @@ class UserRoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Employee $user)
+    public function index(User $user)
     {
         $roles = $user->roles()->get();
 
@@ -43,10 +42,9 @@ class UserRoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRequest $request, Employee $user)
+    public function store(StoreRequest $request, User $user)
     {
-
-        throw_if(Role::find($request->role_id)->public, new ReportError(__("this is a public role"), 403));
+        throw_if(Role::find($request->scope_id)->public, new ReportError(__("this is a public role"), 403));
 
         DB::transaction(function () use ($request, $user) {
             $user->roles()->syncWithoutDetaching($request->role_id);
@@ -63,7 +61,7 @@ class UserRoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DestroyRequest $request, Employee $user, Role $role)
+    public function destroy(DestroyRequest $request, User $user, Role $role)
     {
         DB::transaction(function () use ($role, $user) {
             $user->roles()->detach($role->id);

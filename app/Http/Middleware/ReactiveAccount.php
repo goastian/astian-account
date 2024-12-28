@@ -4,9 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Models\User\Employee;
+use App\Models\User\User;
 use Illuminate\Support\Facades\DB;
-use App\Events\Employee\EnableEmployeeEvent;
+use App\Events\User\EnableEmployeeEvent;
 use App\Notifications\Client\ReactiveAccount as Notification;
 
 class ReactiveAccount
@@ -20,7 +20,7 @@ class ReactiveAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = Employee::onlyTrashed()->where('email', $request->email)->first();
+        $user = User::onlyTrashed()->where('email', $request->email)->first();
 
         if ($user) {
 

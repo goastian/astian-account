@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Factor\Code;
-use App\Models\User\Employee;
+use App\Models\User\User;
 use App\Notifications\Factor\CodeNotification;
 use App\Providers\RouteServiceProvider;
 use Closure;
@@ -22,7 +22,7 @@ class Auth2faMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!$request->user() and Employee::validate($request)) {
+        if (!$request->user() and User::validate($request)) {
            
             Auth2faMiddleware::generateToken($request);
 
@@ -41,7 +41,7 @@ class Auth2faMiddleware
     {
         $email = $request->email?:$request->user()->email;
         
-        $user = Employee::where('email', $email)->first();
+        $user = User::where('email', $email)->first();
 
         Code::create([
             'status' => $request->session()->getId(),

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,11 +13,14 @@ return new class extends Migration
     public function up()
     {
         Schema::create('broadcasts', function (Blueprint $table) {
-            $table->uuid('id')->unique();
+            $table->uuid('id')->unique()->primary();
             $table->string('channel', 100)->index();
+            $table->string('slug');
             $table->string('description', 350);
-            $table->timestamps();
-            $table->primary('id');
+            $table->boolean('system')->default(false);
+            $table->uuid('created_by')->nullable();
+            $table->uuid('updated_by')->nullable();
+            $table->timestamps(); 
         });
     }
 

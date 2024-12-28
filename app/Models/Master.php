@@ -24,4 +24,10 @@ class Master extends Model
      * @var string
      */
     protected $primaryKey = 'id';
+
+    protected $fillable = [
+        'created_by',
+        'updated_by',
+    ];
+
 }

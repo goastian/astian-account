@@ -19,6 +19,12 @@ class Broadcast extends Master
     protected $fillable = [
         'channel',
         'description',
+        'slug',
+        'system'
+    ];
+
+    public $casts = [
+        'system' => 'boolean',
     ];
 
     /**
@@ -41,8 +47,10 @@ class Broadcast extends Master
                     return (int) $user->id === (int) request()->user()->id;
                 });
 
-            };
-        } catch (QueryException $e) {}
+            }
+            ;
+        } catch (QueryException $e) {
+        }
     }
 
     public static function channelsByDefault()

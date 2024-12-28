@@ -1,8 +1,11 @@
 <?php
 namespace App\Console\Commands\Settings;
 
-use App\Models\User\Employee;
+use App\Models\User\User;
 use App\Models\User\Role;
+use App\Models\User\Scope;
+use App\Models\User\Service;
+use App\Models\User\UserSubscription;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -31,35 +34,67 @@ class settingsUsersCreate extends Command
      */
     public function handle()
     {
-        $email = $this->ask('Please enter the user\'s email:');
         $role = $this->choice('Please select the role:', ['admin', 'client'], 0);
 
-        $this->createUser($email, $role);
+        //searching admin service group administrator
+        $service = Service::where('slug', 'admin')->first();
+        //searching roles 
+        $role = Role::where('slug', 'full')->first();
 
-        $this->info('User created successfully.');
-        $this->info('Email: ' . $email);
-        $this->info('Password: password');
-        $this->info('Role: ' . $role);
+        //use admin id and role id to find the scope_id in scope Model
+        $scope = Scope::where(['role_id' => $role->id, 'service_id' => $service->id])->first();
 
+        //create id
+        $id = (string) Str::uuid();
+
+        DB::transaction(function () use ($id, $scope) {
+            //create user
+            $this->createUser($id);
+
+            //final step add this scope id to user crated 
+            UserSubscription::updateOrCreate(
+                [
+                    'user_id' => $id,
+                    'target_id' => $scope->id
+                ],
+                [
+                    'user_id' => $id,
+                    'target_type' => $scope->type,
+                    'target_id' => $id,
+                    'system' => true,
+                    'status' => 'active'
+                ]
+            );
+        });
         return Command::SUCCESS;
     }
 
-    public function createUser($email, $role)
+    /**
+     * Create new user 
+     * @param mixed $id
+     * @return void
+     */
+    public function createUser($id)
     {
+        $name = 'user_' . Str::random(10);
+        $lastName = 'last_' . Str::random(10);
+        $email = Str::random(10) . "@elyerr.xyz";
+        $password = Str::random(20);
+
         DB::table('users')->insert([
-            'id' => $user = Str::uuid(),
-            'name' => $role === 'admin' ? 'admin' : 'client',
-            'last_name' => $role === 'admin' ? 'administrador' : 'usuario',
+            'id' => $id,
+            'name' => $name,
+            'last_name' => $lastName,
             'email' => $email,
-            'password' => Hash::make('password'), // Default password
+            'accept_terms' => true,
+            'password' => Hash::make($password),
             'verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
-        $roleModel = Role::where('name', $role)->first();
-        if ($roleModel) {
-            Employee::find($user)->roles()->syncWithoutDetaching($roleModel->id);
-        }
+        $this->info('User created successfully.');
+        $this->info('Email: ' . $email);
+        $this->info('Password: ' . $password);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Requests\Employee;
+namespace App\Http\Requests\User;
 
 use App\Models\Auth;
-use App\Models\User\Employee;
+use App\Models\User\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -36,8 +36,8 @@ class StoreRequest extends FormRequest
             'address' => ['nullable', 'max:150'],
             'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
-            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . Employee::setBirthday()],
-            'role' => ['required', 'array', 'exists:roles,id'],
+            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
+            'scope' => ['required', 'array', 'exists:roles,id'],
         ];
     }
 }

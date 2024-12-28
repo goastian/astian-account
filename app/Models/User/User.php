@@ -2,39 +2,65 @@
 
 namespace App\Models\User;
 
+use DateTime;
+use DateInterval;
 use App\Models\Auth;
 use App\Models\User\Group;
-use App\Notifications\Client\DestroyClientNotification;
-use App\Transformers\Auth\EmployeeTransformer;
-use DateInterval;
-use DateTime;
-use Elyerr\Echo\Client\PHP\Socket\Socket;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Elyerr\Echo\Client\PHP\Socket\Socket;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\Auth\EmployeeTransformer;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Notifications\Client\DestroyClientNotification;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Employee extends Auth
+class User extends Auth
 {
     use SoftDeletes, Socket;
 
+    /**
+     * Table name
+     * @var String
+     */
     public $table = "users";
 
     //public $view = "";
+    /**
+     * Class to transform data
+     *
+     * @var EmployeeTransformer
+     */
     public $transformer = EmployeeTransformer::class;
 
+    /**
+     * @return BelongsToMany
+     */
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
     }
 
-    public function groups()
+
+    /**
+     * Retrieve the all group for current user
+     *
+     * @return
+     */
+    public function getGroups()
     {
-        return $this->belongsToMany(Group::class, "group_user", "user_id", "group_id");
+        $group_ids = $this->roles()->get()->pluck('group_id');
+
+        $groups = Group::whereIn('id', $group_ids)->get()->pluck('name');
+
+        return $groups;
     }
 
     /**
-     * elimina clientes luego de un tiempo determinado
+     * Remove client accounts after 30 days.
+     *
+     * @return void
      */
     public function remove_accounts()
     {
@@ -42,7 +68,7 @@ class Employee extends Auth
         $now->sub(new DateInterval('P' . env('DESTROY_CLIENTS_AFTER', 30) . 'D'));
         $fecha = $now->format('Y-m-d H:i:s');
 
-        $users = Employee::onlyTrashed()->where('deleted_at', "<", $fecha)->get();
+        $users = User::onlyTrashed()->where('deleted_at', "<", $fecha)->get();
 
         if (count($users) > 0) {
 
@@ -50,17 +76,18 @@ class Employee extends Auth
                 if ($user->isClient()) {
                     $user->notify(new DestroyClientNotification());
 
-                    // $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
-
                     $user->forceDelete();
+
+                    $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
                 }
             }
-
         }
     }
 
     /**
-     * remove unverified accounts
+     * Remove unverified accounts
+     *
+     * @return void
      */
     public function remove_clients_unverified()
     {
@@ -75,9 +102,9 @@ class Employee extends Auth
 
         DB::table('password_resets')->where('created_at', '<', $fecha)->delete();
 
-        /* if ($deleted) {
-    $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
-    }*/
+        if ($deleted) {
+            $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
+        }
     }
 
     /**
@@ -92,7 +119,7 @@ class Employee extends Auth
             'password' => ['required', 'string'],
         ]);
 
-        $user = Employee::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)->first();
 
         if ($user && $user->m2fa && Hash::check($request->password, $user->password)) {
             return true;
@@ -103,6 +130,8 @@ class Employee extends Auth
 
     /**
      * Accept terms privacy
+     *
+     * @return void
      */
     public function acceptTerms()
     {

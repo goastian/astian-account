@@ -2,11 +2,11 @@
 
 namespace App\Transformers\Auth;
 
-use App\Models\User\Employee;
+use App\Models\User\User;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
-class EmployeeTransformer extends TransformerAbstract
+class UserTransformer extends TransformerAbstract
 {
     use Asset;
 
@@ -35,7 +35,7 @@ class EmployeeTransformer extends TransformerAbstract
      */
     public function transform($user)
     {
-        $user = Employee::withTrashed()->find($user->id);
+        $user = User::withTrashed()->find($user->id);
 
         return [
             'id' => $user->id,
@@ -55,7 +55,7 @@ class EmployeeTransformer extends TransformerAbstract
             'updated' => $this->format_date($user->updated_at),
             'disabled' => $this->format_date($user->deleted_at),
             'roles' => $user->roles->makeHidden(['pivot', 'public', 'required_payment']),
-            'groups' => $user->groups->makeHidden('pivot'),
+            'groups' => $user->getGroups(),
             'links' => [
                 'parent' => route('users.index'),
                 'store' => route('users.store'),
@@ -64,51 +64,15 @@ class EmployeeTransformer extends TransformerAbstract
                 'disable' => route('users.disable', ['user' => $user->id]),
                 'enable' => route('users.enable', ['id' => $user->id]),
                 'roles' => route('users.roles.index', ['user' => $user->id]),
-                'group' => route('users.groups.store', ['user' => $user->id]),
             ],
         ];
     }
 
-    public static function transformRequest($index)
-    {
-        $attributes = [
-            'name' => 'name',
-            'last_name' => 'last_name',
-            'email' => 'email',
-            'password' => 'password',
-            'password_confirmation' => 'password_confirmation',
-            'country' => 'country',
-            'city' => 'city',
-            'address' => 'address',
-            'phone' => 'phone',
-            'dial_code' => 'dial_code',
-            'birthday' => 'birthday',
-            'scope' => 'role',
-        ];
-
-        return isset($attributes[$index]) ? $attributes[$index] : null;
-    }
-
-    public static function transformResponse($index)
-    {
-        $attributes = [
-            'name' => 'name',
-            'last_name' => 'last_name',
-            'email' => 'email',
-            'password' => 'password',
-            'password_confirmation' => 'password_confirmation',
-            'country' => 'country',
-            'city' => 'city',
-            'address' => 'address',
-            'birthday' => 'birthday',
-            'phone' => 'phone',
-            'dial_code' => 'dial_code',
-            'role' => 'scope',
-        ];
-
-        return isset($attributes[$index]) ? $attributes[$index] : null;
-    }
-
+    /**
+     * Retrieve the keys available for this model
+     * @param mixed $index
+     * @return string|null
+     */
     public static function getOriginalAttributes($index)
     {
         $attributes = [

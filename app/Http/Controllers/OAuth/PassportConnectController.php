@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Http\Controllers\GlobalController;
-use App\Models\User\Employee;
 use App\Models\User\Role;
-use App\Notifications\Notify\Notify;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
+use App\Models\User\User;
 use Illuminate\Validation\Rule;
+use App\Notifications\Notify\Notify;
+use App\Http\Controllers\GlobalController;
+use Illuminate\Support\Facades\Notification;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 
-class PasspotConnectController extends GlobalController
+class PassportConnectController extends GlobalController
 {
-
     public function __construct()
     {
         //headers
@@ -70,9 +69,8 @@ class PasspotConnectController extends GlobalController
 
     /**
      * Gateway to check if a token can execute a specific scope. This request includes Authorization and X-SCOPE headers.
-     *
-     * @param Request $request
-     * @return void
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
     public function token_can(Request $request)
     {
@@ -87,7 +85,7 @@ class PasspotConnectController extends GlobalController
      * Gateway to retrieve authenticated user data. This request includes Authorization header.
      *
      * @param Request $request
-     * 
+     *
      * @return Json
      */
     public function auth(Request $request)
@@ -97,12 +95,10 @@ class PasspotConnectController extends GlobalController
 
     /**
      * Gateway for sending notifications
-     *
-     * @param Request $request
-     * 
-     * @return Json
+     * @param \Illuminate\Http\Request $request
+     * @throws \Elyerr\ApiResponse\Exceptions\ReportError
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
-
     public function send_notification(Request $request)
     {
         $X_HEADER = $request->header('X-VERIFY-NOTIFICATION');
@@ -122,10 +118,10 @@ class PasspotConnectController extends GlobalController
         $notifiable = null;
 
         if ($data->users == '*') {
-            $notifiable = Employee::where('id', '!=', $request->user()->id)->get();
+            $notifiable = User::where('id', '!=', $request->user()->id)->get();
 
         } elseif ($this->is_email($data->users)) {
-            $notifiable = Employee::where('email', $data->users)->first();
+            $notifiable = User::where('email', $data->users)->first();
             if (!$notifiable) {
                 throw new ReportError("the email does not exists", 422);
             }
