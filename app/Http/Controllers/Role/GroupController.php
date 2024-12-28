@@ -83,7 +83,7 @@ class GroupController extends Controller
 
         DB::transaction(function () use ($request, $group) {
 
-            if ($this->is_diferent($group->description, $request->description)) {
+            if ($this->is_different($group->description, $request->description)) {
                 $group->description = $request->description;
 
                 $group->push();
