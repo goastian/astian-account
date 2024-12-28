@@ -89,22 +89,22 @@ class AppController extends Controller
 
         DB::transaction(function () use ($request, $app) {
             $updated = false;
-            if ($this->is_diferent($app->name, $request->name)) {
+            if ($this->is_different($app->name, $request->name)) {
                 $updated = true;
                 $app->name = $request->name;
             }
 
-            if ($this->is_diferent($app->url, $request->url)) {
+            if ($this->is_different($app->url, $request->url)) {
                 $updated = true;
                 $app->url = $request->url;
             }
 
-            if ($this->is_diferent($app->url, $request->url)) {
+            if ($this->is_different($app->url, $request->url)) {
                 $updated = true;
                 $app->icon = $request->icon;
             }
 
-            if ($this->is_diferent($app->icon, $request->icon)) {
+            if ($this->is_different($app->icon, $request->icon)) {
                 $updated = true;
                 $app->icon = Purify::config('icons')->clean($request->icon);
             }

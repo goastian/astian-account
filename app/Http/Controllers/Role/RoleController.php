@@ -75,7 +75,7 @@ class RoleController extends Controller
 
             $can_update = false;
 
-            if ($this->is_diferent($role->description, $request->description)) {
+            if ($this->is_different($role->description, $request->description)) {
                 $can_update = true;
                 $role->description = $request->description;
             }

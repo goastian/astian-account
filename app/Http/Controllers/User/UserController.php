@@ -117,47 +117,47 @@ class UserController extends Controller
 
             $can_update = false;
 
-            if ($this->is_diferent($user->name, $request->name)) {
+            if ($this->is_different($user->name, $request->name)) {
                 $can_update = true;
                 $user->name = $request->name;
             }
 
-            if ($this->is_diferent($user->last_name, $request->last_name)) {
+            if ($this->is_different($user->last_name, $request->last_name)) {
                 $can_update = true;
                 $user->last_name = $request->last_name;
             }
 
-            if ($this->is_diferent($user->email, $request->email)) {
+            if ($this->is_different($user->email, $request->email)) {
                 $can_update = true;
                 $user->email = $request->email;
             }
 
-            if ($this->is_diferent($user->country, $request->country)) {
+            if ($this->is_different($user->country, $request->country)) {
                 $can_update = true;
                 $user->country = $request->country;
             }
 
-            if ($this->is_diferent($user->dial_code, $request->dial_code)) {
+            if ($this->is_different($user->dial_code, $request->dial_code)) {
                 $can_update = true;
                 $user->dial_code = $request->dial_code;
             }
 
-            if ($this->is_diferent($user->city, $request->city)) {
+            if ($this->is_different($user->city, $request->city)) {
                 $can_update = true;
                 $user->city = $request->city;
             }
 
-            if ($this->is_diferent($user->address, $request->address)) {
+            if ($this->is_different($user->address, $request->address)) {
                 $can_update = true;
                 $user->address = $request->address;
             }
 
-            if ($this->is_diferent($user->birthday, $request->birthday)) {
+            if ($this->is_different($user->birthday, $request->birthday)) {
                 $can_update = true;
                 $user->birthday = $request->birthday;
             }
 
-            if ($this->is_diferent($user->phone, $request->phone)) {
+            if ($this->is_different($user->phone, $request->phone)) {
                 $can_update = true;
                 $user->phone = $request->phone;
             }

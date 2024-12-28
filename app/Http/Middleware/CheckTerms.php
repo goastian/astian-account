@@ -16,8 +16,8 @@ class CheckTerms
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user() && !$request->user()->accept_terms) {
-           return redirect()->route('check.terms');
+        if (auth()->check() && !$request->user()->accept_terms) {
+            return redirect()->route('check.terms');
         }
 
         return $next($request);
