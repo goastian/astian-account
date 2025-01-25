@@ -17,9 +17,7 @@ return new class extends Migration {
             $table->string('name', 100)->unique();
             $table->string('slug');
             $table->string('description', 200);
-            $table->boolean('system')->default(false);
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable(); 
+            $table->boolean('system')->default(false); 
         });
     }
 

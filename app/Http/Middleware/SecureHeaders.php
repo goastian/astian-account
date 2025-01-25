@@ -15,13 +15,7 @@ class SecureHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
-        //Generate a secure nonce
-        $nonce = $this->generateNonce();
-        // Global key in the all views laravel
-        view()->share('nonce', $nonce);
-
         $response = $next($request);
-
         $response->headers->set("Referrer-Policy", "no-referrer");
         $response->headers->set("X-Content-Type-Options", "nosniff");
         $response->headers->set("X-Frame-Options", "DENY");
@@ -30,30 +24,26 @@ class SecureHeaders
 
         //Ignore csp policies int this route
         if (!in_array($request->route()->getName(), ['passport.authorizations.authorize'])) {
-            $response->headers->set("Content-Security-Policy", $this->ContentSecurityPolicy($nonce));
+            $response->headers->set("Content-Security-Policy", $this->ContentSecurityPolicy());
         }
 
         return $response;
     }
 
     /**
-     * Settting default content security policies
-     *
-     * @param String $nonce
-     * @return String
+     * Setting default content security policies 
+     * @return string
      */
-    public function ContentSecurityPolicy($nonce)
+    public function ContentSecurityPolicy()
     {
-        $host = request()->getHost();
-
         $policies = [
             "base-uri 'self'",
-            "script-src 'self' 'nonce-{$nonce}'",
-            "script-src-elem 'self' 'nonce-{$nonce}'",
+            "script-src 'self'",
+            "script-src-elem 'self'",
             "script-src-attr 'self'",
-            // "style-src 'self' 'nonce-{$nonce}' $host 'unsafe-inline'",
-            // "style-src-elem 'self' 'nonce-{$nonce}' $host 'unsafe-inline'",
-            "style-src-attr 'self' $host 'unsafe-inline'",
+            // "style-src 'self' $host 'unsafe-inline'",
+            // "style-src-elem 'self' $host 'unsafe-inline'",
+            "style-src-attr 'self' 'unsafe-inline'",
             "media-src 'self'",
             "object-src 'self'",
             "child-src 'self'",
@@ -66,7 +56,6 @@ class SecureHeaders
             "worker-src *",
             "manifest-src 'self'",
             "upgrade-insecure-requests",
-            "block-all-mixed-content",
         ];
 
         return implode(";", $policies);
@@ -74,10 +63,9 @@ class SecureHeaders
 
     /**
      * Generate a secure code
-     *
-     * @return String
+     * @return string
      */
-    function generateNonce()
+    public function generateNonce()
     {
         return bin2hex(random_bytes(16));
     }

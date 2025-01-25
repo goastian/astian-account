@@ -1,61 +1,25 @@
 <?php
-
 namespace App\Models\User;
 
 use DateTime;
 use DateInterval;
 use App\Models\Auth;
-use App\Models\User\Group;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Elyerr\Echo\Client\PHP\Socket\Socket;
+use App\Transformers\User\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Transformers\Auth\EmployeeTransformer;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Notifications\Client\DestroyClientNotification;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Auth
 {
-    use SoftDeletes, Socket;
+    use SoftDeletes;
 
     /**
-     * Table name
-     * @var String
+     * Transformer
+     * @var 
      */
-    public $table = "users";
-
-    //public $view = "";
-    /**
-     * Class to transform data
-     *
-     * @var EmployeeTransformer
-     */
-    public $transformer = EmployeeTransformer::class;
-
-    /**
-     * @return BelongsToMany
-     */
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
-    }
-
-
-    /**
-     * Retrieve the all group for current user
-     *
-     * @return
-     */
-    public function getGroups()
-    {
-        $group_ids = $this->roles()->get()->pluck('group_id');
-
-        $groups = Group::whereIn('id', $group_ids)->get()->pluck('name');
-
-        return $groups;
-    }
+    public $transformer = UserTransformer::class;
 
     /**
      * Remove client accounts after 30 days.
@@ -77,8 +41,6 @@ class User extends Auth
                     $user->notify(new DestroyClientNotification());
 
                     $user->forceDelete();
-
-                    $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
                 }
             }
         }
@@ -102,9 +64,7 @@ class User extends Auth
 
         DB::table('password_resets')->where('created_at', '<', $fecha)->delete();
 
-        if ($deleted) {
-            $this->privateChannel('DestroyEmployeeEvent', 'Account deleted');
-        }
+
     }
 
     /**
@@ -129,13 +89,11 @@ class User extends Auth
     }
 
     /**
-     * Accept terms privacy
-     *
-     * @return void
+     * Relationship with scopes
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function acceptTerms()
+    public function userScopes()
     {
-        $this->accept_terms = true;
-        $this->push();
+        return $this->hasMany(UserScope::class);
     }
 }

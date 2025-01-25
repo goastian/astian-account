@@ -2,35 +2,39 @@
 
 namespace App\Http\Controllers;
 
-use App\Transformers\Auth\EmployeeTransformer;
-use Elyerr\ApiResponse\Assets\Asset;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Elyerr\Echo\Client\PHP\Socket\Socket;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
-use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\RefreshTokenRepository;
 use Laravel\Passport\TokenRepository;
+use App\Transformers\User\UserTransformer;
+use Laravel\Passport\RefreshTokenRepository;
 
 class GlobalController extends Controller
 {
-    use AuthorizesRequests, Socket, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
-
+    /**
+     * Construct of class
+     */
     public function __construct()
     {
         $this->middleware('auth:api');
     }
 
+    /**
+     * Return information about the current users and transform date in the process
+     * @return mixed
+     */
     public function authenticated_user()
     {
-        $user = fractal(Auth::user(), EmployeeTransformer::class);
+        $user = fractal(Auth::user(), UserTransformer::class);
 
         return json_decode(json_encode($user))->data;
     }
 
-    
+    /**
+     * Remove the all credential 
+     * @param mixed $tokens
+     * @return void
+     */
     public function removeCredentials($tokens)
     {
         $tokenRepository = app(TokenRepository::class);

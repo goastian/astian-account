@@ -10,7 +10,7 @@ Route::group([
     Route::get('/authorize', [
         'uses' => '\App\Http\Controllers\OAuth\AuthorizationController@authorize',
         'as' => 'authorizations.authorize',
-        'middleware' => ['web','auth:web'],
+        'middleware' => ['web', 'auth:web'],
     ]);
 
     $guard = config('passport.guard', null);
@@ -65,7 +65,7 @@ Route::group([
         ]);
 
         Route::get('/api-keys', [
-            'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser',
+            'uses' => '\App\Http\Controllers\OAuth\PersonalAccessTokenController@forUser',
             'as' => 'personal.tokens.index',
             'middleware' => 'wants.json',
         ]);

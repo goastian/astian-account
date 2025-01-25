@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\GlobalController;
-use App\Models\Auth\Session;
-use App\Transformers\Auth\EmployeeTransformer;
 use Error;
 use ErrorException;
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Contracts\Encryption\Encrypter;
-use Illuminate\Cookie\CookieValuePrefix;
-use Illuminate\Cookie\Middleware\EncryptCookies;
+use App\Models\Auth\Session;
 use Illuminate\Http\Request;
-use Laravel\Passport\RefreshTokenRepository;
 use Laravel\Passport\TokenRepository;
+use Illuminate\Cookie\CookieValuePrefix;
+use App\Http\Controllers\GlobalController;
+use Laravel\Passport\RefreshTokenRepository;
+use Illuminate\Contracts\Encryption\Encrypter;
+use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Contracts\Encryption\DecryptException;
 
 class AuthorizationController extends GlobalController
 {
@@ -25,23 +24,25 @@ class AuthorizationController extends GlobalController
      */
     public $encrypter;
 
+    /**
+     * Class construct
+     * @param \Illuminate\Contracts\Encryption\Encrypter $encrypter
+     */
     public function __construct(Encrypter $encrypter)
     {
         parent::__construct();
         $this->encrypter = $encrypter;
-        $this->middleware('transform.request:' . EmployeeTransformer::class)->only('store');
     }
 
     /**
-     * Destroy the session
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * destroy sessions
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request)
     {
         try {
-            $access_token_id = $this->decode_token($request) ?: request()->user()->token()->id;
+            $access_token_id = $this->decodeToken($request) ?: request()->user()->token()->id;
 
             $tokenRepository = app(TokenRepository::class);
             $refreshTokenRepository = app(RefreshTokenRepository::class);
@@ -49,20 +50,20 @@ class AuthorizationController extends GlobalController
             $tokenRepository->revokeAccessToken($access_token_id);
             $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($access_token_id);
 
-        } catch (ErrorException $e) {}
+        } catch (ErrorException $e) {
+        }
 
-        $this->destroy_default_session($request);
+        $this->destroyDefaultSession($request);
 
         return $this->message(__('Session has finished'), 200);
     }
 
     /**
-     * Get and decode the token jwt from the microservices
-     *
-     * @param Request $request
-     * @return String
+     * Decode the token jwt
+     * @param \Illuminate\Http\Request $request
+     * @return mixed
      */
-    public function decode_token(Request $request)
+    public function decodeToken(Request $request)
     {
         try {
             $token = $request->cookie(env('PASSPORT_TOKEN'));
@@ -82,7 +83,7 @@ class AuthorizationController extends GlobalController
      * @param Request $request
      * @return void
      */
-    public function destroy_default_session(Request $request)
+    public function destroyDefaultSession(Request $request)
     {
         /**
          * decoding cookie from the default session from laravel
@@ -102,7 +103,9 @@ class AuthorizationController extends GlobalController
                 }
             }
             Session::find($session_id)->delete();
-        } catch (Error $e) {} catch (ErrorException $e) {}
+        } catch (Error $e) {
+        } catch (ErrorException $e) {
+        }
 
     }
 }

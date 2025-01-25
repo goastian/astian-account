@@ -24,12 +24,12 @@ class Scope implements Arrayable, Jsonable
     /**
      * The type scope Public Or Private
      *
-     * @var Boolean
+     * @var bool
      */
     public $public;
 
     /**
-     * @var Boolean
+     * @var bool
      */
     public $required_payment;
 

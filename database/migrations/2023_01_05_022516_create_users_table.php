@@ -27,9 +27,7 @@ return new class extends Migration {
             $table->datetime('verified_at')->nullable();
             $table->boolean('m2fa')->default(0);
             $table->boolean('totp')->default(0);
-            $table->boolean("accept_terms")->nullable();
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable(); 
+            $table->boolean("accept_terms")->nullable(); 
             $table->timestamps();
             $table->softDeletes(); 
         });

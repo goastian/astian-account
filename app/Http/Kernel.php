@@ -22,7 +22,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
     ];
-    
+
     /**
      * The application's route middleware groups.
      *
@@ -44,6 +44,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:800,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\VerifyAccount::class,
         ],
     ];
 
@@ -75,6 +76,5 @@ class Kernel extends HttpKernel
         'verify.credentials' => \App\Http\Middleware\verifyCredentials::class,
         '2fa-mail' => \App\Http\Middleware\Auth2faMiddleware::class,
         'reactive.account' => \App\Http\Middleware\ReactiveAccount::class,
-        'check.terms' => \App\Http\Middleware\CheckTerms::class,
     ];
 }

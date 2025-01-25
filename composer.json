@@ -1,15 +1,29 @@
 {
-    "name": "laravel/laravel",
+    "name": "elyerr/oauth2-passport-server",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "OAuth Authorization server",
+    "keywords": [
+        "oauth2",
+        "laravel",
+        "authorization server",
+        "oauth2 server"
+    ],
     "license": "AGPL-3.0",
+    "authors": [
+        {
+            "name": "Elvis Yerel Roman Concha",
+            "email": "yerel9212@yahoo.es",
+            "homepage": "https://gitlab.com/elyerr/oauth2-passport-server",
+            "role": "Owner"
+        }
+    ],
     "require": {
         "php": "^8.0.2",
+        "doctrine/dbal": "^3.9",
         "elyerr/api-response": "^1.0",
         "elyerr/echo-client-php": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^10.43",
+        "laravel/framework": "^10.0",
         "laravel/passport": "^11.8",
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.2",

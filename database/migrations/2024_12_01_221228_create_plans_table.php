@@ -19,8 +19,6 @@ return new class extends Migration {
             $table->string('description');
             $table->decimal('price', 8, 2);
             $table->boolean('public')->default(true);
-            $table->uuid('created_by');
-            $table->uuid('updated_by')->nullable();
             $table->timestamps();
         });
     }

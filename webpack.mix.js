@@ -16,4 +16,5 @@ mix.js("resources/js/app.js", "js")
     .vue()
     .sass("resources/scss/app.scss", "css/app.css")
     .sass("resources/scss/pages.scss", "css/pages.css")
+    .postCss("resources/css/app.css", "css/tailwind.css", [require("tailwindcss")])
     .version();

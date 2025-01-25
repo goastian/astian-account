@@ -65,7 +65,7 @@ class verifyCredentials
      * Deny cookie if the session has been destroyed
      *
      * @param Request $request
-     * @return Boolean
+     * @return bool
      */
     public function verifyCookie(Request $request)
     {

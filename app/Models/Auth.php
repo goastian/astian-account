@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\Standard;
 use DateTime;
 use DateInterval;
 use App\Models\User\Role;
@@ -18,7 +19,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -51,8 +52,9 @@ class Auth extends Authenticatable
         'client',
         'm2fa',
         'totp',
+        'verified_at',
         'dial_code',
-        'accept_terms'
+        'accept_terms',
     ];
 
     /**
@@ -97,21 +99,7 @@ class Auth extends Authenticatable
      */
     public function userCan($scope)
     {
-        return true;
-        /*
-        $roles = $this->scopes();
 
-        if (is_array($scope)) {
-            foreach ($scope as $value) {
-                if ($roles->contains('id', $value)) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        return $this->scopes()->contains('id', $scope);*/
     }
 
     /**
@@ -126,21 +114,9 @@ class Auth extends Authenticatable
     }
 
     /**
-     * get scope for the client
-     *
-     * @return Role
-     */
-    public function addClientScope()
-    {
-        $scope = Role::where('name', 'client')->first();
-        return $scope;
-    }
-
-    /**
-     * Setting the date for registered users
-     *
-     * @param Int $years
-     * @return date
+     * Setting the time to create account
+     * @param mixed $years
+     * @return string
      */
     public static function setBirthday($years = 13)
     {

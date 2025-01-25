@@ -2,14 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Factor\Code;
-use App\Models\User\User;
-use App\Notifications\Factor\CodeNotification;
-use App\Providers\RouteServiceProvider;
 use Closure;
+use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Lang;
+use App\Providers\RouteServiceProvider;
 
 class Auth2faMiddleware
 {
@@ -23,7 +20,7 @@ class Auth2faMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!$request->user() and User::validate($request)) {
-           
+
             Auth2faMiddleware::generateToken($request);
 
             return redirect()->route('factor.email', RouteServiceProvider::query())->with(['email' => $request->email]);
@@ -39,8 +36,8 @@ class Auth2faMiddleware
      */
     public static function generateToken(Request $request)
     {
-        $email = $request->email?:$request->user()->email;
-        
+        $email = $request->email ?: $request->user()->email;
+
         $user = User::where('email', $email)->first();
 
         Code::create([

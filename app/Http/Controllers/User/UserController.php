@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\User\StoreRequest;
-use App\Http\Requests\User\UpdateRequest;
-use App\Models\User\User;
-use App\Notifications\Auth\UserDisableNotification;
-use App\Notifications\Client\ClientDisableNotification;
-use App\Notifications\User\CreatedNewUser;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Error;
+use App\Models\User\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\User\StoreRequest;
+use App\Http\Requests\User\UpdateRequest;
+use App\Notifications\User\UserUpdatedEmail;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\User\UserCreatedAccount;
+use App\Notifications\User\UserDisableAccount;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Notifications\User\UserUpdatedPassword;
+use App\Notifications\User\UserReactivateAccount;
+use App\Http\Controllers\GlobalController as Controller;
 
 class UserController extends Controller
 {
@@ -22,27 +24,31 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         parent::__construct();
-        /*$this->middleware('scope:account_read')->only('index', 'show');
-        $this->middleware('scope:account_create')->only('store');
-        $this->middleware('scope:account_update,client')->only('update');
-        $this->middleware('scope:account_disable,client')->only('disable');
-        $this->middleware('scope:account_enable')->only('enable');*/
+        /*$this->middleware('scope:users_full,users_view')->only('index', 'show');
+        $this->middleware('scope:users_full,users_create')->only('store');
+        $this->middleware('scope:users_full,users_update,client')->only('update');
+        $this->middleware('scope:users_full,users_disable,client')->only('disable');
+        $this->middleware('scope:users_full,users_enable')->only('enable');*/
     }
 
-    /**
-     * Display all users registered
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index(User $user)
+
+    public function index(Request $request, User $user)
     {
-        throw_if(request()->user()->isClient(), new ReportError("The client does not have access rights to the content", 403));
+        $this->checkMethod('get');
 
         $params = $this->filter_transform($user->transformer);
 
-        $users = $this->search($user->table, $params);
+        $data = $user->query();
 
-        return $this->showAll($users, $user->transformer);
+        $data = $user->withTrashed();
+
+        foreach ($params as $key => $value) {
+            $data = $data->where($key, "like", "%" . $value . "%");
+        }
+
+        $data = $data->get();
+
+        return $this->showAll($data, $user->transformer);
     }
 
     /**
@@ -53,32 +59,28 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request, User $user)
     {
+        $this->checkMethod('post');
 
-        throw_if(request()->user()->isClient(), new ReportError("The client does not have access rights to the content", 403));
+        $this->checkContentType($this->getPostHeader());
 
-        /**
-         * Generate password temp for new users
-         */
-        $temp_password = $this->passwordTempGenerate();
+        DB::transaction(function () use ($request, $user) {
 
-        DB::transaction(function () use ($request, $user, $temp_password) {
+            $temp_password = $this->passwordTempGenerate();
 
             $user = $user->fill($request->except('password', 'role'));
             $user->verified_at = now();
             $user->password = Hash::make($temp_password);
             $user->save();
 
-            $user->roles()->syncWithoutDetaching($request->role);
-
             /**
              * Send event
              */
-            $this->privateChannel("StoreEmployeeEvent", "New user created");
+            $this->privateChannel("StoreUserEvent", "New user created");
 
             /**
              * Send notification
              */
-            Notification::send($user, new CreatedNewUser($temp_password));
+            Notification::send($user, new UserCreatedAccount($temp_password));
         });
 
         return $this->showOne($user, $user->transformer, 201);
@@ -92,7 +94,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $this->deny_action($id);
+        $this->checkMethod('get');
 
         $user = User::withTrashed()->find($id);
 
@@ -108,62 +110,78 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, User $user)
     {
+        $this->checkMethod('put');
+
+        $this->checkContentType($this->getUpdateHeader());
+
         DB::transaction(function () use ($request, $user) {
-
-            $this->deny_action($user->id);
-
-            throw_if(!$request->user()->isClient() and $user->isClient(), new ReportError("The client does not have access rights to the content", 403));
-
+            $updated_password = false;
+            $updated_email = false;
             $can_update = false;
 
-            if ($this->is_diferent($user->name, $request->name)) {
+            if ($this->is_different($user->name, $request->name)) {
                 $can_update = true;
                 $user->name = $request->name;
             }
 
-            if ($this->is_diferent($user->last_name, $request->last_name)) {
+            if ($this->is_different($user->last_name, $request->last_name)) {
                 $can_update = true;
                 $user->last_name = $request->last_name;
             }
 
-            if ($this->is_diferent($user->email, $request->email)) {
+            if ($this->is_different($user->email, $request->email)) {
+                $updated_email = true;
                 $can_update = true;
                 $user->email = $request->email;
             }
 
-            if ($this->is_diferent($user->country, $request->country)) {
+            if ($this->is_different($user->country, $request->country)) {
                 $can_update = true;
                 $user->country = $request->country;
             }
 
-            if ($this->is_diferent($user->dial_code, $request->dial_code)) {
+            if ($this->is_different($user->dial_code, $request->dial_code)) {
                 $can_update = true;
                 $user->dial_code = $request->dial_code;
             }
 
-            if ($this->is_diferent($user->city, $request->city)) {
+            if ($this->is_different($user->city, $request->city)) {
                 $can_update = true;
                 $user->city = $request->city;
             }
 
-            if ($this->is_diferent($user->address, $request->address)) {
+            if ($this->is_different($user->address, $request->address)) {
                 $can_update = true;
                 $user->address = $request->address;
             }
 
-            if ($this->is_diferent($user->birthday, $request->birthday)) {
+            if ($this->is_different($user->birthday, $request->birthday)) {
                 $can_update = true;
                 $user->birthday = $request->birthday;
             }
 
-            if ($this->is_diferent($user->phone, $request->phone)) {
+            if ($this->is_different($user->phone, $request->phone)) {
                 $can_update = true;
                 $user->phone = $request->phone;
             }
 
+            if ($request->password && !Hash::check($request->password, $user->password)) {
+                $updated_password = true;
+                $can_update = true;
+                $user->password = Hash::make($request->password);
+            }
+
             if ($can_update) {
                 $user->push();
-                $this->privateChannel("UpdateEmployeeEvent", "User updated");
+                $this->privateChannel("UpdateUserEvent", "User updated");
+            }
+
+            if ($updated_password) {
+                Notification::send($user, new UserUpdatedPassword());
+            }
+
+            if ($updated_email) {
+                Notification::send($user, new UserUpdatedEmail());
             }
         });
 
@@ -171,21 +189,16 @@ class UserController extends Controller
     }
 
     /**
-     * Disable an active user
-     *
-     * @return Bool
+     * Disable accounts
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User\User $user
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function disable(Request $request, User $user)
     {
-        //is not client and user id is request user id
-        throw_if((!$user->isClient() && $request->user()->id == $user->id) ||
-                //authenticated user is not client and user is client
-            (!$request->user()->isClient() && $user->isClient()) ||
-                //is client and request user id is diferent
-            ($request->user()->isClient() && $request->user()->id != $user->id), new ReportError("The client does not have access rights to the content", 403));
+        $this->checkMethod('delete');
 
-        //Throw an exception if Two-Factor Authentication is enabled
-        throw_if($request->user()->isClient() and $request->user()->m2fa, new ReportError(__("Before performing this action, you must disable Two-Factor Authentication"), 403));
+        $this->checkContentType(null);
 
         DB::transaction(function () use ($user) {
 
@@ -195,52 +208,40 @@ class UserController extends Controller
 
             $user->delete();
 
-            $this->privateChannel("DisableEmployeeEvent", "User disabled");
+            Notification::send($user, new UserDisableAccount());
+
+            $this->privateChannel("DisableUserEvent", "User disabled");
         });
-        /**
-         * send notification a especific user
-         */
-        $user->isClient() ? $user->notify(new ClientDisableNotification()) : $user->notify(new UserDisableNotification());
 
         return $this->showOne($user, $user->transformer);
     }
 
     /**
-     * Enable disabled users
-     *
-     * @return Json
+     * Enable accounts
+     * @param mixed $id
+     * @throws \Elyerr\ApiResponse\Exceptions\ReportError
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function enable($id)
     {
-        //request user is not client and request user is client a client
-        throw_if((!request()->user()->isClient() && request()->user()->isClient()) ||
-            //request user is client
-            request()->user()->isClient(), new ReportError(__("The client does not have access rights to the content"), 403));
+        $this->checkMethod('get');
+
+        $this->checkContentType(null);
 
         try {
 
             $user = User::onlyTrashed()->find($id);
-            //enable user
+
             $user->restore();
 
-            //send event
-            $this->privateChannel("EnableEmployeeEvent", "User enabled");
+            Notification::send($user, new UserReactivateAccount());
+
+            $this->privateChannel("EnableUserEvent", "User enabled");
 
             return $this->showOne($user, $user->transformer);
 
-        } catch (Error $e) { //throw exception
-            throw new ReportError("The server cannot find the requested resource", 404);
+        } catch (Error $e) {
+            throw new ReportError(__("The server cannot find the requested resource"), 404);
         }
-    }
-
-    /**
-     * Deny action to the client user and has a different id
-     *
-     * @param String $id
-     * @return Exception
-     */
-    public function deny_action($id)
-    {
-        throw_if(request()->user()->isClient() and request()->user()->id != $id, new ReportError("The client does not have access rights to the content", 403));
     }
 }

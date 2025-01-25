@@ -1,14 +1,32 @@
 <?php
 namespace App\Http\Controllers\OAuth;
 
-use App\Http\Controllers\OAuth\Scopes;
 use Illuminate\Http\Request;
+use App\Http\Controllers\OAuth\Scopes;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use App\Transformers\OAuth\PersonalTokenTransformer;
 use Laravel\Passport\Http\Controllers\PersonalAccessTokenController as Controller;
 
 final class PersonalAccessTokenController extends Controller
 {
 
-    use Scopes;
+    use Scopes, JsonResponser;
+
+
+    /**
+     * Retrieve the all token 
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function forUser(Request $request)
+    {
+        $tokens = $this->tokenRepository->forUser($request->user()->getAuthIdentifier());
+        $tokens = $tokens->load('client')->filter(function ($token) {
+            return $token->client->personal_access_client && !$token->revoked;
+        })->values();
+
+        return $this->showAll($tokens, PersonalTokenTransformer::class);
+    }
 
     /**
      * Create a new personal access token for the user.
@@ -20,12 +38,16 @@ final class PersonalAccessTokenController extends Controller
     {
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
-            'scopes' => 'array|in:' . implode(',', $this->scopesForUser()),
+            //     'scopes' => 'array|in:' . implode(',', $this->scopesForUser()),
         ])->validate();
 
-        return $request->user()->createToken(
-            $request->name, $request->scopes ?: []
+
+        $token = $request->user()->createToken(
+            $request->name,
+            $request->scopes ?: []
         );
+
+        return $token;
     }
 
     /**

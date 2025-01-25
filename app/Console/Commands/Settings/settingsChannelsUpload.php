@@ -1,11 +1,14 @@
 <?php
 namespace App\Console\Commands\Settings;
 
-use App\Models\Broadcasting\Broadcast;
 use Illuminate\Console\Command;
+use Elyerr\ApiResponse\Assets\Asset;
+use App\Models\Broadcasting\Broadcast;
 
 class settingsChannelsUpload extends Command
 {
+    use Asset;
+
     /**
      * The name and signature of the console command.
      *
@@ -21,9 +24,8 @@ class settingsChannelsUpload extends Command
     protected $description = 'Upload channels';
 
     /**
-     * Execute the console command.
-     *
-     * @return int
+     * Summary of handle
+     * @return void
      */
     public function handle()
     {
@@ -38,14 +40,18 @@ class settingsChannelsUpload extends Command
      */
     public function upload_groups()
     {
-        array_map(function ($channel) {
+        $broadcasts = Broadcast::channelsByDefault();
+
+        foreach ($broadcasts as $broadcast) {
             Broadcast::updateOrcreate(
-                ['channel' => $channel->channel],
+                ['name' => $broadcast->name],
                 [
-                    'channel' => $channel->channel,
-                    'description' => $channel->description,
+                    'name' => $broadcast->name,
+                    'slug' => $this->slug($broadcast->name),
+                    'description' => $broadcast->description,
                     'system' => true,
-                ])->save();
-        }, Broadcast::channelsByDefault());
+                ]
+            )->save();
+        }
     }
 }

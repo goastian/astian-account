@@ -1,7 +1,7 @@
 <?php
 namespace App\Console\Commands\Settings;
-
-use App\Models\Country\Country;
+ 
+use App\Models\Global\Country;
 use Illuminate\Console\Command;
 
 class settingsCountriesUpload extends Command
@@ -29,7 +29,7 @@ class settingsCountriesUpload extends Command
     {
         $this->info("Upload countries");
         $this->upload_countries();
-        $this->info("Uploaded succesfully");
+        $this->info("Uploaded successfully");
     }
 
     /**

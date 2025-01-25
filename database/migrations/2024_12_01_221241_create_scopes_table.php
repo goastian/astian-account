@@ -20,8 +20,6 @@ return new class extends Migration {
             $table->boolean('public')->default(false);
             $table->boolean('active')->default(false);
             $table->decimal('price', 8, 2)->default(0);
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable();
             $table->timestamps();
         });
     }
