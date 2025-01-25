@@ -4,20 +4,20 @@ namespace App\Providers;
 
 use App\Guard\TokenGuard;
 use App\Models\OAuth\Client;
-use App\Models\OAuth\PersonalAccessClient;
-use App\Models\OAuth\RefreshToken;
-use App\Models\OAuth\Token;
-use App\Models\User\Role;
-use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\URL;
-use Illuminate\Support\ServiceProvider;
+use App\Models\OAuth\Token; 
 use Laravel\Passport\AuthCode;
-use Laravel\Passport\ClientRepository;
 use Laravel\Passport\Passport;
-use Laravel\Passport\PassportUserProvider;
+use App\Models\Subscription\Role;
+use App\Models\OAuth\RefreshToken;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\TokenRepository;
+use Laravel\Passport\ClientRepository;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\ServiceProvider;
 use League\OAuth2\Server\ResourceServer;
+use App\Models\OAuth\PersonalAccessClient;
+use Laravel\Passport\PassportUserProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -73,9 +73,9 @@ class AppServiceProvider extends ServiceProvider
         /**
          * Custom time for laravel passport tokens
          */
-        Passport::tokensExpireIn(now()->addSeconds(env('PASSPORT_TOKEN_EXPIRE')));
-        Passport::refreshTokensExpireIn(now()->addSeconds(env('PASSPORT_REFRESH_EXPIRE')));
-        Passport::personalAccessTokensExpireIn(now()->addDays(env('PASSPORT_PERSONAL_EXPIRE')));
+        // Passport::tokensExpireIn(now()->addSeconds(env('PASSPORT_TOKEN_EXPIRE')));
+        // Passport::refreshTokensExpireIn(now()->addSeconds(env('PASSPORT_REFRESH_EXPIRE')));
+        // Passport::personalAccessTokensExpireIn(now()->addDays(env('PASSPORT_PERSONAL_EXPIRE')));
 
         /**
          * default scopes for laravel passport
@@ -86,7 +86,8 @@ class AppServiceProvider extends ServiceProvider
             foreach (Role::all() as $key => $value) {
                 $scopes += array($value->name => $value->description);
             }
-        } catch (QueryException $e) {}
+        } catch (QueryException $e) {
+        }
 
         Passport::tokensCan($scopes);
 

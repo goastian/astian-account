@@ -1,15 +1,17 @@
 <?php
 namespace App\Console\Commands\Settings;
 
-use App\Models\User\Role;
-use App\Models\User\Group;
-use App\Models\User\Scope;
-use Illuminate\Support\Str;
-use App\Models\User\Service;
 use Illuminate\Console\Command;
+use App\Models\Subscription\Role;
+use App\Models\Subscription\Group;
+use App\Models\Subscription\Scope;
+use Elyerr\ApiResponse\Assets\Asset;
+use App\Models\Subscription\Service;
 
 class settingsRolesUpload extends Command
 {
+    use Asset;
+
     /**
      * The name and signature of the console command.
      *
@@ -22,7 +24,7 @@ class settingsRolesUpload extends Command
      *
      * @var string
      */
-    protected $description = 'upload roles';
+    protected $description = 'Upload roles';
 
     /**
      * Summary of handle
@@ -35,7 +37,7 @@ class settingsRolesUpload extends Command
         $this->upload_groups();
         $this->info("Uploaded successfully");
     }
-    
+
     /**
      * Upload default roles
      * @return void
@@ -43,13 +45,13 @@ class settingsRolesUpload extends Command
     public function upload_roles()
     {
         $roles = Role::rolesByDefault();
-        foreach ($roles as $key => $value) {
+        foreach ($roles as $role) {
             Role::updateOrCreate(
-                ['name' => $value->name],
+                ['name' => $role->name],
                 [
-                    'name' => $value->name,
-                    'slug' => Str::slug($value->name),
-                    'description' => $value->description,
+                    'name' => $role->name,
+                    'slug' => $this->slug($role->name),
+                    'description' => $role->description,
                     'system' => 1
                 ]
             );
@@ -72,7 +74,7 @@ class settingsRolesUpload extends Command
                 ['name' => $value->name],
                 [
                     'name' => $value->name,
-                    'slug' => Str::slug($value->name),
+                    'slug' => $this->slug($value->name),
                     'description' => $value->description,
                     'system' => 1
                 ]
@@ -86,7 +88,7 @@ class settingsRolesUpload extends Command
                         ['name' => $value1->name],
                         [
                             'name' => $value1->name,
-                            'slug' => Str::slug($value1->name),
+                            'slug' => $this->slug($value1->name),
                             'description' => $value1->description,
                             'system' => 1,
                             'group_id' => $group->id

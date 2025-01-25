@@ -18,8 +18,6 @@ class UserDisableNotification extends Notification implements ShouldQueue
      */
     public function __construct()
     {
-        $this->queue = 'notify';
-
     }
 
     /**
@@ -42,11 +40,11 @@ class UserDisableNotification extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject(__("Account disabled"))
-            ->line(__("Dear user your account has been suspended and all its credentials have been revoked"))
-            ->line(__("If you think it is a mistake, you can communicate with our technical support so that solutions the inconvenience in the brevity possible"))
-            ->action(__('Go to ') . config('ap.name'), url(env('FRONTEND_URL')))
-            ->line(__("Thanks for being part of Midori's family."));
+            ->subject(__("Account Disabled"))
+            ->line(__("Dear user, your account has been suspended, and all associated credentials have been revoked."))
+            ->line(__("If you believe this is a mistake, please contact our technical support team to resolve the issue promptly."))
+            ->action(__('Visit Our Platform'), url(env('FRONTEND_URL')))
+            ->line(__("Thank you for your understanding."));
     }
 
     /**

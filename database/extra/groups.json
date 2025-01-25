@@ -5,7 +5,7 @@
         "services": [
             {
                 "name": "admin",
-                "description": "",
+                "description": "Top level service for admin users",
                 "actions": [
                     {
                         "name": "full",
@@ -18,8 +18,14 @@
             },
             {
                 "name": "groups",
-                "description": "",
+                "description": "Service to manage resource of groups",
                 "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
                     {
                         "name": "view",
                         "public": 0,
@@ -60,8 +66,14 @@
             },
             {
                 "name": "users",
-                "description": "",
+                "description": "Service to manage resource of the users",
                 "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
                     {
                         "name": "view",
                         "public": 0,
@@ -102,8 +114,14 @@
             },
             {
                 "name": "channels",
-                "description": "",
+                "description": "Service to manage channels",
                 "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
                     {
                         "name": "view",
                         "public": 0,
@@ -132,8 +150,14 @@
             },
             {
                 "name": "apps",
-                "description": "",
+                "description": "Service to manage application",
                 "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
                     {
                         "name": "view",
                         "public": 0,
@@ -163,36 +187,12 @@
         ]
     },
     {
-        "name": "customer",
-        "description": "Standard access permissions for client users.",
-        "services": [
-            {
-                "name": "client",
-                "description": "",
-                "actions": [
-                    {
-                        "name": "update",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    },
-                    {
-                        "name": "destroy",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "name": "developer",
         "description": "Environment for developers to build, test, and deploy applications.",
         "services": [
             {
                 "name": "clients",
-                "description": "",
+                "description": "Service to manage applications oauth2 server",
                 "actions": [
                     {
                         "name": "view",
@@ -222,7 +222,7 @@
             },
             {
                 "name": "api",
-                "description": "",
+                "description": "Service to manage API Tokens",
                 "actions": [
                     {
                         "name": "view",

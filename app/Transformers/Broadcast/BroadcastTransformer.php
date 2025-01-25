@@ -31,50 +31,39 @@ class BroadcastTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($broadcast)
+    public function transform($data)
     {
         return [
-            'id' => $broadcast->id,
-            'channel' => $broadcast->channel,
-            'description' => $broadcast->description,
-            'created' => $this->format_date($broadcast->created_at),
-            'updated' => $this->format_date($broadcast->updated_at),
+            'id' => $data->id,
+            'name' => $data->name,
+            'slug' => $data->slug,
+            'description' => $data->description,
+            'system' => $data->system,
+            'created' => $this->format_date($data->created_at),
+            'updated' => $this->format_date($data->updated_at),
             'links' => [
                 'parent' => route('broadcasts.index'),
                 'store' => route('broadcasts.store'),
-                'destroy' => route('broadcasts.destroy', ['broadcast' => $broadcast->id]),
+                'destroy' => route('broadcasts.destroy', ['broadcast' => $data->id]),
             ],
         ];
     }
 
-    public static function transformRequest($index)
-    {
-        $attribute = [
-            'channel' => 'channel',
-            'description' => 'description',
-        ];
 
-        return isset($attribute[$index]) ? $attribute[$index] : null;
-    }
-
-    public static function transformResponse($index)
-    {
-        $attribute = [
-            'channel' => 'channel',
-            'description' => 'description',
-        ];
-
-        return isset($attribute[$index]) ? $attribute[$index] : null;
-    }
-
+    /**
+     * Retrieve the original attributes
+     * @param mixed $index
+     * @return string|null
+     */
     public static function getOriginalAttributes($index)
     {
         $attributes = [
             'id' => 'id',
-            'channel' => 'channel',
+            'name' => 'channel',
             'description' => 'description',
-            'creado' => 'created_at',
-            'actualizado' => 'updated_at',
+            'system' => 'system',
+            'created' => 'created_at',
+            'updated' => 'updated_at',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

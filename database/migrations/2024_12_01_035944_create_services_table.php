@@ -19,8 +19,6 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->boolean('system')->default(false);
             $table->uuid('group_id');
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -3,31 +3,39 @@
 namespace App\Models\OAuth;
 
 use Elyerr\ApiResponse\Assets\Asset;
-use Elyerr\ApiResponse\Assets\Timestamps;
 use Laravel\Passport\Token as PassportToken;
 
 class Token extends PassportToken
 {
-    use Timestamps, Asset;
+    use Asset;
 
+    /**
+     * Getter for Created at field
+     * @param mixed $value
+     * @return string
+     */
     public function getCreatedAtAttribute($value)
     {
-        $date = date('Y-m-d H:i:s', strtotime($value));
-
-        return $this->format_date($date);
+        return $this->format_date($value);
     }
 
+    /**
+     * Getter for updated at field
+     * @param mixed $value
+     * @return string
+     */
     public function getUpdatedAtAttribute($value)
     {
-        $date = date('Y-m-d H:i:s', strtotime($value));
-
-        return $this->format_date($date);
+        return $this->format_date($value);
     }
 
+    /**
+     * Getter for expires at field
+     * @param mixed $value
+     * @return string
+     */
     public function getExpiresAtAttribute($value)
     {
-        $date = date('Y-m-d H:i:s', strtotime($value));
-
-        return $this->format_date($date);
+        return $this->format_date($value);
     }
 }

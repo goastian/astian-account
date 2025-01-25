@@ -14,12 +14,10 @@ return new class extends Migration {
     {
         Schema::create('broadcasts', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('channel', 100)->index();
+            $table->string('name', 100)->index();
             $table->string('slug');
             $table->string('description', 350);
-            $table->boolean('system')->default(false);
-            $table->uuid('created_by')->nullable();
-            $table->uuid('updated_by')->nullable();
+            $table->boolean('system')->default(false); 
             $table->timestamps(); 
         });
     }

@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Broadcasting;
 
-use App\Http\Controllers\GlobalController as Controller;
-use App\Models\Broadcasting\Broadcast;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
+use App\Models\Broadcasting\Broadcast;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Http\Controllers\GlobalController as Controller;
 
 class BroadcastController extends Controller
 {
-    public function __construct(Broadcast $broadcast)
+    /**
+     * Constructor of class
+     */
+    public function __construct()
     {
         parent::__construct();
-        $this->middleware('scope:broadcast');
     }
 
     /**
@@ -24,11 +26,19 @@ class BroadcastController extends Controller
      */
     public function index(Broadcast $broadcast)
     {
+        $this->checkMethod('get');
+
         $params = $this->filter_transform($broadcast->transformer);
 
-        $broadcasts = $this->search($broadcast->table, $params);
+        $data = $broadcast->query();
 
-        return $this->showAll($broadcasts, $broadcast->transformer);
+        foreach ($params as $key => $value) {
+            $data = $data->where($key, "LIKE", "%" . $value . "%");
+        }
+
+        $data = $data->get();
+
+        return $this->showAll($data, $broadcast->transformer);
     }
 
     /**
@@ -40,12 +50,32 @@ class BroadcastController extends Controller
     public function store(Request $request, Broadcast $broadcast)
     {
         $this->validate($request, [
-            'channel' => ['required', 'max:100', 'unique:broadcasts,channel'],
+            'name' => [
+                'required',
+                'max:100',
+                function ($attribute, $value, $fail) use ($broadcast) {
+                    $slug = $this->slug($value);
+                    $model = $broadcast->where('slug', $slug)->first();
+
+                    if ($model) {
+                        $fail(__("The :attribute has been registered", ['attribute' => $attribute]));
+                    }
+                }
+            ],
             'description' => ['required', 'max:350'],
+            'system' => ['nullable', 'boolean'],
+        ]);
+
+        $this->checkMethod('post');
+        $this->checkContentType($this->getPostHeader());
+
+        $request->merge([
+            'slug' => $this->slug($request->name)
         ]);
 
         DB::transaction(function () use ($request, $broadcast) {
-            $broadcast = $broadcast->fill($request->only('channel', 'description'));
+            $broadcast = $broadcast->fill($request->all());
+            $broadcast->createdBy();
             $broadcast->save();
         });
 
@@ -63,11 +93,13 @@ class BroadcastController extends Controller
     public function destroy(Broadcast $broadcast)
     {
         collect(Broadcast::channelsByDefault())->map(function ($value, $key) use ($broadcast) {
-            dd($key);
             if ($value == $broadcast->channel) {
-                throw new ReportError(Lang::get('This channel cannot be removed; this channel belongs by default to the system.'), 403);
+                throw new ReportError(__("This action can't be done"), 400);
             }
         });
+
+        $this->checkMethod('delete');
+        $this->checkContentType(null);
 
         $broadcast->delete();
 

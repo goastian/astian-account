@@ -2,14 +2,8 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Models\User\Role;
 use Illuminate\Http\Request;
-use App\Models\User\User;
-use Illuminate\Validation\Rule;
-use App\Notifications\Notify\Notify;
 use App\Http\Controllers\GlobalController;
-use Illuminate\Support\Facades\Notification;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class PassportConnectController extends GlobalController
 {
@@ -91,49 +85,6 @@ class PassportConnectController extends GlobalController
     public function auth(Request $request)
     {
         return $this->authenticated_user();
-    }
-
-    /**
-     * Gateway for sending notifications
-     * @param \Illuminate\Http\Request $request
-     * @throws \Elyerr\ApiResponse\Exceptions\ReportError
-     * @return mixed|\Illuminate\Http\JsonResponse
-     */
-    public function send_notification(Request $request)
-    {
-        $X_HEADER = $request->header('X-VERIFY-NOTIFICATION');
-
-        throw_unless($X_HEADER == env('VERIFY_NOTIFICATION'), new ReportError("Unsupported header", 422));
-
-        $this->validate($request, [
-            'via' => ['required', 'array', Rule::in(['database', 'mail'])],
-            'subject' => ['required', 'max:50'],
-            'message' => ['required', 'max:500'],
-            'resource' => ['nullable', 'url:https'],
-            'users' => ['required'],
-        ]);
-
-        $data = json_decode(json_encode($request->all()));
-
-        $notifiable = null;
-
-        if ($data->users == '*') {
-            $notifiable = User::where('id', '!=', $request->user()->id)->get();
-
-        } elseif ($this->is_email($data->users)) {
-            $notifiable = User::where('email', $data->users)->first();
-            if (!$notifiable) {
-                throw new ReportError("the email does not exists", 422);
-            }
-        } elseif (Role::get()->contains('name', $data->users)) {
-            $notifiable = Role::where('name', $data->users)->first()->users()->get();
-        } else {
-            throw new ReportError("Unsupported data", 422);
-        }
-
-        Notification::send($notifiable, new Notify($data));
-
-        return $this->message(__('notification sent successfully'), 201);
     }
 
     /**

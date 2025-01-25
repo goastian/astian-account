@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Http\Controllers\GlobalController as Controller;
 use App\Models\OAuth\Client;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Laravel\Passport\ClientRepository;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Http\Controllers\GlobalController as Controller;
 
 class ClientAdminController extends Controller
 {
