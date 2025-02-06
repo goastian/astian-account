@@ -34,6 +34,11 @@ class settingsUsersCreate extends Command
      */
     public function handle()
     {
+        $disable = settingItem('disable_create_user_by_command', false);
+        if ($disable) {
+            return 1;
+        }
+
         $role = $this->choice('Please select the role:', ['admin', 'client'], 0);
 
         // Searching for admin service
@@ -53,13 +58,16 @@ class settingsUsersCreate extends Command
         return Command::SUCCESS;
     }
 
-
+    /**
+     * Create a new user
+     * @param mixed $scope
+     * @return void
+     */
     public function createUser($scope = null)
     {
         $dev_mode = true;
 
         if (app()->environment('production')) {
-            // Request data manually in production
             $name = $this->ask('Enter the user\'s first name');
             $lastName = $this->ask('Enter the user\'s last name');
             $email = $this->ask('Enter the user\'s email');
@@ -80,7 +88,7 @@ class settingsUsersCreate extends Command
             'accept_terms' => true,
             'password' => Hash::make($password),
             'verified_at' => now(),
-            'deleted_at' => $dev_mode ? now() : null,
+            'deleted_at' => now(),
         ]);
 
         if ($scope) {
@@ -88,11 +96,6 @@ class settingsUsersCreate extends Command
                 'scope_id' => $scope->id,
                 'user_id' => $user->id,
             ]);
-        }
-
-
-        if (!$dev_mode) {
-            //send notification to the admins users to activate account
         }
 
         $this->info('User created successfully.');

@@ -2,6 +2,7 @@
 namespace App\Console\Commands\Settings;
 
 use Artisan;
+use App\Models\Setting\Setting;
 use Illuminate\Console\Command;
 
 class settingsSystem extends Command
@@ -30,7 +31,9 @@ class settingsSystem extends Command
         $this->info("Upload channels");
         Artisan::call('settings:roles-upload');
         Artisan::call('settings:countries-upload');
-        Artisan::call('settings:channels-upload'); 
+        Artisan::call('settings:channels-upload');
+        Artisan::call('passport:install');
+        Setting::setDefaultKeys();
         $this->info("Uploaded successfully");
     }
 }

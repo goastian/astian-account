@@ -2,12 +2,17 @@
 
 namespace App\Console;
 
-use App\Models\User\User;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
+    protected $commands = [
+        \App\Console\Commands\Passport\InstallCommand::class,
+        \App\Console\Commands\Passport\ClientCommand::class,
+    ];
+
     /**
      * Define the application's command schedule.
      *
@@ -15,9 +20,9 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    { 
+    {
         $schedule->command("users:delete-accounts")->withoutOverlapping();
-        $schedule->command("users:delete-unverified-account")->withoutOverlapping();       
+        $schedule->command("users:delete-unverified-account")->withoutOverlapping();
         $schedule->command('passport:purge')->withoutOverlapping();
     }
 
