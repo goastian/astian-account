@@ -4,22 +4,24 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Traits\Standard;
 use DateTime;
 use DateInterval;
-use App\Models\User\Role;
+use App\Traits\Scopes;
+use App\Traits\Standard;
+use App\Models\User\UserScope;
+use App\Models\Subscription\Group;
 use Laravel\Passport\HasApiTokens;
 use Elyerr\ApiResponse\Assets\Asset;
-use App\Http\Controllers\OAuth\Scopes;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\Auth\ResetPassword;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard, Scopes;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -76,30 +78,50 @@ class Auth extends Authenticatable
         'accept_terms' => 'boolean'
     ];
 
-
-    public function isAdmin()
-    {
-        return true; //$this->roles()->get()->contains('name', 'admin');
-    }
-
     /**
-     * verify if the user is a client
-     * @return boolean
-     */
-    public function isClient()
-    {
-        return true;
-        // return $this->roles()->get()->contains('name', 'client');
-    }
-
-    /**
-     * 
-     * @param mixed $scope
+     * Check the admin user
      * @return bool
      */
-    public function userCan($scope)
+    public function isAdmin()
     {
+        $gsr = auth()->user()->userScopes()->get()->pluck('gsr_id')->toArray();
+        return in_array('administrator_admin_full', $gsr);
+    }
 
+    /**
+     * Determine if the current API token has a given scope
+     *
+     * @param  string  $scope
+     * @return bool
+     */
+    public function tokenCan($scope)
+    {
+        $apiKey = $this->accessToken;
+
+        if (isset($apiKey->id)) {
+            if (in_array($scope, $apiKey->scopes)) {
+                return true;
+            }
+            return false;
+        }
+
+        if (auth()->check()) {
+            $userScopes = $this->scopes();
+            if (!empty($userScopes) && in_array($scope, $userScopes->pluck('id')->toArray())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Relationship with scopes
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userScopes()
+    {
+        return $this->hasMany(UserScope::class);
     }
 
     /**
@@ -123,5 +145,23 @@ class Auth extends Authenticatable
         $date = new DateTime();
         $date->sub(new DateInterval('P' . $years . 'Y'));
         return $date->format('Y-m-d');
+    }
+
+    /**
+     * Groups
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Group, Auth>
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class);
+    }
+
+    /**
+     * Check if the user has a group
+     * @return bool
+     */
+    public function hasGroup($group)
+    {
+        return $this->groups()->get()->pluck('slug')->contains($group);
     }
 }

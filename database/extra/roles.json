@@ -50,5 +50,13 @@
     {
         "name": "share",
         "description": "Grant access to the resource to other users or groups."
+    },
+    {
+        "name": "history",
+        "description": "View the historical actions or changes made to the resource."
+    },
+    {
+        "name": "revoke",
+        "description": "Remove access or permissions previously granted to a user or group for the resource."
     }
 ]

@@ -80,8 +80,7 @@ class settingsRolesUpload extends Command
                 ]
             );
             //checking if it has services
-            if ($value->services) {
-
+            if (isset($value->services)) {
                 foreach ($value->services as $key1 => $value1) {
                     //Uploading Services Available for this groups
                     $service = Service::updateOrCreate(

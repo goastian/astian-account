@@ -1,15 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\UserController; 
-use App\Http\Controllers\User\UserScopeController; 
+use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserScopeController;
 use App\Http\Controllers\Global\CountriesController;
 use App\Http\Controllers\OAuth\ClientAdminController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Subscription\RoleController;
+use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Subscription\GroupController;
 use App\Http\Controllers\Subscription\ScopeController;
-use App\Http\Controllers\OAuth\AuthorizationController;
 use App\Http\Controllers\Subscription\ServiceController;
 use App\Http\Controllers\OAuth\PassportConnectController;
 use App\Http\Controllers\User\UserNotificationController;
@@ -28,15 +28,17 @@ Route::prefix('gateway')->group(function () {
     Route::get('/check-scopes', [PassportConnectController::class, 'check_scopes']);
     Route::get('/check-client-credentials', [PassportConnectController::class, 'check_client_credentials']);
     Route::get('/token-can', [PassportConnectController::class, 'token_can']);
-    Route::get('/user', [PassportConnectController::class, 'auth']);
-    Route::post('/logout', [AuthorizationController::class, 'destroy']);
-
-})->middleware(['verify.account', 'verify.credentials']);
+    Route::get('/user', [PassportConnectController::class, 'authenticated']);
+    Route::post('/logout', [PassportConnectController::class, 'revokeAuthorization']);
+});
 
 /**
  * Oauth Routes to get credentials
  */
-Route::prefix('oauth')->group(function () {
+Route::group([
+    'prefix' => 'oauth',
+    'as' => 'oauth.'
+], function () {
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
         ->name('passport.token')
         ->middleware('authorize');
@@ -58,6 +60,7 @@ Route::prefix('oauth')->group(function () {
  */
 Route::group([
     'prefix' => 'admin',
+    'as' => 'admin.',
     'middleware' => ['verify.account', 'verify.credentials'],
 
 ], function () {
@@ -71,12 +74,14 @@ Route::group([
 
     Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
     Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');
-    Route::resource('users', UserController::class)->except('edit', 'create', 'destroy');
+    Route::resource('users', UserController::class)->except('edit', 'create');
 
     Route::get('/users/{user}/scopes/history', [UserScopeController::class, 'history'])->name('users.scopes.history');
     Route::get('/users/{user}/scopes', [UserScopeController::class, 'index'])->name('users.scopes.index');
     Route::post('/users/{user}/scopes', [UserScopeController::class, 'store'])->name('users.scopes.store');
     Route::put('/users/{user}/scopes', [UserScopeController::class, 'revoke'])->name('users.scopes.revoke');
+
+    Route::resource('clients', ClientAdminController::class)->except('edit', 'create');
 });
 
 /**
@@ -96,6 +101,8 @@ Route::group([
     Route::delete('/{notification}', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
 });
 
-Route::prefix('assets')->group(function () {
+Route::group([
+    'prefix' => 'resources'
+], function () {
     Route::resource('countries', CountriesController::class)->only('index');
 });

@@ -38,11 +38,11 @@ class RoleTransformer extends TransformerAbstract
             'description' => $role->description,
             'system' => $role->system, 
             'links' => [
-                'index' => route('roles.index'),
-                'store' => route('roles.store'),
-                'show' => route('roles.update', ['role' => $role->id]),
-                'update' => route('roles.update', ['role' => $role->id]),
-                'destroy' => route('roles.destroy', ['role' => $role->id]),
+                'index' => route('admin.roles.index'),
+                'store' => route('admin.roles.store'),
+                'show' => route('admin.roles.update', ['role' => $role->id]),
+                'update' => route('admin.roles.update', ['role' => $role->id]),
+                'destroy' => route('admin.roles.destroy', ['role' => $role->id]),
             ],
         ];
     }

@@ -1,53 +1,96 @@
 <template>
-    <div class="clients">
-        <div class="head">
-            <div class="row">
-                <div class="col">
-                    <p>List of clients</p>
+    <v-sheet class="px-3">
+        <v-data-table
+            :items-per-page="search.per_page"
+            :headers="headers"
+            :items="clients"
+        >
+            <template v-slot:top>
+                <div class="flex mx-3 justify-between align-center">
+                    <h1 class="fw-bold">List of users</h1>
+                    <v-create @created="getClients()"></v-create>
                 </div>
-                <div class="col">
-                    <v-register-client @created="getClients"></v-register-client>
+            </template>
+            <template #item.id="{ item }">
+                <v-chip
+                    :key="item.id"
+                    @click="copyToClipboard(item.id)"
+                    class="ma-2"
+                    color="primary"
+                    dark
+                >
+                    *******
+                </v-chip>
+                <v-snackbar v-model="snackbar" :timeout="2000">
+                    Copied to clipboard
+                </v-snackbar>
+            </template>
+            <template #item.secret="{ item }">
+                <v-chip
+                    v-if="item.secret"
+                    :key="item.secret"
+                    @click="copyToClipboard(item.secret)"
+                    class="ma-2"
+                    color="primary"
+                    dark
+                >
+                    ******
+                </v-chip>
+                <v-snackbar v-model="snackbar" :timeout="2000">
+                    Copied to clipboard
+                </v-snackbar>
+            </template>
+            <template #item.revoked="{ item }">
+                <v-chip>
+                    {{ item.revoked ? "Yes" : "No" }}
+                </v-chip>
+            </template>
+            <template #item.actions="{ item }">
+                <div class="flex justify-between">
+                    <v-delete @deleted="getClients" :item="item"></v-delete>
+                    <v-update @updated="getClients" :item="item"></v-update>
                 </div>
-            </div>
-        </div>
-        <div class="table" style="margin-bottom: 1em">
-            <el-table :data="clients" :lazy="true">
-                <el-table-column prop="id" label="id" width="200" />
-                <el-table-column prop="secret" label="secret" width="300" />
-                <el-table-column prop="name" label="name" width="150" />
-                <el-table-column prop="redirect" label="redirect" width="300" />
-                <el-table-column label="Operations" min-width="300">
-                    <template #default="scope">
-                        <div class="actions">
-                            <div class="box">
-                                <v-remove :client="scope.row" @removed="getClients"></v-remove>
-                            </div>
-
-                            <div class="box">
-                                <v-update :client="scope.row" @updated="getClients"></v-update>
-                            </div>
-                        </div>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
-    </div>
+            </template>
+            <template v-slot:bottom>
+                <v-pagination
+                    v-model="search.page"
+                    :length="search.total_pages"
+                    :total-visible="7"
+                ></v-pagination>
+            </template>
+        </v-data-table>
+    </v-sheet>
 </template>
 <script>
-import VRegisterClient from "./RegisterClient.vue";
-import VRemove from "./RemoveClient.vue";
-import VUpdate from "./UpdateClient.vue";
+import VCreate from "./Create.vue";
+import VUpdate from "./Update.vue";
+import VDelete from "./Delete.vue";
 
 export default {
     components: {
-        VRegisterClient,
-        VRemove,
+        VCreate,
         VUpdate,
+        VDelete,
     },
 
     data() {
         return {
             clients: [],
+            headers: [
+                { title: "Name", value: "name", align: "start" },
+                { title: "Identifier", value: "id", align: "start" },
+                { title: "Secret", value: "secret", align: "start" },
+                { title: "Revoked", value: "revoked", align: "start" },
+                { title: "Created", value: "created_at", align: "start" },
+                { title: "Updated", value: "updated_at", align: "start" },
+                { title: "Actions", value: "actions", align: "center" },
+            ],
+            search: {
+                page: 1,
+                per_page: 50,
+                total_pages: 0,
+            },
+            snackbar: false,
         };
     },
 
@@ -60,43 +103,18 @@ export default {
             this.$server
                 .get("/oauth/clients")
                 .then((res) => {
-                    this.clients = res.data;
+                    this.clients = res.data.data;
+                    this.search = res.data.meta;
                 })
                 .catch((e) => {});
+        },
+
+        async copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                this.snackbar = true;
+            } catch (err) {}
         },
     },
 };
 </script>
-<style lang="scss" scoped>
-.clients {
-    .head {
-        margin-bottom: 1em;
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-
-            .col {
-                flex: 1 1 calc(100% / 2);
-                p {
-                    font-size: 1.3em;
-                    margin: 0;
-                }
-
-                &:nth-child(2) {
-                    text-align: center;
-                }
-            }
-        }
-    }
-
-    .actions {
-        display: flex;
-        flex-wrap: wrap;
-        .box {
-            flex: auto;
-            margin: 0.5em;
-        }
-    }
-}
-</style>

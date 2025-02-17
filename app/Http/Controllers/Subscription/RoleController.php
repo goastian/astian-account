@@ -12,10 +12,11 @@ class RoleController extends Controller
     public function __construct()
     {
         parent::__construct();
-        /*$this->middleware('scope:scope_read')->only('index', 'show');
-        $this->middleware('scope:scope_create')->only('store');
-        $this->middleware('scope:scope_update')->only('update');
-        $this->middleware('scope:scope_destroy')->only('destroy');*/
+        $this->middleware('scope:administrator_role_full,administrator_role_view')->only('index');
+        $this->middleware('scope:administrator_role_full,administrator_role_show')->only('show');
+        $this->middleware('scope:administrator_role_full,administrator_role_create')->only('store');
+        $this->middleware('scope:administrator_role_full,administrator_role_update')->only('update');
+        $this->middleware('scope:administrator_role_full,administrator_role_destroy')->only('destroy');
     }
 
     /**
@@ -84,7 +85,7 @@ class RoleController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $role) {
-            $role = $role->fill($request->all()); 
+            $role = $role->fill($request->all());
             $role->save();
         });
 
@@ -124,7 +125,7 @@ class RoleController extends Controller
                 $can_update = true;
             }
 
-            if ($can_update) {              
+            if ($can_update) {
 
                 $role->push();
                 //send event
@@ -147,10 +148,12 @@ class RoleController extends Controller
         $this->checkContentType(null);
 
         collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
-            throw_if($value->name == $role->name, new ReportError(__("This action can't be done"), 400));
+            throw_if($value->name == $role->name, new ReportError(__("This action cannot be completed because this role is a system role and cannot be deleted."), 403));
         });
 
-        throw_if($role->scopes()->count() > 0, new ReportError(__("This action can't be done"), 400));
+        throw_if($role->system, new ReportError(__("This action cannot be completed because this role is a system role and cannot be deleted."), 403));
+
+        throw_if($role->scopes()->count() > 0, new ReportError(__("This action cannot be completed because this role is currently assigned to one or more scopes and cannot be deleted."), 403));
 
         $role->delete();
 

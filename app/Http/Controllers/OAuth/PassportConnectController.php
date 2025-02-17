@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers\OAuth;
 
+use Log;
+use Http;
+use Response;
+use ErrorException;
 use Illuminate\Http\Request;
+use Laravel\Passport\TokenRepository;
 use App\Http\Controllers\GlobalController;
+use Laravel\Passport\RefreshTokenRepository;
 
 class PassportConnectController extends GlobalController
 {
@@ -13,6 +19,7 @@ class PassportConnectController extends GlobalController
         $scopes = request()->header('X-SCOPES');
 
         parent::__construct();
+
         $this->middleware('scope:' . $scopes)->only('check_scope');
         $this->middleware('scopes:' . $scopes)->only('check_scopes');
 
@@ -62,7 +69,7 @@ class PassportConnectController extends GlobalController
     }
 
     /**
-     * Gateway to check if a token can execute a specific scope. This request includes Authorization and X-SCOPE headers.
+     * Check if the user has scope
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
@@ -70,43 +77,37 @@ class PassportConnectController extends GlobalController
     {
         $scope = $request->header('X-SCOPE');
 
-        $status = request()->user()->tokenCan($scope);
+        if (request()->user()->tokenCan($scope)) {
+            return response(null, 200);
+        }
 
-        return $status ? response(null, 200) : response(null, 403);
+        return response(null, 403);
     }
 
     /**
-     * Gateway to retrieve authenticated user data. This request includes Authorization header.
-     *
-     * @param Request $request
-     *
-     * @return Json
+     * Gateway to get information about the authenticatable user
+     * @param \Illuminate\Http\Request $request
      */
-    public function auth(Request $request)
+    public function authenticated(Request $request)
     {
         return $this->authenticated_user();
     }
 
     /**
-     * verify the email key
-     *
-     * @param string $value
-     * @return bool
+     * Revoke authorization to the current client
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function is_email($value)
+    public function revokeAuthorization(Request $request)
     {
-        $valid_email = filter_var($value, FILTER_VALIDATE_EMAIL);
+        $token = auth()->user()->token();
 
-        if ($valid_email) {
-            list($usuario, $dominio) = explode('@', $value);
+        $tokenRepository = app(TokenRepository::class);
+        $refreshTokenRepository = app(RefreshTokenRepository::class);
 
-            if (strpos($dominio, '.') !== false) {
-                list($dominio, $extension) = explode('.', $dominio);
-                if (strlen($extension) >= 2) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        $tokenRepository->revokeAccessToken($token->id);
+        $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
+
+        return $this->message(__('Session finished successfully'), 200);
     }
 }

@@ -44,12 +44,12 @@ class ServiceTransformer extends TransformerAbstract
             'created' => $this->format_date($data->created_at),
             'updated' => $this->format_date($data->updated_at),
             'links' => [
-                'index' => route('services.index'),
-                'store' => route('services.store'),
-                'show' => route('services.show', ['service' => $data->id]),
-                'update' => route('services.update', ['service' => $data->id]),
-                'destroy' => route('services.destroy', ['service' => $data->id]),
-                'scopes' => route('services.scopes.index', ['service' => $data->id])
+                'index' => route('admin.services.index'),
+                'store' => route('admin.services.store'),
+                'show' => route('admin.services.show', ['service' => $data->id]),
+                'update' => route('admin.services.update', ['service' => $data->id]),
+                'destroy' => route('admin.services.destroy', ['service' => $data->id]),
+                'scopes' => route('admin.services.scopes.index', ['service' => $data->id])
             ]
         ];
     }

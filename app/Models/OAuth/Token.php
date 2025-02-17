@@ -36,6 +36,6 @@ class Token extends PassportToken
      */
     public function getExpiresAtAttribute($value)
     {
-        return $this->format_date($value);
+        return $this->format_date($value, 'Y-m-d H:i');
     }
 }

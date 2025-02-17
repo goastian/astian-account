@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Transformers\OAuth\ClientTransformer;
-use Elyerr\ApiResponse\Assets\JsonResponser;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Laravel\Passport\Http\Controllers\ClientController as Controller;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\DB;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use App\Transformers\OAuth\ClientTransformer;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Laravel\Passport\Http\Controllers\ClientController as Controller;
 
 class ClientController extends Controller
 {
@@ -46,7 +46,7 @@ class ClientController extends Controller
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
             'redirect' => ['required', $this->redirectRule],
-            'confidential' => 'boolean',
+            'confidential' => ['boolean'],
         ])->validate();
 
         //create a new client
@@ -57,7 +57,7 @@ class ClientController extends Controller
             null,
             false,
             false,
-            (bool) $request->input('confidential', true)
+            (bool) $request->confidential
         );
 
         if (Passport::$hashesClientSecrets) {

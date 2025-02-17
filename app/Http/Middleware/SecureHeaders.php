@@ -15,6 +15,10 @@ class SecureHeaders
      */
     public function handle(Request $request, Closure $next): Response
     {
+        $nonce = $this->generateNonce();
+
+        view()->share('nonce', $nonce);
+
         $response = $next($request);
         $response->headers->set("Referrer-Policy", "no-referrer");
         $response->headers->set("X-Content-Type-Options", "nosniff");
@@ -22,9 +26,9 @@ class SecureHeaders
         $response->headers->set("Permissions-Policy", "accelerometer=(), autoplay=(), camera=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), speaker=(self), display-capture=()");
         $response->headers->set("Strict-Transport-Security", "max-age=31536000");
 
-        //Ignore csp policies int this route
+        //Ignore csp policies in this route
         if (!in_array($request->route()->getName(), ['passport.authorizations.authorize'])) {
-            $response->headers->set("Content-Security-Policy", $this->ContentSecurityPolicy());
+            $response->headers->set("Content-Security-Policy", $this->ContentSecurityPolicy($nonce));
         }
 
         return $response;
@@ -34,16 +38,16 @@ class SecureHeaders
      * Setting default content security policies 
      * @return string
      */
-    public function ContentSecurityPolicy()
+    public function ContentSecurityPolicy($nonce)
     {
         $policies = [
             "base-uri 'self'",
             "script-src 'self'",
-            "script-src-elem 'self'",
-            "script-src-attr 'self'",
+            "script-src-elem 'self' 'nonce-{$nonce}'",
+            "script-src-attr 'self' 'nonce-{$nonce}'",
             // "style-src 'self' $host 'unsafe-inline'",
             // "style-src-elem 'self' $host 'unsafe-inline'",
-            "style-src-attr 'self' 'unsafe-inline'",
+            "style-src-attr 'self' 'unsafe-inline' 'nonce-{$nonce}'",
             "media-src 'self'",
             "object-src 'self'",
             "child-src 'self'",

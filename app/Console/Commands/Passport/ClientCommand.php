@@ -46,7 +46,10 @@ class ClientCommand extends Command
             'http://localhost'
         );
 
-        $this->updatePassportEnv($client->getKey(), $client->plainSecret);
+        settingAdd('passport_personal_access_client_id', $client->getKey());
+        settingAdd('passport_personal_access_client_secret', $client->plainSecret);
+
+        //$this->updatePassportEnv($client->getKey(), $client->plainSecret);
 
         $this->info('Personal access client created successfully.');
     }

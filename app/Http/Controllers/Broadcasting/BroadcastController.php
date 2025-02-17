@@ -17,6 +17,11 @@ class BroadcastController extends Controller
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:administrator_channel_full,administrator_channel_view')->only('index');
+        //$this->middleware('scope:administrator_channel_full,administrator_channel_show')->only('show');
+        $this->middleware('scope:administrator_channel_full,administrator_channel_create')->only('store');
+        //$this->middleware('scope:administrator_channel_full,administrator_channel_update')->only('update');
+        $this->middleware('scope:administrator_channel_full,administrator_channel_destroy')->only('destroy');
     }
 
     /**
@@ -32,9 +37,7 @@ class BroadcastController extends Controller
 
         $data = $broadcast->query();
 
-        foreach ($params as $key => $value) {
-            $data = $data->where($key, "LIKE", "%" . $value . "%");
-        }
+        $this->search($data, $params);
 
         $data = $data->get();
 
@@ -75,7 +78,6 @@ class BroadcastController extends Controller
 
         DB::transaction(function () use ($request, $broadcast) {
             $broadcast = $broadcast->fill($request->all());
-            $broadcast->createdBy();
             $broadcast->save();
         });
 
@@ -92,9 +94,11 @@ class BroadcastController extends Controller
      */
     public function destroy(Broadcast $broadcast)
     {
+        throw_if($broadcast->system, new ReportError(__("This service cannot be deleted because it is a system service."), 403));
+
         collect(Broadcast::channelsByDefault())->map(function ($value, $key) use ($broadcast) {
             if ($value == $broadcast->channel) {
-                throw new ReportError(__("This action can't be done"), 400);
+                throw new ReportError(__("This action cannot be completed because this channel is a system channel and cannot be deleted."), 400);
             }
         });
 

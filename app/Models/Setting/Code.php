@@ -13,7 +13,7 @@ class Code extends Master
      * table name
      * @var string
      */
-    public $table = "factor_2fa";
+    protected $table = "factor_2fa";
 
     public $timestamps = false;
 
@@ -25,12 +25,12 @@ class Code extends Master
     ];
 
     /**
-     * destroy tokens
-     *
-     * @param String $status
+     * Destroy token
+     * @param mixed $status
+     * @return void
      */
     public static function destroyToken($status)
     {
-        DB::table('2fa')->where('status', $status)->delete();
+        Code::where('status', $status)->delete();
     }
 }

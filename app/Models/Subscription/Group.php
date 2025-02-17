@@ -2,12 +2,14 @@
 namespace App\Models\Subscription;
 
 use App\Models\Master;
+use App\Models\User\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Transformers\Subscription\GroupTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Group extends Master
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public $table = "groups";
 
@@ -42,5 +44,14 @@ class Group extends Master
     public function services()
     {
         return $this->hasMany(Service::class);
+    }
+
+    /**
+     * Users
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User, Group>
+     */
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 }

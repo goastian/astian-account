@@ -11,8 +11,6 @@ class Session extends Master
 
     public $table = "sessions";
 
-    public $view = "";
-
     public $transformer = SessionTransformer::class;
 
     protected $fillable = [

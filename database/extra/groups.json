@@ -17,7 +17,7 @@
                 ]
             },
             {
-                "name": "groups",
+                "name": "group",
                 "description": "Service to manage resource of groups",
                 "actions": [
                     {
@@ -39,6 +39,12 @@
                         "active": 1
                     },
                     {
+                        "name": "show",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
                         "name": "update",
                         "public": 0,
                         "requires_payment": 0,
@@ -48,13 +54,13 @@
                         "name": "disable",
                         "public": 0,
                         "requires_payment": 0,
-                        "active": 1
+                        "active": 0
                     },
                     {
                         "name": "enable",
                         "public": 0,
                         "requires_payment": 0,
-                        "active": 1
+                        "active": 0
                     },
                     {
                         "name": "destroy",
@@ -65,7 +71,61 @@
                 ]
             },
             {
-                "name": "users",
+                "name": "Service",
+                "description": "Service to manage resource of services",
+                "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "show",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "disable",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 0
+                    },
+                    {
+                        "name": "enable",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 0
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "user",
                 "description": "Service to manage resource of the users",
                 "actions": [
                     {
@@ -113,8 +173,8 @@
                 ]
             },
             {
-                "name": "channels",
-                "description": "Service to manage channels",
+                "name": "role",
+                "description": "Service to manage resource of the roles",
                 "actions": [
                     {
                         "name": "full",
@@ -130,6 +190,12 @@
                     },
                     {
                         "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "show",
                         "public": 0,
                         "requires_payment": 0,
                         "active": 1
@@ -149,8 +215,8 @@
                 ]
             },
             {
-                "name": "apps",
-                "description": "Service to manage application",
+                "name": "Scope",
+                "description": "Service to manage resource of the scopes",
                 "actions": [
                     {
                         "name": "full",
@@ -166,6 +232,96 @@
                     },
                     {
                         "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "show",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "application",
+                "description": "Service to manage third-party applications",
+                "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "show",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    }
+                ]
+            },
+            {
+                "name": "client",
+                "description": "Service to manage admin client",
+                "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "show",
                         "public": 0,
                         "requires_payment": 0,
                         "active": 1
@@ -191,7 +347,7 @@
         "description": "Environment for developers to build, test, and deploy applications.",
         "services": [
             {
-                "name": "clients",
+                "name": "client",
                 "description": "Service to manage applications oauth2 server",
                 "actions": [
                     {
@@ -251,5 +407,9 @@
                 ]
             }
         ]
+    },
+    {
+        "name": "member",
+        "description": "Default user with the lowest level of access who signs up"
     }
 ]

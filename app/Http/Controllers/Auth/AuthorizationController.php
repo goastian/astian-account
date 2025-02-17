@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use Error;
 use ErrorException;
-use App\Models\Auth\Session;
 use Illuminate\Http\Request;
+use App\Models\Setting\Session;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\TokenRepository;
 use Illuminate\Cookie\CookieValuePrefix;
 use App\Http\Controllers\GlobalController;
@@ -16,7 +17,6 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 class AuthorizationController extends GlobalController
 {
-
     /**
      * Encrypter
      *
@@ -41,21 +41,17 @@ class AuthorizationController extends GlobalController
      */
     public function destroy(Request $request)
     {
-        try {
-            $access_token_id = $this->decodeToken($request) ?: request()->user()->token()->id;
+        Auth::guard('web')->logout();
 
-            $tokenRepository = app(TokenRepository::class);
-            $refreshTokenRepository = app(RefreshTokenRepository::class);
+        $request->session()->invalidate();
 
-            $tokenRepository->revokeAccessToken($access_token_id);
-            $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($access_token_id);
+        $request->session()->regenerateToken();
 
-        } catch (ErrorException $e) {
+        if ($request->wantsJson()) {
+            return $this->message(__('Session finished successfully'), 200);
         }
 
-        $this->destroyDefaultSession($request);
-
-        return $this->message(__('Session has finished'), 200);
+        return redirect('/');
     }
 
     /**
@@ -66,7 +62,7 @@ class AuthorizationController extends GlobalController
     public function decodeToken(Request $request)
     {
         try {
-            $token = $request->cookie(env('PASSPORT_TOKEN'));
+            $token = $request->cookie(settingItem('passport_token_services', 'passport_token'));
 
             $token_decode = explode('.', $token);
             $token_decode = $token_decode[1];

@@ -134,7 +134,10 @@ return [
     /**
      * X-CSRF-TOKEN Name
      */
-    'xcsrf-token' => env('XCSRF_TOKEN', Str::slug(env('APP_NAME', 'laravel'), '_') . '_xcsrf'),
+    'xcsrf-token' => env(
+        'XCSRF_TOKEN',
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_csrf'
+    ),
 
     /*
     |--------------------------------------------------------------------------
@@ -186,7 +189,7 @@ return [
     |
      */
 
-    'http_only' => env('SESSION_SECURE_COOKIE', true),
+    'http_only' => env('SESSION_HTTP_ONLY', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -214,6 +217,6 @@ return [
     |
      */
 
-    'partitioned' => true,
+    'partitioned' => false,
 
 ];

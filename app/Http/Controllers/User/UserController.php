@@ -24,11 +24,12 @@ class UserController extends Controller
     public function __construct(User $user)
     {
         parent::__construct();
-        /*$this->middleware('scope:users_full,users_view')->only('index', 'show');
-        $this->middleware('scope:users_full,users_create')->only('store');
-        $this->middleware('scope:users_full,users_update,client')->only('update');
-        $this->middleware('scope:users_full,users_disable,client')->only('disable');
-        $this->middleware('scope:users_full,users_enable')->only('enable');*/
+        $this->middleware('scope:administrator_user_full,administrator_user_view')->only('index');
+        $this->middleware('scope:administrator_user_full,administrator_user_show')->only('show');
+        $this->middleware('scope:administrator_user_full,administrator_user_create')->only('store');
+        $this->middleware('scope:administrator_user_full,administrator_user_update')->only('update');
+        $this->middleware('scope:administrator_user_full,administrator_user_disable')->only('disable');
+        $this->middleware('scope:administrator_user_full,administrator_user_enable')->only('enable');
     }
 
 
@@ -42,9 +43,9 @@ class UserController extends Controller
 
         $data = $user->withTrashed();
 
-        foreach ($params as $key => $value) {
-            $data = $data->where($key, "like", "%" . $value . "%");
-        }
+        $this->search($data, $params);
+
+        $this->orderBy($data, $user->transformer);
 
         $data = $data->get();
 

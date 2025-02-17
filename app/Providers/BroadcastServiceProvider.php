@@ -14,9 +14,6 @@ class BroadcastServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /**
-         * Ckeckig autorization options
-         */
         if (request()->header('Authorization')) {
             Broadcast::routes(['middleware' => ['auth:api']]);
         } else {

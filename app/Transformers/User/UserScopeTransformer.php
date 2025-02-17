@@ -39,7 +39,7 @@ class UserScopeTransformer extends TransformerAbstract
             'group' => $data->scope->service->group->slug,
             'service' => $data->scope->service->slug,
             'role' => $data->scope->role->slug,
-            'scope' => $data->scope->getScopeID(),
+            'scope' => $data->scope->getGsrID(),
             'requires_payment' => $data->scope->requires_payment,
             'public' => $data->scope->public,
             'active' => $data->scope->active,
@@ -49,10 +49,10 @@ class UserScopeTransformer extends TransformerAbstract
             'created_at' => $this->format_date($data->created_at),
             'updated_at' => $this->format_date($data->updated_at),
             'links' => [
-                'index' => route('users.scopes.index', ['user' => $data->user_id]),
-                'store' => route('users.scopes.store', ['user' => $data->user_id]),
-                'revoke' => route('users.scopes.revoke', ['user' => $data->user_id]),
-                'user' => route('users.show', ['user' => $data->user_id]),
+                'index' => route('admin.users.scopes.index', ['user' => $data->user_id]),
+                'store' => route('admin.users.scopes.store', ['user' => $data->user_id]),
+                'revoke' => route('admin.users.scopes.revoke', ['user' => $data->user_id]),
+                'user' => route('admin.users.show', ['user' => $data->user_id]),
             ]
         ];
     }

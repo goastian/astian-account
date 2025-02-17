@@ -32,6 +32,16 @@ class UserScope extends Master
         'end_date',
     ];
 
+    protected $appends = [
+        'gsr_id',
+    ];
+
+
+    public function getGsrIdAttribute()
+    {
+        return $this->scope->getGsrID();
+    }
+
     /**
      * Belongs to 
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
