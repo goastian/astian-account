@@ -1,16 +1,25 @@
 # Authorization Server (Dev)
-Servidor de autorización centralizado usando aouth-sever a través de laravel y laravel passport como capa de abstracción o capa puente, implemeta broadcasting usando [Echo Server](https://gitlab.com/elyerr/echo-server) y [Echo client](https://gitlab.com/elyerr/echo-client-js), este servidor se desarrollo con la finalidad de facilitar la creación de aplicaciones como micro servicios y que se puedan conectar fácilmente al servidor principal como si fuesen un todo, con este servidor de autentificación y autorización puedes desarrollar micro servicios o monolíticos en cualquier lenguaje de programación y administrador de base de datos, facilitado de esta forma que los desarrolladores creen aplicaciones en el lenguaje de programación que mas dominen permitiendo crear aplicaciones mucho mas complejas. 
 
+Centralized authorization server using OAuth-server through Laravel and Laravel Passport as an abstraction or bridge layer. It implements broadcasting using [Echo Server](https://gitlab.com/elyerr/echo-server) and [Echo Client](https://gitlab.com/elyerr/echo-client-js).
+
+This server was developed to facilitate the creation of microservices applications that can easily connect to the main server as if they were a unified system. With this authentication and authorization server, you can develop microservices or monolithic applications in any programming language and database manager. This enables developers to build applications in the language they are most proficient in, allowing for the creation of more complex applications.
+
+---
 
 ## License
-This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](./LICENSE) file for details.
 
+This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.
 
-## RECURSOS
-##### [DOCUMENTCION OFICIAL](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home)
-##### [LARAVEL PASSPORT DOCUMENTACION](https://laravel.com/docs/10.x/passport)
-##### [ECHO SERVER](https://gitlab.com/elyerr/echo-server)
-##### [ECHO CLIENT](https://gitlab.com/elyerr/echo-client-js)
-##### [LARAVEL FRAMEWORK DOCUMENTACION](https://laravel.com/docs/10.x)
+---
 
-##### [CONTACTO DIRECTO](https://t.me/elyerr)
+## Resources
+
+-   [Official Documentation](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home) 
+-   [Echo Server](https://gitlab.com/elyerr/echo-server)
+-   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
+
+---
+
+## Contact
+
+For direct contact, visit [Telegram](https://t.me/elyerr).
