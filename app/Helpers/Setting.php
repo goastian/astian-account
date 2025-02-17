@@ -2,6 +2,7 @@
 
 use App\Models\Setting\Setting;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Artisan;
 
 if (!function_exists('settingAdd')) {
     /**
@@ -33,7 +34,6 @@ if (!function_exists('settingAdd')) {
 }
 
 
-
 if (!function_exists('settingItem')) {
 
     /**
@@ -47,24 +47,20 @@ if (!function_exists('settingItem')) {
         try {
             $userId = $user ? auth()->user()->id : null;
 
-            $cacheKey = "setting_{$key}_user_{$userId}";
+            $query = Setting::query();
 
-            return Cache::remember($cacheKey, now()->addDays(config('cache.expires')), function () use ($key, $userId, $default) {
-
-                $query = Setting::query();
-
-                $query->where('key', $key)->where(function ($subQuery) use ($userId) {
-                    if ($userId) {
-                        $subQuery->where('user_id', $userId);
-                    } else {
-                        $subQuery->whereNull('user_id');
-                    }
-                });
-
-                $setting = $query->first();
-
-                return $setting ? $setting->value : $default;
+            $query->where('key', $key)->where(function ($subQuery) use ($userId) {
+                if ($userId) {
+                    $subQuery->where('user_id', $userId);
+                } else {
+                    $subQuery->whereNull('user_id');
+                }
             });
+
+            $setting = $query->first();
+
+            return $setting ? $setting->value : $default;
+
         } catch (QueryException $th) {
             Log::error($th);
         }
@@ -75,7 +71,7 @@ if (!function_exists('redirectToHome')) {
 
     /**
      * Redirect to home user after login the user
-     * @return Illuminate\Config\Repository|mixed
+     * @return Illuminate\Http\RedirectResponse|Illuminate\Routing\Redirector
      */
     function redirectToHome()
     {

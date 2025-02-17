@@ -32,11 +32,8 @@ class UserTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($user)
+    public function transform(User $user)
     {
-        if ($user instanceof User) {
-            $user = User::withTrashed()->find($user->id);
-        }
 
         return [
             'id' => $user->id,
@@ -51,18 +48,19 @@ class UserTransformer extends TransformerAbstract
             'dial_code' => $user->dial_code,
             'full_phone' => $user->dial_code . " " . $user->phone,
             'm2fa' => $user->m2fa,
+            'groups' => $user->groups()->get()->pluck('slug'),
             'verified' => $this->format_date($user->verified_at),
             'created' => $this->format_date($user->created_at),
             'updated' => $this->format_date($user->updated_at),
             'disabled' => $this->format_date($user->deleted_at),
             'links' => [
-                'index' => route('users.index'),
-                'store' => route('users.store'),
-                'show' => route('users.show', ['user' => $user->id]),
-                'update' => route('users.update', ['user' => $user->id]),
-                'disable' => route('users.disable', ['user' => $user->id]),
-                'enable' => route('users.enable', ['id' => $user->id]),
-                'scopes' => route('users.scopes.index', ['user' => $user->id]),
+                'index' => route('admin.users.index'),
+                'store' => route('admin.users.store'),
+                'show' => route('admin.users.show', ['user' => $user->id]),
+                'update' => route('admin.users.update', ['user' => $user->id]),
+                'disable' => route('admin.users.disable', ['user' => $user->id]),
+                'enable' => route('admin.users.enable', ['id' => $user->id]),
+                'scopes' => route('admin.users.scopes.index', ['user' => $user->id]),
             ],
         ];
     }

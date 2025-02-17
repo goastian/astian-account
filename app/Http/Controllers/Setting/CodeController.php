@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Setting;
 use DateTime;
 use DateInterval;
 use App\Models\User\User;
-use App\Models\Factor\Code;
+use App\Models\Setting\Code;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -56,7 +56,7 @@ class CodeController extends Controller
     }
 
     /**
-     * User autentication via 2FA
+     * User authentication via 2FA
      *
      * @param Request $request
      */
@@ -64,19 +64,25 @@ class CodeController extends Controller
     {
         $code = $this->getToken($request);
 
+        if (empty($code)) {
+            return back()->with('error', __("An error occurred while processing your request. Please try again."));
+        }
+
         $date = new DateTime($code->created_at);
-        $date->add(new DateInterval("PT" . env('CODE_2FA_EXPIRE') . "M"));
+
+
+        $date->add(new DateInterval("PT" . settingItem('code_2fa_email_expires', 5) . "M"));
         $expire = $date->format('Y-m-d H:i:s');
 
         if ($code->email != $request->email) {
             return redirect('login')->with([
-                'status' => Lang::get('Avoid reloading the page before entering the code 2FA'),
+                'status' => __('Avoid reloading the page before entering the code 2FA'),
             ]);
         }
 
         if (!Hash::check($request->token, $code->code)) {
             return redirect()->back()->with([
-                'warning' => Lang::get('Token invalid'),
+                'warning' => __('Token invalid'),
                 'email' => $request->email,
             ]);
         }
@@ -84,7 +90,7 @@ class CodeController extends Controller
         if (now() > $expire) {
             Code::destroyToken($code->status);
             return redirect()->back()->with([
-                'warning' => Lang::get('Token expired'),
+                'warning' => __('Token expired'),
                 'email' => $request->email,
             ]);
         }
@@ -109,7 +115,7 @@ class CodeController extends Controller
 
         if ($code) {
             $date = new DateTime($code->created_at);
-            $date->add(new DateInterval('PT' . env('CODE_2FA_EXPIRE') . 'M'));
+            $date->add(new DateInterval('PT' . settingItem('code_2fa_email_expires', 5) . 'M'));
             $now = $date->format('Y-m-d H:i:s');
 
             if (now() < $now) {
@@ -133,7 +139,7 @@ class CodeController extends Controller
         $code = $this->getToken($request);
 
         $date = new DateTime($code->created_at);
-        $date->add(new DateInterval("PT" . env('CODE_2FA_EXPIRE') . "M"));
+        $date->add(new DateInterval("PT" . settingItem('code_2fa_email_expires', 5) . "M"));
         $expire = $date->format('Y-m-d H:i:s');
 
         if (!Hash::check($request->token, $code->code)) {
@@ -151,6 +157,6 @@ class CodeController extends Controller
 
         Code::destroyToken($code->status);
 
-        return $this->message(Lang::get($user->m2fa ? "2FA activated" : "2FA unactivated"), 201);
+        return $this->message(__($user->m2fa ? "2FA activated" : "2FA unactivated"), 201);
     }
 }

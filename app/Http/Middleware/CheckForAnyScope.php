@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\OAuth\Scopes;
 use Closure;
+use App\Traits\Scopes;
 use Elyerr\ApiResponse\Exceptions\ReportError;
-use Illuminate\Http\Request;
-use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Exceptions\MissingScopeException;
+use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Http\Middleware\CheckForAnyScope as middleware;
 
 class CheckForAnyScope extends middleware
@@ -30,26 +29,29 @@ class CheckForAnyScope extends middleware
             throw new AuthenticationException;
         }
 
-        if ($request->user()->isAdmin()) {
+        //Check the api key
+        $apiKey = $request->user()->token();
+
+        if (isset($apiKey->id)) {
+            if (array_intersect($apiKey->scopes, $scopes)) {
+                return $next($request);
+            }
+            throw new ReportError("You do not have the necessary permissions", 403);
+        }
+
+        //Admin users the top level the of application
+        if (auth()->user()->isAdmin()) {
             return $next($request);
         }
 
-        //sesion sin token
-        if (!$request->header('Authorization')) {
-            $can_access = [];
-            foreach ($scopes as $scope) {
-                array_push($can_access, collect($this->scopes())->contains('id', $scope));
-            }
+        //Check no admin user
+        if (auth()->check()) {
+            $userScopes = $this->scopes()->pluck('id')->toArray();
 
-            return in_array(true, $can_access) ?
-            $next($request) :
-            throw new ReportError('No cuenta con los permisos necesarios', 403);
-        }
-
-        foreach ($scopes as $scope) {
-            if ($request->user()->tokenCan($scope)) {
+            if (!empty($userScopes) && count(array_intersect($userScopes, $scopes)) > 0) {
                 return $next($request);
             }
+            throw new ReportError("You do not have the necessary permissions", 403);
         }
 
         throw new MissingScopeException($scopes);

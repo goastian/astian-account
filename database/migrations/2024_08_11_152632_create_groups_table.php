@@ -17,7 +17,8 @@ return new class extends Migration {
             $table->string('name', 100)->unique();
             $table->string('slug');
             $table->string('description', 200);
-            $table->boolean('system')->default(false); 
+            $table->softDeletes();
+            $table->boolean('system')->default(false);
         });
     }
 

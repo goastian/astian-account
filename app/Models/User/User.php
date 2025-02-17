@@ -22,17 +22,16 @@ class User extends Auth
     public $transformer = UserTransformer::class;
 
     /**
-     * Remove client accounts after 30 days.
-     *
+     * Destroy users
      * @return void
      */
     public function remove_accounts()
     {
         $now = new DateTime();
-        $now->sub(new DateInterval('P' . env('DESTROY_CLIENTS_AFTER', 30) . 'D'));
-        $fecha = $now->format('Y-m-d H:i:s');
+        $now->sub(new DateInterval('P' . settingItem('destroy_user_after', 30) . 'D'));
+        $date = $now->format('Y-m-d H:i:s');
 
-        $users = User::onlyTrashed()->where('deleted_at', "<", $fecha)->get();
+        $users = User::onlyTrashed()->where('deleted_at', "<", $date)->get();
 
         if (count($users) > 0) {
 
@@ -54,15 +53,15 @@ class User extends Auth
     public function remove_clients_unverified()
     {
         $now = new DateTime();
-        $now->sub(new DateInterval('PT' . env('TIME_TO_VERIFY_ACCOUNT', 5) . 'M'));
-        $fecha = $now->format('Y-m-d H:i:s');
+        $now->sub(new DateInterval('PT' . settingItem('verify_account_time', 5) . 'M'));
+        $date = $now->format('Y-m-d H:i:s');
 
         $deleted = DB::table('users')
             ->where('verified_at', null)
-            ->where('created_at', "<", $fecha)
+            ->where('created_at', "<", $date)
             ->delete();
 
-        DB::table('password_resets')->where('created_at', '<', $fecha)->delete();
+        DB::table('password_resets')->where('created_at', '<', $date)->delete();
 
 
     }
@@ -86,14 +85,5 @@ class User extends Auth
         }
 
         return false;
-    }
-
-    /**
-     * Relationship with scopes
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function userScopes()
-    {
-        return $this->hasMany(UserScope::class);
     }
 }

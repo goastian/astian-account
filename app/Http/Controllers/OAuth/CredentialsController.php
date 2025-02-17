@@ -14,8 +14,8 @@ class CredentialsController extends Controller
     }
 
     /**
-     * revoca todas las credenciales del usuario autnteicado
-     * @return Json
+     * Revoke all tokens
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function revokeCredentials()
     {
@@ -23,7 +23,6 @@ class CredentialsController extends Controller
 
         $this->removeCredentials($tokens);
 
-        //send event
         $this->privateChannel("RevokeCredentialsEvent." . request()->user()->id, "Credentials remove");
 
         return $this->message(__("All of your credentials have been canceled.") . now());

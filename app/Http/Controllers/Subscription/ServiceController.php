@@ -13,6 +13,11 @@ class ServiceController extends GlobalController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:administrator_service_full,administrator_service_view')->only('index');
+        $this->middleware('scope:administrator_service_full,administrator_service_show')->only('show');
+        $this->middleware('scope:administrator_service_full,administrator_service_create')->only('store');
+        $this->middleware('scope:administrator_service_full,administrator_service_update')->only('update');
+        $this->middleware('scope:administrator_service_full,administrator_service_destroy')->only('destroy');
     }
 
     /**
@@ -28,9 +33,7 @@ class ServiceController extends GlobalController
 
         $data = $service->query();
 
-        foreach ($params as $key => $value) {
-            $data = $data->where($key, "LIKE", "%" . $value . "%");
-        }
+        $this->search($data, $params);
 
         $data = $data->get();
 
@@ -70,7 +73,7 @@ class ServiceController extends GlobalController
         ]);
 
         DB::transaction(function () use ($request, $service) {
-            $service = $service->fill($request->all()); 
+            $service = $service->fill($request->all());
             $service->push();
         });
 
@@ -103,7 +106,6 @@ class ServiceController extends GlobalController
             'system' => ['nullable', 'boolean'],
         ]);
 
-
         $this->checkMethod('put');
         $this->checkContentType($this->getUpdateHeader());
 
@@ -120,7 +122,7 @@ class ServiceController extends GlobalController
                 $service->system = $request->system;
             }
 
-            if ($update) { 
+            if ($update) {
                 $service->push();
             }
         });
@@ -137,6 +139,8 @@ class ServiceController extends GlobalController
     {
         $this->checkMethod('delete');
         $this->checkContentType(null);
+
+        throw_if($service->system, new ReportError(__("This action cannot be completed because this service is a system service and cannot be deleted."), 403));
 
         throw_if($service->scopes()->count() > 0, new ReportError(__("This action can't be done"), 400));
 

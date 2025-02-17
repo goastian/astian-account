@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\GlobalController as Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use App\Transformers\Auth\EmployeeTransformer;
-use Elyerr\ApiResponse\Assets\JsonResponser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Transformers\UserTransformer;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use App\Http\Controllers\GlobalController as Controller;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -27,8 +27,8 @@ class AuthenticatedSessionController extends Controller
      */
     public function create()
     {
-        if (request()->user()) {
-            return redirect(env('FRONTEND_URL'));
+        if (auth()->check()) {
+            return redirectToHome();
         }
 
         $params = request()->all();
@@ -44,6 +44,9 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        if ($request->module) {
+            return redirect()->route('authorize.module', ['redirect_to' => $request->redirect_to]);
+        }
 
         return RouteServiceProvider::home();
     }
@@ -59,11 +62,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return $request->wantsJson() ? route('login') : redirect(env('APP_URL'));
+        return $request->wantsJson() ? route('login') : settingItem('home_page', '/');
     }
 
+    /**
+     * Profile info
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
     public function profile()
     {
-        return $this->showOne(request()->user(), EmployeeTransformer::class);
+        return $this->showOne(request()->user(), UserTransformer::class);
     }
 }

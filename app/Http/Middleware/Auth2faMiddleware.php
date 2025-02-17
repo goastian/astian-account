@@ -4,9 +4,11 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\User\User;
+use App\Models\Setting\Code;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
+use App\Notifications\Setting\CodeNotification;
 
 class Auth2faMiddleware
 {

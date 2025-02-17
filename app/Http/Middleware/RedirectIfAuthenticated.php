@@ -9,13 +9,12 @@ use App\Providers\RouteServiceProvider;
 
 class RedirectIfAuthenticated
 {
+
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
-     * @param  string|null  ...$guards
-     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     * Summary of handle
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @param array $guards
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {

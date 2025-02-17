@@ -4,17 +4,17 @@ namespace App\Http\Controllers\Subscription;
 
 use App\Models\Subscription\Service;
 use App\Http\Controllers\GlobalController;
-use App\Transformers\User\ScopeTransformer;
+use App\Transformers\Subscription\ScopeTransformer;
 
 class ServiceScopeController extends GlobalController
 {
-
     /**
      * Construct 
      */
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:administrator_service_full,administrator_service_view')->only('index');
     }
 
     /**

@@ -1,20 +1,17 @@
 @extends('layouts.pages')
 
+@section('title')
+    @include('layouts.parts.title', ['title' => __('Login')])
+@endsection
+
 @section('content')
-    @if (session('status'))
-        <div class="notify" id="notify">
-            <p>
-                {{ session('status') }}
-            </p>
-        </div>
-    @endif
 
-    <div class="login-form">
+    <div class="login-form flex justify-center items-center min-h-screen bg-gray-50">
 
-        <div class="box">
+        <div class="box bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
             <div class="login">
-                <div class="head">
-                    <p>
+                <div class="head text-center mb-8">
+                    <p class="text-3xl font-bold text-gray-800 tracking-tight">
                         {{ config('app.name') }}
                     </p>
                 </div>
@@ -22,24 +19,30 @@
                     <form action="{{ route('login') }}" method="post">
                         @csrf
 
-                        <div class="item">
-                            <input type="email" name="email" placeholder="{{ __('Email') }}">
+                        <div class="item mb-5">
+                            <input type="email" name="email" placeholder="{{ __('Email') }}"
+                                class="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200 ease-in-out"
+                                required>
                             @if ($errors->has('email'))
                                 @foreach ($errors->get('email') as $item)
-                                    <span class="errors">{{ $item }}</span>
+                                    <span class="text-red-500 text-sm mt-1 block">{{ $item }}</span>
                                 @endforeach
                             @endif
                         </div>
 
-                        <div class="item">
-                            <a class="" href="/forgot-password">{{ __('Forgot your password?') }}</a>
-                            <input type="password" name="password" placeholder="{{ __('Password') }}">
+                        <div class="item mb-6">
+                            <input type="password" name="password" placeholder="{{ __('Password') }}"
+                                class="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200 ease-in-out"
+                                required>
                             @if ($errors->has('password'))
                                 @foreach ($errors->get('password') as $item)
-                                    <span class="errors">{{ $item }}</span>
+                                    <span class="text-red-500 text-sm mt-1 block">{{ $item }}</span>
                                 @endforeach
                             @endif
+                            <a class="text-blue-500 text-sm hover:underline mt-2 block text-right"
+                                href="/forgot-password">{{ __('Forgot your password?') }}</a>
                         </div>
+
                         <!--Do not remove this lines-->
                         <div>
                             @foreach ($query as $item => $value)
@@ -48,33 +51,22 @@
                             @endforeach
                         </div>
                         <!--end of the lines-->
-                        <div class="buttons">
 
-                            <button type="submit">
+                        <div class="buttons mt-6">
+                            <button type="submit"
+                                class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
                                 {{ __('Sign in') }}
                             </button>
-
-                            <a href="{{ route('register') }}">
-                                {{ __("Don't have an account? Sign up.") }}
-                            </a>
+                            @if (settingItem('enable_register_member', true))
+                                <p class="text-sm text-gray-600 text-center mt-4">
+                                    {{ __("Don't have an account?") }}
+                                    <a href="{{ route('register') }}" class="text-blue-600 hover:underline">
+                                        {{ __('Sign up.') }}
+                                    </a>
+                                </p>
+                            @endif
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-
-        <div class="box">
-
-            <div class="page">
-                <div>
-                    <h1>
-                        {{ config('app.name') }}
-                    </h1>
-                </div>
-                <div class="body">
-                    <p>
-                        {{ __('A new way to browse the internet.') }}
-                    </p>
                 </div>
             </div>
         </div>

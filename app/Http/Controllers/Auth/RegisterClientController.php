@@ -7,11 +7,13 @@ use DateInterval;
 use ErrorException;
 use App\Models\User\User;
 use Illuminate\Http\Request;
+use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Notifications\User\VendorCreatedAccount;
+use App\Notifications\Member\MemberCreatedAccount;
 
 class RegisterClientController extends Controller
 {
@@ -31,10 +33,10 @@ class RegisterClientController extends Controller
     /**
      * Register users
      * @param \Illuminate\Http\Request $request
-     * @param \App\Models\User\User $client
+     * @param \App\Models\User\User $user
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request, User $client)
+    public function store(Request $request, User $user)
     {
         $this->checkMethod('post');
         $this->checkContentType($this->getPostHeader());
@@ -48,15 +50,21 @@ class RegisterClientController extends Controller
             'accept_terms' => ['required', 'boolean']
         ]);
 
-        DB::transaction(function () use ($request, $client) {
+        $group = Group::where('slug', 'member')->first();
 
-            $client = $client->fill($request->all());
-            $client->password = Hash::make($request->password);
-            $client->save();
+        if (empty($group)) {
+            return back()->with('error', __('The registration could not be completed successfully. Our team has been notified of the issue and is working to resolve it. We appreciate your patience and encourage you to try again later'));
+        }
 
-            $client->notify(new VendorCreatedAccount());
+        DB::transaction(function () use ($request, $user, $group) {
+            $user = $user->fill($request->all());
+            $user->password = Hash::make($request->password);
+            $user->group_id = $group->id;
+            $user->save();
 
-            $this->privateChannel("StoreClientEvent", "New client registered");
+            $user->groups()->sync($group->id);
+
+            $user->notify(new MemberCreatedAccount());
         });
 
         return redirect()->route('login')->with('status', __('Your account has been registered successfully. A verification email has been sent to your inbox.'));
@@ -79,7 +87,7 @@ class RegisterClientController extends Controller
             ])->first();
 
             $now = new DateTime($data->created_at);
-            $now->add(new DateInterval("PT" . env("TIME_TO_VERIFY_ACCOUNT", 5) . "M"));
+            $now->add(new DateInterval("PT" . settingItem("verify_account_time", 5) . "M"));
             $date = $now->format("Y-m-d H:i:s");
 
             DB::table('password_resets')->where('email', '=', $request->email)->delete();
@@ -94,9 +102,21 @@ class RegisterClientController extends Controller
             $user->verified_at = now();
             $user->save();
 
-            return redirect()->route('login')->with(['status' => __('Your account has been activated.')]);
+            $token = uniqid();
+
+            return redirect()->route('verified-account')->with(
+                [
+                    'status' => __('Your account has been activated.'),
+                    'token' => $token
+                ]
+            );
+
         } catch (ErrorException $e) {
-            return redirect()->route('login')->with(['error' => __('Verification failed. The token has expired.')]);
+            if (auth()->check()) {
+                auth()->logout();
+            }
+
+            return redirect()->route('login');
         }
 
     }
@@ -108,7 +128,7 @@ class RegisterClientController extends Controller
     public function formVerifyAccount()
     {
         if (auth()->check() && auth()->user()->verified_at) {
-            return redirect('/');
+            return redirectToHome();
         }
 
         return view("auth.verify-account");
@@ -122,11 +142,23 @@ class RegisterClientController extends Controller
     {
         if (!auth()->user()->verified_at) {
 
-            auth()->user()->notify(new VendorCreatedAccount());
+            auth()->user()->notify(new MemberCreatedAccount());
 
             return back()->with("status", "we're sent an a new email to verify your account");
         }
 
-        return redirect("/");
+        return redirectToHome();
+    }
+
+    /**
+     * Redirect to the user after activate your account
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function verifiedAccount()
+    {
+        if (session('token')) {
+            return view('auth.verified-account');
+        }
+        return redirectToHome();
     }
 }

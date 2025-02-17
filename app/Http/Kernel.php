@@ -37,7 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\CreateFreshApiToken::class,
+            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
             \App\Http\Middleware\VerifyAccount::class,
         ],
 
@@ -76,5 +76,6 @@ class Kernel extends HttpKernel
         'verify.credentials' => \App\Http\Middleware\verifyCredentials::class,
         '2fa-mail' => \App\Http\Middleware\Auth2faMiddleware::class,
         'reactive.account' => \App\Http\Middleware\ReactiveAccount::class,
+        'userCanAny' => \App\Http\Middleware\UserCanAny::class
     ];
 }

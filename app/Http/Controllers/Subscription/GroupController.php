@@ -12,10 +12,13 @@ class GroupController extends Controller
     public function __construct()
     {
         parent::__construct();
-        /*$this->middleware('scope:groups_fullgroup_read')->only('index', 'show');
-        $this->middleware('scope:gruop_create')->only('store');
-        $this->middleware('scope:group_update')->only('update');
-        $this->middleware('scope:group_destroy')->only('destroy');*/
+        $this->middleware('scope:administrator_group_full,administrator_group_view')->only('index');
+        $this->middleware('scope:administrator_group_full,administrator_group_show')->only('show');
+        $this->middleware('scope:administrator_group_full,administrator_group_create')->only('store');
+        $this->middleware('scope:administrator_group_full,administrator_group_update')->only('update');
+        $this->middleware('scope:administrator_group_full,administrator_group_destroy')->only('destroy');
+        //$this->middleware('scope:administrator_group_full,administrator_group_enable')->only('enable');
+        //$this->middleware('scope:administrator_group_full,administrator_group_disable')->only('disable');
     }
 
     /**
@@ -31,9 +34,7 @@ class GroupController extends Controller
 
         $data = $group->query();
 
-        foreach ($params as $key => $value) {
-            $data = $data->where($key, "like", "%" . $value . "%");
-        }
+        $this->search($data, $params);
 
         $data = $data->get();
 
@@ -74,7 +75,7 @@ class GroupController extends Controller
         $this->checkContentType($this->getPostHeader());
 
         DB::transaction(function () use ($request, $group) {
-            $group = $group->fill($request->all()); 
+            $group = $group->fill($request->all());
             $group->save();
 
             $this->privateChannel("GroupCreated", "New group created");
@@ -134,13 +135,17 @@ class GroupController extends Controller
         $this->checkMethod('delete');
         $this->checkContentType(null);
 
+        if ($group->services()->count() === 0 && $group->users()->count()) {
+            new ReportError(__("This action cannot be completed because this group is currently in use by another resource."), 403);
+        }
+
+        throw_if($group->system, new ReportError(__("This group cannot be deleted because it is a system group."), 403));
+
         collect(Group::groupByDefault())->map(function ($value, $key) use ($group) {
-            throw_if($value->name == $group->name, new ReportError(__("This action can't be done"), 400));
+            throw_if($value->name == $group->name, new ReportError(__("This group cannot be deleted because it is a system group."), 403));
         });
 
-        throw_if($group->services()->count() > 0, new ReportError(__("This action can't be done"), 400));
-
-        $group->delete();
+        $group->forceDelete();
 
         $this->privateChannel("GroupDeleted", "Group deleted");
 

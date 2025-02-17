@@ -1,22 +1,28 @@
 <?php
 namespace App\Http\Controllers\User;
 
+use App\Traits\Scopes;
 use App\Models\User\User;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\User\UserScope;
 use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 use App\Http\Controllers\GlobalController;
 
 class UserScopeController extends GlobalController
 {
+    use Scopes;
     /**
      * Construct of class
      */
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:administrator_user_full,administrator_user_view')->only('index');
+        $this->middleware('scope:administrator_user_full,administrator_user_create')->only('store');
+        $this->middleware('scope:administrator_user_full,administrator_user_revoke')->only('revoke');
+        $this->middleware('scope:administrator_user_full,administrator_user_history')->only('history');
     }
 
     /**
@@ -97,13 +103,19 @@ class UserScopeController extends GlobalController
         $this->checkContentType($this->getPostHeader());
 
         DB::transaction(function () use ($request, $user, $userScope) {
-
             foreach ($request->scopes as $id) {
-                $userScope = $userScope->fill($request->only('end_date'));
-                $userScope->user_id = $user->id;
-                $userScope->scope_id = $id;
-                $userScope->createdBy();
-                $userScope->save();
+                $userScope->whereNull('package_id')
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                            ->orWhere('end_date', '>', now());
+                    })
+                    ->where('scope_id', $id)
+                    ->where('user_id', $user->id)
+                    ->updateOrCreate([
+                        'scope_id' => $id,
+                        'user_id' => $user->id,
+                        'end_date' => $request->end_date
+                    ]);
             }
         });
 
@@ -127,19 +139,6 @@ class UserScopeController extends GlobalController
                     if (!is_array($value)) {
                         $fail(__("The :attribute must be an array", ['attribute' => $attribute]));
                     }
-
-                    if (is_array($value)) {
-                        foreach ($value as $id) {
-                            try {
-                                $scope = $userScope->find($id);
-                                if (!$scope) {
-                                    $fail(__("The :attribute is not valid", ["attribute" => $attribute, "id" => $id]));
-                                }
-                            } catch (QueryException $th) {
-                                $fail(__("The :attribute is not valid", ["attribute" => $attribute, "id" => $id]));
-                            }
-                        }
-                    }
                 }
             ],
         ]);
@@ -148,11 +147,16 @@ class UserScopeController extends GlobalController
         $this->checkContentType($this->getUpdateHeader());
 
         DB::transaction(function () use ($request, $user, $userScope) {
+
             foreach ($request->scopes as $id) {
-                $scope = $userScope->find($id);
-                $scope->end_date = now();
-                $scope->updatedBy();
-                $scope->push();
+                $userScope->whereNull('package_id')
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                            ->orWhere('end_date', '>', now());
+                    })
+                    ->where('scope_id', $id)
+                    ->where('user_id', $user->id)
+                    ->update(['end_date' => now()]);
             }
         });
 

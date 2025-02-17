@@ -15,6 +15,11 @@ class ScopeController extends GlobalController
     public function __construct()
     {
         parent::__construct();
+        $this->middleware('scope:administrator_scope_full,administrator_scope_view')->only('index');
+        $this->middleware('scope:administrator_scope_full,administrator_scope_show')->only('show');
+        $this->middleware('scope:administrator_scope_full,administrator_scope_create')->only('store');
+        $this->middleware('scope:administrator_scope_full,administrator_scope_update')->only('update');
+        $this->middleware('scope:administrator_scope_full,administrator_scope_destroy')->only('destroy');
     }
 
     /**
@@ -30,9 +35,7 @@ class ScopeController extends GlobalController
 
         $data = $scope->query();
 
-        foreach ($params as $key => $value) {
-            $data = $data->where($key, "LIKE", "%" . $value . "%");
-        }
+        $this->search($data, $params);
 
         $data = $data->get();
 
@@ -87,7 +90,7 @@ class ScopeController extends GlobalController
 
         DB::transaction(function () use ($request, $scope) {
 
-            $scope = $scope->fill($request->all()); 
+            $scope = $scope->fill($request->all());
             $scope->save();
 
         });
@@ -116,9 +119,6 @@ class ScopeController extends GlobalController
      */
     public function update(Request $request, Scope $scope)
     {
-        $this->checkMethod("put");
-        $this->checkContentType($this->getUpdateHeader());
-
         $this->validate($request, [
             'service_id' => ['nullable', 'exists:services,id'],
             'role_id' => ['nullable', 'exists:roles,id'],
@@ -134,6 +134,9 @@ class ScopeController extends GlobalController
                 }
             ]
         ]);
+
+        $this->checkMethod("put");
+        $this->checkContentType($this->getUpdateHeader());
 
         DB::transaction(function () use ($request, $scope) {
 
@@ -169,7 +172,7 @@ class ScopeController extends GlobalController
                 $update = true;
             }
 
-            if ($update) { 
+            if ($update) {
                 $scope->push();
             }
         });

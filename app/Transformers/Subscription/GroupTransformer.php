@@ -38,11 +38,11 @@ class GroupTransformer extends TransformerAbstract
             'description' => $group->description,
             'system' => $group->system, 
             'links' => [
-                'index' => route('groups.index'),
-                'store' => route('groups.store'),
-                'show' => route('groups.show', ['group' => $group->id]),
-                'update' => route('groups.update', ['group' => $group->id]),
-                'destroy' => route('groups.destroy', ['group' => $group->id]),
+                'index' => route('admin.groups.index'),
+                'store' => route('admin.groups.store'),
+                'show' => route('admin.groups.show', ['group' => $group->id]),
+                'update' => route('admin.groups.update', ['group' => $group->id]),
+                'destroy' => route('admin.groups.destroy', ['group' => $group->id]),
             ],
 
         ];

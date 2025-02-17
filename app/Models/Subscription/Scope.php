@@ -1,7 +1,7 @@
 <?php
 namespace App\Models\Subscription;
 
-use App\Models\Master; 
+use App\Models\Master;
 use App\Models\Subscription\Role;
 use App\Models\User\UserScope;
 use App\Transformers\Subscription\ScopeTransformer;
@@ -28,6 +28,10 @@ class Scope extends Master
         'price'
     ];
 
+    protected $appends = [
+        'gsr_id'
+    ];
+
     /**
      * Casts properties
      * @var array
@@ -38,6 +42,14 @@ class Scope extends Master
         'active' => 'boolean',
     ];
 
+    /**
+     * get scope name
+     * @return string
+     */
+    public function getGsrIdAttribute()
+    {
+        return $this->getGsrID();
+    }
 
     /**
      * Relationship with service
@@ -70,7 +82,7 @@ class Scope extends Master
      * Generate the scope id
      * @return string
      */
-    public function getScopeID()
+    public function getGsrID()
     {
         $group = $this->service->group->slug;
         $service = $this->service->slug;

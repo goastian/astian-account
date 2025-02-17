@@ -17,6 +17,8 @@ return [
 
     'default' => env('CACHE_DRIVER', 'file'),
 
+
+    'expires' => env('CACHE_EXPIRES', 30),
     /*
     |--------------------------------------------------------------------------
     | Cache Stores

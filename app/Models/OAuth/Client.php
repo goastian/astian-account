@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Models\OAuth;
-
-use App\Transformers\OAuth\ClientAdminTransformer; 
+ 
 use Laravel\Passport\Client as PassportClient;
+use App\Transformers\OAuth\ClientAdminTransformer;
 
 class Client extends PassportClient
 {

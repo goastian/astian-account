@@ -2,8 +2,8 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User\User;
+use Illuminate\Validation\Rule; 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreRequest extends FormRequest
 {
@@ -33,7 +33,7 @@ class StoreRequest extends FormRequest
             'address' => ['nullable', 'max:150'],
             'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
-            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
+            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()]
         ];
     }
 }

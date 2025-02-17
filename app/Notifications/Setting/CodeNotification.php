@@ -2,7 +2,6 @@
 namespace App\Notifications\Setting;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Lang;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -12,7 +11,8 @@ class CodeNotification extends Notification implements ShouldQueue
     use Queueable;
 
     /**
-     * @var String
+     * code
+     * @var 
      */
     public $code;
 
@@ -49,7 +49,7 @@ class CodeNotification extends Notification implements ShouldQueue
             ->subject(__("Two Factor verification"))
             ->line(__("We have received a login application using the 2FA."))
             ->line(__("Code" . " : " . $this->code))
-            ->line(__("This code has a maximum limit of life, it expires in") . " " . env('CODE_2FA_EXPIRE', 1) . " " . __("minutes."))
+            ->line(__("This code has a maximum limit of life, it expires in") . " " . settingItem('code_2fa_email_expires', 5) . " " . __("minutes."))
             ->line(__("If you were not, omit this message and for security changes your password that has been violated"))
             ->line('Thanks for using our services!');
     }
