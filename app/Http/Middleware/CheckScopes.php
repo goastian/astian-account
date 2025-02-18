@@ -33,6 +33,10 @@ class CheckScopes extends middleware
         $apiKey = $request->user()->token();
         if (isset($apiKey->id)) {
 
+            if (in_array(auth()->user()->adminScopeName(), $apiKey->scopes)) {
+                return $next($request);
+            }
+
             if (empty(array_diff($scopes, $apiKey->scopes))) {
                 return $next($request);
             }
