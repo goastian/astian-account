@@ -89,6 +89,15 @@ class Auth extends Authenticatable
     }
 
     /**
+     * Name of admin scope
+     * @return string
+     */
+    public function adminScopeName()
+    {
+        return "administrator_admin_full";
+    }
+
+    /**
      * Determine if the current API token has a given scope
      *
      * @param  string  $scope
