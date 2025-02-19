@@ -2,10 +2,11 @@
 namespace App\Console\Commands\Settings;
 
 use App\Models\User\User;
-use App\Models\User\UserScope;
 use Illuminate\Support\Str;
+use App\Models\User\UserScope;
 use Illuminate\Console\Command;
 use App\Models\Subscription\Role;
+use App\Models\Subscription\Group;
 use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Service;
@@ -39,20 +40,23 @@ class settingsUsersCreate extends Command
             return 1;
         }
 
-        $role = $this->choice('Please select the role:', ['admin', 'client'], 0);
+        $user_type = $this->choice('Please select the role:', ['admin', 'client'], 0);
 
         // Searching for admin service
-        $service = Service::where('slug', 'admin')->first();
+        $service = $user_type == "admin" ? Service::where('slug', 'admin')->first() : null;
 
         //Searching role admin
-        $role = Role::where('slug', 'full')->first();
+        $role = $user_type == "admin" ? Role::where('slug', 'full')->first() : null;
 
         // Use admin id and role id to find the scope_id in scope Model
-        $scope = Scope::where(['role_id' => $role->id, 'service_id' => $service->id])->first();
+        $scope = $user_type == "admin" ? Scope::where(['role_id' => $role->id, 'service_id' => $service->id])->first() : null;
 
-        DB::transaction(function () use ($scope) {
+        //Group
+        $group = $user_type == "admin" ? Group::where('slug', 'administrator')->first() : Group::where('slug', 'member')->first();
+
+        DB::transaction(function () use ($scope, $group) {
             // Create user
-            $this->createUser($scope);
+            $this->createUser($scope, $group);
         });
 
         return Command::SUCCESS;
@@ -61,9 +65,10 @@ class settingsUsersCreate extends Command
     /**
      * Create a new user
      * @param mixed $scope
+     * @param mixed $group
      * @return void
      */
-    public function createUser($scope = null)
+    public function createUser($scope = null, $group = null)
     {
         $dev_mode = true;
 
@@ -90,6 +95,8 @@ class settingsUsersCreate extends Command
             'verified_at' => now(),
             'deleted_at' => now(),
         ]);
+
+        $user->groups()->attach($group->id);
 
         if ($scope) {
             UserScope::create([

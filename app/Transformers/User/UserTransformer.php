@@ -61,6 +61,8 @@ class UserTransformer extends TransformerAbstract
                 'disable' => route('admin.users.disable', ['user' => $user->id]),
                 'enable' => route('admin.users.enable', ['id' => $user->id]),
                 'scopes' => route('admin.users.scopes.index', ['user' => $user->id]),
+                'groups.assign' => route('admin.users.groups.assign', ['user' => $user->id]),
+                'groups.revoke' => route('admin.users.groups.revoke', ['user' => $user->id]),
             ],
         ];
     }

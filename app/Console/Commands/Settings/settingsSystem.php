@@ -19,7 +19,7 @@ class settingsSystem extends Command
      *
      * @var string
      */
-    protected $description = 'Upload channels';
+    protected $description = 'Install essential data to start the server';
 
     /**
      * Loading default settings for the system, for example default roles, services, 
@@ -28,12 +28,12 @@ class settingsSystem extends Command
      */
     public function handle()
     {
-        $this->info("Upload channels");
+        $this->info("Install server");
+        Artisan::call('key:generate');
         Artisan::call('settings:roles-upload');
         Artisan::call('settings:countries-upload');
         Artisan::call('settings:channels-upload');
-        Artisan::call('passport:install');
         Setting::setDefaultKeys();
-        $this->info("Uploaded successfully");
+        $this->info("Server installed successfully");
     }
 }

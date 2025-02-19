@@ -16,6 +16,7 @@ use App\Notifications\User\UserDisableAccount;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Notifications\User\UserUpdatedPassword;
 use App\Notifications\User\UserReactivateAccount;
+use App\Notifications\Member\MemberCreatedAccount;
 use App\Http\Controllers\GlobalController as Controller;
 
 class UserController extends Controller
@@ -73,15 +74,15 @@ class UserController extends Controller
             $user->password = Hash::make($temp_password);
             $user->save();
 
+            $user->groups()->attach($request->groups);
+
             /**
              * Send event
              */
             $this->privateChannel("StoreUserEvent", "New user created");
 
-            /**
-             * Send notification
-             */
             Notification::send($user, new UserCreatedAccount($temp_password));
+
         });
 
         return $this->showOne($user, $user->transformer, 201);
