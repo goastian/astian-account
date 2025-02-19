@@ -50,7 +50,7 @@ class UserScopeTransformer extends TransformerAbstract
             'updated_at' => $this->format_date($data->updated_at),
             'links' => [
                 'index' => route('admin.users.scopes.index', ['user' => $data->user_id]),
-                'store' => route('admin.users.scopes.store', ['user' => $data->user_id]),
+                'assign' => route('admin.users.scopes.assign', ['user' => $data->user_id]),
                 'revoke' => route('admin.users.scopes.revoke', ['user' => $data->user_id]),
                 'user' => route('admin.users.show', ['user' => $data->user_id]),
             ]

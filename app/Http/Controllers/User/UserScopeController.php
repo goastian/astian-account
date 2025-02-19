@@ -20,7 +20,7 @@ class UserScopeController extends GlobalController
     {
         parent::__construct();
         $this->middleware('scope:administrator_user_full,administrator_user_view')->only('index');
-        $this->middleware('scope:administrator_user_full,administrator_user_create')->only('store');
+        $this->middleware('scope:administrator_user_full,administrator_user_assign')->only('assign');
         $this->middleware('scope:administrator_user_full,administrator_user_revoke')->only('revoke');
         $this->middleware('scope:administrator_user_full,administrator_user_history')->only('history');
     }
@@ -64,7 +64,7 @@ class UserScopeController extends GlobalController
      * @param \App\Http\Controllers\User\Scope $scope
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, User $user, UserScope $userScope, Scope $scope)
+    public function assign(Request $request, User $user, UserScope $userScope, Scope $scope)
     {
         $this->validate($request, [
             'scopes' => [
