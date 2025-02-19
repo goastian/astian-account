@@ -169,6 +169,24 @@
                         "public": 0,
                         "requires_payment": 0,
                         "active": 1
+                    },
+                    {
+                        "name": "assign",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "revoke",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
+                    },
+                    {
+                        "name": "history",
+                        "public": 0,
+                        "requires_payment": 0,
+                        "active": 1
                     }
                 ]
             },
