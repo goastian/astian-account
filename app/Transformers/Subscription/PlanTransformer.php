@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Transformers\Subscription;
+
+use App\Models\Subscription\Plan;
+use Elyerr\ApiResponse\Assets\Asset;
+use League\Fractal\TransformerAbstract;
+
+class PlanTransformer extends TransformerAbstract
+{
+    use Asset;
+
+    /**
+     * List of resources to automatically include
+     *
+     * @var array
+     */
+    protected array $defaultIncludes = [
+        //
+    ];
+
+    /**
+     * List of resources possible to include
+     *
+     * @var array
+     */
+    protected array $availableIncludes = [
+        //
+    ];
+
+    /**
+     * A Fractal transformer.
+     *
+     * @return array
+     */
+    public function transform(Plan $plan)
+    {
+        return [
+            'id' => $plan->id,
+            'name' => $plan->name,
+            'slug' => $plan->slug,
+            'description' => $plan->description,
+            'price' => $plan->price,
+            'public' => $plan->public,
+            'created' => $this->format_date($plan->created_at),
+            'updated' => $this->format_date($plan->updated_at),
+            'scopes' => $plan->assignedScopes(),
+            'links' => [
+                'parent' => route('admin.plans.index'),
+                'store' => route('admin.plans.store'),
+                'show' => route('admin.plans.show', ['plan' => $plan]),
+                'update' => route('admin.plans.show', ['plan' => $plan]),
+                'destroy' => route('admin.plans.show', ['plan' => $plan]),
+                'assign' => route('admin.plans.scopes.assign', ['plan' => $plan]),
+                'revoke' => route('admin.plans.scopes.revoke', ['plan' => $plan]),
+            ],
+        ];
+    }
+
+
+    /**
+     * Return the original attribute 
+     * @param mixed $index
+     * @return string|null
+     */
+    public static function getOriginalAttributes($index)
+    {
+        $attributes = [
+            'id' => 'id',
+            'name' => 'name',
+            'slug' => 'slug',
+            'description' => 'description',
+            'price' => 'price',
+            'public' => 'public',
+            'created' => 'created_at',
+            'updated' => 'updated_at'
+        ];
+
+        return isset($attributes[$index]) ? $attributes[$index] : null;
+    }
+}
