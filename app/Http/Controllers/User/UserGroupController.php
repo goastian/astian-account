@@ -48,6 +48,10 @@ class UserGroupController extends GlobalController
             ],
         ]);
 
+        $this->checkMethod('post');
+
+        $this->checkContentType($this->getPostHeader());
+
         $user->groups()->syncWithoutDetaching($request->groups);
 
         return $this->message(__('Groups assigned successfully'), 201);
@@ -84,6 +88,10 @@ class UserGroupController extends GlobalController
                 }
             ],
         ]);
+
+        $this->checkMethod('put');
+
+        $this->checkContentType($this->getUpdateHeader());
 
         $user->groups()->detach($request->groups);
 

@@ -35,8 +35,6 @@ class UserScopeController extends GlobalController
     {
         $this->checkMethod('get');
 
-        $params = $this->filter_transform($userScope->transformer);
-
         $scopes = $userScope->query();
 
         $scopes = $userScope->where('user_id', $user->id)
@@ -49,11 +47,7 @@ class UserScopeController extends GlobalController
             })
             ->with(['scope.service.group', 'scope.role']);
 
-        $this->search($scopes, $params);
-
-        $scopes = $scopes->get();
-
-        return $this->showAll($scopes, $userScope->transformer);
+        return $this->showAllByBuilder($scopes, $userScope->transformer);
     }
 
     /**
@@ -160,7 +154,7 @@ class UserScopeController extends GlobalController
             }
         });
 
-        return $this->message(__("Scopes have been revoked successfully"), 201);
+        return $this->message(__("Scopes have been revoked successfully"), 200);
     }
 
     /**
