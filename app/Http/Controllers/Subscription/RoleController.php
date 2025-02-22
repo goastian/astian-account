@@ -32,13 +32,10 @@ class RoleController extends Controller
 
         $data = $role->query();
 
-        foreach ($params as $key => $value) {
-            $data = $data->where($key, "like", "%" . $value . "%");
-        }
+        $data = $this->searchByBuilder($data, $params);
+        $data = $this->orderByBuilder($data);
 
-        $data = $data->get();
-
-        return $this->showAll($data, $role->transformer);
+        return $this->showAllByBuilder($data, $role->transformer);
     }
 
     /**
@@ -134,7 +131,7 @@ class RoleController extends Controller
 
         });
 
-        return $this->showOne($role, $role->transformer, 201);
+        return $this->showOne($role, $role->transformer, 200);
     }
 
     /**
