@@ -42,9 +42,9 @@ class BroadcastTransformer extends TransformerAbstract
             'created' => $this->format_date($data->created_at),
             'updated' => $this->format_date($data->updated_at),
             'links' => [
-                'parent' => route('broadcasts.index'),
-                'store' => route('broadcasts.store'),
-                'destroy' => route('broadcasts.destroy', ['broadcast' => $data->id]),
+                'parent' => route('admin.broadcasts.index'),
+                'store' => route('admin.broadcasts.store'),
+                'destroy' => route('admin.broadcasts.destroy', ['broadcast' => $data->id]),
             ],
         ];
     }

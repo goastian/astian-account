@@ -37,11 +37,10 @@ class BroadcastController extends Controller
 
         $data = $broadcast->query();
 
-        $this->search($data, $params);
+        $data = $this->searchByBuilder($data, $params);
+        $data = $this->orderByBuilder($data, $params);
 
-        $data = $data->get();
-
-        return $this->showAll($data, $broadcast->transformer);
+        return $this->showAllByBuilder($data, $broadcast->transformer);
     }
 
     /**
