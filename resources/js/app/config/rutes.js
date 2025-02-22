@@ -1,67 +1,49 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import Clients from "../pages/OAuth/Clients/Index.vue";
-import Tokens from "../pages/OAuth/Tokens/Index.vue";
-import PersonalTokens from "../pages/OAuth/Personal/Index.vue";
-import Users from "../pages/Users/Index.vue";
-import Roles from "../pages/Role/Index.vue";
-import Channel from "../pages/Broadcast/Index.vue";
-import Profile from "../pages/Account/Profile.vue";
-import Security from "../pages/Account/Security.vue";
-import Push from "../pages/Notify/Push.vue";
-import Read from "../pages/Notify/Read.vue";
-import Unread from "../pages/Notify/Unread.vue";
-
 const routes = [
-    { path: "/", name: "home", component: Profile },
-
     {
-        path: "/notifications",
-        name: "notify",
-        component: Push,
+        path: "/about",
+        name: "about",
+        component: () => import("../pages/Account/About.vue"),
     },
     {
-        path: "/notifications/Read",
-        name: "notify.read",
-        component: Read,
+        path: "/admin/users",
+        name: "users.index",
+        component: () => import("../pages/Admin/Users/Index.vue"),
     },
     {
-        path: "/notifications/unread",
-        name: "notify.unread",
-        component: Unread,
-    },
-
-    {
-        path: "/security",
-        name: "security",
-        component: Security,
-    },
-
-    {
-        path: "/private-clients",
-        name: "clients",
-        component: Clients,
+        path: "/admin/broadcasts",
+        name: "broadcasts.index",
+        component: () => import("../pages/Admin/Broadcast/Index.vue"),
     },
     {
-        path: "/tokens",
-        name: "tokens",
-        component: Tokens,
+        path: "/admin/roles",
+        name: "roles.index",
+        component: () => import("../pages/Admin/Role/Index.vue"),
     },
     {
-        path: "/personal-tokens",
-        name: "personalTokens",
-        component: PersonalTokens,
+        path: "/admin/services",
+        name: "services.index",
+        component: () => import("../pages/Admin/Service/Index.vue"),
     },
-    { path: "/users", name: "users", component: Users },
-    { path: "/scopes", name: "scopes", component: Roles },
     {
-        path: "/channels",
-        name: "channels",
-        component: Channel,
+        path: "/admin/scopes",
+        name: "scopes.index",
+        component: () => import("../pages/Admin/Scope/Index.vue"),
+    },
+    {
+        path: "/developers/clients",
+        name: "clients.index",
+        component: () => import("../pages/OAuth/Clients/Index.vue"),
+    },
+    {
+        path: "/developers/api_key",
+        name: "api.index",
+        component: () => import("../pages/OAuth/Personal/Index.vue"),
     },
 ];
 
 export const router = createRouter({
     history: createWebHistory(),
-    routes,
+    routes: routes,
 });

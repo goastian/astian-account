@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,11 +13,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('roles', function (Blueprint $table) {
-            $table->uuid('id')->unique();
+            $table->uuid('id')->unique()->primary();
+            $table->string('slug')->nullable();
             $table->string('name', 60)->index();
+            $table->boolean('system')->default(false);
             $table->string('description', 200);
-            $table->boolean('public')->default(0);
-            $table->primary('id');
+            $table->timestamps();
         });
     }
 

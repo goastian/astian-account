@@ -4,21 +4,24 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Http\Controllers\OAuth\Scopes;
-use App\Models\User\Role;
-use App\Notifications\Auth\ResetPassword;
-use DateInterval;
 use DateTime;
+use DateInterval;
+use App\Traits\Scopes;
+use App\Traits\Standard;
+use App\Models\User\UserScope;
+use App\Models\Subscription\Group;
+use Laravel\Passport\HasApiTokens;
 use Elyerr\ApiResponse\Assets\Asset;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\Auth\ResetPassword;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens;
 
 class Auth extends Authenticatable
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard, Scopes;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -51,8 +54,9 @@ class Auth extends Authenticatable
         'client',
         'm2fa',
         'totp',
+        'verified_at',
         'dial_code',
-        'accept_terms'
+        'accept_terms',
     ];
 
     /**
@@ -75,42 +79,49 @@ class Auth extends Authenticatable
     ];
 
     /**
-     * verifica si contiene el role de administrador
+     * Check the admin user
+     * @return bool
      */
     public function isAdmin()
     {
-        return $this->roles()->get()->contains('name', 'admin');
+        $gsr = auth()->user()->userScopes()->get()->pluck('gsr_id')->toArray();
+        return in_array('administrator_admin_full', $gsr);
     }
 
     /**
-     * verify if the user is a client
-     * @return boolean
-     */
-    public function isClient()
-    {
-        return $this->roles()->get()->contains('name', 'client');
-    }
-
-    /**
-     * Checking if the user has an access for any scope
+     * Determine if the current API token has a given scope
      *
-     * @return Boolean
+     * @param  string  $scope
+     * @return bool
      */
-    public function userCan($scope)
+    public function tokenCan($scope)
     {
-        $roles = $this->scopes();
-        
-        if (is_array($scope)) {
-            foreach ($scope as $value) {
-                if ($roles->contains('id', $value)) {
-                    return true;
-                }
-            }
+        $apiKey = $this->accessToken;
 
+        if (isset($apiKey->id)) {
+            if (in_array($scope, $apiKey->scopes)) {
+                return true;
+            }
             return false;
         }
 
-       return $this->scopes()->contains('id', $scope);
+        if (auth()->check()) {
+            $userScopes = $this->scopes();
+            if (!empty($userScopes) && in_array($scope, $userScopes->pluck('id')->toArray())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Relationship with scopes
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function userScopes()
+    {
+        return $this->hasMany(UserScope::class);
     }
 
     /**
@@ -125,26 +136,32 @@ class Auth extends Authenticatable
     }
 
     /**
-     * get scope for the client
-     *
-     * @return Role
-     */
-    public function addClientScope()
-    {
-        $scope = Role::where('name', 'client')->first();
-        return $scope;
-    }
-
-    /**
-     * Setting the date for registered users
-     *
-     * @param Int $years
-     * @return date
+     * Setting the time to create account
+     * @param mixed $years
+     * @return string
      */
     public static function setBirthday($years = 13)
     {
         $date = new DateTime();
         $date->sub(new DateInterval('P' . $years . 'Y'));
         return $date->format('Y-m-d');
+    }
+
+    /**
+     * Groups
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Group, Auth>
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class);
+    }
+
+    /**
+     * Check if the user has a group
+     * @return bool
+     */
+    public function hasGroup($group)
+    {
+        return $this->groups()->get()->pluck('slug')->contains($group);
     }
 }

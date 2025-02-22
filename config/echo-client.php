@@ -8,6 +8,11 @@ return [
     'host' => env('ECHO_SERVER', '127.0.0.1'),
 
     /**
+     * Cookie name to authorize private channels
+     */
+    'cookie_name' => env('ECHO_SERVER_COOKIE_NAME'),
+
+    /**
      * Port
      */
     'port' => env('ECHO_SERVER_PORT', '6010'),

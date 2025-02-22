@@ -4,17 +4,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="OAuth2 Server to synchronize the entire Astian ecosystem">
+    <meta name="description" content="OAuth2 Server for secure authentication.">
+    <meta name="keywords" content="OAuth2, Laravel, API, Authentication">
+    <meta name="author" content="Tu Nombre o Compañía">
+    <meta name="robots" content="index, follow">
+
+    <meta property="og:title" content="{{ config('app.name', 'Laravel') }}">
+    <meta property="og:description" content="OAuth2 Server for secure authentication.">
+    <meta property="og:url" content="{{ config('app.url') }}">
+    <meta property="og:type" content="website">
+
+    <link rel="icon" href="{{ config('app.url') }}/favicon.png" type="image/png">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <link rel="icon" href="{{ config('app.url') }}/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
 
+    <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+    <link rel="stylesheet" href="{{ mix('/css/tailwind.css') }}">
+    <script src="{{ mix('/js/pages.js') }}"></script>
 </head>
 
 <body>
-    <div id="app">
-    </div>
+
+    <div id="app" data-nonce="{{ $nonce }}" data-app-name="{{ config('app.name') }}"></div>
+
+    <!-- Scripts -->
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 

@@ -2,41 +2,41 @@ import { createApp } from "vue";
 import App from "./app/App.vue";
 
 import { router } from "./app/config/rutes.js";
-import { components } from "./app/config/globalComponents";
+import { customComponents } from "./app/config/customComponents.js";
 import { $channels, $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
 import { $customElement } from "./app/config/customElements.js";
+import { notyf } from "./app/config/notification.js";
 
-import ElementPlus from "element-plus";
-import "element-plus/dist/index.css";
-import * as ElementPlusIconsVue from "@element-plus/icons-vue";
+//Import vuetify components
+import "@mdi/font/css/materialdesignicons.css";
+import "vuetify/styles";
+import { createVuetify } from "vuetify";
+import * as components from "vuetify/components";
+import * as directives from "vuetify/directives";
 
-try {
-    const res = await $server.get("/api/gateway/user");
-    /**
-     * Montamos la vue app solo cuando se haya authenticado el usuario
-     */
-    if (res.status == 200) {
-        const app = createApp(App);
-        for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-            app.component(key, component);
-        }
+const vuetify = createVuetify({
+    components,
+    directives,
+});
 
-        app.config.globalProperties.$user = res.data;
-        app.config.globalProperties.$id = res.data.id;
-        app.config.globalProperties.$echo = $echo;
-        app.config.globalProperties.$channels = $channels;
-        app.config.globalProperties.$server = $server;
-        app.config.globalProperties.$ce = $customElement;
-        app.use(router);
-        app.use(ElementPlus);
-        /**
-         * Global components
-         */
-        components.forEach((index) => {
-            app.component(index[0], index[1]);
-        });
+//Setting vuejs App
+const app = createApp(App);
 
-        app.mount("#app");
-    }
-} catch (error) {}
+app.config.globalProperties.$echo = $echo;
+app.config.globalProperties.$channels = $channels;
+app.config.globalProperties.$server = $server;
+app.config.globalProperties.$ce = $customElement;
+app.config.globalProperties.$notification = notyf;
+app.use(router);
+app.use(vuetify);
+
+/**
+ * Custom components
+ */
+customComponents.forEach((index) => {
+    app.component(index[0], index[1]);
+});
+
+//Mount app
+app.mount("#app");

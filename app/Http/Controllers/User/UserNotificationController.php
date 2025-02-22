@@ -10,9 +10,8 @@ use Elyerr\ApiResponse\Exceptions\ReportError;
 class UserNotificationController extends Controller
 {
     /**
-     * show all notification
-     *
-     * @return Object
+     * show the all notifications of the users
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -22,9 +21,8 @@ class UserNotificationController extends Controller
     }
 
     /**
-     * show unread notificatios
-     *
-     * @return Object
+     * Show the unread notification for the user
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function show_unread_notifications()
     {
@@ -34,9 +32,9 @@ class UserNotificationController extends Controller
     }
 
     /**
-     * show a notification
-     *
-     * @return Json
+     * Show detail of the notification
+     * @param \App\Models\Notify\Notification $notification
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function show(Notification $notification)
     {
@@ -46,9 +44,9 @@ class UserNotificationController extends Controller
     }
 
     /**
-     * mark as read a notification
-     *
-     * @return Json
+     * Mark as read the user notification
+     * @param \App\Models\Notify\Notification $notification
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function mark_as_read_notification(Notification $notification)
     {
@@ -58,15 +56,14 @@ class UserNotificationController extends Controller
         $notification->push();
 
         //send event
-        $this->privateChannel("ReadNotificationEvent", "Notification read");
+        $this->privateChannel("ReadNotificationEvent", "Notification read successfully");
 
         return $this->message(__('notification marked as read'), 201);
     }
 
     /**
-     * mark as read all notifications
-     *
-     * @return Json
+     * Mark as red the all notifications
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function mark_as_read_notifications()
     {
@@ -79,9 +76,9 @@ class UserNotificationController extends Controller
     }
 
     /**
-     * destroy all notifications
-     *
-     * @return json
+     * Destroy the notification
+     * @param \App\Models\Notify\Notification $notification
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function destroy(Notification $notification)
     {
@@ -92,21 +89,20 @@ class UserNotificationController extends Controller
         //send event
         $this->privateChannel("DestroyNotificationEvent", "Notification deleted");
 
-        return $this->message(__('notifications removed'), 200);
+        return $this->message(__('Notification deleted successfully'), 200);
     }
 
     /**
-     * destroy all notifications
-     *
-     * @return json
+     * Destroy the all notifications
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function clean()
     {
         request()->user()->notifications()->delete();
 
         //send event
-        $this->privateChannel("DestroyNotificationEvent", "Notifications deleted");
+        $this->privateChannel("DestroyNotificationEvent", "Notifications deleted successfully");
 
-        return $this->message(__('notifications removed'), 200);
+        return $this->message(__('Notifications deleted successfully'), 200);
     }
 }

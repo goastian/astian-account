@@ -3,11 +3,10 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Models\User\User;
 use Illuminate\Http\Request;
-use App\Models\User\Employee;
 use Illuminate\Support\Facades\DB;
-use App\Events\Employee\EnableEmployeeEvent;
-use App\Notifications\Client\ReactiveAccount as Notification;
+use App\Notifications\Member\MemberReactivateAccount;
 
 class ReactiveAccount
 {
@@ -20,20 +19,17 @@ class ReactiveAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        $user = Employee::onlyTrashed()->where('email', $request->email)->first();
+        $user = User::onlyTrashed()->where('email', $request->email)->first();
 
-        if ($user) {
+        if ($user && $user->hasGroup('member')) {
 
-            DB::transaction(function() use($user){
+            DB::transaction(function () use ($user) {
 
                 $user->deleted_at = null;
-                
+
                 $user->push();
-                
-                EnableEmployeeEvent::dispatch();
-                
-                $user->notify(new Notification());
-                
+
+                $user->notify(new MemberReactivateAccount());
             });
         }
 

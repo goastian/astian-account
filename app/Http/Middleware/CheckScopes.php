@@ -2,17 +2,17 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\OAuth\Scopes;
 use Closure;
+use App\Traits\Scopes;
 use Elyerr\ApiResponse\Exceptions\ReportError;
-use Illuminate\Http\Request;
-use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Exceptions\MissingScopeException;
+use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Http\Middleware\CheckScopes as middleware;
 
 class CheckScopes extends middleware
 {
     use Scopes;
+
     /**
      * Handle the incoming request.
      *
@@ -28,21 +28,32 @@ class CheckScopes extends middleware
         if (!$request->user() || !$request->user()->token()) {
             throw new AuthenticationException;
         }
-        //Verification for non-admin users
-        if (!$request->user()->isAdmin()) {
-            if (!$request->header('Authorization')) {
-                //Check that the scopes are within the scopes assigned to the user.
-                foreach ($scopes as $scope) {
-                    throw_unless(collect($this->scopes())->contains('id', $scope),
-                        new ReportError('no cuenta con los permisos para realizar esta operacion', 403));
-                }
+
+        //Check the api key
+        $apiKey = $request->user()->token();
+        if (isset($apiKey->id)) {
+
+            if (empty(array_diff($scopes, $apiKey->scopes))) {
+                return $next($request);
             }
 
-            foreach ($scopes as $scope) {
-                if (!$request->user()->tokenCan($scope)) {
-                    throw new MissingScopeException($scope);
-                }
+            throw new ReportError("You do not have the necessary permissions", 403);
+        }
+
+        //admin users
+        if (auth()->user()->isAdmin()) {
+            return $next($request);
+        }
+
+        //Verification for non-admin users
+        if (auth()->check()) {
+
+            $userScopes = $this->scopes()->pluck('id')->toArray();
+            if (!empty($userScopes) && empty(array_diff($scopes, $userScopes))) {
+                return $next($request);
             }
+
+            throw new ReportError("You do not have the necessary permissions", 403);
         }
 
         return $next($request);

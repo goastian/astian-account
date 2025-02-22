@@ -3,8 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class VerifyAccount
 {
@@ -17,11 +17,17 @@ class VerifyAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($request->user() and $request->user()->isClient() and !$request->user()->verified_at ) {
-            throw new ReportError(__('please, check your email address to activate your account'), 403);
-        }
-         
-        return $next($request);
+        $except = ['send.verification.email', 'check.account', 'verify.account'];
 
+        if (auth()->check() && !in_array(Route::currentRouteName(), $except) && !auth()->user()->verified_at) {
+
+            if ($request->wantsJson()) {
+                return response()->json(['message' => __("Your Account is unverified")]);
+            }
+
+            return redirect()->route('check.account');
+        }
+
+        return $next($request);
     }
 }
