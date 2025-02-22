@@ -2,7 +2,8 @@
 namespace App\Http\Requests\User;
 
 use App\Models\User\User;
-use Illuminate\Validation\Rule; 
+use Illuminate\Validation\Rule;
+use App\Models\Subscription\Group;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreRequest extends FormRequest
@@ -33,7 +34,28 @@ class StoreRequest extends FormRequest
             'address' => ['nullable', 'max:150'],
             'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
-            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()]
+            'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
+            'groups' => [
+                'required',
+                function ($attribute, $value, $fail) {
+
+                    if (empty($value)) {
+                        $fail(__('The groups field is required.'));
+                    }
+
+                    if (!is_array($value)) {
+                        $fail(__('The groups field must be an array.'));
+                    }
+
+                    foreach ($value as $key) {
+                        $group = Group::find($key);
+
+                        if (empty($group)) {
+                            $fail(__('The group with ID :key does not exist.', ['key' => $key]));
+                        }
+                    }
+                }
+            ],
         ];
     }
 }

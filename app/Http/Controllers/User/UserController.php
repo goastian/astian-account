@@ -16,6 +16,7 @@ use App\Notifications\User\UserDisableAccount;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Notifications\User\UserUpdatedPassword;
 use App\Notifications\User\UserReactivateAccount;
+use App\Notifications\Member\MemberCreatedAccount;
 use App\Http\Controllers\GlobalController as Controller;
 
 class UserController extends Controller
@@ -32,7 +33,12 @@ class UserController extends Controller
         $this->middleware('scope:administrator_user_full,administrator_user_enable')->only('enable');
     }
 
-
+    /**
+     * Summary of index
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\User\User $user
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
     public function index(Request $request, User $user)
     {
         $this->checkMethod('get');
@@ -40,16 +46,10 @@ class UserController extends Controller
         $params = $this->filter_transform($user->transformer);
 
         $data = $user->query();
+        $data = $this->searchByBuilder($data, $params);
+        $data = $this->orderByBuilder($data, $user->transformer);
 
-        $data = $user->withTrashed();
-
-        $this->search($data, $params);
-
-        $this->orderBy($data, $user->transformer);
-
-        $data = $data->get();
-
-        return $this->showAll($data, $user->transformer);
+        return $this->showAllByBuilder($data, $user->transformer);
     }
 
     /**
@@ -73,15 +73,15 @@ class UserController extends Controller
             $user->password = Hash::make($temp_password);
             $user->save();
 
+            $user->groups()->attach($request->groups);
+
             /**
              * Send event
              */
             $this->privateChannel("StoreUserEvent", "New user created");
 
-            /**
-             * Send notification
-             */
             Notification::send($user, new UserCreatedAccount($temp_password));
+
         });
 
         return $this->showOne($user, $user->transformer, 201);
@@ -186,7 +186,7 @@ class UserController extends Controller
             }
         });
 
-        return $this->showOne($user, $user->transformer, 201);
+        return $this->showOne($user, $user->transformer, 200);
     }
 
     /**

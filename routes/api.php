@@ -1,13 +1,13 @@
 <?php
-
+ 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\User\UserGroupController;
 use App\Http\Controllers\User\UserScopeController;
 use App\Http\Controllers\Global\CountriesController;
 use App\Http\Controllers\OAuth\ClientAdminController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Subscription\RoleController;
-use App\Http\Controllers\Auth\AuthorizationController;
 use App\Http\Controllers\Subscription\GroupController;
 use App\Http\Controllers\Subscription\ScopeController;
 use App\Http\Controllers\Subscription\ServiceController;
@@ -78,8 +78,11 @@ Route::group([
 
     Route::get('/users/{user}/scopes/history', [UserScopeController::class, 'history'])->name('users.scopes.history');
     Route::get('/users/{user}/scopes', [UserScopeController::class, 'index'])->name('users.scopes.index');
-    Route::post('/users/{user}/scopes', [UserScopeController::class, 'store'])->name('users.scopes.store');
+    Route::post('/users/{user}/scopes', [UserScopeController::class, 'assign'])->name('users.scopes.assign');
     Route::put('/users/{user}/scopes', [UserScopeController::class, 'revoke'])->name('users.scopes.revoke');
+
+    Route::post('/users/{user}/groups', [UserGroupController::class, 'assign'])->name('users.groups.assign');
+    Route::put('/users/{user}/groups', [UserGroupController::class, 'revoke'])->name('users.groups.revoke');
 
     Route::resource('clients', ClientAdminController::class)->except('edit', 'create');
 });

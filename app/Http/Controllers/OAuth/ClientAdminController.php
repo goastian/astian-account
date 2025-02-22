@@ -41,11 +41,10 @@ class ClientAdminController extends Controller
         $data = $client->query();
         $data = $data->whereNull('user_id')->where('personal_access_client', false);
 
-        $this->search($data, $params);
+        $data = $this->searchByBuilder($data, $params);
+        $data = $this->orderByBuilder($data, $client->transformer);
 
-        $data = $data->get();
-
-        return $this->showAll($data, $client->transformer);
+        return $this->showAllByBuilder($data, $client->transformer);
     }
 
     /**
