@@ -34,12 +34,9 @@ class GroupController extends Controller
 
         $data = $group->query();
 
-        $this->search($data, $params);
+        $data = $this->searchByBuilder($data, $params);
 
-        $data = $data->get();
-
-
-        return $this->showAll($data, $group->transformer);
+        return $this->showAllByBuilder($data, $group->transformer);
     }
 
     /**
