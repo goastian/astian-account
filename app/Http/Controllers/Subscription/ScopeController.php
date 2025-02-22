@@ -35,11 +35,9 @@ class ScopeController extends GlobalController
 
         $data = $scope->query();
 
-        $this->search($data, $params);
+        $this->searchByBuilder($data, $params);
 
-        $data = $data->get();
-
-        return $this->showAll($data, $scope->transformer);
+        return $this->showAllByBuilder($data, $scope->transformer);
     }
 
     /**
@@ -177,7 +175,7 @@ class ScopeController extends GlobalController
             }
         });
 
-        return $this->showOne($scope, $scope->transformer, 201);
+        return $this->showOne($scope, $scope->transformer, 200);
     }
 
     /**

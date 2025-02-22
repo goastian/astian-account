@@ -15,8 +15,6 @@ class CountriesController extends Controller
             $countries = $countries->where('name_en', "LIKE", "%" . $request->name_en . "%");
         }
 
-        $this->orderBy($countries);
-
         $countries = $countries->get();
 
         return $this->showAll($countries, null, 200, false);

@@ -20,7 +20,7 @@ class UserScopeController extends GlobalController
     {
         parent::__construct();
         $this->middleware('scope:administrator_user_full,administrator_user_view')->only('index');
-        $this->middleware('scope:administrator_user_full,administrator_user_create')->only('store');
+        $this->middleware('scope:administrator_user_full,administrator_user_assign')->only('assign');
         $this->middleware('scope:administrator_user_full,administrator_user_revoke')->only('revoke');
         $this->middleware('scope:administrator_user_full,administrator_user_history')->only('history');
     }
@@ -35,8 +35,6 @@ class UserScopeController extends GlobalController
     {
         $this->checkMethod('get');
 
-        $params = $this->filter_transform($userScope->transformer);
-
         $scopes = $userScope->query();
 
         $scopes = $userScope->where('user_id', $user->id)
@@ -49,11 +47,7 @@ class UserScopeController extends GlobalController
             })
             ->with(['scope.service.group', 'scope.role']);
 
-        $this->search($scopes, $params);
-
-        $scopes = $scopes->get();
-
-        return $this->showAll($scopes, $userScope->transformer);
+        return $this->showAllByBuilder($scopes, $userScope->transformer);
     }
 
     /**
@@ -64,7 +58,7 @@ class UserScopeController extends GlobalController
      * @param \App\Http\Controllers\User\Scope $scope
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, User $user, UserScope $userScope, Scope $scope)
+    public function assign(Request $request, User $user, UserScope $userScope, Scope $scope)
     {
         $this->validate($request, [
             'scopes' => [
@@ -160,7 +154,7 @@ class UserScopeController extends GlobalController
             }
         });
 
-        return $this->message(__("Scopes have been revoked successfully"), 201);
+        return $this->message(__("Scopes have been revoked successfully"), 200);
     }
 
     /**

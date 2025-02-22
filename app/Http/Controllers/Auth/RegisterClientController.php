@@ -152,7 +152,7 @@ class RegisterClientController extends Controller
 
     /**
      * Redirect to the user after activate your account
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function verifiedAccount()
     {

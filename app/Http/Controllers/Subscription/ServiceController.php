@@ -33,11 +33,9 @@ class ServiceController extends GlobalController
 
         $data = $service->query();
 
-        $this->search($data, $params);
+        $this->searchByBuilder($data, $params);
 
-        $data = $data->get();
-
-        return $this->showAll($data, $service->transformer);
+        return $this->showAllByBuilder($data, $service->transformer);
     }
 
     /**
@@ -127,7 +125,7 @@ class ServiceController extends GlobalController
             }
         });
 
-        return $this->showOne($service, $service->transformer, 201);
+        return $this->showOne($service, $service->transformer, 200);
     }
 
     /**

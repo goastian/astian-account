@@ -85,7 +85,16 @@ class Auth extends Authenticatable
     public function isAdmin()
     {
         $gsr = auth()->user()->userScopes()->get()->pluck('gsr_id')->toArray();
-        return in_array('administrator_admin_full', $gsr);
+        return in_array($this->adminScopeName(), $gsr);
+    }
+
+    /**
+     * Name of admin scope
+     * @return string
+     */
+    public function adminScopeName()
+    {
+        return "administrator_admin_full";
     }
 
     /**
