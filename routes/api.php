@@ -1,5 +1,5 @@
 <?php
- 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserGroupController;
@@ -7,6 +7,7 @@ use App\Http\Controllers\User\UserScopeController;
 use App\Http\Controllers\Global\CountriesController;
 use App\Http\Controllers\OAuth\ClientAdminController;
 use App\Http\Controllers\OAuth\CredentialsController;
+use App\Http\Controllers\Subscription\PlanController;
 use App\Http\Controllers\Subscription\RoleController;
 use App\Http\Controllers\Subscription\GroupController;
 use App\Http\Controllers\Subscription\ScopeController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Subscription\ServiceController;
 use App\Http\Controllers\OAuth\PassportConnectController;
 use App\Http\Controllers\User\UserNotificationController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
+use App\Http\Controllers\Subscription\PlanScopeController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\Subscription\ServiceScopeController;
 use App\Http\Controllers\OAuth\ScopeController as OauthScopeController;
@@ -85,6 +87,10 @@ Route::group([
     Route::put('/users/{user}/groups', [UserGroupController::class, 'revoke'])->name('users.groups.revoke');
 
     Route::resource('clients', ClientAdminController::class)->except('edit', 'create');
+
+    Route::resource('plans', PlanController::class)->except('edit', 'create');
+    Route::post('plans/{plan}/scopes', [PlanScopeController::class, 'assign'])->name('plans.scopes.assign');
+    Route::put('plans/{plan}/scopes', [PlanScopeController::class, 'revoke'])->name('plans.scopes.revoke');
 });
 
 /**

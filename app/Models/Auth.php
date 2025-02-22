@@ -14,7 +14,6 @@ use Laravel\Passport\HasApiTokens;
 use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\Auth\ResetPassword;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
