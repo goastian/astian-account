@@ -11,6 +11,7 @@ use App\Models\OAuth\RefreshToken;
 use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Database\QueryException;
 use App\Models\OAuth\PersonalAccessClient;
 
 class Setting extends Master
@@ -93,12 +94,15 @@ class Setting extends Master
         //Cookies names
         Passport::cookie(settingItem('cookie_name'));
 
-        //Scopes
-        $scopes = [];
-        foreach (Scope::where('active', true)->get() as $key => $value) {
-            $scopes += array($value->gsr_id => $value->role->description);
+        try {
+            //Scopes
+            $scopes = [];
+            foreach (Scope::where('active', true)->get() as $key => $value) {
+                $scopes += array($value->gsr_id => $value->role->description);
+            }
+            Passport::tokensCan($scopes);
+        } catch (QueryException $th) {
         }
-        Passport::tokensCan($scopes);
 
         /**
          * Custom models for laravel passport
