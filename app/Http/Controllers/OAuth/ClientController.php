@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Laravel\Passport\Http\Controllers\ClientController as Controller;
 use Laravel\Passport\Passport;
+use Illuminate\Support\Facades\DB;
+use Elyerr\ApiResponse\Assets\JsonResponser;
+use App\Transformers\OAuth\ClientTransformer;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Laravel\Passport\Http\Controllers\ClientController as Controller;
 
 class ClientController extends Controller
 {
+    use JsonResponser;
+
     /**
-     * Get all of the clients for the authenticated user.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Database\Eloquent\Collection
+     * Retrieve the all clients for this users
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|TFirstDefault|TModel|\Illuminate\Database\Eloquent\Collection|\Illuminate\Http\JsonResponse
      */
     public function forUser(Request $request)
     {
-        if ($request->redirect) {
-            return $this->searchByUri($request);
-        }
-
         $userId = $request->user()->getAuthIdentifier();
 
         $clients = $this->clients->activeForUser($userId);
@@ -31,61 +30,51 @@ class ClientController extends Controller
             return $clients;
         }
 
-        /**$clients->each(function ($client) {
-        $client->secret = Hash::make($client->secret);
-        });*/
+        $clients->makeVisible('secret');
 
-        return $clients->makeVisible('secret');
+        return $this->showAll($clients, ClientTransformer::class);
     }
 
     /**
-     * Store a new client.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Laravel\Passport\Client|array
+     * Create a new client
+     * @param \Illuminate\Http\Request $request
+     * @return array|mixed|\Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        if ($this->existsForThisUser($request)) {
-            $this->validation->make($request->only('redirect'), [
-                'redirect' => ['unique:oauth_clients,redirect'],
-            ])->validate();
-        }
-
+        //validation request
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
             'redirect' => ['required', $this->redirectRule],
-            'confidential' => 'boolean',
+            'confidential' => ['boolean'],
         ])->validate();
 
+        //create a new client
         $client = $this->clients->create(
-            $request->user()->getAuthIdentifier(), $request->name, $request->redirect,
-            null, false, false, (bool) $request->input('confidential', true)
+            $request->user()->getAuthIdentifier(),
+            $request->name,
+            $request->redirect,
+            null,
+            false,
+            false,
+            (bool) $request->confidential
         );
 
         if (Passport::$hashesClientSecrets) {
             return ['plainSecret' => $client->plainSecret] + $client->toArray();
         }
 
-        return $client->makeVisible('secret');
+        $client->makeVisible('secret');
+
+        return $this->message(__("Client created successfully"), 201);
     }
 
-    /**
-     * verifica que el mismo cliente no registre pa un usuario
-     */
-    public function existsForThisUser($request)
-    {
-        $userId = $request->user()->getAuthIdentifier();
-        $clients = $this->clients->activeForUser($userId);
-        return $clients->where('redirect', $request->redirect)->first();
-    }
 
     /**
-     * Update the given client.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $clientId
-     * @return \Illuminate\Http\Response|\Laravel\Passport\Client
+     * Update clients
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $clientId
+     * @return mixed|Response|\Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $clientId)
     {
@@ -94,63 +83,36 @@ class ClientController extends Controller
         if (!$client) {
             return new Response('', 404);
         }
-        /*$clientForDB = $this->existsForThisUser($request);
-
-        if ($clientForDB->user_id == $client->user_id and $clientForDB->redirect != $client->redirect) {
-        $this->validation->make($request->only('redirect'), [
-        'redirect' => ['unique:oauth_clients,redirect'],
-        ])->validate();
-        }*/
 
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
             'redirect' => ['required', $this->redirectRule],
         ])->validate();
 
-        return $this->clients->update(
-            $client, $request->name, $request->redirect
+        $this->clients->update(
+            $client,
+            $request->name,
+            $request->redirect
         );
-    }
 
-    public function searchByUri(Request $request)
-    {
-        $userId = $request->user()->getAuthIdentifier();
-        $clients = $this->clients->activeForUser($userId);
-
-        if (Passport::$hashesClientSecrets) {
-            return $clients;
-        }
-
-        $client = $clients->where('redirect', $request->redirect)->first();
-
-        return $client ?: throw new ReportError("Not Found", 404);
+        return $this->message(__('Client updated successfully'), 201);
     }
 
     /**
-     * Delete the given client.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $clientId
-     * @return \Illuminate\Http\Response
+     * destroy 
+     * @param \Illuminate\Http\Request $request
+     * @param mixed $clientId
+     * @return ReportError|Response
      */
     public function destroy(Request $request, $clientId)
     {
         $client = $this->clients->findForUser($clientId, $request->user()->getAuthIdentifier());
-
         if (!$client) {
-            return new Response(__('Not Found'), 404);
+            throw new ReportError(__("Client not found"), 404);
         }
 
-        DB::transaction((function () use ($client) {
+        $this->clients->delete($client);
 
-            $this->clients->delete($client);
-
-            $client->tokens()->update(['revoked' => true]);
-
-            DB::table('oauth_clients')->where('id', $client->id)->delete();
-
-        }));
-
-        return new Response(__('Operation successful.'), 200);
+        return $this->message(__("Client deleted successfully"), 200);
     }
 }

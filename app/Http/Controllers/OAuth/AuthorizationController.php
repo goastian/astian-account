@@ -1,19 +1,20 @@
 <?php
 namespace App\Http\Controllers\OAuth;
 
-use App\Exceptions\OAuthAuthenticationException;
-use Illuminate\Contracts\Auth\StatefulGuard;
-use Illuminate\Http\Request;
+use App\Traits\Scopes;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use Laravel\Passport\Bridge\User;
+use Laravel\Passport\TokenRepository;
 use Laravel\Passport\ClientRepository;
+use Nyholm\Psr7\Response as Psr7Response;
+use Illuminate\Contracts\Auth\StatefulGuard;
+use Psr\Http\Message\ServerRequestInterface;
+use League\OAuth2\Server\AuthorizationServer;
+use App\Exceptions\OAuthAuthenticationException;
+use League\OAuth2\Server\Exception\OAuthServerException;
 use Laravel\Passport\Contracts\AuthorizationViewResponse;
 use Laravel\Passport\Http\Controllers\AuthorizationController as Controller;
-use Laravel\Passport\TokenRepository;
-use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Exception\OAuthServerException;
-use Nyholm\Psr7\Response as Psr7Response;
-use Psr\Http\Message\ServerRequestInterface;
 
 class AuthorizationController extends Controller
 {
@@ -39,12 +40,11 @@ class AuthorizationController extends Controller
 
     /**
      * Authorize a client to access the user's account.
-     *
-     * @param  \Psr\Http\Message\ServerRequestInterface  $psrRequest
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Laravel\Passport\ClientRepository  $clients
-     * @param  \Laravel\Passport\TokenRepository  $tokens
-     * @return \Illuminate\Http\Response|\Laravel\Passport\Contracts\AuthorizationViewResponse
+     * @param \Psr\Http\Message\ServerRequestInterface $psrRequest
+     * @param \Illuminate\Http\Request $request
+     * @param \Laravel\Passport\ClientRepository $clients
+     * @param \Laravel\Passport\TokenRepository $tokens
+     * @return AuthorizationViewResponse|\Illuminate\Http\Response
      */
     public function authorize(ServerRequestInterface $psrRequest,
         Request $request,

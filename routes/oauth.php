@@ -10,7 +10,7 @@ Route::group([
     Route::get('/authorize', [
         'uses' => '\App\Http\Controllers\OAuth\AuthorizationController@authorize',
         'as' => 'authorizations.authorize',
-        'middleware' => ['web','auth:web'],
+        'middleware' => ['web', 'auth:web'],
     ]);
 
     $guard = config('passport.guard', null);
@@ -20,7 +20,7 @@ Route::group([
         Route::post('/token/refresh', [
             'uses' => '\Laravel\Passport\Http\Controllers\TransientTokenController@refresh',
             'as' => 'token.refresh',
-        ]); 
+        ]);
 
         Route::post('/authorize', [
             'uses' => '\Laravel\Passport\Http\Controllers\ApproveAuthorizationController@approve',
@@ -62,20 +62,20 @@ Route::group([
         Route::delete('/clients/{client_id}', [
             'uses' => '\App\Http\Controllers\OAuth\ClientController@destroy',
             'as' => 'clients.destroy',
-        ]); 
-        
-        Route::get('/personal-access-tokens', [
-            'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@forUser',
+        ]);
+
+        Route::get('/api-keys', [
+            'uses' => '\App\Http\Controllers\OAuth\PersonalAccessTokenController@forUser',
             'as' => 'personal.tokens.index',
             'middleware' => 'wants.json',
         ]);
 
-        Route::post('/personal-access-tokens', [
+        Route::post('/api-keys', [
             'uses' => '\App\Http\Controllers\OAuth\PersonalAccessTokenController@store',
             'as' => 'personal.tokens.store',
         ]);
 
-        Route::delete('/personal-access-tokens/{token_id}', [
+        Route::delete('/api-keys/{token_id}', [
             'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy',
             'as' => 'personal.tokens.destroy',
         ]);

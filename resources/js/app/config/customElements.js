@@ -1,21 +1,4 @@
-import { ElNotification } from "element-plus";
-
 export const $customElement = {
-    /**
-     * Show a notification types (success,warning,info,error)
-     * @param {*} title
-     * @param {*} message
-     * @param {*} type
-     */
-    notification(title, message, type, duration = 5000) {
-        ElNotification({
-            title: title,
-            message: message,
-            type: type,
-            duration: duration,
-        });
-    },
-
     /**
      * Change theme
      * @param {*} theme

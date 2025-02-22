@@ -1,12 +1,15 @@
 <?php
 namespace App\Console\Commands\Settings;
 
-use App\Models\User\Employee;
-use App\Models\User\Role;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User\User;
+use App\Models\User\UserScope;
 use Illuminate\Support\Str;
+use Illuminate\Console\Command;
+use App\Models\Subscription\Role;
+use App\Models\Subscription\Scope;
+use Illuminate\Support\Facades\DB;
+use App\Models\Subscription\Service;
+use Illuminate\Support\Facades\Hash;
 
 class settingsUsersCreate extends Command
 {
@@ -15,7 +18,7 @@ class settingsUsersCreate extends Command
      *
      * @var string
      */
-    protected $signature = 'settings:create_user';
+    protected $signature = 'settings:create-user';
 
     /**
      * The console command description.
@@ -31,35 +34,72 @@ class settingsUsersCreate extends Command
      */
     public function handle()
     {
-        $email = $this->ask('Please enter the user\'s email:');
+        $disable = settingItem('disable_create_user_by_command', false);
+        if ($disable) {
+            return 1;
+        }
+
         $role = $this->choice('Please select the role:', ['admin', 'client'], 0);
 
-        $this->createUser($email, $role);
+        // Searching for admin service
+        $service = Service::where('slug', 'admin')->first();
 
-        $this->info('User created successfully.');
-        $this->info('Email: ' . $email);
-        $this->info('Password: password');
-        $this->info('Role: ' . $role);
+        //Searching role admin
+        $role = Role::where('slug', 'full')->first();
+
+        // Use admin id and role id to find the scope_id in scope Model
+        $scope = Scope::where(['role_id' => $role->id, 'service_id' => $service->id])->first();
+
+        DB::transaction(function () use ($scope) {
+            // Create user
+            $this->createUser($scope);
+        });
 
         return Command::SUCCESS;
     }
 
-    public function createUser($email, $role)
+    /**
+     * Create a new user
+     * @param mixed $scope
+     * @return void
+     */
+    public function createUser($scope = null)
     {
-        DB::table('users')->insert([
-            'id' => $user = Str::uuid(),
-            'name' => $role === 'admin' ? 'admin' : 'client',
-            'last_name' => $role === 'admin' ? 'administrador' : 'usuario',
+        $dev_mode = true;
+
+        if (app()->environment('production')) {
+            $name = $this->ask('Enter the user\'s first name');
+            $lastName = $this->ask('Enter the user\'s last name');
+            $email = $this->ask('Enter the user\'s email');
+            $password = $this->secret('Enter the user\'s password');
+            $dev_mode = false;
+        } else {
+            // Use Faker in development
+            $name = fake()->name();
+            $lastName = fake()->lastName();
+            $email = fake()->unique()->safeEmail();
+            $password = Str::random(20);
+        }
+
+        $user = User::create([
+            'name' => $name,
+            'last_name' => $lastName,
             'email' => $email,
-            'password' => Hash::make('password'), // Default password
+            'accept_terms' => true,
+            'password' => Hash::make($password),
             'verified_at' => now(),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'deleted_at' => now(),
         ]);
 
-        $roleModel = Role::where('name', $role)->first();
-        if ($roleModel) {
-            Employee::find($user)->roles()->syncWithoutDetaching($roleModel->id);
+        if ($scope) {
+            UserScope::create([
+                'scope_id' => $scope->id,
+                'user_id' => $user->id,
+            ]);
         }
+
+        $this->info('User created successfully.');
+        $this->info('Email: ' . $email);
+        $this->info('Password: ' . $password);
     }
 }

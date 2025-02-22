@@ -32,8 +32,7 @@ class ApiTokenCookieFactory extends Factory
             $config['secure'],
             $config['http_only'],
             false,
-            $config['same_site'] ?? null,
-            $config['partitioned'] ?? false
+            $config['same_site'] ?? null
         );
     }
 }

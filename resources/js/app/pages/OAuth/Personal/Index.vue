@@ -1,58 +1,57 @@
 <template>
-    <div class="tokens">
-        <div class="head">
-            <div class="row">
-                <div class="col">
-                    <p>List of token</p>
+    <v-sheet class="px-3">
+        <v-data-table
+            :items-per-page="search.per_page"
+            :headers="headers"
+            :items="tokens"
+        >
+            <template v-slot:top>
+                <div class="flex mx-3 justify-between align-center">
+                    <h1 class="fw-bold">List of users</h1>
+                    <v-create @created="getPersonalAccessToken()"></v-create>
                 </div>
-                <div class="col">
-                    <v-create
-                        @created="getPersonalAccessToken"
-                    ></v-create>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="table" style="margin-bottom: 1em">
-        <el-table :data="tokens" :lazy="true">
-            <el-table-column prop="name" label="name" width="200" />
-            <el-table-column prop="scopes" label="scopes" width="300">
-                <template #default="scope">
-                    {{ scope.row.scopes.join(", ") }}
-                </template>
-            </el-table-column>
-            <el-table-column prop="created_at" label="created" width="200" />
-            <el-table-column prop="expires_at" label="expires" width="200" />
-            <el-table-column label="actions" min-width="200">
-                <template #default="scope">
-                    <div class="actions">
-                        <div class="box">
-                            <v-remove
-                                :token="scope.row"
-                                @removed="getPersonalAccessToken"
-                            ></v-remove>
-                        </div>
-                    </div>
-                </template>
-            </el-table-column>
-        </el-table>
-    </div>
+            </template>
+            <template #item.actions="{ item }">
+                <v-delete
+                    @deleted="getPersonalAccessToken"
+                    :item="item"
+                ></v-delete>
+            </template>
+            <template v-slot:bottom>
+                <v-pagination
+                    v-model="search.page"
+                    :length="search.total_pages"
+                    :total-visible="7"
+                ></v-pagination>
+            </template>
+        </v-data-table>
+    </v-sheet>
 </template>
 <script>
 import VCreate from "./Create.vue";
-import VRemove from "./Remove.vue";
+import VDelete from "./Delete.vue";
 
 export default {
     components: {
         VCreate,
-        VRemove,
+        VDelete,
     },
-
+ 
     data() {
         return {
             tokens: [],
+            headers: [
+                { title: "Name", value: "name", align: "start" },
+                { title: "Created", value: "created", align: "start" },
+                { title: "Expires", value: "expires", align: "start" },
+                { title: "Actions", value: "actions", align: "start" },
+            ],
             user_id: null,
+            search: {
+                page: 1,
+                per_page: 50,
+                total_pages: 0,
+            },
         };
     },
 
@@ -63,9 +62,10 @@ export default {
     methods: {
         getPersonalAccessToken() {
             this.$server
-                .get("/oauth/personal-access-tokens")
+                .get("/oauth/api-keys")
                 .then((res) => {
-                    this.tokens = res.data;
+                    this.tokens = res.data.data;
+                    this.search = res.data.meta;
                 })
                 .catch((e) => {});
         },
@@ -80,22 +80,3 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
-.tokens {
-    .head {
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            .col {
-                flex: calc(100% / 2);
-                p {
-                    margin: 0;
-                }
-                &:nth-child(2) {
-                    text-align: center;
-                }
-            }
-        }
-    }
-}
-</style>

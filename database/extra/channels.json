@@ -1,6 +1,6 @@
 [
     {
-        "channel": "auth",
+        "name": "auth",
         "description": "default channel in the system"
     }
 ]

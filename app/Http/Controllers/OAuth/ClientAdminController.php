@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use App\Http\Controllers\GlobalController as Controller;
 use App\Models\OAuth\Client;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Laravel\Passport\ClientRepository;
+use App\Http\Controllers\GlobalController as Controller;
 
 class ClientAdminController extends Controller
 {
-
     /**
      * The client repository instance.
      *
@@ -22,7 +22,11 @@ class ClientAdminController extends Controller
     {
         parent::__construct();
         $this->clients = $clients;
-        $this->middleware('scope:admin');
+        $this->middleware('scope:administrator_application_full,administrator_application_view')->only('index');
+        $this->middleware('scope:administrator_application_full,administrator_application_show')->only('show');
+        $this->middleware('scope:administrator_application_full,administrator_application_create')->only('store');
+        $this->middleware('scope:administrator_application_full,administrator_application_update')->only('update');
+        $this->middleware('scope:administrator_application_full,administrator_application_destroy')->only('destroy');
     }
 
     /**
@@ -34,10 +38,14 @@ class ClientAdminController extends Controller
     {
         $params = $this->filter_transform($client->transformer);
 
-        $clients = $this->search($client->table, $params);
-        $clients = collect($clients)->where('user_id', null)->values();
+        $data = $client->query();
+        $data = $data->whereNull('user_id')->where('personal_access_client', false);
 
-        return $this->showAll($clients, $client->transformer);
+        $this->search($data, $params);
+
+        $data = $data->get();
+
+        return $this->showAll($data, $client->transformer);
     }
 
     /**
@@ -48,22 +56,33 @@ class ClientAdminController extends Controller
      */
     public function store(Request $request, Client $client)
     {
-        if ($client->user_id) {
-            return new ReportError(__("Client not found"), 404);
-        }
-
         $this->validate($request, [
             'name' => 'required|max:191',
-            'redirect' => ['required', 'array'],
-            'redirect.*' => ['required', 'distinct', 'url:http,https'],
+            'redirect' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    $urls = explode(',', $value);
+                    foreach ($urls as $url) {
+                        $url = trim($url);
+                        if (!preg_match('/^(https?:\/\/)/i', $url)) {
+                            $fail(__('Each URL in :attribute must start with http or https.', ['attribute' => $attribute]));
+                            break;
+                        }
+                    }
+
+                }
+            ],
             'confidential' => 'boolean',
         ]);
 
-        $request->merge(['redirect' => implode(',', $request->redirect)]);
-
         $client = $this->clients->create(
-            null, $request->name, $request->redirect,
-            null, false, false, (bool) $request->input('confidential', true)
+            null,
+            $request->name,
+            $request->redirect,
+            null,
+            false,
+            false,
+            (bool) $request->confidential
         );
 
         return $this->showOne($client, $client->transformer, 201);
@@ -77,6 +96,10 @@ class ClientAdminController extends Controller
      */
     public function show(Client $client)
     {
+        if ($client->personal_access_client) {
+            throw new ReportError(__('Not found'), 404);
+        }
+
         return $this->showOne($client, $client->transformer);
     }
 
@@ -89,21 +112,52 @@ class ClientAdminController extends Controller
      */
     public function update(Request $request, Client $client)
     {
-        if ($client->user_id) {
-            return new ReportError(__("Client not found"), 404);
+        if ($client->personal_access_client) {
+            throw new ReportError(__('Not found'), 404);
         }
 
         $this->validate($request, [
-            'name' => 'required|max:191',
-            'redirect' => ['required', 'array'],
-            'redirect.*' => ['required', 'distinct', 'url:http,https'],
+            'name' => 'nullable|max:191',
+            'redirect' => [
+                'nullable',
+                function ($attribute, $value, $fail) {
+                    if (!empty($value)) {
+                        $urls = explode(',', $value);
+                        foreach ($urls as $url) {
+                            $url = trim($url);
+                            if (!preg_match('/^(https?:\/\/)/i', $url)) {
+                                $fail(__('Each URL in :attribute must start with http or https.', ['attribute' => $attribute]));
+                                break;
+                            }
+                        }
+                    }
+                }
+            ],
         ]);
 
-        $request->merge(['redirect' => implode(',', $request->redirect)]);
+        DB::transaction(function () use ($request, $client) {
+            $updated = false;
 
-        $client = $this->clients->update(
-            $client, $request->name, $request->redirect
-        );
+            if ($this->is_different($client->name, $request->name)) {
+                $client->name = $request->name;
+                $updated = true;
+            }
+
+            if ($this->is_different($client->redirect, $request->redirect)) {
+                $client->redirect = $request->redirect;
+                $updated = true;
+            }
+
+            if ($this->is_different($client->revoked, $request->revoked)) {
+                $client->revoked = $request->revoked;
+                $client->tokens()->update(['revoked' => true]);
+                $updated = true;
+            }
+
+            if ($updated) {
+                $client->push();
+            }
+        });
 
         return $this->showOne($client, $client->transformer);
     }
@@ -116,13 +170,13 @@ class ClientAdminController extends Controller
      */
     public function destroy(Client $client)
     {
-        if ($client->user_id) {
-            return new ReportError(__("Client not found"), 404);
+        if ($client->personal_access_client) {
+            throw new ReportError(__('Not found'), 404);
         }
 
-        $this->clients->delete($client);
-
         $client->tokens()->update(['revoked' => true]);
+
+        $client->delete();
 
         return $this->showOne($client, $client->transformer);
     }

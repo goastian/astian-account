@@ -12,19 +12,40 @@ class Broadcast extends Master
 {
     use HasFactory;
 
+    /**
+     * Table name
+     * @var string
+     */
     public $table = "broadcasts";
 
+    /**
+     * Transformer class
+     * @var 
+     */
     public $transformer = BroadcastTransformer::class;
 
+    /**
+     * Fillable properties
+     * @var array
+     */
     protected $fillable = [
-        'channel',
+        'name',
         'description',
+        'slug',
+        'system'
     ];
 
     /**
-     * registra todos los canales disponibles
-     *
-     * @return mixed
+     * Cast properties
+     * @var array
+     */
+    public $casts = [
+        'system' => 'boolean',
+    ];
+
+    /**
+     * Register the all channels available in the system
+     * @return void
      */
     public static function register()
     {
@@ -33,18 +54,30 @@ class Broadcast extends Master
 
             foreach ($channels as $broadcast) {
 
+                /**
+                 * Register private channels
+                 */
                 Broadcasting::channel($broadcast->channel . ".{id}", function ($user, $id) {
                     return (int) $user->id === (int) $id;
                 });
 
+                /**
+                 * Register public channels
+                 */
                 Broadcasting::channel($broadcast->channel, function ($user) {
                     return (int) $user->id === (int) request()->user()->id;
                 });
 
-            };
-        } catch (QueryException $e) {}
+            }
+            ;
+        } catch (QueryException $e) {
+        }
     }
 
+    /**
+     * Retrieve default channels for the system
+     * @return mixed
+     */
     public static function channelsByDefault()
     {
         return json_decode(file_get_contents(base_path('database/extra/channels.json')));

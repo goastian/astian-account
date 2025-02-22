@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Http\Middleware;
-
-use App\Models\Auth\Session;
+ 
 use Closure;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use ErrorException;
-use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
-use Illuminate\Cookie\CookieValuePrefix;
 use Illuminate\Http\Request;
+use App\Models\Setting\Session;
+use Illuminate\Cookie\CookieValuePrefix;
+use Elyerr\ApiResponse\Exceptions\ReportError;
+use Illuminate\Contracts\Encryption\Encrypter as EncrypterContract;
 
 class verifyCredentials
 {
@@ -65,7 +65,7 @@ class verifyCredentials
      * Deny cookie if the session has been destroyed
      *
      * @param Request $request
-     * @return Boolean
+     * @return bool
      */
     public function verifyCookie(Request $request)
     {

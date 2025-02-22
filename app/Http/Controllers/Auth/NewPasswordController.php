@@ -7,7 +7,6 @@ use Illuminate\Validation\Rules;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Validation\ValidationException;
 
 class NewPasswordController extends Controller
@@ -19,10 +18,6 @@ class NewPasswordController extends Controller
      */
     public function create(Request $request)
     {
-        if ($request->user()) {
-            throw new ReportError(__("we're detecting an open account, please close and reload the page before " . env('RESET_PASSWORD_EXPIRED') . " minutes"), 403);
-        }
-
         return view('auth.reset-password')->with(['token' => $request->token, 'email' => $request->email]);
     }
 
@@ -57,10 +52,6 @@ class NewPasswordController extends Controller
             throw ValidationException::withMessages([
                 'email' => [__($status)],
             ]);
-        }
-
-        if (request()->wantsJson) {
-            return response()->json(['status' => __($status)]);
         }
 
         return redirect('login')->with('status', __($status));

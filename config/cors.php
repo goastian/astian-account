@@ -15,20 +15,19 @@ return [
     |
     */
 
-    'paths' => explode(',', env('CORS_PATHS')),
+    'paths' => ['api/*', 'logout'],
 
-    'allowed_methods' => explode(',', env('CORS_METHODS')),
+    'allowed_methods' => ['*'],
 
-    'allowed_origins' =>  explode(',', env('CORS_ORIGINS')),
+    'allowed_origins' => ['*'],
 
-    'allowed_origins_patterns' => explode(',', env('CORS_PATTERNS')),
+    'allowed_origins_patterns' => [],
 
-    'allowed_headers' => explode(',', env('CORS_ALLOW_HEADERS')),
+    'allowed_headers' => ['*'],
 
-    'exposed_headers' => explode(',', env('CORS_EXPOSED_HEADERS')),
+    'exposed_headers' => [],
 
-    'max_age' => env('CORS_MAX_AGE',0),
+    'max_age' => 0,
 
-    'supports_credentials' => env('CORS_CREDENTIALS',true),
-
+    'supports_credentials' => true,
 ];
