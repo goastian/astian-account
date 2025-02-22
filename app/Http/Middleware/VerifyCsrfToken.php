@@ -29,8 +29,8 @@ class VerifyCsrfToken extends Middleware
         $token = $this->getTokenFromRequest($request);
 
         return is_string($request->session()->token()) &&
-        is_string($token) &&
-        hash_equals($request->session()->token(), $token);
+            is_string($token) &&
+            hash_equals($request->session()->token(), $token);
     }
 
     /**
@@ -69,7 +69,7 @@ class VerifyCsrfToken extends Middleware
             $this->availableAt(60 * $config['lifetime']),
             $config['path'],
             $config['domain'],
-            $config['secure'],
+            false,
             $config['http_only'],
             false,
             $config['same_site'] ?? null,
