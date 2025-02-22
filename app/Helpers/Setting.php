@@ -61,8 +61,12 @@ if (!function_exists('settingItem')) {
 
             return $setting ? $setting->value : $default;
 
-        } catch (QueryException $th) {
-            Log::error($th);
+        } catch (QueryException $e) {
+            Log::error("Database error in settingItem: " . $e->getMessage());
+            return $default;
+        } catch (\Exception $e) {
+            Log::error("General error in settingItem: " . $e->getMessage());
+            return $default;
         }
     }
 }
