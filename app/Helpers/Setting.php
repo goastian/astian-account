@@ -29,6 +29,32 @@ if (!function_exists('settingAdd')) {
 }
 
 
+if (!function_exists('settingLoad')) {
+    /**
+     * Add an item only if it does not exist
+     * @param mixed $key
+     * @param mixed $value
+     * @param mixed $user
+     * @return void
+     */
+    function settingLoad($key, $value, $user = false)
+    {
+        $user = $user ? auth()->user()->id : null;
+
+        Setting::firstOrCreate(
+            [
+                'key' => $key,
+                'user_id' => $user
+            ],
+            [
+                'value' => $value
+            ]
+        );
+    }
+}
+
+
+
 if (!function_exists('settingItem')) {
 
     /**
