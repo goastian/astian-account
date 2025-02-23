@@ -59,10 +59,9 @@ class RegisterClientController extends Controller
         DB::transaction(function () use ($request, $user, $group) {
             $user = $user->fill($request->all());
             $user->password = Hash::make($request->password);
-            $user->group_id = $group->id;
             $user->save();
 
-            $user->groups()->sync($group->id);
+            $user->groups()->attach($group->id);
 
             $user->notify(new MemberCreatedAccount());
         });
