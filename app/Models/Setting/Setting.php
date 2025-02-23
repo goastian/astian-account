@@ -42,6 +42,7 @@ class Setting extends Master
         Setting::getPassportSetting();
         Setting::getRedisConfig();
         Setting::getQueueSetting();
+        Setting::getFileSystems();
     }
 
     /**
@@ -149,6 +150,65 @@ class Setting extends Master
         settingLoad('queue.failed.driver', 'database-uuids');
         settingLoad('queue.failed.database', 'mysql');
         settingLoad('queue.failed.table', 'failed_jobs');
+
+
+        //----------FILESYSTEM SETTINGS------------------------------------------
+        settingLoad('filesystems.default', 'local');
+        settingLoad('filesystems.disks.local.driver', 'local');
+        settingLoad('filesystems.disks.local.root', storage_path('app'));
+        settingLoad('filesystems.disks.local.throw', false);
+
+        settingLoad('filesystems.disks.public.driver', 'local');
+        settingLoad('filesystems.disks.public.root', storage_path('app/public'));
+        settingLoad('filesystems.disks.public.url', config('app.url', null) . '/storage');
+        settingLoad('filesystems.disks.public.visibility', 'public');
+        settingLoad('filesystems.disks.public.throw', false);
+
+        settingLoad('filesystems.disks.s3.driver', 's3');
+        settingLoad('filesystems.disks.s3.key', null);
+        settingLoad('filesystems.disks.s3.secret', null);
+        settingLoad('filesystems.disks.s3.region', null);
+        settingLoad('filesystems.disks.s3.bucket', null);
+        settingLoad('filesystems.disks.s3.url', null);
+        settingLoad('filesystems.disks.s3.endpoint', null);
+        settingLoad('filesystems.disks.s3.use_path_style_endpoint', false);
+        settingLoad('filesystems.disks.s3.throw', false);
+
+        settingLoad('filesystems.links.public', public_path('storage'));
+        settingLoad('filesystems.links.storage', storage_path('app/public'));
+
+
+    }
+
+    /**
+     * Setting default values for files system
+     * @return void
+     */
+    public static function getFileSystems()
+    {
+        Config::set('filesystems.default', settingItem('filesystems.default', 'local'));
+        Config::set('filesystems.disks.local.driver', settingItem('filesystems.disks.local.driver', 'local'));
+        Config::set('filesystems.disks.local.root', settingItem('filesystems.disks.local.root', storage_path('app')));
+        Config::set('filesystems.disks.local.throw', settingItem('filesystems.disks.local.throw', false));
+
+        Config::set('filesystems.disks.public.driver', settingItem('filesystems.disks.public.driver', 'local'));
+        Config::set('filesystems.disks.public.root', settingItem('filesystems.disks.public.root', storage_path('app/public')));
+        Config::set('filesystems.disks.public.url', settingItem('filesystems.disks.public.url', config('app.url', null) . '/storage'));
+        Config::set('filesystems.disks.public.visibility', settingItem('filesystems.disks.public.visibility', 'public'));
+        Config::set('filesystems.disks.public.throw', settingItem('filesystems.disks.public.throw', false));
+
+        Config::set('filesystems.disks.s3.driver', settingItem('filesystems.disks.s3.driver', 's3'));
+        Config::set('filesystems.disks.s3.key', settingItem('filesystems.disks.s3.key', null));
+        Config::set('filesystems.disks.s3.secret', settingItem('filesystems.disks.s3.secret', null));
+        Config::set('filesystems.disks.s3.region', settingItem('filesystems.disks.s3.region', null));
+        Config::set('filesystems.disks.s3.bucket', settingItem('filesystems.disks.s3.bucket', null));
+        Config::set('filesystems.disks.s3.url', settingItem('filesystems.disks.s3.url', null));
+        Config::set('filesystems.disks.s3.endpoint', settingItem('filesystems.disks.s3.endpoint', null));
+        Config::set('filesystems.disks.s3.use_path_style_endpoint', settingItem('filesystems.disks.s3.use_path_style_endpoint', false));
+        Config::set('filesystems.disks.s3.throw', settingItem('filesystems.disks.s3.throw', false));
+
+        Config::set('filesystems.links.public', settingItem('filesystems.links.public', public_path('storage')));
+        Config::set('filesystems.links.storage', settingItem('filesystems.links.storage', storage_path('app/public')));
     }
 
     /**
@@ -170,6 +230,7 @@ class Setting extends Master
         Config::set('database.redis.cache.password', settingItem('database.redis.cache.password', null));
         Config::set('database.redis.cache.port', settingItem('database.redis.cache.port', '127.0.0.1'));
         Config::set('database.redis.cache.database', settingItem('database.redis.cache.database', 1));
+
     }
 
     /**
