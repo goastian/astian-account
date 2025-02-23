@@ -14,7 +14,7 @@
                 <h3 class="text-lg font-semibold text-gray-700 mb-4 border-b pb-2">{{ __('Default Queue') }}</h3>
                 <select name="queue[default]" id="queue_selector"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200">
-                    @foreach (['sync', 'database', 'beanstalkd', 'sqs', 'redis', 'null'] as $driver)
+                    @foreach (['database', 'beanstalkd', 'sqs', 'redis'] as $driver)
                         <option value="{{ $driver }}" {{ settingItem('queue.default') == $driver ? 'selected' : '' }}>
                             {{ ucfirst($driver) }}
                         </option>
