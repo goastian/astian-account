@@ -57,6 +57,8 @@ Route::group([
     Route::get('/email', [SettingController::class, 'email'])->name('email');
     Route::get('/user', [SettingController::class, 'user'])->name('user');
     Route::get('/routes', [SettingController::class, 'routes'])->name('routes');
+    Route::get('/redis', [SettingController::class, 'redis'])->name('redis');
+    Route::get('/queues', [SettingController::class, 'queues'])->name('queues');
 
-    Route::post('/', [SettingController::class, 'update'])->name('update');
+    Route::put('/', [SettingController::class, 'update'])->name('update');
 });

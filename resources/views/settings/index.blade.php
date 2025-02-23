@@ -41,11 +41,23 @@
                             <i class="mdi mdi-router-network text-2xl"></i> {{ __('Routes') }}
                         </a>
                     </li>
+                    <li class="list-item hover:bg-gray-100 cursor-pointer">
+                        <a class="block px-2 py-2" href="{{ route('settings.redis') }}">
+                            <i class="mdi mdi-database-cog text-2xl"></i> {{ __('Redis') }}
+                        </a>
+                    </li>
+                    <li class="list-item hover:bg-gray-100 cursor-pointer">
+                        <a class="block px-2 py-2" href="{{ route('settings.queues') }}">
+                            <i class="mdi mdi-queue-first-in-last-out text-2xl"></i> {{ __('Queues') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
 
             <div class="w-full md:w-3/4">
-                <form action="{{ route('settings.update') }}" method="post">
+                <form action="{{ route('settings.update') }}" method="post" autocomplete="off">
+                    @method('put')
+                    @csrf
                     <div>
                         @yield('form')
                     </div>

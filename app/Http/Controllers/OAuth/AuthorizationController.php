@@ -29,12 +29,14 @@ class AuthorizationController extends Controller
      * @param  \Laravel\Passport\Contracts\AuthorizationViewResponse  $response
      * @return void
      */
-    public function __construct(AuthorizationServer $server,
+    public function __construct(
+        AuthorizationServer $server,
         StatefulGuard $guard,
-        AuthorizationViewResponse $response) {
+        AuthorizationViewResponse $response
+    ) {
         parent::__construct($server, $guard, $response);
 
-        $this->scopes_can_granted(request());
+        $this->userHasScopes(request());
 
     }
 
@@ -46,10 +48,12 @@ class AuthorizationController extends Controller
      * @param \Laravel\Passport\TokenRepository $tokens
      * @return AuthorizationViewResponse|\Illuminate\Http\Response
      */
-    public function authorize(ServerRequestInterface $psrRequest,
+    public function authorize(
+        ServerRequestInterface $psrRequest,
         Request $request,
         ClientRepository $clients,
-        TokenRepository $tokens) {
+        TokenRepository $tokens
+    ) {
 
         $authRequest = $this->withErrorHandling(function () use ($psrRequest) {
             return $this->server->validateAuthorizationRequest($psrRequest);
@@ -57,12 +61,14 @@ class AuthorizationController extends Controller
 
         if ($this->guard->guest()) {
             return $request->get('prompt') === 'none'
-            ? $this->denyRequest($authRequest)
-            : $this->promptForLogin($request);
+                ? $this->denyRequest($authRequest)
+                : $this->promptForLogin($request);
         }
 
-        if ($request->get('prompt') === 'login' &&
-            !$request->session()->get('promptedForLogin', false)) {
+        if (
+            $request->get('prompt') === 'login' &&
+            !$request->session()->get('promptedForLogin', false)
+        ) {
             $this->guard->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -78,8 +84,10 @@ class AuthorizationController extends Controller
 
         $client = $clients->find($authRequest->getClient()->getIdentifier());
 
-        if ($request->get('prompt') !== 'consent' &&
-            ($client->skipsAuthorization() || $this->hasValidToken($tokens, $user, $client, $scopes))) {
+        if (
+            $request->get('prompt') !== 'consent' &&
+            ($client->skipsAuthorization() || $this->hasValidToken($tokens, $user, $client, $scopes))
+        ) {
             return $this->approveRequest($authRequest, $user);
         }
 
@@ -148,39 +156,29 @@ class AuthorizationController extends Controller
     }
 
     /**
-     * verifica los scopes entrantes y solo asignara al los que el cliente tenga acceso
-     *
+     * Check available scopes to the requested user
      * @param \Illuminate\Http\Request $request
-     * @return string
+     * @return void
      */
-    public function scopes_can_granted(Request $request)
+    public function userHasScopes(Request $request)
     {
-        //variable para lo nuevos scopes
         $scopes_accepted = [];
 
-        //convertimos los scopes a un array
         $request_scopes = explode(' ', $request->scope);
 
-        //obtenemos todos los scopes a los que el usuario tiene acceso
         $owner_scopes = collect($this->scopes())->pluck('id');
 
-        /**
-         * cuando alguien solicite un token global en el scope debe venir un asterisco (*)
-         */
         if (str_contains($request->scope, '*')) {
             foreach ($owner_scopes as $key) {
                 array_push($scopes_accepted, $key);
             }
-        } else { //si no es un token global
-            //verificamos si el scope que ingreso el usuario tiene accesso
+        } else {
             foreach ($owner_scopes as $key) {
-
-                if (in_array($key, $request_scopes)) { //si tiene accesso se le asigna
+                if (in_array($key, $request_scopes)) {
                     array_push($scopes_accepted, $key);
                 }
             }
         }
-
         $request->merge(['scope' => implode(" ", $scopes_accepted)]);
     }
 }

@@ -45,7 +45,7 @@ class MemberDisableAccount extends Notification implements ShouldQueue
             ->line(__('We are sorry to hear about your decision to deactivate your account.'))
             ->line(__('For security purposes, your account will not be removed immediately. Instead, it is scheduled for permanent deletion in ') . settingItem('destroy_user_after', 30) . __(' days.'))
             ->line(__('If you change your mind, you can easily reactivate your account by logging in before the deletion period ends.'))
-            ->action(__('Visit ') . config('app.name'), url(env('FRONTEND_URL')))
+            ->action(__('Visit ') . settingItem('app.name'), url(env('FRONTEND_URL')))
             ->line(__('Thank you for being a valued member of our community. We truly appreciate your trust and the time you spent with us.'));
 
     }

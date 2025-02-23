@@ -10,11 +10,11 @@
 
             <div class="mb-4 px-2 py-2">
                 <label for="app_name" class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ __('App Name') }}
+                    {{ __('App name') }}
                 </label>
-                <input id="app_name" type="text" name="app_name"
+                <input id="app_name" type="text" name="app[name]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="{{ __('Enter the application name') }}" value="{{ settingItem('app_name') }}">
+                    placeholder="{{ __('Enter the application name') }}" value="{{ settingItem('app.name') }}">
                 <small class="block mt-1 text-gray-600">
                     {{ __('This field specifies the name of the application') }}
                 </small>

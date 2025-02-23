@@ -12,7 +12,7 @@
             <div class="login">
                 <div class="head text-center mb-8">
                     <p class="text-3xl font-bold text-gray-800 tracking-tight">
-                        {{ config('app.name') }}
+                        {{ settingItem('app.name', 'Oauth2 Server') }}
                     </p>
                 </div>
                 <div class="body">

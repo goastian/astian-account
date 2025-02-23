@@ -9,14 +9,14 @@
     <meta name="author" content="Tu Nombre o Compañía">
     <meta name="robots" content="index, follow">
 
-    <meta property="og:title" content="{{ config('app.name', 'Laravel') }}">
+    <meta property="og:title" content="{{ settingItem('app.name', 'Oauth2 Server') }}">
     <meta property="og:description" content="OAuth2 Server for secure authentication.">
-    <meta property="og:url" content="{{ config('app.url') }}">
+    <meta property="og:url" content="{{ settingItem('app.url') }}">
     <meta property="og:type" content="website">
 
-    <link rel="icon" href="{{ config('app.url') }}/favicon.png" type="image/png">
+    <link rel="icon" href="{{ settingItem('app.url') }}/favicon.png" type="image/png">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ settingItem('app.name', 'Oauth2 Server') }}</title>
 
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/tailwind.css') }}">
@@ -25,7 +25,7 @@
 
 <body>
 
-    <div id="app" data-nonce="{{ $nonce }}" data-app-name="{{ config('app.name') }}"></div>
+    <div id="app" data-nonce="{{ $nonce }}" data-app-name="{{ settingItem('app.name') }}"></div>
 
     <!-- Scripts -->
     <script src="{{ mix('/js/app.js') }}"></script>
