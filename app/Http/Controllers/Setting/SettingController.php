@@ -29,12 +29,38 @@ class SettingController extends Controller
      */
     public function update(Request $request)
     {
-        $data = $request->all();
+        $data = $request->except('_method', '_token');
+
+        $data = $this->transformRequest($data);
+
         foreach ($data as $key => $value) {
             settingAdd($key, $value);
         }
 
         return back()->with('status', __('Setting updated successfully'));
+    }
+
+    /**
+     * Transform request
+     * @param array $data
+     * @param string $prefix
+     * @return array
+     */
+    public function transformRequest(array $data, string $prefix = '')
+    {
+        $flattened = [];
+
+        foreach ($data as $key => $value) {
+            $newKey = $prefix ? "{$prefix}.{$key}" : $key;
+
+            if (is_array($value)) {
+                $flattened += $this->transformRequest($value, $newKey);
+            } else {
+                $flattened[$newKey] = $value;
+            }
+        }
+
+        return $flattened;
     }
 
     /**
@@ -80,5 +106,23 @@ class SettingController extends Controller
     public function routes()
     {
         return view('settings.section.routes');
+    }
+
+    /**
+     * Show the view of 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function redis()
+    {
+        return view('settings.section.redis');
+    }
+
+    /**
+     * Show the view of 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function queues()
+    {
+        return view('settings.section.queues');
     }
 }
