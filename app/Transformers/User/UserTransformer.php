@@ -1,7 +1,9 @@
 <?php
 namespace App\Transformers\User;
 
+use App\Models\Subscription\Group;
 use App\Models\User\User;
+use App\Transformers\Subscription\GroupTransformer;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
@@ -48,7 +50,7 @@ class UserTransformer extends TransformerAbstract
             'dial_code' => $user->dial_code,
             'full_phone' => $user->dial_code . " " . $user->phone,
             'm2fa' => $user->m2fa,
-            'groups' => $user->groups()->get()->pluck('slug'),
+            'groups' => $user->myGroups(),
             'verified' => $this->format_date($user->verified_at),
             'created' => $this->format_date($user->created_at),
             'updated' => $this->format_date($user->updated_at),

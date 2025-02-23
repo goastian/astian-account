@@ -2,7 +2,6 @@
 
 use App\Models\Setting\Setting;
 use Illuminate\Database\QueryException;
-use Illuminate\Support\Facades\Artisan;
 
 if (!function_exists('settingAdd')) {
     /**
@@ -15,7 +14,6 @@ if (!function_exists('settingAdd')) {
     function settingAdd($key, $value, $user = false)
     {
         $user = $user ? auth()->user()->id : null;
-
         Setting::updateOrCreate(
             [
                 'key' => $key,
@@ -27,9 +25,6 @@ if (!function_exists('settingAdd')) {
                 'user_id' => $user,
             ]
         );
-
-        $cacheKey = "setting_{$key}_user_{$user}";
-        Cache::forget($cacheKey);
     }
 }
 

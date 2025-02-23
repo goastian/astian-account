@@ -164,7 +164,7 @@ export default {
     data() {
         return {
             errors: {},
-            countries: [],
+            countries: [], 
         };
     },
 
@@ -174,7 +174,7 @@ export default {
             flatpickr(".datetime", {
                 enableTime: true,
                 dateFormat: "Y-m-d",
-                minDate: "today",
+                maxDate: "today",
             });
         },
 
@@ -190,7 +190,7 @@ export default {
          * Load necessary data to register new users
          */
         async loadData() {
-            this.getCountries();
+            await this.getCountries();
             await this.calendar();
         },
 
@@ -231,7 +231,12 @@ export default {
          */
         async getCountries() {
             try {
-                const res = await this.$server.get("/api/resources/countries");
+                const res = await this.$server.get("/api/resources/countries", {
+                    params: {
+                        order_by: "name_en",
+                        order_type: "asc",
+                    },
+                });
 
                 if (res.status == 200) {
                     this.countries = res.data;

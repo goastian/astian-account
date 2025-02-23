@@ -37,6 +37,33 @@
                     class="block mt-1 text-gray-600">{{ __('This field specifies the expiration time for the 2FA code sent via email, in minutes') }}</small>
             </div>
 
+            <div class="mb-4 px-2 py-2">
+                <label for="auth_passwords_users_expire" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('Password Reset Expiration Time (Minutes)') }}
+                </label>
+                <input id="auth_passwords_users_expire" type="number" name="auth[passwords][users][expire]"
+                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="{{ __('Enter expiration time for password reset (minutes)') }}"
+                    value="{{ settingItem('auth.passwords.users.expire', 10) }}">
+                <small class="block mt-1 text-gray-600">
+                    {{ __('This field specifies the number of minutes before a password reset link expires.') }}
+                </small>
+            </div>
+
+            <div class="mb-4 px-2 py-2">
+                <label for="auth_passwords_users_throttle" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('Password Reset Request Throttle (Minutes)') }}
+                </label>
+                <input id="auth_passwords_users_throttle" type="number" name="auth[passwords][users][throttle]"
+                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="{{ __('Enter cooldown time before another reset request (minutes)') }}"
+                    value="{{ settingItem('auth.passwords.users.throttle', 10) }}">
+                <small class="block mt-1 text-gray-600">
+                    {{ __('This field specifies the cooldown time before a user can request another password reset.') }}
+                </small>
+            </div>
+
+
         </div>
     </div>
 @endsection

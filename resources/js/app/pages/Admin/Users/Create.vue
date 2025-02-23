@@ -112,14 +112,35 @@
                             <label
                                 class="block text-gray-700 text-sm font-bold mb-2"
                                 >Birthday</label
-                            >                            
+                            >
                             <input
-                                    type="text"
-                                    v-model="form.birthday"
-                                    class="mt-1 datetime py-2 px-2 w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                    placeholder="Select date and time"
-                                />
+                                type="text"
+                                v-model="form.birthday"
+                                class="mt-1 datetime py-2 px-2 w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                                placeholder="Select date and time"
+                            />
                             <v-error :error="errors.birthday"></v-error>
+                        </div>
+
+                        <div class="w-full mb-2">
+                            <label
+                                class="block text-gray-700 text-sm font-bold mb-2"
+                            >
+                                Groups
+                            </label>
+
+                            <v-select
+                                v-model="form.groups"
+                                :items="groups"
+                                item-title="name"
+                                item-value="id"
+                                label="Groups"
+                                persistent-hint
+                                multiple
+                                single-line
+                            ></v-select>
+
+                            <v-error :error="errors.groups"></v-error>
                         </div>
                     </div>
                 </v-card-text>
@@ -149,8 +170,8 @@
     </v-dialog>
 </template>
 <script>
-import flatpickr from 'flatpickr';
-import { nextTick } from 'vue';
+import flatpickr from "flatpickr";
+import { nextTick } from "vue";
 
 export default {
     emits: ["created"],
@@ -167,9 +188,11 @@ export default {
                 dial_code: null,
                 phone: null,
                 birthday: null,
+                groups: [],
             },
             errors: {},
             countries: [],
+            groups: [],
         };
     },
 
@@ -179,7 +202,7 @@ export default {
             flatpickr(".datetime", {
                 enableTime: true,
                 dateFormat: "Y-m-d",
-                minDate: "today",
+                maxDate: "today",
             });
         },
 
@@ -187,7 +210,8 @@ export default {
          * Show the modal in the windowss
          */
         async open() {
-            this.loadData();
+            await this.getCountries();
+            await this.getGroups();
             await this.calendar();
         },
 
@@ -201,10 +225,22 @@ export default {
         },
 
         /**
-         * Load necessary data to register new users
+         * Get the groups
          */
-        loadData() {
-            this.getCountries();
+        async getGroups() {
+            try {
+                const res = await this.$server.get("/api/admin/groups", {
+                    params: {
+                        per_page: 150,
+                    },
+                });
+
+                if (res.status == 200) {
+                    this.groups = res.data.data;
+                }
+            } catch (error) {
+                console.log(error);
+            }
         },
 
         /**
