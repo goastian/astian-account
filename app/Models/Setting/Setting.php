@@ -107,7 +107,7 @@ class Setting extends Master
 
         //---------------------QUEUES CONFIG--------------------///
         //default queues
-        settingAdd('queue.default', 'sync');
+        settingAdd('queue.default', 'database');
 
         //Sync setting
         settingAdd('queue.connections.sync.driver', 'sync');
