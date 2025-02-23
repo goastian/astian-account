@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Transformers\Subscription\GroupTransformer;
 use App\Notifications\Client\DestroyClientNotification;
 
 class User extends Auth
@@ -85,5 +86,14 @@ class User extends Auth
         }
 
         return false;
+    }
+
+    /**
+     * Return the groups 
+     */
+    public function myGroups()
+    {
+        $groups = fractal($this->groups()->get(), GroupTransformer::class);
+        return json_decode(json_encode($groups))->data;
     }
 }
