@@ -25,6 +25,6 @@ class CredentialsController extends Controller
 
         $this->privateChannel("RevokeCredentialsEvent." . request()->user()->id, "Credentials remove");
 
-        return $this->message(__("All of your credentials have been canceled.") . now());
+        return $this->message(__("All credentials have been revoked."));
     }
 }
