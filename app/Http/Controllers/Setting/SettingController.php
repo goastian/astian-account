@@ -125,4 +125,14 @@ class SettingController extends Controller
     {
         return view('settings.section.queues');
     }
+
+
+    /**
+     * Show the view of 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function filesystem()
+    {
+        return view('settings.section.filesystem');
+    }
 }

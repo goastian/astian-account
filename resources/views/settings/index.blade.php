@@ -51,6 +51,11 @@
                             <i class="mdi mdi-queue-first-in-last-out text-2xl"></i> {{ __('Queues') }}
                         </a>
                     </li>
+                    <li class="list-item hover:bg-gray-100 cursor-pointer">
+                        <a class="block px-2 py-2" href="{{ route('settings.filesystem') }}">
+                            <i class="mdi mdi-file-cog text-2xl"></i> {{ __('Filesystem') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
 

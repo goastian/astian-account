@@ -16,10 +16,9 @@ return new class extends Migration {
             $table->uuid('id')->unique()->primary();
             $table->uuid('service_id');
             $table->uuid('role_id');
-            $table->boolean('requires_payment')->default(false);
             $table->boolean('public')->default(false);
             $table->boolean('active')->default(false);
-            $table->decimal('price', 8, 2)->default(0);
+            $table->boolean('api_key')->default(true);
             $table->timestamps();
         });
     }

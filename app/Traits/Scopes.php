@@ -16,7 +16,7 @@ trait Scopes
     {
 
         $query = ModelScope::query();
-        $query->where('active', true)->with('role');
+        $query->where('active', true)->where('api_key', true)->with('role');
 
         if (Auth::user()->isAdmin()) {
             return $query->get()

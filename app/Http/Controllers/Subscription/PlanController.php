@@ -62,15 +62,8 @@ class PlanController extends GlobalController
                 }
             ],
             'description' => ['required'],
-            'price' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (!empty($value) && !is_numeric($value)) {
-                        $fail(__('The price must be a number'));
-                    }
-                }
-            ],
             'public' => ['required', 'boolean'],
+            'active' => ['required', 'boolean'],
             'scopes' => [
                 'required',
                 function ($attribute, $value, $fail) {
@@ -131,15 +124,8 @@ class PlanController extends GlobalController
         $this->validate($request, [
             'name' => ['nullable', 'max:150'],
             'description' => ['nullable'],
-            'price' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (!empty($value) && !is_numeric($value)) {
-                        $fail(__('The price must be a number'));
-                    }
-                }
-            ],
             'public' => ['nullable', 'boolean'],
+            'active' => ['nullable', 'boolean'],
         ]);
 
         $this->checkMethod('put');
@@ -159,14 +145,14 @@ class PlanController extends GlobalController
                 $plan->description = $request->description;
             }
 
-            if ($this->is_different($plan->price, $request->price)) {
-                $update = true;
-                $plan->price = $request->price;
-            }
-
             if ($this->is_different($plan->public, $request->public)) {
                 $update = true;
                 $plan->public = $request->public;
+            }
+
+            if ($this->is_different($plan->active, $request->active)) {
+                $update = true;
+                $plan->active = $request->active;
             }
 
             if ($update) {

@@ -22,10 +22,9 @@ class Scope extends Master
     protected $fillable = [
         'service_id',
         'role_id',
-        'requires_payment',
         'public',
         'active',
-        'price'
+        'api_key'
     ];
 
     protected $appends = [

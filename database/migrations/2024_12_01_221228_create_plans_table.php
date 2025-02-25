@@ -16,9 +16,9 @@ return new class extends Migration {
             $table->uuid('id')->unique()->primary();
             $table->string('name');
             $table->string('slug');
-            $table->longText('description');
-            $table->decimal('price', 8, 2)->default(0);
-            $table->boolean('public')->default(true);
+            $table->longText('description'); 
+            $table->boolean('public')->default(false);
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }
