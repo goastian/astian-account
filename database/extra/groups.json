@@ -11,8 +11,8 @@
                         "name": "full",
                         "description": "Comprehensive access to all system functionalities.",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -23,50 +23,50 @@
                     {
                         "name": "full",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "show",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "disable",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 0
+                        "active": 0,
+                        "api_key": 1
                     },
                     {
                         "name": "enable",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 0
+                        "active": 0,
+                        "api_key": 1
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -77,50 +77,50 @@
                     {
                         "name": "full",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "show",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "disable",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 0
+                        "active": 0,
+                        "api_key": 1
                     },
                     {
                         "name": "enable",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 0
+                        "active": 0,
+                        "api_key": 1
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -131,62 +131,62 @@
                     {
                         "name": "full",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "disable",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "enable",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "assign",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "revoke",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "history",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -197,38 +197,38 @@
                     {
                         "name": "full",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "show",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -239,38 +239,38 @@
                     {
                         "name": "full",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "show",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -281,80 +281,38 @@
                     {
                         "name": "full",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "show",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    }
-                ]
-            },
-            {
-                "name": "client",
-                "description": "Service to manage admin client",
-                "actions": [
-                    {
-                        "name": "full",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    },
-                    {
-                        "name": "view",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    },
-                    {
-                        "name": "create",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    },
-                    {
-                        "name": "show",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    },
-                    {
-                        "name": "update",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
-                    },
-                    {
-                        "name": "destroy",
-                        "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -365,50 +323,50 @@
                     {
                         "name": "full",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "assign",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "revoke",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     },
                     {
                         "name": "history",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             }
@@ -425,26 +383,26 @@
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     }
                 ]
             },
@@ -455,26 +413,26 @@
                     {
                         "name": "view",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     },
                     {
                         "name": "create",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     },
                     {
                         "name": "update",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     },
                     {
                         "name": "destroy",
                         "public": 0,
-                        "requires_payment": 0,
-                        "active": 1
+                        "active": 1,
+                        "api_key": 0
                     }
                 ]
             }

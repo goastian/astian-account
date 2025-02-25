@@ -42,6 +42,7 @@ class Setting extends Master
         Setting::getPassportSetting();
         Setting::getRedisConfig();
         Setting::getQueueSetting();
+        Setting::getFileSystems();
     }
 
     /**
@@ -51,104 +52,163 @@ class Setting extends Master
     public static function setDefaultKeys()
     {
         //default schema HTTP or HTTPS
-        settingAdd('schema_mode', 'https');
+        settingLoad('schema_mode', 'https');
 
         //Redirect page after login
-        settingAdd('redirect_to', '/about');
+        settingLoad('redirect_to', '/about');
 
         //Home page
-        settingAdd('home_page', '/');
+        settingLoad('home_page', '/');
 
         //Name of cookie of laravel passport and session
-        settingAdd('cookie_name', 'oauth2_server');
+        settingLoad('cookie_name', 'oauth2_server');
 
         //Name of cookie of laravel passport from microservices
-        settingAdd('passport_token_services', 'server_authorization');
+        settingLoad('passport_token_services', 'server_authorization');
 
         //Expires time to check verification account in minutes
-        settingAdd('verify_account_time', 5);
+        settingLoad('verify_account_time', 5);
 
         //Disable option to create user by command
-        settingAdd('disable_create_user_by_command', false);
+        settingLoad('disable_create_user_by_command', false);
 
         //Destroy users after 30 days
-        settingAdd('destroy_user_after', 30);
+        settingLoad('destroy_user_after', 30);
 
         //Code 2FA time expires in minutes
-        settingAdd('code_2fa_email_expires', 5);
+        settingLoad('code_2fa_email_expires', 5);
 
         //Enable or disable login
-        settingAdd('enable_register_member', true);
+        settingLoad('enable_register_member', true);
 
         //App name
-        settingAdd('app.name', 'Oauth2 Server');
+        settingLoad('app.name', 'Oauth2 Server');
 
         //expires time for reset password
-        settingAdd('auth.passwords.users.expire', 10);
+        settingLoad('auth.passwords.users.expire', 10);
         //expires time to try another request 
-        settingAdd('auth.passwords.users.throttle', 10);
+        settingLoad('auth.passwords.users.throttle', 10);
 
         //------------------------REDIS CONFIGURATION-------------------//
         //redis default settings
-        settingAdd('database.redis.default.url', null);
-        settingAdd('database.redis.default.host', '127.0.0.1');
-        settingAdd('database.redis.default.username', null);
-        settingAdd('database.redis.default.password', null);
-        settingAdd('database.redis.default.port', '6379');
-        settingAdd('database.redis.default.database', 0);
+        settingLoad('database.redis.default.url', null);
+        settingLoad('database.redis.default.host', '127.0.0.1');
+        settingLoad('database.redis.default.username', null);
+        settingLoad('database.redis.default.password', null);
+        settingLoad('database.redis.default.port', '6379');
+        settingLoad('database.redis.default.database', 0);
         //redis cache settings
-        settingAdd('database.redis.cache.url', null);
-        settingAdd('database.redis.cache.host', '127.0.0.1');
-        settingAdd('database.redis.cache.username', null);
-        settingAdd('database.redis.cache.password', null);
-        settingAdd('database.redis.cache.port', '6379');
-        settingAdd('database.redis.cache.database', 1);
+        settingLoad('database.redis.cache.url', null);
+        settingLoad('database.redis.cache.host', '127.0.0.1');
+        settingLoad('database.redis.cache.username', null);
+        settingLoad('database.redis.cache.password', null);
+        settingLoad('database.redis.cache.port', '6379');
+        settingLoad('database.redis.cache.database', 1);
 
 
         //---------------------QUEUES CONFIG--------------------///
         //default queues
-        settingAdd('queue.default', 'database');
+        settingLoad('queue.default', 'database');
 
         //Sync setting
-        settingAdd('queue.connections.sync.driver', 'sync');
+        settingLoad('queue.connections.sync.driver', 'sync');
 
         //Database settings
-        settingAdd('queue.connections.database.driver', 'database');
-        settingAdd('queue.connections.database.table', 'jobs');
-        settingAdd('queue.connections.database.queue', 'default');
-        settingAdd('queue.connections.database.retry_after', 90);
-        settingAdd('queue.connections.database.after_commit', false);
+        settingLoad('queue.connections.database.driver', 'database');
+        settingLoad('queue.connections.database.table', 'jobs');
+        settingLoad('queue.connections.database.queue', 'default');
+        settingLoad('queue.connections.database.retry_after', 90);
+        settingLoad('queue.connections.database.after_commit', false);
 
         //beanstalkd Settings
-        settingAdd('queue.connections.beanstalkd.driver', 'beanstalkd');
-        settingAdd('queue.connections.beanstalkd.host', 'localhost');
-        settingAdd('queue.connections.beanstalkd.queue', 'default');
-        settingAdd('queue.connections.beanstalkd.retry_after', 90);
-        settingAdd('queue.connections.beanstalkd.block_for', 0);
-        settingAdd('queue.connections.beanstalkd.after_commit', false);
+        settingLoad('queue.connections.beanstalkd.driver', 'beanstalkd');
+        settingLoad('queue.connections.beanstalkd.host', 'localhost');
+        settingLoad('queue.connections.beanstalkd.queue', 'default');
+        settingLoad('queue.connections.beanstalkd.retry_after', 90);
+        settingLoad('queue.connections.beanstalkd.block_for', 0);
+        settingLoad('queue.connections.beanstalkd.after_commit', false);
 
         //AWS settings
-        settingAdd('queue.connections.sqs.driver', 'sqs');
-        settingAdd('queue.connections.sqs.key', null);
-        settingAdd('queue.connections.sqs.secret', null);
-        settingAdd('queue.connections.sqs.prefix', 'https://sqs.us-east-1.amazonaws.com/your-account-id');
-        settingAdd('queue.connections.sqs.queue', 'default');
-        settingAdd('queue.connections.sqs.suffix', null);
-        settingAdd('queue.connections.sqs.region', 'us-east-1');
-        settingAdd('queue.connections.sqs.after_commit', false);
+        settingLoad('queue.connections.sqs.driver', 'sqs');
+        settingLoad('queue.connections.sqs.key', null);
+        settingLoad('queue.connections.sqs.secret', null);
+        settingLoad('queue.connections.sqs.prefix', 'https://sqs.us-east-1.amazonaws.com/your-account-id');
+        settingLoad('queue.connections.sqs.queue', 'default');
+        settingLoad('queue.connections.sqs.suffix', null);
+        settingLoad('queue.connections.sqs.region', 'us-east-1');
+        settingLoad('queue.connections.sqs.after_commit', false);
 
         //Redis Settings
-        settingAdd('queue.connections.redis.driver', 'redis');
-        settingAdd('queue.connections.redis.connection', 'default');
-        settingAdd('queue.connections.redis.queue', 'default');
-        settingAdd('queue.connections.redis.retry_after', 90);
-        settingAdd('queue.connections.redis.block_for', null);
-        settingAdd('queue.connections.redis.after_commit', false);
+        settingLoad('queue.connections.redis.driver', 'redis');
+        settingLoad('queue.connections.redis.connection', 'default');
+        settingLoad('queue.connections.redis.queue', 'default');
+        settingLoad('queue.connections.redis.retry_after', 90);
+        settingLoad('queue.connections.redis.block_for', null);
+        settingLoad('queue.connections.redis.after_commit', false);
 
         //Fail queue settings
-        settingAdd('queue.failed.driver', 'database-uuids');
-        settingAdd('queue.failed.database', 'mysql');
-        settingAdd('queue.failed.table', 'failed_jobs');
+        settingLoad('queue.failed.driver', 'database-uuids');
+        settingLoad('queue.failed.database', 'mysql');
+        settingLoad('queue.failed.table', 'failed_jobs');
+
+
+        //----------FILESYSTEM SETTINGS------------------------------------------
+        settingLoad('filesystems.default', 'local');
+        settingLoad('filesystems.disks.local.driver', 'local');
+        settingLoad('filesystems.disks.local.root', storage_path('app'));
+        settingLoad('filesystems.disks.local.throw', false);
+
+        settingLoad('filesystems.disks.public.driver', 'local');
+        settingLoad('filesystems.disks.public.root', storage_path('app/public'));
+        settingLoad('filesystems.disks.public.url', config('app.url', null) . '/storage');
+        settingLoad('filesystems.disks.public.visibility', 'public');
+        settingLoad('filesystems.disks.public.throw', false);
+
+        settingLoad('filesystems.disks.s3.driver', 's3');
+        settingLoad('filesystems.disks.s3.key', null);
+        settingLoad('filesystems.disks.s3.secret', null);
+        settingLoad('filesystems.disks.s3.region', null);
+        settingLoad('filesystems.disks.s3.bucket', null);
+        settingLoad('filesystems.disks.s3.url', null);
+        settingLoad('filesystems.disks.s3.endpoint', null);
+        settingLoad('filesystems.disks.s3.use_path_style_endpoint', false);
+        settingLoad('filesystems.disks.s3.throw', false);
+
+        settingLoad('filesystems.links.public', public_path('storage'));
+        settingLoad('filesystems.links.storage', storage_path('app/public'));
+
+
+    }
+
+    /**
+     * Setting default values for files system
+     * @return void
+     */
+    public static function getFileSystems()
+    {
+        Config::set('filesystems.default', settingItem('filesystems.default', 'local'));
+        Config::set('filesystems.disks.local.driver', settingItem('filesystems.disks.local.driver', 'local'));
+        Config::set('filesystems.disks.local.root', settingItem('filesystems.disks.local.root', storage_path('app')));
+        Config::set('filesystems.disks.local.throw', settingItem('filesystems.disks.local.throw', false));
+
+        Config::set('filesystems.disks.public.driver', settingItem('filesystems.disks.public.driver', 'local'));
+        Config::set('filesystems.disks.public.root', settingItem('filesystems.disks.public.root', storage_path('app/public')));
+        Config::set('filesystems.disks.public.url', settingItem('filesystems.disks.public.url', config('app.url', null) . '/storage'));
+        Config::set('filesystems.disks.public.visibility', settingItem('filesystems.disks.public.visibility', 'public'));
+        Config::set('filesystems.disks.public.throw', settingItem('filesystems.disks.public.throw', false));
+
+        Config::set('filesystems.disks.s3.driver', settingItem('filesystems.disks.s3.driver', 's3'));
+        Config::set('filesystems.disks.s3.key', settingItem('filesystems.disks.s3.key', null));
+        Config::set('filesystems.disks.s3.secret', settingItem('filesystems.disks.s3.secret', null));
+        Config::set('filesystems.disks.s3.region', settingItem('filesystems.disks.s3.region', null));
+        Config::set('filesystems.disks.s3.bucket', settingItem('filesystems.disks.s3.bucket', null));
+        Config::set('filesystems.disks.s3.url', settingItem('filesystems.disks.s3.url', null));
+        Config::set('filesystems.disks.s3.endpoint', settingItem('filesystems.disks.s3.endpoint', null));
+        Config::set('filesystems.disks.s3.use_path_style_endpoint', settingItem('filesystems.disks.s3.use_path_style_endpoint', false));
+        Config::set('filesystems.disks.s3.throw', settingItem('filesystems.disks.s3.throw', false));
+
+        Config::set('filesystems.links.public', settingItem('filesystems.links.public', public_path('storage')));
+        Config::set('filesystems.links.storage', settingItem('filesystems.links.storage', storage_path('app/public')));
     }
 
     /**
@@ -170,6 +230,7 @@ class Setting extends Master
         Config::set('database.redis.cache.password', settingItem('database.redis.cache.password', null));
         Config::set('database.redis.cache.port', settingItem('database.redis.cache.port', '127.0.0.1'));
         Config::set('database.redis.cache.database', settingItem('database.redis.cache.database', 1));
+
     }
 
     /**

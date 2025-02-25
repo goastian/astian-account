@@ -19,9 +19,9 @@ class Plan extends Master
     protected $fillable = [
         'name',
         'slug',
-        'description',
-        'price',
+        'description', 
         'public',
+        'active'
     ];
 
     /**
