@@ -109,10 +109,9 @@ class settingsRolesUpload extends Command
                                 [
                                     'service_id' => $service->id,
                                     'role_id' => $role->id,
-                                    'requires_payment' => $value2->requires_payment,
+                                    'api_key' => $value2->api_key,
                                     'public' => $value2->public,
                                     'active' => $value2->active,
-                                    'price' => 0,
                                 ]
                             );
                         }
