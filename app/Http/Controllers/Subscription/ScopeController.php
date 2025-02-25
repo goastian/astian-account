@@ -70,17 +70,9 @@ class ScopeController extends GlobalController
                     }
                 }
             ],
-            'requires_payment' => ['nullable', 'boolean'],
             'public' => ['nullable', 'boolean'],
             'active' => ['nullable', 'boolean'],
-            'price' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (!is_numeric($value)) {
-                        $fail(__("The :attribute is not a number"));
-                    }
-                }
-            ]
+            'api_key' => ['nullable', 'boolean'],
         ]);
 
         $this->checkMethod('post');
@@ -120,17 +112,10 @@ class ScopeController extends GlobalController
         $this->validate($request, [
             'service_id' => ['nullable', 'exists:services,id'],
             'role_id' => ['nullable', 'exists:roles,id'],
-            'requires_payment' => ['nullable', 'boolean'],
             'public' => ['nullable', 'boolean'],
             'active' => ['nullable', 'boolean'],
-            'price' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (!is_numeric($value)) {
-                        $fail(__("The :attribute is not a number"));
-                    }
-                }
-            ]
+            'api_key' => ['nullable', 'boolean'],
+
         ]);
 
         $this->checkMethod("put");
@@ -150,11 +135,6 @@ class ScopeController extends GlobalController
                 $update = true;
             }
 
-            if ($this->is_different($scope->requires_payment, $request->requires_payment)) {
-                $scope->requires_payment = $request->requires_payment;
-                $update = true;
-            }
-
             if ($this->is_different($scope->public, $request->public)) {
                 $scope->public = $request->public;
                 $update = true;
@@ -165,8 +145,8 @@ class ScopeController extends GlobalController
                 $update = true;
             }
 
-            if ($this->is_different($scope->price, $request->price)) {
-                $scope->price = $request->price;
+            if ($this->is_different($scope->api_key, $request->api_key)) {
+                $scope->api_key = $request->api_key;
                 $update = true;
             }
 
