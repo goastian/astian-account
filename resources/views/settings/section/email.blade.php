@@ -1,4 +1,4 @@
-@extends('settings.index')
+@extends('settings.setting')
 
 @section('form')
     <div class="flex flex-col md:flex-row gap-2 items-start md:space-x-6 p-4 bg-gray-100 rounded-md shadow">

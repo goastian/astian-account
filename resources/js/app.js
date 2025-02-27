@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import App from "./app/App.vue";
+import Terminal from "./terminal/Terminal.vue";
 
 import { router } from "./app/config/rutes.js";
 import { customComponents } from "./app/config/customComponents.js";
@@ -20,7 +21,7 @@ const vuetify = createVuetify({
     directives,
 });
 
-//Setting vuejs App
+//------ Admin app ----------------------------
 const app = createApp(App);
 
 app.config.globalProperties.$echo = $echo;
@@ -40,3 +41,19 @@ customComponents.forEach((index) => {
 
 //Mount app
 app.mount("#app");
+
+//--------------end admin app----------------
+
+//-------- Start terminal app -----------------
+const terminal = createApp(Terminal);
+
+terminal.config.globalProperties.$server = $server;
+terminal.config.globalProperties.$notification = notyf;
+terminal.use(vuetify);
+
+customComponents.forEach((index) => {
+    terminal.component(index[0], index[1]);
+});
+
+terminal.mount("#terminal");
+//-------- end terminal app -----------------

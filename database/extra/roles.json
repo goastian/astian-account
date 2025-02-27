@@ -62,5 +62,9 @@
     {
         "name": "assign",
         "description": "Grant access or permissions to a user or group for a specific resource."
+    },
+    {
+        "name": "execute",
+        "description": "Allows a user or group to run authorized commands within the system."
     }
 ]
