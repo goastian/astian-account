@@ -96,4 +96,13 @@ class User extends Auth
         $groups = fractal($this->groups()->get(), GroupTransformer::class);
         return json_decode(json_encode($groups))->data;
     }
+
+    /**
+     * Terminals
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function terminals()
+    {
+        return $this->hasMany(Terminal::class);
+    }
 }
