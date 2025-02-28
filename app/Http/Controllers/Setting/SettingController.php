@@ -19,7 +19,7 @@ class SettingController extends Controller
      */
     public function menu()
     {
-        return view('settings.index');
+        return view('settings.setting');
     }
 
     /**
@@ -134,5 +134,14 @@ class SettingController extends Controller
     public function filesystem()
     {
         return view('settings.section.filesystem');
+    }
+
+    /**
+     * Show the view of 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function terminal()
+    {
+        return view('settings.terminal');
     }
 }

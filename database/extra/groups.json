@@ -369,6 +369,30 @@
                         "api_key": 1
                     }
                 ]
+            },
+            {
+                "name": "Terminal",
+                "description": "Service for executing and managing system commands securely.",
+                "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "execute",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    }
+                ]
             }
         ]
     },

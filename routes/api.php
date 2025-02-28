@@ -1,5 +1,6 @@
 <?php
- 
+
+use App\Http\Controllers\Setting\TerminalController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserGroupController;
@@ -63,7 +64,7 @@ Route::group([
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
-    'middleware' => ['verify.account', 'verify.credentials'],
+    'middleware' => ['verify.account', 'verify.credentials', 'wants.json'],
 
 ], function () {
 
@@ -91,6 +92,8 @@ Route::group([
     Route::resource('plans', PlanController::class)->except('edit', 'create');
     Route::post('plans/{plan}/scopes', [PlanScopeController::class, 'assign'])->name('plans.scopes.assign');
     Route::put('plans/{plan}/scopes', [PlanScopeController::class, 'revoke'])->name('plans.scopes.revoke');
+
+    Route::resource('terminals', TerminalController::class)->only('index', 'store');
 });
 
 /**

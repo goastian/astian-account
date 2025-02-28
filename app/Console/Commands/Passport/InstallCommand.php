@@ -38,6 +38,13 @@ class InstallCommand extends Command
             $this->configureUuids();
         }
 
-        $this->call('passport:client', ['--personal' => true, '--name' => config('app.name') . ' Personal Access Client']);
+        $options = ['--personal' => true, '--name' => config('app.name') . ' Personal Access Client'];
+
+        if ($this->option('force')) {
+            $options['--force'] = true;
+        }
+
+        $this->call('passport:client', $options);
     }
+
 }
