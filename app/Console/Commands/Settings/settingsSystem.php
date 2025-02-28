@@ -33,6 +33,7 @@ class settingsSystem extends Command
         Artisan::call('settings:roles-upload');
         Artisan::call('settings:countries-upload');
         Artisan::call('settings:channels-upload');
+        Artisan::call('passport:install');
         Setting::setDefaultKeys();
         $this->info("Server installed successfully");
     }

@@ -43,6 +43,7 @@ class Setting extends Master
         Setting::getRedisConfig();
         Setting::getQueueSetting();
         Setting::getFileSystems();
+        Setting::getEmailSettings();
     }
 
     /**
@@ -178,6 +179,46 @@ class Setting extends Master
         settingLoad('filesystems.links.storage', storage_path('app/public'));
 
 
+        //-------EMAIL SETTINGS -------------------------
+        settingLoad('mail.default', 'smtp');
+
+        settingLoad('mail.mailers.smtp.transport', 'smtp');
+        settingLoad('mail.mailers.smtp.host', 'smtp.mailgun.org');
+        settingLoad('mail.mailers.smtp.port', 587);
+        settingLoad('mail.mailers.smtp.encryption', 'tls');
+        settingLoad('mail.mailers.smtp.username', null);
+        settingLoad('mail.mailers.smtp.password', null);
+        settingLoad('mail.mailers.smtp.timeout', null);
+        settingLoad('mail.mailers.smtp.local_domain', null);
+
+        settingLoad('mail.mailers.ses.transport', 'ses');
+        settingLoad('mail.mailers.mailgun.transport', 'mailgun');
+        settingLoad('mail.mailers.postmark.transport', 'postmark');
+
+        settingLoad('mail.mailers.sendmail.transport', 'sendmail');
+
+        settingLoad('mail.mailers.log.transport', 'log');
+        settingLoad('mail.mailers.log.channel', 'MAIL_LOG_CHANNEL');
+
+        settingLoad('mail.mailers.array.transport', 'array');
+
+        settingLoad('mail.mailers.failover.transport', 'failover');
+        //settingLoad('mail.mailers.failover.mailers', ['smtp', 'log']);
+
+        settingLoad('mail.from.address', 'hello@example.com');
+        settingLoad('mail.from.name', 'Example');
+
+        //---------Setting services ---------------
+        settingLoad('services.mailgun.domain', null);
+        settingLoad('services.mailgun.secret', null);
+        settingLoad('services.mailgun.endpoint', null);
+        settingLoad('services.mailgun.scheme', 'https');
+
+        settingLoad('services.passport.token', null);
+
+        settingLoad('services.ses.key', null);
+        settingLoad('services.ses.secret', null);
+        settingLoad('services.ses.region', null);
     }
 
     /**
@@ -313,5 +354,52 @@ class Setting extends Master
         Config::set('queue.failed.driver', settingItem('queue.failed.driver', 'database-uuids'));
         Config::set('queue.failed.database', settingItem('queue.failed.database', 'mysql'));
         Config::set('queue.failed.table', settingItem('queue.failed.table', 'failed_jobs'));
+    }
+
+
+    /**
+     * Email settings
+     * @return void
+     */
+    public static function getEmailSettings()
+    {
+        Config::set('mail.default', settingItem('mail.default', 'smtp'));
+
+        Config::set('mail.mailers.smtp.transport', settingItem('mail.mailers.smtp.transport', 'smtp'));
+        Config::set('mail.mailers.smtp.host', settingItem('mail.mailers.smtp.host', 'smtp.mailgun.org'));
+        Config::set('mail.mailers.smtp.port', settingItem('mail.mailers.smtp.port', 587));
+        Config::set('mail.mailers.smtp.encryption', settingItem('mail.mailers.smtp.encryption', 'tls'));
+        Config::set('mail.mailers.smtp.username', settingItem('mail.mailers.smtp.username', null));
+        Config::set('mail.mailers.smtp.password', settingItem('mail.mailers.smtp.password', null));
+        Config::set('mail.mailers.smtp.timeout', settingItem('mail.mailers.smtp.timeout', null));
+        Config::set('mail.mailers.smtp.local_domain', settingItem('mail.mailers.smtp.local_domain', null));
+
+        Config::set('mail.mailers.ses.transport', settingItem('mail.mailers.ses.transport', 'ses'));
+        Config::set('mail.mailers.mailgun.transport', settingItem('mail.mailers.mailgun.transport', 'mailgun'));
+        Config::set('mail.mailers.postmark.transport', settingItem('mail.mailers.postmark.transport', 'postmark'));
+
+        Config::set('mail.mailers.sendmail.transport', settingItem('mail.mailers.sendmail.transport', 'sendmail'));
+
+        Config::set('mail.mailers.log.transport', settingItem('mail.mailers.log.transport', 'log'));
+        Config::set('mail.mailers.log.channel', settingItem('mail.mailers.log.channel', 'MAIL_LOG_CHANNEL'));
+
+        Config::set('mail.mailers.array.transport', settingItem('mail.mailers.array.transport', 'array'));
+
+        Config::set('mail.mailers.failover.transport', settingItem('mail.mailers.failover.transport', 'failover'));
+
+        Config::set('mail.from.address', settingItem('mail.from.address', 'hello@example.com'));
+        Config::set('mail.from.name', settingItem('mail.from.name', 'Example'));
+
+
+        Config::set('services.mailgun.domain', settingItem('services.mailgun.domain', null));
+        Config::set('services.mailgun.secret', settingItem('services.mailgun.secret', null));
+        Config::set('services.mailgun.endpoint', settingItem('services.mailgun.endpoint', null));
+        Config::set('services.mailgun.scheme', settingItem('services.mailgun.scheme', 'https'));
+
+        Config::set('services.passport.token', settingItem('services.passport.token', null));
+
+        Config::set('services.ses.key', settingItem('services.ses.key', null));
+        Config::set('services.ses.secret', settingItem('services.ses.secret', null));
+        Config::set('services.ses.region', settingItem('services.ses.region', null));
     }
 }

@@ -16,14 +16,16 @@ class ClientCommand extends Command
      * @var string
      */
     protected $signature = 'passport:client
-            {--personal : Create a personal access token client}
-            {--password : Create a password grant client}
-            {--client : Create a client credentials grant client}
-            {--name= : The name of the client}
-            {--provider= : The name of the user provider}
-            {--redirect_uri= : The URI to redirect to after authorization }
-            {--user_id= : The user ID the client should be assigned to }
-            {--public : Create a public client (Auth code grant type only) }';
+        {--personal : Create a personal access token client}
+        {--password : Create a password grant client}
+        {--client : Create a client credentials grant client}
+        {--name= : The name of the client}
+        {--provider= : The name of the user provider}
+        {--redirect_uri= : The URI to redirect to after authorization }
+        {--user_id= : The user ID the client should be assigned to }
+        {--public : Create a public client (Auth code grant type only) }
+        {--force : Force re-generation of client keys}';
+
 
     /**
      * The console command description.
@@ -35,6 +37,16 @@ class ClientCommand extends Command
 
     protected function createPersonalClient(ClientRepository $clients)
     {
+        $force = $this->option('force');
+
+        $existingClientId = settingItem('passport_personal_access_client_id');
+        $existingClientSecret = settingItem('passport_personal_access_client_secret');
+
+        if ($existingClientId && $existingClientSecret && !$force) {
+            $this->info('Personal access client already exists. Use --force to regenerate.');
+            return;
+        }
+
         $name = $this->option('name') ?: $this->ask(
             'What should we name the personal access client?',
             config('app.name') . ' Personal Access Client'
@@ -53,6 +65,7 @@ class ClientCommand extends Command
 
         $this->info('Personal access client created successfully.');
     }
+
 
 
     /**

@@ -21,4 +21,5 @@ laravel-echo*
 rutas.js
 sync
 points
-!.dockerignore
+Dockerfile
+docker-compose*
