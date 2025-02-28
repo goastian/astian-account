@@ -35,7 +35,7 @@ services:
             - public-net
 
     app:
-        image: elyerr/oauth2-passport-server:latest
+        image: elyerr/oauth2-passport-server:dev
         restart: always
         ports:
             - "8005:80"
