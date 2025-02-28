@@ -1,28 +1,31 @@
 #!/bin/sh
+set -e  # Exit immediately if a command fails
 
-cd /var/www
+cd /var/www 
 
-composer install --no-dev --optimize-autoloader
-
+echo "🔑 Generating application key..."
 php artisan key:generate
 
-echo "Running migrations"
+echo "🔄 Running database migrations..."
 php artisan migrate --force
-echo "Migration ran successfully" 
+echo "✅ Migrations completed successfully"
 
-echo "Running nodejs"
+echo "📦 Installing Node.js dependencies..."
 npm install
+
+echo "⚡ Building frontend assets..."
 npm run production
-echo "Nodejs ran successfully"
+echo "✅ Frontend build completed"
 
-chown -R www-data:www-data /var/www && chmod -R 775 /var/www
-
-php-fpm83 -D
-
-nginx -g "daemon off;"
-
+echo "⚙️ Running system configuration..."
 php artisan settings:system-start
 
-php artisan queue:work --tries=6 &
+echo "🚀 Starting PHP-FPM..."
+php-fpm83 -D
 
+echo "🌐 Starting Nginx..."
+nginx -g "daemon off;"
 echo "Server ran successfully"
+
+php artisan queue:work --tries=6 & 
+echo "Starting queue worker..."

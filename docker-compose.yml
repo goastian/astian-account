@@ -44,6 +44,7 @@ services:
                 condition: service_healthy
         volumes:
             - .env:/var/www/.env
+            - app-secrets:/var/www/secrets
         command: sh -c "/usr/local/bin/laravel-scripts.sh"
         networks:
             - internal-net
@@ -51,7 +52,7 @@ services:
 
 volumes:
     pg-data:
-
+    app-secrets:
 
 networks:
     internal-net:

@@ -42,10 +42,15 @@ WORKDIR /var/www/
 
 COPY . /var/www/ 
 
+RUN composer install --no-dev --optimize-autoloader
+
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 775 /var/www
+
 COPY docker/www.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/http.d/default.conf
-COPY docker/laravel-scripts.sh /usr/local/bin/laravel-scripts.sh
+COPY docker/laravel-scripts.sh /usr/local/bin/laravel-scripts.sh 
 
 RUN chmod 755 /etc/nginx/http.d/default.conf
 RUN chmod 755 /usr/local/bin/laravel-scripts.sh
