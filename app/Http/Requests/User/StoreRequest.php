@@ -35,6 +35,7 @@ class StoreRequest extends FormRequest
             'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
+            'verify_email' => ['nullable', 'boolean'],
             'groups' => [
                 'required',
                 function ($attribute, $value, $fail) {
