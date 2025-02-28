@@ -20,7 +20,7 @@ class DeleteUnverifiedAccount extends Command
      *
      * @var string
      */
-    protected $description = 'Delete unverified user account (Clients only)';
+    protected $description = 'Delete unverified user account (Members only)';
 
     /**
      * Execute the console command.
@@ -29,9 +29,9 @@ class DeleteUnverifiedAccount extends Command
      */
     public function handle()
     {
-        $this->info("Delete unverified user account (Clients only)");
-        Log::info("Delete unverified user account (Clients only)");
+        $this->info("Delete unverified user accounts (Members only)");
+        Log::info("Delete unverified user accounts (Members only)");
         $user = new User();
-        $user->remove_clients_unverified();
+        $user->destroyUnverifiedMembers();
     }
 }

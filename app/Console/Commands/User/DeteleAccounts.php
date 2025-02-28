@@ -29,9 +29,9 @@ class DeteleAccounts extends Command
      */
     public function handle()
     {
-        $this->info("Delete user accounts (clients only)");
-        Log::info("Delete user accounts (clients only)");
+        $this->info("Delete user accounts (Members only)");
+        Log::info("Delete user accounts (Members only)");
         $user = new User();
-        $user->remove_accounts();
+        $user->destroyAccounts();
     }
 }
