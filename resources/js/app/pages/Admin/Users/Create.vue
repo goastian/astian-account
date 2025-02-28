@@ -113,11 +113,11 @@
                                 class="block text-gray-700 text-sm font-bold mb-2"
                                 >Birthday</label
                             >
-                            <input
-                                type="text"
-                                v-model="form.birthday"
-                                class="mt-1 datetime py-2 px-2 w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Select date and time"
+                            <VueDatePicker
+                                v-model="birthday"
+                                :enable-time-picker="false"
+                                :max-date="new Date()"
+                                format="yyyy-MM-dd"
                             />
                             <v-error :error="errors.birthday"></v-error>
                         </div>
@@ -141,6 +141,15 @@
                             ></v-select>
 
                             <v-error :error="errors.groups"></v-error>
+                        </div>
+
+                        <div class="w-full mb-2">
+                            <v-checkbox
+                                density="compact"
+                                v-model="verify_email"
+                                label="Mark user email as verified"
+                                variant="solo"
+                            ></v-checkbox>
                         </div>
                     </div>
                 </v-card-text>
@@ -189,11 +198,19 @@ export default {
                 phone: null,
                 birthday: null,
                 groups: [],
+                verify_email: null,
             },
             errors: {},
             countries: [],
             groups: [],
+            verify_email: false,
         };
+    },
+
+    watch: {
+        verify_email(value) {
+            this.item.verify_email = value ? 1 : 0;
+        },
     },
 
     methods: {
@@ -238,9 +255,7 @@ export default {
                 if (res.status == 200) {
                     this.groups = res.data.data;
                 }
-            } catch (error) {
-                console.log(error);
-            }
+            } catch (error) {}
         },
 
         /**
@@ -262,6 +277,9 @@ export default {
                 if (res.status == 201) {
                     this.form = { scope: [] };
                     this.errors = {};
+                    this.notification.success(
+                        "A new user has been created successfully"
+                    );
                     this.$emit("created", true);
                 }
             } catch (e) {
@@ -271,6 +289,15 @@ export default {
                     e.response.status == 422
                 ) {
                     this.errors = e.response.data.errors;
+                }
+
+                if (
+                    e.response &&
+                    e.response.status != 422 &&
+                    e.response.data &&
+                    e.response.data.message
+                ) {
+                    this.notification.error(e.response.data.message);
                 }
             }
         },
