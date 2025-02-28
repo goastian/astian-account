@@ -12,8 +12,13 @@
                 </div>
                 <v-filter :params="params" @change="searching"></v-filter>
             </template>
+            <template #item.system="{ item }">
+                <v-chip>
+                    {{ item.system ? "Yes" : "No" }}
+                </v-chip>
+            </template>
             <template #item.actions="{ item }">
-                <v-update :item="item" @updated="getBroadcasting"></v-update>
+                <v-destroy :item="item" @deleted="getBroadcasting"></v-destroy>
             </template>
             <template v-slot:bottom>
                 <v-pagination
@@ -27,11 +32,11 @@
 </template>
 <script>
 import VCreate from "./Create.vue";
-import VUpdate from "./Update.vue";
+import VDestroy from "./Destroy.vue";
 export default {
     components: {
         VCreate,
-        VUpdate,
+        VDestroy,
     },
 
     data() {
@@ -105,7 +110,13 @@ export default {
         listenEvents() {
             this.$echo
                 .private(this.$channels.ch_0())
-                .listen("UpdateEmployeeEvent", (e) => {
+                .listen("CreatedBroadcasting", (e) => {
+                    this.getBroadcasting();
+                });
+
+            this.$echo
+                .private(this.$channels.ch_0())
+                .listen("DestroyedBroadcasting", (e) => {
                     this.getBroadcasting();
                 });
         },
