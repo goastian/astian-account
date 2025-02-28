@@ -7,14 +7,19 @@
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
         "prod": "npm run production",
-        "production": "mix --production"
+        "production": "mix --production",
+        "prepare": "husky install",
+        "test": "echo \"No tests defined\" && exit 0"
     },
     "devDependencies": {
+        "@commitlint/cli": "^19.7.1",
+        "@commitlint/config-conventional": "^19.7.1",
         "@tailwindcss/forms": "^0.5.9",
         "@types/uuid": "^9.0.7",
         "autoprefixer": "^10.4.20",
         "css-loader": "^6.10.0",
         "html-webpack-plugin": "^5.6.0",
+        "husky": "^8.0.0",
         "laravel-mix": "^6.0.49",
         "resolve-url-loader": "^5.0.0",
         "sass": "^1.79.4",
