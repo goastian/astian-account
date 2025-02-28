@@ -29,6 +29,7 @@
         "@mdi/font": "^7.4.47",
         "@popperjs/core": "^2.11.8",
         "@tailwindcss/postcss": "^4.0.0",
+        "@vuepic/vue-datepicker": "^11.0.1",
         "axios": "^1.1.2",
         "echo-client-js": "^1.2.0",
         "flatpickr": "^4.6.13",

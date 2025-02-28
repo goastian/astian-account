@@ -9,6 +9,11 @@ import { $server } from "./app/config/axios.js";
 import { $customElement } from "./app/config/customElements.js";
 import { notyf } from "./app/config/notification.js";
 
+//Vue date picker
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+
+
 //Import vuetify components
 import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
@@ -31,7 +36,7 @@ app.config.globalProperties.$ce = $customElement;
 app.config.globalProperties.$notification = notyf;
 app.use(router);
 app.use(vuetify);
-
+app.component('VueDatePicker', VueDatePicker);
 /**
  * Custom components
  */
