@@ -18,6 +18,10 @@ class UserCanAny
      */
     public function handle(Request $request, Closure $next, $scopes): Response
     {
+        if (!auth()->check()) {
+            return redirect()->route('login');
+        }
+
         $scopes = explode(',', $scopes);
 
         $userScopes = $this->scopes();
