@@ -30,7 +30,6 @@ class DeleteUnverifiedAccount extends Command
     public function handle()
     {
         $this->info("Delete unverified user accounts (Members only)");
-        Log::info("Delete unverified user accounts (Members only)");
         $user = new User();
         $user->destroyUnverifiedMembers();
     }

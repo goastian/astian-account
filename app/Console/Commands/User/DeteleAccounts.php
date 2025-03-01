@@ -30,7 +30,6 @@ class DeteleAccounts extends Command
     public function handle()
     {
         $this->info("Delete user accounts (Members only)");
-        Log::info("Delete user accounts (Members only)");
         $user = new User();
         $user->destroyAccounts();
     }
