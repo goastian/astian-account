@@ -19,6 +19,7 @@
     ],
     "require": {
         "php": "^8.0.2",
+        "arcanedev/log-viewer": "^10.1",
         "doctrine/dbal": "^3.9",
         "elyerr/api-response": "^1.0",
         "elyerr/echo-client-php": "^1.0",
