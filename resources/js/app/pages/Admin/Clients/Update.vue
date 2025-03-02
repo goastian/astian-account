@@ -120,14 +120,3 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
-.row {
-    display: flex;
-    flex-wrap: wrap;
-
-    .col {
-        flex: 1 1 100%;
-        margin-bottom: 0.5em;
-    }
-}
-</style>
