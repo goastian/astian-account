@@ -18,7 +18,7 @@
                         v-for="(menu, index) in menus()"
                         :key="index"
                     >
-                        <v-expansion-panel-title>
+                        <v-expansion-panel-title v-if="menu.show">
                             <v-icon left>{{ menu.icon }}</v-icon>
                             {{ menu.name }}
                         </v-expansion-panel-title>
@@ -103,11 +103,18 @@ export default {
             this.app_name = app.dataset.appName;
         },
 
+          hasGroup(name) {
+            return this.user.groups.some(
+                (item) => item.name == name || item.name == "admin"
+            );
+        },
+
         menus() {
             return [
                 {
                     name: "Account",
                     icon: "mdi-account-star",
+                    show: true,
                     menu: [
                         { name: "Me", route: "about", icon: "mdi-information" },
                     ],
@@ -115,6 +122,7 @@ export default {
                 {
                     name: "Admin",
                     icon: "mdi-shield-crown-outline",
+                    show: this.hasGroup("admin"),
                     menu: [
                         {
                             name: "Users",
@@ -136,6 +144,7 @@ export default {
                 {
                     name: "Tools",
                     icon: "mdi-tools",
+                    show: true,
                     menu: [
                         {
                             name: "Clients",
