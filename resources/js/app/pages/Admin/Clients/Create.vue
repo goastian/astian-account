@@ -6,7 +6,7 @@
                 color="blue-lighten-1"
                 icon
                 variant="tonal"
-                @click="open(item)"
+                @click="open"
             >
                 <v-icon icon="mdi-plus"></v-icon>
             </v-btn>
@@ -14,11 +14,11 @@
 
         <template v-slot:default="{ isActive }">
             <v-card>
-                <v-card-title> Update new client </v-card-title>
+                <v-card-title> Add new client </v-card-title>
                 <v-card-text>
                     <v-row>
                         <!-- Name -->
-                        <v-col sm="12" class="py-1">
+                        <v-col sm="12" md="8">
                             <v-text-field
                                 v-model="form.name"
                                 label="Name"
@@ -29,10 +29,22 @@
                                 </template>
                             </v-text-field>
                         </v-col>
-                        <v-col sm="12" class="py-1">
+                        <v-col sm="12" md="4">
+                            <v-checkbox
+                                label="Confidential"
+                                v-model="form.confidential"
+                            >
+                                <template #details>
+                                    <v-error
+                                        :error="errors.confidential"
+                                    ></v-error>
+                                </template>
+                            </v-checkbox>
+                        </v-col>
+                        <v-col sm="12">
                             <v-text-field
                                 v-model="form.redirect"
-                                label="Name"
+                                label="Redirect URL"
                                 variant="solo"
                             >
                                 <template #details>
@@ -69,50 +81,52 @@
 </template>
 <script>
 export default {
-    emits: ["updated"],
-
-    props: {
-        item: {
-            type: Object,
-            required: true,
-        },
-    },
+    emits: ["created"],
 
     data() {
         return {
-            errors: {
-                name: "",
-                redirect: "",
+            form: {
+                name: null,
+                redirect: null,
+                confidential: false,
             },
-            form: {},
+            errors: {},
         };
     },
 
     methods: {
+        /**
+         * Clean the form when it is closed
+         */
         close(isActive) {
-            this.form = {};
+            this.client = {};
             this.errors = {};
             isActive.value = false;
         },
 
-        open(item) {
-            this.form = item;
+        open() {
+            this.form = {};
+            this.errors = {};
         },
 
-        async updateClient(isActive) {
+        /**
+         * Create a new client
+         */
+        async create(isActive) {
             try {
-                const res = await this.$server.put(
-                    this.form.links.update,
+                const res = await this.$server.post(
+                    "/api/admin/clients",
                     this.form
                 );
 
-                if (res.status == 200) {
-                    this.$emit("updated", true);
+                if (res.status == 201) {
+                    this.form = {};
                     this.errors = {};
+                    this.$emit("created", true);
                     isActive.value = false;
                 }
             } catch (e) {
-                if (e.response && e.response.status == 422) {
+                if (e.response && e.response.data.errors) {
                     this.errors = e.response.data.errors;
                 }
             }
@@ -120,14 +134,3 @@ export default {
     },
 };
 </script>
-<style lang="scss" scoped>
-.row {
-    display: flex;
-    flex-wrap: wrap;
-
-    .col {
-        flex: 1 1 100%;
-        margin-bottom: 0.5em;
-    }
-}
-</style>
