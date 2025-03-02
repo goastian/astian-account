@@ -51,6 +51,7 @@ class UserTransformer extends TransformerAbstract
             'full_phone' => $user->dial_code . " " . $user->phone,
             'm2fa' => $user->m2fa,
             'groups' => $user->myGroups(),
+            'verify_email' => $user->verified_at ? true : false,
             'verified' => $this->format_date($user->verified_at),
             'created' => $this->format_date($user->created_at),
             'updated' => $this->format_date($user->updated_at),

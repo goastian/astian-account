@@ -69,14 +69,13 @@ export default {
             app_name: "",
             drawer: true,
             user: {},
-            nonce: "",
+            errors: {},
         };
     },
 
     provide() {
         return {
             $user: computed(() => this.user),
-            $nonce: computed(() => this.nonce),
         };
     },
 
@@ -102,7 +101,6 @@ export default {
             await nextTick();
             const app = document.querySelector("#app");
             this.app_name = app.dataset.appName;
-            this.nonce = app.dataset.nonce;
         },
 
         menus() {
@@ -122,6 +120,11 @@ export default {
                             name: "Users",
                             route: "users.index",
                             icon: "mdi-account-group",
+                        },
+                        {
+                            name: "Broadcasts",
+                            route: "broadcasts.index",
+                            icon: "mdi-broadcast",
                         },
                     ],
                 },

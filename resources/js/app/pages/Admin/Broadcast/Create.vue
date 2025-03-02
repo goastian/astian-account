@@ -1,12 +1,11 @@
 <template>
-    <v-dialog max-width="500">
+    <v-dialog>
         <template v-slot:activator="{ props: activatorProps }">
             <v-btn
                 v-bind="activatorProps"
                 color="blue-lighten-1"
                 icon
                 variant="tonal"
-                @click="open"
             >
                 <v-icon icon="mdi-plus"></v-icon>
             </v-btn>
@@ -14,7 +13,7 @@
 
         <template v-slot:default="{ isActive }">
             <v-card>
-                <v-card-title> Add new Channel </v-card-title>
+                <v-card-title> Add new channel </v-card-title>
                 <v-card-text>
                     <v-row>
                         <v-col sm="12" class="py-1">
@@ -47,6 +46,10 @@
                         </v-col>
 
                         <v-col sm="12">
+                            <v-chip color="red-accent-2">
+                                Be careful, if you mark this option, this action
+                                cannot be undone.
+                            </v-chip>
                             <v-checkbox
                                 density="compact"
                                 v-model="form.system"
@@ -93,8 +96,6 @@ export default {
                 system: false,
             },
             errors: {},
-            roles: {},
-            countries: [],
         };
     },
 
@@ -105,7 +106,6 @@ export default {
         close(isActive) {
             isActive.value = false;
             this.form = [];
-            this.countries = [];
         },
 
         /**
@@ -114,9 +114,14 @@ export default {
          */
         async create() {
             try {
+                const form = new FormData();
+                form.append("name", this.form.name);
+                form.append("description", this.form.description);
+                form.append("system", this.form.system ? 1 : 0);
+
                 const res = await this.$server.post(
                     "/api/admin/broadcasts",
-                    this.form,
+                    form,
                     {
                         headers: {
                             "Content-Type": "multipart/form-data",
@@ -125,9 +130,12 @@ export default {
                 );
 
                 if (res.status == 201) {
-                    this.form = { scope: [] };
+                    this.form = {};
                     this.errors = {};
                     this.$emit("created", true);
+                    this.$notification.success(
+                        "A new channel has been created"
+                    );
                 }
             } catch (e) {
                 if (

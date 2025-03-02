@@ -5,8 +5,6 @@
 
     @include('layouts.parts.meta')
 
-    @yield('title', config('app.name', 'OAuth2 Server'))
-
     <link rel="icon" href="{{ settingItem('app.url') }}/favicon.png" type="image/png">
 
     <title>{{ settingItem('app.name', 'Oauth2 Server') }}</title>

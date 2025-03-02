@@ -38,7 +38,8 @@
                             'settings.redis' => ['icon' => 'mdi-database-cog', 'label' => __('Redis')],
                             'settings.queues' => ['icon' => 'mdi-queue-first-in-last-out', 'label' => __('Queues')],
                             'settings.filesystem' => ['icon' => 'mdi-file-cog', 'label' => __('Filesystem')],
-                            'settings.terminal' => ['icon' => 'mdi-console', 'label' => __('terminal')],
+                            'settings.terminal' => ['icon' => 'mdi-console', 'label' => __('Terminal')],
+                            'log-viewer::dashboard' => ['icon' => 'mdi-math-log', 'label' => __('Logs')],
                         ];
                     @endphp
 

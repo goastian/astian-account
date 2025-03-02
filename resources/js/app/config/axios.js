@@ -2,7 +2,6 @@ import axios from "axios";
 import https from "stream-http";
 
 export const $server = axios.create({
-    baseURL: process.env.MIX_APP_URL,
     timeout: 5000,
     withCredentials: true,
     httpsAgent: new https.Agent({ keepAlive: true }),

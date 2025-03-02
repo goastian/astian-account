@@ -5,16 +5,19 @@ use DateTime;
 use DateInterval;
 use App\Models\Auth;
 use Illuminate\Http\Request;
+use App\Models\Setting\Terminal;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Elyerr\EchoClient\Socket\Socket;
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Notifications\Member\MemberDestroyAccount;
 use App\Transformers\Subscription\GroupTransformer;
-use App\Notifications\Client\DestroyClientNotification;
 
 class User extends Auth
 {
-    use SoftDeletes;
+    use SoftDeletes, Socket;
 
     /**
      * Transformer
@@ -26,22 +29,24 @@ class User extends Auth
      * Destroy users
      * @return void
      */
-    public function remove_accounts()
+    public function destroyAccounts()
     {
         $now = new DateTime();
         $now->sub(new DateInterval('P' . settingItem('destroy_user_after', 30) . 'D'));
         $date = $now->format('Y-m-d H:i:s');
 
-        $users = User::onlyTrashed()->where('deleted_at', "<", $date)->get();
+        $users = User::onlyTrashed()
+            ->whereHas('groups', function ($query) {
+                $query->where('slug', 'member');
+            })
+            ->where('deleted_at', '<', $date)
+            ->get();
 
         if (count($users) > 0) {
-
             foreach ($users as $user) {
-                if ($user->isClient()) {
-                    $user->notify(new DestroyClientNotification());
-
-                    $user->forceDelete();
-                }
+                $user->notify(new MemberDestroyAccount());
+                $user->forceDelete();
+                Log::info("deleted user account", $user->toArray());
             }
         }
     }
@@ -51,20 +56,27 @@ class User extends Auth
      *
      * @return void
      */
-    public function remove_clients_unverified()
+    public function destroyUnverifiedMembers()
     {
         $now = new DateTime();
         $now->sub(new DateInterval('PT' . settingItem('verify_account_time', 5) . 'M'));
         $date = $now->format('Y-m-d H:i:s');
 
-        $deleted = DB::table('users')
-            ->where('verified_at', null)
-            ->where('created_at', "<", $date)
-            ->delete();
+        $users = User::whereHas('groups', function ($query) {
+            $query->where('slug', 'member');
+        })
+            ->whereNull('verified_at')
+            ->where('created_at', '<', $date)
+            ->get();
+
+        foreach ($users as $user) {
+            $user->forceDelete();
+            Log::info("deleted unverified user", $user->toArray());
+        }
+
+
 
         DB::table('password_resets')->where('created_at', '<', $date)->delete();
-
-
     }
 
     /**

@@ -6,7 +6,7 @@
                 color="blue-lighten-1"
                 icon
                 variant="tonal"
-                @click="loadData"
+                @click="loadData(item)"
             >
                 <v-icon icon="mdi-pencil"></v-icon>
             </v-btn>
@@ -113,13 +113,23 @@
                                 class="block text-gray-700 text-sm font-bold mb-2"
                                 >Birthday</label
                             >
-                            <input
-                                type="text"
-                                v-model="item.birthday"
-                                class="mt-1 datetime py-2 px-2 w-full rounded border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Select date and time"
+                            <VueDatePicker
+                                v-model="birthday"
+                                :enable-time-picker="false"
+                                :max-date="new Date()"
+                                format="yyyy-MM-dd"
                             />
+
                             <v-error :error="errors.birthday"></v-error>
+                        </div>
+
+                        <div class="w-full mb-2">
+                            <v-checkbox
+                                density="compact"
+                                v-model="verify_email"
+                                label="Mark user email as verified"
+                                variant="solo"
+                            ></v-checkbox>
                         </div>
                     </div>
                 </v-card-text>
@@ -149,8 +159,6 @@
     </v-dialog>
 </template>
 <script>
-import flatpickr from "flatpickr";
-import { nextTick } from "vue";
 export default {
     emits: ["updated"],
 
@@ -164,20 +172,19 @@ export default {
     data() {
         return {
             errors: {},
-            countries: [], 
+            countries: [],
+            verify_email: false,
+            birthday: null,
         };
     },
 
-    methods: {
-        async calendar() {
-            await nextTick();
-            flatpickr(".datetime", {
-                enableTime: true,
-                dateFormat: "Y-m-d",
-                maxDate: "today",
-            });
+    watch: {
+        verify_email(value) {
+            this.item.verify_email = value ? 1 : 0;
         },
+    },
 
+    methods: {
         /**
          *  reset keys when the windows is closed
          */
@@ -189,9 +196,9 @@ export default {
         /**
          * Load necessary data to register new users
          */
-        async loadData() {
+        async loadData(item) {
+            this.verify_email = item.verify_email;
             await this.getCountries();
-            await this.calendar();
         },
 
         /**
@@ -210,10 +217,13 @@ export default {
                     }
                 );
 
-                if (res.status == 201) {
+                if (res.status == 200) {
                     this.form = { scope: [] };
                     this.errors = {};
                     this.$emit("updated", true);
+                    this.$notification.success(
+                        "User has been updated successfully"
+                    );
                 }
             } catch (e) {
                 if (
@@ -222,6 +232,15 @@ export default {
                     e.response.status == 422
                 ) {
                     this.errors = e.response.data.errors;
+                }
+
+                if (
+                    e.response &&
+                    e.response.status != 422 &&
+                    e.response.data &&
+                    e.response.data.message
+                ) {
+                    this.$notification.error(e.response.data.message);
                 }
             }
         },

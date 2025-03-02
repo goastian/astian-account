@@ -14,6 +14,9 @@
                         Execute
                     </v-btn>
                 </div>
+                <div>
+                    <v-error :error="errors.command"></v-error>
+                </div>
                 <v-data-table
                     :items-per-page="search.per_page"
                     :headers="headers"
@@ -40,6 +43,45 @@
                         <v-chip>
                             {{ item.created }}
                         </v-chip>
+                    </template>
+                    <template #item.actions="{ item }">
+                        <v-dialog>
+                            <template
+                                v-slot:activator="{ props: activatorProps }"
+                            >
+                                <v-btn
+                                    v-bind="activatorProps"
+                                    color="surface-variant"
+                                    text="Open Dialog"
+                                    variant="flat"
+                                    icon
+                                >
+                                    <v-icon icon="mdi-eye-arrow-right-outline">
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+
+                            <template v-slot:default="{ isActive }">
+                                <v-card title="Output details">
+                                    <v-card-text>
+                                        <p
+                                            v-for="(it, index) in item.output"
+                                            :key="index"
+                                        >
+                                            {{ it }}
+                                        </p>
+                                    </v-card-text>
+
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                            text="Close Dialog"
+                                            @click="isActive.value = false"
+                                        ></v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </template>
+                        </v-dialog>
                     </template>
                     <template v-slot:bottom>
                         <v-pagination
@@ -86,12 +128,14 @@ export default {
                 { title: "Status", value: "status", align: "center" },
                 { title: "User", value: "user", align: "center" },
                 { title: "Created", value: "created", align: "center" },
+                { title: "Actions", value: "actions", align: "center" },
             ],
             pages: {},
             search: {
                 page: 1,
                 per_page: 15,
             },
+            errors: {},
         };
     },
 
@@ -163,8 +207,22 @@ export default {
                     this.getCommands();
                     this.form.command = "";
                     this.getCommands();
+                    this.$notification.success("Command execute successfully");
                 }
-            } catch (e) {}
+            } catch (e) {
+                if (e.response && e.response.status == 422) {
+                    this.errors = e.response.data.errors;
+                }
+
+                if (
+                    e.response &&
+                    e.response.status != 422 &&
+                    e.response.data &&
+                    e.response.data.message
+                ) {
+                    this.$notification.error(e.response.data.message);
+                }
+            }
         },
 
         async appData() {
