@@ -105,7 +105,7 @@ export default {
 
           hasGroup(name) {
             return this.user.groups.some(
-                (item) => item.name == name || item.name == "admin"
+                (item) => item.slug == name || item.slug == "administrator"
             );
         },
 
@@ -122,7 +122,7 @@ export default {
                 {
                     name: "Admin",
                     icon: "mdi-shield-crown-outline",
-                    show: this.hasGroup("admin"),
+                    show: this.hasGroup("administrator"),
                     menu: [
                         {
                             name: "Users",
