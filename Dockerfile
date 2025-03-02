@@ -31,7 +31,8 @@ RUN apk add --no-cache \
     nginx \
     npm \
     curl \
-    unzip
+    unzip \
+    supervisor
 
 RUN getent passwd www-data || adduser -S -G www-data -s /usr/sbin/nologin www-data
 
@@ -51,6 +52,8 @@ COPY docker/www.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/http.d/default.conf
 COPY docker/laravel-scripts.sh /usr/local/bin/laravel-scripts.sh 
+
+COPY docker/supervisord.conf /etc/supervisord.conf
 
 RUN chmod 755 /etc/nginx/http.d/default.conf
 RUN chmod 755 /usr/local/bin/laravel-scripts.sh

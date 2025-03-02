@@ -71,6 +71,9 @@ class UserController extends Controller
             $user = $user->fill($request->except('password', 'role'));
             $user->verified_at = now();
             $user->password = Hash::make($temp_password);
+            if ($request->verify_email) {
+                $user->verified_at = now();
+            }
             $user->save();
 
             $user->groups()->attach($request->groups);
@@ -123,6 +126,11 @@ class UserController extends Controller
             if ($this->is_different($user->name, $request->name)) {
                 $can_update = true;
                 $user->name = $request->name;
+            }
+
+            if (empty($user->verified_at) && $request->verify_email) {
+                $can_update = true;
+                $user->verified_at = now();
             }
 
             if ($this->is_different($user->last_name, $request->last_name)) {

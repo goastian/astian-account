@@ -35,6 +35,7 @@ class UpdateRequest extends FormRequest
             'city' => ['nullable', 'regex:/^[A-Za-z\s]+$/', 'max:100'],
             'address' => ['nullable', 'max:150'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
+            'verify_email' => ['nullable', 'boolean'],
         ];
     }
 }
