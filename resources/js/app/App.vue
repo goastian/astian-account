@@ -18,7 +18,7 @@
                         v-for="(menu, index) in menus()"
                         :key="index"
                     >
-                        <v-expansion-panel-title>
+                        <v-expansion-panel-title v-if="menu.show">
                             <v-icon left>{{ menu.icon }}</v-icon>
                             {{ menu.name }}
                         </v-expansion-panel-title>
@@ -103,11 +103,18 @@ export default {
             this.app_name = app.dataset.appName;
         },
 
+          hasGroup(name) {
+            return this.user.groups.some(
+                (item) => item.slug == name || item.slug == "administrator"
+            );
+        },
+
         menus() {
             return [
                 {
                     name: "Account",
                     icon: "mdi-account-star",
+                    show: true,
                     menu: [
                         { name: "Me", route: "about", icon: "mdi-information" },
                     ],
@@ -115,15 +122,21 @@ export default {
                 {
                     name: "Admin",
                     icon: "mdi-shield-crown-outline",
+                    show: this.hasGroup("administrator"),
                     menu: [
                         {
                             name: "Users",
-                            route: "users.index",
+                            route: "admin.users.index",
                             icon: "mdi-account-group",
                         },
                         {
+                            name: "Clients",
+                            route: "admin.clients.index",
+                            icon: "mdi-apps",
+                        },
+                        {
                             name: "Broadcasts",
-                            route: "broadcasts.index",
+                            route: "admin.broadcasts.index",
                             icon: "mdi-broadcast",
                         },
                     ],
@@ -131,15 +144,16 @@ export default {
                 {
                     name: "Tools",
                     icon: "mdi-tools",
+                    show: true,
                     menu: [
                         {
                             name: "Clients",
-                            route: "clients.index",
+                            route: "developer.clients.index",
                             icon: "mdi-wan",
                         },
                         {
                             name: "API Key",
-                            route: "api.index",
+                            route: "developer.api.index",
                             icon: "mdi-shield-key-outline",
                         },
                     ],
