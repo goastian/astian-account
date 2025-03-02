@@ -118,12 +118,17 @@ export default {
                     menu: [
                         {
                             name: "Users",
-                            route: "users.index",
+                            route: "admin.users.index",
                             icon: "mdi-account-group",
                         },
                         {
+                            name: "Clients",
+                            route: "admin.clients.index",
+                            icon: "mdi-apps",
+                        },
+                        {
                             name: "Broadcasts",
-                            route: "broadcasts.index",
+                            route: "admin.broadcasts.index",
                             icon: "mdi-broadcast",
                         },
                     ],
@@ -134,12 +139,12 @@ export default {
                     menu: [
                         {
                             name: "Clients",
-                            route: "clients.index",
+                            route: "developer.clients.index",
                             icon: "mdi-wan",
                         },
                         {
                             name: "API Key",
-                            route: "api.index",
+                            route: "developer.api.index",
                             icon: "mdi-shield-key-outline",
                         },
                     ],

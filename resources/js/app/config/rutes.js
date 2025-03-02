@@ -6,40 +6,58 @@ const routes = [
         name: "about",
         component: () => import("../pages/Account/About.vue"),
     },
+
+    //admin routes
     {
-        path: "/admin/users",
-        name: "users.index",
-        component: () => import("../pages/Admin/Users/Index.vue"),
+        path: "/admin",
+        children: [
+            {
+                path: "/users",
+                name: "admin.users.index",
+                component: () => import("../pages/Admin/Users/Index.vue"),
+            },
+            {
+                path: "/clients",
+                name: "admin.clients.index",
+                component: () => import("../pages/Admin/Clients/Index.vue"),
+            },
+            {
+                path: "/broadcasts",
+                name: "admin.broadcasts.index",
+                component: () => import("../pages/Admin/Broadcast/Index.vue"),
+            },
+            {
+                path: "/roles",
+                name: "admin.roles.index",
+                component: () => import("../pages/Admin/Role/Index.vue"),
+            },
+            {
+                path: "/services",
+                name: "admin.services.index",
+                component: () => import("../pages/Admin/Service/Index.vue"),
+            },
+            {
+                path: "/scopes",
+                name: "admin.scopes.index",
+                component: () => import("../pages/Admin/Scope/Index.vue"),
+            },
+        ],
     },
+
     {
-        path: "/admin/broadcasts",
-        name: "broadcasts.index",
-        component: () => import("../pages/Admin/Broadcast/Index.vue"),
-    },
-    {
-        path: "/admin/roles",
-        name: "roles.index",
-        component: () => import("../pages/Admin/Role/Index.vue"),
-    },
-    {
-        path: "/admin/services",
-        name: "services.index",
-        component: () => import("../pages/Admin/Service/Index.vue"),
-    },
-    {
-        path: "/admin/scopes",
-        name: "scopes.index",
-        component: () => import("../pages/Admin/Scope/Index.vue"),
-    },
-    {
-        path: "/developers/clients",
-        name: "clients.index",
-        component: () => import("../pages/OAuth/Clients/Index.vue"),
-    },
-    {
-        path: "/developers/api_key",
-        name: "api.index",
-        component: () => import("../pages/OAuth/Personal/Index.vue"),
+        path: "/developers",
+        children: [
+            {
+                path: "/clients",
+                name: "developer.clients.index",
+                component: () => import("../pages/OAuth/Clients/Index.vue"),
+            },
+            {
+                path: "/api_key",
+                name: "developer.api.index",
+                component: () => import("../pages/OAuth/Personal/Index.vue"),
+            },
+        ],
     },
 ];
 
