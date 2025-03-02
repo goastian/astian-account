@@ -27,5 +27,5 @@ echo "🌐 Starting Nginx..."
 nginx -g "daemon off;"
 echo "Server ran successfully"
 
-php artisan queue:work --tries=6 & 
-echo "Starting queue worker..."
+supervisord -c /etc/supervisord.conf
+echo "Starting supervisor..."
