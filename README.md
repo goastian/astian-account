@@ -23,3 +23,23 @@ This project is licensed under the GNU Affero General Public License v3.0. See t
 ## Contact
 
 For direct contact, visit [Telegram](https://t.me/elyerr).
+
+
+# 🚀 Deploy & First User Setup  
+
+This project uses Docker and Laravel for OAuth2 authentication. Follow the steps below to deploy the production environment and create the first user.  
+
+## 🔑 Environment Configuration  
+Before deployment, make sure to copy the environment file and configure the necessary variables:  
+
+```bash
+cp .env.example .env
+```
+Then, edit the .env file with your specific settings.
+
+## Deploy to Production
+Run the following command to deploy the application in a production environment:
+
+```bash
+./deploy-prod.sh
+```
