@@ -53,7 +53,8 @@ COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/http.d/default.conf
 COPY docker/laravel-scripts.sh /usr/local/bin/laravel-scripts.sh 
 
-COPY docker/supervisord.conf /etc/supervisord.conf
+RUN mkdir -p /etc/supervisor.d \
+    && cp docker/laravel.ini /etc/supervisor.d/laravel.ini
 
 RUN chmod 755 /etc/nginx/http.d/default.conf
 RUN chmod 755 /usr/local/bin/laravel-scripts.sh

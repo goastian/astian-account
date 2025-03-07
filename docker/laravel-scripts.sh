@@ -1,5 +1,5 @@
 #!/bin/sh
-set -e  # Exit immediately if a command fails
+set -e   
 
 cd /var/www 
 
@@ -24,8 +24,11 @@ echo "🚀 Starting PHP-FPM..."
 php-fpm83 -D
 
 echo "🌐 Starting Nginx..."
-nginx -g "daemon off;"
-echo "Server ran successfully"
+nginx -g "daemon off;" &   
 
-supervisord -c /etc/supervisord.conf
-echo "Starting supervisor..."
+echo "🛠️ Starting Supervisor..."
+supervisord -c /etc/supervisord.conf &  
+
+echo "✅ All services started"
+
+tail -f /dev/null
