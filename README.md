@@ -43,3 +43,9 @@ Run the following command to deploy the application in a production environment:
 ```bash
 ./deploy-prod.sh
 ```
+
+## 👤 Create the First User
+To create an initial user in the application, execute the following command inside the container:
+```bash
+docker exec -it oauth2-server-app-1 php artisan settings:create-user
+```
