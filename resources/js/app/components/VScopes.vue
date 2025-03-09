@@ -1,56 +1,45 @@
 <template>
-    <div class="space-y-4">
+    <div class="q-gutter-y-md">
         <div
             v-for="(services, group) in groupedScopes"
             :key="group"
-            class="mb-5"
+            class="q-mb-md"
         >
-            <h6 class="text-lg font-semibold uppercase text-gray-700">
+            <q-banner
+                class="text-h6 text-grey-8 bg-grey-3 q-pa-md rounded-borders"
+            >
                 {{ group }}
-            </h6>
-            <div
+            </q-banner>
+
+            <q-card
                 v-for="(roles, service) in services"
                 :key="service"
-                class="ml-4 px-4 py-1 mb-6 bg-gray-100 rounded-lg"
+                class="q-mt-md q-pa-md bg-grey-2"
             >
-                <div class="flex items-center mt-4 gap-1">
-                    <h6 class="text-md uppercase font-medium text-gray-600">
+                <div class="row items-center q-mb-md">
+                    <span class="text-subtitle1 text-weight-medium text-grey-7">
                         {{ service }}
-                    </h6>
-                    -
-                    <span class="text-sm text-gray-500">{{
-                        roles[0].service_description
-                    }}</span>
+                    </span>
+                    <q-space />
+                    <span class="text-caption text-grey-6">
+                        {{ roles[0].service_description }}
+                    </span>
                 </div>
-                <div class="grid grid-cols-3 gap-2 mt-2">
-                    <label
+
+                <div class="q-gutter-sm">
+                    <q-checkbox
                         v-for="role in roles"
                         :key="role.id"
-                        :class="{
-                            'bg-blue-200 p-2 font-bold text-blue-600':
-                                user_scopes.includes(role.id),
-                            'bg-transparent': !user_scopes.includes(role.id),
-                        }"
-                        class="flex items-center gap-2 p-2 rounded"
+                        v-model="selected_scopes"
+                        :val="role.id"
+                        :label="role.role_slug"
+                        class="q-pa-sm"
+                        :color="user_scopes.includes(role.id) ? 'blue' : 'grey'"
                     >
-                        <input
-                            type="checkbox"
-                            v-model="selected_scopes"
-                            :value="role.id"
-                            class="w-4 h-4 text-blue-500 border-gray-300 rounded"
-                        />
-                        <span class="text-gray-700 text-sm relative group">
-                            <v-tooltip :text="role.role_description">
-                                <template v-slot:activator="{ props }">
-                                    <span v-bind="props">
-                                        {{ role.role_slug }}
-                                    </span>
-                                </template>
-                            </v-tooltip>
-                        </span>
-                    </label>
+                        <q-tooltip>{{ role.role_description }}</q-tooltip>
+                    </q-checkbox>
                 </div>
-            </div>
+            </q-card>
         </div>
     </div>
 </template>
@@ -71,7 +60,7 @@ export default {
     watch: {
         default_roles: {
             immediate: true,
-            handler(values) {
+            handler() {
                 if (this.scopes.length) {
                     this.syncSelectedScopes();
                 }
@@ -116,7 +105,7 @@ export default {
                     params: { per_page: 150 },
                 });
 
-                if (res.status == 200) {
+                if (res.status === 200) {
                     this.scopes = res.data.data;
                     this.syncSelectedScopes();
                 }

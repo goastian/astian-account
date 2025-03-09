@@ -1,5 +1,4 @@
 import { createApp } from "vue";
-
 import App from "./app/App.vue";
 import "./app/config/matomo.js";
 
@@ -19,6 +18,7 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
 //icons https://pictogrammers.com/library/mdi/
+//icons https://pictogrammers.com/library/mdi/
 import "@mdi/font/css/materialdesignicons.css";
 
 //------ Admin app ----------------------------
@@ -29,11 +29,28 @@ app.config.globalProperties.$channels = $channels;
 app.config.globalProperties.$server = $server;
 app.use(router);
 app.component("VueDatePicker", VueDatePicker);
+app.component("VueDatePicker", VueDatePicker);
 /**
  * Custom components
  */
 customComponents.forEach((index) => {
     app.component(index[0], index[1]);
+});
+
+app.use(Quasar, {
+    plugins: {
+        Notify,
+        Dialog,
+        Loading,
+    },
+    directives: {
+        Ripple,
+        ClosePopup,
+    },
+});
+
+QComponents.forEach((item) => {
+    app.component(item.name, item);
 });
 
 app.use(Quasar, {
