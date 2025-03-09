@@ -5,18 +5,18 @@
             :key="group"
             class="mb-5"
         >
-            <h2 class="text-lg font-semibold uppercase text-gray-700">
+            <h6 class="text-lg font-semibold uppercase text-gray-700">
                 {{ group }}
-            </h2>
+            </h6>
             <div
                 v-for="(roles, service) in services"
                 :key="service"
-                class="ml-4 px-4 py-1 mb-2 bg-gray-100 rounded-lg"
+                class="ml-4 px-4 py-1 mb-6 bg-gray-100 rounded-lg"
             >
                 <div class="flex items-center mt-4 gap-1">
-                    <h3 class="text-md uppercase font-medium text-gray-600">
+                    <h6 class="text-md uppercase font-medium text-gray-600">
                         {{ service }}
-                    </h3>
+                    </h6>
                     -
                     <span class="text-sm text-gray-500">{{
                         roles[0].service_description

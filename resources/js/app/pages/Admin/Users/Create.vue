@@ -1,285 +1,269 @@
 <template>
-    <v-dialog max-width="500">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                v-bind="activatorProps"
-                color="blue-lighten-1"
-                icon
-                variant="tonal"
-                @click="open"
-            >
-                <v-icon icon="mdi-plus"></v-icon>
-            </v-btn>
-        </template>
+    <q-dialog v-model="dialog" persistent>
+        <q-card class="w-100">
+            <q-card-section>
+                <div class="text-h6">Add new user</div>
+            </q-card-section>
 
-        <template v-slot:default="{ isActive }">
-            <v-card>
-                <v-card-title> Add new user </v-card-title>
-                <v-card-text>
-                    <div class="grid grid-cols-1">
-                        <!-- Name -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Name"
-                                type="text"
-                                v-model="form.name"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
+            <q-card-section>
+                <div class="q-gutter-md">
+                    <q-input
+                        outlined
+                        v-model="form.name"
+                        dense="dense"
+                        label="Name"
+                        :error="!!errors.name"
+                    >
+                        <template v-slot:error>
                             <v-error :error="errors.name"></v-error>
-                        </div>
-
-                        <!-- Last Name -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Last name"
-                                type="text"
-                                v-model="form.last_name"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
+                        </template>
+                    </q-input>
+                    <q-input
+                        outlined
+                        v-model="form.last_name"
+                        dense="dense"
+                        label="Last name"
+                        :error="!!errors.last_name"
+                    >
+                        <template v-slot:error>
                             <v-error :error="errors.last_name"></v-error>
-                        </div>
-
-                        <!-- Email -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Email"
-                                type="email"
-                                v-model="form.email"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
+                        </template>
+                    </q-input>
+                    <q-input
+                        outlined
+                        v-model="form.email"
+                        dense="dense"
+                        label="Email"
+                        :error="!!errors.email"
+                    >
+                        <template v-slot:error>
                             <v-error :error="errors.email"></v-error>
-                        </div>
+                        </template>
+                    </q-input>
 
-                        <!-- Country -->
-                        <div class="w-full mb-2">
-                            <label
-                                class="block text-gray-700 text-sm font-bold mb-2"
-                            >
-                                Country
-                            </label>
-                            <select
-                                v-model="form.country"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            >
-                                <option
-                                    v-for="country in countries"
-                                    :key="country.name_en"
-                                    :value="country.name_en"
-                                >
-                                    {{ country.emoji }} {{ country.name_en }}
-                                </option>
-                            </select>
+                    <q-select
+                        v-model="form.country"
+                        dense
+                        outlined
+                        label="Country"
+                        :options="countries"
+                        option-value="id"
+                        :error="!!errors.country"
+                        emit-value
+                        map-options
+                    >
+                        <template v-slot:option="scope">
+                            <q-item v-bind="scope.itemProps">
+                                <q-item-section avatar>
+                                    <q-avatar size="sm">{{
+                                        scope.opt.emoji
+                                    }}</q-avatar>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>{{
+                                        scope.opt.name_en
+                                    }}</q-item-label>
+                                </q-item-section>
+                            </q-item>
+                        </template>
+
+                        <template v-slot:selected>
+                            <q-avatar size="sm">{{
+                                form.country &&
+                                countries.find((c) => c.id === form.country)
+                                    ?.emoji
+                            }}</q-avatar>
+                            <span class="q-ml-sm">{{
+                                form.country &&
+                                countries.find((c) => c.id === form.country)
+                                    ?.name_en
+                            }}</span>
+                        </template>
+
+                        <template v-slot:error>
                             <v-error :error="errors.country"></v-error>
-                        </div>
+                        </template>
+                    </q-select>
 
-                        <!-- Dial Code -->
-                        <div class="w-full mb-2">
-                            <label
-                                class="block text-gray-700 text-sm font-bold mb-2"
-                                >Dial Code</label
-                            >
-                            <select
-                                v-model="form.dial_code"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            >
-                                <option
-                                    v-for="country in countries"
-                                    :key="country.dial_code"
-                                    :value="country.dial_code"
-                                >
-                                    {{ country.emoji }}
-                                    {{ country.name_en }} ({{
-                                        country.dial_code
-                                    }})
-                                </option>
-                            </select>
+                    <q-select
+                        v-model="form.dial_code"
+                        dense="dense"
+                        :options="
+                            countries.map((c) => ({
+                                label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
+                                value: c.dial_code,
+                            }))
+                        "
+                        label="Dial Code"
+                        outlined
+                        :error="!!errors.dial_code"
+                    >
+                        <template v-slot:error>
                             <v-error :error="errors.dial_code"></v-error>
-                        </div>
+                        </template>
+                    </q-select>
 
-                        <!-- Phone -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Phone Number"
-                                type="text"
-                                v-model="form.phone"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
+                    <q-input
+                        outlined
+                        v-model="form.phone"
+                        dense="dense"
+                        label="Phone"
+                        :error="!!errors.phone"
+                    >
+                        <template v-slot:error>
                             <v-error :error="errors.phone"></v-error>
-                        </div>
+                        </template>
+                    </q-input>
 
-                        <!-- Birthday -->
-                        <div class="w-full mb-2">
-                            <label
-                                class="block text-gray-700 text-sm font-bold mb-2"
-                                >Birthday</label
-                            >
-                            <VueDatePicker
-                                v-model="birthday"
-                                :enable-time-picker="false"
-                                :max-date="new Date()"
-                                format="yyyy-MM-dd"
-                            />
-                            <v-error :error="errors.birthday"></v-error>
-                        </div>
+                    <div class="w-full mb-2">
+                        <label
+                            class="block text-gray-700 text-sm font-bold mb-2"
+                        >
+                            Birthday
+                        </label>
+                        <VueDatePicker
+                            v-model="form.birthday"
+                            :enable-time-picker="false"
+                            :max-date="new Date()"
+                            format="yyyy-MM-dd"
+                        />
 
-                        <div class="w-full mb-2">
-                            <label
-                                class="block text-gray-700 text-sm font-bold mb-2"
-                            >
-                                Groups
-                            </label>
-
-                            <v-select
-                                v-model="form.groups"
-                                :items="groups"
-                                item-title="name"
-                                item-value="id"
-                                label="Groups"
-                                persistent-hint
-                                multiple
-                                single-line
-                            ></v-select>
-
-                            <v-error :error="errors.groups"></v-error>
-                        </div>
-
-                        <div class="w-full mb-2">
-                            <v-checkbox
-                                density="compact"
-                                v-model="verify_email"
-                                label="Mark user email as verified"
-                                variant="solo"
-                            ></v-checkbox>
-                        </div>
+                        <v-error :error="errors.birthday"></v-error>
                     </div>
-                </v-card-text>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        @click="create"
-                        color="blue-darken-1"
-                        prepend-icon="mdi-content-save-alert"
-                        class="mx-4"
-                        variant="flat"
+                    <q-select
+                        v-model="selected_groups"
+                        dense="dense"
+                        multiple
+                        :options="
+                            groups.map((c) => ({
+                                label: c.name,
+                                value: c.id,
+                            }))
+                        "
+                        label="Groups"
+                        outlined
+                        :error="!!errors.groups"
                     >
-                        Save
-                    </v-btn>
-                    <v-btn
-                        @click="close(isActive)"
-                        prepend-icon="mdi-close-circle"
-                        variant="flat"
-                        color="red-lighten-1"
+                        <template v-slot:error>
+                            <v-error :error="errors.groups"></v-error>
+                        </template>
+                    </q-select>
+
+                    <q-checkbox
+                        dense="dense"
+                        v-model="verify_email"
+                        label="Mark user email as verified"
+                        :error="!!form.groups"
                     >
-                        Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </template>
-    </v-dialog>
+                        <template v-slot:error>
+                            <v-error :error="errors.groups"></v-error>
+                        </template>
+                    </q-checkbox>
+                </div>
+            </q-card-section>
+
+            <q-card-actions align="right">
+                <q-btn
+                    label="Save"
+                    icon="mdi-content-save-alert"
+                    color="primary"
+                    @click="create"
+                />
+                <q-btn
+                    label="Close"
+                    icon="mdi-close-circle"
+                    color="negative"
+                    @click="dialog = false"
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+    <q-btn class="glossy" round color="secondary" icon="mdi-plus" @click="open">
+        <q-tooltip> Add new user</q-tooltip>
+    </q-btn>
 </template>
-<script>
-import flatpickr from "flatpickr";
-import { nextTick } from "vue";
 
+<script>
 export default {
     emits: ["created"],
-
     data() {
         return {
+            dialog: false,
             form: {
                 name: null,
                 last_name: null,
                 email: null,
                 country: null,
-                city: null,
-                address: null,
                 dial_code: null,
                 phone: null,
                 birthday: null,
                 groups: [],
-                verify_email: null,
+                verify_email: 0,
             },
+            selected_groups: [],
+            verify_email: false,
             errors: {},
             countries: [],
             groups: [],
-            verify_email: false,
+            formFields: {
+                name: { label: "Name", type: "text" },
+                last_name: { label: "Last Name", type: "text" },
+                email: { label: "Email", type: "email" },
+                phone: { label: "Phone Number", type: "text" },
+            },
         };
     },
 
     watch: {
+        selected_groups(value) {
+            this.form.groups = value.map((item) => item.value);
+        },
+
         verify_email(value) {
-            this.item.verify_email = value ? 1 : 0;
+            this.form.verify_email = value ? 1 : 0;
         },
     },
 
     methods: {
-        async calendar() {
-            await nextTick();
-            flatpickr(".datetime", {
-                enableTime: true,
-                dateFormat: "Y-m-d",
-                maxDate: "today",
-            });
-        },
-
-        /**
-         * Show the modal in the windowss
-         */
         async open() {
+            this.dialog = true;
             await this.getCountries();
             await this.getGroups();
-            await this.calendar();
         },
 
-        /**
-         *  reset keys when the windows is closed
-         */
-        close(isActive) {
-            isActive.value = false;
-            this.form = [];
+        close(dialog) {
+            dialog.value = false;
+            this.form = { groups: [] };
             this.countries = [];
         },
-
-        /**
-         * Get the groups
-         */
         async getGroups() {
             try {
                 const res = await this.$server.get("/api/admin/groups", {
-                    params: {
-                        per_page: 150,
-                    },
+                    params: { per_page: 150 },
                 });
-
-                if (res.status == 200) {
-                    this.groups = res.data.data;
-                }
+                if (res.status === 200) this.groups = res.data.data;
             } catch (error) {}
         },
-
-        /**
-         * Create a new user in the system
-         *
-         */
         async create() {
             try {
                 const res = await this.$server.post(
                     "/api/admin/users",
                     this.form,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                    { headers: { "Content-Type": "multipart/form-data" } }
                 );
-
-                if (res.status == 201) {
-                    this.form = { scope: [] };
+                if (res.status === 201) {
+                    this.form = { groups: [] };
                     this.errors = {};
-                    this.notification.success(
-                        "A new user has been created successfully"
-                    );
+                    this.selected_groups = [];
+                    this.verify_email = 0;
+
+                    this.$q.notify({
+                        type: "positive",
+                        message: "A new user has been created successfully",
+                        timeout: 3000,
+                    });
+
                     this.$emit("created", true);
                 }
             } catch (e) {
@@ -297,26 +281,19 @@ export default {
                     e.response.data &&
                     e.response.data.message
                 ) {
-                    this.notification.error(e.response.data.message);
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                    });
                 }
             }
         },
-
-        /**
-         * Get the all countries
-         */
         async getCountries() {
             try {
                 const res = await this.$server.get("/api/resources/countries", {
-                    params: {
-                        order_by: "name_en",
-                        order_type: "asc",
-                    },
+                    params: { order_by: "name_en", order_type: "asc" },
                 });
-
-                if (res.status == 200) {
-                    this.countries = res.data;
-                }
+                if (res.status === 200) this.countries = res.data;
             } catch (e) {}
         },
     },

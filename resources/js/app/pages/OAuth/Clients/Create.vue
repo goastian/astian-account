@@ -1,83 +1,76 @@
 <template>
-    <v-dialog max-width="800">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                v-bind="activatorProps"
-                color="blue-lighten-1"
-                icon
-                variant="tonal"
-                @click="open"
-            >
-                <v-icon icon="mdi-plus"></v-icon>
-            </v-btn>
-        </template>
+    <div class="q-pa-md q-gutter-sm">
+        <q-btn
+            round
+            dense="dense"
+            color="primary"
+            @click="dialog = true"
+            icon="mdi-plus-circle"
+        />
 
-        <template v-slot:default="{ isActive }">
-            <v-card>
-                <v-card-title> Add new client </v-card-title>
-                <v-card-text>
-                    <v-row>
-                        <!-- Name -->
-                        <v-col sm="12" md="8">
-                            <v-text-field
-                                v-model="form.name"
-                                label="Name"
-                                variant="solo"
-                            >
-                                <template #details>
-                                    <v-error :error="errors.name"></v-error>
-                                </template>
-                            </v-text-field>
-                        </v-col>
-                        <v-col sm="12" md="4">
-                            <v-checkbox
-                                label="Confidential"
-                                v-model="form.confidential"
-                            >
-                                <template #details>
-                                    <v-error
-                                        :error="errors.confidential"
-                                    ></v-error>
-                                </template>
-                            </v-checkbox>
-                        </v-col>
-                        <v-col sm="12">
-                            <v-text-field
-                                v-model="form.redirect"
-                                label="Redirect URL"
-                                variant="solo"
-                            >
-                                <template #details>
-                                    <v-error :error="errors.redirect"></v-error>
-                                </template>
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
+        <q-dialog
+            v-model="dialog"
+            persistent
+            transition-show="scale"
+            transition-hide="scale"
+        >
+            <q-card class="w-100 py-4">
+                <q-card-section class="text-center">
+                    <h6 class="text-gray-500">Add new client</h6>
+                </q-card-section>
+                <q-card-section>
+                    <q-input
+                        v-model="form.name"
+                        label="Name"
+                        dense="dense"
+                        :error="!!errors.name"
+                    >
+                        <template v-slot:error>
+                            <v-error :error="errors.name"></v-error>
+                        </template>
+                    </q-input>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        @click="create(isActive)"
-                        color="blue-darken-1"
-                        prepend-icon="mdi-content-save-alert"
-                        class="mx-4"
-                        variant="flat"
+                    <q-input
+                        v-model="form.redirect"
+                        label="Redirect"
+                        dense="dense"
+                        :error="!!errors.redirect"
                     >
-                        Save
-                    </v-btn>
-                    <v-btn
-                        @click="close(isActive)"
-                        prepend-icon="mdi-close-circle"
-                        variant="flat"
-                        color="red-lighten-1"
+                        <template v-slot:error>
+                            <v-error :error="errors.redirect"></v-error>
+                        </template>
+                    </q-input>
+
+                    <q-checkbox
+                        v-model="confidential"
+                        label="Confidential client"
+                        color="orange"
+                        :error="!!errors.confidential"
                     >
-                        Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </template>
-    </v-dialog>
+                        <template v-slot:error>
+                            <v-error :error="errors.redirect"></v-error>
+                        </template>
+                    </q-checkbox>
+                </q-card-section>
+
+                <q-card-actions align="right" class="bg-white text-teal">
+                    <q-btn
+                        dense="dense"
+                        color="primary"
+                        label="Accept"
+                        @click="create"
+                    />
+
+                    <q-btn
+                        dense="dense"
+                        caolor="secondary"
+                        label="Close"
+                        @click="close"
+                    />
+                </q-card-actions>
+            </q-card>
+        </q-dialog>
+    </div>
 </template>
 <script>
 export default {
@@ -85,37 +78,47 @@ export default {
 
     data() {
         return {
+            dialog: false,
             form: {
                 name: null,
                 redirect: null,
-                confidential: false,
+                confidential: 0,
             },
+            confidential: false,
             errors: {},
         };
+    },
+
+    watch: {
+        confidential(value) {
+            this.form.confidential = value ? 1 : 0;
+        },
     },
 
     methods: {
         /**
          * Clean the form when it is closed
          */
-        close(isActive) {
+        close() {
             this.client = {};
             this.errors = {};
-            isActive.value = false;
+            this.confidential = false;
+            this.dialog = false;
         },
 
         open() {
             this.form = {};
+            this.confidential = false;
             this.errors = {};
         },
 
         /**
          * Create a new client
          */
-        async create(isActive) {
+        async create() {
             try {
                 const res = await this.$server.post(
-                    "/oauth/clients",
+                    "/api/admin/clients",
                     this.form
                 );
 
@@ -123,7 +126,7 @@ export default {
                     this.form = {};
                     this.errors = {};
                     this.$emit("created", true);
-                    isActive.value = false;
+                    this.dialog = false;
                 }
             } catch (e) {
                 if (e.response && e.response.data.errors) {

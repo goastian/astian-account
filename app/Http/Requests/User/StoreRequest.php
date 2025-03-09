@@ -49,6 +49,12 @@ class StoreRequest extends FormRequest
                     }
 
                     foreach ($value as $key) {
+
+                        if (is_array($key)) {
+                            $fail(__('The group field has a wrong value.'));
+                            break;
+                        }
+
                         $group = Group::find($key);
 
                         if (empty($group)) {

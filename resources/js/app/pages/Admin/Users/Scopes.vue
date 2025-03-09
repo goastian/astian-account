@@ -1,66 +1,50 @@
 <template>
-    <v-dialog fullscreen>
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                v-bind="activatorProps"
-                color="blue-lighten-1"
-                icon
-                variant="tonal"
-                @click="userRoles"
-            >
-                <v-icon icon="mdi-shield-crown"></v-icon>
-            </v-btn>
-        </template>
+    <q-dialog v-model="dialog" full-width>
+        <template v-slot:default>
+            <q-card>
+                <q-card-section class="row items-center">
+                    <div class="text-h6">Add or remove scopes</div>
+                    <q-space />
+                    <q-btn flat icon="close" @click="dialog = false" />
+                </q-card-section>
 
-        <template v-slot:default="{ isActive }">
-            <v-card>
-                <v-card-title> Add or remove scopes </v-card-title>
-                <v-card-text>
+                <q-card-section>
                     <v-scopes
                         :default_roles="user_roles"
                         @checked="checkedRoles"
                     ></v-scopes>
-                </v-card-text>
+                </q-card-section>
 
-                <v-card-actions>
-                    <div class="flex justify-between w-100">
-                        <v-btn
-                            @click="add"
-                            color="blue-darken-1"
-                            prepend-icon="mdi-content-save-alert"
-                            class="mx-4"
-                            variant="flat"
-                        >
-                            add
-                        </v-btn>
-                        <v-btn
-                            @click="close(isActive)"
-                            prepend-icon="mdi-window-close"
-                            variant="flat"
-                            color="green-accent-2"
-                        >
-                            Close
-                        </v-btn>
-                        <v-btn
-                            @click="revoke"
-                            color="red-darken-1"
-                            prepend-icon="mdi-delete-circle-outline"
-                            class="mx-4"
-                            variant="flat"
-                        >
-                            Revoke
-                        </v-btn>
-                    </div>
-                </v-card-actions>
-            </v-card>
+                <q-card-actions align="between">
+                    <q-btn
+                        @click="add"
+                        color="primary"
+                        icon="save"
+                        class="q-mx-sm"
+                    >
+                        Add
+                    </q-btn>
+                    <q-btn @click="dialog = false" color="green" icon="close">
+                        Close
+                    </q-btn>
+                    <q-btn
+                        @click="revoke"
+                        color="red"
+                        icon="delete"
+                        class="q-mx-sm"
+                    >
+                        Revoke
+                    </q-btn>
+                </q-card-actions>
+            </q-card>
         </template>
-    </v-dialog>
+    </q-dialog>
+
+    <q-btn color="blue" icon="mdi-shield-crown" round flat @click="openDialog" />
 </template>
+
 <script>
 export default {
-    emits: ["updated"],
-    props: ["item"],
-
     props: {
         item: {
             required: true,
@@ -70,6 +54,7 @@ export default {
 
     data() {
         return {
+            dialog: false,
             user_roles: [],
             form: {
                 scopes: [],
@@ -79,11 +64,9 @@ export default {
     },
 
     methods: {
-        /**
-         *  reset keys when the windows is closed
-         */
-        close(isActive) {
-            isActive.value = false;
+        openDialog() {
+            this.dialog = true;
+            this.userRoles();
         },
 
         async userRoles() {
@@ -96,7 +79,7 @@ export default {
                     this.user_roles = res.data.data;
                 }
             } catch (error) {
-                console.log(error);
+                console.error(error);
             }
         },
 
@@ -104,33 +87,26 @@ export default {
             this.form.scopes = event;
         },
 
-        /**
-         * update the user in the system
-         *
-         */
         async add() {
             try {
                 const res = await this.$server.post(
                     this.item.links.scopes,
                     this.form,
                     {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
+                        headers: { "Content-Type": "multipart/form-data" },
                     }
                 );
 
                 if (res.status == 201) {
                     this.errors = {};
                     this.userRoles();
-                    this.$notification.success(res.data.message);
+                    this.$q.notify({
+                        type: "positive",
+                        message: res.data.message,
+                    });
                 }
             } catch (e) {
-                if (
-                    e.response &&
-                    e.response.data.errors &&
-                    e.response.status == 422
-                ) {
+                if (e.response?.status == 422) {
                     this.errors = e.response.data.errors;
                 }
             }
@@ -151,30 +127,16 @@ export default {
                 if (res.status == 201) {
                     this.errors = {};
                     this.userRoles();
-                    this.$notification.success(res.data.message);
+                    this.$q.notify({
+                        type: "positive",
+                        message: res.data.message,
+                    });
                 }
             } catch (e) {
-                if (
-                    e.response &&
-                    e.response.data.errors &&
-                    e.response.status == 422
-                ) {
+                if (e.response?.status == 422) {
                     this.errors = e.response.data.errors;
                 }
             }
-        },
-
-        /**
-         * Get the all countries
-         */
-        async getCountries() {
-            try {
-                const res = await this.$server.get("/api/resources/countries");
-
-                if (res.status == 200) {
-                    this.countries = res.data;
-                }
-            } catch (e) {}
         },
     },
 };

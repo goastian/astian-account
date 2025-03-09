@@ -1,31 +1,40 @@
 <template>
-    <v-sheet class="px-3">
-        <v-data-table
-            :items-per-page="search.per_page"
-            :headers="headers"
-            :items="tokens"
+    <q-page>
+        <q-table
+            flat
+            bordered
+            :rows="tokens"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
         >
             <template v-slot:top>
-                <div class="flex mx-3 justify-between align-center">
-                    <h1 class="fw-bold">List of users</h1>
-                    <v-create @created="getPersonalAccessToken()"></v-create>
-                </div>
+                <h6>List of API KEY</h6>
+                <q-space />
+                <v-create @created="getPersonalAccessToken()"></v-create>
             </template>
-            <template #item.actions="{ item }">
-                <v-delete
-                    @deleted="getPersonalAccessToken"
-                    :item="item"
-                ></v-delete>
+
+            <template v-slot:body-cell-actions="props">
+                <q-td>
+                    <v-delete
+                        @deleted="getPersonalAccessToken"
+                        :item="props.row"
+                    ></v-delete>
+                </q-td>
             </template>
-            <template v-slot:bottom>
-                <v-pagination
-                    v-model="search.page"
-                    :length="search.total_pages"
-                    :total-visible="7"
-                ></v-pagination>
-            </template>
-        </v-data-table>
-    </v-sheet>
+        </q-table>
+
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.per_page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </q-page>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -36,17 +45,24 @@ export default {
         VCreate,
         VDelete,
     },
- 
+
     data() {
         return {
             tokens: [],
             headers: [
-                { title: "Name", value: "name", align: "start" },
-                { title: "Created", value: "created", align: "start" },
-                { title: "Expires", value: "expires", align: "start" },
-                { title: "Actions", value: "actions", align: "start" },
+                { label: "Name", field: "name", align: "left" },
+                { label: "Created", field: "created", align: "left" },
+                { label: "Expires", field: "expires", align: "left" },
+                {
+                    label: "Actions",
+                    name: "actions",
+                    field: "actions",
+                    align: "left",
+                },
             ],
-            user_id: null,
+            pages: {
+                total_pages: 0,
+            },
             search: {
                 page: 1,
                 per_page: 50,
@@ -65,7 +81,10 @@ export default {
                 .get("/oauth/api-keys")
                 .then((res) => {
                     this.tokens = res.data.data;
-                    this.search = res.data.meta;
+                    const meta = res.data.meta;
+                    this.pages = res.data.meta.pagination;
+                    this.search.total_pages =
+                        res.data.meta.pagination.total_pages;
                 })
                 .catch((e) => {});
         },
