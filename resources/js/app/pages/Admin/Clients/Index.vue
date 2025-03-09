@@ -1,65 +1,78 @@
 <template>
-    <v-sheet class="px-3">
-        <v-data-table
-            :items-per-page="search.per_page"
-            :headers="headers"
-            :items="clients"
+    <q-page>
+        <q-table
+            flat
+            bordered
+            :rows="clients"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
         >
             <template v-slot:top>
-                <div class="flex mx-3 justify-between align-center">
-                    <h1 class="fw-bold">List of users</h1>
-                    <v-create @created="getClients()"></v-create>
-                </div>
+                <h5>List of clients</h5>
+                <q-space />
+                <v-create @created="getClients()"></v-create>
             </template>
-            <template #item.id="{ item }">
-                <v-chip
-                    :key="item.id"
-                    @click="copyToClipboard(item.id)"
-                    class="ma-2"
-                    color="primary"
-                    dark
-                >
-                    *******
-                </v-chip>
-                <v-snackbar v-model="snackbar" :timeout="2000">
-                    Copied to clipboard
-                </v-snackbar>
+            <template v-slot:body-cell-id="props">
+                <q-td>
+                    <q-chip
+                        clickable
+                        @click="copyToClipboard(props.row.id)"
+                        color="green"
+                        text-color="white"
+                        icon="mdi-content-copy"
+                        label="*****"
+                    >
+                        <q-tooltip> Copy id </q-tooltip>
+                    </q-chip>
+                </q-td>
             </template>
-            <template #item.secret="{ item }">
-                <v-chip
-                    v-if="item.secret"
-                    :key="item.secret"
-                    @click="copyToClipboard(item.secret)"
-                    class="ma-2"
-                    color="primary"
-                    dark
-                >
-                    ******
-                </v-chip>
-                <v-snackbar v-model="snackbar" :timeout="2000">
-                    Copied to clipboard
-                </v-snackbar>
+            <template v-slot:body-cell-secret="props">
+                <q-td>
+                    <q-chip
+                        v-if="props.row.secret"
+                        clickable
+                        @click="copyToClipboard(props.row.secret)"
+                        color="green"
+                        text-color="white"
+                        icon="mdi-content-copy"
+                        label="*****"
+                    >
+                        <q-tooltip> Copy secret </q-tooltip>
+                    </q-chip>
+                </q-td>
             </template>
-            <template #item.revoked="{ item }">
-                <v-chip>
-                    {{ item.revoked ? "Yes" : "No" }}
-                </v-chip>
+            <template v-slot:body-cell-revoked="props">
+                <q-td>
+                    {{ props.row.revoked ? "Yes" : "No" }}
+                </q-td>
             </template>
-            <template #item.actions="{ item }">
-                <div class="flex justify-between">
-                    <v-delete @deleted="getClients" :item="item"></v-delete>
-                    <v-update @updated="getClients" :item="item"></v-update>
-                </div>
+            <template v-slot:body-cell-actions="props">
+                <q-td class="">
+                    <v-update
+                        @updated="getClients"
+                        :item="props.row"
+                    ></v-update>
+
+                    <v-delete
+                        @deleted="getClients"
+                        :item="props.row"
+                    ></v-delete>
+                </q-td>
             </template>
-            <template v-slot:bottom>
-                <v-pagination
-                    v-model="search.page"
-                    :length="search.total_pages"
-                    :total-visible="7"
-                ></v-pagination>
-            </template>
-        </v-data-table>
-    </v-sheet>
+        </q-table>
+
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </q-page>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -77,21 +90,60 @@ export default {
         return {
             clients: [],
             headers: [
-                { title: "Name", value: "name", align: "start" },
-                { title: "Identifier", value: "id", align: "start" },
-                { title: "Secret", value: "secret", align: "start" },
-                { title: "Revoked", value: "revoked", align: "start" },
-                { title: "Created", value: "created_at", align: "start" },
-                { title: "Updated", value: "updated_at", align: "start" },
-                { title: "Actions", value: "actions", align: "center" },
+                { label: "Name", name: "value", field: "name", align: "left" },
+                { label: "Identifier", name: "id", field: "id", align: "left" },
+                {
+                    label: "Secret",
+                    name: "secret",
+                    field: "secret",
+                    align: "left",
+                },
+                {
+                    label: "Revoked",
+                    name: "revoked",
+                    field: "revoked",
+                    align: "left",
+                },
+                {
+                    label: "Created",
+                    name: "created_at",
+                    field: "created_at",
+                    align: "left",
+                },
+                {
+                    label: "Updated",
+                    name: "updated_at",
+                    field: "updated_at",
+                    align: "left",
+                },
+                {
+                    label: "Actions",
+                    name: "actions",
+                    field: "actions",
+                    align: "center",
+                },
             ],
+            pages: {
+                total_pages: 0,
+            },
             search: {
                 page: 1,
-                per_page: 50,
-                total_pages: 0,
+                per_page: 15,
             },
             snackbar: false,
         };
+    },
+
+    watch: {
+        "search.page"(value) {
+            this.getClients();
+        },
+        "search.per_page"(value) {
+            if (value) {
+                this.search.per_page = value;
+                this.getClients();
+            }
+        },
     },
 
     created() {
@@ -99,12 +151,28 @@ export default {
     },
 
     methods: {
-        getClients() {
+        changePage(event) {
+            this.search.page = event;
+        },
+
+        searching(event) {
+            this.getUsers(event);
+        },
+
+        getClients(param = null) {
+            var params = {};
+            Object.assign(params, this.search);
+            Object.assign(params, param);
+
             this.$server
-                .get("/api/admin/clients")
+                .get("/api/admin/clients", {
+                    params: params,
+                })
                 .then((res) => {
                     this.clients = res.data.data;
-                    this.search = res.data.meta;
+                    var meta = res.data.meta;
+                    this.pages = meta.pagination;
+                    this.search.current_page = meta.pagination.current_page;
                 })
                 .catch((e) => {});
         },
@@ -112,7 +180,11 @@ export default {
         async copyToClipboard(text) {
             try {
                 await navigator.clipboard.writeText(text);
-                this.snackbar = true;
+                this.$q.notify({
+                    type: "positive",
+                    message: "Copy successfully",
+                    timeout: 3000,
+                });
             } catch (err) {}
         },
     },

@@ -1,34 +1,46 @@
 <template>
-    <v-sheet class="px-3">
-        <v-data-table
-            :items-per-page="search.per_page"
-            :headers="headers"
-            :items="channels"
+    <q-page>
+        <v-filter :params="params" @change="searching"></v-filter>
+        <q-table
+            flat
+            bordered
+            :rows="channels"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
         >
             <template v-slot:top>
-                <div class="flex mx-3 justify-between align-center">
-                    <h1 class="fw-bold">List of channels</h1>
-                    <v-create @created="getBroadcasting"></v-create>
-                </div>
-                <v-filter :params="params" @change="searching"></v-filter>
+                <h6 class="fw-bold">List of channels</h6>
+                <q-space />
+                <v-create @created="getBroadcasting"></v-create>
             </template>
-            <template #item.system="{ item }">
-                <v-chip>
-                    {{ item.system ? "Yes" : "No" }}
-                </v-chip>
+
+            <template v-slot:body-cell-system="props">
+                <q-td>
+                    {{ props.row.system ? "Yes" : "No" }}
+                </q-td>
             </template>
-            <template #item.actions="{ item }">
-                <v-destroy :item="item" @deleted="getBroadcasting"></v-destroy>
+            <template v-slot:body-cell-actions="props">
+                <q-td>
+                    <v-destroy
+                        :item="props.row"
+                        @deleted="getBroadcasting"
+                    ></v-destroy>
+                </q-td>
             </template>
-            <template v-slot:bottom>
-                <v-pagination
-                    v-model="search.page"
-                    :length="pages.total_pages"
-                    :total-visible="7"
-                ></v-pagination>
-            </template>
-        </v-data-table>
-    </v-sheet>
+        </q-table>
+
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </q-page>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -42,15 +54,37 @@ export default {
     data() {
         return {
             headers: [
-                { title: "Name", value: "name", align: "start" },
-                { title: "Description", value: "description", align: "start" },
-                { title: "Slug", value: "slug", align: "start" },
-                { title: "System", value: "system", align: "start" },
-                { title: "Actions", value: "actions", align: "center" },
+                { label: "Name", name: "name", field: "name", align: "left" },
+                {
+                    label: "Description",
+                    name: "description",
+                    field: "description",
+                    align: "left",
+                },
+                { label: "Slug", name: "slug", field: "slug", align: "left" },
+                {
+                    label: "System",
+                    name: "system",
+                    field: "system",
+                    align: "left",
+                },
+                {
+                    label: "Actions",
+                    name: "actions",
+                    field: "actions",
+                    align: "center",
+                },
             ],
-            params: ["name", "description", "slug", "system"],
+            params: [
+                { key: "Name", value: "name" },
+                { key: "Description", value: "description" },
+                { key: "slug", value: "slug" },
+                { key: "System", value: "system" },
+            ],
             channels: [],
-            pages: {},
+            pages: {
+                total_pages: 0,
+            },
             search: {
                 page: 1,
                 per_page: 15,

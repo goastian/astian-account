@@ -1,41 +1,45 @@
 <template>
-    <v-dialog max-width="500">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                v-bind="activatorProps"
-                color="red-darken-1"
-                icon
-                variant="tonal"
-            >
-                <v-icon icon="mdi-delete-outline"></v-icon>
-            </v-btn>
-        </template>
+    <q-btn
+        round
+        flat
+        color="red"
+        @click="dialog = true"
+        icon="mdi-delete-outline"
+    />
 
-        <template v-slot:default="{ isActive }">
-            <v-card title="Dialog">
-                <v-card-text>
-                    Are you share you want to remove this client with name
-                    <v-chip color="blue-darken-1">{{ item.name }}</v-chip> with
-                    ID <v-chip color="blue-darken-1">{{ item.id }}</v-chip> ?
-                </v-card-text>
+    <q-dialog
+        v-model="dialog"
+        persistent
+        transition-show="scale"
+        transition-hide="scale"
+    >
+        <q-card class="w-100 py-4">
+            <q-card-section class="text-center">
+                <h6 class="text-gray-500">Delete client</h6>
+            </q-card-section>
+            <q-card-section>
+                Are you share you want to remove this client with name
+                <q-chip color="blue-darken-1">{{ item.name }}</q-chip> with ID
+                <q-chip color="blue-darken-1">{{ item.id }}</q-chip> ?
+            </q-card-section>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        text="Agree"
-                        color="blue-accent-2"
-                        @click="destroy(isActive)"
-                    ></v-btn>
+            <q-card-actions align="right" class="bg-white text-teal">
+                <q-btn
+                    dense="dense"
+                    color="primary"
+                    label="Accept"
+                    @click="destroy"
+                />
 
-                    <v-btn
-                        text="Close"
-                        color="red-darken-1"
-                        @click="isActive.value = false"
-                    ></v-btn>
-                </v-card-actions>
-            </v-card>
-        </template>
-    </v-dialog>
+                <q-btn
+                    dense="dense"
+                    caolor="secondary"
+                    label="Close"
+                    @click="dialog = false"
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>
 <script>
 export default {
@@ -48,14 +52,20 @@ export default {
         },
     },
 
+    data() {
+        return {
+            dialog: false,
+        };
+    },
+
     methods: {
-        async destroy(isActive) {
+        async destroy() {
             try {
                 const res = await this.$server.delete(this.item.links.destroy);
 
                 if (res.status == 200) {
                     this.$emit("deleted", true);
-                    isActive.value = false;
+                    this.dialog = false;
                 }
             } catch (err) {}
         },

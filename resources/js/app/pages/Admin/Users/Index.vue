@@ -1,30 +1,38 @@
 <template>
-    <v-sheet class="px-3">
-        <v-data-table
-            :items-per-page="search.per_page"
-            :headers="headers"
-            :items="users"
+    <q-page>
+        <v-filter :params="params" @change="searching"></v-filter>
+        <q-table
+            flat
+            bordered
+            :rows="users"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
         >
             <template v-slot:top>
-                <div class="flex mx-3 justify-between align-center">
-                    <h1 class="fw-bold">List of users</h1>
-                    <v-create @created="getUsers"></v-create>
-                </div>
-                <v-filter :params="params" @change="searching"></v-filter>
+                <h5>List of users</h5>
+                <q-space />
+                <v-create @created="getUsers"></v-create>
             </template>
-            <template #item.actions="{ item }">
-                <v-update :item="item" @updated="getUsers"></v-update>
-                <v-scopes :item="item"></v-scopes>
+            <template v-slot:body-cell-actions="props">
+                <q-td>
+                    <v-update @updated="getUsers" :item="props.row"></v-update>
+                    <v-scopes :item="props.row"></v-scopes>
+                </q-td>
             </template>
-            <template v-slot:bottom>
-                <v-pagination
-                    v-model="search.page"
-                    :length="pages.total_pages"
-                    :total-visible="7"
-                ></v-pagination>
-            </template>
-        </v-data-table>
-    </v-sheet>
+        </q-table>
+
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </q-page>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -40,10 +48,25 @@ export default {
     data() {
         return {
             headers: [
-                { title: "Name", value: "name", align: "start" },
-                { title: "Last Name", value: "last_name", align: "start" },
-                { title: "Email", value: "email", align: "start" },
-                { title: "Actions", value: "actions", align: "center" },
+                { label: "Name", name: "name", field: "name", align: "left" },
+                {
+                    label: "Last Name",
+                    name: "last_name",
+                    field: "last_name",
+                    align: "left",
+                },
+                {
+                    label: "Email",
+                    name: "email",
+                    field: "email",
+                    align: "left",
+                },
+                {
+                    label: "Actions",
+                    name: "actions",
+                    field: "actions",
+                    align: "left",
+                },
             ],
             params: [
                 { key: "Name", value: "name" },
@@ -53,9 +76,11 @@ export default {
                 { key: "Updated", value: "updated" },
             ],
             users: [],
-            pages: {},
+            pages: {
+                total_pages: 0,
+            },
             search: {
-                page: 1,
+                page: 0,
                 per_page: 15,
             },
         };
