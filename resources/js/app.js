@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 
 import App from "./app/App.vue";
+import "./app/config/matomo.js";
 
 import { router } from "./app/config/rutes.js";
 import { customComponents } from "./app/config/customComponents.js";
