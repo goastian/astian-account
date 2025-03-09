@@ -1,56 +1,34 @@
 <template>
-    <v-card class="m-2">
-        <v-img
-            class="align-end text-white"
-            height="200"
+    <q-card class="q-mb-md">
+        <q-img
             src="/img/docks.jpg"
-            cover
+            height="200px"
+            class="text-white"
+            fit="cover"
         >
-            <v-card-title class="text-gray-500">
-                {{ $user.name }} {{ $user.last_name }}</v-card-title
-            >
-        </v-img>
+            <div class="absolute-bottom text-grey-4 q-pa-md">
+                {{ $user.name }} {{ $user.last_name }}
+            </div>
+        </q-img>
 
-        <v-card-subtitle class="pt-4"> {{ $user.phone }}</v-card-subtitle>
+        <q-card-section class="q-pt-md">
+            {{ $user.phone }}
+        </q-card-section>
 
-        <v-card-text>
+        <q-card-section>
             <div>{{ $user.name }}</div>
-
             <div>{{ $user.email }}</div>
-        </v-card-text>
+        </q-card-section>
 
-        <v-card-actions>
-            <v-btn color="orange" text="Share"></v-btn>
-
-            <v-btn color="orange" text="Explore"></v-btn>
-        </v-card-actions>
-    </v-card>
+        <q-card-actions align="right">
+            <q-btn color="orange" label="Share" />
+            <q-btn color="orange" label="Explore" />
+        </q-card-actions>
+    </q-card>
 </template>
 
 <script>
 export default {
-    data() {
-        return {
-            roles: [],
-        };
-    },
-
     inject: ["$user"],
-
-    created() {
-        this.scopes();
-    },
-    methods: {
-        async scopes() {
-            try {
-                const res = await this.$server.get("/api/oauth/scopes");
-                if (res.status === 200) {
-                    this.roles = res.data;
-                }
-            } catch (e) {
-                console.error("Error obteniendo los roles", e);
-            }
-        },
-    },
 };
 </script>

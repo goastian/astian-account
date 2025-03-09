@@ -136,12 +136,4 @@ class SettingController extends Controller
         return view('settings.section.filesystem');
     }
 
-    /**
-     * Show the view of 
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function terminal()
-    {
-        return view('settings.terminal');
-    }
 }

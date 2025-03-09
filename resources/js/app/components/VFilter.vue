@@ -1,114 +1,83 @@
 <template>
-    <div class="p-4 bg-white border rounded-lg shadow-md space-y-4">
-        <div
-            class="bg-blue-500 px-4 py-2 text-white font-semibold text-lg rounded-t-lg flex items-center justify-between"
+    <q-card class="q-pa-md">
+        <q-card-section
+            class="bg-primary text-white row items-center justify-between"
         >
-            <div>
-                <v-btn
-                    icon
-                    variant="tonal"
-                    class="me-2 text-white"
+            <div class="row items-center">
+                <q-btn
+                    flat
+                    dense
+                    round
+                    icon="mdi-filter-multiple-outline"
+                    class="q-mr-sm"
                     @click="show = !show"
-                >
-                    <v-icon icon="mdi-filter-multiple-outline"></v-icon>
-                </v-btn>
-                <span>Advanced Filters</span>
-            </div>
-            <v-btn icon variant="tonal" class="me-2 text-white" @click="clean">
-                <v-icon icon="mdi-broom"></v-icon>
-            </v-btn>
-        </div>
-
-        <div
-            v-show="show"
-            class="grid grid-cols-1 px-4 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4"
-        >
-            <!-- Searching -->
-            <div class="w-full">
-                <label
-                    for="filterValue"
-                    class="block text-sm font-semibold text-gray-700 mb-1"
-                >
-                    Searching
-                </label>
-                <input
-                    id="filterValue"
-                    type="text"
-                    v-model="inputValue"
-                    @input="emitFilterChange"
-                    placeholder="Type your search..."
-                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm py-2 px-4"
                 />
+                <span class="text-subtitle1">Advanced Filters</span>
             </div>
+            <q-btn flat dense round icon="mdi-broom" @click="clean" />
+        </q-card-section>
 
-            <!-- Searching by -->
-            <div class="w-full">
-                <label
-                    for="parameter"
-                    class="block text-sm font-semibold text-gray-700 mb-1"
-                >
-                    Searching by
-                </label>
-                <select
-                    id="parameter"
-                    v-model="selected_parameter"
-                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm py-2 px-4"
-                >
-                    <option disabled value="">Select a parameter</option>
-                    <option
-                        v-for="(item, index) in params"
-                        :key="index"
-                        :value="item.value"
-                    >
-                        {{ item.key }}
-                    </option>
-                </select>
-            </div>
+        <q-slide-transition>
+            <div v-show="show" class="q-pa-md">
+                <div class="row q-col-gutter-md">
+                    <!-- Searching -->
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <q-input
+                            v-model="inputValue"
+                            outlined
+                            dense
+                            label="Searching"
+                            @keyup="emitFilterChange"
+                            @input="emitFilterChange"
+                        />
+                    </div>
 
-            <!-- Order by -->
-            <div class="w-full">
-                <label
-                    for="orderBy"
-                    class="block text-sm font-semibold text-gray-700 mb-1"
-                >
-                    Order by
-                </label>
-                <select
-                    id="orderBy"
-                    v-model="order_by"
-                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm py-2 px-4"
-                >
-                    <option disabled value="">Select an order field</option>
-                    <option
-                        v-for="(item, index) in params"
-                        :key="index"
-                        :value="item.value"
-                    >
-                        {{ item.key }}
-                    </option>
-                </select>
-            </div>
+                    <!-- Searching by -->
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <q-select
+                            v-model="selected_parameter"
+                            :options="params"
+                            option-value="value"
+                            option-label="key"
+                            outlined
+                            dense
+                            label="Searching by"
+                            emit-value
+                            map-options
+                        />
+                    </div>
 
-            <!-- Order type -->
-            <div class="w-full">
-                <label
-                    for="orderType"
-                    class="block text-sm font-semibold text-gray-700 mb-1"
-                >
-                    Order type
-                </label>
-                <select
-                    id="orderType"
-                    v-model="order_type"
-                    class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 text-sm py-2 px-4"
-                >
-                    <option disabled value="">Select order type</option>
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </select>
+                    <!-- Order by -->
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <q-select
+                            v-model="order_by"
+                            :options="params"
+                            option-value="value"
+                            option-label="key"
+                            outlined
+                            dense
+                            label="Order by"
+                            emit-value
+                            map-options
+                        />
+                    </div>
+
+                    <!-- Order type -->
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <q-select
+                            v-model="order_type"
+                            :options="orderTypes"
+                            outlined
+                            dense
+                            label="Order type"
+                            emit-value
+                            map-options
+                        />
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
+        </q-slide-transition>
+    </q-card>
 </template>
 
 <script>
@@ -134,11 +103,16 @@ export default {
     },
     data() {
         return {
-            selected_parameter: this.params[0] || "",
+            selected_parameter:
+                this.params.length > 0 ? this.params[0].value : "",
             inputValue: "",
             show: false,
             order_by: "",
             order_type: "",
+            orderTypes: [
+                { label: "Ascending", value: "asc" },
+                { label: "Descending", value: "desc" },
+            ],
         };
     },
     methods: {

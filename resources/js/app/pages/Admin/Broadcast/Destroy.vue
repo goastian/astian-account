@@ -1,47 +1,41 @@
 <template>
-    <v-dialog max-width="400">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                v-bind="activatorProps"
-                color="red-accent-2"
-                icon
-                variant="tonal"
-            >
-                <v-icon icon="mdi-delete-circle-outline"></v-icon>
-            </v-btn>
-        </template>
+    <q-dialog v-model="dialog" persistent>
+        <q-card class="w-100">
+            <q-card-section>
+                <div class="text-h6">Delete channel</div>
+            </q-card-section>
 
-        <template v-slot:default="{ isActive }">
-            <v-card>
-                <v-card-title>Delete channel </v-card-title>
-                <v-card-text>
-                    This channel will be removed. This action cannot be undone.
-                    Are you sure you want to proceed?
-                </v-card-text>
+            <q-card-section>
+                This channel will be removed. This action cannot be undone. Are
+                you sure you want to proceed?
+            </q-card-section>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        @click="destroy(isActive)"
-                        color="blue-darken-1"
-                        prepend-icon="mdi-content-save-alert"
-                        class="mx-4"
-                        variant="flat"
-                    >
-                        proceed
-                    </v-btn>
-                    <v-btn
-                        @click="close(isActive)"
-                        prepend-icon="mdi-close-circle"
-                        variant="flat"
-                        color="red-lighten-1"
-                    >
-                        Cancel
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </template>
-    </v-dialog>
+            <q-card-actions align="right">
+                <q-btn
+                    label="Save"
+                    icon="mdi-content-save-alert"
+                    color="primary"
+                    @click="destroy"
+                />
+                <q-btn
+                    label="Close"
+                    icon="mdi-close-circle"
+                    color="negative"
+                    @click="dialog = false"
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+    <q-btn
+        class="glossy"
+        round
+        flat
+        color="red"
+        icon="mdi-delete-circle-outline"
+        @click="dialog = true"
+    >
+        <q-tooltip>Delete channel</q-tooltip>
+    </q-btn>
 </template>
 <script>
 export default {
@@ -57,17 +51,11 @@ export default {
     data() {
         return {
             errors: {},
+            dialog: false,
         };
     },
 
     methods: {
-        /**
-         *  reset keys when the windows is closed
-         */
-        close(isActive) {
-            isActive.value = false;
-        },
-
         /**
          * Create a new user in the system
          *
@@ -79,13 +67,19 @@ export default {
                 if (res.status == 200) {
                     this.errors = {};
                     this.$emit("deleted", true);
-                    this.$notification.success(
-                        "The channel has been deleted successfully"
-                    );
+                    this.$q.notify({
+                        type: "positive",
+                        message: "The channel has been deleted successfully",
+                        timeout: 3000,
+                    });
                 }
             } catch (e) {
                 if (e.response && e.response.data && e.response.data.message) {
-                    this.$notification.success(e.response.data.message);
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
                 }
             } finally {
                 isActive.value = false;

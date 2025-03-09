@@ -1,163 +1,111 @@
 <template>
-    <v-dialog max-width="500">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                v-bind="activatorProps"
-                color="blue-lighten-1"
-                icon
-                variant="tonal"
-                @click="loadData(item)"
-            >
-                <v-icon icon="mdi-pencil"></v-icon>
-            </v-btn>
-        </template>
+    <q-dialog v-model="dialog" persistent>
+        <q-card class="q-pa-md w-100">
+            <q-card-section>
+                <div class="text-h6">Update User</div>
+            </q-card-section>
 
-        <template v-slot:default="{ isActive }">
-            <v-card>
-                <v-card-title> Update user </v-card-title>
-                <v-card-text>
-                    <div class="grid grid-cols-1">
-                        <!-- Name -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Name"
-                                type="text"
-                                v-model="item.name"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
-                            <v-error :error="errors.name"></v-error>
-                        </div>
+            <q-card-section class="q-gutter-md">
+                <!-- Name -->
+                <q-input
+                    v-model="item.name"
+                    label="Name"
+                    outlined
+                    dense
+                    :error="!!errors.name"
+                />
+                <q-input
+                    v-model="item.last_name"
+                    label="Last Name"
+                    outlined
+                    dense
+                    :error="!!errors.last_name"
+                />
+                <q-input
+                    v-model="item.email"
+                    label="Email"
+                    type="email"
+                    outlined
+                    dense
+                    :error="!!errors.email"
+                />
 
-                        <!-- Last Name -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Last name"
-                                type="text"
-                                v-model="item.last_name"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
-                            <v-error :error="errors.last_name"></v-error>
-                        </div>
+                <!-- Country -->
+                <q-select
+                    v-model="item.country"
+                    label="Country"
+                    outlined
+                    dense
+                    :options="
+                        countries.map((c) => ({
+                            label: `${c.emoji} ${c.name_en}`,
+                            value: c.name_en,
+                        }))
+                    "
+                    emit-value
+                    map-options
+                    :error="!!errors.country"
+                />
 
-                        <!-- Email -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Email"
-                                type="email"
-                                v-model="item.email"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
-                            <v-error :error="errors.email"></v-error>
-                        </div>
+                <!-- Dial Code -->
+                <q-select
+                    v-model="item.dial_code"
+                    label="Dial Code"
+                    outlined
+                    dense
+                    :options="
+                        countries.map((c) => ({
+                            label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
+                            value: c.dial_code,
+                        }))
+                    "
+                    emit-value
+                    map-options
+                    :error="!!errors.dial_code"
+                />
 
-                        <!-- Country -->
-                        <div class="w-full mb-2">
-                            <label
-                                class="block text-gray-700 text-sm font-bold mb-2"
-                            >
-                                Country
-                            </label>
-                            <select
-                                v-model="item.country"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            >
-                                <option
-                                    v-for="country in countries"
-                                    :key="country.name_en"
-                                    :value="country.name_en"
-                                >
-                                    {{ country.emoji }} {{ country.name_en }}
-                                </option>
-                            </select>
-                            <v-error :error="errors.country"></v-error>
-                        </div>
+                <!-- Phone -->
+                <q-input
+                    v-model="item.phone"
+                    label="Phone Number"
+                    outlined
+                    dense
+                    :error="!!errors.phone"
+                />
 
-                        <!-- Dial Code -->
-                        <div class="w-full mb-2">
-                            <label
-                                class="block text-gray-700 text-sm font-bold mb-2"
-                                >Dial Code</label
-                            >
-                            <select
-                                v-model="item.dial_code"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            >
-                                <option
-                                    v-for="country in countries"
-                                    :key="country.dial_code"
-                                    :value="country.dial_code"
-                                >
-                                    {{ country.emoji }}
-                                    {{ country.name_en }} ({{
-                                        country.dial_code
-                                    }})
-                                </option>
-                            </select>
-                            <v-error :error="errors.dial_code"></v-error>
-                        </div>
-
-                        <!-- Phone -->
-                        <div class="w-full mb-2">
-                            <input
-                                placeholder="Phone Number"
-                                type="text"
-                                v-model="item.phone"
-                                class="w-full px-3 py-2 border rounded-lg focus:ring focus:ring-blue-300"
-                            />
-                            <v-error :error="errors.phone"></v-error>
-                        </div>
-
-                        <!-- Birthday -->
-                        <div class="w-full mb-2">
-                            <label
-                                class="block text-gray-700 text-sm font-bold mb-2"
-                                >Birthday</label
-                            >
-                            <VueDatePicker
-                                v-model="birthday"
-                                :enable-time-picker="false"
-                                :max-date="new Date()"
-                                format="yyyy-MM-dd"
-                            />
-
-                            <v-error :error="errors.birthday"></v-error>
-                        </div>
-
-                        <div class="w-full mb-2">
-                            <v-checkbox
-                                density="compact"
-                                v-model="verify_email"
-                                label="Mark user email as verified"
-                                variant="solo"
-                            ></v-checkbox>
-                        </div>
-                    </div>
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        @click="update"
-                        color="blue-darken-1"
-                        prepend-icon="mdi-content-save-alert"
-                        class="mx-4"
-                        variant="flat"
+                <!-- Birthday -->
+                <div class="w-full mb-2">
+                    <label class="block text-gray-700 text-sm font-bold mb-2"
+                        >Birthday</label
                     >
-                        Save
-                    </v-btn>
-                    <v-btn
-                        @click="close(isActive)"
-                        prepend-icon="mdi-close-circle"
-                        variant="flat"
-                        color="red-lighten-1"
-                    >
-                        Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </template>
-    </v-dialog>
+                    <VueDatePicker
+                        v-model="item.birthday"
+                        :enable-time-picker="false"
+                        :max-date="new Date()"
+                        format="yyyy-MM-dd"
+                    />
+
+                    <v-error :error="errors.birthday"></v-error>
+                </div>
+
+                <!-- Email Verified Checkbox -->
+                <q-checkbox
+                    v-model="verify_email"
+                    label="Mark user email as verified"
+                    dense
+                />
+            </q-card-section>
+
+            <q-card-actions align="right">
+                <q-btn flat label="Close" color="red" @click="dialog = false" />
+                <q-btn flat label="Save" color="blue" @click="update" />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
+
+    <q-btn icon="edit" color="primary" round flat dense @click="loadData(item)" />
 </template>
+
 <script>
 export default {
     emits: ["updated"],
@@ -175,6 +123,7 @@ export default {
             countries: [],
             verify_email: false,
             birthday: null,
+            dialog: false,
         };
     },
 
@@ -199,6 +148,7 @@ export default {
         async loadData(item) {
             this.verify_email = item.verify_email;
             await this.getCountries();
+            this.dialog = true;
         },
 
         /**

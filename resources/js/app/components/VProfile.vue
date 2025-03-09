@@ -1,48 +1,51 @@
 <template>
     <div class="text-center">
-        <v-menu v-model="menu" :close-on-content-click="false" location="end">
-            <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" icon="mdi-dots-vertical"></v-btn>
-            </template>
+        <q-btn flat round icon="mdi-dots-vertical">
+            <q-menu fit anchor="bottom right" self="top right">
+                <q-card style="min-width: 200px">
+                    <q-list>
+                        <q-item>
+                            <q-item-section>
+                                <q-item-label
+                                    >{{ $user.name }}
+                                    {{ $user.last_name }}</q-item-label
+                                >
+                                <q-item-label caption>{{
+                                    $user.email
+                                }}</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
 
-            <v-card min-width="200">
-                <v-list>
-                    <v-list-item
-                        :subtitle="$user.email"
-                        :title="$user.name + ' ' + $user.last_name"
-                    >
-                    </v-list-item>
-                </v-list>
+                    <q-separator />
 
-                <v-divider></v-divider>
-
-                <v-list>
-                    <v-list-item @click="logout"> Logout </v-list-item>
-                </v-list>
-            </v-card>
-        </v-menu>
+                    <q-list>
+                        <q-item clickable v-close-popup @click="logout">
+                            <q-item-section>
+                                <q-item-label>Logout</q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </q-card>
+            </q-menu>
+        </q-btn>
     </div>
 </template>
+
 <script>
 export default {
-    data() {
-        return {
-            menu: false,
-            fav: false,
-        };
-    },
-
     inject: ["$user"],
 
     methods: {
         async logout() {
             try {
-                const res = await this.$server.post("logout");
-
-                if (res.status == 200) {
+                const res = await this.$server.post("/logout");
+                if (res.status === 200) {
                     window.location.href = "/";
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.error("Error logging out:", error);
+            }
         },
     },
 };

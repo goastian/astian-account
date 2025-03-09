@@ -1,71 +1,57 @@
 <template>
-    <v-dialog max-width="800">
-        <template v-slot:activator="{ props: activatorProps }">
-            <v-btn
-                v-bind="activatorProps"
-                color="blue-lighten-1"
-                icon
-                variant="tonal"
-                @click="open(item)"
-            >
-                <v-icon icon="mdi-plus"></v-icon>
-            </v-btn>
-        </template>
+    <q-btn round flat color="primary" @click="open(item)" icon="mdi-pencil" />
 
-        <template v-slot:default="{ isActive }">
-            <v-card>
-                <v-card-title> Update new client </v-card-title>
-                <v-card-text>
-                    <v-row>
-                        <!-- Name -->
-                        <v-col sm="12" class="py-1">
-                            <v-text-field
-                                v-model="form.name"
-                                label="Name"
-                                variant="solo"
-                            >
-                                <template #details>
-                                    <v-error :error="errors.name"></v-error>
-                                </template>
-                            </v-text-field>
-                        </v-col>
-                        <v-col sm="12" class="py-1">
-                            <v-text-field
-                                v-model="form.redirect"
-                                label="Name"
-                                variant="solo"
-                            >
-                                <template #details>
-                                    <v-error :error="errors.redirect"></v-error>
-                                </template>
-                            </v-text-field>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
+    <q-dialog
+        v-model="dialog"
+        persistent
+        transition-show="scale"
+        transition-hide="scale"
+    >
+        <q-card class="w-100 py-4">
+            <q-card-section class="text-center">
+                <h6 class="text-gray-500">Update client</h6>
+            </q-card-section>
+            <q-card-section>
+                <q-input
+                    v-model="form.name"
+                    label="Name"
+                    dense="dense"
+                    :error="!!errors.name"
+                >
+                    <template v-slot:error>
+                        <v-error :error="errors.name"></v-error>
+                    </template>
+                </q-input>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        @click="create(isActive)"
-                        color="blue-darken-1"
-                        prepend-icon="mdi-content-save-alert"
-                        class="mx-4"
-                        variant="flat"
-                    >
-                        Save
-                    </v-btn>
-                    <v-btn
-                        @click="close(isActive)"
-                        prepend-icon="mdi-close-circle"
-                        variant="flat"
-                        color="red-lighten-1"
-                    >
-                        Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </template>
-    </v-dialog>
+                <q-input
+                    v-model="form.redirect"
+                    label="Redirect"
+                    dense="dense"
+                    :error="!!errors.redirect"
+                >
+                    <template v-slot:error>
+                        <v-error :error="errors.redirect"></v-error>
+                    </template>
+                </q-input>
+            </q-card-section>
+
+            <q-card-actions align="right" class="bg-white text-teal">
+                <q-btn
+                    dense="dense"
+                    color="primary"
+                    label="Accept"
+                    @click="updateClient"
+                />
+
+                <q-btn
+                    dense="dense"
+                    caolor="secondary"
+                    label="Close"
+                    @click="close"
+                />
+            </q-card-actions>
+        </q-card>
+    </q-dialog>
 </template>
 <script>
 export default {
@@ -85,21 +71,24 @@ export default {
                 redirect: "",
             },
             form: {},
+            dialog: false,
         };
     },
 
     methods: {
-        close(isActive) {
+        close() {
             this.form = {};
             this.errors = {};
-            isActive.value = false;
+            this.dialog = false;
         },
 
         open(item) {
             this.form = item;
+            this.errors = {};
+            this.dialog = true;
         },
 
-        async updateClient(isActive) {
+        async updateClient() {
             try {
                 const res = await this.$server.put(
                     this.form.links.update,
@@ -109,7 +98,7 @@ export default {
                 if (res.status == 200) {
                     this.$emit("updated", true);
                     this.errors = {};
-                    isActive.value = false;
+                    this.dialog = false;
                 }
             } catch (e) {
                 if (e.response && e.response.status == 422) {
