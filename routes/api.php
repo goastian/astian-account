@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Setting\TerminalController;
+use App\Http\Controllers\Subscription\PlanPriceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserGroupController;
@@ -92,6 +93,8 @@ Route::group([
     Route::resource('plans', PlanController::class)->except('edit', 'create');
     Route::post('plans/{plan}/scopes', [PlanScopeController::class, 'assign'])->name('plans.scopes.assign');
     Route::put('plans/{plan}/scopes', [PlanScopeController::class, 'revoke'])->name('plans.scopes.revoke');
+    Route::post('plans/{plan}/prices', [PlanPriceController::class, 'store'])->name('plans.prices.store');
+    Route::delete('plans/{plan}/prices/{price}', [PlanPriceController::class, 'destroy'])->name('plans.prices.destroy');
 
     Route::resource('terminals', TerminalController::class)->only('index', 'store');
 });
