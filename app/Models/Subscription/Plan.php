@@ -2,11 +2,13 @@
 namespace App\Models\Subscription;
 
 use App\Models\Master;
+use App\Models\Subscription\Price;
 use App\Models\Subscription\Scope;
 use App\Models\Subscription\Package;
 use App\Transformers\Subscription\PlanTransformer;
 use App\Transformers\Subscription\ScopeTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Transformers\Subscription\PlanPriceTransformer;
 
 class Plan extends Master
 {
@@ -19,7 +21,7 @@ class Plan extends Master
     protected $fillable = [
         'name',
         'slug',
-        'description', 
+        'description',
         'public',
         'active'
     ];
@@ -52,4 +54,21 @@ class Plan extends Master
         return $this->hasMany(Package::class);
     }
 
+    /**
+     * Summary of prices
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
+     */
+    public function prices()
+    {
+        return $this->morphMany(Price::class, 'priceable');
+    }
+
+    /**
+     * Prices
+     */
+    public function priceable()
+    {
+        $prices = fractal($this->prices()->get(), PlanPriceTransformer::class);
+        return json_decode(json_encode($prices))->data;
+    }
 }
