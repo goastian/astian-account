@@ -156,7 +156,7 @@ export default {
         },
 
         searching(event) {
-            this.getUsers(event);
+            this.getClients(event);
         },
 
         getClients(param = null) {
