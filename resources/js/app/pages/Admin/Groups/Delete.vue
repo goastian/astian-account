@@ -61,7 +61,6 @@ export default {
     methods: {
         async destroy() {
             try {
-                console.log(this.item.links)
                 const res = await this.$server.delete(this.item.links.destroy);
 
                 if (res.status == 200) {
