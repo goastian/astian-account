@@ -85,12 +85,17 @@ export default {
                         {
                             name: "Users",
                             route: "admin.users.index",
-                            icon: "mdi-account-group",
+                            icon: "mdi-account-multiple",
                         },
                         {
                             name: "Clients",
                             route: "admin.clients.index",
                             icon: "mdi-apps",
+                        },
+                        {
+                            name: "Groups",
+                            route: "admin.groups.index",
+                            icon: "mdi-account-group",
                         },
                         {
                             name: "Broadcasts",
