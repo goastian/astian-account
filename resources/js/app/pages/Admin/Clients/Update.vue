@@ -83,7 +83,7 @@ export default {
         },
 
         open(item) {
-            this.form = item;
+            this.form = { ...item };
             this.errors = {};
             this.dialog = true;
         },
