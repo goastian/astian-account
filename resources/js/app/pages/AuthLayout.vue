@@ -98,6 +98,11 @@ export default {
                             icon: "mdi-account-group",
                         },
                         {
+                            name: "Roles",
+                            route: "admin.roles.index",
+                            icon: "mdi-format-list-group"
+                        },
+                        {
                             name: "Broadcasts",
                             route: "admin.broadcasts.index",
                             icon: "mdi-broadcast",
