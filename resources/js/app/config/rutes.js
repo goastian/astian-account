@@ -34,6 +34,12 @@ const routes = [
                             import("../pages/Admin/Broadcast/Index.vue"),
                     },
                     {
+                        path: "groups",
+                        name: "admin.groups.index",
+                        component: () =>
+                            import("../pages/Admin/Groups/Index.vue"),
+                    },
+                    {
                         path: "roles",
                         name: "admin.roles.index",
                         component: () =>
