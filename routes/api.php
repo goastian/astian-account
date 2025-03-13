@@ -33,6 +33,7 @@ Route::prefix('gateway')->group(function () {
     Route::get('/check-client-credentials', [PassportConnectController::class, 'check_client_credentials']);
     Route::get('/token-can', [PassportConnectController::class, 'token_can']);
     Route::get('/user', [PassportConnectController::class, 'authenticated']);
+    Route::get('/access', [PassportConnectController::class, 'access']);
     Route::post('/logout', [PassportConnectController::class, 'revokeAuthorization']);
 });
 

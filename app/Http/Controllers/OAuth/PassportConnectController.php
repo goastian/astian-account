@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\OAuth;
 
-use Log;
-use Http;
-use Response;
-use ErrorException;
+use App\Traits\Scopes;
 use Illuminate\Http\Request;
 use Laravel\Passport\TokenRepository;
 use App\Http\Controllers\GlobalController;
@@ -13,6 +10,9 @@ use Laravel\Passport\RefreshTokenRepository;
 
 class PassportConnectController extends GlobalController
 {
+
+    use Scopes;
+
     public function __construct()
     {
         //headers
@@ -109,5 +109,13 @@ class PassportConnectController extends GlobalController
         $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
 
         return $this->message(__('Session finished successfully'), 200);
+    }
+
+    /**
+     * Get the all available scopes for the auth user
+     */
+    public function access()
+    {
+        return $this->availableScopes();
     }
 }
