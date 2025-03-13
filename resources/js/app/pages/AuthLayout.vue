@@ -98,6 +98,11 @@ export default {
                             icon: "mdi-account-group",
                         },
                         {
+                            name: "Services",
+                            route: "admin.services.index",
+                            icon: "mdi-text-box-check"
+                        },
+                        {
                             name: "Roles",
                             route: "admin.roles.index",
                             icon: "mdi-format-list-group"
