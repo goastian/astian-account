@@ -40,11 +40,11 @@ class PlanTransformer extends TransformerAbstract
             'name' => $plan->name,
             'slug' => $plan->slug,
             'description' => $plan->description,
-            'price' => $plan->price,
             'public' => $plan->public,
             'created' => $this->format_date($plan->created_at),
             'updated' => $this->format_date($plan->updated_at),
             'scopes' => $plan->assignedScopes(),
+            'prices' => $plan->priceable(),
             'links' => [
                 'parent' => route('admin.plans.index'),
                 'store' => route('admin.plans.store'),
@@ -70,7 +70,6 @@ class PlanTransformer extends TransformerAbstract
             'name' => 'name',
             'slug' => 'slug',
             'description' => 'description',
-            'price' => 'price',
             'public' => 'public',
             'created' => 'created_at',
             'updated' => 'updated_at'
