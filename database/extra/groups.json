@@ -393,6 +393,67 @@
                         "api_key": 1
                     }
                 ]
+            },
+            {
+                "name": "settings",
+                "description": "Service to manage application settings",
+                "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    }
+                ]
+            },
+
+            {
+                "name": "vpn",
+                "description": "Service to manage and configure VPN access and connections",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "create",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "update",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "show",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "destroy",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    }
+                ]
             }
         ]
     },
@@ -465,5 +526,39 @@
     {
         "name": "member",
         "description": "Default user with the lowest level of access who signs up"
+    },
+    {
+        "name": "commerce",
+        "description": "Collection of paid services including cloud computing, VPN, and other premium infrastructure solutions.",
+        "services": [
+            {
+                "name": "vpn",
+                "description": "Service to manage, configure, and process payments for VPN access and subscriptions",
+                "actions": [
+                    {
+                        "name": "basic",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "intermediate",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "advanced",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "name": "enterprise",
+        "description": "Exclusive services designed for businesses, providing advanced cloud solutions, dedicated infrastructure, and enterprise-grade security."
     }
 ]
