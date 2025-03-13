@@ -66,5 +66,21 @@
     {
         "name": "execute",
         "description": "Allows a user or group to run authorized commands within the system."
+    },
+    {
+        "name": "reset",
+        "description": "Allows a user or group to restore settings or data to their default state."
+    },
+    {
+        "name": "basic",
+        "description": "Provides access to essential features for individual users."
+    },
+    {
+        "name": "intermediate",
+        "description": "Includes additional features and support for growing needs."
+    },
+    {
+        "name": "advanced",
+        "description": "Unlocks all premium features with full access and support."
     }
 ]
