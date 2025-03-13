@@ -42,11 +42,9 @@ class ScopeTransformer extends TransformerAbstract
             'role_id' => $data->role_id,
             'role_slug' => $data->role->slug,
             'role_description' => $data->role->description,
-            'requires_payment' => $data->requires_payment,
             'public' => $data->public,
             'active' => $data->active,
-            'price' => number_format($data->price, 2),
-            'gsr_id' => $data->getGsrID(), 
+            'gsr_id' => $data->getGsrID(),
             'created' => $this->format_date($data->created_at),
             'updated' => $this->format_date($data->updated_at),
             'links' => [
@@ -71,7 +69,7 @@ class ScopeTransformer extends TransformerAbstract
             'slug' => "slug",
             'description' => "service",
             'system' => "system",
-            'group_id' => "group_id", 
+            'group_id' => "group_id",
             'created' => "created_at",
             'updated' => "updated_at",
         ];

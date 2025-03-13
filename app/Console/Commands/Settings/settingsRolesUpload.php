@@ -46,7 +46,7 @@ class settingsRolesUpload extends Command
     {
         $roles = Role::rolesByDefault();
         foreach ($roles as $role) {
-            Role::updateOrCreate(
+            Role::firstOrCreate(
                 ['name' => $role->name],
                 [
                     'name' => $role->name,
@@ -67,54 +67,62 @@ class settingsRolesUpload extends Command
     {
         $groups = Group::groupByDefault();
 
-        foreach ($groups as $key => $value) {
+        foreach ($groups as $grp) {
 
             //upload system groups
-            $group = Group::updateOrcreate(
-                ['name' => $value->name],
+            $group = Group::firstOrCreate(
                 [
-                    'name' => $value->name,
-                    'slug' => $this->slug($value->name),
-                    'description' => $value->description,
+                    'slug' => $this->slug($grp->name)
+                ],
+                [
+                    'name' => $grp->name,
+                    'slug' => $this->slug($grp->name),
+                    'description' => $grp->description,
                     'system' => 1
                 ]
             );
             //checking if it has services
-            if (isset($value->services)) {
-                foreach ($value->services as $key1 => $value1) {
-                    //Uploading Services Available for this groups
-                    $service = Service::updateOrCreate(
-                        ['name' => $value1->name],
-                        [
-                            'name' => $value1->name,
-                            'slug' => $this->slug($value1->name),
-                            'description' => $value1->description,
-                            'system' => 1,
-                            'group_id' => $group->id
-                        ]
-                    );
+            if (isset($grp->services)) {
+                foreach ($grp->services as $srv) {
+                    try {
+                        //Uploading Services Available for this groups
+                        $service = Service::firstOrCreate(
+                            [
+                                'name' => $this->slug($srv->name),
+                                'group_id' => $group->id
+                            ],
+                            [
+                                'name' => $srv->name,
+                                'slug' => $this->slug($srv->name),
+                                'description' => $srv->description,
+                                'system' => 1,
+                                'group_id' => $group->id
+                            ]
+                        );
 
-                    //check for this services has actions
-                    if (isset($value1->actions)) {
-                        foreach ($value1->actions as $key1 => $value2) {
-                            //searching for action in roles Model
-                            $role = Role::where('name', $value2->name)->first();
+                        //check for this services has actions
+                        if (isset($srv->actions)) {
+                            foreach ($srv->actions as $action) {
+                                //searching for action in roles Model
+                                $role = Role::where('name', $action->name)->first();
 
-                            //create default scopes for this service
-                            Scope::updateOrCreate(
-                                [
-                                    'service_id' => $service->id,
-                                    'role_id' => $role->id
-                                ],
-                                [
-                                    'service_id' => $service->id,
-                                    'role_id' => $role->id,
-                                    'api_key' => $value2->api_key,
-                                    'public' => $value2->public,
-                                    'active' => $value2->active,
-                                ]
-                            );
+                                //create default scopes for this service
+                                Scope::firstOrCreate(
+                                    [
+                                        'service_id' => $service->id,
+                                        'role_id' => $role->id
+                                    ],
+                                    [
+                                        'service_id' => $service->id,
+                                        'role_id' => $role->id,
+                                        'api_key' => $action->api_key,
+                                        'public' => $action->public,
+                                        'active' => $action->active,
+                                    ]
+                                );
+                            }
                         }
+                    } catch (\Throwable $th) {
                     }
                 }
             }
