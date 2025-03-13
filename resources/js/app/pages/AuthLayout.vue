@@ -108,6 +108,11 @@ export default {
                             icon: "mdi-format-list-group"
                         },
                         {
+                            name: "Scopes",
+                            route: "admin.scopes.index",
+                            icon: "mdi-circle-outline"
+                        },
+                        {
                             name: "Broadcasts",
                             route: "admin.broadcasts.index",
                             icon: "mdi-broadcast",
