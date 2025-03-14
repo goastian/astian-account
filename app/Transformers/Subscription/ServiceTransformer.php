@@ -1,6 +1,7 @@
 <?php
 namespace App\Transformers\Subscription;
 
+use App\Models\Subscription\Service;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
@@ -31,14 +32,14 @@ class ServiceTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($data)
+    public function transform(Service $data)
     {
         return [
             'id' => $data->id,
             'name' => $data->name,
             'slug' => $data->slug,
             'description' => $data->description,
-            'system' => $data->system,
+            'system' => $data->system ? true : false,
             'group_id' => $data->group_id,
             'group_name' => $data->group->name,
             'created' => $this->format_date($data->created_at),

@@ -17,6 +17,9 @@ return new class extends Migration {
             $table->uuid('package_id')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->timestamps();
+
+            $table->foreign('scope_id')->references('id')->on('scopes')->onDelete('RESTRICT');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('RESTRICT');
         });
     }
 
