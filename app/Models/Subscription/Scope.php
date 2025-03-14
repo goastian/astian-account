@@ -36,7 +36,6 @@ class Scope extends Master
      * @var array
      */
     protected $casts = [
-        'requires_payment' => 'boolean',
         'public' => 'boolean',
         'active' => 'boolean',
     ];
