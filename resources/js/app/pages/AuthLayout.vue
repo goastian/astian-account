@@ -2,6 +2,7 @@
     <q-layout view="hHh Lpr lff" v-if="$user.id">
         <q-header elevated="false" class="header">
             <q-toolbar>
+                <q-btn dense flat round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
                 <div class="header-title">
                     <q-img src="/img/icon.webp" />
                     <h1>Astian Account</h1>
@@ -12,15 +13,15 @@
         </q-header>
 
         <q-drawer
-            v-mode="leftDrawerOpen"
+            v-model="leftDrawerOpen"
             show-if-above
-            :width="350"
-            :breakpoint="400"
+            :width="300"
+            :breakpoint="500"
+            class="nav"
         >
-            <q-scroll-area class="nav-sroll">
-                <q-list class="nav-list column q-gutter-y-sm">
+            <q-scroll-area class="nav-scroll">
+                <q-list padding class="menu-list">
                     <q-expansion-item
-                        v-if="$user.groups[0].slug == 'administrator'"
                         v-for="(menu, index) in menus"
                         :key="index"
                         expand-separator
@@ -34,38 +35,25 @@
                             clickable
                             v-ripple
                             @click="open(item)"
+                            class="item-admin"
+                            :active="$route.name == item.route"
+                            active-class="active"
                         >
                             <q-item-section avatar>
-                                <q-icon color="blue" :name="item.icon" />
+                                <q-icon :name="item.icon" />
                             </q-item-section>
                             <q-item-section>
                                 {{ item.name }}
                             </q-item-section>
                         </q-item>
                     </q-expansion-item>
-                    <q-item
-                        v-else
-                        v-for="(item, index) in nav"
-                        :key="index"
-                        clickable
-                        @click="open(item)"
-                        class="item-user"
-                        :active="$route.name == item.route"
-                        active-class="active-link"
-                    >
-                        <q-item-section avatar>
-                            <q-icon :name="item.icon" />
-                        </q-item-section>
-                        <q-item-section>
-                            {{ item.name }}
-                        </q-item-section>
-                    </q-item>
                 </q-list>
             </q-scroll-area>
         </q-drawer>
-
         <q-page-container>
-            <router-view />
+            <q-page :class="{ 'no-radius': !leftDrawerOpen }">
+                <router-view />
+            </q-page>
         </q-page-container>
 
         <q-page v-if="!$user.id" class="fixed-full flex flex-center bg-white">
@@ -229,7 +217,7 @@ export default {
 }
 
 .header-title {
-    width: 325px;
+    width: 200px;
     height: 42px;
     display: flex;
     align-items: center;
@@ -246,13 +234,27 @@ export default {
     font-size: 1rem;
 }
 
-.nav-sroll {
+.nav-scroll {
     height: 100%;
     padding: 1rem 0;
 }
 
 .nav-list {
     padding: 0 1rem;
+}
+
+.item-admin {
+    color: var(--text-link);
+}
+
+.item-admin:hover {
+    background-color: var(--bg-link-hover);
+    color: var(--text-link-hover);
+}
+
+.active {
+    background-color: var(--bg-link-active);
+    color: var(--text-link-active);
 }
 
 .item-user {
@@ -269,5 +271,17 @@ export default {
 .item-user:hover {
     background-color: var(--bg-link-hover);
     color: var(--text-link-hover);
+}
+
+.q-page {
+    width: auto;
+    padding: 1rem;
+    background-color: var(--bg-main);
+    border-radius: 1.5rem 0 0 0;
+    border: .08rem solid var(--border-color);
+}
+
+.no-radius {
+    border-radius: 0;
 }
 </style>
