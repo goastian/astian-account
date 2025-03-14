@@ -1,9 +1,11 @@
 <template>
     <q-layout view="hHh Lpr lff" v-if="$user.id">
-        <q-header elevated class="">
+        <q-header elevated="false" class="header">
             <q-toolbar>
-                <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-                <q-toolbar-title> {{ $app_name }} </q-toolbar-title>
+                <div class="header-title">
+                    <q-img src="/img/icon.webp" />
+                    <h1>Astian Account</h1>
+                </div>
                 <q-space />
                 <v-profile />
             </q-toolbar>
@@ -221,21 +223,26 @@ export default {
     width: 250px;
 }
 
-.nav-top {
-    height: 60px;
-    padding: 0 1rem;
+.header {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+.header-title {
+    width: 325px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 1rem;
 }
 
-.nav-top .q-img {
+.header-title .q-img {
     width: 30px;
     height: 30px;
 }
 
-.nav-top h1 {
+.header-title h1 {
     font-size: 1rem;
 }
 
