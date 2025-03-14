@@ -1,5 +1,6 @@
 <template>
     <q-page>
+        <v-filter :params="params" @change="searching"></v-filter>
         <q-table
             flat
             bordered
@@ -110,6 +111,9 @@ export default {
                     field: "actions",
                     align: "center",
                 },
+            ],
+            params: [
+                { key: "Name", value: "name" },
             ],
             pages: {
                 total_pages: 0,
