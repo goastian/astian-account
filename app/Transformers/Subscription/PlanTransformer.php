@@ -40,7 +40,7 @@ class PlanTransformer extends TransformerAbstract
             'name' => $plan->name,
             'slug' => $plan->slug,
             'description' => $plan->description,
-            'public' => $plan->public,
+            'public' => $plan->public ? true : false,
             'created' => $this->format_date($plan->created_at),
             'updated' => $this->format_date($plan->updated_at),
             'scopes' => $plan->assignedScopes(),
