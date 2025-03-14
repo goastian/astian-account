@@ -36,7 +36,7 @@ class RoleTransformer extends TransformerAbstract
             'name' => $role->name,
             'slug' => $role->slug,
             'description' => $role->description,
-            'system' => $role->system, 
+            'system' => $role->system ? true : false,
             'links' => [
                 'index' => route('admin.roles.index'),
                 'store' => route('admin.roles.store'),

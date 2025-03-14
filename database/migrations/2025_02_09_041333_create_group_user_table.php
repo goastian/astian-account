@@ -13,6 +13,10 @@ return new class extends Migration {
         Schema::create('group_user', function (Blueprint $table) {
             $table->uuid('user_id');
             $table->uuid('group_id');
+
+            $table->unique(['user_id', 'group_id']);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('RESTRICT');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('RESTRICT');
         });
     }
 

@@ -2,6 +2,7 @@
 namespace App\Transformers\Subscription;
 
 
+use App\Models\Subscription\Group;
 use League\Fractal\TransformerAbstract;
 
 class GroupTransformer extends TransformerAbstract
@@ -29,14 +30,14 @@ class GroupTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($group)
+    public function transform(Group $group)
     {
         return [
             'id' => $group->id,
             'name' => $group->name,
             'slug' => $group->slug,
             'description' => $group->description,
-            'system' => $group->system, 
+            'system' => $group->system ? true : false,
             'links' => [
                 'index' => route('admin.groups.index'),
                 'store' => route('admin.groups.store'),

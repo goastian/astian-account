@@ -21,7 +21,9 @@ return new class extends Migration {
             $table->boolean('api_key')->default(false);
             $table->timestamps();
 
-            $table->unique(['service_id', 'role_id']);            
+            $table->unique(['service_id', 'role_id']);
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('RESTRICT');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('RESTRICT');
         });
     }
 
