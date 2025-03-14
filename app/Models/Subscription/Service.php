@@ -2,7 +2,7 @@
 
 namespace App\Models\Subscription;
 
-use App\Models\Master; 
+use App\Models\Master;
 use App\Models\Subscription\Group;
 use App\Models\Subscription\Scope;
 use App\Transformers\Subscription\ServiceTransformer;
@@ -34,6 +34,10 @@ class Service extends Master
         'description',
         'group_id',
         'system'
+    ];
+
+    protected $casts = [
+        'system' => 'boolean',
     ];
 
     /**

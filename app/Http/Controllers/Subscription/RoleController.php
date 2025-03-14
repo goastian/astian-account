@@ -110,20 +110,14 @@ class RoleController extends Controller
 
         DB::transaction(function () use ($request, $role) {
 
-            $can_update = false;
+            $update = false;
 
-            if ($this->is_different($role->description, $request->description)) {
-                $can_update = true;
+            if ($request->has('description') && $role->description != $request->description) {
+                $update = true;
                 $role->description = $request->description;
             }
 
-            if ($this->is_different($role->system, $request->system)) {
-                $role->system = $request->system;
-                $can_update = true;
-            }
-
-            if ($can_update) {
-
+            if ($update) {
                 $role->push();
                 //send event
                 $this->privateChannel("UpdateRoleEvent", "Role updated");

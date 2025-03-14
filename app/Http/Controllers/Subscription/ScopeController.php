@@ -125,29 +125,29 @@ class ScopeController extends GlobalController
 
             $update = false;
 
-            if ($this->is_different($scope->service_id, $request->service_id)) {
+            if ($request->has('service_id') && $scope->service_id != $request->service_id) {
+                $update = true;
                 $scope->service_id = $request->service_id;
-                $update = true;
             }
 
-            if ($this->is_different($scope->role_id, $request->role_id)) {
+            if ($request->has('role_id') && $scope->role_id != $request->role_id) {
+                $update = true;
                 $scope->role_id = $request->role_id;
-                $update = true;
             }
 
-            if ($this->is_different($scope->public, $request->public)) {
-                $scope->public = $request->public;
+            if ($request->has('public') && $scope->public != $request->public) {
                 $update = true;
+                $scope->public = (int) $request->public;
             }
 
-            if ($this->is_different($scope->active, $request->active)) {
-                $scope->active = $request->active;
+            if ($request->has('active') && $scope->active != $request->active) {
                 $update = true;
+                $scope->active = (int) $request->active;
             }
 
-            if ($this->is_different($scope->api_key, $request->api_key)) {
-                $scope->api_key = $request->api_key;
+            if ($request->has('api_key') && $scope->api_key != $request->api_key) {
                 $update = true;
+                $scope->api_key = (int) $request->api_key;
             }
 
             if ($update) {
