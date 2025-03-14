@@ -26,6 +26,11 @@ class Plan extends Master
         'active'
     ];
 
+    protected $casts = [
+        'public' => 'boolean',
+        'active' => 'boolean',
+    ];
+
     /**
      * Show the scopes available for the plan
      */
