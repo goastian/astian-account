@@ -135,22 +135,22 @@ class PlanController extends GlobalController
         DB::transaction(function () use ($request, $plan) {
             $update = false;
 
-            if ($this->is_different($plan->name, $request->name)) {
+            if ($request->has('name') && $plan->name != $request->name) {
                 $update = true;
                 $plan->name = $request->name;
             }
 
-            if ($this->is_different($plan->description, $request->description)) {
+            if ($request->has('description') && $plan->description != $request->description) {
                 $update = true;
                 $plan->description = $request->description;
             }
 
-            if ($this->is_different($plan->public, $request->public)) {
+            if ($request->has('public') && $plan->public != $request->public) {
                 $update = true;
                 $plan->public = $request->public;
             }
 
-            if ($this->is_different($plan->active, $request->active)) {
+            if ($request->has('active') && $plan->active != $request->active) {
                 $update = true;
                 $plan->active = $request->active;
             }
