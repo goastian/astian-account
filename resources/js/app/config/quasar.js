@@ -43,7 +43,8 @@ import {
     QDate,
     QCheckbox,
     QOptionGroup,
-    QSlideTransition
+    QSlideTransition,
+    QScrollArea,
 } from "quasar";
 
 export const QComponents = [
@@ -91,5 +92,6 @@ export const QComponents = [
     QDate,
     QCheckbox,
     QOptionGroup,
-    QSlideTransition
+    QSlideTransition,
+    QScrollArea
 ];
