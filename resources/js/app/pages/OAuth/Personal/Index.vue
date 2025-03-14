@@ -1,40 +1,38 @@
 <template>
-    <q-page>
-        <q-table
-            flat
-            bordered
-            :rows="tokens"
-            :columns="headers"
-            row-key="name"
-            hide-bottom
-            :rows-per-page-options="[search.per_page]"
-            hide-pagination
-        >
-            <template v-slot:top>
-                <h6>List of API KEY</h6>
-                <q-space />
-                <v-create @created="getPersonalAccessToken()"></v-create>
-            </template>
+    <q-table
+        flat
+        bordered
+        :rows="tokens"
+        :columns="headers"
+        row-key="name"
+        hide-bottom
+        :rows-per-page-options="[search.per_page]"
+        hide-pagination
+    >
+        <template v-slot:top>
+            <h6>List of API KEY</h6>
+            <q-space />
+            <v-create @created="getPersonalAccessToken()"></v-create>
+        </template>
 
-            <template v-slot:body-cell-actions="props">
-                <q-td>
-                    <v-delete
-                        @deleted="getPersonalAccessToken"
-                        :item="props.row"
-                    ></v-delete>
-                </q-td>
-            </template>
-        </q-table>
+        <template v-slot:body-cell-actions="props">
+            <q-td>
+                <v-delete
+                    @deleted="getPersonalAccessToken"
+                    :item="props.row"
+                ></v-delete>
+            </q-td>
+        </template>
+    </q-table>
 
-        <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.per_page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="sm"
-            />
-        </div>
-    </q-page>
+    <div class="row justify-center q-mt-md">
+        <q-pagination
+            v-model="search.per_page"
+            color="grey-8"
+            :max="pages.total_pages"
+            size="sm"
+        />
+    </div>
 </template>
 <script>
 import VCreate from "./Create.vue";
