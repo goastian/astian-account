@@ -110,13 +110,13 @@ class ServiceController extends GlobalController
 
             $update = false;
 
-            if ($this->is_different($service->description, $request->description)) {
+            if ($request->has('description') && $service->description != $request->description) {
                 $update = true;
                 $service->description = $request->description;
 
             }
 
-            if ($this->is_different($service->name, $request->name)) {
+            if ($request->has('name') && $service->name != $request->name) {
                 $update = true;
                 $service->name = $request->name;
             }

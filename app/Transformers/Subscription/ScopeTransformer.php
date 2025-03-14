@@ -2,6 +2,7 @@
 namespace App\Transformers\Subscription;
 
 
+use App\Models\Subscription\Scope;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
@@ -32,7 +33,7 @@ class ScopeTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($data)
+    public function transform(Scope $data)
     {
         return [
             'id' => $data->id,
@@ -42,8 +43,8 @@ class ScopeTransformer extends TransformerAbstract
             'role_id' => $data->role_id,
             'role_slug' => $data->role->slug,
             'role_description' => $data->role->description,
-            'public' => $data->public,
-            'active' => $data->active,
+            'public' => $data->public ? true : false,
+            'active' => $data->active ? true : false,
             'gsr_id' => $data->getGsrID(),
             'created' => $this->format_date($data->created_at),
             'updated' => $this->format_date($data->updated_at),
