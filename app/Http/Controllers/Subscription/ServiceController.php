@@ -100,8 +100,7 @@ class ServiceController extends GlobalController
     public function update(Request $request, Service $service)
     {
         $this->validate($request, [
-            'description' => ['nullable', 'max:190'],
-            'system' => ['nullable', 'boolean'],
+            'description' => ['nullable', 'max:190']
         ]);
 
         $this->checkMethod('put');
@@ -112,12 +111,14 @@ class ServiceController extends GlobalController
             $update = false;
 
             if ($this->is_different($service->description, $request->description)) {
+                $update = true;
                 $service->description = $request->description;
 
             }
 
-            if ($this->is_different($service->system, $request->system)) {
-                $service->system = $request->system;
+            if ($this->is_different($service->name, $request->name)) {
+                $update = true;
+                $service->name = $request->name;
             }
 
             if ($update) {

@@ -18,8 +18,10 @@ return new class extends Migration {
             $table->uuid('role_id');
             $table->boolean('public')->default(false);
             $table->boolean('active')->default(false);
-            $table->boolean('api_key')->default(true);
+            $table->boolean('api_key')->default(false);
             $table->timestamps();
+
+            $table->unique(['service_id', 'role_id']);            
         });
     }
 

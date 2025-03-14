@@ -15,11 +15,17 @@ return new class extends Migration {
         Schema::create('services', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('name');
-            $table->string('slug');
+            $table->string('slug')->index();
             $table->string('description')->nullable();
             $table->boolean('system')->default(false);
             $table->uuid('group_id');
             $table->timestamps();
+
+            $table->unique(['slug', 'group_id']);
+            $table->foreign('group_id')
+                ->references('id')
+                ->on('groups')
+                ->onDelete('RESTRICT');
         });
     }
 
