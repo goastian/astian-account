@@ -1,11 +1,17 @@
 <template>
     <q-layout view="hHh Lpr lff" v-if="$user.id">
-        <q-header elevated="false" class="header">
+        <q-header :elevated="false" class="header">
             <q-toolbar>
-                <q-btn dense flat round icon="menu" @click="leftDrawerOpen = !leftDrawerOpen" />
+                <q-btn
+                    dense
+                    flat
+                    round
+                    icon="menu"
+                    @click="leftDrawerOpen = !leftDrawerOpen"
+                />
                 <div class="header-title">
                     <q-img src="/img/icon.webp" />
-                    <h1>Astian Account</h1>
+                    <h1>{{ $app_name }}</h1>
                 </div>
                 <q-space />
                 <v-profile />
@@ -62,7 +68,6 @@
                 <p class="text-h6 text-grey-7 q-animate--pulse">Loading ...</p>
             </div>
         </q-page>
-
     </q-layout>
 </template>
 
@@ -84,23 +89,23 @@ export default {
                 {
                     name: "Personal Information",
                     icon: "mdi-account",
-                    route: "information"
+                    route: "information",
                 },
                 {
                     name: "Security",
                     icon: "mdi-shield-outline",
-                    route: "security"
+                    route: "security",
                 },
                 {
                     name: "Payment and Suscriptions",
                     icon: "mdi-account-credit-card",
-                    route: "payment"
+                    route: "payment",
                 },
                 {
                     name: "Help",
                     icon: "mdi-help",
-                    route: "help"
-                }
+                    route: "help",
+                },
             ],
             menus: [
                 {
@@ -134,17 +139,17 @@ export default {
                         {
                             name: "Services",
                             route: "admin.services.index",
-                            icon: "mdi-text-box-check"
+                            icon: "mdi-text-box-check",
                         },
                         {
                             name: "Roles",
                             route: "admin.roles.index",
-                            icon: "mdi-format-list-group"
+                            icon: "mdi-format-list-group",
                         },
                         {
                             name: "Scopes",
                             route: "admin.scopes.index",
-                            icon: "mdi-circle-outline"
+                            icon: "mdi-circle-outline",
                         },
                         {
                             name: "Broadcasts",
@@ -278,7 +283,7 @@ export default {
     padding: 1rem;
     background-color: var(--bg-main);
     border-radius: 1.5rem 0 0 0;
-    border: .08rem solid var(--border-color);
+    border: 0.08rem solid var(--border-color);
 }
 
 .no-radius {

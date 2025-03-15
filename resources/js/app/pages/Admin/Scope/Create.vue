@@ -4,20 +4,13 @@
             round
             dense="dense"
             color="primary"
-            @click="dialog = true"
+            @click="open"
             icon="mdi-plus-circle"
         />
 
-        <q-dialog
-            v-model="dialog"
-            persistent
-            position="right"
-            maximized
-        >
+        <q-dialog v-model="dialog" persistent position="right" maximized>
             <div class="containerDialog">
-                <q-card
-                    class="card"
-                >
+                <q-card class="card">
                     <div class="card-main">
                         <q-card-section class="column items-center card-header">
                             <q-icon
@@ -25,13 +18,22 @@
                                 size="4rem"
                                 color="secondary"
                             />
-                            <h6>Create a scope and assign a service and role to it</h6>
-                            <span>Creating a scope assigns specific services and roles, controlling access to features based on user permissions.</span>
+                            <h6>
+                                Create a scope and assign a service and role to
+                                it
+                            </h6>
+                            <span
+                                >Creating a scope assigns specific services and
+                                roles, controlling access to features based on
+                                user permissions.</span
+                            >
                         </q-card-section>
 
                         <q-separator />
 
-                        <q-card-section class="column no-wrap q-gutter-y-md card-body">
+                        <q-card-section
+                            class="column no-wrap q-gutter-y-md card-body"
+                        >
                             <q-select
                                 v-model="formService"
                                 label="Services"
@@ -92,7 +94,7 @@
                         </q-card-section>
                     </div>
 
-                    <q-separator/>
+                    <q-separator />
                     <q-card-section class="row justify-between card-footer">
                         <q-btn
                             dense="dense"
@@ -137,11 +139,12 @@ export default {
                 service_id: null,
                 role_id: null,
             },
+            formService: {},
             system: false,
             errors: {},
-            servicess: [],
+            services: [],
             servicesScope: [],
-            roless: [],
+            roles: [],
             rolesScope: [],
         };
     },
@@ -150,11 +153,6 @@ export default {
         system(value) {
             this.form.system = value ? 1 : 0;
         },
-    },
-
-    created() {
-        this.getServices();
-        this.getRoles();
     },
 
     methods: {
@@ -169,6 +167,10 @@ export default {
         },
 
         open() {
+            this.dialog = true;
+            this.getServices();
+            this.getRoles();
+
             this.form = {};
             this.system = false;
             this.errors = {};
@@ -186,9 +188,9 @@ export default {
                     this.form,
                     {
                         headers: {
-                            "Content-Type": "multipart/form-data"
+                            "Content-Type": "multipart/form-data",
                         },
-                    },
+                    }
                 );
 
                 if (res.status == 201) {
@@ -205,62 +207,64 @@ export default {
         },
 
         getServices() {
-            this.$server.get("/api/admin/services", {
-                params: {
-                    "page": 1,
-                    "per_page": 1000
-                }
-            })
+            this.$server
+                .get("/api/admin/services", {
+                    params: {
+                        page: 1,
+                        per_page: 1000,
+                    },
+                })
                 .then((res) => {
                     this.servicesScope = res.data.data;
-                    this.servicess = res.data.data;
+                    this.services = res.data.data;
                 })
                 .catch((e) => {});
         },
 
         filterService(val, update) {
-            if(!val) {
-                update(() => this.servicesScope = this.servicess);
+            if (!val) {
+                update(() => (this.servicesScope = this.services));
                 return;
             }
 
             update(() => {
                 const needle = val.toLowerCase();
-                const filtered = this.servicess.filter((option) => {
-                    return option.name.toLowerCase().includes(needle)
+                const filtered = this.services.filter((option) => {
+                    return option.name.toLowerCase().includes(needle);
                 });
                 this.servicesScope = filtered;
-            })
+            });
         },
 
         getRoles() {
-            this.$server.get("/api/admin/roles", {
-                params: {
-                    "page": 1,
-                    "per_page": 1000
-                }
-            })
+            this.$server
+                .get("/api/admin/roles", {
+                    params: {
+                        page: 1,
+                        per_page: 1000,
+                    },
+                })
                 .then((res) => {
                     this.rolesScope = res.data.data;
-                    this.roless = res.data.data;
+                    this.roles = res.data.data;
                 })
                 .catch((e) => {});
         },
 
         filterRoles(val, update) {
-            if(!val) {
-                update(() => this.rolessScope = this.roless);
+            if (!val) {
+                update(() => (this.rolessScope = this.roles));
                 return;
             }
 
             update(() => {
                 const needle = val.toLowerCase();
-                const filtered = this.roless.filter((option) => {
-                    return option.name.toLowerCase().includes(needle)
+                const filtered = this.roles.filter((option) => {
+                    return option.name.toLowerCase().includes(needle);
                 });
                 this.rolesScope = filtered;
-            })
-        }
+            });
+        },
     },
 };
 </script>
@@ -269,7 +273,7 @@ export default {
 .containerDialog {
     width: auto;
     height: 100%;
-    padding: .5rem;
+    padding: 0.5rem;
 }
 
 .card {
@@ -304,7 +308,7 @@ export default {
 }
 
 .card-footer > .q-btn {
-    padding: .4rem 2rem;
-    border-radius: .6rem;
+    padding: 0.4rem 2rem;
+    border-radius: 0.6rem;
 }
 </style>

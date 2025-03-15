@@ -1,8 +1,7 @@
 import { createApp } from "vue";
 import App from "./app/App.vue";
-import "./app/config/matomo.js";
 
-import { router } from "./app/config/rutes.js";
+import { router } from "./app/config/routes.js";
 import { customComponents } from "./app/config/customComponents.js";
 import { $channels, $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
@@ -17,7 +16,6 @@ import { QComponents } from "./app/config/quasar.js";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
-//icons https://pictogrammers.com/library/mdi/
 //icons https://pictogrammers.com/library/mdi/
 import "@mdi/font/css/materialdesignicons.css";
 
