@@ -1,6 +1,7 @@
 <?php
 namespace App\Models\User;
 
+use App\Models\Subscription\Group;
 use DateTime;
 use DateInterval;
 use App\Models\Auth;
@@ -105,8 +106,16 @@ class User extends Auth
      */
     public function myGroups()
     {
-        $groups = fractal($this->groups()->get(), GroupTransformer::class);
-        return json_decode(json_encode($groups))->data;
+        $groups = $this->groups()->get();
+
+        if ($this->isAdmin()) {
+            $groups = Group::all();
+        }
+
+        return $groups->map(fn($group) => [
+            'name' => $group->name,
+            'slug' => $group->slug,
+        ])->toArray();
     }
 
     /**

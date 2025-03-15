@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Transformers\User\AuthTransformer;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +26,7 @@ class GlobalController extends Controller
      */
     public function authenticated_user()
     {
-        $user = fractal(Auth::user(), UserTransformer::class);
+        $user = fractal(Auth::user(), AuthTransformer::class);
 
         return json_decode(json_encode($user))->data;
     }
