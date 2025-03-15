@@ -73,38 +73,38 @@ export default {
             apps: [
                 {
                     name: 'Contacts',
-                    route: 'https://www.google.com',
+                    route: 'https://contacts.astian.org',
                     icon: 'mdi-contacts'
                 },
                 {
                     name: 'Cloud',
-                    route: 'https://www.google.com',
+                    route: 'https://cloud.astian.org',
                     icon: 'mdi-cloud-check-outline'
                 },
                 {
                     name: 'AstianGO',
-                    route: 'https://www.google.com',
+                    route: 'https://astiango.co',
                     icon: 'mdi-magnify'
                 },
                 {
                     name: 'Calendar',
-                    route: 'https://www.google.com',
+                    route: 'https://calendar.astian.org',
                     icon: 'mdi-calendar-blank-outline'
 
                 },
                 {
                     name: 'Midori',
-                    route: 'https://www.google.com',
+                    route: 'https://astian.org',
                     icon: 'mdi-earth'
                 },
                 {
                     name: 'Notes',
-                    route: 'https://www.google.com',
+                    route: 'https://notes.astian.org',
                     icon: 'mdi-note-multiple-outline'
                 },
                 {
                     name: 'AstianVPN',
-                    route: 'https://www.google.com',
+                    route: 'https://vpn.astian.org',
                     icon: 'mdi-shield-outline'
                 }
             ]
