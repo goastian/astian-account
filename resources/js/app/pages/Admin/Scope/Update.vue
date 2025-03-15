@@ -1,135 +1,135 @@
 <template>
     <q-btn round flat color="primary" @click="open(item)" icon="mdi-pencil" />
 
-    <q-dialog
-        v-model="dialog"
-        persistent
-        position="right"
-        maximized
-    >
+    <q-dialog v-model="dialog" persistent position="right" maximized>
         <div class="containerDialog">
-                <q-card
-                    class="card"
-                >
-                    <div class="card-main">
-                        <q-card-section class="column items-center card-header">
-                            <q-icon
-                                name="mdi-update"
-                                size="4rem"
-                                color="secondary"
-                            />
-                            <h6>Update a scope and assign a service and role to it</h6>
-                            <span>Define the details and set up its assignment to properly integrate it into the system.</span>
-                        </q-card-section>
-
-                        <q-separator />
-
-                        <q-card-section class="column no-wrap q-gutter-y-md card-body">
-                            <q-select
-                                v-model="service"
-                                label="Services"
-                                :options="servicesScope"
-                                option-label="name"
-                                option-value="id"
-                                use-input
-                                filter
-                                @filter="filterService"
-                                stack-label
-                                filled
-                            >
-                                <template v-slot:prepend>
-                                    <q-icon name="mdi-home" />
-                                </template>
-
-                                <template v-slot:no-option>
-                                    <q-item>
-                                        <q-item-section class="text-grey">
-                                            No Results
-                                        </q-item-section>
-                                    </q-item>
-                                </template>
-
-                                <template v-slot:after>
-                                    <q-icon name="mdi-asterisk" size="1rem" />
-                                </template>
-                            </q-select>
-
-                            <q-select
-                                v-model="role"
-                                label="Roles"
-                                :options="rolesScope"
-                                option-label="name"
-                                option-value="id"
-                                use-input
-                                filter
-                                @filter="filterRoles"
-                                stack-label
-                                filled
-                            >
-                                <template v-slot:prepend>
-                                    <q-icon name="mdi-home" />
-                                </template>
-
-                                <template v-slot:no-option>
-                                    <q-item>
-                                        <q-item-section class="text-grey">
-                                            No Results
-                                        </q-item-section>
-                                    </q-item>
-                                </template>
-
-                                <template v-slot:after>
-                                    <q-icon name="mdi-asterisk" size="1rem" />
-                                </template>
-                            </q-select>
-
-                            <q-checkbox
-                                v-model="form.public"
-                                label="Public"
-                                color="orange"
-                                :error="!!errors.confidential"
-                            >
-                                <template v-slot:error>
-                                    <v-error :error="errors.description"></v-error>
-                                </template>
-                            </q-checkbox>
-                            <q-checkbox
-                                v-model="form.active"
-                                label="Active"
-                                color="orange"
-                                :error="!!errors.confidential"
-                            >
-                                <template v-slot:error>
-                                    <v-error :error="errors.description"></v-error>
-                                </template>
-                            </q-checkbox>
-                        </q-card-section>
-                    </div>
-
-                    <q-separator/>
-                    <q-card-section class="row justify-between card-footer">
-                        <q-btn
-                            dense="dense"
+            <q-card class="card">
+                <div class="card-main">
+                    <q-card-section class="column items-center card-header">
+                        <q-icon
+                            name="mdi-update"
+                            size="4rem"
                             color="secondary"
-                            label="Update Scope"
-                            @click="updateScope"
-                            no-caps
-                            class="btn-create"
                         />
-
-                        <q-btn
-                            dense="dense"
-                            color="secondary"
-                            label="Cancel"
-                            @click="close"
-                            outline
-                            no-caps
-                            class="btn-cancel"
-                        />
+                        <h6>
+                            Update a scope and assign a service and role to it
+                        </h6>
+                        <span
+                            >Define the details and set up its assignment to
+                            properly integrate it into the system.</span
+                        >
                     </q-card-section>
-                </q-card>
-            </div>
-        </q-dialog>
+
+                    <q-separator />
+
+                    <q-card-section
+                        class="column no-wrap q-gutter-y-md card-body"
+                    >
+                        <q-select
+                            v-model="service"
+                            label="Services"
+                            :options="servicesScope"
+                            option-label="name"
+                            option-value="id"
+                            use-input
+                            filter
+                            @filter="filterService"
+                            stack-label
+                            filled
+                        >
+                            <template v-slot:prepend>
+                                <q-icon name="mdi-home" />
+                            </template>
+
+                            <template v-slot:no-option>
+                                <q-item>
+                                    <q-item-section class="text-grey">
+                                        No Results
+                                    </q-item-section>
+                                </q-item>
+                            </template>
+
+                            <template v-slot:after>
+                                <q-icon name="mdi-asterisk" size="1rem" />
+                            </template>
+                        </q-select>
+
+                        <q-select
+                            v-model="role"
+                            label="Roles"
+                            :options="rolesScope"
+                            option-label="name"
+                            option-value="id"
+                            use-input
+                            filter
+                            @filter="filterRoles"
+                            stack-label
+                            filled
+                        >
+                            <template v-slot:prepend>
+                                <q-icon name="mdi-home" />
+                            </template>
+
+                            <template v-slot:no-option>
+                                <q-item>
+                                    <q-item-section class="text-grey">
+                                        No Results
+                                    </q-item-section>
+                                </q-item>
+                            </template>
+
+                            <template v-slot:after>
+                                <q-icon name="mdi-asterisk" size="1rem" />
+                            </template>
+                        </q-select>
+
+                        <q-checkbox
+                            v-model="form.public"
+                            label="Public"
+                            color="orange"
+                            :error="!!errors.confidential"
+                        >
+                            <template v-slot:error>
+                                <v-error :error="errors.description"></v-error>
+                            </template>
+                        </q-checkbox>
+                        <q-checkbox
+                            v-model="form.active"
+                            label="Active"
+                            color="orange"
+                            :error="!!errors.confidential"
+                        >
+                            <template v-slot:error>
+                                <v-error :error="errors.description"></v-error>
+                            </template>
+                        </q-checkbox>
+                    </q-card-section>
+                </div>
+
+                <q-separator />
+                <q-card-section class="row justify-between card-footer">
+                    <q-btn
+                        dense="dense"
+                        color="secondary"
+                        label="Update Scope"
+                        @click="updateScope"
+                        no-caps
+                        class="btn-create"
+                    />
+
+                    <q-btn
+                        dense="dense"
+                        color="secondary"
+                        label="Cancel"
+                        @click="close"
+                        outline
+                        no-caps
+                        class="btn-cancel"
+                    />
+                </q-card-section>
+            </q-card>
+        </div>
+    </q-dialog>
 </template>
 <script>
 export default {
@@ -152,26 +152,23 @@ export default {
             rol: {},
             service: {
                 id: null,
-                name: null
+                name: null,
             },
             role: {
                 id: null,
                 name: null,
             },
             dialog: false,
-            servicess: [],
+            services: [],
             servicesScope: [],
-            roless: [],
+            roles: [],
             rolesScope: [],
-            publi: null,
+            public: null,
             active: null,
         };
     },
 
-    created() {
-        this.getServices();
-        this.getRoles();
-    },
+    created() {},
 
     methods: {
         close() {
@@ -181,7 +178,11 @@ export default {
         },
 
         open(item) {
-            const { service_slug, service_id, role_id, role_slug, ...form } = item;
+            this.getServices();
+            this.getRoles();
+
+            const { service_slug, service_id, role_id, role_slug, ...form } =
+                item;
             this.service.id = service_id;
             this.service.name = service_slug;
             this.role.id = role_id;
@@ -211,7 +212,7 @@ export default {
                     }
                 );
 
-                console.log(res)
+                console.log(res);
                 if (res.status == 200) {
                     this.$emit("updated", true);
                     this.errors = {};
@@ -225,62 +226,64 @@ export default {
         },
 
         getServices() {
-            this.$server.get("/api/admin/services", {
-                params: {
-                    "page": 1,
-                    "per_page": 1000
-                }
-            })
+            this.$server
+                .get("/api/admin/services", {
+                    params: {
+                        page: 1,
+                        per_page: 1000,
+                    },
+                })
                 .then((res) => {
                     this.servicesScope = res.data.data;
-                    this.servicess = res.data.data;
+                    this.services = res.data.data;
                 })
                 .catch((e) => {});
         },
 
         filterService(val, update) {
-            if(!val) {
-                update(() => this.servicesScope = this.servicess);
+            if (!val) {
+                update(() => (this.servicesScope = this.services));
                 return;
             }
 
             update(() => {
                 const needle = val.toLowerCase();
-                const filtered = this.servicess.filter((option) => {
-                    return option.name.toLowerCase().includes(needle)
+                const filtered = this.services.filter((option) => {
+                    return option.name.toLowerCase().includes(needle);
                 });
                 this.servicesScope = filtered;
-            })
+            });
         },
 
         getRoles() {
-            this.$server.get("/api/admin/roles", {
-                params: {
-                    "page": 1,
-                    "per_page": 1000
-                }
-            })
+            this.$server
+                .get("/api/admin/roles", {
+                    params: {
+                        page: 1,
+                        per_page: 1000,
+                    },
+                })
                 .then((res) => {
                     this.rolesScope = res.data.data;
-                    this.roless = res.data.data;
+                    this.roles = res.data.data;
                 })
                 .catch((e) => {});
         },
 
         filterRoles(val, update) {
-            if(!val) {
-                update(() => this.rolessScope = this.roless);
+            if (!val) {
+                update(() => (this.rolessScope = this.roles));
                 return;
             }
 
             update(() => {
                 const needle = val.toLowerCase();
-                const filtered = this.roless.filter((option) => {
-                    return option.name.toLowerCase().includes(needle)
+                const filtered = this.roles.filter((option) => {
+                    return option.name.toLowerCase().includes(needle);
                 });
                 this.rolesScope = filtered;
-            })
-        }
+            });
+        },
     },
 };
 </script>
@@ -289,7 +292,7 @@ export default {
 .containerDialog {
     width: auto;
     height: 100%;
-    padding: .5rem;
+    padding: 0.5rem;
 }
 
 .card {
@@ -324,7 +327,7 @@ export default {
 }
 
 .card-footer > .q-btn {
-    padding: .4rem 2rem;
-    border-radius: .6rem;
+    padding: 0.4rem 2rem;
+    border-radius: 0.6rem;
 }
 </style>

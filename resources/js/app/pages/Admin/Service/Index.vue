@@ -20,6 +20,11 @@
                 {{ props.row.revoked ? "Yes" : "No" }}
             </q-td>
         </template>
+        <template v-slot:body-cell-system="props">
+            <q-td>
+                {{ props.row.system ? "Yes" : "No" }}
+            </q-td>
+        </template>
         <template v-slot:body-cell-actions="props">
             <q-td class="">
                 <v-update

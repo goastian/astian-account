@@ -14,22 +14,22 @@
             <q-space />
             <v-create @created="getScopes()"></v-create>
         </template>
-        <template v-slot:body-cell-revoked="props">
+
+        <template v-slot:body-cell-public="props">
             <q-td>
-                {{ props.row.revoked ? "Yes" : "No" }}
+                {{ props.row.public ? "Yes" : "No" }}
+            </q-td>
+        </template>
+        <template v-slot:body-cell-active="props">
+            <q-td>
+                {{ props.row.active ? "Yes" : "No" }}
             </q-td>
         </template>
         <template v-slot:body-cell-actions="props">
             <q-td class="">
-                <v-update
-                    @updated="getScopes"
-                    :item="props.row"
-                ></v-update>
+                <v-update @updated="getScopes" :item="props.row"></v-update>
 
-                <v-delete
-                    @deleted="getScopes"
-                    :item="props.row"
-                ></v-delete>
+                <v-delete @deleted="getScopes" :item="props.row"></v-delete>
             </q-td>
         </template>
     </q-table>
@@ -59,10 +59,20 @@ export default {
         return {
             scopes: [],
             headers: [
-                {label: "Group-Service-Role", name: "value", field: "gsr_id", align: "left"},
-                { label: "Service Description", name: "value", field: "service_description", align: "left" },
                 {
-                    label: "Role Description",
+                    label: "GSR_ID",
+                    name: "value",
+                    field: "gsr_id",
+                    align: "left",
+                },
+                {
+                    label: "Service",
+                    name: "service_slug",
+                    field: "service_slug",
+                    align: "left",
+                },
+                {
+                    label: "Role description",
                     name: "system",
                     field: "role_description",
                     align: "left",
@@ -77,7 +87,7 @@ export default {
                     label: "Active",
                     name: "active",
                     field: "active",
-                    align: "left"
+                    align: "left",
                 },
                 {
                     label: "Actions",
