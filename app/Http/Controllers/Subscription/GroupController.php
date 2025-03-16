@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Subscription;
 
+use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
@@ -61,7 +62,7 @@ class GroupController extends Controller
                 }
             ],
             'description' => ['required', 'max:190'],
-            'system' => ['required', 'boolean'],
+            'system' => ['required', new BooleanRule()],
         ]);
 
         $request->merge([

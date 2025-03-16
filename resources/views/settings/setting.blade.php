@@ -58,6 +58,7 @@
                 <form action="{{ route('settings.update') }}" method="post" autocomplete="off">
                     @method('put')
                     @csrf
+                    <input type="hidden" name="current_route" value="{{ url()->current() }}">
                     <div class="max-h-screen overflow-y-scroll">
                         @yield('form')
                     </div>

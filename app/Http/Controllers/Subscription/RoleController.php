@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Subscription;
 
+use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Role;
 use Illuminate\Support\Facades\DB;
@@ -102,7 +103,7 @@ class RoleController extends Controller
     {
         $this->validate($request, [
             'description' => ['nullable', 'max:300'],
-            'system' => ['nullable', 'boolean']
+            'system' => ['nullable', new BooleanRule()]
         ]);
 
         $this->checkMethod('put');
