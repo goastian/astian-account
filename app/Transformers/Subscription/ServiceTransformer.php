@@ -50,7 +50,7 @@ class ServiceTransformer extends TransformerAbstract
                 'show' => route('admin.services.show', ['service' => $data->id]),
                 'update' => route('admin.services.update', ['service' => $data->id]),
                 'destroy' => route('admin.services.destroy', ['service' => $data->id]),
-                'scopes' => route('admin.services.scopes.index', ['service' => $data->id])
+                'scopes' => route('admin.service.scopes.index', ['service' => $data->id])
             ]
         ];
     }

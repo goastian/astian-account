@@ -38,6 +38,7 @@ class Scope extends Master
     protected $casts = [
         'public' => 'boolean',
         'active' => 'boolean',
+        'api_key' => 'boolean'
     ];
 
     /**

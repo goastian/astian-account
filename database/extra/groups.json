@@ -121,6 +121,18 @@
                         "public": 0,
                         "active": 1,
                         "api_key": 1
+                    },
+                    {
+                        "name": "assign",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "revoke",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
