@@ -2,7 +2,9 @@
 namespace App\Http\Controllers\Setting;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Route;
 
 class SettingController extends Controller
 {
@@ -10,7 +12,7 @@ class SettingController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('userCanAny:administrator_admin_full');
+        $this->middleware('userCanAny:administrator_settings_full');
     }
 
     /**
@@ -29,7 +31,7 @@ class SettingController extends Controller
      */
     public function update(Request $request)
     {
-        $data = $request->except('_method', '_token');
+        $data = $request->except('_method', '_token', 'current_route');
 
         $data = $this->transformRequest($data);
 
@@ -37,7 +39,7 @@ class SettingController extends Controller
             settingAdd($key, $value);
         }
 
-        return back()->with('status', __('Setting updated successfully'));
+        return redirect($request->current_route)->with('status', __('Setting updated successfully'));
     }
 
     /**

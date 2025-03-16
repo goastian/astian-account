@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\Setting\TerminalController;
-use App\Http\Controllers\Subscription\PlanPriceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserGroupController;
 use App\Http\Controllers\User\UserScopeController;
 use App\Http\Controllers\Global\CountriesController;
+use App\Http\Controllers\Setting\TerminalController;
 use App\Http\Controllers\OAuth\ClientAdminController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Subscription\PlanController;
@@ -17,6 +16,7 @@ use App\Http\Controllers\Subscription\ServiceController;
 use App\Http\Controllers\OAuth\PassportConnectController;
 use App\Http\Controllers\User\UserNotificationController;
 use App\Http\Controllers\Broadcasting\BroadcastController;
+use App\Http\Controllers\Subscription\PlanPriceController;
 use App\Http\Controllers\Subscription\PlanScopeController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\Subscription\ServiceScopeController;
@@ -73,9 +73,13 @@ Route::group([
     Route::resource('broadcasts', BroadcastController::class)->only('index', 'store', 'destroy');
     Route::resource('groups', GroupController::class)->except('edit', 'create');
     Route::resource('roles', RoleController::class)->except('create', 'edit');
+
+    Route::resource('scopes', ScopeController::class)->only('index');
+
     Route::resource('services', ServiceController::class)->except('create', 'edit');
-    Route::resource('scopes', ScopeController::class)->except('create', 'edit');
-    Route::resource('services.scopes', ServiceScopeController::class)->only('index');
+    Route::get('services/{service}/scopes', [ServiceScopeController::class, 'index'])->name('service.scopes.index');
+    Route::post('services/{service}/scopes', [ServiceScopeController::class, 'assign'])->name('service.scopes.assign');
+    Route::delete('services/{service}/scopes/{scope}', [ServiceScopeController::class, 'revoke'])->name('services.scopes.revoke');
 
     Route::delete('users/{user}/disable', [UserController::class, 'disable'])->name('users.disable');
     Route::get('users/{id}/enable', [UserController::class, 'enable'])->name('users.enable');

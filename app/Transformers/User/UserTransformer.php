@@ -1,15 +1,14 @@
 <?php
 namespace App\Transformers\User;
 
-use App\Models\Subscription\Group;
 use App\Models\User\User;
-use App\Transformers\Subscription\GroupTransformer;
+use App\Traits\Scopes;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
 class UserTransformer extends TransformerAbstract
 {
-    use Asset;
+    use Asset, Scopes;
 
     /**
      * List of resources to automatically include
@@ -50,7 +49,6 @@ class UserTransformer extends TransformerAbstract
             'dial_code' => $user->dial_code,
             'full_phone' => $user->dial_code . " " . $user->phone,
             'm2fa' => $user->m2fa,
-            'groups' => $user->myGroups(),
             'verify_email' => $user->verified_at ? true : false,
             'verified' => $this->format_date($user->verified_at),
             'created' => $this->format_date($user->created_at),

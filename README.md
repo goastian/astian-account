@@ -34,3 +34,43 @@ To create an initial user in the application, execute the following command insi
 ```bash
 docker exec -it oauth2-server-app-1 php artisan settings:create-user
 ```
+
+## Proxy settings Nginx server
+
+```bash
+server {
+    
+    listen 80;
+    server_name accounts.server.org;
+
+    # Logging
+    access_log /var/log/nginx/accounts_access.log main;
+    error_log /var/log/nginx/accounts_error.log warn;
+
+    location / {
+        proxy_pass http://127.0.0.1:8005;
+        proxy_http_version 1.1;
+ 
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+ 
+        proxy_set_header X-Forwarded-Host $http_x_forwarded_host;
+        proxy_set_header X-Forwarded-Port $http_x_forwarded_port;
+        proxy_set_header X-Forwarded-AWS-ELB $http_x_forwarded_aws_elb;
+ 
+        proxy_read_timeout 720s;
+        proxy_connect_timeout 720s;
+        proxy_send_timeout 720s;
+
+        proxy_buffering on;
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+        proxy_temp_file_write_size 256k;
+ 
+        proxy_redirect off;
+    }
+}
+```

@@ -2,7 +2,7 @@ name: oauth2-server
 
 services:
     db:
-        image: postgres:latest
+        image: postgres:17
         restart: always
         volumes:
             - pg-data:/var/lib/postgresql/data
@@ -24,7 +24,7 @@ services:
         image: adminer:latest
         restart: always
         ports:
-            - "8002:8080"            
+            - "8002:8080"
         depends_on:
             db:
                 condition: service_healthy
