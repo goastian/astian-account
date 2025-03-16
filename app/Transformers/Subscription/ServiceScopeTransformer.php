@@ -6,7 +6,7 @@ use App\Models\Subscription\Scope;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
-class ScopeTransformer extends TransformerAbstract
+class ServiceScopeTransformer extends TransformerAbstract
 {
     use Asset;
 
@@ -37,8 +37,8 @@ class ScopeTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
-            // 'public' => $data->public ? true : false,
-            //'active' => $data->active ? true : false,
+            'public' => $data->public ? true : false,
+            'active' => $data->active ? true : false,
             'gsr_id' => $data->getGsrID(),
             'service' => [
                 'id' => $data->service->id,
@@ -61,28 +61,13 @@ class ScopeTransformer extends TransformerAbstract
             'created' => $this->format_date($data->created_at),
             'updated' => $this->format_date($data->updated_at),
             'links' => [
-                'index' => route('admin.scopes.index'),
+                'index' => route('admin.service.scopes.index', ['service' => $data->service->id]),
+                'assign' => route('admin.service.scopes.assign', ['service' => $data->service->id]),
+                'revoke' => route('admin.services.scopes.revoke', [
+                    'service' => $data->service->id,
+                    'scope' => $data->id,
+                ])
             ]
         ];
-    }
-
-    /**
-     * Return the original keys
-     * @param mixed $index
-     * @return string|null
-     */
-    public static function getOriginalAttributes($index)
-    {
-        $attributes = [
-            'name' => "name",
-            'slug' => "slug",
-            'description' => "service",
-            'system' => "system",
-            'group_id' => "group_id",
-            'created' => "created_at",
-            'updated' => "updated_at",
-        ];
-
-        return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 }
