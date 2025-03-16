@@ -90,8 +90,9 @@ Route::group([
     Route::post('/users/{user}/scopes', [UserScopeController::class, 'assign'])->name('users.scopes.assign');
     Route::put('/users/{user}/scopes', [UserScopeController::class, 'revoke'])->name('users.scopes.revoke');
 
+    Route::get('/users/{user}/groups', [UserGroupController::class, 'index'])->name('users.groups.index');
     Route::post('/users/{user}/groups', [UserGroupController::class, 'assign'])->name('users.groups.assign');
-    Route::put('/users/{user}/groups', [UserGroupController::class, 'revoke'])->name('users.groups.revoke');
+    Route::delete('/users/{user}/groups/{group}', [UserGroupController::class, 'revoke'])->name('users.groups.revoke');
 
     Route::resource('clients', ClientAdminController::class)->except('edit', 'create');
 
