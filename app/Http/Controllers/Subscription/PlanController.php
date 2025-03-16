@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Subscription;
 
+use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use App\Models\Subscription\Scope;
@@ -62,8 +63,8 @@ class PlanController extends GlobalController
                 }
             ],
             'description' => ['required'],
-            'public' => ['required', 'boolean'],
-            'active' => ['required', 'boolean'],
+            'public' => ['required', new BooleanRule()],
+            'active' => ['required', new BooleanRule()],
             'scopes' => [
                 'required',
                 function ($attribute, $value, $fail) {
@@ -124,8 +125,8 @@ class PlanController extends GlobalController
         $this->validate($request, [
             'name' => ['nullable', 'max:150'],
             'description' => ['nullable'],
-            'public' => ['nullable', 'boolean'],
-            'active' => ['nullable', 'boolean'],
+            'public' => ['nullable', new BooleanRule()],
+            'active' => ['nullable', new BooleanRule()],
         ]);
 
         $this->checkMethod('put');

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Subscription;
 
+use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Service;
@@ -60,7 +61,7 @@ class ServiceController extends GlobalController
             ],
             'description' => ['required', 'max:190'],
             'group_id' => ['required', 'exists:groups,id'],
-            'system' => ['nullable', 'boolean'],
+            'system' => ['nullable', new BooleanRule()],
         ]);
 
         $this->checkMethod('post');

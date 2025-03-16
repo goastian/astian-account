@@ -121,6 +121,18 @@
                         "public": 0,
                         "active": 1,
                         "api_key": 1
+                    },
+                    {
+                        "name": "assign",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "revoke",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
                     }
                 ]
             },
@@ -237,37 +249,7 @@
                 "description": "Service to manage resource of the scopes",
                 "actions": [
                     {
-                        "name": "full",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 1
-                    },
-                    {
                         "name": "view",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 1
-                    },
-                    {
-                        "name": "create",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 1
-                    },
-                    {
-                        "name": "show",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 1
-                    },
-                    {
-                        "name": "update",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 1
-                    },
-                    {
-                        "name": "destroy",
                         "public": 0,
                         "active": 1,
                         "api_key": 1

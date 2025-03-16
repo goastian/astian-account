@@ -6,6 +6,7 @@ use DateTime;
 use DateInterval;
 use ErrorException;
 use App\Models\User\User;
+use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +48,7 @@ class RegisterClientController extends Controller
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'min:8', 'max:60'],
             'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
-            'accept_terms' => ['required', 'boolean']
+            'accept_terms' => ['required', new BooleanRule()]
         ]);
 
         $group = Group::where('slug', 'member')->first();
