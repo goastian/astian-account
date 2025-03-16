@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\OAuth;
 
+use App\Rules\BooleanRule;
 use App\Models\OAuth\Client;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Laravel\Passport\ClientRepository;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Http\Controllers\GlobalController as Controller;
 
 class ClientAdminController extends Controller
@@ -71,7 +72,7 @@ class ClientAdminController extends Controller
 
                 }
             ],
-            'confidential' => 'boolean',
+            'confidential' => new BooleanRule(),
         ]);
 
         $client = $this->clients->create(
