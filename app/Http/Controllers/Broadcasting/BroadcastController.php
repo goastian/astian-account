@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Broadcasting;
 
+use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
@@ -65,7 +66,7 @@ class BroadcastController extends Controller
                 }
             ],
             'description' => ['required', 'max:350'],
-            'system' => ['nullable', 'boolean'],
+            'system' => ['nullable', new BooleanRule()],
         ]);
 
         $this->checkMethod('post');

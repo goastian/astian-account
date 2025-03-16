@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\OAuth;
 
+use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Laravel\Passport\Passport;
@@ -46,7 +47,7 @@ class ClientController extends Controller
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
             'redirect' => ['required', $this->redirectRule],
-            'confidential' => ['boolean'],
+            'confidential' => [new BooleanRule()],
         ])->validate();
 
         //create a new client
