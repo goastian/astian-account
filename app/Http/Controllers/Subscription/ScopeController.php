@@ -16,10 +16,6 @@ class ScopeController extends GlobalController
     {
         parent::__construct();
         $this->middleware('scope:administrator_scope_full,administrator_scope_view')->only('index');
-        $this->middleware('scope:administrator_scope_full,administrator_scope_show')->only('show');
-        $this->middleware('scope:administrator_scope_full,administrator_scope_create')->only('store');
-        $this->middleware('scope:administrator_scope_full,administrator_scope_update')->only('update');
-        $this->middleware('scope:administrator_scope_full,administrator_scope_destroy')->only('destroy');
     }
 
     /**
