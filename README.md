@@ -1,14 +1,29 @@
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f68c8a9e1c474a009876bd8c7eb5a227)](https://app.codacy.com/gh/goastian/astian-account/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+# Authorization Server
 
-# [Astian Account Server](https://astian.org) 
+Centralized authorization server using OAuth-server through Laravel and Laravel Passport as an abstraction or bridge layer. It implements broadcasting using [Echo Server](https://gitlab.com/elyerr/echo-server) and [Echo Client](https://gitlab.com/elyerr/echo-client-js).
 
-[Astian](https://astian.org) Account Server is a service to unify the entire authentication and authorization process for Astian services.
+This server was developed to facilitate the creation of microservices applications that can easily connect to the main server as if they were a unified system. With this authentication and authorization server, you can develop microservices or monolithic applications in any programming language and database manager. This enables developers to build applications in the language they are most proficient in, allowing for the creation of more complex applications.
+
+---
 
 ## License
 
 This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.
 
- 
+---
+
+## Resources
+
+-   [Official Documentation](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home) 
+-   [Echo Server](https://gitlab.com/elyerr/echo-server)
+-   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
+
+---
+
+## Contact
+
+For direct contact, visit [Telegram](https://t.me/elyerr).
+
 
 # 🚀 Deploy & First User Setup  
 
@@ -33,4 +48,44 @@ Run the following command to deploy the application in a production environment:
 To create an initial user in the application, execute the following command inside the container:
 ```bash
 docker exec -it oauth2-server-app-1 php artisan settings:create-user
+```
+
+## Proxy settings Nginx server
+
+```bash
+server {
+    
+    listen 80;
+    server_name accounts.server.org;
+
+    # Logging
+    access_log /var/log/nginx/accounts_access.log main;
+    error_log /var/log/nginx/accounts_error.log warn;
+
+    location / {
+        proxy_pass http://127.0.0.1:8005;
+        proxy_http_version 1.1;
+ 
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+ 
+        proxy_set_header X-Forwarded-Host $http_x_forwarded_host;
+        proxy_set_header X-Forwarded-Port $http_x_forwarded_port;
+        proxy_set_header X-Forwarded-AWS-ELB $http_x_forwarded_aws_elb;
+ 
+        proxy_read_timeout 720s;
+        proxy_connect_timeout 720s;
+        proxy_send_timeout 720s;
+
+        proxy_buffering on;
+        proxy_buffer_size 128k;
+        proxy_buffers 4 256k;
+        proxy_busy_buffers_size 256k;
+        proxy_temp_file_write_size 256k;
+ 
+        proxy_redirect off;
+    }
+}
 ```
