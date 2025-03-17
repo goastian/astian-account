@@ -32,24 +32,43 @@ class UserScopeTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($data)
+    public function transform(UserScope $data)
     {
         return [
             'id' => $data->id,
-            'group' => $data->scope->service->group->slug,
-            'service' => $data->scope->service->slug,
-            'role' => $data->scope->role->slug,
-            'scope' => $data->scope->getGsrID(),
-            'public' => $data->scope->public,
-            'active' => $data->scope->active,
-            'end_date' => $data->end_date,
-            'package_id' => $data->package_id, 
+            'expiration_date' => $data->end_date,
+            'package_id' => $data->package_id,
+            'status' => $data->revoked(),
+            'scope' => [
+                'gsr_id' => $data->scope->getGsrID(),
+                'public' => $data->scope->public,
+                'active' => $data->scope->active,
+                'service' => [
+                    'id' => $data->scope->service->id,
+                    'name' => $data->scope->service->name,
+                    'slug' => $data->scope->service->slug,
+                    'description' => $data->scope->service->description,
+                    'system' => $data->scope->service->system ? true : false,
+                    'group' => [
+                        'id' => $data->scope->service->group->id,
+                        'name' => $data->scope->service->group->name,
+                        'description' => $data->scope->service->group->description,
+                    ]
+                ],
+                'role' => [
+                    'id' => $data->scope->role->id,
+                    'name' => $data->scope->role->name,
+                    'slug' => $data->scope->role->slug,
+                    'description' => $data->scope->role->description
+                ],
+            ],
             'created_at' => $this->format_date($data->created_at),
             'updated_at' => $this->format_date($data->updated_at),
             'links' => [
                 'index' => route('admin.users.scopes.index', ['user' => $data->user_id]),
+                'history' => route('admin.users.scopes.history', ['user' => $data->user_id]),
                 'assign' => route('admin.users.scopes.assign', ['user' => $data->user_id]),
-                'revoke' => route('admin.users.scopes.revoke', ['user' => $data->user_id]), 
+                'revoke' => route('admin.users.scopes.revoke', ['user' => $data->user_id, 'scope' => $data->id]),
             ]
         ];
     }
@@ -65,7 +84,7 @@ class UserScopeTransformer extends TransformerAbstract
             'scope_id' => 'scope_id',
             'user_id' => 'user_id',
             'end_date' => 'end_date',
-            'package_id' => 'package_id', 
+            'package_id' => 'package_id',
             'created' => "created_at",
             'updated' => "updated_at",
         ];

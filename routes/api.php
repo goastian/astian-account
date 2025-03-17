@@ -88,7 +88,7 @@ Route::group([
     Route::get('/users/{user}/scopes/history', [UserScopeController::class, 'history'])->name('users.scopes.history');
     Route::get('/users/{user}/scopes', [UserScopeController::class, 'index'])->name('users.scopes.index');
     Route::post('/users/{user}/scopes', [UserScopeController::class, 'assign'])->name('users.scopes.assign');
-    Route::put('/users/{user}/scopes', [UserScopeController::class, 'revoke'])->name('users.scopes.revoke');
+    Route::put('/users/{user}/scopes/{scope}', [UserScopeController::class, 'revoke'])->name('users.scopes.revoke');
 
     Route::get('/users/{user}/groups', [UserGroupController::class, 'index'])->name('users.groups.index');
     Route::post('/users/{user}/groups', [UserGroupController::class, 'assign'])->name('users.groups.assign');
