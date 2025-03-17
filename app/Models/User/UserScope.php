@@ -59,4 +59,13 @@ class UserScope extends Master
     {
         return $this->belongsTo(Scope::class);
     }
+
+    public function revoked()
+    {
+        if (empty($this->end_date)) {
+            return 'unlimited';
+        }
+
+        return $this->end_date < now() ? 'revoked' : 'active';
+    }
 }

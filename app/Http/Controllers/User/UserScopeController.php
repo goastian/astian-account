@@ -3,6 +3,7 @@ namespace App\Http\Controllers\User;
 
 use App\Traits\Scopes;
 use App\Models\User\User;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use App\Models\User\UserScope;
 use App\Models\Subscription\Scope;
@@ -124,34 +125,18 @@ class UserScopeController extends GlobalController
      * @param \App\Models\Subscription\Scope $scope
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function revoke(Request $request, User $user, UserScope $userScope)
+    public function revoke(Request $request, User $user, UserScope $scope)
     {
-        $this->validate($request, [
-            'scopes' => [
-                'required',
-                function ($attribute, $value, $fail) use ($userScope) {
-                    if (!is_array($value)) {
-                        $fail(__("The :attribute must be an array", ['attribute' => $attribute]));
-                    }
-                }
-            ],
-        ]);
+        if ($user->id != $scope->user_id) {
+            throw new ReportError(__('Invalid request'), 400);
+        }
 
-        $this->checkMethod('put');
-        $this->checkContentType($this->getUpdateHeader());
-
-        DB::transaction(function () use ($request, $user, $userScope) {
-
-            foreach ($request->scopes as $id) {
-                $userScope->whereNull('package_id')
-                    ->where(function ($query) {
-                        $query->whereNull('end_date')
-                            ->orWhere('end_date', '>', now());
-                    })
-                    ->where('scope_id', $id)
-                    ->where('user_id', $user->id)
-                    ->update(['end_date' => now()]);
+        DB::transaction(function () use ($scope) {
+            if (empty($scope->end_date) || $scope->end_date >= now()) {
+                $scope->end_date = now();
+                $scope->push();
             }
+
         });
 
         return $this->message(__("Scopes have been revoked successfully"), 200);
@@ -167,15 +152,9 @@ class UserScopeController extends GlobalController
     {
         $this->checkMethod('get');
 
-        $params = $this->filter_transform($userScope->transformer);
-
         $scopes = $userScope->query();
-        $scopes = $scopes->where('user_id', $user->id);
+        $scopes->where('user_id', $user->id);
 
-        $this->search($scopes, $params);
-
-        $scopes = $scopes->get();
-
-        return $this->showAll($scopes, $userScope->transformer);
+        return $this->showAllByBuilder($scopes, $userScope->transformer);
     }
 }
