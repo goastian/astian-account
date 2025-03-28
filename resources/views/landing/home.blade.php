@@ -56,7 +56,7 @@
             <!-- 1 -->
             <div class="p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-lg hover:transform hover:scale-105 transition-all duration-300">
                 <!-- Icono dentro de un contenedor con fondo y borde redondeado -->
-                <div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
+                <div class="w-12 h-12 bg-red-100 text-red-300 rounded-lg flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
                     <i class="mdi mdi-shield-lock text-3xl"></i>
                 </div>
                 <!-- Título -->
@@ -70,7 +70,7 @@
             <!-- 2 -->
             <div class="p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-lg hover:transform hover:scale-105 transition-all duration-300">
                 <!-- Icono dentro de un contenedor con fondo y borde redondeado -->
-                <div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
+                <div class="w-12 h-12 rounded-lg bg-sky-100 text-sky-300 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
                     <i class="mdi mdi-gamepad-circle text-3xl"></i>
                 </div>
                 <!-- Título -->
@@ -84,7 +84,7 @@
             <!-- 3 -->
             <div class="p-6 border border-gray-200 rounded-lg shadow-md hover:shadow-lg hover:transform hover:scale-105 transition-all duration-300">
                 <!-- Icono dentro de un contenedor con fondo y borde redondeado -->
-                <div class="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
+                <div class="w-12 h-12 rounded-lg bg-purple-100 text-purple-300 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
                     <i class="mdi mdi-cog text-3xl"></i>
                 </div>
                 <!-- Título -->
