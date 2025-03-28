@@ -15,9 +15,11 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/auth.php';
 require __DIR__ . '/oauth.php';
 
+/*
 Route::get("/", function () {
     return view('landing.home');
 });
+ */
 
 Route::get("/{any}", function () {
     return view('app');
