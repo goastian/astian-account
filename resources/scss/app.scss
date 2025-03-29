@@ -1,14 +1,27 @@
+@import '@fontsource/outfit';
 /**  Add custom styles for vue js templates**/
 :root {
     --bg: #fff;
     --text: #202020;
+    --color-gray: #8E8E8E;
     --bg-link-active: #FF595D;
     --text-link-active: #fff;
     --bg-link-hover: #FFF3F3;
     --text-link: #555555;
     --text-link-hover: #FF595D;
     --bg-main: #FFF3F3;
-    --border-color: #FFC7C8;
+    --border-color: #C1C1C1;
 
     --primary-color: #00b9b5;
+    --primary-bg: #8BE5E2;
+    --bg-primary: #F8FAFC;
+
+
+    --green-primary: #00A12B;
+    --green-secondary: #ACF2BF;
+}
+
+
+* {
+  font-family: 'Outfit', sans-serif;
 }

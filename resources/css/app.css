@@ -1,3 +1,11 @@
 @import "tailwindcss";
 @source "../views";
 @import "flatpickr";
+
+.green-color-login-light {
+    background-color: #BEF0EF;
+}
+
+.green-color-login-card {
+    background-color: #00B9B5;
+}
