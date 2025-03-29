@@ -1,6 +1,6 @@
 <template>
-    <div class="text-center">
-        <q-btn flat round icon="mdi-dots-vertical">
+    <div class="container-icon">
+        <q-btn flat round icon="mdi-account" size="10px">
             <q-menu fit anchor="bottom right" self="top right">
                 <q-card style="min-width: 200px">
                     <q-list>
@@ -50,3 +50,14 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.container-icon {
+    background-color: var(--primary-color);
+    font-size: .2rem;
+    border-radius: 50%;
+    color: white;
+    height: 30px;
+    width: 30px;
+}
+</style>
