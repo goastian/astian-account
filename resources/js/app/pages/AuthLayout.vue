@@ -1,31 +1,36 @@
 <template>
     <q-layout view="hHh Lpr lff" v-if="$user.id">
-        <q-header :elevated="false" class="header">
-            <q-toolbar>
-                <q-btn
-                    dense
-                    flat
-                    round
-                    icon="menu"
-                    @click="leftDrawerOpen = !leftDrawerOpen"
-                />
-                <div class="header-title">
-                    <q-img src="/img/icon.webp" />
-                    <h1>{{ $app_name }}</h1>
-                </div>
-                <q-space />
-                <v-profile />
-            </q-toolbar>
-        </q-header>
-
         <q-drawer
-            v-model="leftDrawerOpen"
+            v-model="state.isVisible"
             show-if-above
-            :width="300"
+            :width="270"
             :breakpoint="500"
             class="nav"
         >
-            <q-scroll-area class="nav-scroll">
+            <q-scroll-area v-if="$user.groups[0].name === 'member' " class="nav-user-scroll">
+                <q-list
+                    padding
+                    class=""
+                >
+                    <q-item
+                        v-for="(nav, index) in navs"
+                        :key="index"
+                        :href="nav.route"
+                        class="item-user"
+                        :active="$route.name == nav.route"
+                        active-class="active-link"
+                    >
+                        <q-item-section avatar>
+                            <q-icon :name="nav.icon" />
+                        </q-item-section>
+                        <q-item-section>
+                            {{ nav.name }}
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </q-scroll-area>
+
+            <q-scroll-area v-else class="nav-scroll">
                 <q-list padding class="menu-list">
                     <q-expansion-item
                         v-for="(menu, index) in menus"
@@ -55,10 +60,17 @@
                     </q-expansion-item>
                 </q-list>
             </q-scroll-area>
+
+            <div class="absolute-top container-logo">
+                <img src="/img/Astian-1.png" class="logo" />
+            </div>
         </q-drawer>
+
         <q-page-container>
-            <q-page :class="{ 'no-radius': !leftDrawerOpen }">
-                <router-view />
+            <q-page :class="{ 'full-page': !state.isVisible }">
+                <div class="main-container">
+                    <router-view />
+                </div>
             </q-page>
         </q-page-container>
 
@@ -72,6 +84,7 @@
 </template>
 
 <script>
+import { reactive } from 'vue';
 export default {
     inject: ["$user", "$app_name"],
 
@@ -79,13 +92,17 @@ export default {
         return {
             drawer: true,
             errors: {},
-            leftDrawerOpen: false,
-            nav: [
+            leftDrawerOpen: true,
+            state: reactive({
+                isVisible: true,
+            }),
+            navs: [
                 {
                     name: "Dashboard",
                     icon: "mdi-home",
                     route: "about",
                 },
+                /*
                 {
                     name: "Personal Information",
                     icon: "mdi-account",
@@ -106,6 +123,7 @@ export default {
                     icon: "mdi-help",
                     route: "help",
                 },
+                */
             ],
             menus: [
                 {
@@ -189,15 +207,17 @@ export default {
         };
     },
 
+    provide() {
+        return {
+            state: this.state
+        }
+    },
+
     methods: {
         hasGroup(name) {
             return this.$user.groups.some(
                 (item) => item.slug == name || item.slug == "administrator"
             );
-        },
-
-        toggleLeftDrawer() {
-            this.leftDrawerOpen = !this.leftDrawerOpen;
         },
 
         open(item) {
@@ -240,8 +260,9 @@ export default {
 }
 
 .nav-scroll {
-    height: 100%;
+    height: calc(100% - 70px);
     padding: 1rem 0;
+    margin-top: 70px;
 }
 
 .nav-list {
@@ -262,10 +283,16 @@ export default {
     color: var(--text-link-active);
 }
 
+.nav-user-scroll {
+    height: calc(100% - 70px);
+    margin-top: 70px;
+    padding: 1rem .5rem;
+}
+
 .item-user {
-    border-radius: 2rem;
-    padding: 0 2.5rem;
+    border-radius: .6rem;
     color: var(--text-link);
+    padding: 0 1rem;
 }
 
 .active-link {
@@ -279,14 +306,42 @@ export default {
 }
 
 .q-page {
-    width: auto;
-    padding: 1rem;
-    background-color: var(--bg-main);
-    border-radius: 1.5rem 0 0 0;
-    border: 0.08rem solid var(--border-color);
+    padding: .5rem .5rem .5rem 0;
+    height: 100vh;
+    min-height: 100vh;
+    width: calc(100vw - 270px);
+    background-color: white;
 }
 
-.no-radius {
-    border-radius: 0;
+.full-page {
+    padding: .5rem;
+    width: 100vw;
+    transition: .2s;
+}
+
+.main-container {
+    border-radius: .7rem;
+    border: .06rem solid var(--border-color);
+    min-height: 100%;
+    background-color: var(--bg-primary);
+}
+
+.container-logo {
+    height: 70px;
+    padding: .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: .06rem solid var(--border-color);
+    gap: 1rem;
+}
+
+.logo {
+    width: 70%;
+    height: 30px;
+}
+
+.mini {
+  width: 70px; /* Ajusta este valor según lo que quieras */
 }
 </style>
