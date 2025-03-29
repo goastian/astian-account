@@ -1,46 +1,49 @@
 <template>
-    <q-table
-        flat
-        bordered
-        :rows="scopes"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h5>List of scopes</h5>
-            <q-space />
-            <v-create @created="getScopes()"></v-create>
-        </template>
+    <v-header title="Scopes" />
+    <div class="container">
+        <q-table
+            flat
+            bordered
+            :rows="scopes"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
+        >
+            <template v-slot:top>
+                <h5>List of scopes</h5>
+                <q-space />
+                <v-create @created="getScopes()"></v-create>
+            </template>
 
-        <template v-slot:body-cell-public="props">
-            <q-td>
-                {{ props.row.public ? "Yes" : "No" }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-active="props">
-            <q-td>
-                {{ props.row.active ? "Yes" : "No" }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td class="">
-                <v-update @updated="getScopes" :item="props.row"></v-update>
+            <template v-slot:body-cell-public="props">
+                <q-td>
+                    {{ props.row.public ? "Yes" : "No" }}
+                </q-td>
+            </template>
+            <template v-slot:body-cell-active="props">
+                <q-td>
+                    {{ props.row.active ? "Yes" : "No" }}
+                </q-td>
+            </template>
+            <template v-slot:body-cell-actions="props">
+                <q-td class="">
+                    <v-update @updated="getScopes" :item="props.row"></v-update>
 
-                <v-delete @deleted="getScopes" :item="props.row"></v-delete>
-            </q-td>
-        </template>
-    </q-table>
+                    <v-delete @deleted="getScopes" :item="props.row"></v-delete>
+                </q-td>
+            </template>
+        </q-table>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
     </div>
 </template>
 <script>
@@ -152,3 +155,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.container {
+    padding: 1rem;
+}
+</style>

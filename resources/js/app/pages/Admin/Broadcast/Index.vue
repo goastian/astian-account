@@ -1,43 +1,46 @@
 <template>
-    <v-filter :params="params" @change="searching"></v-filter>
-    <q-table
-        flat
-        bordered
-        :rows="channels"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h6 class="fw-bold">List of channels</h6>
-            <q-space />
-            <v-create @created="getBroadcasting"></v-create>
-        </template>
+    <v-header title="Scopes" />
+    <div class="container">
+        <v-filter :params="params" @change="searching"></v-filter>
+        <q-table
+            flat
+            bordered
+            :rows="channels"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
+        >
+            <template v-slot:top>
+                <h6 class="fw-bold">List of channels</h6>
+                <q-space />
+                <v-create @created="getBroadcasting"></v-create>
+            </template>
 
-        <template v-slot:body-cell-system="props">
-            <q-td>
-                {{ props.row.system ? "Yes" : "No" }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td>
-                <v-destroy
-                    :item="props.row"
-                    @deleted="getBroadcasting"
-                ></v-destroy>
-            </q-td>
-        </template>
-    </q-table>
+            <template v-slot:body-cell-system="props">
+                <q-td>
+                    {{ props.row.system ? "Yes" : "No" }}
+                </q-td>
+            </template>
+            <template v-slot:body-cell-actions="props">
+                <q-td>
+                    <v-destroy
+                        :item="props.row"
+                        @deleted="getBroadcasting"
+                    ></v-destroy>
+                </q-td>
+            </template>
+        </q-table>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
     </div>
 </template>
 <script>
@@ -155,3 +158,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.container {
+    padding: 1rem;
+}
+</style>

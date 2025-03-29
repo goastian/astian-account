@@ -1,35 +1,38 @@
 <template>
-    <v-filter :params="params" @change="searching"></v-filter>
-    <q-table
-        flat
-        bordered
-        :rows="users"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h5>List of users</h5>
-            <q-space />
-            <v-create @created="getUsers"></v-create>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td>
-                <v-update @updated="getUsers" :item="props.row"></v-update>
-                <v-scopes :item="props.row"></v-scopes>
-            </q-td>
-        </template>
-    </q-table>
+    <v-header title="Users" />
+    <div class="container">
+        <v-filter :params="params" @change="searching"></v-filter>
+        <q-table
+            flat
+            bordered
+            :rows="users"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
+        >
+            <template v-slot:top>
+                <h5>List of users</h5>
+                <q-space />
+                <v-create @created="getUsers"></v-create>
+            </template>
+            <template v-slot:body-cell-actions="props">
+                <q-td>
+                    <v-update @updated="getUsers" :item="props.row"></v-update>
+                    <v-scopes :item="props.row"></v-scopes>
+                </q-td>
+            </template>
+        </q-table>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
     </div>
 </template>
 <script>
@@ -169,3 +172,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.container {
+    padding: 1rem;
+}
+</style>

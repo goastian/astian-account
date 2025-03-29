@@ -1,52 +1,55 @@
 <template>
-    <v-filter :params="params" @change="searching"></v-filter>
-    <q-table
-        flat
-        bordered
-        :rows="services"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h5>List of services</h5>
-            <q-space />
-            <v-create @created="getServices()"></v-create>
-        </template>
-        <template v-slot:body-cell-revoked="props">
-            <q-td>
-                {{ props.row.revoked ? "Yes" : "No" }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-system="props">
-            <q-td>
-                {{ props.row.system ? "Yes" : "No" }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td class="">
-                <v-update
-                    @updated="getServices"
-                    :item="props.row"
-                ></v-update>
+    <v-header title="services" />
+    <div class="container">
+        <v-filter :params="params" @change="searching"></v-filter>
+        <q-table
+            flat
+            bordered
+            :rows="services"
+            :columns="headers"
+            row-key="name"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+            hide-pagination
+        >
+            <template v-slot:top>
+                <h5>List of services</h5>
+                <q-space />
+                <v-create @created="getServices()"></v-create>
+            </template>
+            <template v-slot:body-cell-revoked="props">
+                <q-td>
+                    {{ props.row.revoked ? "Yes" : "No" }}
+                </q-td>
+            </template>
+            <template v-slot:body-cell-system="props">
+                <q-td>
+                    {{ props.row.system ? "Yes" : "No" }}
+                </q-td>
+            </template>
+            <template v-slot:body-cell-actions="props">
+                <q-td class="">
+                    <v-update
+                        @updated="getServices"
+                        :item="props.row"
+                    ></v-update>
 
-                <v-delete
-                    @deleted="getServices"
-                    :item="props.row"
-                ></v-delete>
-            </q-td>
-        </template>
-    </q-table>
+                    <v-delete
+                        @deleted="getServices"
+                        :item="props.row"
+                    ></v-delete>
+                </q-td>
+            </template>
+        </q-table>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
     </div>
 </template>
 <script>
@@ -154,3 +157,9 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.container {
+    padding: 1rem;
+}
+</style>

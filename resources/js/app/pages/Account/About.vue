@@ -1,7 +1,5 @@
 <template>
-    <q-toolbar>
-        <q-toolbar-title>Home</q-toolbar-title>
-    </q-toolbar>
+    <v-header title="Dashboard" />
     <div class="column q-gutter-y-xl q-pa-lg">
         <div class="row no-wrap items-center q-gutter-x-lg">
             <div class="img">
