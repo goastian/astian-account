@@ -8,21 +8,21 @@
             <q-card-section class="q-gutter-md">
                 <!-- Name -->
                 <q-input
-                    v-model="item.name"
+                    v-model="user.name"
                     label="Name"
                     outlined
                     dense
                     :error="!!errors.name"
                 />
                 <q-input
-                    v-model="item.last_name"
+                    v-model="user.last_name"
                     label="Last Name"
                     outlined
                     dense
                     :error="!!errors.last_name"
                 />
                 <q-input
-                    v-model="item.email"
+                    v-model="user.email"
                     label="Email"
                     type="email"
                     outlined
@@ -32,7 +32,7 @@
 
                 <!-- Country -->
                 <q-select
-                    v-model="item.country"
+                    v-model="user.country"
                     label="Country"
                     outlined
                     dense
@@ -49,7 +49,7 @@
 
                 <!-- Dial Code -->
                 <q-select
-                    v-model="item.dial_code"
+                    v-model="user.dial_code"
                     label="Dial Code"
                     outlined
                     dense
@@ -66,7 +66,7 @@
 
                 <!-- Phone -->
                 <q-input
-                    v-model="item.phone"
+                    v-model="user.phone"
                     label="Phone Number"
                     outlined
                     dense
@@ -124,7 +124,12 @@ export default {
             verify_email: false,
             birthday: null,
             dialog: false,
+            user: '',
         };
+    },
+
+    mounted() {
+        this.syncData();
     },
 
     watch: {
@@ -134,6 +139,9 @@ export default {
     },
 
     methods: {
+        syncData() {
+            this.user = {...this.item};
+        },
         /**
          *  reset keys when the windows is closed
          */
@@ -158,8 +166,8 @@ export default {
         async update() {
             try {
                 const res = await this.$server.put(
-                    this.item.links.update,
-                    this.item,
+                    this.user.links.update,
+                    this.user,
                     {
                         headers: {
                             "Content-Type": "application/x-www-form-urlencoded",
@@ -168,6 +176,7 @@ export default {
                 );
 
                 if (res.status == 200) {
+                    this.user = {};
                     this.form = { scope: [] };
                     this.errors = {};
                     this.$emit("updated", true);
