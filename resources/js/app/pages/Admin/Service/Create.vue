@@ -200,6 +200,11 @@ export default {
                 );
 
                 if (res.status == 201) {
+                    this.$q.notify({
+                        type: "positive",
+                        message: "Service created successfully",
+                        timeout: 3000,
+                    });
                     this.form = {};
                     this.errors = {};
                     this.$emit("created", true);

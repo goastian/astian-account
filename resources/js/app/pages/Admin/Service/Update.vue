@@ -1,5 +1,7 @@
 <template>
-    <q-btn round flat color="primary" @click="open(item)" icon="mdi-pencil" />
+    <button class="button" @click="open(item)">
+        <q-icon name="mdi-square-edit-outline" />
+    </button>
 
     <q-dialog
         v-model="dialog"
@@ -130,11 +132,15 @@ export default {
                     }
                 );
 
-                console.log(res)
                 if (res.status == 200) {
                     this.$emit("updated", true);
                     this.errors = {};
                     this.dialog = false;
+                    this.$q.notify({
+                        type: "positive",
+                        message: "Service edited successfully",
+                        timeout: 3000,
+                    });
                 }
             } catch (e) {
                 if (e.response && e.response.status == 422) {
@@ -147,6 +153,21 @@ export default {
 </script>
 
 <style scoped>
+
+.button {
+    padding: .4rem;
+    cursor: pointer;
+    outline: 1px solid #ccc;
+    padding: .2rem .4rem;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+}
+
+.button:hover {
+    background-color: #0077b6;
+    color: white;
+    outline: none;
+}
 .containerDialog {
     width: auto;
     height: 100%;

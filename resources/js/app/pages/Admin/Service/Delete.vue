@@ -1,11 +1,11 @@
 <template>
-    <q-btn
-        round
-        flat
-        color="red"
+    <button
+        class="button"
         @click="dialog = true"
         icon="mdi-delete-outline"
-    />
+    >
+        <q-icon name="mdi-delete-outline" />
+    </button>
 
     <q-dialog
         v-model="dialog"
@@ -64,11 +64,41 @@ export default {
                 const res = await this.$server.delete(this.item.links.destroy);
 
                 if (res.status == 200) {
+                    this.$q.notify({
+                        type: "positive",
+                        message: "Service deleted successfully",
+                        timeout: 3000,
+                    });
                     this.$emit("deleted", true);
                     this.dialog = false;
                 }
-            } catch (err) {}
+            } catch (err) {
+                this.$q.notify({
+                    type: "negative",
+                    message: err.response.data.message,
+                    timeout: 3000,
+                });
+            }
         },
     },
 };
 </script>
+
+<style scoped>
+
+.button {
+    padding: .4rem;
+    cursor: pointer;
+    outline: 1px solid #ccc;
+    padding: .2rem .4rem;
+    border-radius: 50%;
+    transition: .2s ease-in-out;
+}
+
+.button:hover {
+    background-color: #f50b0b;
+    color: white;
+    outline: none;
+}
+
+</style>
