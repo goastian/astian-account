@@ -40,6 +40,7 @@ class ServiceScopeTransformer extends TransformerAbstract
             'public' => $data->public ? true : false,
             'active' => $data->active ? true : false,
             'gsr_id' => $data->getGsrID(),
+            'api_key' => $data->api_key,
             'service' => [
                 'id' => $data->service->id,
                 'name' => $data->service->name,
