@@ -113,13 +113,15 @@
                                 <div class="scope-list" v-if="scopes[props.row.id]">
                                     <div class="scope-item badge" v-for="(scope, index) in scopes[props.row.id]">
                                         <span class="scope-title">{{ scope.role.name }}</span>
-                                        <button @click="copyToClipboard(scope.gsr_id)">
-                                            <q-icon name="mdi-content-copy" size="12px"/>
-                                        </button>
-                                        <v-edit-scope @edit="getServices()" :item="scope" />
-                                        <button class="delete-scope" @click="revokeRole(scope)">
-                                            <q-icon name="mdi-close" size="12px" />
-                                        </button>
+                                        <div class="scope-buttons">
+                                            <button @click="copyToClipboard(scope.gsr_id)">
+                                                <q-icon name="mdi-content-copy" size="12px"/>
+                                            </button>
+                                            <v-edit-scope @edit="getServices()" :item="scope" />
+                                            <button class="delete-scope" @click="revokeRole(scope)">
+                                                <q-icon name="mdi-close" size="12px" />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div v-if="scopes[props.row.id] < 1" >
@@ -147,6 +149,7 @@ import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VDelete from "./Delete.vue";
 import VAddScope from "./AddScope.vue";
+import VEditScope from "./EditScope.vue";
 
 export default {
     components: {
@@ -154,6 +157,7 @@ export default {
         VUpdate,
         VDelete,
         VAddScope,
+        VEditScope,
     },
 
     data() {
@@ -430,6 +434,16 @@ export default {
   border: none;
   color: red;
   cursor: pointer;
+}
+
+.scope-buttons {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+}
+
+.scope-buttons > button {
+    cursor: pointer;
 }
 
 .card .badge.success {
