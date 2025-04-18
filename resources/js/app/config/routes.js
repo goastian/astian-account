@@ -50,13 +50,7 @@ const routes = [
                         name: "admin.services.index",
                         component: () =>
                             import("../pages/Admin/Service/Index.vue"),
-                    },
-                    {
-                        path: "scopes",
-                        name: "admin.scopes.index",
-                        component: () =>
-                            import("../pages/Admin/Scope/Index.vue"),
-                    },
+                    }, 
                 ],
             },
 
