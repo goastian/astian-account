@@ -1,60 +1,48 @@
 <template>
     <q-layout view="hHh Lpr lff" v-if="$user.id">
-        <q-header :elevated="false" class="header">
+        <q-header class="bg-positive text-white">
             <q-toolbar>
-                <q-btn
-                    dense
-                    flat
-                    round
-                    icon="menu"
-                    @click="leftDrawerOpen = !leftDrawerOpen"
-                />
-                <div class="header-title">
-                    <q-img src="/img/icon.webp" />
-                    <h1>{{ $app_name }}</h1>
-                </div>
-                <q-space />
-                <v-profile />
+                <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+
+                <q-toolbar-title>
+                    <q-avatar>
+                        <img src="../../../img/favicon.png" />
+                    </q-avatar>
+                    {{ $app_name }}
+                </q-toolbar-title>
             </q-toolbar>
         </q-header>
 
-        <q-drawer
-            v-model="leftDrawerOpen"
-            show-if-above
-            :width="300"
-            :breakpoint="500"
-            class="nav"
-        >
-            <q-scroll-area class="nav-scroll">
-                <q-list padding class="menu-list">
-                    <q-expansion-item
-                        v-for="(menu, index) in menus"
-                        :key="index"
-                        expand-separator
-                        :label="menu.name"
-                        :icon="menu.icon"
-                        v-show="menu.show"
+        <q-drawer show-if-above v-model="leftDrawerOpen" side="left" elevated>
+            <q-list padding class="menu-list">
+                <q-expansion-item
+                    v-for="(menu, index) in menus"
+                    :key="index"
+                    expand-separator
+                    :label="menu.name"
+                    :icon="menu.icon"
+                    v-show="menu.show"
+                    header-class="text-positive"
+                >
+                    <q-item
+                        v-for="(item, i) in menu.menu"
+                        :key="i"
+                        clickable
+                        v-ripple
+                        @click="open(item)"
+                        class="item-admin"
+                        :active="$route.name == item.route"
+                        active-class="active"
                     >
-                        <q-item
-                            v-for="(item, i) in menu.menu"
-                            :key="i"
-                            clickable
-                            v-ripple
-                            @click="open(item)"
-                            class="item-admin"
-                            :active="$route.name == item.route"
-                            active-class="active"
-                        >
-                            <q-item-section avatar>
-                                <q-icon :name="item.icon" />
-                            </q-item-section>
-                            <q-item-section>
-                                {{ item.name }}
-                            </q-item-section>
-                        </q-item>
-                    </q-expansion-item>
-                </q-list>
-            </q-scroll-area>
+                        <q-item-section avatar>
+                            <q-icon :name="item.icon" color="primary" />
+                        </q-item-section>
+                        <q-item-section class="text-primary">
+                            {{ item.name }}
+                        </q-item-section>
+                    </q-item>
+                </q-expansion-item>
+            </q-list>
         </q-drawer>
         <q-page-container>
             <q-page :class="{ 'no-radius': !leftDrawerOpen }">
@@ -79,7 +67,7 @@ export default {
         return {
             drawer: true,
             errors: {},
-            leftDrawerOpen: false,
+            leftDrawerOpen: true,
             nav: [
                 {
                     name: "Dashboard",
@@ -210,83 +198,3 @@ export default {
     },
 };
 </script>
-
-<style scoped lang="css">
-.custom-drawer {
-    width: 250px;
-}
-
-.header {
-    background-color: var(--bg);
-    color: var(--text);
-}
-
-.header-title {
-    width: 200px;
-    height: 42px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
-
-.header-title .q-img {
-    width: 30px;
-    height: 30px;
-}
-
-.header-title h1 {
-    font-size: 1rem;
-}
-
-.nav-scroll {
-    height: 100%;
-    padding: 1rem 0;
-}
-
-.nav-list {
-    padding: 0 1rem;
-}
-
-.item-admin {
-    color: var(--text-link);
-}
-
-.item-admin:hover {
-    background-color: var(--bg-link-hover);
-    color: var(--text-link-hover);
-}
-
-.active {
-    background-color: var(--bg-link-active);
-    color: var(--text-link-active);
-}
-
-.item-user {
-    border-radius: 2rem;
-    padding: 0 2.5rem;
-    color: var(--text-link);
-}
-
-.active-link {
-    background-color: var(--bg-link-active);
-    color: var(--text-link-active);
-}
-
-.item-user:hover {
-    background-color: var(--bg-link-hover);
-    color: var(--text-link-hover);
-}
-
-.q-page {
-    width: auto;
-    padding: 1rem;
-    background-color: var(--bg-main);
-    border-radius: 1.5rem 0 0 0;
-    border: 0.08rem solid var(--border-color);
-}
-
-.no-radius {
-    border-radius: 0;
-}
-</style>
