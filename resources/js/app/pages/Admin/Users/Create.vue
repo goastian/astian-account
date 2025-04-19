@@ -152,7 +152,7 @@
 
                     <q-checkbox
                         dense="dense"
-                        v-model="verify_email"
+                        v-model="form.verify_email"
                         label="Mark user email as verified"
                         :error="!!form.groups"
                     >
@@ -179,8 +179,10 @@
             </q-card-actions>
         </q-card>
     </q-dialog>
-    <q-btn class="glossy" round color="secondary" icon="mdi-plus" @click="open">
-        <q-tooltip> Add new user</q-tooltip>
+    <q-btn color="positive" outline round icon="mdi-plus" @click="open">
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Add new users
+        </q-tooltip>
     </q-btn>
 </template>
 
@@ -199,10 +201,9 @@ export default {
                 phone: null,
                 birthday: null,
                 groups: [],
-                verify_email: 0,
+                verify_email: false,
             },
             selected_groups: [],
-            verify_email: false,
             errors: {},
             countries: [],
             groups: [],
@@ -218,10 +219,6 @@ export default {
     watch: {
         selected_groups(value) {
             this.form.groups = value.map((item) => item.value);
-        },
-
-        verify_email(value) {
-            this.form.verify_email = value ? 1 : 0;
         },
     },
 
@@ -256,7 +253,6 @@ export default {
                     this.form = { groups: [] };
                     this.errors = {};
                     this.selected_groups = [];
-                    this.verify_email = 0;
 
                     this.$q.notify({
                         type: "positive",

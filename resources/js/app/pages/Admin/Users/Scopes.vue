@@ -1,9 +1,9 @@
 <template>
-    <q-dialog v-model="dialog" full-width>
+    <q-dialog v-model="dialog" full-screen persistent>
         <template v-slot:default>
             <q-card>
                 <q-card-section class="row items-center">
-                    <div class="text-h6">Add or remove scopes</div>
+                    <div class="text-h6">Add scopes</div>
                     <q-space />
                     <q-btn flat icon="close" @click="dialog = false" />
                 </q-card-section>
@@ -27,20 +27,21 @@
                     <q-btn @click="dialog = false" color="green" icon="close">
                         Close
                     </q-btn>
-                    <q-btn
-                        @click="revoke"
-                        color="red"
-                        icon="delete"
-                        class="q-mx-sm"
-                    >
-                        Revoke
-                    </q-btn>
                 </q-card-actions>
             </q-card>
         </template>
     </q-dialog>
-
-    <q-btn color="blue" icon="mdi-shield-crown" round flat @click="openDialog" />
+    <q-btn
+        outline
+        round
+        icon="mdi-shield-plus-outline"
+        color="positive"
+        @click="openDialog"
+    >
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Add scopes
+        </q-tooltip>
+    </q-btn>
 </template>
 
 <script>
@@ -54,8 +55,8 @@ export default {
 
     data() {
         return {
-            dialog: false,
             user_roles: [],
+            dialog: false,
             form: {
                 scopes: [],
                 end_date: "",
@@ -78,9 +79,7 @@ export default {
                 if (res.status == 200) {
                     this.user_roles = res.data.data;
                 }
-            } catch (error) {
-                console.error(error);
-            }
+            } catch (error) {}
         },
 
         checkedRoles(event) {
@@ -94,33 +93,6 @@ export default {
                     this.form,
                     {
                         headers: { "Content-Type": "multipart/form-data" },
-                    }
-                );
-
-                if (res.status == 201) {
-                    this.errors = {};
-                    this.userRoles();
-                    this.$q.notify({
-                        type: "positive",
-                        message: res.data.message,
-                    });
-                }
-            } catch (e) {
-                if (e.response?.status == 422) {
-                    this.errors = e.response.data.errors;
-                }
-            }
-        },
-
-        async revoke() {
-            try {
-                const res = await this.$server.put(
-                    this.item.links.scopes,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
                     }
                 );
 
