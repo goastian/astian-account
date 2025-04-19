@@ -16,9 +16,11 @@
             <v-create @created="getUsers"></v-create>
         </template>
         <template v-slot:body-cell-actions="props">
-            <q-td>
+            <q-td class="flex justify-around">
                 <v-update @updated="getUsers" :item="props.row"></v-update>
                 <v-scopes :item="props.row"></v-scopes>
+                <v-revoke :item="props.row"></v-revoke>
+                <v-status :item="props.row" @updated="getUsers"></v-status>
             </q-td>
         </template>
     </q-table>
@@ -36,11 +38,15 @@
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VScopes from "./Scopes.vue";
+import VStatus from "./Status.vue";
+import VRevoke from "./Revoke.vue";
 export default {
     components: {
         VCreate,
         VUpdate,
         VScopes,
+        VStatus,
+        VRevoke,
     },
 
     data() {

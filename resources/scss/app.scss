@@ -1,13 +1,5 @@
 /**  Add custom styles for vue js templates**/
-:root {
-    --bg: #fff;
-    --text: #202020;
-    --bg-link-active: #FF595D;
-    --text-link-active: #fff;
-    --bg-link-hover: #FFF3F3;
-    --text-link: #555555;
-    --text-link-hover: #FF595D;
-    --bg-main: #FFF3F3;
-    --border-color: #FFC7C8;
 
+.text-ucfirst::first-letter {
+    text-transform: uppercase;
 }
