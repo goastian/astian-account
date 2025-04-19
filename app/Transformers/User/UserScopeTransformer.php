@@ -40,6 +40,7 @@ class UserScopeTransformer extends TransformerAbstract
             'package_id' => $data->package_id,
             'status' => $data->revoked(),
             'scope' => [
+                'id' => $data->scope->id,
                 'gsr_id' => $data->scope->getGsrID(),
                 'public' => $data->scope->public,
                 'active' => $data->scope->active,
