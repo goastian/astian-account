@@ -1,68 +1,49 @@
 <template>
-    <v-filter :params="params" @change="searching"></v-filter>
-    <q-table
-        flat
-        bordered
-        :rows="groups"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h5>List of groups</h5>
-            <q-space />
-            <v-create @created="getGroups()"></v-create>
-        </template>
-        <template v-slot:body-cell-id="props">
-            <q-td>
-                <q-chip
-                    clickable
-                    @click="copyToClipboard(props.row.id)"
-                    color="green"
-                    text-color="white"
-                    icon="mdi-content-copy"
-                    label="*****"
-                >
-                    <q-tooltip> Copy id </q-tooltip>
-                </q-chip>
-            </q-td>
-        </template>
-        <template v-slot:body-cell-secret="props">
-            <q-td>
-                <q-chip
-                    v-if="props.row.secret"
-                    clickable
-                    @click="copyToClipboard(props.row.secret)"
-                    color="green"
-                    text-color="white"
-                    icon="mdi-content-copy"
-                    label="*****"
-                >
-                    <q-tooltip> Copy secret </q-tooltip>
-                </q-chip>
-            </q-td>
-        </template>
-        <template v-slot:body-cell-revoked="props">
-            <q-td>
-                {{ props.row.revoked ? "Yes" : "No" }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td class="">
-                <v-update
-                    @updated="getGroups"
-                    :item="props.row"
-                ></v-update>
+    <v-filter :params="params" @change="searching" />
 
-                <v-delete
-                    @deleted="getGroups"
-                    :item="props.row"
-                ></v-delete>
-            </q-td>
-        </template>
-    </q-table>
+    <q-toolbar class="q-ma-sm">
+        <q-toolbar-title> List of groups </q-toolbar-title>
+
+        <v-create @created="getGroups"></v-create>
+    </q-toolbar>
+
+    <div class="row q-col-gutter-md q-ma-sm">
+        <div
+            class="col-xs-12 col-sm-6 col-md-4"
+            v-for="group in groups"
+            :key="group.id"
+        >
+            <q-card flat bordered>
+                <q-card-section class="q-pb-none">
+                    <div class="text-h6 text-ucfirst">{{ group.name }}</div>
+                    <div class="text-subtitle2 text-grey-7">
+                        {{ group.slug }}
+                    </div>
+                </q-card-section>
+
+                <q-card-section>
+                    <div class="line-clamp-2">
+                        {{ group.description }}
+                    </div>
+                </q-card-section>
+
+                <q-card-section class="text-caption text-grey-8">
+                    System: <strong>{{ group.system ? "Yes" : "No" }}</strong>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right">
+                    <v-update @updated="getGroups" :item="group" />
+                    <v-delete
+                        v-if="!group.system"
+                        @deleted="getGroups"
+                        :item="group"
+                    />
+                </q-card-actions>
+            </q-card>
+        </div>
+    </div>
 
     <div class="row justify-center q-mt-md">
         <q-pagination
@@ -73,6 +54,7 @@
         />
     </div>
 </template>
+
 <script>
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
@@ -88,31 +70,7 @@ export default {
     data() {
         return {
             groups: [],
-            headers: [
-                { label: "Name", name: "value", field: "name", align: "left" },
-                { label: "Slug", name: "value", field: "slug", align: "left" },
-                {
-                    label: "Description",
-                    name: "description",
-                    field: "description",
-                    align: "left",
-                },
-                {
-                    label: "System",
-                    name: "system",
-                    field: "system",
-                    align: "left",
-                },
-                {
-                    label: "Actions",
-                    name: "actions",
-                    field: "actions",
-                    align: "center",
-                },
-            ],
-            params: [
-                { key: "Name", value: "name" },
-            ],
+            params: [{ key: "Name", value: "name" }],
             pages: {
                 total_pages: 0,
             },
@@ -166,17 +124,14 @@ export default {
                 })
                 .catch((e) => {});
         },
-
-        async copyToClipboard(text) {
-            try {
-                await navigator.clipboard.writeText(text);
-                this.$q.notify({
-                    type: "positive",
-                    message: "Copy successfully",
-                    timeout: 3000,
-                });
-            } catch (err) {}
-        },
     },
 };
 </script>
+<style scoped>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>

@@ -49,7 +49,7 @@
             </q-td>
         </template>
         <template v-slot:body-cell-actions="props">
-            <q-td class="">
+            <q-td class="flex justify-around">
                 <v-update
                     @updated="getClients"
                     :item="props.row"

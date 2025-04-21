@@ -1,8 +1,8 @@
 <template>
     <q-btn
         round
-        flat
-        color="red"
+        outline
+        color="negative"
         @click="dialog = true"
         icon="mdi-delete-outline"
     />
@@ -25,15 +25,15 @@
 
             <q-card-actions align="right" class="bg-white text-teal">
                 <q-btn
-                    dense="dense"
-                    color="primary"
+                    outline
+                    color="positive"
                     label="Accept"
                     @click="destroy"
                 />
 
                 <q-btn
-                    dense="dense"
-                    caolor="secondary"
+                    outline
+                    color="secondary"
                     label="Close"
                     @click="dialog = false"
                 />

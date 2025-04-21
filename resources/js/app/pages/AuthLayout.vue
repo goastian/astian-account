@@ -10,6 +10,8 @@
                     </q-avatar>
                     {{ $app_name }}
                 </q-toolbar-title>
+
+                <v-profile></v-profile>
             </q-toolbar>
         </q-header>
 
@@ -68,33 +70,6 @@ export default {
             drawer: true,
             errors: {},
             leftDrawerOpen: true,
-            nav: [
-                {
-                    name: "Dashboard",
-                    icon: "mdi-home",
-                    route: "about",
-                },
-                {
-                    name: "Personal Information",
-                    icon: "mdi-account",
-                    route: "information",
-                },
-                {
-                    name: "Security",
-                    icon: "mdi-shield-outline",
-                    route: "security",
-                },
-                {
-                    name: "Payment and Suscriptions",
-                    icon: "mdi-account-credit-card",
-                    route: "payment",
-                },
-                {
-                    name: "Help",
-                    icon: "mdi-help",
-                    route: "help",
-                },
-            ],
             menus: [
                 {
                     name: "Account",

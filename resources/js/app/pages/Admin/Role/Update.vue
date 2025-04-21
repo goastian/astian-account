@@ -1,5 +1,9 @@
 <template>
-    <q-btn round flat color="primary" @click="open(item)" icon="mdi-pencil" />
+    <q-btn round outline color="positive" @click="open(item)" icon="mdi-pencil">
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Update role
+        </q-tooltip>
+    </q-btn>
 
     <q-dialog
         v-model="dialog"
@@ -15,7 +19,7 @@
                 <q-input
                     v-model="form.description"
                     label="Description"
-                    dense="dense"
+                    outline
                     :error="!!errors.redirect"
                     type="textarea"
                 >
@@ -27,18 +31,13 @@
 
             <q-card-actions align="right" class="bg-white text-teal">
                 <q-btn
-                    dense="dense"
+                    outline
                     color="primary"
                     label="Accept"
                     @click="updateRole"
                 />
 
-                <q-btn
-                    dense="dense"
-                    caolor="secondary"
-                    label="Close"
-                    @click="close"
-                />
+                <q-btn outline color="secondary" label="Close" @click="close" />
             </q-card-actions>
         </q-card>
     </q-dialog>
