@@ -2,11 +2,15 @@
     <div class="q-pa-md q-gutter-sm">
         <q-btn
             round
-            dense="dense"
-            color="primary"
+            outline
+            color="positive"
             @click="dialog = true"
             icon="mdi-plus-circle"
-        />
+        >
+            <q-tooltip transition-show="rotate" transition-hide="rotate">
+                Add new client
+            </q-tooltip>
+        </q-btn>
 
         <q-dialog
             v-model="dialog"
@@ -48,22 +52,22 @@
                         :error="!!errors.confidential"
                     >
                         <template v-slot:error>
-                            <v-error :error="errors.redirect"></v-error>
+                            <v-error :error="errors.confidential"></v-error>
                         </template>
                     </q-checkbox>
                 </q-card-section>
 
                 <q-card-actions align="right" class="bg-white text-teal">
                     <q-btn
-                        dense="dense"
-                        color="primary"
+                        outline
+                        color="positive"
                         label="Accept"
                         @click="create"
                     />
 
                     <q-btn
-                        dense="dense"
-                        caolor="secondary"
+                        outline
+                        color="secondary"
                         label="Close"
                         @click="close"
                     />

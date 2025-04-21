@@ -12,24 +12,25 @@
 
             <q-card-actions align="right">
                 <q-btn
+                    outline
                     label="Save"
                     icon="mdi-content-save-alert"
-                    color="primary"
+                    color="positive"
                     @click="destroy"
                 />
                 <q-btn
+                    outline
                     label="Close"
                     icon="mdi-close-circle"
-                    color="negative"
+                    color="secondary"
                     @click="dialog = false"
                 />
             </q-card-actions>
         </q-card>
     </q-dialog>
     <q-btn
-        class="glossy"
+        outline
         round
-        flat
         color="red"
         icon="mdi-delete-circle-outline"
         @click="dialog = true"

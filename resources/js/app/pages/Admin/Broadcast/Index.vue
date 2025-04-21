@@ -24,6 +24,7 @@
         <template v-slot:body-cell-actions="props">
             <q-td>
                 <v-destroy
+                    v-if="!props.row.system"
                     :item="props.row"
                     @deleted="getBroadcasting"
                 ></v-destroy>

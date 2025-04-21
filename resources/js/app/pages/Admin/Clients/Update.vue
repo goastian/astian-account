@@ -1,5 +1,9 @@
 <template>
-    <q-btn round flat color="primary" @click="open(item)" icon="mdi-pencil" />
+    <q-btn round outline color="positive" @click="open(item)" icon="mdi-pencil">
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Update client
+        </q-tooltip>
+    </q-btn>
 
     <q-dialog
         v-model="dialog"
