@@ -1,36 +1,52 @@
 <template>
-    <v-filter :params="params" @change="searching"></v-filter>
-    <q-table
-        flat
-        bordered
-        :rows="channels"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h6 class="fw-bold">List of channels</h6>
-            <q-space />
-            <v-create @created="getBroadcasting"></v-create>
-        </template>
+    <v-filter :params="params" @change="searching" />
+    <q-toolbar class="q-ma-sm">
+        <q-toolbar-title> List of channels </q-toolbar-title>
 
-        <template v-slot:body-cell-system="props">
-            <q-td>
-                {{ props.row.system ? "Yes" : "No" }}
-            </q-td>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td>
-                <v-destroy
-                    v-if="!props.row.system"
-                    :item="props.row"
-                    @deleted="getBroadcasting"
-                ></v-destroy>
-            </q-td>
-        </template>
-    </q-table>
+        <v-create @created="getBroadcasting"></v-create>
+    </q-toolbar>
+
+    <div class="row q-col-gutter-md q-ma-sm">
+        <div
+            class="col-xs-12 col-sm-6 col-md-4"
+            v-for="channel in channels"
+            :key="channel.id"
+        >
+            <q-card bordered flat>
+                <q-card-section class="q-pb-none">
+                    <div class="text-h6">{{ channel.name }}</div>
+                    <div class="text-subtitle2 text-grey">
+                        {{ channel.slug }}
+                    </div>
+                </q-card-section>
+
+                <q-card-section>
+                    <div class="q-mb-sm">
+                        <strong>Description:</strong>
+                        {{ channel.description || "—" }}
+                    </div>
+                    <div>
+                        <strong>System:</strong>
+                        <q-chip
+                            :color="channel.system ? 'green' : 'red'"
+                            text-color="white"
+                            dense
+                        >
+                            {{ channel.system ? "Yes" : "No" }}
+                        </q-chip>
+                    </div>
+                </q-card-section>
+
+                <q-card-actions align="right">
+                    <v-destroy
+                        v-if="!channel.system"
+                        :item="channel"
+                        @deleted="getBroadcasting"
+                    />
+                </q-card-actions>
+            </q-card>
+        </div>
+    </div>
 
     <div class="row justify-center q-mt-md">
         <q-pagination
@@ -52,28 +68,6 @@ export default {
 
     data() {
         return {
-            headers: [
-                { label: "Name", name: "name", field: "name", align: "left" },
-                {
-                    label: "Description",
-                    name: "description",
-                    field: "description",
-                    align: "left",
-                },
-                { label: "Slug", name: "slug", field: "slug", align: "left" },
-                {
-                    label: "System",
-                    name: "system",
-                    field: "system",
-                    align: "left",
-                },
-                {
-                    label: "Actions",
-                    name: "actions",
-                    field: "actions",
-                    align: "center",
-                },
-            ],
             params: [
                 { key: "Name", value: "name" },
                 { key: "Description", value: "description" },
