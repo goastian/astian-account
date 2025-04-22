@@ -46,6 +46,7 @@ class UserController extends Controller
         $params = $this->filter_transform($user->transformer);
 
         $data = $user->query();
+        $data = $data->withTrashed();
         $data = $this->searchByBuilder($data, $params);
         $data = $this->orderByBuilder($data, $user->transformer);
 
@@ -76,7 +77,7 @@ class UserController extends Controller
             }
             $user->save();
 
-            $user->groups()->attach($request->groups);
+            //$user->groups()->attach($request->groups);
 
             /**
              * Send event
