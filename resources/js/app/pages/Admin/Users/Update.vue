@@ -172,6 +172,7 @@ export default {
                     this.$notification.success(
                         "User has been updated successfully"
                     );
+                    this.dialog = false;
                 }
             } catch (e) {
                 if (
