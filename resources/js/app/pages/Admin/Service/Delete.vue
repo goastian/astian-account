@@ -1,11 +1,15 @@
 <template>
     <q-btn
         round
-        flat
+        outline
         color="red"
         @click="dialog = true"
         icon="mdi-delete-outline"
-    />
+    >
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Delete service
+        </q-tooltip>
+    </q-btn>
 
     <q-dialog
         v-model="dialog"
@@ -25,15 +29,15 @@
 
             <q-card-actions align="right" class="bg-white text-teal">
                 <q-btn
-                    dense="dense"
-                    color="primary"
+                    outline
+                    color="positive"
                     label="Accept"
                     @click="destroy"
                 />
 
                 <q-btn
-                    dense="dense"
-                    caolor="secondary"
+                    outline
+                    color="secondary"
                     label="Close"
                     @click="dialog = false"
                 />
@@ -66,6 +70,11 @@ export default {
                 if (res.status == 200) {
                     this.$emit("deleted", true);
                     this.dialog = false;
+                    this.$q.notify({
+                        type: "positive",
+                        message: "Service has been deleted successfully",
+                        timeout: 3000,
+                    });
                 }
             } catch (err) {}
         },
