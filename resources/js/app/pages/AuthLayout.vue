@@ -15,36 +15,38 @@
             </q-toolbar>
         </q-header>
 
-        <q-drawer show-if-above v-model="leftDrawerOpen" side="left" elevated>
-            <q-list padding class="menu-list">
-                <q-expansion-item
-                    v-for="(menu, index) in menus"
-                    :key="index"
-                    expand-separator
-                    :label="menu.name"
-                    :icon="menu.icon"
-                    v-show="menu.show"
-                    header-class="text-positive"
+        <q-drawer show-if-above v-model="leftDrawerOpen" side="left">
+            <q-expansion-item
+                v-for="(menu, index) in menus"
+                :key="index"
+                expand-separator
+                :label="menu.name"
+                :icon="menu.icon"
+                v-show="menu.show"
+                header-class="text-positive"
+                default-opened
+            >
+                <q-item
+                    v-for="(item, i) in menu.menu"
+                    :key="i"
+                    clickable
+                    v-ripple
+                    @click="open(item)"
+                    class="item-admin"
+                    :active="$route.name === item.route"
+                    active-class="active"
+                    :class="{
+                        'bg-grey-2 text-primary': $route.name === item.route,
+                    }"
                 >
-                    <q-item
-                        v-for="(item, i) in menu.menu"
-                        :key="i"
-                        clickable
-                        v-ripple
-                        @click="open(item)"
-                        class="item-admin"
-                        :active="$route.name == item.route"
-                        active-class="active"
-                    >
-                        <q-item-section avatar>
-                            <q-icon :name="item.icon" color="primary" />
-                        </q-item-section>
-                        <q-item-section class="text-primary">
-                            {{ item.name }}
-                        </q-item-section>
-                    </q-item>
-                </q-expansion-item>
-            </q-list>
+                    <q-item-section avatar>
+                        <q-icon :name="item.icon" color="primary" />
+                    </q-item-section>
+                    <q-item-section class="text-primary">
+                        {{ item.name }}
+                    </q-item-section>
+                </q-item>
+            </q-expansion-item>
         </q-drawer>
         <q-page-container>
             <q-page :class="{ 'no-radius': !leftDrawerOpen }">
@@ -168,3 +170,9 @@ export default {
     },
 };
 </script>
+<style scoped>
+.item-admin.active {
+    background-color: rgba(0, 150, 136, 0.1);
+    border-left: 3px solid #26a69a;
+}
+</style>
