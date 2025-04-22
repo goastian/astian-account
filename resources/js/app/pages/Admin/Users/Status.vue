@@ -20,14 +20,14 @@
     </q-dialog>
 
     <q-btn
-        :color="item.disable ? 'negative' : 'positive'"
+        :color="item.disabled ? 'negative' : 'positive'"
         outline
         round
         icon="mdi-power"
         @click="open"
     >
         <q-tooltip transition-show="rotate" transition-hide="rotate">
-            {{ item.disable ? "Enable this user" : "Disable this user" }}
+            {{ item.disabled ? "Enable this user" : "Disable this user" }}
         </q-tooltip>
     </q-btn>
 </template>
@@ -49,7 +49,7 @@ export default {
         },
 
         action(item) {
-            if (item.disable) {
+            if (item.disabled) {
                 this.enable();
             } else {
                 this.disable();
