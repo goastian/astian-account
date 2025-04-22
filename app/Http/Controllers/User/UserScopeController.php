@@ -99,7 +99,7 @@ class UserScopeController extends GlobalController
 
         DB::transaction(function () use ($request, $user, $userScope) {
             foreach ($request->scopes as $id) {
-                $userScope->whereNull('package_id')
+                $us = $userScope->whereNull('package_id')
                     ->where(function ($query) {
                         $query->whereNull('end_date')
                             ->orWhere('end_date', '>', now());
@@ -111,6 +111,8 @@ class UserScopeController extends GlobalController
                         'user_id' => $user->id,
                         'end_date' => $request->end_date
                     ]);
+
+                $user->groups()->sync($us->scope->service->group->id);
             }
         });
 
