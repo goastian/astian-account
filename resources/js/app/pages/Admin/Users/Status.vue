@@ -2,15 +2,19 @@
     <q-dialog v-model="dialog" persistent>
         <q-card>
             <q-card-section class="row items-center">
-                <span class="q-ml-sm"
-                    >You are currently not connected to any network.</span
-                >
+                <span class="q-ml-sm">
+                    {{
+                        item.disabled
+                            ? "This user will be activated"
+                            : "This user will be disabled"
+                    }}
+                </span>
             </q-card-section>
 
             <q-card-actions align="right">
-                <q-btn flat label="Cancel" color="primary" v-close-popup />
+                <q-btn outline label="Cancel" color="negative" v-close-popup />
                 <q-btn
-                    flat
+                    outline
                     label="Accept"
                     @click="action(item)"
                     color="primary"

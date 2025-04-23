@@ -14,7 +14,7 @@
         >
             <q-card flat bordered>
                 <q-card-section class="q-pb-none">
-                    <div class="text-h6">
+                    <div class="text-h6 text-grey-7">
                         {{ user.name }} {{ user.last_name }}
                     </div>
                     <div class="text-subtitle2 text-grey-7">
