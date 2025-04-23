@@ -118,7 +118,7 @@ export default {
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/api/admin/clients",
+                    "/oauth/clients",
                     this.form
                 );
 

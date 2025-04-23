@@ -1,29 +1,33 @@
 <template>
-    <q-table
-        flat
-        bordered
-        :rows="tokens"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h6>List of API KEY</h6>
-            <q-space />
-            <v-create @created="getPersonalAccessToken()"></v-create>
-        </template>
+    <q-toolbar>
+        <q-toolbar-title> List of API KEY </q-toolbar-title>
+        <v-create @created="getPersonalAccessToken()" />
+    </q-toolbar>
+    <div class="row q-col-gutter-md">
+        <div
+            class="col-12 col-md-4 col-lg-3 q-gutter-sm"
+            v-for="token in tokens"
+            :key="token.name"
+        >
+            <q-card flat bordered>
+                <q-card-section>
+                    <div class="text-h6">{{ token.name }}</div>
+                    <div class="text-caption text-grey">
+                        Created: {{ token.created }}
+                    </div>
+                    <div class="text-caption text-grey">
+                        Expires: {{ token.expires }}
+                    </div>
+                </q-card-section>
 
-        <template v-slot:body-cell-actions="props">
-            <q-td>
-                <v-delete
-                    @deleted="getPersonalAccessToken"
-                    :item="props.row"
-                ></v-delete>
-            </q-td>
-        </template>
-    </q-table>
+                <q-separator />
+
+                <q-card-actions align="right">
+                    <v-delete @deleted="getPersonalAccessToken" :item="token" />
+                </q-card-actions>
+            </q-card>
+        </div>
+    </div>
 
     <div class="row justify-center q-mt-md">
         <q-pagination
