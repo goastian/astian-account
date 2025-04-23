@@ -43,12 +43,13 @@ export default {
     data() {
         return {
             links: [
-                { name: "Personal Information", route: "personal_information" },
-                { name: "Change Password", route: "security" },
+                { name: "Personal Information", route: "account.information" },
+                { name: "Change Password", route: "account.password" },
                 {
                     name: "Set up two-factor authentication (2FA)",
-                    route: "security",
+                    route: "account.2fa",
                 },
+
                 { name: "View my subscriptions", route: "payment" },
                 { name: "Contact support", route: "help" },
                 { name: "Privacy preferences", route: "privacy" },
