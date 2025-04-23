@@ -19,7 +19,17 @@
             <q-list bordered>
                 <div v-for="(item, index) in menus" :key="index">
                     <q-separator />
-                    <q-item clickable v-ripple @click="open(item)">
+                    <q-item
+                        clickable
+                        v-ripple
+                        @click="open(item)"
+                        :active="$route.name === item.route"
+                        active-class="active"
+                        :class="{
+                            'bg-grey-2 text-primary':
+                                $route.name === item.route,
+                        }"
+                    >
                         <q-item-section avatar>
                             <q-avatar
                                 color="primary"
