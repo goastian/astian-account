@@ -1,8 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\CodeController;
+use App\Http\Controllers\User\UserInformation;
 use App\Http\Controllers\Auth\SessionController;
-use App\Http\Controllers\Setting\CodeController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\RegisterClientController;
@@ -47,6 +48,9 @@ Route::post('/verify/2fa-factor', [CodeController::class, 'loginBy2FA'])->name('
 Route::post('/m2fa/authorize', [CodeController::class, 'requestToken2FA'])->name('m2fa.authorize');
 Route::post('/m2fa/activate', [CodeController::class, 'factor2faEnableOrDisable'])->name('m2fa.activate');
 
+//User information
+Route::put("/users", [UserInformation::class, 'personalInformation'])->name('users.personal_information');
+Route::put("/users/change-password", [UserInformation::class, 'changePassword'])->name('users.personal_information');
 
 Route::group([
     'prefix' => 'settings',

@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Setting;
+namespace App\Http\Controllers\User;
 
 use DateTime;
 use DateInterval;
@@ -57,8 +57,8 @@ class CodeController extends Controller
 
     /**
      * User authentication via 2FA
-     *
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|null
      */
     public function loginBy2FA(Request $request)
     {
@@ -104,10 +104,9 @@ class CodeController extends Controller
 
     /**
      * Send request to obtain 2FA activation token.
-     *
-     * @param Request $request
-     * 
-     * @return Json
+     * @param \Illuminate\Http\Request $request
+     * @throws \Elyerr\ApiResponse\Exceptions\ReportError
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function requestToken2FA(Request $request)
     {
@@ -119,7 +118,13 @@ class CodeController extends Controller
             $now = $date->format('Y-m-d H:i:s');
 
             if (now() < $now) {
-                throw new ReportError(__("Please wait a moment, the next token should be sent after " . date('H:i:s', strtotime($now))), 422);
+                throw new ReportError(
+                    __(
+                        "Please wait a moment, the next token should be sent after :minute minutes",
+                        ['minute' => settingItem('code_2fa_email_expires', 5)]
+                    ),
+                    422
+                );
             }
         }
 
@@ -129,10 +134,9 @@ class CodeController extends Controller
     }
 
     /**
-     * Authorize users to activate 2FA using a token.
-     *
-     * @param Request $request
-     * @return Json
+     *  Authorize users to activate 2FA using a token.
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function factor2faEnableOrDisable(Request $request)
     {

@@ -37,33 +37,6 @@ class StoreRequest extends FormRequest
             'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
             'verify_email' => ['nullable', new BooleanRule()],
-            /*'groups' => [
-                'required',
-                function ($attribute, $value, $fail) {
-
-                    if (empty($value)) {
-                        $fail(__('The groups field is required.'));
-                    }
-
-                    if (!is_array($value)) {
-                        $fail(__('The groups field must be an array.'));
-                    }
-
-                    foreach ($value as $key) {
-
-                        if (is_array($key)) {
-                            $fail(__('The group field has a wrong value.'));
-                            break;
-                        }
-
-                        $group = Group::find($key);
-
-                        if (empty($group)) {
-                            $fail(__('The group with ID :key does not exist.', ['key' => $key]));
-                        }
-                    }
-                }
-            ],*/
         ];
     }
 }
