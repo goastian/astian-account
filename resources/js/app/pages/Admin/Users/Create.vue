@@ -29,6 +29,7 @@
                             <v-error :error="errors.last_name"></v-error>
                         </template>
                     </q-input>
+
                     <q-input
                         outlined
                         v-model="form.email"
@@ -43,43 +44,19 @@
 
                     <q-select
                         v-model="form.country"
-                        dense
-                        outlined
-                        label="Country"
-                        :options="countries"
-                        option-value="id"
-                        :error="!!errors.country"
+                        dense="dense"
                         emit-value
                         map-options
+                        :options="
+                            countries.map((c) => ({
+                                label: `${c.emoji} ${c.name_en} `,
+                                value: c.name_en,
+                            }))
+                        "
+                        label="Country"
+                        outlined
+                        :error="!!errors.country"
                     >
-                        <template v-slot:option="scope">
-                            <q-item v-bind="scope.itemProps">
-                                <q-item-section avatar>
-                                    <q-avatar size="sm">{{
-                                        scope.opt.emoji
-                                    }}</q-avatar>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>{{
-                                        scope.opt.name_en
-                                    }}</q-item-label>
-                                </q-item-section>
-                            </q-item>
-                        </template>
-
-                        <template v-slot:selected>
-                            <q-avatar size="sm">{{
-                                form.country &&
-                                countries.find((c) => c.id === form.country)
-                                    ?.emoji
-                            }}</q-avatar>
-                            <span class="q-ml-sm">{{
-                                form.country &&
-                                countries.find((c) => c.id === form.country)
-                                    ?.name_en
-                            }}</span>
-                        </template>
-
                         <template v-slot:error>
                             <v-error :error="errors.country"></v-error>
                         </template>
@@ -88,6 +65,8 @@
                     <q-select
                         v-model="form.dial_code"
                         dense="dense"
+                        emit-value
+                        map-options
                         :options="
                             countries.map((c) => ({
                                 label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
@@ -126,29 +105,12 @@
                             :enable-time-picker="false"
                             :max-date="new Date()"
                             format="yyyy-MM-dd"
+                            model-type="format"
+                            placeholder="YYYY-MM-DD"
                         />
 
                         <v-error :error="errors.birthday"></v-error>
                     </div>
-
-                    <q-select
-                        v-model="selected_groups"
-                        dense="dense"
-                        multiple
-                        :options="
-                            groups.map((c) => ({
-                                label: c.name,
-                                value: c.id,
-                            }))
-                        "
-                        label="Groups"
-                        outlined
-                        :error="!!errors.groups"
-                    >
-                        <template v-slot:error>
-                            <v-error :error="errors.groups"></v-error>
-                        </template>
-                    </q-select>
 
                     <q-checkbox
                         dense="dense"

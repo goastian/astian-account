@@ -47,7 +47,24 @@
                     </q-item-section>
                 </q-item>
             </q-expansion-item>
+
+            <q-separator inset="item" />
+
+            <q-item
+                v-if="hasGroup('administrator')"
+                clickable
+                v-ripple
+                :active="$route.name === 'admin.users.index'"
+                @click="goToAdmin"
+            >
+                <q-item-section avatar>
+                    <q-icon color="positive" name="mdi-security" />
+                </q-item-section>
+
+                <q-item-section class="text-primary">Admin</q-item-section>
+            </q-item>
         </q-drawer>
+
         <q-page-container>
             <q-page :class="{ 'no-radius': !leftDrawerOpen }">
                 <router-view />
@@ -78,56 +95,29 @@ export default {
                     icon: "mdi-account-star",
                     show: true,
                     menu: [
-                        { name: "Me", route: "about", icon: "mdi-information" },
-                    ],
-                },
-                {
-                    name: "Admin",
-                    icon: "mdi-shield-crown-outline",
-                    show: this.hasGroup("administrator"),
-                    menu: [
                         {
-                            name: "Users",
-                            route: "admin.users.index",
-                            icon: "mdi-account-multiple",
+                            name: "Me",
+                            route: "account.me",
+                            icon: "mdi-information",
                         },
                         {
-                            name: "Clients",
-                            route: "admin.clients.index",
-                            icon: "mdi-apps",
+                            name: "Information",
+                            route: "account.information",
+                            icon: "mdi-account-details-outline",
                         },
                         {
-                            name: "Groups",
-                            route: "admin.groups.index",
-                            icon: "mdi-account-group",
+                            name: "Password",
+                            route: "account.password",
+                            icon: "mdi-lock-reset",
                         },
                         {
-                            name: "Services",
-                            route: "admin.services.index",
-                            icon: "mdi-text-box-check",
-                        },
-                        {
-                            name: "Roles",
-                            route: "admin.roles.index",
-                            icon: "mdi-format-list-group",
-                        },
-                        {
-                            name: "Broadcasts",
-                            route: "admin.broadcasts.index",
-                            icon: "mdi-broadcast",
-                        },
-                        {
-                            name: "Terminal",
-                            route: "terminal.index",
-                            icon: "mdi-console",
-                        },
-                        {
-                            name: "Settings",
-                            route: "/settings",
-                            icon: "mdi-cogs",
+                            name: "2FA",
+                            route: "account.2fa",
+                            icon: "mdi-two-factor-authentication",
                         },
                     ],
                 },
+
                 {
                     name: "Tools",
                     icon: "mdi-tools",
@@ -166,6 +156,10 @@ export default {
             } catch (error) {
                 window.location.href = item.route;
             }
+        },
+
+        goToAdmin() {
+            this.$router.push({ name: "admin.users.index" });
         },
     },
 };
