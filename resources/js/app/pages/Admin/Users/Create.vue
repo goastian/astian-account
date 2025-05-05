@@ -248,7 +248,7 @@ export default {
         },
         async getCountries() {
             try {
-                const res = await this.$server.get("/api/resources/countries", {
+                const res = await this.$server.get("/api/public/countries", {
                     params: { order_by: "name_en", order_type: "asc" },
                 });
                 if (res.status === 200) this.countries = res.data;

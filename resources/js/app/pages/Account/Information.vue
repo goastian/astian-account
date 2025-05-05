@@ -189,14 +189,18 @@ export default {
     methods: {
         async update() {
             try {
-                const res = await this.$server.put("/users", this.form, {
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                });
+                const res = await this.$server.put(
+                    this.$user.links.update,
+                    this.form,
+                    {
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                    }
+                );
                 if (res.status === 200) {
                     this.form = res.data.data;
-
+                    tis.errors = {};
                     this.$q.notify({
                         type: "positive",
                         message: "Information has been updated successfully",
@@ -212,7 +216,7 @@ export default {
 
         async getCountries() {
             try {
-                const res = await this.$server.get("/api/resources/countries", {
+                const res = await this.$server.get("/api/public/countries", {
                     params: { order_by: "name_en", order_type: "asc" },
                 });
                 if (res.status === 200) {

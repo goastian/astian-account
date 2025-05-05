@@ -61,6 +61,8 @@
 
 <script>
 export default {
+    inject: ["$user"],
+
     data() {
         return {
             token: "",
@@ -68,9 +70,10 @@ export default {
             errors: {},
         };
     },
-    created() {
-        this.getAuthUser();
+    mounted() {
         this.listener();
+
+        this.user = { ...this.$user };
     },
     methods: {
         popup(message, type = "positive") {
@@ -83,7 +86,9 @@ export default {
         },
         async requestCode() {
             try {
-                const res = await this.$server.post("/m2fa/authorize");
+                const res = await this.$server.post(
+                    this.user.links.f2a_authorize
+                );
                 if (res.status === 201) {
                     this.popup(res.data.message);
                     this.errors = {};
@@ -104,7 +109,7 @@ export default {
         },
         async activateFactor() {
             try {
-                const res = await this.$server.post("/m2fa/activate", {
+                const res = await this.$server.post(this.user.links.f2a_activate, {
                     token: this.token,
                 });
                 if (res.status === 201) {

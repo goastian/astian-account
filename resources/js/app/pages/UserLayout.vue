@@ -115,6 +115,16 @@ export default {
                             route: "account.2fa",
                             icon: "mdi-two-factor-authentication",
                         },
+                        {
+                            name: "Subscriptions",
+                            route: "account.subscriptions",
+                            icon: "mdi-gift-outline"
+                        },
+                        {
+                            name: "Store",
+                            route: "plans.index",
+                            icon: "mdi-store-search"
+                        }
                     ],
                 },
 

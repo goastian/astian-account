@@ -1,12 +1,13 @@
 import axios from "axios";
 import https from "stream-http";
+import { router } from "./routes";
 
 export const $server = axios.create({
     timeout: 5000,
     withCredentials: true,
     httpsAgent: new https.Agent({ keepAlive: true }),
-    "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
     headers: {
+        "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
         Accept: "application/json",
     },
 
@@ -19,7 +20,11 @@ $server.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            window.location.href = "/login";
+            const meta = router.currentRoute.value.meta;
+
+            if (meta.auth) {
+                window.location.href = "/login";
+            }
         }
         return Promise.reject(error);
     }

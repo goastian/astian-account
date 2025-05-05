@@ -74,7 +74,7 @@ export default {
         async update() {
             try {
                 const res = await this.$server.put(
-                    "/users/change-password",
+                    this.$user.links.change_password,
                     this.form,
                     {
                         headers: {
