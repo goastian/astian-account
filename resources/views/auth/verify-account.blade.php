@@ -13,7 +13,7 @@
             <p class="text-gray-600 text-center mb-6">
                 {{ __('It seems your account is not yet verified. Please check your email for the verification link. If you didn’t receive the email, you can request a new one below.') }}
             </p>
-            <form method="POST" action="{{ route('send.verification.email') }}">
+            <form method="POST" action="{{ route('users.verification.email') }}">
                 @csrf
                 <button type="submit"
                     class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
