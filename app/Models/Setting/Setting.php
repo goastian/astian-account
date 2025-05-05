@@ -219,6 +219,9 @@ class Setting extends Master
         settingLoad('services.ses.key', null);
         settingLoad('services.ses.secret', null);
         settingLoad('services.ses.region', null);
+
+        //Trial settings
+        settingLoad('trial_days', 30);
     }
 
     /**

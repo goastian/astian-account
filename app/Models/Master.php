@@ -25,4 +25,22 @@ class Master extends Model
      * @var string
      */
     protected $primaryKey = 'id';
+
+    /**
+     * Summary of transformer
+     * @var 
+     */
+    public $transformer = null;
+
+
+    /**
+     * Retrieve metadata of the model
+     * @param array $transformer
+     */
+    public function meta($transformer = null)
+    {
+        $data = fractal($this, $transformer ?? $this->transformer)->toArray()['data'];
+        unset($data['links']);
+        return $data;
+    }
 }

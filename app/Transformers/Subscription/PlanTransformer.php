@@ -41,6 +41,9 @@ class PlanTransformer extends TransformerAbstract
             'slug' => $plan->slug,
             'description' => $plan->description,
             'public' => $plan->public ? true : false,
+            'active' => $plan->active ? true : false,
+            'bonus_enabled' => $plan->bonus_enabled ? true : false,
+            'bonus_duration' => $plan->bonus_duration,
             'created' => $this->format_date($plan->created_at),
             'updated' => $this->format_date($plan->updated_at),
             'scopes' => $plan->assignedScopes(),
@@ -51,8 +54,6 @@ class PlanTransformer extends TransformerAbstract
                 'show' => route('admin.plans.show', ['plan' => $plan]),
                 'update' => route('admin.plans.show', ['plan' => $plan]),
                 'destroy' => route('admin.plans.show', ['plan' => $plan]),
-                'assign' => route('admin.plans.scopes.assign', ['plan' => $plan]),
-                'revoke' => route('admin.plans.scopes.revoke', ['plan' => $plan]),
             ],
         ];
     }

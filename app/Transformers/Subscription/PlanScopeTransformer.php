@@ -2,13 +2,25 @@
 namespace App\Transformers\Subscription;
 
 
+use App\Models\Subscription\Plan;
 use App\Models\Subscription\Scope;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
-class ScopeTransformer extends TransformerAbstract
+class PlanScopeTransformer extends TransformerAbstract
 {
     use Asset;
+
+    /**
+     * Plan 
+     * @var 
+     */
+    public $plan;
+
+    public function __construct(Plan $plan)
+    {
+        $this->plan = $plan;
+    }
 
     /**
      * List of resources to automatically include
@@ -39,8 +51,8 @@ class ScopeTransformer extends TransformerAbstract
             'id' => $data->id,
             'public' => $data->public ? true : false,
             'active' => $data->active ? true : false,
-            'api_key' => $data->api_key ? true : false,
             'gsr_id' => $data->getGsrID(),
+            'api_key' => $data->api_key,
             'service' => [
                 'id' => $data->service->id,
                 'name' => $data->service->name,
@@ -62,28 +74,8 @@ class ScopeTransformer extends TransformerAbstract
             'created' => $this->format_date($data->created_at),
             'updated' => $this->format_date($data->updated_at),
             'links' => [
-                'index' => route('admin.scopes.index'),
+                'revoke' => route('admin.plans.scopes.revoke', ['plan' => $this->plan->id, 'scope' => $data->id]),
             ]
         ];
-    }
-
-    /**
-     * Return the original keys
-     * @param mixed $index
-     * @return string|null
-     */
-    public static function getOriginalAttributes($index)
-    {
-        $attributes = [
-            'name' => "name",
-            'slug' => "slug",
-            'description' => "service",
-            'system' => "system",
-            'group_id' => "group_id",
-            'created' => "created_at",
-            'updated' => "updated_at",
-        ];
-
-        return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 }

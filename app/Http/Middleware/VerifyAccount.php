@@ -17,7 +17,11 @@ class VerifyAccount
      */
     public function handle(Request $request, Closure $next)
     {
-        $except = ['send.verification.email', 'check.account', 'verify.account'];
+        $except = [
+            'users.verification.email',
+            'users.check.account',
+            'users.verify.account'
+        ];
 
         if (auth()->check() && !in_array(Route::currentRouteName(), $except) && !auth()->user()->verified_at) {
 
@@ -25,7 +29,7 @@ class VerifyAccount
                 return response()->json(['message' => __("Your Account is unverified")]);
             }
 
-            return redirect()->route('check.account');
+            return redirect()->route('users.check.account');
         }
 
         return $next($request);

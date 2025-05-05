@@ -6,9 +6,9 @@ use App\Models\Subscription\Price;
 use App\Models\Subscription\Scope;
 use App\Models\Subscription\Package;
 use App\Transformers\Subscription\PlanTransformer;
-use App\Transformers\Subscription\ScopeTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Transformers\Subscription\PlanPriceTransformer;
+use App\Transformers\Subscription\PlanScopeTransformer;
 
 class Plan extends Master
 {
@@ -23,12 +23,15 @@ class Plan extends Master
         'slug',
         'description',
         'public',
-        'active'
+        'active',
+        'bonus_activated',
+        'bonus_duration'
     ];
 
     protected $casts = [
         'public' => 'boolean',
         'active' => 'boolean',
+        'bonus_activate' => 'boolean'
     ];
 
     /**
@@ -37,7 +40,7 @@ class Plan extends Master
     public function assignedScopes()
     {
         $data = $this->scopes()->where('active', 1)->get();
-        $data = fractal($data, ScopeTransformer::class);
+        $data = fractal($data, new PlanScopeTransformer($this));
         return !empty($data) ? json_decode(json_encode($data))->data : [];
     }
 
@@ -73,7 +76,33 @@ class Plan extends Master
      */
     public function priceable()
     {
-        $prices = fractal($this->prices()->get(), PlanPriceTransformer::class);
-        return json_decode(json_encode($prices))->data;
+        $prices = fractal($this->prices()->get(), PlanPriceTransformer::class)->toArray()['data'];
+        return $prices;
+    }
+
+    /**
+     * Details of the plan to save 
+     * @param string $billing_period
+     * @return array
+     */
+    public function processPlan(string $plan_id, string $billing_period)
+    {
+        $plan = $this::where('id', $plan_id)->first();
+
+        $price = $plan->prices()->where('billing_period', $billing_period)->first();
+        $price = fractal($price, PlanPriceTransformer::class)->toArray()['data'];
+
+        $meta = fractal($plan, $this->transformer)->toArray()['data'];
+
+        unset($meta['prices']); //remove prices
+        unset($meta['links']); //remove links
+        unset($meta['scopes']['links']); //remove links
+        unset($price['links']); //remove links
+        unset($price['expiration']); //remove links
+
+        //add price to renew plan
+        $meta['price'] = $price;
+
+        return $meta;
     }
 }
