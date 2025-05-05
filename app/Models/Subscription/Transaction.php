@@ -56,6 +56,24 @@ class Transaction extends Master
         return 'TXN-' . $timestamp . '-' . strtoupper(Str::random(4));
     }
 
+    /**
+     * Generate a new session id
+     * @return string
+     */
+    public static function generateSessionId()
+    {
+        return 'cs_test_offline_' . Str::random(45);
+    }
+
+    /**
+     * Generate a intent code
+     * @return string
+     */
+    public static function generateIntent()
+    {
+        return 'pi_' . Str::random(45);
+    }
+
 
     /**
      * Plan
