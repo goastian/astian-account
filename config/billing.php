@@ -87,7 +87,7 @@ return [
             'icon' => 'mdi-paypal',
             'enable' => false
         ],
-        'manual' => [
+        'p2p' => [
             'key' => 'p2p',
             'name' => 'Peer 2 Peer',
             'icon' => 'mdi-cash-register',
