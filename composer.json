@@ -30,6 +30,7 @@
         "predis/predis": "^2.2",
         "spatie/laravel-fractal": "^6.0",
         "stevebauman/purify": "^6.2",
+        "stripe/stripe-php": "^17.1",
         "symfony/http-client": "^7.0",
         "symfony/mailgun-mailer": "^7.0"
     },
@@ -50,7 +51,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/Setting.php"
+            "app/Helpers/Setting.php",
+            "app/Helpers/Payment.php"
         ]
     },
     "autoload-dev": {

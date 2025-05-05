@@ -36,6 +36,10 @@ class UserScope extends Master
         'gsr_id',
     ];
 
+    protected $casts = [
+        'end_date' => 'datetime',
+    ];
+
 
     public function getGsrIdAttribute()
     {

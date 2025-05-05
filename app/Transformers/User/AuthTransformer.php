@@ -55,6 +55,21 @@ class AuthTransformer extends TransformerAbstract
             'created' => $this->format_date($user->created_at),
             'updated' => $this->format_date($user->updated_at),
             'disabled' => $this->format_date($user->deleted_at),
+            'links' => [
+                'update' => route('users.update'),
+                'change_password' => route('users.change.password'),
+                'send_verification_email' => route('users.verification.email'),
+                'verify_account' => route('users.verify.account'),
+                'verified_account' => route('users.verified.account'),
+                'check_account' => route('users.check.account'),
+                'f2a_send_code' => route('users.2fa.send-code'),
+                'f2a_login' => route('users.2fa.login'),
+                'f2a_activate' => route('users.2fa.activate'),
+                'f2a_authorize' => route('users.2fa.authorize'),
+                'subscriptions' => route('users.subscriptions.index'),
+                'subscriptions_buy' => route('users.subscriptions.buy'),
+                'subscriptions_renew' => route('users.subscriptions.renew')
+            ],
         ];
     }
 }

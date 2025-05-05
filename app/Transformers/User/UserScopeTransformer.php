@@ -39,6 +39,7 @@ class UserScopeTransformer extends TransformerAbstract
             'expiration_date' => $data->end_date,
             'package_id' => $data->package_id,
             'status' => $data->revoked(),
+            'end_date' => $this->format_date($data->end_date),
             'scope' => [
                 'id' => $data->scope->id,
                 'gsr_id' => $data->scope->getGsrID(),

@@ -2,8 +2,9 @@
 namespace App\Models\Subscription;
 
 use App\Models\Master;
-use App\Models\Subscription\Role;
 use App\Models\User\UserScope;
+use App\Models\Subscription\Plan;
+use App\Models\Subscription\Role;
 use App\Transformers\Subscription\ScopeTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -57,6 +58,15 @@ class Scope extends Master
     public function service()
     {
         return $this->belongsTo(Service::class);
+    }
+
+    /**
+     * Summary of plan
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function plan()
+    {
+        return $this->belongsToMany(Plan::class);
     }
 
     /**

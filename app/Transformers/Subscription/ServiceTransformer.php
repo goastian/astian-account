@@ -40,8 +40,13 @@ class ServiceTransformer extends TransformerAbstract
             'slug' => $data->slug,
             'description' => $data->description,
             'system' => $data->system ? true : false,
-            'group_id' => $data->group_id,
-            'group_name' => $data->group->name,
+            'group' => [
+                'id' => $data->id,
+                'name' => $data->group->name,
+                'slug' => $data->group->slug,
+                'description' => $data->group->description,
+
+            ],
             'created' => $this->format_date($data->created_at),
             'updated' => $this->format_date($data->updated_at),
             'links' => [

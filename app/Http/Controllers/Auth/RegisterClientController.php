@@ -104,7 +104,7 @@ class RegisterClientController extends Controller
 
             $token = uniqid();
 
-            return redirect()->route('verified-account')->with(
+            return redirect()->route('users.verified.account')->with(
                 [
                     'status' => __('Your account has been activated.'),
                     'token' => $token
