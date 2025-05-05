@@ -50,7 +50,7 @@ export default {
                     route: "account.2fa",
                 },
 
-                { name: "View my subscriptions", route: "payment" },
+                { name: "View my subscriptions", route: "account.subscriptions" },
                 { name: "Contact support", route: "help" },
                 { name: "Privacy preferences", route: "privacy" },
             ],

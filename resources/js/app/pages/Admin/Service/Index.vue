@@ -36,7 +36,7 @@
                         {{ service.description }}
                     </div>
                     <div class="text-caption q-mt-sm">
-                        <strong>Group:</strong> {{ service.group_name }}
+                        <strong>Group:</strong> {{ service.group.name }}
                     </div>
                     <div class="text-caption">
                         <strong>System:</strong>

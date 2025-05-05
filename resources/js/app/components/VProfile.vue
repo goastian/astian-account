@@ -4,7 +4,7 @@
             <q-menu fit anchor="bottom right" self="top right">
                 <q-card style="min-width: 200px">
                     <q-list>
-                        <q-item>
+                        <q-item v-if="$user?.id">
                             <q-item-section>
                                 <q-item-label
                                     >{{ $user.name }}
@@ -20,7 +20,31 @@
                     <q-separator />
 
                     <q-list>
-                        <q-item clickable v-close-popup @click="logout">
+                        <q-item
+                            v-if="!$user?.id"
+                            icon="mdi-home"
+                            clickable
+                            @click="homePage"
+                        >
+                            <q-item-section> Home page </q-item-section>
+                        </q-item>
+                        <q-item
+                            v-if="$user?.id"
+                            icon="mdi-home-account"
+                            clickable
+                            @click="
+                                $router.push({ name: 'account.subscriptions' })
+                            "
+                        >
+                            <q-item-section> My account </q-item-section>
+                        </q-item>
+                        <q-separator />
+                        <q-item
+                            v-if="$user?.id"
+                            clickable
+                            v-close-popup
+                            @click="logout"
+                        >
                             <q-item-section>
                                 <q-item-label>Logout</q-item-label>
                             </q-item-section>
@@ -46,6 +70,10 @@ export default {
             } catch (error) {
                 console.error("Error logging out:", error);
             }
+        },
+
+        homePage() {
+            window.location.href = "/";
         },
     },
 };

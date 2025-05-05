@@ -1,33 +1,29 @@
 <template>
-    <div v-if="user.id">
-        <router-view></router-view>
-    </div>
-    <div v-if="!user.id">
-        <div
-            id="loading-screen"
-            class="fixed inset-0 flex items-center justify-center bg-white z-50"
-        >
-            <div class="text-center">
-                <div
-                    class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"
-                ></div>
-                <p class="text-lg font-medium text-gray-700 animate-pulse">
-                    Loading ...
-                </p>
+    <div>
+        <q-layout view="lHh Lpr lFf">
+            <div
+                v-if="loader"
+                class="fixed inset-0 z-max flex items-center justify-center bg-white"
+            >
+                <q-spinner-dots color="primary" size="64px" />
+                <div class="q-ml-md text-primary text-subtitle1">
+                    loading ...
+                </div>
             </div>
-        </div>
+            <router-view v-else />
+        </q-layout>
     </div>
 </template>
 
 <script>
 import { computed, nextTick } from "vue";
+
 export default {
     data() {
         return {
             app_name: "",
-            drawer: true,
             user: {},
-            errors: {},
+            loader: true,
         };
     },
 
@@ -39,8 +35,8 @@ export default {
     },
 
     mounted() {
-        this.authenticated();
         this.appData();
+        this.authenticated();
     },
 
     methods: {
@@ -50,7 +46,10 @@ export default {
                 if (res.status === 200) {
                     this.user = res.data;
                 }
-            } catch (e) {}
+            } catch (e) {
+            } finally {
+                this.loader = false;
+            }
         },
 
         async appData() {

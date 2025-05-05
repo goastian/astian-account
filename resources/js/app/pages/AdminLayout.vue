@@ -106,6 +106,11 @@ export default {
                     icon: "mdi-broadcast",
                 },
                 {
+                    name: "Plans",
+                    route: "admin.plans.index",
+                    icon: "mdi-cash-clock",
+                },
+                {
                     name: "Terminal",
                     route: "terminal.index",
                     icon: "mdi-console",
