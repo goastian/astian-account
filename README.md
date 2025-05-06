@@ -89,3 +89,10 @@ server {
     }
 }
 ```
+
+## Payment Methods
+
+- **Stripe**: Third-party payment method
+    - **Webhook (POST)**: `https://domain.com/webhook/stripe`
+
+- **P2P**: Offline payment method
