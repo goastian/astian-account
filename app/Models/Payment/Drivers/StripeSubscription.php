@@ -57,7 +57,6 @@ class StripeSubscription implements PaymentMethod
                         'unit_amount' => $data['price']['cents'],
                         'product_data' => [
                             'name' => $data['name'],
-                            'description' => $data['description'] ?? '',
                         ],
                     ],
                     'quantity' => 1,
