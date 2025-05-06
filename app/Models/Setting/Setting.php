@@ -39,12 +39,16 @@ class Setting extends Master
         Config::set('passport.personal_access_client.id', settingItem('passport_personal_access_client_id'));
         Config::set('passport.personal_access_client.secret', settingItem('passport_personal_access_client_secret'));
 
+
         Setting::getPassportSetting();
         Setting::getRedisConfig();
         Setting::getQueueSetting();
         Setting::getFileSystems();
         Setting::getEmailSettings();
         Setting::getPaymentSettings();
+        Setting::getSystemSetting();
+
+
 
     }
 
@@ -54,35 +58,6 @@ class Setting extends Master
      */
     public static function setDefaultKeys()
     {
-        //default schema HTTP or HTTPS
-        settingLoad('schema_mode', 'https');
-
-        //Redirect page after login
-        settingLoad('redirect_to', '/about');
-
-        //Home page
-        settingLoad('home_page', '/');
-
-        //Name of cookie of laravel passport and session
-        settingLoad('cookie_name', 'oauth2_server');
-
-        //Name of cookie of laravel passport from microservices
-        settingLoad('passport_token_services', 'server_authorization');
-
-        //Expires time to check verification account in minutes
-        settingLoad('verify_account_time', 5);
-
-        //Disable option to create user by command
-        settingLoad('disable_create_user_by_command', false);
-
-        //Destroy users after 30 days
-        settingLoad('destroy_user_after', 30);
-
-        //Code 2FA time expires in minutes
-        settingLoad('code_2fa_email_expires', 5);
-
-        //Enable or disable login
-        settingLoad('enable_register_member', true);
 
         //App name
         settingLoad('app.name', 'Oauth2 Server');
@@ -233,6 +208,20 @@ class Setting extends Master
         settingLoad('billing.methods.p2p.name', 'Peer 2 Peer');
         settingLoad('billing.methods.p2p.icon', 'mdi-cash-register');
         settingLoad('billing.methods.p2p.enable', true);
+
+        //System settings
+        settingLoad('system.schema_mode', "https");
+        settingLoad('system.home_page', "/");
+        settingLoad('system.cookie_name', "oauth2_server");
+        settingLoad('system.passport_token_services', null);
+        settingLoad('system.verify_account_time', 5);
+        settingLoad('system.disable_create_user_by_command', false);
+        settingLoad('system.destroy_user_after', 30);
+        settingLoad('system.code_2fa_email_expires', 5);
+        settingLoad('system.enable_register_member', true);
+        settingLoad('system.csp_enabled', true);
+        settingLoad('system.redirect_to', "/account");
+
 
     }
 
@@ -434,5 +423,24 @@ class Setting extends Master
         Config::set('billing.methods.p2p.name', settingItem('billing.methods.p2p.name', 'Peer 2 Peer'));
         Config::set('billing.methods.p2p.icon', settingItem('billing.methods.p2p.icon', 'mdi-cash-register'));
         Config::set('billing.methods.p2p.enable', settingItem('billing.methods.p2p.enable', true));
+    }
+
+    /**
+     * Setting system
+     * @return void
+     */
+    public static function getSystemSetting()
+    {
+        Config::set('system.schema_mode', settingItem('system.schema_mode', "https"));
+        Config::set('system.home_page', settingItem('system.home_page', "/"));
+        Config::set('system.cookie_name', settingItem('system.cookie_name', null));
+        Config::set('system.passport_token_services', settingItem('system.passport_token_services', null));
+        Config::set('system.verify_account_time', settingItem('system.verify_account_time', 5));
+        Config::set('system.disable_create_user_by_command', settingItem('system.disable_create_user_by_command', false));
+        Config::set('system.destroy_user_after', settingItem('system.destroy_user_after', 30));
+        Config::set('system.code_2fa_email_expires', settingItem('system.code_2fa_email_expires', 5));
+        Config::set('system.enable_register_member', settingItem('system.enable_register_member', true));
+        Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
+        Config::set('system.redirect_to', settingItem('system.redirect_to', true));
     }
 }
