@@ -44,6 +44,8 @@ class Setting extends Master
         Setting::getQueueSetting();
         Setting::getFileSystems();
         Setting::getEmailSettings();
+        Setting::getPaymentSettings();
+
     }
 
     /**
@@ -220,8 +222,18 @@ class Setting extends Master
         settingLoad('services.ses.secret', null);
         settingLoad('services.ses.region', null);
 
-        //Trial settings
-        settingLoad('trial_days', 30);
+        //Payment settings 
+        settingLoad('billing.methods.stripe.name', 'Credit Card (Stripe)');
+        settingLoad('billing.methods.stripe.icon', 'mdi-credit-card-outline');
+        settingLoad('billing.methods.stripe.enable', true);
+        settingLoad('services.stripe.secret', null);
+        settingLoad('services.stripe.key', null);
+        settingLoad('services.stripe.webhook_secret', null);
+
+        settingLoad('billing.methods.p2p.name', 'Peer 2 Peer');
+        settingLoad('billing.methods.p2p.icon', 'mdi-cash-register');
+        settingLoad('billing.methods.p2p.enable', true);
+
     }
 
     /**
@@ -404,5 +416,23 @@ class Setting extends Master
         Config::set('services.ses.key', settingItem('services.ses.key', null));
         Config::set('services.ses.secret', settingItem('services.ses.secret', null));
         Config::set('services.ses.region', settingItem('services.ses.region', null));
+    }
+
+    /**
+     * Payment settings
+     * @return void
+     */
+    public static function getPaymentSettings()
+    {
+        Config::set('billing.methods.stripe.name', settingItem('billing.methods.stripe.name', 'Credit Card (Stripe)'));
+        Config::set('billing.methods.stripe.icon', settingItem('billing.methods.stripe.icon', 'mdi-credit-card-outline'));
+        Config::set('billing.methods.stripe.enable', settingItem('billing.methods.stripe.enable', true));
+        Config::set('services.stripe.secret', settingItem('services.stripe.secret', null));
+        Config::set('services.stripe.key', settingItem('services.stripe.key', null));
+        Config::set('services.stripe.webhook_secret', settingItem('services.stripe.webhook_secret', null));
+
+        Config::set('billing.methods.p2p.name', settingItem('billing.methods.p2p.name', 'Peer 2 Peer'));
+        Config::set('billing.methods.p2p.icon', settingItem('billing.methods.p2p.icon', 'mdi-cash-register'));
+        Config::set('billing.methods.p2p.enable', settingItem('billing.methods.p2p.enable', true));
     }
 }

@@ -12,7 +12,8 @@ class SettingController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('userCanAny:administrator_settings_full');
+        $this->middleware('userCanAny:administrator_settings_full, administrator_settings_view')->except('update');
+        $this->middleware('userCanAny:administrator_settings_full, administrator_settings_update')->only('update');
     }
 
     /**
@@ -138,4 +139,13 @@ class SettingController extends Controller
         return view('settings.section.filesystem');
     }
 
+
+     /**
+     * Show the view of 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function payment()
+    {
+        return view('settings.section.payment');
+    } 
 }
