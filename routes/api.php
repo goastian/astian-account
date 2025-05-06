@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Manager\TransactionManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserGroupController;
@@ -77,7 +78,7 @@ Route::group([
     Route::resource('groups', GroupController::class)->except('edit', 'create');
     Route::resource('roles', RoleController::class)->except('create', 'edit');
     Route::resource('scopes', ScopeController::class)->only('index');
-    
+
     Route::resource('services', ServiceController::class)->except('create', 'edit');
     Route::get('services/{service}/scopes', [ServiceScopeController::class, 'index'])->name('service.scopes.index');
     Route::post('services/{service}/scopes', [ServiceScopeController::class, 'assign'])->name('service.scopes.assign');
@@ -96,11 +97,14 @@ Route::group([
     Route::post('/users/{user}/groups', [UserGroupController::class, 'assign'])->name('users.groups.assign');
     Route::delete('/users/{user}/groups/{group}', [UserGroupController::class, 'revoke'])->name('users.groups.revoke');
 
-    Route::resource('clients', ClientAdminController::class)->except('edit', 'create');
+    Route::resource('/clients', ClientAdminController::class)->except('edit', 'create');
 
-    Route::resource('plans', PlanController::class)->except('edit', 'create');
+    Route::resource('/plans', PlanController::class)->except('edit', 'create');
     Route::delete('/plans/{plan}/scopes/{scope}', [PlanScopeController::class, 'revoke'])->name('plans.scopes.revoke');
     Route::delete('/plans/{plan}/prices/{price}', [PlanPriceController::class, 'destroy'])->name('plans.prices.destroy');
+
+    Route::get('/transactions', [TransactionManagerController::class, 'index'])->name('transactions.index');
+    Route::put('/transactions/{transaction}', [TransactionManagerController::class, 'activate'])->name('transactions.activate');
 
     Route::resource('terminals', TerminalController::class)->only('index', 'store');
 });

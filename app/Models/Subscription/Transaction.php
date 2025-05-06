@@ -2,6 +2,7 @@
 namespace App\Models\Subscription;
 
 use App\Models\Master;
+use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Subscription\Package;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -57,12 +58,21 @@ class Transaction extends Master
     }
 
     /**
+     * User
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
      * Generate a new session id
      * @return string
      */
     public static function generateSessionId()
     {
-        return 'cs_test_offline_' . Str::random(45);
+        return 'cs_offline_' . Str::random(45);
     }
 
     /**
@@ -95,6 +105,7 @@ class Transaction extends Master
         $transaction->status = config('billing.status.successful.name');
         $transaction->payment_intent_id = $meta['payment_intent'];
         $transaction->response = $meta;
+        $transaction->user_id = auth()->check() ? auth()->user()->id : null;
 
         if ($transaction->renew) {
             $transaction->package->renewSuccessfully();

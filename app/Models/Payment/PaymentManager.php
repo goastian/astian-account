@@ -1,9 +1,9 @@
 <?php
 namespace App\Models\Payment;
  
-use App\Models\Payment\Drivers\P2pSubscription;
 use Exception;
 use App\Models\Subscription\Transaction;
+use App\Models\Payment\Drivers\P2pSubscription;
 use App\Models\Payment\Drivers\StripeSubscription;
 
 class PaymentManager
