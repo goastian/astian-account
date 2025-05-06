@@ -14,9 +14,9 @@
                 <label for="cookie_name" class="block text-sm font-medium text-gray-700 mb-2">
                     {{ __('Cookie Name') }}
                 </label>
-                <input id="cookie_name" type="text" name="cookie_name"
+                <input id="cookie_name" type="text" name="system[cookie_name]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    placeholder="{{ __('Enter the cookie name for Passport') }}" value="{{ settingItem('cookie_name') }}">
+                    placeholder="{{ __('Enter the cookie name for Passport') }}" value="{{ config('system.cookie_name') }}">
                 <small
                     class="block mt-1 text-gray-600">{{ __('This field specifies the name of the cookie used by Laravel Passport for authentication') }}</small>
             </div>
@@ -25,10 +25,10 @@
                 <label for="passport_token_services" class="block text-sm font-medium text-gray-700 mb-2">
                     {{ __('Passport Token Services Cookie Name') }}
                 </label>
-                <input id="passport_token_services" type="text" name="passport_token_services"
+                <input type="text" name="system[passport_token_services]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder="{{ __('Enter the cookie name for Passport token services') }}"
-                    value="{{ settingItem('passport_token_services') }}">
+                    value="{{ config('system.passport_token_services') }}">
                 <small
                     class="block mt-1 text-gray-600">{{ __('This field specifies the name of the cookie used by Laravel Passport for authentication in microservices') }}</small>
             </div>
