@@ -84,7 +84,7 @@ return [
         'paypal' => [
             'key' => 'paypal',
             'name' => 'PayPal',
-            'icon' => 'mdi-paypal',
+            'icon' => 'mdi-contactless-payment',
             'enable' => false
         ],
         'p2p' => [

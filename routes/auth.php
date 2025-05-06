@@ -41,6 +41,7 @@ Route::group([
     Route::get('/redis', [SettingController::class, 'redis'])->name('redis');
     Route::get('/queues', [SettingController::class, 'queues'])->name('queues');
     Route::get('/filesystem', [SettingController::class, 'filesystem'])->name('filesystem');
+    Route::get('/payment', [SettingController::class, 'payment'])->name('payment');
 
     Route::put('/', [SettingController::class, 'update'])->name('update');
 });

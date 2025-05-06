@@ -31,6 +31,7 @@
                     @php
                         $routes = [
                             'settings.general' => ['icon' => 'mdi-home', 'label' => __('General')],
+                            'settings.payment' => ['icon' => 'mdi-cash-sync', 'label' => __('Payment')],
                             'settings.passport' => ['icon' => 'mdi-file-key-outline', 'label' => __('Passport')],
                             'settings.email' => ['icon' => 'mdi-at', 'label' => __('Email')],
                             'settings.user' => ['icon' => 'mdi-account-key', 'label' => __('User')],
