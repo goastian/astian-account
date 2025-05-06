@@ -333,12 +333,6 @@
                         "api_key": 1
                     },
                     {
-                        "name": "assign",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 1
-                    },
-                    {
                         "name": "revoke",
                         "public": 0,
                         "active": 1,
@@ -431,6 +425,25 @@
                     },
                     {
                         "name": "destroy",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    }
+                ]
+            },
+
+            {
+                "name": "transactions",
+                "description": "Service to manage transaction into the admin manager",
+                "actions": [
+                    {
+                        "name": "view",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
+                        "name": "update",
                         "public": 0,
                         "active": 1,
                         "api_key": 1

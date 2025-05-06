@@ -10,6 +10,15 @@ use Elyerr\ApiResponse\Exceptions\ReportError;
 class TransactionManagerController extends GlobalController
 {
 
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->middleware('scope:administrator_transaction_full,administrator_transaction_view')->only('index');
+        $this->middleware('scope:administrator_transaction_full,administrator_transaction_update')->only('activate');
+    }
+
     /**
      * show the all transaction
      * @param \App\Models\Subscription\Transaction $transaction
