@@ -45,7 +45,8 @@ const routes = [
             {
                 path: "/account/subscriptions",
                 name: "account.subscriptions",
-                component: () => import("../pages/Account/Subscription/Index.vue"),
+                component: () =>
+                    import("../pages/Account/Subscription/Index.vue"),
                 meta: { auth: true },
             },
             {
@@ -107,6 +108,12 @@ const routes = [
                 path: "services",
                 name: "admin.services.index",
                 component: () => import("../pages/Admin/Service/Index.vue"),
+                meta: { auth: true },
+            },
+            {
+                path: "transactions",
+                name: "admin.transactions.index",
+                component: () => import("../pages/Admin/Transaction/Index.vue"),
                 meta: { auth: true },
             },
         ],

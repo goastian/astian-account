@@ -111,6 +111,11 @@ export default {
                     icon: "mdi-cash-clock",
                 },
                 {
+                    name: "Transactions",
+                    route: "admin.transactions.index",
+                    icon: "mdi-account-cash-outline",
+                },
+                {
                     name: "Terminal",
                     route: "terminal.index",
                     icon: "mdi-console",

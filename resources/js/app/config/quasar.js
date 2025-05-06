@@ -49,6 +49,7 @@ import {
     QSpinnerGears,
     QSpinnerDots,
     QRadio,
+    QMarkupTable,
 } from "quasar";
 
 export const QComponents = [
@@ -102,4 +103,5 @@ export const QComponents = [
     QSpinnerGears,
     QSpinnerDots,
     QRadio,
+    QMarkupTable,
 ];
