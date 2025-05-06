@@ -64,27 +64,6 @@ export default {
 
     data() {
         return {
-            headers: [
-                { label: "Name", name: "name", field: "name", align: "left" },
-                {
-                    label: "Last Name",
-                    name: "last_name",
-                    field: "last_name",
-                    align: "left",
-                },
-                {
-                    label: "Email",
-                    name: "email",
-                    field: "email",
-                    align: "left",
-                },
-                {
-                    label: "Actions",
-                    name: "actions",
-                    field: "actions",
-                    align: "center",
-                },
-            ],
             params: [
                 { key: "Name", value: "name" },
                 { key: "Last name", value: "last_name" },
