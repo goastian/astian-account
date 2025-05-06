@@ -1060,16 +1060,16 @@
         },
         {
             "name": "elyerr/api-response",
-            "version": "v1.0.21",
+            "version": "v1.0.22",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/elyerr/api-response.git",
-                "reference": "e363a2de5ea36b3349af926f050378df50e739fb"
+                "reference": "9d491f91738b039bb0bea1afc8b1fa22482904a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/elyerr%2Fapi-response/repository/archive.zip?sha=e363a2de5ea36b3349af926f050378df50e739fb",
-                "reference": "e363a2de5ea36b3349af926f050378df50e739fb",
+                "url": "https://gitlab.com/api/v4/projects/elyerr%2Fapi-response/repository/archive.zip?sha=9d491f91738b039bb0bea1afc8b1fa22482904a1",
+                "reference": "9d491f91738b039bb0bea1afc8b1fa22482904a1",
                 "shasum": ""
             },
             "require": {
@@ -1106,9 +1106,9 @@
             "description": "Add news functionalities into the Laravel Framework",
             "support": {
                 "issues": "https://gitlab.com/elyerr/api-response/-/issues",
-                "source": "https://gitlab.com/elyerr/api-response/-/tree/v1.0.21"
+                "source": "https://gitlab.com/elyerr/api-response/-/tree/v1.0.22"
             },
-            "time": "2025-05-02T20:41:06+00:00"
+            "time": "2025-05-06T11:31:06+00:00"
         },
         {
             "name": "elyerr/echo-client-php",
@@ -2438,16 +2438,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.6.2",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94"
+                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/06c3b0bf2540338094575612f4a1778d0d2d5e94",
-                "reference": "06c3b0bf2540338094575612f4a1778d0d2d5e94",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
+                "reference": "6fbb36d44824ed4091adbcf4c7d4a3923cdb3405",
                 "shasum": ""
             },
             "require": {
@@ -2484,7 +2484,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.7-dev"
+                    "dev-main": "2.8-dev"
                 }
             },
             "autoload": {
@@ -2541,7 +2541,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-18T21:09:27+00:00"
+            "time": "2025-05-05T12:20:28+00:00"
         },
         {
             "name": "league/config",
