@@ -39,8 +39,8 @@ class ClientCommand extends Command
     {
         $force = $this->option('force');
 
-        $existingClientId = settingItem('passport_personal_access_client_id');
-        $existingClientSecret = settingItem('passport_personal_access_client_secret');
+        $existingClientId = config('passport.personal_access_client.id');
+        $existingClientSecret = config('passport.personal_access_client.secret');
 
         if ($existingClientId && $existingClientSecret && !$force) {
             $this->info('Personal access client already exists. Use --force to regenerate.');
@@ -58,8 +58,8 @@ class ClientCommand extends Command
             'http://localhost'
         );
 
-        settingAdd('passport_personal_access_client_id', $client->getKey());
-        settingAdd('passport_personal_access_client_secret', $client->plainSecret);
+        settingAdd('passport.personal_access_client.id', $client->getKey());
+        settingAdd('passport.personal_access_client.secret', $client->plainSecret);
 
         //$this->updatePassportEnv($client->getKey(), $client->plainSecret);
 

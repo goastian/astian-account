@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route; 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\RegisterClientController;
@@ -24,7 +24,7 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 /**
  * Register user account
  */
-if (settingItem('enable_register_member', true)) {
+if (config('system.enable_register_member', true)) {
     Route::get('/register', [RegisterClientController::class, 'register'])->name('register');
     Route::post('/register', [RegisterClientController::class, 'store']);
 }

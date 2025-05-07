@@ -7,7 +7,7 @@
 @section('header')
     <nav class="bg-indigo-600 text-white py-4 shadow-md">
         <div class="container mx-auto flex justify-between items-center ">
-            <a href="{{ settingItem('redirect_to', 'home') }}" class="text-lg font-semibold">
+            <a href="{{ config('system.redirect_to', 'home') }}" class="text-lg font-semibold">
                 <i class="mdi mdi-home text-2xl"></i>
                 {{ __('Dashboard') }}
             </a>
@@ -26,7 +26,7 @@
                 {{ __('Thank you for your purchase. Your transaction has been completed successfully.') }}
             </p>
 
-            <a href="{{ settingItem('redirect_to', 'home') }}"
+            <a href="{{ config('system.redirect_to', 'home') }}"
                 class="bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition">
                 {{ __('Go to Dashboard') }}
             </a>

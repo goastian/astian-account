@@ -57,7 +57,7 @@
 
 @push('js')
     <script nonce="{{ $nonce }}">
-        const route = "{{ settingItem('redirect_to', 'about') }}"
+        const route = "{{ config('system.redirect_to', 'about') }}"
         let timeLeft = 10;
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('counter').innerHTML = timeLeft + ' seconds';

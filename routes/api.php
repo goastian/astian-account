@@ -70,7 +70,7 @@ Route::group([
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
-    'middleware' => ['verify.account', 'wants.json'],
+    'middleware' => ['wants.json'],
 
 ], function () {
 
@@ -114,7 +114,7 @@ Route::group([
  */
 Route::group([
     'prefix' => 'notifications',
-    'middleware' => ['verify.account', 'wants.json'],
+    'middleware' => ['wants.json'],
 
 ], function () {
     Route::get('/', [UserNotificationController::class, 'index'])->name('notifications.index');

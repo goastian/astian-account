@@ -62,7 +62,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return $request->wantsJson() ? route('login') : settingItem('home_page', '/');
+        return $request->wantsJson() ? route('login') : config('system.home_page', '/');
     }
 
     /**
