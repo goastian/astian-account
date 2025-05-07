@@ -11,12 +11,14 @@ class PaymentFailed extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $url;
+
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        //
+        $this->url = config('app.url') . config('system.redirect_to', '/about');
     }
 
     /**
@@ -39,7 +41,7 @@ class PaymentFailed extends Notification implements ShouldQueue
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line('Unfortunately, your recent payment attempt was not successful.')
             ->line('Please review your payment method and try again.')
-            ->action('Retry Payment', redirectToHome())
+            ->action('Go to dashboard', $this->url)
             ->line('If you continue to have issues, contact our support team.');
     }
 
@@ -53,7 +55,7 @@ class PaymentFailed extends Notification implements ShouldQueue
         return [
             'title' => 'Payment Failed',
             'message' => 'Your recent payment attempt was unsuccessful. Please try again.',
-            'url' => redirectToHome(),
+            'url' => $this->url,
         ];
     }
 }

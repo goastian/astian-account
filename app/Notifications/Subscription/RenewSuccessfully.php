@@ -11,12 +11,14 @@ class RenewSuccessfully extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $url;
+
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        //
+        $this->url = config('app.url') . config('system.redirect_to', '/about');
     }
 
     /**
@@ -26,7 +28,7 @@ class RenewSuccessfully extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
@@ -39,7 +41,7 @@ class RenewSuccessfully extends Notification implements ShouldQueue
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line('We’re happy to inform you that your subscription has been successfully renewed.')
             ->line('Thank you for continuing to use our service.')
-            ->action('Manage Subscription', redirectToHome())
+            ->action('Go to dashboard', $this->url)
             ->line('If you have any questions, feel free to contact our support team.');
     }
 
@@ -53,7 +55,7 @@ class RenewSuccessfully extends Notification implements ShouldQueue
         return [
             'title' => 'Subscription Renewed',
             'message' => 'Your subscription has been successfully renewed.',
-            'url' => redirectToHome(),
+            'url' => $this->url,
         ];
     }
 }

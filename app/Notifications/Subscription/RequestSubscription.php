@@ -13,12 +13,16 @@ class RequestSubscription extends Notification implements ShouldQueue
 
     public $code;
 
+    public $url;
+
     /**
      * Create a new notification instance.
      */
     public function __construct($code)
     {
         $this->code = $code;
+        $this->url = config('app.url') . config('system.redirect_to', '/about');
+
     }
 
     /**
@@ -43,6 +47,7 @@ class RequestSubscription extends Notification implements ShouldQueue
             ->line("Transaction Code: {$this->code}")
             ->line('You will receive a confirmation email once the process is completed.')
             ->line('Thank you for your interest and for choosing our services.')
+            ->action('Go to dashboard', $this->url)
             ->salutation('Best regards, The Team');
     }
 
@@ -57,7 +62,7 @@ class RequestSubscription extends Notification implements ShouldQueue
             'title' => 'Subscription Request Received',
             'message' => "Your subscription request with transaction code {$this->code} is being processed. You will be notified once it is confirmed.",
             'transaction_code' => $this->code,
-            'url' => redirectToHome(),
+            'url' => $this->url,
         ];
     }
 }
