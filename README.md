@@ -93,6 +93,7 @@ server {
     }
 }
 ```
+
 # Notes
 
 ## Re-generate OAuth2 keys
@@ -108,5 +109,9 @@ php artisan passport:install --force
 -   **Stripe**: Third-party payment method
 
     -   **Webhook (POST)**: `https://domain.com/webhook/stripe`
+    -   **Listen event**
+        -   `checkout.session.completed`
+        -   `payment_intent.payment_failed`
+        -   `checkout.session.expired`
 
 -   **P2P**: Offline payment method
