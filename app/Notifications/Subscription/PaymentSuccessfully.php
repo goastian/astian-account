@@ -11,12 +11,14 @@ class PaymentSuccessfully extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $url;
+
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        //
+        $this->url = config('app.url') . config('system.redirect_to', '/about');
     }
 
     /**
@@ -40,7 +42,7 @@ class PaymentSuccessfully extends Notification implements ShouldQueue
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line('We have successfully received your payment.')
             ->line('Your subscription has been activated and is now in effect.')
-            ->action('Go to Dashboard', redirectToHome())
+            ->action('Go to dashboard', $this->url)
             ->line('Thank you for your trust!');
     }
 
@@ -54,7 +56,7 @@ class PaymentSuccessfully extends Notification implements ShouldQueue
         return [
             'title' => 'Payment Successfully Received',
             'message' => 'Your payment was received and your subscription is now active.',
-            'url' => redirectToHome(),
+            'url' => $this->url,
         ];
     }
 }
