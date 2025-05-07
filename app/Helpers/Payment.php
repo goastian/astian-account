@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 
 
 if (!function_exists('billing_get_period')) {

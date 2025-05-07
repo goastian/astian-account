@@ -6,7 +6,7 @@
             <h2 class="text-xl font-semibold text-gray-800">{{ __('General settings') }}</h2>
         </div>
 
-        <div class="flex-1 space-y-4">
+        <div class="w-full md:w-3/4 space-y-4">
 
             <div class="mb-4 px-2 py-2">
                 <label for="app_name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -55,6 +55,28 @@
                 <input type="text" name="system[home_page]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder="{{ __('Enter home page URL') }}" value="{{ config('system.home_page') }}">
+                <small
+                    class="block mt-1 text-gray-600">{{ __('This field specifies the URL of the home page of the application') }}</small>
+            </div>
+
+            <div class="mb-4 px-2 py-2">
+                <label for="home_page" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('Policy services URL') }}
+                </label>
+                <input type="text" name="system[policy_services]"
+                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value="{{ config('system.policy_services') }}">
+                <small
+                    class="block mt-1 text-gray-600">{{ __('This field specifies the URL of the home page of the application') }}</small>
+            </div>
+
+            <div class="mb-4 px-2 py-2">
+                <label for="home_page" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('Policy Cookies URL') }}
+                </label>
+                <input type="text" name="system[policy_cookies]"
+                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value="{{ config('system.policy_cookies') }}">
                 <small
                     class="block mt-1 text-gray-600">{{ __('This field specifies the URL of the home page of the application') }}</small>
             </div>

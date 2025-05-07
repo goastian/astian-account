@@ -221,6 +221,8 @@ class Setting extends Master
         settingLoad('system.enable_register_member', true);
         settingLoad('system.csp_enabled', true);
         settingLoad('system.redirect_to', "/account");
+        settingLoad('system.policy_services', null);
+        settingLoad('system.policy_cookies', null);
 
 
     }
@@ -441,6 +443,8 @@ class Setting extends Master
         Config::set('system.code_2fa_email_expires', settingItem('system.code_2fa_email_expires', 5));
         Config::set('system.enable_register_member', settingItem('system.enable_register_member', true));
         Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
-        Config::set('system.redirect_to', settingItem('system.redirect_to', true));
+        Config::set('system.redirect_to', settingItem('system.redirect_to', null));
+        Config::set('system.policy_services', settingItem('system.policy_services', null));
+        Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
     }
 }

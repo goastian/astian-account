@@ -15,7 +15,7 @@
                 <select name="queue[default]" id="queue_selector"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200">
                     @foreach (['database', 'beanstalkd', 'sqs', 'redis'] as $driver)
-                        <option value="{{ $driver }}" {{ settingItem('queue.default') == $driver ? 'selected' : '' }}>
+                        <option value="{{ $driver }}" {{ config('queue.default') == $driver ? 'selected' : '' }}>
                             {{ ucfirst($driver) }}
                         </option>
                     @endforeach
@@ -33,7 +33,7 @@
                         </label>
                         <input type="text" name="queue[connections][database][{{ $key }}]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200"
-                            value="{{ settingItem('queue.connections.database.' . $key) }}">
+                            value="{{ config('queue.connections.database.' . $key) }}">
                     </div>
                 @endforeach
             </div>
@@ -49,7 +49,7 @@
                         </label>
                         <input type="text" name="queue[connections][beanstalkd][{{ $key }}]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-yellow-200"
-                            value="{{ settingItem('queue.connections.beanstalkd.' . $key) }}">
+                            value="{{ config('queue.connections.beanstalkd.' . $key) }}">
                     </div>
                 @endforeach
             </div>
@@ -64,7 +64,7 @@
                         </label>
                         <input type="text" name="queue[connections][sqs][{{ $key }}]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200"
-                            value="{{ settingItem('queue.connections.sqs.' . $key) }}">
+                            value="{{ config('queue.connections.sqs.' . $key) }}">
                     </div>
                 @endforeach
             </div>
@@ -79,7 +79,7 @@
                         </label>
                         <input type="text" name="queue[connections][redis][{{ $key }}]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-red-200"
-                            value="{{ settingItem('queue.connections.redis.' . $key) }}">
+                            value="{{ config('queue.connections.redis.' . $key) }}">
                     </div>
                 @endforeach
             </div>

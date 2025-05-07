@@ -15,8 +15,7 @@
                 <select name="filesystems[default]" id="filesystem-select"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200">
                     @foreach (['local', 'public', 's3'] as $driver)
-                        <option value="{{ $driver }}"
-                            {{ settingItem('filesystems.default') == $driver ? 'selected' : '' }}>
+                        <option value="{{ $driver }}" {{ config('filesystems.default') == $driver ? 'selected' : '' }}>
                             {{ ucfirst($driver) }}
                         </option>
                     @endforeach
@@ -35,18 +34,18 @@
                             <select name="filesystems[disks][local][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200">
                                 <option value="{{ false }}"
-                                    {{ settingItem('filesystems.disks.local.throw', false) == false ? 'selected' : '' }}>
+                                    {{ config('filesystems.disks.local.throw', false) == false ? 'selected' : '' }}>
                                     {{ __('No') }}
                                 </option>
                                 <option value="{{ true }}"
-                                    {{ settingItem('filesystems.disks.local.throw', false) == true ? 'selected' : '' }}>
+                                    {{ config('filesystems.disks.local.throw', false) == true ? 'selected' : '' }}>
                                     {{ __('Yes') }}
                                 </option>
                             </select>
                         @else
                             <input type="text" name="filesystems[disks][local][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-green-200"
-                                value="{{ settingItem('filesystems.disks.local.' . $key, $key == 'root' ? storage_path('app') : 'local') }}">
+                                value="{{ config('filesystems.disks.local.' . $key, $key == 'root' ? storage_path('app') : 'local') }}">
                         @endif
                     </div>
                 @endforeach
@@ -64,18 +63,18 @@
                             <select name="filesystems[disks][public][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200">
                                 <option value="{{ false }}"
-                                    {{ settingItem('filesystems.disks.public.throw', false) == false ? 'selected' : '' }}>
+                                    {{ config('filesystems.disks.public.throw', false) == false ? 'selected' : '' }}>
                                     {{ __('No') }}
                                 </option>
                                 <option value="{{ true }}"
-                                    {{ settingItem('filesystems.disks.public.throw', false) == true ? 'selected' : '' }}>
+                                    {{ config('filesystems.disks.public.throw', false) == true ? 'selected' : '' }}>
                                     {{ __('Yes') }}
                                 </option>
                             </select>
                         @else
                             <input type="text" name="filesystems[disks][public][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200"
-                                value="{{ settingItem('filesystems.disks.public.' . $key, '') }}">
+                                value="{{ config('filesystems.disks.public.' . $key, '') }}">
                         @endif
                     </div>
                 @endforeach
@@ -93,18 +92,18 @@
                             <select name="filesystems[disks][s3][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-yellow-200">
                                 <option value="{{ false }}"
-                                    {{ settingItem('filesystems.disks.s3.' . $key, false) == false ? 'selected' : '' }}>
+                                    {{ config('filesystems.disks.s3.' . $key, false) == false ? 'selected' : '' }}>
                                     {{ __('Yes') }}
                                 </option>
                                 <option value="{{ true }}"
-                                    {{ settingItem('filesystems.disks.s3.' . $key, false) == true ? 'selected' : '' }}>
+                                    {{ config('filesystems.disks.s3.' . $key, false) == true ? 'selected' : '' }}>
                                     {{ __('No') }}
                                 </option>
                             </select>
                         @else
                             <input type="text" name="filesystems[disks][s3][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-yellow-200"
-                                value="{{ settingItem('filesystems.disks.s3.' . $key, '') }}">
+                                value="{{ config('filesystems.disks.s3.' . $key, '') }}">
                         @endif
                     </div>
                 @endforeach
