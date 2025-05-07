@@ -12,7 +12,7 @@
             <div class="login">
                 <div class="head text-center mb-8">
                     <p class="text-3xl font-bold text-gray-800 tracking-tight">
-                        {{ settingItem('app.name', 'Oauth2 Server') }}
+                        {{ config('app.name', 'Oauth2 Server') }}
                     </p>
                 </div>
                 <div class="body">
@@ -57,7 +57,7 @@
                                 class="w-full bg-blue-600 text-white py-3 rounded-xl hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 ease-in-out">
                                 {{ __('Sign in') }}
                             </button>
-                            @if (settingItem('enable_register_member', true))
+                            @if (config('system.enable_register_member', true))
                                 <p class="text-sm text-gray-600 text-center mt-4">
                                     {{ __("Don't have an account?") }}
                                     <a href="{{ route('register') }}" class="text-blue-600 hover:underline">

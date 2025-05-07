@@ -1,7 +1,7 @@
 @extends('layouts.pages')
 
 @section('title')
-    @include('layouts.parts.title', ['title' => settingItem('app.name', 'Oauth2 Server')])
+    @include('layouts.parts.title', ['title' => config('app.name', 'Oauth2 Server')])
 @endsection
 
 @section('header')
@@ -11,7 +11,7 @@
 @section('content')
     <main class="container mx-auto px-6 py-10 grow">
         <section id="about" class="mb-6 text-center">
-            <h2 class="text-2xl font-semibold">{{ settingItem('app.name', 'Oauth2 Server') }}</h2>
+            <h2 class="text-2xl font-semibold">{{ config('app.name', 'Oauth2 Server') }}</h2>
             <p class="text-base text-gray-700">
                 {{ __('Securely manage user access and authentication with modern protocols like OAuth 2.0.') }}
             </p>

@@ -35,4 +35,7 @@ return [
     // Enable Content Security Policy (CSP) headers
     "csp_enabled" => false,
 
+    //Policies
+    "policy_services" => null,
+    "policy_cookies" => null
 ];

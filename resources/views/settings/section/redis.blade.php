@@ -28,7 +28,7 @@
                                 name="database[redis][default][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200"
                                 placeholder="{{ __('Enter redis cache :name', ['name' => $key]) }}"
-                                value="{{ settingItem('database.redis.default.' . $key, $key === 'port' ? '6379' : ($key === 'database' ? 1 : '')) }}">
+                                value="{{ config('database.redis.default.' . $key, $key === 'port' ? '6379' : ($key === 'database' ? 1 : '')) }}">
                         </div>
                     @endforeach
                 </div>
@@ -52,7 +52,7 @@
                                 name="database[redis][cache][{{ $key }}]"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-200"
                                 placeholder="{{ __('Enter redis cache :name', ['name' => $key]) }}"
-                                value="{{ settingItem('database.redis.cache.' . $key, $key === 'port' ? '6379' : ($key === 'database' ? 1 : '')) }}">
+                                value="{{ config('database.redis.cache.' . $key, $key === 'port' ? '6379' : ($key === 'database' ? 1 : '')) }}">
                         </div>
                     @endforeach
                 </div>

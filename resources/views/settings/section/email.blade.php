@@ -17,7 +17,7 @@
                 <select name="mail[default]" id="mail_selector"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300">
                     @foreach (['smtp', 'ses', 'mailgun', 'postmark', 'sendmail', 'log', 'array', 'failover'] as $driver)
-                        <option value="{{ $driver }}" {{ settingItem('mail.default') == $driver ? 'selected' : '' }}>
+                        <option value="{{ $driver }}" {{ config('mail.default') == $driver ? 'selected' : '' }}>
                             {{ ucfirst($driver) }}
                         </option>
                     @endforeach
@@ -34,7 +34,7 @@
                         <input type="{{ $key === 'password' ? 'password' : 'text' }}"
                             name="mail[mailers][smtp][{{ $key }}]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
-                            value="{{ settingItem('mail.mailers.smtp.' . $key) }}">
+                            value="{{ config('mail.mailers.smtp.' . $key) }}">
                     </div>
                 @endforeach
             </div>
@@ -48,7 +48,7 @@
                         <label class="block text-sm font-medium text-gray-700">{{ ucfirst($key) }}</label>
                         <input type="text" name="services[mailgun][{{ $key }}]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                            value="{{ settingLoad('services.mailgun.' . $key, null) }}">
+                            value="{{ config('services.mailgun.' . $key, null) }}">
                     </div>
                 @endforeach
             </div>
@@ -61,7 +61,7 @@
                         <label class="block text-sm font-medium text-gray-700">{{ ucfirst($key) }}</label>
                         <input type="text" name="services[ses][{{ $key }}]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                            value="{{ settingLoad('services.ses.' . $key, null) }}">
+                            value="{{ config('services.ses.' . $key, null) }}">
                     </div>
                 @endforeach
             </div>
@@ -73,7 +73,7 @@
                     <label class="block text-sm font-medium text-gray-700">Token</label>
                     <input type="text" name="services[passport][token]"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                        value="{{ settingLoad('services.passport.token', null) }}">
+                        value="{{ config('services.passport.token', null) }}">
                 </div>
             </div>
 
@@ -84,26 +84,55 @@
                     <label class="block text-sm font-medium text-gray-700">Email</label>
                     <input type="text" name="mail[from][address]"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                        value="{{ settingItem('mail.from.address') }}">
+                        value="{{ config('mail.from.address') }}">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Name</label>
                     <input type="text" name="mail[from][name]"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                        value="{{ settingItem('mail.from.name') }}">
+                        value="{{ config('mail.from.name') }}">
                 </div>
             </div>
 
             {{-- Configurations --}}
-            @foreach ([['verify_account_time', 'Account Verification Time (minutes)'], ['code_2fa_email_expires', '2FA Email Code Expiration Time (Minutes)'], ['auth[passwords][users][expire]', 'Password Reset Expiration Time (Minutes)'], ['auth[passwords][users][throttle]', 'Password Reset Request Throttle (Minutes)']] as [$name, $label])
-                <div class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __($label) }}</label>
-                    <input type="number" name="{{ $name }}"
-                        class="block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:ring-indigo-300"
-                        placeholder="{{ __($label) }}" value="{{ settingItem($name, 10) }}">
-                    <small class="block mt-1 text-gray-600">{{ __('Specify the duration in minutes.') }}</small>
-                </div>
-            @endforeach
+
+            <div class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+                <label
+                    class="block text-sm font-medium text-gray-700 mb-2">{{ __(key: 'Account Verification Time (minutes)') }}</label>
+                <input type="number" name="system[verify_account_time]"
+                    class="block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:ring-indigo-300"
+                    value="{{ config('system.verify_account_time', 5) }}">
+                <small class="block mt-1 text-gray-600">{{ __('Specify the duration in minutes.') }}</small>
+            </div>
+
+
+            <div class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+                <label
+                    class="block text-sm font-medium text-gray-700 mb-2">{{ __('2FA Email Code Expiration Time (Minutes)') }}</label>
+                <input type="number" name="system[code_2fa_email_expires]"
+                    class="block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:ring-indigo-300"
+                    value="{{ config('system.code_2fa_email_expires', 5) }}">
+                <small class="block mt-1 text-gray-600">{{ __('Specify the duration in minutes.') }}</small>
+            </div>
+
+
+            <div class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+                <label
+                    class="block text-sm font-medium text-gray-700 mb-2">{{ __('Password Reset Expiration Time (Minutes)') }}</label>
+                <input type="number" name="auth[passwords][users][expire]"
+                    class="block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:ring-indigo-300"
+                    value="{{ config('auth.passwords.users.expire', 10) }}">
+                <small class="block mt-1 text-gray-600">{{ __('Specify the duration in minutes.') }}</small>
+            </div>
+
+            <div class="p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+                <label
+                    class="block text-sm font-medium text-gray-700 mb-2">{{ __('Password Reset Request Throttle (Minutes)') }}</label>
+                <input type="number" name="auth[passwords][users][throttle]"
+                    class="block w-full px-3 py-2 rounded-md border-gray-300 shadow-sm focus:ring-indigo-300"
+                    value="{{ config('auth.passwords.users.throttle', 10) }}">
+                <small class="block mt-1 text-gray-600">{{ __('Specify the duration in minutes.') }}</small>
+            </div>
         </div>
     </div>
 @endsection

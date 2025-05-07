@@ -11,12 +11,12 @@
                 <label for="enable_register_member" class="block text-sm font-medium text-gray-700 mb-2">
                     {{ __('Enable Member Registration') }}
                 </label>
-                <select id="enable_register_member" name="enable_register_member"
+                <select id="enable_register_member" name="system[enable_register_member]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="1" {{ settingItem('enable_register_member') == 1 ? 'selected' : '' }}>
+                    <option value="1" {{ config('system.enable_register_member') == true ? 'selected' : '' }}>
                         {{ __('Yes') }}
                     </option>
-                    <option value="0" {{ settingItem('enable_register_member') == 0 ? 'selected' : '' }}>
+                    <option value="0" {{ config('system.enable_register_member') == false ? 'selected' : '' }}>
                         {{ __('No') }}
                     </option>
                 </select>

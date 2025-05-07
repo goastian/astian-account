@@ -8,7 +8,7 @@
                         <i class="mdi mdi-login"></i> {{ __('Login') }}
                     </a>
                 </li>
-                @if (settingItem('enable_register_member', true))
+                @if (config('enable_register_member', true))
                     <li>
                         <a href="{{ route('register') }}" class="hover:underline">
                             <i class="mdi mdi-account-edit-outline"></i> {{ __('Register') }}

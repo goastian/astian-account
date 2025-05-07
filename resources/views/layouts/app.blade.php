@@ -5,9 +5,9 @@
 
     @include('layouts.parts.meta')
 
-    <link rel="icon" href="{{ settingItem('app.url') }}/favicon.png" type="image/png">
+    <link rel="icon" href="{{ config('app.url') }}/favicon.png" type="image/png">
 
-    <title>{{ settingItem('app.name', 'Oauth2 Server') }}</title>
+    <title>{{ config('app.name', 'Oauth2 Server') }}</title>
 
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/tailwind.css') }}">
