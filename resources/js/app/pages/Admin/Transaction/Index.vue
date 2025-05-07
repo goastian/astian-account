@@ -24,7 +24,7 @@
                             </div>
                             <q-space />
                             <v-activate
-                                @activated="getTransactions"
+                                @updated="getTransactions"
                                 v-if="check(item)"
                                 :item="item"
                             />
@@ -81,7 +81,8 @@
                             </div>
                             <div class="q-mb-sm">
                                 <q-icon name="event" class="q-mr-xs" />
-                                <strong>Activated :</strong> {{ item.activated }}
+                                <strong>Activated :</strong>
+                                {{ item.activated }}
                             </div>
                         </q-card-section>
                     </q-card>
@@ -155,6 +156,7 @@ export default {
         searching(event) {
             this.getTransactions(event);
         },
+
         async getTransactions(param = null) {
             var params = {};
             Object.assign(params, this.search);

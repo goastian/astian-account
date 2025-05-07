@@ -1,11 +1,10 @@
 <template>
     <div>
-        <q-btn
-            outline
-            icon="mdi-power"
-            color="positive"
-            @click="dialog = true"
-        />
+        <q-btn outline icon="mdi-power" color="positive" @click="dialog = true">
+            <q-tooltip transition-show="rotate" transition-hide="rotate">
+                Activate transaction
+            </q-tooltip>
+        </q-btn>
         <q-dialog v-model="dialog">
             <q-card>
                 <q-card-section class="row items-center q-pb-none">
@@ -38,7 +37,7 @@
 </template>
 <script>
 export default {
-    emits: ["activated"],
+    emits: ["updated"],
 
     props: {
         item: {
@@ -60,7 +59,7 @@ export default {
 
                 if (res.status == 200) {
                     this.dialog = false;
-                    this.emit("activated");
+                    this.$emit("updated");
                 }
             } catch (error) {}
         },

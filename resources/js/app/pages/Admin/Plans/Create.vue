@@ -31,17 +31,21 @@
                             </template>
                         </q-input>
 
+                        <v-editor @content="setContent" />
+
+                        <!--
                         <q-input
-                            outlined
-                            v-model="form.description"
-                            label="Description"
-                            type="textarea"
-                            :error="!!errors.description"
+                        outlined
+                        v-model="form.description"
+                        label="Description"
+                        type="textarea"
+                        :error="!!errors.description"
                         >
-                            <template v-slot:error>
-                                <v-error :error="errors.description" />
-                            </template>
-                        </q-input>
+                        <template v-slot:error>
+                            <v-error :error="errors.description" />
+                        </template>
+                    </q-input>
+                    -->
 
                         <div class="row q-col-gutter-md">
                             <q-item
@@ -405,6 +409,10 @@ export default {
         close() {
             this.dialog = false;
             this.clean();
+        },
+
+        setContent(text) {
+            this.form.description = text;
         },
 
         clean() {
