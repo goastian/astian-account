@@ -35,7 +35,7 @@ class settingsUsersCreate extends Command
      */
     public function handle()
     {
-        $disable = settingItem('disable_create_user_by_command', false);
+        $disable = config('system.disable_create_user_by_command', false);
         if ($disable) {
             return 1;
         }

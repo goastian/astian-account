@@ -33,7 +33,7 @@ class User extends Auth
     public function destroyAccounts()
     {
         $now = new DateTime();
-        $now->sub(new DateInterval('P' . settingItem('destroy_user_after', 30) . 'D'));
+        $now->sub(new DateInterval('P' . config('system.destroy_user_after', 30) . 'D'));
         $date = $now->format('Y-m-d H:i:s');
 
         $users = User::onlyTrashed()
@@ -60,7 +60,7 @@ class User extends Auth
     public function destroyUnverifiedMembers()
     {
         $now = new DateTime();
-        $now->sub(new DateInterval('PT' . settingItem('verify_account_time', 5) . 'M'));
+        $now->sub(new DateInterval('PT' . config('system.verify_account_time', 5) . 'M'));
         $date = $now->format('Y-m-d H:i:s');
 
         $users = User::whereHas('groups', function ($query) {

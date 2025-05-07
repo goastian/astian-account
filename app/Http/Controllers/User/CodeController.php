@@ -71,7 +71,7 @@ class CodeController extends Controller
         $date = new DateTime($code->created_at);
 
 
-        $date->add(new DateInterval("PT" . settingItem('code_2fa_email_expires', 5) . "M"));
+        $date->add(new DateInterval("PT" . config('system.code_2fa_email_expires', 5) . "M"));
         $expire = $date->format('Y-m-d H:i:s');
 
         if ($code->email != $request->email) {
@@ -114,14 +114,14 @@ class CodeController extends Controller
 
         if ($code) {
             $date = new DateTime($code->created_at);
-            $date->add(new DateInterval('PT' . settingItem('code_2fa_email_expires', 5) . 'M'));
+            $date->add(new DateInterval('PT' . config('system.code_2fa_email_expires', 5) . 'M'));
             $now = $date->format('Y-m-d H:i:s');
 
             if (now() < $now) {
                 throw new ReportError(
                     __(
                         "Please wait a moment, the next token should be sent after :minute minutes",
-                        ['minute' => settingItem('code_2fa_email_expires', 5)]
+                        ['minute' => config('system.code_2fa_email_expires', 5)]
                     ),
                     422
                 );
@@ -143,7 +143,7 @@ class CodeController extends Controller
         $code = $this->getToken($request);
 
         $date = new DateTime($code->created_at);
-        $date->add(new DateInterval("PT" . settingItem('code_2fa_email_expires', 5) . "M"));
+        $date->add(new DateInterval("PT" . config('system.code_2fa_email_expires', 5) . "M"));
         $expire = $date->format('Y-m-d H:i:s');
 
         if (!Hash::check($request->token, $code->code)) {

@@ -62,7 +62,7 @@ class AuthorizationController extends GlobalController
     public function decodeToken(Request $request)
     {
         try {
-            $token = $request->cookie(settingItem('passport_token_services', 'passport_token'));
+            $token = $request->cookie(config('system.passport_token_services', 'passport_token'));
 
             $token_decode = explode('.', $token);
             $token_decode = $token_decode[1];

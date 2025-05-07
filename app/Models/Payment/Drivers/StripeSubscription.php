@@ -71,10 +71,10 @@ class StripeSubscription implements PaymentMethod
         ];
 
         // Add tax if enabled
-        if (config('billing.taxes.enabled') && !is_null(settingItem('billing.taxes.id'))) {
+        if (config('billing.taxes.enabled') && !is_null(config('billing.taxes.id'))) {
 
             foreach ($meta['line_items'] as &$item) {
-                $item['tax_rates'] = [settingItem('billing.taxes.id')];
+                $item['tax_rates'] = [config('billing.taxes.id')];
             }
         }
 

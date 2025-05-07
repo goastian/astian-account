@@ -443,5 +443,8 @@ class Setting extends Master
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
         Config::set('system.policy_services', settingItem('system.policy_services', null));
         Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
+
+        Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));
+        Config::set('passport.personal_access_client.secret', settingItem('passport.personal_access_client.secret', null));
     }
 }
