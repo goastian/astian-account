@@ -74,3 +74,21 @@ server {
     }
 }
 ```
+
+# Notes
+
+## Re-generate OAuth2 keys
+
+-   Go to admins and choose terminal and type the next command
+
+```bash
+php artisan passport:install --force
+```
+
+## Payment Methods
+
+-   **Stripe**: Third-party payment method
+
+    -   **Webhook (POST)**: `https://domain.com/webhook/stripe`
+
+-   **P2P**: Offline payment method
