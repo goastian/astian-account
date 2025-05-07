@@ -20,8 +20,8 @@
                                 <v-update @updated="getPlans" :item="plan" />
                                 <v-delete @deleted="getPlans" :item="plan" />
                             </div>
-                            <div class="text-subtitle2">
-                                {{ plan.description }}
+                            <div class="text-subtitle1">
+                                <span v-html="plan.description"></span>
                             </div>
                             <div class="q-mt-sm q-gutter-sm">
                                 <q-badge
@@ -120,7 +120,7 @@
                                                 item.currency
                                             }}</span>
                                             <span class="q-ml-sm">{{
-                                                item.amount
+                                                item.amount_format
                                             }}</span>
                                         </div>
                                         <div class="text-caption text-grey">

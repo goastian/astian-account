@@ -25,7 +25,12 @@
                             </template>
                         </q-input>
 
-                        <q-input
+                        <v-editor
+                            :text="form.description"
+                            @content="setContent"
+                        />
+                        <!--
+                            <q-input
                             outlined
                             v-model="form.description"
                             label="Description"
@@ -36,6 +41,7 @@
                                 <v-error :error="errors.description" />
                             </template>
                         </q-input>
+                        -->
 
                         <div class="row q-col-gutter-md">
                             <q-item
@@ -389,6 +395,7 @@ export default {
             service: [],
             currencies: [],
             billing_periods: [],
+            text: "",
         };
     },
 
@@ -406,6 +413,10 @@ export default {
             this.dialog = false;
         },
 
+        setContent(text) {
+            this.text = text;
+        },
+
         open() {
             this.form = { ...this.item };
             this.form.scopes = this.form.scopes.map((item) => item.id);
@@ -420,6 +431,8 @@ export default {
          * Create a new client
          */
         async update() {
+            this.form.description = this.text;
+
             try {
                 const res = await this.$server.put(
                     this.form.links.update,

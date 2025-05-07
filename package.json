@@ -39,6 +39,7 @@
         "notyf": "^3.10.0",
         "postcss": "^8.5.1",
         "quasar": "^2.18.1",
+        "quill": "^2.0.3",
         "sass": "^1.85.1",
         "sass-loader": "^16.0.5",
         "stream-http": "^3.2.0",

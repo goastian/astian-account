@@ -29,7 +29,7 @@
                                     </q-badge>
                                 </div>
                                 <div class="text-subtitle2 text-grey-7">
-                                    {{ plan.description }}
+                                    <span v-html="plan.description"></span>
                                 </div>
                             </q-card-section>
 
@@ -97,7 +97,7 @@
                                                     >{{ item.currency }}</span
                                                 >
                                                 <span class="q-ml-sm">{{
-                                                    item.amount
+                                                    item.amount_format
                                                 }}</span>
                                             </div>
                                             <div class="text-caption text-grey">
