@@ -30,7 +30,7 @@ class Setting extends Master
      */
     public static function getDefaultSetting()
     {
-        if ($item = settingItem('schema_mode', 'https')) {
+        if ($item = config('system.schema_mode', 'https')) {
             URL::forceScheme($item);
         }
 
@@ -47,9 +47,6 @@ class Setting extends Master
         Setting::getEmailSettings();
         Setting::getPaymentSettings();
         Setting::getSystemSetting();
-
-
-
     }
 
     /**
