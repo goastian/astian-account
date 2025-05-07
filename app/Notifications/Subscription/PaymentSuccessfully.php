@@ -34,12 +34,13 @@ class PaymentSuccessfully extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+
         return (new MailMessage)
             ->subject('Payment Confirmation')
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line('We have successfully received your payment.')
             ->line('Your subscription has been activated and is now in effect.')
-            ->action('Go to Dashboard', url('/dashboard'))
+            ->action('Go to Dashboard', redirectToHome())
             ->line('Thank you for your trust!');
     }
 
@@ -53,7 +54,7 @@ class PaymentSuccessfully extends Notification implements ShouldQueue
         return [
             'title' => 'Payment Successfully Received',
             'message' => 'Your payment was received and your subscription is now active.',
-            'url' => url('/dashboard'),
+            'url' => redirectToHome(),
         ];
     }
 }

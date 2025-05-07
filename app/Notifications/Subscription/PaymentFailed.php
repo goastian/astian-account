@@ -39,7 +39,7 @@ class PaymentFailed extends Notification implements ShouldQueue
             ->greeting('Hello ' . $notifiable->name . ',')
             ->line('Unfortunately, your recent payment attempt was not successful.')
             ->line('Please review your payment method and try again.')
-            ->action('Retry Payment', url('/billing'))
+            ->action('Retry Payment', redirectToHome())
             ->line('If you continue to have issues, contact our support team.');
     }
 
@@ -53,7 +53,7 @@ class PaymentFailed extends Notification implements ShouldQueue
         return [
             'title' => 'Payment Failed',
             'message' => 'Your recent payment attempt was unsuccessful. Please try again.',
-            'url' => url('/billing'),
+            'url' => redirectToHome(),
         ];
     }
 }
