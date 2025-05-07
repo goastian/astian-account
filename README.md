@@ -14,7 +14,7 @@ This project is licensed under the GNU Affero General Public License v3.0. See t
 
 ## Resources
 
--   [Official Documentation](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home) 
+-   [Official Documentation](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home)
 -   [Echo Server](https://gitlab.com/elyerr/echo-server)
 -   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
 
@@ -24,20 +24,22 @@ This project is licensed under the GNU Affero General Public License v3.0. See t
 
 For direct contact, visit [Telegram](https://t.me/elyerr).
 
+# 🚀 Deploy & First User Setup
 
-# 🚀 Deploy & First User Setup  
+This project uses Docker and Laravel for OAuth2 authentication. Follow the steps below to deploy the production environment and create the first user.
 
-This project uses Docker and Laravel for OAuth2 authentication. Follow the steps below to deploy the production environment and create the first user.  
+## 🔑 Environment Configuration
 
-## 🔑 Environment Configuration  
-Before deployment, make sure to copy the environment file and configure the necessary variables:  
+Before deployment, make sure to copy the environment file and configure the necessary variables:
 
 ```bash
 cp .env.example .env
 ```
+
 Then, edit the .env file with your specific settings.
 
 ## Deploy to Production
+
 Run the following command to deploy the application in a production environment:
 
 ```bash
@@ -45,7 +47,9 @@ Run the following command to deploy the application in a production environment:
 ```
 
 ## 👤 Create the First User
+
 To create an initial user in the application, execute the following command inside the container:
+
 ```bash
 docker exec -it oauth2-server-app-1 php artisan settings:create-user
 ```
@@ -54,7 +58,7 @@ docker exec -it oauth2-server-app-1 php artisan settings:create-user
 
 ```bash
 server {
-    
+
     listen 80;
     server_name accounts.server.org;
 
@@ -65,16 +69,16 @@ server {
     location / {
         proxy_pass http://127.0.0.1:8005;
         proxy_http_version 1.1;
- 
+
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
- 
+
         proxy_set_header X-Forwarded-Host $http_x_forwarded_host;
         proxy_set_header X-Forwarded-Port $http_x_forwarded_port;
         proxy_set_header X-Forwarded-AWS-ELB $http_x_forwarded_aws_elb;
- 
+
         proxy_read_timeout 720s;
         proxy_connect_timeout 720s;
         proxy_send_timeout 720s;
@@ -84,15 +88,25 @@ server {
         proxy_buffers 4 256k;
         proxy_busy_buffers_size 256k;
         proxy_temp_file_write_size 256k;
- 
+
         proxy_redirect off;
     }
 }
 ```
+# Notes
+
+## Re-generate OAuth2 keys
+
+-   Go to admins and choose terminal and type the next command
+
+```bash
+php artisan passport:install --force
+```
 
 ## Payment Methods
 
-- **Stripe**: Third-party payment method
-    - **Webhook (POST)**: `https://domain.com/webhook/stripe`
+-   **Stripe**: Third-party payment method
 
-- **P2P**: Offline payment method
+    -   **Webhook (POST)**: `https://domain.com/webhook/stripe`
+
+-   **P2P**: Offline payment method
