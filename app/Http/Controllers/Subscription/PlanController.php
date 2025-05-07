@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Package;
 use App\Http\Controllers\GlobalController;
 use Elyerr\ApiResponse\Exceptions\ReportError;
+use Stevebauman\Purify\Facades\Purify;
 
 class PlanController extends GlobalController
 {
@@ -100,7 +101,8 @@ class PlanController extends GlobalController
         $this->checkContentType($this->getPostHeader());
 
         DB::transaction(function () use ($request, $plan) {
-            $plan = $plan->fill($request->all());
+            $plan = $plan->fill($request->except('description'));
+            $plan->description = Purify::clean($request->description);
             $plan->slug = $this->slug($request->name);
             $plan->save();
 
@@ -189,7 +191,7 @@ class PlanController extends GlobalController
 
             if ($request->has('description') && $plan->description != $request->description) {
                 $update = true;
-                $plan->description = $request->description;
+                $plan->description = Purify::clean($request->description);
             }
 
             if ($request->has('public') && $plan->public != $request->public) {
