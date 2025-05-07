@@ -92,6 +92,6 @@ class ServiceScopeController extends GlobalController
             throw new ReportError(__("This resource cannot be deleted because it is being used by another resource."), 400);
         }
 
-        return $this->message(__('Role has been revoked successfully'), 201);
+        return $this->message(__('Role has been revoked successfully'), 200);
     }
 }

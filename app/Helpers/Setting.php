@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Setting\Setting;
-use Illuminate\Database\QueryException;
 
 if (!function_exists('settingAdd')) {
     /**
@@ -14,17 +13,20 @@ if (!function_exists('settingAdd')) {
     function settingAdd($key, $value, $user = false)
     {
         $user = $user ? auth()->user()->id : null;
-        Setting::updateOrCreate(
-            [
-                'key' => $key,
-                'user_id' => $user
-            ],
-            [
-                'key' => $key,
-                'value' => $value,
-                'user_id' => $user,
-            ]
-        );
+        try {
+            Setting::updateOrCreate(
+                [
+                    'key' => $key,
+                    'user_id' => $user
+                ],
+                [
+                    'key' => $key,
+                    'value' => $value,
+                    'user_id' => $user,
+                ]
+            );
+        } catch (\Exception $th) {
+        }
     }
 }
 
@@ -40,20 +42,20 @@ if (!function_exists('settingLoad')) {
     function settingLoad($key, $value, $user = false)
     {
         $user = $user ? auth()->user()->id : null;
-
-        Setting::firstOrCreate(
-            [
-                'key' => $key,
-                'user_id' => $user
-            ],
-            [
-                'value' => $value
-            ]
-        );
+        try {
+            Setting::firstOrCreate(
+                [
+                    'key' => $key,
+                    'user_id' => $user
+                ],
+                [
+                    'value' => $value
+                ]
+            );
+        } catch (\Exception $th) {
+        }
     }
 }
-
-
 
 if (!function_exists('settingItem')) {
 
@@ -82,11 +84,9 @@ if (!function_exists('settingItem')) {
 
             return $setting ? $setting->value : $default;
 
-        } catch (QueryException $e) {
-            return $default;
         } catch (\Exception $e) {
-            return $default;
         }
+        return $default;
     }
 }
 
@@ -98,7 +98,7 @@ if (!function_exists('redirectToHome')) {
      */
     function redirectToHome()
     {
-        $url = config('app.url') . settingItem('redirect_to', '/about');
+        $url = config('app.url') . config('system.redirect_to', '/about');
         return redirect($url);
     }
 }

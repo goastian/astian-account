@@ -1,5 +1,5 @@
 <template>
-    <q-btn icon="mdi-plus" round flat color="primary" @click="open" />
+    <q-btn outline round icon="mdi-plus" color="positive" @click="open" />
 
     <q-dialog v-model="dialog" maximized>
         <q-card>
@@ -42,6 +42,7 @@
                         color="primary"
                         icon="mdi-content-save-alert"
                         label="Create"
+                        outline
                     />
                 </div>
 

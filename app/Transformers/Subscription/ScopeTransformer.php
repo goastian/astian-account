@@ -37,8 +37,9 @@ class ScopeTransformer extends TransformerAbstract
     {
         return [
             'id' => $data->id,
-            // 'public' => $data->public ? true : false,
-            //'active' => $data->active ? true : false,
+            'public' => $data->public ? true : false,
+            'active' => $data->active ? true : false,
+            'api_key' => $data->api_key ? true : false,
             'gsr_id' => $data->getGsrID(),
             'service' => [
                 'id' => $data->service->id,

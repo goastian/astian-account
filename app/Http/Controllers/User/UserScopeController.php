@@ -52,11 +52,11 @@ class UserScopeController extends GlobalController
     }
 
     /**
-     * Create new scope
+     *  Create new scope
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\User\User $user
      * @param \App\Models\User\UserScope $userScope
-     * @param \App\Http\Controllers\User\Scope $scope
+     * @param \App\Models\Subscription\Scope $scope
      * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function assign(Request $request, User $user, UserScope $userScope, Scope $scope)
@@ -99,7 +99,9 @@ class UserScopeController extends GlobalController
 
         DB::transaction(function () use ($request, $user, $userScope) {
             foreach ($request->scopes as $id) {
-                $userScope->whereNull('package_id')
+
+                //add scopes
+                $us = $userScope->whereNull('package_id')
                     ->where(function ($query) {
                         $query->whereNull('end_date')
                             ->orWhere('end_date', '>', now());
@@ -111,6 +113,9 @@ class UserScopeController extends GlobalController
                         'user_id' => $user->id,
                         'end_date' => $request->end_date
                     ]);
+
+                //sync groups by scopes
+                $user->groups()->sync($us->scope->service->group->id);
             }
         });
 
@@ -145,7 +150,7 @@ class UserScopeController extends GlobalController
     /**
      * Return the all roles assigned for the user
      * @param \App\Models\User\User $user
-     * @param \App\Models\User\Scope $scope
+     * @param \App\Models\User\UserScope $userScope
      * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function history(User $user, UserScope $userScope)

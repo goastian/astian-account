@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Package;
 use App\Http\Controllers\GlobalController;
 use Elyerr\ApiResponse\Exceptions\ReportError;
+use Stevebauman\Purify\Facades\Purify;
 
 class PlanController extends GlobalController
 {
@@ -65,24 +66,34 @@ class PlanController extends GlobalController
             'description' => ['required'],
             'public' => ['required', new BooleanRule()],
             'active' => ['required', new BooleanRule()],
-            'scopes' => [
+            'bonus_enabled' => ['nullable', new BooleanRule()],
+            'bonus_duration' => [
+                'required_if:bonus_enabled,true',
+                'integer',
+                'min:0',
+                'max:255',
+            ],
+            'scopes' => ['required', 'array', 'exists:scopes,id'],
+            'prices' => ['required', 'array'],
+            'prices.*.billing_period' => [
                 'required',
+                'string',
                 function ($attribute, $value, $fail) {
-                    if (!empty($value)) {
-                        if (!is_array($value)) {
-                            $fail(__("The :attribute must be an array", ["attribute" => $attribute]));
-                        }
-
-                        foreach ($value as $key) {
-                            if (!Scope::find($key)) {
-                                $fail(__("The :attribute is invalid", ["attribute" => $attribute]));
-                            }
-                        }
+                    if (empty(billing_get_period($value))) {
+                        $fail("The billing period is invalid");
                     }
-
-
                 }
-            ]
+            ],
+            'prices.*.currency' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (empty(billing_get_currency($value))) {
+                        $fail("The billing period is invalid");
+                    }
+                }
+            ],
+            'prices.*.amount' => ['required', 'integer', 'min:0'],
         ]);
 
         $this->checkMethod('post');
@@ -90,11 +101,20 @@ class PlanController extends GlobalController
         $this->checkContentType($this->getPostHeader());
 
         DB::transaction(function () use ($request, $plan) {
-            $plan = $plan->fill($request->all());
+            $plan = $plan->fill($request->except('description'));
+            $plan->description = Purify::clean($request->description);
             $plan->slug = $this->slug($request->name);
             $plan->save();
 
             $plan->scopes()->attach($request->scopes);
+
+            foreach ($request->prices as $key => $value) {
+                $plan->prices()->create([
+                    'amount' => $value['amount'],
+                    'billing_period' => $value['billing_period'],
+                    'currency' => $value['currency']
+                ]);
+            }
         });
 
         return $this->showOne($plan, $plan->transformer, 201);
@@ -127,6 +147,34 @@ class PlanController extends GlobalController
             'description' => ['nullable'],
             'public' => ['nullable', new BooleanRule()],
             'active' => ['nullable', new BooleanRule()],
+            'bonus_enabled' => ['nullable', new BooleanRule()],
+            'bonus_duration' => [
+                'required_if:bonus_enabled,true',
+                'integer',
+                'min:0',
+                'max:255',
+            ],
+            'nullable' => ['nullable', 'array', 'exists:scopes,id'],
+            'prices' => ['nullable', 'array'],
+            'prices.*.billing_period' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (empty(billing_get_period($value))) {
+                        $fail("The billing period is invalid");
+                    }
+                }
+            ],
+            'prices.*.currency' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    if (empty(billing_get_currency($value))) {
+                        $fail("The billing period is invalid");
+                    }
+                }
+            ],
+            'prices.*.amount' => ['required', 'integer', 'min:0'],
         ]);
 
         $this->checkMethod('put');
@@ -143,7 +191,7 @@ class PlanController extends GlobalController
 
             if ($request->has('description') && $plan->description != $request->description) {
                 $update = true;
-                $plan->description = $request->description;
+                $plan->description = Purify::clean($request->description);
             }
 
             if ($request->has('public') && $plan->public != $request->public) {
@@ -156,8 +204,38 @@ class PlanController extends GlobalController
                 $plan->active = $request->active;
             }
 
+            if ($request->has('bonus_enabled') && $plan->bonus_enabled != $request->bonus_enabled) {
+                $update = true;
+                $plan->bonus_enabled = $request->bonus_enabled;
+            }
+
+            if ($request->has('bonus_duration') && $plan->bonus_duration != $request->bonus_duration) {
+                $update = true;
+                $plan->bonus_duration = $request->bonus_duration;
+            }
+
             if ($update) {
                 $plan->save();
+            }
+
+            if (!empty($request->scopes)) {
+
+                $plan->scopes()->syncWithoutDetaching($request->scopes);
+            }
+
+            if (!empty($request->prices)) {
+                foreach ($request->prices as $key => $value) {
+                    $plan->prices()->updateOrCreate(
+                        [
+                            'billing_period' => strtolower($value['billing_period']),
+                        ],
+                        [
+                            'billing_period' => strtolower($value['billing_period']),
+                            'amount' => $value['amount'],
+                            'currency' => $value['currency']
+                        ]
+                    );
+                }
             }
         });
 
@@ -171,25 +249,12 @@ class PlanController extends GlobalController
      */
     public function destroy(Plan $plan)
     {
-        $this->checkMethod('delete');
-
-        $this->checkContentType(null);
-
-        throw_if(
-            $plan->packages()->count() > 0,
-            new ReportError(__("This action cannot be completed because this plan is currently assigned to one or more packages and cannot be deleted."), 403)
-        );
-
-        /*throw_if(
-            $plan->scopes()->count() > 0,
-            new ReportError(__("This action cannot be completed because this plan is currently assigned to one or more scopes and cannot be deleted."), 403)
-        );*/
-
         $plan->scopes()->detach();
+
+        $plan->prices()->delete();
 
         $plan->delete();
 
-        return $this->showOne($plan, $plan->transformer);
+        return $this->message(__("Plan deleted successfully"), 200);
     }
-
 }

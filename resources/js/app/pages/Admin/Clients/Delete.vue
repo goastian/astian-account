@@ -1,11 +1,15 @@
 <template>
     <q-btn
         round
-        flat
-        color="red"
+        outline
+        color="negative"
         @click="dialog = true"
         icon="mdi-delete-outline"
-    />
+    >
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Delete client
+        </q-tooltip>
+    </q-btn>
 
     <q-dialog
         v-model="dialog"

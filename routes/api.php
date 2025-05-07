@@ -1,17 +1,20 @@
 <?php
 
+use App\Http\Controllers\Manager\TransactionManagerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\User\UserGroupController;
 use App\Http\Controllers\User\UserScopeController;
 use App\Http\Controllers\Global\CountriesController;
 use App\Http\Controllers\Setting\TerminalController;
+use App\Http\Controllers\User\UserPaymentController;
 use App\Http\Controllers\OAuth\ClientAdminController;
 use App\Http\Controllers\OAuth\CredentialsController;
 use App\Http\Controllers\Subscription\PlanController;
 use App\Http\Controllers\Subscription\RoleController;
 use App\Http\Controllers\Subscription\GroupController;
 use App\Http\Controllers\Subscription\ScopeController;
+use App\Http\Controllers\Subscription\PaymentController;
 use App\Http\Controllers\Subscription\ServiceController;
 use App\Http\Controllers\OAuth\PassportConnectController;
 use App\Http\Controllers\User\UserNotificationController;
@@ -20,6 +23,7 @@ use App\Http\Controllers\Subscription\PlanPriceController;
 use App\Http\Controllers\Subscription\PlanScopeController;
 use Laravel\Passport\Http\Controllers\AccessTokenController;
 use App\Http\Controllers\Subscription\ServiceScopeController;
+use App\Http\Controllers\User\PlanController as UserPlanController;
 use App\Http\Controllers\OAuth\ScopeController as OauthScopeController;
 
 /**
@@ -66,14 +70,13 @@ Route::group([
 Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
-    'middleware' => ['verify.account', 'verify.credentials', 'wants.json'],
+    'middleware' => ['wants.json'],
 
 ], function () {
 
     Route::resource('broadcasts', BroadcastController::class)->only('index', 'store', 'destroy');
     Route::resource('groups', GroupController::class)->except('edit', 'create');
     Route::resource('roles', RoleController::class)->except('create', 'edit');
-
     Route::resource('scopes', ScopeController::class)->only('index');
 
     Route::resource('services', ServiceController::class)->except('create', 'edit');
@@ -94,13 +97,14 @@ Route::group([
     Route::post('/users/{user}/groups', [UserGroupController::class, 'assign'])->name('users.groups.assign');
     Route::delete('/users/{user}/groups/{group}', [UserGroupController::class, 'revoke'])->name('users.groups.revoke');
 
-    Route::resource('clients', ClientAdminController::class)->except('edit', 'create');
+    Route::resource('/clients', ClientAdminController::class)->except('edit', 'create');
 
-    Route::resource('plans', PlanController::class)->except('edit', 'create');
-    Route::post('plans/{plan}/scopes', [PlanScopeController::class, 'assign'])->name('plans.scopes.assign');
-    Route::put('plans/{plan}/scopes', [PlanScopeController::class, 'revoke'])->name('plans.scopes.revoke');
-    Route::post('plans/{plan}/prices', [PlanPriceController::class, 'store'])->name('plans.prices.store');
-    Route::delete('plans/{plan}/prices/{price}', [PlanPriceController::class, 'destroy'])->name('plans.prices.destroy');
+    Route::resource('/plans', PlanController::class)->except('edit', 'create');
+    Route::delete('/plans/{plan}/scopes/{scope}', [PlanScopeController::class, 'revoke'])->name('plans.scopes.revoke');
+    Route::delete('/plans/{plan}/prices/{price}', [PlanPriceController::class, 'destroy'])->name('plans.prices.destroy');
+
+    Route::get('/transactions', [TransactionManagerController::class, 'index'])->name('transactions.index');
+    Route::put('/transactions/{transaction}', [TransactionManagerController::class, 'activate'])->name('transactions.activate');
 
     Route::resource('terminals', TerminalController::class)->only('index', 'store');
 });
@@ -110,7 +114,7 @@ Route::group([
  */
 Route::group([
     'prefix' => 'notifications',
-    'middleware' => ['verify.account', 'verify.credentials', 'wants.json'],
+    'middleware' => ['wants.json'],
 
 ], function () {
     Route::get('/', [UserNotificationController::class, 'index'])->name('notifications.index');
@@ -123,7 +127,14 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'resources'
+    'prefix' => 'public',
+    'as' => 'public.'
 ], function () {
-    Route::resource('countries', CountriesController::class)->only('index');
+    Route::resource('/countries', CountriesController::class)->only('index');
+    Route::get('/plans', [UserPlanController::class, 'index'])->name('plans.index');
+
+    Route::get('/payments/billing-period', [PaymentController::class, 'billingPeriod'])->name('payments.billing-period');
+    Route::get('/payments/currencies', [PaymentController::class, 'currencies'])->name('payments.currencies');
+    Route::get('/payments/payment-status', [PaymentController::class, 'currencies'])->name('payments.payment_status');
+    Route::get('/payments/methods', [PaymentController::class, 'methods'])->name('payments.methods');
 });

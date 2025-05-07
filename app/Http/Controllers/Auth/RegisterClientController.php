@@ -87,7 +87,7 @@ class RegisterClientController extends Controller
             ])->first();
 
             $now = new DateTime($data->created_at);
-            $now->add(new DateInterval("PT" . settingItem("verify_account_time", 5) . "M"));
+            $now->add(new DateInterval("PT" . config("system.verify_account_time", 5) . "M"));
             $date = $now->format("Y-m-d H:i:s");
 
             DB::table('password_resets')->where('email', '=', $request->email)->delete();
@@ -104,7 +104,7 @@ class RegisterClientController extends Controller
 
             $token = uniqid();
 
-            return redirect()->route('verified-account')->with(
+            return redirect()->route('users.verified.account')->with(
                 [
                     'status' => __('Your account has been activated.'),
                     'token' => $token

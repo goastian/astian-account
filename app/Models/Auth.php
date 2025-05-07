@@ -49,7 +49,7 @@ class Auth extends Authenticatable
         'city',
         'address',
         'phone',
-        'birthday', 
+        'birthday',
         'm2fa',
         'totp',
         'verified_at',
@@ -170,5 +170,17 @@ class Auth extends Authenticatable
     public function hasGroup($group)
     {
         return $this->groups()->get()->pluck('slug')->contains($group);
+    }
+
+
+    /**
+     * Retrieve metadata of the model
+     * @param array $transformer
+     */
+    public function meta($transformer = null)
+    {
+        $data = fractal($this, $transformer ?? $this->transformer)->toArray()['data'];
+        unset($data['links']);
+        return $data;
     }
 }

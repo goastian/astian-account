@@ -1,5 +1,9 @@
 <template>
-    <q-btn round flat color="primary" @click="open(item)" icon="mdi-pencil" />
+    <q-btn round outline color="positive" @click="open(item)" icon="mdi-pencil">
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Update group
+        </q-tooltip>
+    </q-btn>
 
     <q-dialog
         v-model="dialog"
@@ -27,18 +31,13 @@
 
             <q-card-actions align="right" class="bg-white text-teal">
                 <q-btn
-                    dense="dense"
-                    color="primary"
+                    outline
+                    color="positive"
                     label="Accept"
                     @click="updateClient"
                 />
 
-                <q-btn
-                    dense="dense"
-                    caolor="secondary"
-                    label="Close"
-                    @click="close"
-                />
+                <q-btn outline color="secondary" label="Close" @click="close" />
             </q-card-actions>
         </q-card>
     </q-dialog>

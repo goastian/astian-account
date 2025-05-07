@@ -36,18 +36,18 @@
                     </div>
                 </div>
                 <h2 class="text-2xl font-bold text-gray-800 mb-2">
-                    Account Verified Successfully!
+                    {{ __('Account Verified Successfully!') }}
                 </h2>
                 <p class="text-gray-600 mb-6">
-                    Thank you for verifying your email address. Your account is now fully activated.
+                    {{ __('Thank you for verifying your email address. Your account is now fully activated.') }}
                 </p>
                 <div class="space-y-3">
                     <a href=""
                         class="block w-full px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition duration-150">
-                        Continue to Dashboard
+                        {{ __('Continue to Dashboard') }}
                     </a>
                     <p class="text-sm text-gray-500 mb-4">
-                        Redirecting in <span id="counter">5 seconds</span>
+                        {{ __('Redirecting in') }} <span id="counter">5 {{ __('seconds') }}</span>
                     </p>
                 </div>
             </div>
@@ -57,7 +57,7 @@
 
 @push('js')
     <script nonce="{{ $nonce }}">
-        const route = "{{ settingItem('redirect_to', 'about') }}"
+        const route = "{{ config('system.redirect_to', 'about') }}"
         let timeLeft = 10;
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('counter').innerHTML = timeLeft + ' seconds';

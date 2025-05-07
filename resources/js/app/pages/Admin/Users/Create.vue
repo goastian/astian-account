@@ -29,6 +29,7 @@
                             <v-error :error="errors.last_name"></v-error>
                         </template>
                     </q-input>
+
                     <q-input
                         outlined
                         v-model="form.email"
@@ -43,43 +44,19 @@
 
                     <q-select
                         v-model="form.country"
-                        dense
-                        outlined
-                        label="Country"
-                        :options="countries"
-                        option-value="id"
-                        :error="!!errors.country"
+                        dense="dense"
                         emit-value
                         map-options
+                        :options="
+                            countries.map((c) => ({
+                                label: `${c.emoji} ${c.name_en} `,
+                                value: c.name_en,
+                            }))
+                        "
+                        label="Country"
+                        outlined
+                        :error="!!errors.country"
                     >
-                        <template v-slot:option="scope">
-                            <q-item v-bind="scope.itemProps">
-                                <q-item-section avatar>
-                                    <q-avatar size="sm">{{
-                                        scope.opt.emoji
-                                    }}</q-avatar>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>{{
-                                        scope.opt.name_en
-                                    }}</q-item-label>
-                                </q-item-section>
-                            </q-item>
-                        </template>
-
-                        <template v-slot:selected>
-                            <q-avatar size="sm">{{
-                                form.country &&
-                                countries.find((c) => c.id === form.country)
-                                    ?.emoji
-                            }}</q-avatar>
-                            <span class="q-ml-sm">{{
-                                form.country &&
-                                countries.find((c) => c.id === form.country)
-                                    ?.name_en
-                            }}</span>
-                        </template>
-
                         <template v-slot:error>
                             <v-error :error="errors.country"></v-error>
                         </template>
@@ -88,6 +65,8 @@
                     <q-select
                         v-model="form.dial_code"
                         dense="dense"
+                        emit-value
+                        map-options
                         :options="
                             countries.map((c) => ({
                                 label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
@@ -126,33 +105,16 @@
                             :enable-time-picker="false"
                             :max-date="new Date()"
                             format="yyyy-MM-dd"
+                            model-type="format"
+                            placeholder="YYYY-MM-DD"
                         />
 
                         <v-error :error="errors.birthday"></v-error>
                     </div>
 
-                    <q-select
-                        v-model="selected_groups"
-                        dense="dense"
-                        multiple
-                        :options="
-                            groups.map((c) => ({
-                                label: c.name,
-                                value: c.id,
-                            }))
-                        "
-                        label="Groups"
-                        outlined
-                        :error="!!errors.groups"
-                    >
-                        <template v-slot:error>
-                            <v-error :error="errors.groups"></v-error>
-                        </template>
-                    </q-select>
-
                     <q-checkbox
                         dense="dense"
-                        v-model="verify_email"
+                        v-model="form.verify_email"
                         label="Mark user email as verified"
                         :error="!!form.groups"
                     >
@@ -179,8 +141,10 @@
             </q-card-actions>
         </q-card>
     </q-dialog>
-    <q-btn class="glossy" round color="secondary" icon="mdi-plus" @click="open">
-        <q-tooltip> Add new user</q-tooltip>
+    <q-btn color="positive" outline round icon="mdi-plus" @click="open">
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Add new users
+        </q-tooltip>
     </q-btn>
 </template>
 
@@ -199,10 +163,9 @@ export default {
                 phone: null,
                 birthday: null,
                 groups: [],
-                verify_email: 0,
+                verify_email: false,
             },
             selected_groups: [],
-            verify_email: false,
             errors: {},
             countries: [],
             groups: [],
@@ -218,10 +181,6 @@ export default {
     watch: {
         selected_groups(value) {
             this.form.groups = value.map((item) => item.value);
-        },
-
-        verify_email(value) {
-            this.form.verify_email = value ? 1 : 0;
         },
     },
 
@@ -256,7 +215,6 @@ export default {
                     this.form = { groups: [] };
                     this.errors = {};
                     this.selected_groups = [];
-                    this.verify_email = 0;
 
                     this.$q.notify({
                         type: "positive",
@@ -290,7 +248,7 @@ export default {
         },
         async getCountries() {
             try {
-                const res = await this.$server.get("/api/resources/countries", {
+                const res = await this.$server.get("/api/public/countries", {
                     params: { order_by: "name_en", order_type: "asc" },
                 });
                 if (res.status === 200) this.countries = res.data;

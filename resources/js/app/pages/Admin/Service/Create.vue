@@ -2,131 +2,104 @@
     <div class="q-pa-md q-gutter-sm">
         <q-btn
             round
-            dense="dense"
-            color="primary"
+            outline
+            color="positive"
             @click="dialog = true"
             icon="mdi-plus-circle"
-        />
-
-        <q-dialog
-            v-model="dialog"
-            persistent
-            position="right"
-            maximized
         >
-            <div class="containerDialog">
-                <q-card
-                    class="card"
-                >
-                    <div class="card-main">
-                        <q-card-section class="column items-center card-header">
-                            <q-icon
-                                name="mdi-plus"
-                                size="4rem"
-                                color="secondary"
-                            />
-                            <h6>Create a Service and assign it to group</h6>
-                            <span>Define the details and set up its assignment to properly integrate it into the system.</span>
-                        </q-card-section>
+            <q-tooltip transition-show="rotate" transition-hide="rotate">
+                Add new service
+            </q-tooltip>
+        </q-btn>
 
-                        <q-separator />
-
-                        <q-card-section class="column no-wrap q-gutter-y-md card-body">
-                            <q-input
-                                v-model="form.name"
-                                label="Name"
-                                stack-label
-                                filled
-                            >
-                                <template v-slot:prepend>
-                                    <q-icon name="mdi-account-badge-outline" />
-                                </template>
-                                <template v-slot:after>
-                                    <q-icon name="mdi-asterisk" size="1rem" />
-                                </template>
-                            </q-input>
-
-                            <q-input
-                                v-model="form.description"
-                                label="Description"
-                                stack-label
-                                filled
-                                type="textarea"
-                            >
-                                <template v-slot:prepend>
-                                    <q-icon name="mdi-home" />
-                                </template>
-
-                                <template v-slot:after>
-                                    <q-icon size="1rem"/>
-                                </template>
-                            </q-input>
-
-                            <q-select
-                                v-model="formGroup"
-                                label="Group"
-                                :options="groupsSerice"
-                                option-label="name"
-                                option-value="id"
-                                use-input
-                                filter
-                                @filter="filterGroup"
-                                stack-label
-                                filled
-                            >
-                                <template v-slot:prepend>
-                                    <q-icon name="mdi-home" />
-                                </template>
-
-                                <template v-slot:no-option>
-                                    <q-item>
-                                        <q-item-section class="text-grey">
-                                            No Results
-                                        </q-item-section>
-                                    </q-item>
-                                </template>
-
-                                <template v-slot:after>
-                                    <q-icon name="mdi-asterisk" size="1rem" />
-                                </template>
-                            </q-select>
-
-                            <q-checkbox
-                                v-model="system"
-                                :label="system ? 'This action is irreversible. Are you sure?' : 'System'"
-                                color="orange"
-                                :error="!!errors.confidential"
-                            >
-                                <template v-slot:error>
-                                    <v-error :error="errors.description"></v-error>
-                                </template>
-                            </q-checkbox>
-                        </q-card-section>
-                    </div>
-
-                    <q-separator/>
-                    <q-card-section class="row justify-between card-footer">
-                        <q-btn
-                            dense="dense"
-                            color="secondary"
-                            label="Create New Service"
-                            @click="create"
-                            no-caps
-                            class="btn-create"
-                        />
-
-                        <q-btn
-                            dense="dense"
-                            color="secondary"
-                            label="Cancel"
-                            @click="close"
-                            outline
-                            no-caps
-                            class="btn-cancel"
-                        />
+        <q-dialog v-model="dialog" persistent>
+            <q-card class="card">
+                <div class="card-main">
+                    <q-card-section class="column items-center card-header">
+                        <h6>Add new service</h6>
                     </q-card-section>
-                </q-card>
-            </div>
+
+                    <q-separator />
+
+                    <q-card-section
+                        class="column no-wrap q-gutter-y-md card-body"
+                    >
+                        <q-input
+                            v-model="form.name"
+                            label="Name"
+                            :error="!!errors.name"
+                        >
+                            <template v-slot:error>
+                                <v-error :error="errors.name" />
+                            </template>
+                        </q-input>
+
+                        <q-input
+                            v-model="form.description"
+                            label="Description"
+                            type="textarea"
+                            :error="!!errors.description"
+                        >
+                            <template v-slot:error>
+                                <v-error :error="errors.description" />
+                            </template>
+                        </q-input>
+
+                        <q-select
+                            v-model="form.group_id"
+                            label="Group"
+                            :options="groups"
+                            option-label="name"
+                            option-value="id"
+                            filter
+                            emit-value
+                            map-options
+                            :error="!!errors.group_id"
+                        >
+                            <template v-slot:error>
+                                <v-error :error="errors.group_id" />
+                            </template>
+                        </q-select>
+                        <q-item tag="label" v-ripple>
+                            <q-item-section avatar>
+                                <q-checkbox
+                                    v-model="form.system"
+                                    val="orange"
+                                    color="orange"
+                                    :error="!!errors.system"
+                                >
+                                    <template v-slot:error>
+                                        <v-error :error="errors.system" />
+                                    </template>
+                                </q-checkbox>
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>System</q-item-label>
+                                <q-item-label caption>
+                                    This action cannot be undone.
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-card-section>
+                </div>
+
+                <q-separator />
+                <q-card-section class="row justify-between card-footer">
+                    <q-btn
+                        outline
+                        color="positive"
+                        label="create"
+                        @click="create"
+                    />
+
+                    <q-btn
+                        outline
+                        color="secondary"
+                        label="Cancel"
+                        @click="close"
+                    />
+                </q-card-section>
+            </q-card>
         </q-dialog>
     </div>
 </template>
@@ -146,19 +119,11 @@ export default {
                 description: null,
                 group_id: null,
                 group_name: null,
-                system: 0,
+                system: false,
             },
-            system: false,
             errors: {},
-            groupss: [],
-            groupsSerice: [],
+            groups: [],
         };
-    },
-
-    watch: {
-        system(value) {
-            this.form.system = value ? 1 : 0;
-        },
     },
 
     created() {
@@ -172,13 +137,11 @@ export default {
         close() {
             this.services = {};
             this.errors = {};
-            this.system = false;
             this.dialog = false;
         },
 
         open() {
             this.form = {};
-            this.system = false;
             this.errors = {};
         },
 
@@ -187,16 +150,14 @@ export default {
          */
         async create() {
             try {
-                this.form.group_id = this.formGroup.id;
-                this.form.group_name = this.formGroup.group_name;
                 const res = await this.$server.post(
                     "/api/admin/services",
                     this.form,
                     {
                         headers: {
-                            "Content-Type": "multipart/form-data"
+                            "Content-Type": "multipart/form-data",
                         },
-                    },
+                    }
                 );
 
                 if (res.status == 201) {
@@ -204,6 +165,11 @@ export default {
                     this.errors = {};
                     this.$emit("created", true);
                     this.dialog = false;
+                    this.$q.notify({
+                        type: "positive",
+                        message: "A new service has been created successfully",
+                        timeout: 3000,
+                    });
                 }
             } catch (e) {
                 if (e.response && e.response.data.errors) {
@@ -213,33 +179,18 @@ export default {
         },
 
         getGroups() {
-            this.$server.get("/api/admin/groups", {
-                params: {
-                    "page": 1,
-                    "per_page": 1000
-                }
-            })
+            this.$server
+                .get("/api/admin/groups", {
+                    params: {
+                        page: 1,
+                        per_page: 1000,
+                    },
+                })
                 .then((res) => {
-                    this.groupsSerice = res.data.data;
-                    this.groupss = res.data.data;
+                    this.groups = res.data.data;
                 })
                 .catch((e) => {});
         },
-
-        filterGroup(val, update) {
-            if(!val) {
-                update(() => this.groupsSerice = this.groupss);
-                return;
-            }
-
-            update(() => {
-                const needle = val.toLowerCase();
-                const filtered = this.groupss.filter((option) => {
-                    return option.name.toLowerCase().includes(needle)
-                });
-                this.groupsSerice = filtered;
-            })
-        }
     },
 };
 </script>
@@ -248,7 +199,7 @@ export default {
 .containerDialog {
     width: auto;
     height: 100%;
-    padding: .5rem;
+    padding: 0.5rem;
 }
 
 .card {
@@ -283,7 +234,7 @@ export default {
 }
 
 .card-footer > .q-btn {
-    padding: .4rem 2rem;
-    border-radius: .6rem;
+    padding: 0.4rem 2rem;
+    border-radius: 0.6rem;
 }
 </style>

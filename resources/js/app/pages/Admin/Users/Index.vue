@@ -1,27 +1,42 @@
 <template>
-    <v-filter :params="params" @change="searching"></v-filter>
-    <q-table
-        flat
-        bordered
-        :rows="users"
-        :columns="headers"
-        row-key="name"
-        hide-bottom
-        :rows-per-page-options="[search.per_page]"
-        hide-pagination
-    >
-        <template v-slot:top>
-            <h5>List of users</h5>
-            <q-space />
-            <v-create @created="getUsers"></v-create>
-        </template>
-        <template v-slot:body-cell-actions="props">
-            <q-td>
-                <v-update @updated="getUsers" :item="props.row"></v-update>
-                <v-scopes :item="props.row"></v-scopes>
-            </q-td>
-        </template>
-    </q-table>
+    <v-filter :params="params" @change="searching" />
+
+    <q-toolbar class="q-ma-sm">
+        <q-toolbar-title> List of users </q-toolbar-title>
+
+        <v-create @created="getUsers"></v-create>
+    </q-toolbar>
+    <div class="row q-col-gutter-md q-ma-sm">
+        <div
+            class="col-xs-12 col-sm-6 col-md-4"
+            v-for="user in users"
+            :key="user.id"
+        >
+            <q-card flat bordered>
+                <q-card-section class="q-pb-none">
+                    <div class="text-h6 text-grey-7">
+                        {{ user.name }} {{ user.last_name }}
+                    </div>
+                    <div class="text-subtitle2 text-grey-7">
+                        {{ user.email }}
+                    </div>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="around">
+                    <v-update
+                        v-if="!user.disabled"
+                        @updated="getUsers"
+                        :item="user"
+                    />
+                    <v-scopes v-if="!user.disabled" :item="user" />
+                    <v-revoke v-if="!user.disabled" :item="user" />
+                    <v-status :item="user" @updated="getUsers" />
+                </q-card-actions>
+            </q-card>
+        </div>
+    </div>
 
     <div class="row justify-center q-mt-md">
         <q-pagination
@@ -36,36 +51,19 @@
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VScopes from "./Scopes.vue";
+import VStatus from "./Status.vue";
+import VRevoke from "./Revoke.vue";
 export default {
     components: {
         VCreate,
         VUpdate,
         VScopes,
+        VStatus,
+        VRevoke,
     },
 
     data() {
         return {
-            headers: [
-                { label: "Name", name: "name", field: "name", align: "left" },
-                {
-                    label: "Last Name",
-                    name: "last_name",
-                    field: "last_name",
-                    align: "left",
-                },
-                {
-                    label: "Email",
-                    name: "email",
-                    field: "email",
-                    align: "left",
-                },
-                {
-                    label: "Actions",
-                    name: "actions",
-                    field: "actions",
-                    align: "left",
-                },
-            ],
             params: [
                 { key: "Name", value: "name" },
                 { key: "Last name", value: "last_name" },

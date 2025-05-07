@@ -2,11 +2,15 @@
     <div class="q-pa-md q-gutter-sm">
         <q-btn
             round
-            dense="dense"
-            color="primary"
+            outline
+            color="positive"
             @click="dialog = true"
             icon="mdi-plus-circle"
-        />
+        >
+            <q-tooltip transition-show="rotate" transition-hide="rotate">
+                Add new role
+            </q-tooltip>
+        </q-btn>
 
         <q-dialog
             v-model="dialog"
@@ -22,7 +26,7 @@
                     <q-input
                         v-model="form.name"
                         label="Name"
-                        dense="dense"
+                        outline
                         :error="!!errors.name"
                     >
                         <template v-slot:error>
@@ -33,38 +37,48 @@
                     <q-input
                         v-model="form.description"
                         label="Description"
-                        dense="dense"
-                        :error="!!errors.name"
+                        outline
+                        :error="!!errors.description"
                         type="textarea"
                     >
                         <template v-slot:error>
-                            <v-error :error="errors.name" />
+                            <v-error :error="errors.description" />
                         </template>
                     </q-input>
 
-                    <q-checkbox
-                        v-model="system"
-                        :label="system ? 'This action is irreversible. Are you sure?' : 'System'"
-                        color="orange"
-                        :error="!!errors.confidential"
-                    >
-                        <template v-slot:error>
-                            <v-error :error="errors.description"></v-error>
-                        </template>
-                    </q-checkbox>
+                    <q-item tag="label" v-ripple>
+                        <q-item-section avatar>
+                            <q-checkbox
+                                v-model="form.system"
+                                val="orange"
+                                color="orange"
+                                :error="!!errors.system"
+                            >
+                                <template v-slot:error>
+                                    <v-error :error="errors.system" />
+                                </template>
+                            </q-checkbox>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>System</q-item-label>
+                            <q-item-label caption>
+                                This action cannot be undone.
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
                 </q-card-section>
 
                 <q-card-actions align="right" class="bg-white text-teal">
                     <q-btn
-                        dense="dense"
-                        color="primary"
+                        outline
+                        color="positive"
                         label="Accept"
                         @click="create"
                     />
 
                     <q-btn
-                        dense="dense"
-                        caolor="secondary"
+                        outline
+                        color="secondary"
                         label="Close"
                         @click="close"
                     />
@@ -83,17 +97,10 @@ export default {
             form: {
                 name: null,
                 description: null,
-                system: 0,
+                system: false,
             },
-            system: false,
             errors: {},
         };
-    },
-
-    watch: {
-        system(value) {
-            this.form.system = value ? 1 : 0;
-        },
     },
 
     methods: {
@@ -103,13 +110,11 @@ export default {
         close() {
             this.roles = {};
             this.errors = {};
-            this.system = false;
             this.dialog = false;
         },
 
         open() {
             this.form = {};
-            this.system = false;
             this.errors = {};
         },
 
@@ -123,9 +128,9 @@ export default {
                     this.form,
                     {
                         headers: {
-                            "Content-Type": "multipart/form-data"
+                            "Content-Type": "multipart/form-data",
                         },
-                    },
+                    }
                 );
 
                 if (res.status == 201) {

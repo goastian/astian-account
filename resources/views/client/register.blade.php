@@ -92,12 +92,12 @@
                         </div>
                         <div class="box">
                             <label for="accept_terms" class="text-sm text-gray-600">
-                                By choosing this option, you accept the <a href="{{ env('MIX_HOME_PAGE') }}"
+                                By choosing this option, you accept the <a href="{{ config('system.home_page') }}"
                                     target="_blank" class="text-blue-600 hover:underline">
                                     {{ config('app.name') }}
-                                </a>. <a href="{{ env('MIX_HOME_POLICY') }}" target="_blank"
+                                </a>. <a href="{{ config('system.policy_services') }}" target="_blank"
                                     class="text-blue-600 hover:underline">Services Agreement, Privacy Statement</a>, and
-                                <a href="{{ env('MIX_HOME_COOKIES') }}" target="_blank"
+                                <a href="{{ config('system.policy_cookies') }}" target="_blank"
                                     class="text-blue-600 hover:underline">Cookies Policy</a>.
                             </label>
                         </div>

@@ -1,86 +1,61 @@
 <template>
-    <q-btn round flat color="primary" @click="open(item)" icon="mdi-pencil" />
+    <q-btn round outline color="primary" @click="open(item)" icon="mdi-pencil">
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Update service
+        </q-tooltip>
+    </q-btn>
 
-    <q-dialog
-        v-model="dialog"
-        persistent
-        position="right"
-        maximized
-    >
-        <div class="containerDialog">
-                <q-card
-                    class="card"
-                >
-                    <div class="card-main">
-                        <q-card-section class="column items-center card-header">
-                            <q-icon
-                                name="mdi-plus"
-                                size="4rem"
-                                color="secondary"
-                            />
-                            <h6>Create a Service and assign it to group</h6>
-                            <span>Define the details and set up its assignment to properly integrate it into the system.</span>
-                        </q-card-section>
+    <q-dialog v-model="dialog" persistent>
+        <q-card class="card">
+            <div class="card-main">
+                <q-card-section class="column items-center card-header">
+                    <h6>Detail of service</h6>
+                </q-card-section>
 
-                        <q-separator />
+                <q-separator />
 
-                        <q-card-section class="column no-wrap q-gutter-y-md card-body">
-                            <q-input
-                                v-model="form.name"
-                                label="Name"
-                                stack-label
-                                filled
-                            >
-                                <template v-slot:prepend>
-                                    <q-icon name="mdi-account-badge-outline" />
-                                </template>
-                                <template v-slot:after>
-                                    <q-icon name="mdi-asterisk" size="1rem" />
-                                </template>
-                            </q-input>
+                <q-card-section class="column no-wrap q-gutter-y-md card-body">
+                    <q-input
+                        v-model="form.name"
+                        label="Name"
+                        :error="!!errors.name"
+                    >
+                        <template v-slot:error>
+                            <v-error :error="errors.name" />
+                        </template>
+                    </q-input>
 
-                            <q-input
-                                v-model="form.description"
-                                label="Description"
-                                stack-label
-                                filled
-                                type="textarea"
-                            >
-                                <template v-slot:prepend>
-                                    <q-icon name="mdi-home" />
-                                </template>
-
-                                <template v-slot:after>
-                                    <q-icon size="1rem"/>
-                                </template>
-                            </q-input>
-                        </q-card-section>
-                    </div>
-
-                    <q-separator/>
-                    <q-card-section class="row justify-between card-footer">
-                        <q-btn
-                            dense="dense"
-                            color="secondary"
-                            label="Update Service"
-                            @click="updateService"
-                            no-caps
-                            class="btn-create"
-                        />
-
-                        <q-btn
-                            dense="dense"
-                            color="secondary"
-                            label="Cancel"
-                            @click="close"
-                            outline
-                            no-caps
-                            class="btn-cancel"
-                        />
-                    </q-card-section>
-                </q-card>
+                    <q-input
+                        v-model="form.description"
+                        label="Description"
+                        type="textarea"
+                        :error="!!errors.description"
+                    >
+                        <template v-slot:error>
+                            <v-error :error="errors.description" />
+                        </template>
+                    </q-input>
+                </q-card-section>
             </div>
-        </q-dialog>
+
+            <q-separator />
+            <q-card-section class="flex justify-between card-footer">
+                <q-btn
+                    outline
+                    color="positive"
+                    label="Update"
+                    @click="updateService"
+                />
+
+                <q-btn
+                    outline
+                    color="secondary"
+                    label="Cancel"
+                    @click="close"
+                />
+            </q-card-section>
+        </q-card>
+    </q-dialog>
 </template>
 <script>
 export default {
@@ -130,7 +105,7 @@ export default {
                     }
                 );
 
-                console.log(res)
+                console.log(res);
                 if (res.status == 200) {
                     this.$emit("updated", true);
                     this.errors = {};
@@ -150,7 +125,7 @@ export default {
 .containerDialog {
     width: auto;
     height: 100%;
-    padding: .5rem;
+    padding: 0.5rem;
 }
 
 .card {
@@ -185,7 +160,7 @@ export default {
 }
 
 .card-footer > .q-btn {
-    padding: .4rem 2rem;
-    border-radius: .6rem;
+    padding: 0.4rem 2rem;
+    border-radius: 0.6rem;
 }
 </style>

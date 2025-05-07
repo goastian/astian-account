@@ -8,21 +8,21 @@
             <q-card-section class="q-gutter-md">
                 <!-- Name -->
                 <q-input
-                    v-model="item.name"
+                    v-model="form.name"
                     label="Name"
                     outlined
                     dense
                     :error="!!errors.name"
                 />
                 <q-input
-                    v-model="item.last_name"
+                    v-model="form.last_name"
                     label="Last Name"
                     outlined
                     dense
                     :error="!!errors.last_name"
                 />
                 <q-input
-                    v-model="item.email"
+                    v-model="form.email"
                     label="Email"
                     type="email"
                     outlined
@@ -32,7 +32,7 @@
 
                 <!-- Country -->
                 <q-select
-                    v-model="item.country"
+                    v-model="form.country"
                     label="Country"
                     outlined
                     dense
@@ -49,7 +49,7 @@
 
                 <!-- Dial Code -->
                 <q-select
-                    v-model="item.dial_code"
+                    v-model="form.dial_code"
                     label="Dial Code"
                     outlined
                     dense
@@ -66,7 +66,7 @@
 
                 <!-- Phone -->
                 <q-input
-                    v-model="item.phone"
+                    v-model="form.phone"
                     label="Phone Number"
                     outlined
                     dense
@@ -79,7 +79,7 @@
                         >Birthday</label
                     >
                     <VueDatePicker
-                        v-model="item.birthday"
+                        v-model="form.birthday"
                         :enable-time-picker="false"
                         :max-date="new Date()"
                         format="yyyy-MM-dd"
@@ -88,9 +88,8 @@
                     <v-error :error="errors.birthday"></v-error>
                 </div>
 
-                <!-- Email Verified Checkbox -->
                 <q-checkbox
-                    v-model="verify_email"
+                    v-model="form.verify_email"
                     label="Mark user email as verified"
                     dense
                 />
@@ -103,7 +102,11 @@
         </q-card>
     </q-dialog>
 
-    <q-btn icon="edit" color="primary" round flat dense @click="loadData(item)" />
+    <q-btn icon="edit" outline round color="positive" @click="loadData(item)">
+        <q-tooltip transition-show="rotate" transition-hide="rotate">
+            Edit user
+        </q-tooltip>
+    </q-btn>
 </template>
 
 <script>
@@ -120,17 +123,12 @@ export default {
     data() {
         return {
             errors: {},
+            form: {},
             countries: [],
             verify_email: false,
             birthday: null,
             dialog: false,
         };
-    },
-
-    watch: {
-        verify_email(value) {
-            this.item.verify_email = value ? 1 : 0;
-        },
     },
 
     methods: {
@@ -146,7 +144,7 @@ export default {
          * Load necessary data to register new users
          */
         async loadData(item) {
-            this.verify_email = item.verify_email;
+            this.form = { ...item };
             await this.getCountries();
             this.dialog = true;
         },
@@ -174,6 +172,7 @@ export default {
                     this.$notification.success(
                         "User has been updated successfully"
                     );
+                    this.dialog = false;
                 }
             } catch (e) {
                 if (
@@ -200,7 +199,7 @@ export default {
          */
         async getCountries() {
             try {
-                const res = await this.$server.get("/api/resources/countries", {
+                const res = await this.$server.get("/api/public/countries", {
                     params: {
                         order_by: "name_en",
                         order_type: "asc",

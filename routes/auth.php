@@ -1,8 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\SessionController;
-use App\Http\Controllers\Setting\CodeController;
 use App\Http\Controllers\Setting\SettingController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\RegisterClientController;
@@ -11,7 +9,7 @@ use App\Http\Controllers\Auth\AuthorizationModuloController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+Route::post('/login', [AuthenticatedSessionController::class, 'store']);
 
 Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('forgot-password');
 Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
@@ -26,27 +24,10 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name
 /**
  * Register user account
  */
-if (settingItem('enable_register_member', true)) {
+if (config('system.enable_register_member', true)) {
     Route::get('/register', [RegisterClientController::class, 'register'])->name('register');
     Route::post('/register', [RegisterClientController::class, 'store']);
 }
-
-/**
- * Check account
- */
-Route::get('/verified-account', [RegisterClientController::class, 'verifiedAccount'])->name('verified-account');
-Route::get('/verify/account', [RegisterClientController::class, 'verifyAccount'])->name('verify.account');
-Route::get('/check-my-account', [RegisterClientController::class, 'formVerifyAccount'])->name('check.account');
-Route::post('/send-verification-email', [RegisterClientController::class, 'sendVerificationEmail'])->name('send.verification.email');
-/**
- * 2FA
- */
-Route::get('/verify/2fa-factor', [CodeController::class, 'create'])->name('factor.email');
-Route::post('/verify/2fa-factor', [CodeController::class, 'loginBy2FA'])->name('factor.email.login');
-
-Route::post('/m2fa/authorize', [CodeController::class, 'requestToken2FA'])->name('m2fa.authorize');
-Route::post('/m2fa/activate', [CodeController::class, 'factor2faEnableOrDisable'])->name('m2fa.activate');
-
 
 Route::group([
     'prefix' => 'settings',
@@ -60,6 +41,7 @@ Route::group([
     Route::get('/redis', [SettingController::class, 'redis'])->name('redis');
     Route::get('/queues', [SettingController::class, 'queues'])->name('queues');
     Route::get('/filesystem', [SettingController::class, 'filesystem'])->name('filesystem');
+    Route::get('/payment', [SettingController::class, 'payment'])->name('payment');
 
     Route::put('/', [SettingController::class, 'update'])->name('update');
 });

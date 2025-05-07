@@ -8,7 +8,7 @@
 @section('header')
     <nav class="bg-indigo-600 text-white py-4 shadow-md">
         <div class="container mx-auto flex justify-between items-center px-4">
-            <a href="{{ settingItem('redirect_to', 'home') }}" class="text-lg font-semibold">
+            <a href="{{ config('system.redirect_to', 'home') }}" class="text-lg font-semibold">
                 <i class="mdi mdi-home text-2xl"></i>
                 {{ __('Dashboard') }}
             </a>
@@ -31,6 +31,7 @@
                     @php
                         $routes = [
                             'settings.general' => ['icon' => 'mdi-home', 'label' => __('General')],
+                            'settings.payment' => ['icon' => 'mdi-cash-sync', 'label' => __('Payment')],
                             'settings.passport' => ['icon' => 'mdi-file-key-outline', 'label' => __('Passport')],
                             'settings.email' => ['icon' => 'mdi-at', 'label' => __('Email')],
                             'settings.user' => ['icon' => 'mdi-account-key', 'label' => __('User')],

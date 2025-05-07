@@ -30,39 +30,51 @@
                         </template>
                     </q-input>
 
-                    <q-checkbox
-                        v-model="system"
-                        label="Be careful, if you mark this option, this action  cannot be undone."
-                        color="orange"
-                        :error="!!errors.system"
-                    >
-                        <template v-slot:error>
-                            <v-error :error="errors.redirect"></v-error>
-                        </template>
-                    </q-checkbox>
+                    <q-item tag="label" v-ripple>
+                        <q-item-section avatar>
+                            <q-checkbox
+                                v-model="form.system"
+                                val="orange"
+                                color="orange"
+                                :error="!!errors.system"
+                            >
+                                <template v-slot:error>
+                                    <v-error :error="errors.system" />
+                                </template>
+                            </q-checkbox>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label>System</q-item-label>
+                            <q-item-label caption>
+                                This action cannot be undone.
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
                 </div>
             </q-card-section>
 
             <q-card-actions align="right">
                 <q-btn
                     label="Save"
+                    outline
                     icon="mdi-content-save-alert"
-                    color="primary"
+                    color="positive"
                     @click="create"
                 />
                 <q-btn
                     label="Close"
+                    outline
                     icon="mdi-close-circle"
-                    color="negative"
+                    color="secondary"
                     @click="dialog = false"
                 />
             </q-card-actions>
         </q-card>
     </q-dialog>
     <q-btn
-        class="glossy"
+        outline
         round
-        color="secondary"
+        color="positive"
         icon="mdi-plus"
         @click="dialog = true"
     >
@@ -78,7 +90,7 @@ export default {
             form: {
                 name: null,
                 description: null,
-                system: 0,
+                system: false,
             },
             errors: {},
             dialog: false,

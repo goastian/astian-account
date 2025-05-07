@@ -1,45 +1,68 @@
 <template>
-    <div class="q-gutter-y-md">
-        <div
-            v-for="(services, group) in groupedScopes"
-            :key="group"
-            class="q-mb-md"
-        >
-            <q-banner
-                class="text-h6 text-grey-8 bg-grey-3 q-pa-md rounded-borders"
-            >
-                {{ group }}
-            </q-banner>
+    <div class="q-gutter-y-xl">
+        <div>
+            <q-inner-loading
+                :showing="loading"
+                label="Please wait..."
+                label-class="text-teal "
+                label-style="font-size: 2em"
+            />
+        </div>
 
-            <q-card
-                v-for="(roles, service) in services"
-                :key="service"
-                class="q-mt-md q-pa-md bg-grey-2"
-            >
-                <div class="row items-center q-mb-md">
-                    <span class="text-subtitle1 text-weight-medium text-grey-7">
-                        {{ service }}
-                    </span>
-                    <q-space />
-                    <span class="text-caption text-grey-6">
-                        {{ roles[0].service_description }}
-                    </span>
-                </div>
-
-                <div class="q-gutter-sm">
-                    <q-checkbox
-                        v-for="role in roles"
-                        :key="role.id"
-                        v-model="selected_scopes"
-                        :val="role.id"
-                        :label="role.role_slug"
-                        class="q-pa-sm"
-                        :color="user_scopes.includes(role.id) ? 'blue' : 'grey'"
+        <div v-if="!loading">
+            <div v-for="group in groupedScopes" :key="group.name">
+                <q-card
+                    flat
+                    bordered
+                    class="q-pa-lg bg-grey-1 q-gutter-y-md q-ml-sm q-mt-lg"
+                >
+                    <div
+                        class="text-h6 text-weight-bold text-primary text-ucfirst"
                     >
-                        <q-tooltip>{{ role.role_description }}</q-tooltip>
-                    </q-checkbox>
-                </div>
-            </q-card>
+                        {{ group.name }}
+                    </div>
+
+                    <div class="text-caption text-positive q-mb-md q-mt-xs">
+                        {{ group.description }}
+                    </div>
+
+                    <div class="q-gutter-y-md q-ml-sm q-mt-lg">
+                        <q-card
+                            v-for="(roles, service) in group.services"
+                            :key="service"
+                            class="text-primary q-pa-md"
+                            bordered
+                        >
+                            <div class="row items-center q-mb-sm">
+                                <span
+                                    class="text-subtitle1 text-ucfirst text-weight-medium"
+                                >
+                                    {{ service }}
+                                </span>
+                                <q-space />
+                                <span class="text-caption text-primary">
+                                    {{ roles[0]?.service_description || "" }}
+                                </span>
+                            </div>
+
+                            <div class="q-gutter-sm">
+                                <q-checkbox
+                                    v-for="role in roles"
+                                    :key="role.id"
+                                    v-model="selected_scopes"
+                                    :val="role.id"
+                                    :label="role.role_name"
+                                    class="q-pa-sm"
+                                >
+                                    <q-tooltip>
+                                        {{ role.role.description }}
+                                    </q-tooltip>
+                                </q-checkbox>
+                            </div>
+                        </q-card>
+                    </div>
+                </q-card>
+            </div>
         </div>
     </div>
 </template>
@@ -54,17 +77,14 @@ export default {
             scopes: [],
             selected_scopes: [],
             user_scopes: [],
+            loading: true,
         };
     },
 
     watch: {
-        default_roles: {
-            immediate: true,
-            handler() {
-                if (this.scopes.length) {
-                    this.syncSelectedScopes();
-                }
-            },
+        default_roles(values) {
+            const scopes = values.map((userScope) => userScope.scope.id);
+            this.selected_scopes.push(...scopes);
         },
 
         selected_scopes(newScopes) {
@@ -74,27 +94,39 @@ export default {
 
     mounted() {
         this.getScopes();
+        // console.log(this.default_roles);
     },
 
     computed: {
         groupedScopes() {
             const grouped = {};
+
             this.scopes.forEach((scope) => {
-                if (scope.gsr_id) {
-                    const [group, service] = scope.gsr_id.split("_");
+                const groupName = scope.service.group.name;
+                const groupDescription = scope.service.group.description;
+                const serviceName = scope.service.name;
 
-                    if (!grouped[group]) {
-                        grouped[group] = {};
-                    }
+                scope.role_name = scope.role.name;
+                scope.role_slug = scope.role.slug;
+                scope.role_description = scope.role.description;
+                scope.service_description = scope.service.description;
 
-                    if (!grouped[group][service]) {
-                        grouped[group][service] = [];
-                    }
-
-                    grouped[group][service].push(scope);
+                if (!grouped[groupName]) {
+                    grouped[groupName] = {
+                        name: groupName,
+                        description: groupDescription,
+                        services: {},
+                    };
                 }
+
+                if (!grouped[groupName].services[serviceName]) {
+                    grouped[groupName].services[serviceName] = [];
+                }
+
+                grouped[groupName].services[serviceName].push(scope);
             });
-            return grouped;
+
+            return Object.values(grouped);
         },
     },
 
@@ -108,6 +140,7 @@ export default {
                 if (res.status === 200) {
                     this.scopes = res.data.data;
                     this.syncSelectedScopes();
+                    this.loading = false;
                 }
             } catch (e) {}
         },

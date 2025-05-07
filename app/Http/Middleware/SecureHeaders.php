@@ -18,17 +18,20 @@ class SecureHeaders
         $nonce = $this->generateNonce();
 
         view()->share('nonce', $nonce);
-
         $response = $next($request);
-        $response->headers->set("Referrer-Policy", "no-referrer");
-        $response->headers->set("X-Content-Type-Options", "nosniff");
-        $response->headers->set("X-Frame-Options", "DENY");
-        $response->headers->set("Permissions-Policy", "accelerometer=(), autoplay=(), camera=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), speaker=(self), display-capture=()");
-        $response->headers->set("Strict-Transport-Security", "max-age=31536000");
+        
+        if (config('system.csp_enabled', true)) {
 
-        //Ignore csp policies in this route
-        if (!in_array($request->route()->getName(), ['passport.authorizations.authorize'])) {
-            $response->headers->set("Content-Security-Policy", $this->ContentSecurityPolicy($nonce));
+            $response->headers->set("Referrer-Policy", "no-referrer");
+            $response->headers->set("X-Content-Type-Options", "nosniff");
+            $response->headers->set("X-Frame-Options", "DENY");
+            $response->headers->set("Permissions-Policy", "accelerometer=(), autoplay=(), camera=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), speaker=(self), display-capture=()");
+            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+
+            //Ignore csp policies in this route
+            if (!in_array($request->route()->getName(), ['passport.authorizations.authorize'])) {
+                $response->headers->set("Content-Security-Policy", $this->ContentSecurityPolicy($nonce));
+            }
         }
 
         return $response;

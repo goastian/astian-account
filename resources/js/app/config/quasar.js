@@ -45,6 +45,11 @@ import {
     QOptionGroup,
     QSlideTransition,
     QScrollArea,
+    QInnerLoading,
+    QSpinnerGears,
+    QSpinnerDots,
+    QRadio,
+    QMarkupTable,
 } from "quasar";
 
 export const QComponents = [
@@ -93,5 +98,10 @@ export const QComponents = [
     QCheckbox,
     QOptionGroup,
     QSlideTransition,
-    QScrollArea
+    QScrollArea,
+    QInnerLoading,
+    QSpinnerGears,
+    QSpinnerDots,
+    QRadio,
+    QMarkupTable,
 ];
