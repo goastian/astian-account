@@ -21,8 +21,9 @@ class P2pSubscription implements PaymentMethod
 
         $session = new Fluent([
             'id' => $session_id,
-            'amount_subtotal' => $data['price']['cents'],
-            'amount_total' => $data['price']['cents'],
+            'currency' => $data['price']['currency'],
+            'amount_subtotal' => $data['price']['amount'],
+            'amount_total' => $data['price']['amount'],
             'payment_intent' => Transaction::generateIntent(),
             'url' => route('users.checkout.success') . "?session_id={$session_id}",
         ]);
