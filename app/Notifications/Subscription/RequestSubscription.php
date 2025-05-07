@@ -7,16 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class RenewSuccessfully extends Notification implements ShouldQueue
+class RequestSubscription extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    public $code;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($code)
     {
-        //
+        $this->code = $code;
     }
 
     /**
@@ -35,12 +37,13 @@ class RenewSuccessfully extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Subscription Renewed Successfully')
-            ->greeting('Hello ' . $notifiable->name . ',')
-            ->line('We’re happy to inform you that your subscription has been successfully renewed.')
-            ->line('Thank you for continuing to use our service.')
-            ->action('Manage Subscription', redirectToHome())
-            ->line('If you have any questions, feel free to contact our support team.');
+            ->subject('Your Subscription Request is Being Processed')
+            ->greeting('Dear User,')
+            ->line('We have received your subscription request and it is currently being processed.')
+            ->line("Transaction Code: {$this->code}")
+            ->line('You will receive a confirmation email once the process is completed.')
+            ->line('Thank you for your interest and for choosing our services.')
+            ->salutation('Best regards, The Team');
     }
 
     /**
@@ -51,8 +54,9 @@ class RenewSuccessfully extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            'title' => 'Subscription Renewed',
-            'message' => 'Your subscription has been successfully renewed.',
+            'title' => 'Subscription Request Received',
+            'message' => "Your subscription request with transaction code {$this->code} is being processed. You will be notified once it is confirmed.",
+            'transaction_code' => $this->code,
             'url' => redirectToHome(),
         ];
     }

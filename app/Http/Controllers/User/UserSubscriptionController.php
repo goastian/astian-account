@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Notifications\Subscription\RequestSubscription;
 use App\Transformers\User\UserPackageTransformer;
 use Exception;
 use Illuminate\Http\Request;
@@ -72,10 +73,10 @@ class UserSubscriptionController extends Controller
         //Generate payment  
         $paymentManager = $paymentManager->buy($request->payment_method, $plan);
 
-        DB::transaction(function () use ($plan, $request, $paymentManager) {
+        //Generate transaction code
+        $code = Transaction::generateTransactionCode();
 
-            //Generate transaction code
-            $code = Transaction::generateTransactionCode();
+        DB::transaction(function () use ($plan, $request, $paymentManager, $code) {
 
             //Register package
             $package = Package::create([
@@ -111,7 +112,11 @@ class UserSubscriptionController extends Controller
             }
 
             Transaction::create($transaction);
+
+
         });
+
+        auth()->user()->notify(new RequestSubscription($code));
 
         return $this->data([
             'data' => [
