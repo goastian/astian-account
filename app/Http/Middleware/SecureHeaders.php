@@ -20,7 +20,7 @@ class SecureHeaders
         view()->share('nonce', $nonce);
         $response = $next($request);
         
-        if (config('csp.enabled', true)) {
+        if (config('system.csp_enabled', true)) {
 
             $response->headers->set("Referrer-Policy", "no-referrer");
             $response->headers->set("X-Content-Type-Options", "nosniff");
