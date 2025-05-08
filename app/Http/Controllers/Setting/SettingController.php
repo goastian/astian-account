@@ -140,12 +140,21 @@ class SettingController extends Controller
     }
 
 
-     /**
+    /**
      * Show the view of 
      * @return \Illuminate\Contracts\View\View
      */
     public function payment()
     {
         return view('settings.section.payment');
-    } 
+    }
+
+    /**
+     * Show the view of 
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function session()
+    {
+        return view('settings.section.session');
+    }
 }
