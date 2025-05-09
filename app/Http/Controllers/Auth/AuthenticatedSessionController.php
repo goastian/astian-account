@@ -64,13 +64,4 @@ class AuthenticatedSessionController extends Controller
 
         return $request->wantsJson() ? route('login') : config('system.home_page', '/');
     }
-
-    /**
-     * Profile info
-     * @return mixed|\Illuminate\Http\JsonResponse
-     */
-    public function profile()
-    {
-        return $this->showOne(request()->user(), UserTransformer::class);
-    }
 }
