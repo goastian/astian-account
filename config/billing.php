@@ -72,6 +72,11 @@ return [
             'unit' => 'years',
             'name' => 'annual',
         ],
+        'biannual' => [
+            'interval' => 2,
+            'unit' => 'years',
+            'name' => 'Biannual',
+        ],
     ],
 
     'methods' => [
