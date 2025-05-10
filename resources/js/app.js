@@ -4,6 +4,7 @@ import { createInertiaApp } from "@inertiajs/vue3";
 import { customComponents } from "./app/config/customComponents.js";
 import { $channels, $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
+import { layouts } from "./app/config/layouts.js";
 
 //Quasar
 import { Quasar, Ripple, ClosePopup, Notify, Dialog, Loading } from "quasar";
@@ -27,6 +28,10 @@ createInertiaApp({
         const app = createApp({ render: () => h(App, props) });
 
         customComponents.forEach((index) => {
+            app.component(index[0], index[1]);
+        });
+
+        layouts.forEach((index) => {
             app.component(index[0], index[1]);
         });
 

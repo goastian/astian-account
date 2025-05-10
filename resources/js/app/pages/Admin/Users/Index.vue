@@ -50,7 +50,6 @@
     </v-admin-layout>
 </template>
 <script>
-import VAdminLayout from "../../AdminLayout.vue";
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VScopes from "./Scopes.vue";
@@ -63,7 +62,6 @@ export default {
         VScopes,
         VStatus,
         VRevoke,
-        VAdminLayout,
     },
 
     data() {

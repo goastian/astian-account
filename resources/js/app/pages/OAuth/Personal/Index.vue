@@ -44,7 +44,6 @@
     </v-user-layout>
 </template>
 <script>
-import VUserLayout from "../../UserLayout.vue";
 import VCreate from "./Create.vue";
 import VDelete from "./Delete.vue";
 
@@ -52,7 +51,6 @@ export default {
     components: {
         VCreate,
         VDelete,
-        VUserLayout,
     },
 
     data() {
