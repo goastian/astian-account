@@ -1,13 +1,12 @@
-<?php 
-namespace App\Http\Controllers\Web\User;
-
+<?php
+namespace App\Http\Controllers\Web\Account;
 
 use DateTime;
 use DateInterval;
 use Inertia\Inertia;
 use App\Models\User\User;
 use App\Models\Setting\Code;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\WebController;
