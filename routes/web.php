@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route; 
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,15 +12,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
-require __DIR__ . '/users.php';
-require __DIR__ . '/auth.php';
-require __DIR__ . '/oauth.php'; 
-require __DIR__ . '/webhook.php'; 
+require __DIR__ . '/web/users.php';
+require __DIR__ . '/web/auth.php';
+require __DIR__ . '/web/oauth.php';
+require __DIR__ . '/web/webhook.php';
+require __DIR__ . '/web/public.php';
+require __DIR__ . '/web/settings.php';
+require __DIR__ . '/web/admin.php';
 
 Route::get("/", function () {
     return view('landing.home');
 });
-
-Route::get("/{any}", function () {
-    return view('app');
-})->where('any', '^(?!api).*$');

@@ -24,7 +24,7 @@ class UserCanAny
 
         $scopes = explode(',', $scopes);
 
-        $userScopes = $this->scopes();
+        $userScopes = $this->scopes(false);
 
         if (!empty($userScopes) && array_intersect($userScopes->pluck('id')->toArray(), $scopes)) {
             return $next($request);

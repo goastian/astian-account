@@ -1,12 +1,13 @@
 <?php
 namespace App\Models\User;
 
-use App\Models\Subscription\Group;
 use DateTime;
 use DateInterval;
 use App\Models\Auth;
+use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Setting\Terminal;
+use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Elyerr\EchoClient\Socket\Socket;
@@ -125,5 +126,14 @@ class User extends Auth
     public function terminals()
     {
         return $this->hasMany(Terminal::class);
+    }
+
+    /**
+     * Has one
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function partner()
+    {
+        return $this->hasOne(Partner::class);
     }
 }

@@ -1,53 +1,56 @@
 <template>
-    <v-filter :params="params" @change="searching" />
+    <v-admin-layout>
+        <v-filter :params="params" @change="searching" />
 
-    <q-toolbar class="q-ma-sm">
-        <q-toolbar-title> List of users </q-toolbar-title>
+        <q-toolbar class="q-ma-sm">
+            <q-toolbar-title> List of users </q-toolbar-title>
 
-        <v-create @created="getUsers"></v-create>
-    </q-toolbar>
-    <div class="row q-col-gutter-md q-ma-sm">
-        <div
-            class="col-xs-12 col-sm-6 col-md-4"
-            v-for="user in users"
-            :key="user.id"
-        >
-            <q-card flat bordered>
-                <q-card-section class="q-pb-none">
-                    <div class="text-h6 text-grey-7">
-                        {{ user.name }} {{ user.last_name }}
-                    </div>
-                    <div class="text-subtitle2 text-grey-7">
-                        {{ user.email }}
-                    </div>
-                </q-card-section>
+            <v-create @created="getUsers"></v-create>
+        </q-toolbar>
+        <div class="row q-col-gutter-md q-ma-sm">
+            <div
+                class="col-xs-12 col-sm-6 col-md-4"
+                v-for="user in users"
+                :key="user.id"
+            >
+                <q-card flat bordered>
+                    <q-card-section class="q-pb-none">
+                        <div class="text-h6 text-grey-7">
+                            {{ user.name }} {{ user.last_name }}
+                        </div>
+                        <div class="text-subtitle2 text-grey-7">
+                            {{ user.email }}
+                        </div>
+                    </q-card-section>
 
-                <q-separator />
+                    <q-separator />
 
-                <q-card-actions align="around">
-                    <v-update
-                        v-if="!user.disabled"
-                        @updated="getUsers"
-                        :item="user"
-                    />
-                    <v-scopes v-if="!user.disabled" :item="user" />
-                    <v-revoke v-if="!user.disabled" :item="user" />
-                    <v-status :item="user" @updated="getUsers" />
-                </q-card-actions>
-            </q-card>
+                    <q-card-actions align="around">
+                        <v-update
+                            v-if="!user.disabled"
+                            @updated="getUsers"
+                            :item="user"
+                        />
+                        <v-scopes v-if="!user.disabled" :item="user" />
+                        <v-revoke v-if="!user.disabled" :item="user" />
+                        <v-status :item="user" @updated="getUsers" />
+                    </q-card-actions>
+                </q-card>
+            </div>
         </div>
-    </div>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
-    </div>
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </v-admin-layout>
 </template>
 <script>
+import VAdminLayout from "../../AdminLayout.vue";
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VScopes from "./Scopes.vue";
@@ -60,6 +63,7 @@ export default {
         VScopes,
         VStatus,
         VRevoke,
+        VAdminLayout,
     },
 
     data() {
@@ -83,8 +87,9 @@ export default {
     },
 
     created() {
-        this.getUsers();
-        this.listenEvents();
+        const values = this.$page.props.users;
+        this.users = values.data;
+        this.pages = values.meta.pagination;
     },
 
     watch: {
@@ -117,7 +122,7 @@ export default {
             Object.assign(params, param);
 
             try {
-                const res = await this.$server.get("/api/admin/users", {
+                const res = await this.$server.get(this.$page.props.route, {
                     params: params,
                 });
 

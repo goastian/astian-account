@@ -40,7 +40,7 @@
                                 @endforeach
                             @endif
                             <a class="text-blue-500 text-sm hover:underline mt-2 block text-right"
-                                href="/forgot-password">{{ __('Forgot your password?') }}</a>
+                                href="{{ route('forgot-password') }}">{{ __('Forgot your password?') }}</a>
                         </div>
 
                         <!--Do not remove this lines-->

@@ -4,7 +4,7 @@
             round
             dense="dense"
             color="primary"
-            @click="dialog = true"
+            @click="open"
             icon="mdi-plus-circle"
         />
 
@@ -63,7 +63,7 @@
 
                     <q-btn
                         dense="dense"
-                        caolor="secondary"
+                        color="secondary"
                         label="Close"
                         @click="close"
                     />
@@ -79,20 +79,9 @@ export default {
     data() {
         return {
             dialog: false,
-            form: {
-                name: null,
-                redirect: null,
-                confidential: 0,
-            },
-            confidential: false,
+            form: {},
             errors: {},
         };
-    },
-
-    watch: {
-        confidential(value) {
-            this.form.confidential = value ? 1 : 0;
-        },
     },
 
     methods: {
@@ -107,9 +96,12 @@ export default {
         },
 
         open() {
-            this.form = {};
+            this.form.name = null;
+            this.form.redirect = null;
+            this.form.confidential = false;
             this.confidential = false;
             this.errors = {};
+            this.dialog = true;
         },
 
         /**
@@ -118,7 +110,7 @@ export default {
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/oauth/clients",
+                    this.$page.props.route,
                     this.form
                 );
 

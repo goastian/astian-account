@@ -188,7 +188,6 @@ export default {
         async open() {
             this.dialog = true;
             await this.getCountries();
-            await this.getGroups();
         },
 
         close(dialog) {
@@ -196,18 +195,11 @@ export default {
             this.form = { groups: [] };
             this.countries = [];
         },
-        async getGroups() {
-            try {
-                const res = await this.$server.get("/api/admin/groups", {
-                    params: { per_page: 150 },
-                });
-                if (res.status === 200) this.groups = res.data.data;
-            } catch (error) {}
-        },
+
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/api/admin/users",
+                    this.$page.props.route,
                     this.form,
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );

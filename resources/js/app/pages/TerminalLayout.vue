@@ -112,8 +112,6 @@
 
 <script>
 export default {
-    inject: ["$user"],
-
     data() {
         return {
             commands: [],
@@ -161,8 +159,10 @@ export default {
         };
     },
 
-    mounted() {
-        this.getCommands();
+    created() {
+        const values = this.$page.props.commands;
+        this.commands = values.data;
+        this.pages = values.meta.pagination;
     },
 
     watch: {

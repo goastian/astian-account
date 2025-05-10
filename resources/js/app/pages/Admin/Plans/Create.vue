@@ -440,15 +440,11 @@ export default {
          */
         async create() {
             try {
-                const res = await this.$server.post(
-                    "/api/admin/plans",
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
-                );
+                const res = await this.$server.post("/admin/plans", this.form, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
 
                 if (res.status == 201) {
                     this.clean();

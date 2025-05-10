@@ -170,7 +170,7 @@ export default {
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/oauth/api-keys",
+                    this.$page.props.route,
                     this.form
                 );
                 if (res.status == 200) {
@@ -189,7 +189,7 @@ export default {
         },
         getScopes() {
             this.$server
-                .get("/api/oauth/scopes")
+                .get("/oauth/scopes")
                 .then((res) => {
                     this.scopes = res.data;
                 })

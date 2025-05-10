@@ -1,44 +1,50 @@
 <template>
-    <q-toolbar>
-        <q-toolbar-title> List of API KEY </q-toolbar-title>
-        <v-create @created="getPersonalAccessToken()" />
-    </q-toolbar>
-    <div class="row q-col-gutter-md">
-        <div
-            class="col-12 col-md-4 col-lg-3 q-gutter-sm"
-            v-for="token in tokens"
-            :key="token.name"
-        >
-            <q-card flat bordered>
-                <q-card-section>
-                    <div class="text-h6">{{ token.name }}</div>
-                    <div class="text-caption text-grey">
-                        Created: {{ token.created }}
-                    </div>
-                    <div class="text-caption text-grey">
-                        Expires: {{ token.expires }}
-                    </div>
-                </q-card-section>
+    <v-user-layout>
+        <q-toolbar>
+            <q-toolbar-title> List of API KEY </q-toolbar-title>
+            <v-create @created="getPersonalAccessToken()" />
+        </q-toolbar>
+        <div class="row q-col-gutter-md">
+            <div
+                class="col-12 col-md-4 col-lg-3 q-gutter-sm"
+                v-for="token in tokens"
+                :key="token.name"
+            >
+                <q-card flat bordered>
+                    <q-card-section>
+                        <div class="text-h6">{{ token.name }}</div>
+                        <div class="text-caption text-grey">
+                            Created: {{ token.created }}
+                        </div>
+                        <div class="text-caption text-grey">
+                            Expires: {{ token.expires }}
+                        </div>
+                    </q-card-section>
 
-                <q-separator />
+                    <q-separator />
 
-                <q-card-actions align="right">
-                    <v-delete @deleted="getPersonalAccessToken" :item="token" />
-                </q-card-actions>
-            </q-card>
+                    <q-card-actions align="right">
+                        <v-delete
+                            @deleted="getPersonalAccessToken"
+                            :item="token"
+                        />
+                    </q-card-actions>
+                </q-card>
+            </div>
         </div>
-    </div>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.per_page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
-    </div>
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.per_page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </v-user-layout>
 </template>
 <script>
+import VUserLayout from "../../UserLayout.vue";
 import VCreate from "./Create.vue";
 import VDelete from "./Delete.vue";
 
@@ -46,6 +52,7 @@ export default {
     components: {
         VCreate,
         VDelete,
+        VUserLayout,
     },
 
     data() {
@@ -74,13 +81,15 @@ export default {
     },
 
     created() {
-        this.getPersonalAccessToken();
+        const values = this.$page.props.tokens;
+        this.tokens = values.data;
+        this.pages = values.meta.pagination;
     },
 
     methods: {
         getPersonalAccessToken() {
             this.$server
-                .get("/oauth/api-keys")
+                .get(this.$page.props.route)
                 .then((res) => {
                     this.tokens = res.data.data;
                     const meta = res.data.meta;
