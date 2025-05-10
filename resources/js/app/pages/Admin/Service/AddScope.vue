@@ -155,11 +155,14 @@ export default {
 
         async getRoles() {
             try {
-                const res = await this.$server.get("/api/admin/roles", {
-                    headers: {
-                        per_page: 100,
-                    },
-                });
+                const res = await this.$server.get(
+                    this.$page.props.route.roles,
+                    {
+                        headers: {
+                            per_page: 100,
+                        },
+                    }
+                );
 
                 if (res.status == 200) {
                     this.roles = res.data.data;

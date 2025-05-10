@@ -133,7 +133,7 @@ export default {
     methods: {
         async getScopes() {
             try {
-                const res = await this.$server.get("/api/admin/scopes", {
+                const res = await this.$server.get("/admin/scopes", {
                     params: { per_page: 150 },
                 });
 

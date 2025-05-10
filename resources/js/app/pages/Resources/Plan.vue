@@ -149,7 +149,6 @@
 
 <script>
 export default {
-    inject: ["$user"],
     data() {
         return {
             pages: {
@@ -165,8 +164,10 @@ export default {
         };
     },
 
-    created() {
-        this.getPlans();
+    mounted() {
+        const values = this.$page.props.plans;
+        this.plans = values.data;
+        this.pages = values.meta.pagination;
     },
 
     watch: {

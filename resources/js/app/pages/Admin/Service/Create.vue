@@ -151,7 +151,7 @@ export default {
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/api/admin/services",
+                    this.$page.props.route.services,
                     this.form,
                     {
                         headers: {
@@ -172,15 +172,32 @@ export default {
                     });
                 }
             } catch (e) {
-                if (e.response && e.response.data.errors) {
+                if (
+                    e.response &&
+                    e.response.status == 422 &&
+                    e.response.data.errors
+                ) {
                     this.errors = e.response.data.errors;
+                }
+
+                if (
+                    e.response &&
+                    e.response.status != 422 &&
+                    e.response.data &&
+                    e.response.data.message
+                ) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
                 }
             }
         },
 
         getGroups() {
             this.$server
-                .get("/api/admin/groups", {
+                .get(this.$page.props.route.groups, {
                     params: {
                         page: 1,
                         per_page: 1000,

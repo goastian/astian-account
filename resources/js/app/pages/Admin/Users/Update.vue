@@ -166,13 +166,11 @@ export default {
                 );
 
                 if (res.status == 200) {
-                    this.form = { scope: [] };
                     this.errors = {};
                     this.$emit("updated", true);
                     this.$notification.success(
                         "User has been updated successfully"
                     );
-                    this.dialog = false;
                 }
             } catch (e) {
                 if (
@@ -181,7 +179,7 @@ export default {
                     e.response.status == 422
                 ) {
                     this.errors = e.response.data.errors;
-                }
+                } //
 
                 if (
                     e.response &&

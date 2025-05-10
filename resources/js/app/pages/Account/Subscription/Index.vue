@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-user-layout>
         <q-toolbar>
             <q-toolbar-title>
                 <q-icon name="list_alt" class="q-mr-sm" />
@@ -20,10 +20,11 @@
                         >
                             <div>
                                 <div class="text-h6 text-primary">
-                                    {{ item.meta.name }}
+                                    {{ item?.meta.name }}
                                 </div>
                                 <div class="text-caption text-grey">
-                                    {{ item.transaction.billing_period }} plan
+                                    {{ item.transaction.billing_period }}
+                                    plan
                                 </div>
                             </div>
                             <q-space></q-space>
@@ -35,7 +36,8 @@
                         <q-card-section class="q-pt-none">
                             <div class="q-mb-sm">
                                 <q-icon name="payments" class="q-mr-xs" />
-                                <strong>Price:</strong> {{ item.transaction.total }}
+                                <strong>Price:</strong>
+                                {{ item.transaction.total }}
                                 {{ item.transaction.currency }}
                             </div>
 
@@ -95,16 +97,16 @@
                 boundary-numbers
             />
         </div>
-    </div>
+    </v-user-layout>
 </template>
 
 <script>
+import VUserLayout from "../../UserLayout.vue";
 import VDetail from "./Detail.vue";
 
 export default {
-    inject: ["$user"],
-
     components: {
+        VUserLayout,
         VDetail,
     },
 
@@ -121,14 +123,18 @@ export default {
         };
     },
 
-    created() {
-        this.getPackages();
+    mounted() {
+        const values = this.$page.props.packages;
+        this.packages = values.data;
+        this.pages = values.meta.pagination;
     },
 
     methods: {
         async getPackages() {
             try {
-                const res = await this.$server.get(this.$user.links.subscriptions);
+                const res = await this.$server.get(
+                    this.$user.links.subscriptions
+                );
 
                 if (res.status == 200) {
                     this.packages = res.data.data;

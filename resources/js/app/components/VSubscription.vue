@@ -58,8 +58,6 @@
 
 <script>
 export default {
-    inject: ["$user"],
-
     props: {
         period: {
             type: Object,
@@ -95,6 +93,7 @@ export default {
 
     created() {
         this.getBillingPeriod();
+        this.user = this.$page.props.user;
     },
 
     methods: {
@@ -103,7 +102,7 @@ export default {
         },
 
         async payment() {
-            if (!this.$user?.id) {
+            if (!this.user?.id) {
                 this.$q.notify({
                     type: "negative",
                     message: "Please login and try again",
@@ -112,7 +111,7 @@ export default {
                 return;
             }
 
-            if (!this.$user?.id) {
+            if (!this.user?.id) {
                 this.$q.notify({
                     type: "negative",
                     message: "Please select the plan to continue ...",
@@ -133,7 +132,7 @@ export default {
 
             try {
                 const res = await this.$server.post(
-                    this.$user.links.subscriptions_buy,
+                    this.user.links.subscriptions_buy,
                     {
                         plan: this.plan.id,
                         billing_period: this.period.billing_period,
@@ -155,7 +154,7 @@ export default {
 
             try {
                 const res = await this.$server.post(
-                    this.$user.links.subscriptions_renew,
+                    this.user.links.subscriptions_renew,
                     {
                         package: this.package.id,
                         billing_period: this.period.billing_period,

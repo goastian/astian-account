@@ -12,11 +12,15 @@ trait Scopes
      * Retrieve all scopes available for the authenticated user corresponding to the API key.
      * @return array|\Illuminate\Database\Eloquent\Collection<int, Scope>|\Illuminate\Support\Collection<int, Scope>
      */
-    public function scopes()
+    public function scopes($api_key = true)
     {
 
         $query = ModelScope::query();
-        $query->where('active', true)->where('api_key', true)->with('role');
+        $query->where('active', true)->with('role');
+
+        if ($api_key) {
+            $query->where('api_key', true);
+        }
 
         if (Auth::user()->isAdmin()) {
             return $query->get()

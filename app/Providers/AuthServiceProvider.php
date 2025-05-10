@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Contracts\Auth\StatefulGuard;
-use App\Http\Controllers\OAuth\AuthorizationController;
+use App\Http\Controllers\Web\OAuth\AuthorizationController;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
