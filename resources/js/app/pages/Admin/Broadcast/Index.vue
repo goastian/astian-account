@@ -60,14 +60,12 @@
     </v-admin-layout>
 </template>
 <script>
-import VAdminLayout from "../../AdminLayout.vue";
 import VCreate from "./Create.vue";
 import VDestroy from "./Destroy.vue";
 export default {
     components: {
         VCreate,
         VDestroy,
-        VAdminLayout,
     },
 
     data() {

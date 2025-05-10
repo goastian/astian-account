@@ -101,12 +101,10 @@
 </template>
 
 <script>
-import VUserLayout from "../../UserLayout.vue";
 import VDetail from "./Detail.vue";
 
 export default {
     components: {
-        VUserLayout,
         VDetail,
     },
 

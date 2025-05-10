@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import VUserLayout from "../../UserLayout.vue";
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VDelete from "./Delete.vue";
@@ -80,7 +79,6 @@ export default {
         VCreate,
         VUpdate,
         VDelete,
-        VUserLayout,
     },
 
     data() {

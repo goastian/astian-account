@@ -78,7 +78,6 @@
 </template>
 
 <script>
-import VAdminLayout from "../../AdminLayout.vue";
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VDelete from "./Delete.vue";
@@ -89,7 +88,6 @@ export default {
         VUpdate,
         VDelete,
         VDetail,
-        VAdminLayout,
     },
 
     data() {

@@ -159,13 +159,7 @@
 </template>
 
 <script>
-import VUserLayout from "../UserLayout.vue";
-
 export default {
-    components: {
-        VUserLayout,
-    },
-
     data() {
         return {
             form: {

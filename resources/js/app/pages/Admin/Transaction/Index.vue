@@ -103,7 +103,6 @@
     </v-admin-layout>
 </template>
 <script>
-import VAdminLayout from "../../AdminLayout.vue";
 import VActivate from "./Activate.vue";
 import VDetail from "./Detail.vue";
 
@@ -111,7 +110,6 @@ export default {
     components: {
         VActivate,
         VDetail,
-        VAdminLayout,
     },
 
     data() {

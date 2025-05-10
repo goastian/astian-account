@@ -162,7 +162,6 @@
 </template>
 
 <script>
-import VAdminLayout from "../../AdminLayout.vue";
 import VCreate from "./Create.vue";
 import VDelete from "./Delete.vue";
 import VUpdate from "./Updated.vue";
@@ -176,7 +175,6 @@ export default {
         VUpdate,
         VRevokeScope,
         VDeletePrice,
-        VAdminLayout,
     },
     data() {
         return {
