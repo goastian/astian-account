@@ -1,10 +1,10 @@
 <?php
-namespace App\Http\Controllers\Web\User;
+namespace App\Http\Controllers\Web\Account;
 
 use App\Http\Controllers\WebController;
 use Inertia\Inertia;
 
-class UserHomePageController extends WebController
+class HomePageController extends WebController
 {
     /**
      * show 

@@ -1,6 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\User;
-
+namespace App\Http\Controllers\Web\Account;
 
 use App\Http\Controllers\WebController;
 use App\Models\User\User;
@@ -10,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
-class UserInformation extends WebController
+class UserController extends WebController
 {
 
     /**

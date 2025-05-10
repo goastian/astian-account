@@ -1,19 +1,16 @@
 <?php
+namespace App\Http\Controllers\Web\Account;
 
-namespace App\Http\Controllers\Web\User;
-
-use Exception;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Package;
 use App\Models\Payment\PaymentManager;
 use App\Http\Controllers\WebController;
 use App\Models\Subscription\Transaction;
 use App\Transformers\User\UserPackageTransformer;
 use App\Notifications\Subscription\RequestSubscription;
-
 
 class UserSubscriptionController extends WebController
 {

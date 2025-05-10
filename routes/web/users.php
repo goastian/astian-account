@@ -1,23 +1,23 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\User\CodeController;
-use App\Http\Controllers\Web\User\UserInformation;
-use App\Http\Controllers\Web\Auth\RegisterClientController;
-use App\Http\Controllers\Web\User\UserHomePageController;
-use App\Http\Controllers\Web\User\UserSubscriptionController;
+use Illuminate\Support\Facades\Route; 
+use App\Http\Controllers\Web\Account\CodeController;
+use App\Http\Controllers\Web\Account\UserController;
+use App\Http\Controllers\Web\Account\HomePageController;
+use App\Http\Controllers\Web\Auth\RegisterClientController; 
+use App\Http\Controllers\Web\Account\UserSubscriptionController;
 
 Route::group([
     'prefix' => 'account',
     'as' => 'users.',
 ], function () {
 
-    Route::get("/", [UserHomePageController::class, 'dashboard'])->name('dashboard');
+    Route::get("/", [HomePageController::class, 'dashboard'])->name('dashboard');
 
-    Route::get("/update", [UserInformation::class, 'profile'])->name('profile');
-    Route::put("/update", [UserInformation::class, 'personalInformation'])->name('update');
-    Route::get("/change-password", [UserInformation::class, 'formToChangePassword'])->name("password");
-    Route::put("/change-password", [UserInformation::class, 'changePassword'])->name('change.password');
+    Route::get("/update", [UserController::class, 'profile'])->name('profile');
+    Route::put("/update", [UserController::class, 'personalInformation'])->name('update');
+    Route::get("/change-password", [UserController::class, 'formToChangePassword'])->name("password");
+    Route::put("/change-password", [UserController::class, 'changePassword'])->name('change.password');
 
     Route::get('/verify/account', [RegisterClientController::class, 'verifyAccount'])->name('verify.account');
     Route::get('/verified-account', [RegisterClientController::class, 'verifiedAccount'])->name('verified.account');

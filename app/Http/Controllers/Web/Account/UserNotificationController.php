@@ -1,6 +1,5 @@
 <?php
-
-namespace App\Http\Controllers\Web\User;
+namespace App\Http\Controllers\Web\Account;
 
 use App\Http\Controllers\ApiController as Controller;
 use App\Models\Notify\Notification;
