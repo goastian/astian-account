@@ -3,8 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\User\UserController;
 use App\Http\Controllers\Web\User\UserGroupController;
-use App\Http\Controllers\Web\User\UserScopeController;
-use App\Http\Controllers\Web\Setting\TerminalController;
+use App\Http\Controllers\Web\User\UserScopeController; 
 use App\Http\Controllers\Web\OAuth\ClientAdminController;
 use App\Http\Controllers\Web\Subscription\PlanController;
 use App\Http\Controllers\Web\Subscription\RoleController;
@@ -61,6 +60,4 @@ Route::group([
 
     Route::get('/transactions', [TransactionManagerController::class, 'index'])->name('transactions.index');
     Route::put('/transactions/{transaction}', [TransactionManagerController::class, 'activate'])->name('transactions.activate');
-
-    Route::resource('terminals', TerminalController::class)->only('index', 'store');
 });

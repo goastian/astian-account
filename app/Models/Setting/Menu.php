@@ -148,12 +148,6 @@ class Menu
                 'show' => true,
             ],
             [
-                "name" => "Terminal",
-                "route" => route("admin.terminals.index"),
-                "icon" => "mdi-console",
-                'show' => true,
-            ],
-            [
                 "name" => "Settings",
                 "route" => route("settings.general"),
                 "icon" => "mdi-cogs",

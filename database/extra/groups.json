@@ -377,30 +377,6 @@
                 ]
             },
             {
-                "name": "Terminal",
-                "description": "Service for executing and managing system commands securely.",
-                "actions": [
-                    {
-                        "name": "full",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 0
-                    },
-                    {
-                        "name": "view",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 0
-                    },
-                    {
-                        "name": "execute",
-                        "public": 0,
-                        "active": 1,
-                        "api_key": 0
-                    }
-                ]
-            },
-            {
                 "name": "settings",
                 "description": "Service to manage application settings",
                 "actions": [
