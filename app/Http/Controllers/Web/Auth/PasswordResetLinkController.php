@@ -9,6 +9,11 @@ use Illuminate\Validation\ValidationException;
 
 class PasswordResetLinkController extends WebController
 {
+
+    public function __construct()
+    {
+    }
+
     /**
      * Show view to sent link to change password
      */

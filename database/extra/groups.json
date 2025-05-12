@@ -585,5 +585,23 @@
     {
         "name": "enterprise",
         "description": "Exclusive services designed for businesses, providing advanced cloud solutions, dedicated infrastructure, and enterprise-grade security."
+    },
+    {
+        "name": "reseller",
+        "description": "Tailored for businesses and individuals looking to resell services, this plan offers full white-label capabilities, scalable resources",
+        "services": [
+            {
+                "name": "partner",
+                "description": "Designed to build trust and mutual growth, this program allows users to earn by sharing referral links.",
+                "actions": [
+                    {
+                        "name": "full",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 0
+                    }
+                ]
+            }
+        ]
     }
 ]

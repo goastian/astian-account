@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Web\Account;
 
+use App\Models\User\Partner;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
@@ -107,6 +108,23 @@ class UserSubscriptionController extends WebController
                 'response' => $paymentManager->toArray(),
                 'package_id' => $package->id,
             ];
+
+            if (!empty($partner_id = auth()->user()->partner_id)) {
+
+                $partner = Partner::find($partner_id);
+
+                if (!empty($partner)) {
+                    $transaction['partner_id'] = $partner->id;
+                    $transaction['partner_commission_rate'] = $partner->commission_rate;
+                }
+
+            } else if ($request->referral_code && empty(auth()->user()->partner_id)) {
+                $partner = Partner::where('code', $request->referral_code)->first();
+                if (!empty($partner)) {
+                    $transaction['partner_id'] = $partner->id;
+                    $transaction['partner_commission_rate'] = $partner->commission_rate;
+                }
+            }
 
             if (config('billing.taxes.enabled')) {
                 $transaction['tax_rate_id'] = null;

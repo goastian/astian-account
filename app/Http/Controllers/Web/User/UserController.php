@@ -87,8 +87,6 @@ class UserController extends WebController
             }
             $user->save();
 
-            //$user->groups()->attach($request->groups);
-
             /**
              * Send event
              */
@@ -191,8 +189,13 @@ class UserController extends WebController
                 $user->password = Hash::make($request->password);
             }
 
+            if ($request->has('commission_rate') && !empty($user->partner) && $request->commission_rate != $user->partner->commission_rate) {
+                $user->partner->updateCommissionRate($request->commission_rate);
+            }
+
             if ($can_update) {
                 $user->push();
+
                 $this->privateChannel("UpdateUserEvent", "User updated");
             }
 

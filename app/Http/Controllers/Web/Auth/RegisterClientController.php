@@ -7,16 +7,21 @@ use DateInterval;
 use ErrorException;
 use App\Models\User\User;
 use App\Rules\BooleanRule;
+use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Group;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\WebController;
-use Elyerr\ApiResponse\Exceptions\ReportError; 
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Notifications\Member\MemberCreatedAccount;
 
 class RegisterClientController extends WebController
 {
+
+    public function __construct()
+    {
+    }
 
     /**
      * Show view to register users
@@ -47,7 +52,8 @@ class RegisterClientController extends WebController
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => ['required', 'confirmed', 'min:8', 'max:60'],
             'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
-            'accept_terms' => ['required', new BooleanRule()]
+            'accept_terms' => ['required', new BooleanRule()],
+            'referral_code' => ['nullable'],
         ]);
 
         $group = Group::where('slug', 'member')->first();
@@ -57,8 +63,16 @@ class RegisterClientController extends WebController
         }
 
         DB::transaction(function () use ($request, $user, $group) {
-            $user = $user->fill($request->all());
+            $user = $user->fill($request->except('password'));
             $user->password = Hash::make($request->password);
+
+            if ($request->referral_code) {
+                $partner = Partner::where('code', $request->referral_code)->first();
+                if (!empty($partner)) {
+                    $user->partner_id = $partner->id;
+                }
+            }
+
             $user->save();
 
             $user->groups()->attach($group->id);

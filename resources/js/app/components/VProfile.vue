@@ -6,13 +6,13 @@
                     <q-list>
                         <q-item v-if="user?.id">
                             <q-item-section>
-                                <q-item-label
-                                    >{{ user.name }}
-                                    {{ user.last_name }}</q-item-label
-                                >
-                                <q-item-label caption>{{
-                                    user.email
-                                }}</q-item-label>
+                                <q-item-label>
+                                    {{ user.name }}
+                                    {{ user.last_name }}
+                                </q-item-label>
+                                <q-item-label caption>
+                                    {{ user.email }}
+                                </q-item-label>
                             </q-item-section>
                         </q-item>
                     </q-list>
@@ -65,7 +65,7 @@ export default {
     methods: {
         async logout() {
             try {
-                const res = await this.$server.post("/logout");
+                const res = await this.$server.post(this.$page.props.logout);
                 if (res.status === 200) {
                     window.location.href = this.$page.props.login;
                 }

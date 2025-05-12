@@ -47,6 +47,7 @@ class UserTransformer extends TransformerAbstract
             'birthday' => $user->birthday,
             'phone' => $user->phone,
             'dial_code' => $user->dial_code,
+            'commission_rate' => $user->partner ? $user->partner->commission_rate : 0,
             'full_phone' => $user->dial_code . " " . $user->phone,
             'm2fa' => $user->m2fa,
             'verify_email' => $user->verified_at ? true : false,

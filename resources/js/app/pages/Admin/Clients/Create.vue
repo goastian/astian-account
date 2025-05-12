@@ -46,7 +46,7 @@
                     </q-input>
 
                     <q-checkbox
-                        v-model="confidential"
+                        v-model="form.confidential"
                         label="Confidential client"
                         color="orange"
                         :error="!!errors.confidential"

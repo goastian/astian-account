@@ -37,6 +37,7 @@ class UpdateRequest extends FormRequest
             'address' => ['nullable', 'max:150'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
             'verify_email' => ['nullable', new BooleanRule()],
+            'commission_rate' => ['nullable', 'numeric']
         ];
     }
 }

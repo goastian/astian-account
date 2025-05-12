@@ -14,8 +14,7 @@ use Elyerr\EchoClient\Socket\Socket;
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Notifications\Member\MemberDestroyAccount;
-use App\Transformers\Subscription\GroupTransformer;
+use App\Notifications\Member\MemberDestroyAccount; 
 
 class User extends Auth
 {

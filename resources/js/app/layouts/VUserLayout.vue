@@ -62,6 +62,20 @@
                     {{ admin_dashboard.name }}
                 </q-item-section>
             </q-item>
+
+            <q-item
+                v-if="hasGroup('reseller')"
+                clickable
+                v-ripple
+                @click="open(partner_dashboard)"
+            >
+                <q-item-section avatar>
+                    <q-icon color="positive" :name="partner_dashboard.icon" />
+                </q-item-section>
+                <q-item-section class="text-primary">
+                    {{ partner_dashboard.name }}
+                </q-item-section>
+            </q-item>
         </q-drawer>
 
         <q-page-container>
@@ -88,6 +102,7 @@ export default {
             app_name: "",
             menus: [],
             admin_dashboard: [],
+            partner_dashboard: [],
         };
     },
 
@@ -96,6 +111,7 @@ export default {
         this.app_name = this.$page.props.app_name;
         this.menus = this.$page.props.user_routes;
         this.admin_dashboard = this.$page.props.admin_dashboard;
+        this.partner_dashboard = this.$page.props.partner_dashboard;
     },
 
     methods: {
