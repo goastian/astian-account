@@ -5,7 +5,6 @@ namespace App\Providers;
 use App\Guard\TokenGuard;
 use Laravel\Passport\Passport;
 use App\Models\Setting\Setting;
-use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\TokenRepository;
 use Laravel\Passport\ClientRepository;

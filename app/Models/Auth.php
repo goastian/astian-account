@@ -55,6 +55,7 @@ class Auth extends Authenticatable
         'verified_at',
         'dial_code',
         'accept_terms',
+        'partner_id'
     ];
 
     /**

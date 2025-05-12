@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-admin-layout>
         <q-toolbar class="q-ma-sm">
             <q-toolbar-title> List of clients </q-toolbar-title>
 
@@ -61,16 +61,16 @@
                 </q-card>
             </div>
         </div>
-    </div>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
-    </div>
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </v-admin-layout>
 </template>
 
 <script>
@@ -113,7 +113,9 @@ export default {
     },
 
     created() {
-        this.getClients();
+        const values = this.$page.props.clients;
+        this.clients = values.data;
+        this.pages = values.meta.pagination;
     },
 
     methods: {
@@ -131,7 +133,7 @@ export default {
             Object.assign(params, param);
 
             this.$server
-                .get("/api/admin/clients", {
+                .get(this.$page.props.route, {
                     params: params,
                 })
                 .then((res) => {

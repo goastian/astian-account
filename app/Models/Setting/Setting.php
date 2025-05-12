@@ -47,6 +47,7 @@ class Setting extends Master
         Setting::getEmailSettings();
         Setting::getPaymentSettings();
         Setting::getSystemSetting();
+        Setting::getSessionSettings();
     }
 
     /**
@@ -221,7 +222,18 @@ class Setting extends Master
         settingLoad('system.policy_services', null);
         settingLoad('system.policy_cookies', null);
 
-
+        //Session settings
+        settingLoad('session.driver', 'database');
+        settingLoad('session.lifetime', 7200);
+        settingLoad('session.expire_on_close', false);
+        settingLoad('session.encrypt', false);
+        settingLoad('session.table', 'sessions');
+        settingLoad('session.cookie', 'oauth2_session');
+        settingLoad('session.xcsrf-token', 'oauth2_csrf');
+        settingLoad('session.path', '/');
+        settingLoad('session.secure', true);
+        settingLoad('session.http_only', true);
+        settingLoad('session.partitioned', false);
     }
 
     /**
@@ -447,4 +459,25 @@ class Setting extends Master
         Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));
         Config::set('passport.personal_access_client.secret', settingItem('passport.personal_access_client.secret', null));
     }
+
+    /**
+     * Summary of getSessionSettings
+     * @return void
+     */
+    public static function getSessionSettings()
+    {
+        Config::set('session.driver', settingItem('session.driver', 'database'));
+        Config::set('session.lifetime', settingItem('session.lifetime', 7200));
+        Config::set('session.expire_on_close', settingItem('session.expire_on_close', false));
+        Config::set('session.encrypt', settingItem('session.encrypt', false));
+        Config::set('session.table', settingItem('session.table', 'sessions'));
+        Config::set('session.cookie', settingItem('session.cookie', 'oauth2_session'));
+        Config::set('session.xcsrf-token', settingItem('session.xcsrf-token', 'oauth2_csrf'));
+        Config::set('session.path', settingItem('session.path', '/'));
+        Config::set('session.secure', settingItem('session.secure', true));
+        Config::set('session.http_only', settingItem('session.http_only', true));
+        Config::set('session.partitioned', settingItem('session.partitioned', false));
+    }
+
+
 }

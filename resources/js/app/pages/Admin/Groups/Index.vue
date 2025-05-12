@@ -1,58 +1,61 @@
 <template>
-    <v-filter :params="params" @change="searching" />
+    <v-admin-layout>
+        <v-filter :params="params" @change="searching" />
 
-    <q-toolbar class="q-ma-sm">
-        <q-toolbar-title> List of groups </q-toolbar-title>
+        <q-toolbar class="q-ma-sm">
+            <q-toolbar-title> List of groups </q-toolbar-title>
 
-        <v-create @created="getGroups"></v-create>
-    </q-toolbar>
+            <v-create @created="getGroups"></v-create>
+        </q-toolbar>
 
-    <div class="row q-col-gutter-md q-ma-sm">
-        <div
-            class="col-xs-12 col-sm-6 col-md-4"
-            v-for="group in groups"
-            :key="group.id"
-        >
-            <q-card flat bordered>
-                <q-card-section class="q-pb-none">
-                    <div class="text-h6 text-ucfirst">{{ group.name }}</div>
-                    <div class="text-subtitle2 text-grey-7">
-                        {{ group.slug }}
-                    </div>
-                </q-card-section>
+        <div class="row q-col-gutter-md q-ma-sm">
+            <div
+                class="col-xs-12 col-sm-6 col-md-4"
+                v-for="group in groups"
+                :key="group.id"
+            >
+                <q-card flat bordered>
+                    <q-card-section class="q-pb-none">
+                        <div class="text-h6 text-ucfirst">{{ group.name }}</div>
+                        <div class="text-subtitle2 text-grey-7">
+                            {{ group.slug }}
+                        </div>
+                    </q-card-section>
 
-                <q-card-section>
-                    <div class="line-clamp-2">
-                        {{ group.description }}
-                    </div>
-                </q-card-section>
+                    <q-card-section>
+                        <div class="line-clamp-2">
+                            {{ group.description }}
+                        </div>
+                    </q-card-section>
 
-                <q-card-section class="text-caption text-grey-8">
-                    System: <strong>{{ group.system ? "Yes" : "No" }}</strong>
-                </q-card-section>
+                    <q-card-section class="text-caption text-grey-8">
+                        System:
+                        <strong>{{ group.system ? "Yes" : "No" }}</strong>
+                    </q-card-section>
 
-                <q-separator />
+                    <q-separator />
 
-                <q-card-actions align="right">
-                    <v-update @updated="getGroups" :item="group" />
-                    <v-delete
-                        v-if="!group.system"
-                        @deleted="getGroups"
-                        :item="group"
-                    />
-                </q-card-actions>
-            </q-card>
+                    <q-card-actions align="right">
+                        <v-update @updated="getGroups" :item="group" />
+                        <v-delete
+                            v-if="!group.system"
+                            @deleted="getGroups"
+                            :item="group"
+                        />
+                    </q-card-actions>
+                </q-card>
+            </div>
         </div>
-    </div>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
-    </div>
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </v-admin-layout>
 </template>
 
 <script>
@@ -78,8 +81,13 @@ export default {
                 page: 1,
                 per_page: 15,
             },
-            snackbar: false,
         };
+    },
+
+    created() {
+        const values = this.$page.props.groups;
+        this.groups = values.data;
+        this.pages = values.meta.pagination;
     },
 
     watch: {
@@ -92,10 +100,6 @@ export default {
                 this.getGroups();
             }
         },
-    },
-
-    created() {
-        this.getGroups();
     },
 
     methods: {
@@ -113,7 +117,7 @@ export default {
             Object.assign(params, param);
 
             this.$server
-                .get("/api/admin/groups", {
+                .get(this.$page.props.route, {
                     params: params,
                 })
                 .then((res) => {

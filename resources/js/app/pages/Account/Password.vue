@@ -1,64 +1,64 @@
 <template>
-    <div class="q-pa-md q-gutter-md">
-        <q-toolbar class="q-ma-sm">
-            <q-toolbar-title class="text-grey-7">
-                Update password
-            </q-toolbar-title>
-        </q-toolbar>
-        <div class="row q-col-gutter-md q-ma-sm">
-            <div class="col-xs-12">
-                <q-input
-                    filled
-                    dense
-                    v-model="form.current_password"
-                    label="Current password"
-                    type="password"
-                    :error="!!errors.current_password"
-                />
-                <v-error :error="errors.current_password" />
+    <v-user-layout>
+        <div class="q-pa-md q-gutter-md">
+            <q-toolbar class="q-ma-sm">
+                <q-toolbar-title class="text-grey-7">
+                    Update password
+                </q-toolbar-title>
+            </q-toolbar>
+            <div class="row q-col-gutter-md q-ma-sm">
+                <div class="col-xs-12">
+                    <q-input
+                        filled
+                        dense
+                        v-model="form.current_password"
+                        label="Current password"
+                        type="password"
+                        :error="!!errors.current_password"
+                    />
+                    <v-error :error="errors.current_password" />
+                </div>
+
+                <div class="col-xs-12">
+                    <q-input
+                        filled
+                        dense
+                        type="password"
+                        v-model="form.password"
+                        label="New password"
+                        :error="!!errors.password"
+                    />
+                    <v-error :error="errors.password" />
+                </div>
+
+                <div class="col-xs-12">
+                    <q-input
+                        filled
+                        dense
+                        type="password"
+                        v-model="form.password_confirmation"
+                        label="Confirm password"
+                        :error="!!errors.password_confirmation"
+                    />
+                    <v-error :error="errors.password_confirmation" />
+                </div>
             </div>
 
-            <div class="col-xs-12">
-                <q-input
-                    filled
-                    dense
-                    type="password"
-                    v-model="form.password"
-                    label="New password"
-                    :error="!!errors.password"
+            <div class="q-mt-lg">
+                <q-btn
+                    label="Submit"
+                    color="primary"
+                    unelevated
+                    no-caps
+                    @click="update"
                 />
-                <v-error :error="errors.password" />
-            </div>
-
-            <div class="col-xs-12">
-                <q-input
-                    filled
-                    dense
-                    type="password"
-                    v-model="form.password_confirmation"
-                    label="Confirm password"
-                    :error="!!errors.password_confirmation"
-                />
-                <v-error :error="errors.password_confirmation" />
             </div>
         </div>
-
-        <div class="q-mt-lg">
-            <q-btn
-                label="Submit"
-                color="primary"
-                unelevated
-                no-caps
-                @click="update"
-            />
-        </div>
-    </div>
+    </v-user-layout>
 </template>
 
 <script>
 export default {
-    inject: ["$user"],
-
     data() {
         return {
             form: {
@@ -74,7 +74,7 @@ export default {
         async update() {
             try {
                 const res = await this.$server.put(
-                    this.$user.links.change_password,
+                    this.$page.props.user.links.change_password,
                     this.form,
                     {
                         headers: {

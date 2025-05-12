@@ -4,7 +4,7 @@
             round
             outline
             color="positive"
-            @click="dialog = true"
+            @click="open"
             icon="mdi-plus-circle"
         >
             <q-tooltip transition-show="rotate" transition-hide="rotate">
@@ -94,11 +94,7 @@ export default {
     data() {
         return {
             dialog: false,
-            form: {
-                name: null,
-                description: null,
-                system: false,
-            },
+            form: {},
             errors: {},
         };
     },
@@ -114,8 +110,11 @@ export default {
         },
 
         open() {
-            this.form = {};
+            this.form.name = null;
+            this.form.description = null;
+            this.system = false;
             this.errors = {};
+            this.dialog = true;
         },
 
         /**
@@ -124,7 +123,7 @@ export default {
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/api/admin/roles",
+                    this.$page.props.route,
                     this.form,
                     {
                         headers: {

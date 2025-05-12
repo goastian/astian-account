@@ -4,7 +4,7 @@
             round
             outline
             color="positive"
-            @click="dialog = true"
+            @click="open"
             icon="mdi-plus-circle"
         >
             <q-tooltip transition-show="rotate" transition-hide="rotate">
@@ -46,7 +46,7 @@
                     </q-input>
 
                     <q-checkbox
-                        v-model="confidential"
+                        v-model="form.confidential"
                         label="Confidential client"
                         color="orange"
                         :error="!!errors.confidential"
@@ -86,17 +86,10 @@ export default {
             form: {
                 name: null,
                 redirect: null,
-                confidential: 0,
+                confidential: false,
             },
-            confidential: false,
             errors: {},
         };
-    },
-
-    watch: {
-        confidential(value) {
-            this.form.confidential = value ? 1 : 0;
-        },
     },
 
     methods: {
@@ -106,14 +99,15 @@ export default {
         close() {
             this.client = {};
             this.errors = {};
-            this.confidential = false;
             this.dialog = false;
         },
 
         open() {
-            this.form = {};
-            this.confidential = false;
+            this.form.name = null;
+            this.form.redirect = null;
+            this.form.confidential = false;
             this.errors = {};
+            this.dialog = true;
         },
 
         /**
@@ -122,7 +116,7 @@ export default {
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/api/admin/clients",
+                    this.$page.props.route,
                     this.form
                 );
 

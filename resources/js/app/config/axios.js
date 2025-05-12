@@ -1,6 +1,5 @@
 import axios from "axios";
 import https from "stream-http";
-import { router } from "./routes";
 
 export const $server = axios.create({
     timeout: 5000,
@@ -20,11 +19,7 @@ $server.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-            const meta = router.currentRoute.value.meta;
-
-            if (meta.auth) {
-                window.location.href = "/login";
-            }
+          //  window.location.href = "/login";
         }
         return Promise.reject(error);
     }

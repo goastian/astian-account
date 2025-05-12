@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-admin-layout>
         <v-filter :params="params" @change="searching" />
         <q-toolbar>
             <q-toolbar-title>
@@ -100,7 +100,7 @@
                 boundary-numbers
             />
         </div>
-    </div>
+    </v-admin-layout>
 </template>
 <script>
 import VActivate from "./Activate.vue";
@@ -144,8 +144,10 @@ export default {
         },
     },
 
-    mounted() {
-        this.getTransactions();
+    created() {
+        const values = this.$page.props.transactions;
+        this.transactions = values.data;
+        this.pages = values.meta.pagination;
     },
 
     methods: {
@@ -163,7 +165,7 @@ export default {
             Object.assign(params, param);
 
             try {
-                const res = await this.$server.get("/api/admin/transactions", {
+                const res = await this.$server.get("/admin/transactions", {
                     params: params,
                 });
                 if (res.status == 200) {
@@ -178,4 +180,3 @@ export default {
     },
 };
 </script>
-<style lang=""></style>

@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/tailwind.css') }}">
+    @inertiaHead
 </head>
 
 <body>

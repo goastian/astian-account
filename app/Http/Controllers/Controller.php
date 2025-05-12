@@ -5,8 +5,12 @@ namespace App\Http\Controllers;
 use App\Traits\Standard;
 use Elyerr\ApiResponse\Assets\Asset;
 use Elyerr\EchoClient\Socket\Socket;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Passport\TokenRepository;
 use Illuminate\Database\Eloquent\Builder;
+use App\Transformers\User\AuthTransformer;
 use Elyerr\ApiResponse\Assets\JsonResponser;
+use Laravel\Passport\RefreshTokenRepository;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -52,4 +56,34 @@ class Controller extends BaseController
         return $builder;
     }
 
+
+    /**
+     * Return information about the current users and transform date in the process
+     * @return mixed
+     */
+    public function authenticated_user()
+    {
+        $user = fractal(Auth::user(), AuthTransformer::class);
+
+        return json_decode(json_encode($user))->data;
+    }
+
+
+    /**
+     * Remove the all credential 
+     * @param mixed $tokens
+     * @return void
+     */
+    public function removeCredentials($tokens)
+    {
+        $tokenRepository = app(TokenRepository::class);
+        $refreshTokenRepository = app(RefreshTokenRepository::class);
+
+        foreach ($tokens as $token) {
+
+            $tokenRepository->revokeAccessToken($token->id);
+
+            $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
+        }
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-admin-layout>
         <q-toolbar>
             <q-toolbar-title> List of plans </q-toolbar-title>
             <v-create @created="getPlans" />
@@ -158,7 +158,7 @@
                 size="sm"
             />
         </div>
-    </div>
+    </v-admin-layout>
 </template>
 
 <script>
@@ -190,13 +190,15 @@ export default {
     },
 
     created() {
-        this.getPlans();
+        const values = this.$page.props.plans;
+        this.plans = values.data;
+        this.pages = values.meta.pagination;
     },
 
     methods: {
         async getPlans() {
             try {
-                const res = await this.$server.get("/api/admin/plans");
+                const res = await this.$server.get("/admin/plans");
 
                 if (res.status == 200) {
                     this.plans = res.data.data;

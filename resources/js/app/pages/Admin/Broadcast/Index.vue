@@ -1,61 +1,63 @@
 <template>
-    <v-filter :params="params" @change="searching" />
-    <q-toolbar class="q-ma-sm">
-        <q-toolbar-title> List of channels </q-toolbar-title>
+    <v-admin-layout>
+        <v-filter :params="params" @change="searching" />
+        <q-toolbar class="q-ma-sm">
+            <q-toolbar-title> List of channels </q-toolbar-title>
 
-        <v-create @created="getBroadcasting"></v-create>
-    </q-toolbar>
+            <v-create @created="getBroadcasting"></v-create>
+        </q-toolbar>
 
-    <div class="row q-col-gutter-md q-ma-sm">
-        <div
-            class="col-xs-12 col-sm-6 col-md-4"
-            v-for="channel in channels"
-            :key="channel.id"
-        >
-            <q-card bordered flat>
-                <q-card-section class="q-pb-none">
-                    <div class="text-h6">{{ channel.name }}</div>
-                    <div class="text-subtitle2 text-grey">
-                        {{ channel.slug }}
-                    </div>
-                </q-card-section>
+        <div class="row q-col-gutter-md q-ma-sm">
+            <div
+                class="col-xs-12 col-sm-6 col-md-4"
+                v-for="channel in channels"
+                :key="channel.id"
+            >
+                <q-card bordered flat>
+                    <q-card-section class="q-pb-none">
+                        <div class="text-h6">{{ channel.name }}</div>
+                        <div class="text-subtitle2 text-grey">
+                            {{ channel.slug }}
+                        </div>
+                    </q-card-section>
 
-                <q-card-section>
-                    <div class="q-mb-sm">
-                        <strong>Description:</strong>
-                        {{ channel.description || "—" }}
-                    </div>
-                    <div>
-                        <strong>System:</strong>
-                        <q-chip
-                            :color="channel.system ? 'green' : 'red'"
-                            text-color="white"
-                            dense
-                        >
-                            {{ channel.system ? "Yes" : "No" }}
-                        </q-chip>
-                    </div>
-                </q-card-section>
+                    <q-card-section>
+                        <div class="q-mb-sm">
+                            <strong>Description:</strong>
+                            {{ channel.description || "—" }}
+                        </div>
+                        <div>
+                            <strong>System:</strong>
+                            <q-chip
+                                :color="channel.system ? 'green' : 'red'"
+                                text-color="white"
+                                dense
+                            >
+                                {{ channel.system ? "Yes" : "No" }}
+                            </q-chip>
+                        </div>
+                    </q-card-section>
 
-                <q-card-actions align="right">
-                    <v-destroy
-                        v-if="!channel.system"
-                        :item="channel"
-                        @deleted="getBroadcasting"
-                    />
-                </q-card-actions>
-            </q-card>
+                    <q-card-actions align="right">
+                        <v-destroy
+                            v-if="!channel.system"
+                            :item="channel"
+                            @deleted="getBroadcasting"
+                        />
+                    </q-card-actions>
+                </q-card>
+            </div>
         </div>
-    </div>
 
-    <div class="row justify-center q-mt-md">
-        <q-pagination
-            v-model="search.page"
-            color="grey-8"
-            :max="pages.total_pages"
-            size="sm"
-        />
-    </div>
+        <div class="row justify-center q-mt-md">
+            <q-pagination
+                v-model="search.page"
+                color="grey-8"
+                :max="pages.total_pages"
+                size="sm"
+            />
+        </div>
+    </v-admin-layout>
 </template>
 <script>
 import VCreate from "./Create.vue";
@@ -86,7 +88,9 @@ export default {
     },
 
     created() {
-        this.getBroadcasting();
+        const values = this.$page.props.channels;
+        this.channels = values.data;
+        this.pages = values.meta.pagination;
     },
 
     watch: {
@@ -119,7 +123,7 @@ export default {
             Object.assign(params, param);
 
             try {
-                const res = await this.$server.get("/api/admin/broadcasts", {
+                const res = await this.$server.get("/admin/broadcasts", {
                     params: params,
                 });
 

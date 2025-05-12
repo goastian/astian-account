@@ -50,6 +50,7 @@
                             </q-item-label>
                         </q-item-section>
                     </q-item>
+                    this.getBroadcasting();
                 </div>
             </q-card-section>
 
@@ -119,7 +120,7 @@ export default {
         async create() {
             try {
                 const res = await this.$server.post(
-                    "/api/admin/broadcasts",
+                    "/admin/broadcasts",
                     this.form,
                     {
                         headers: {

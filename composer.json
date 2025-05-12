@@ -24,6 +24,7 @@
         "elyerr/api-response": "^1.0",
         "elyerr/echo-client-php": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
+        "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^10.0",
         "laravel/passport": "^11.8",
         "laravel/tinker": "^2.7",

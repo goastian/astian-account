@@ -1,11 +1,11 @@
-import { createApp } from "vue";
-import App from "./app/App.vue";
-import "./app/config/matomo.js"; 
+import { createApp, h } from "vue";
+import { createInertiaApp } from "@inertiajs/vue3";
 
-import { router } from "./app/config/routes.js";
 import { customComponents } from "./app/config/customComponents.js";
 import { $channels, $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
+import { layouts } from "./app/config/layouts.js";
+import { layouts } from "./app/config/matomo.js";
 
 //Quasar
 import { Quasar, Ripple, ClosePopup, Notify, Dialog, Loading } from "quasar";
@@ -20,36 +20,44 @@ import "@vuepic/vue-datepicker/dist/main.css";
 //icons https://pictogrammers.com/library/mdi/
 import "@mdi/font/css/materialdesignicons.css";
 
-//------ Admin app ----------------------------
-const app = createApp(App);
-
-app.config.globalProperties.$echo = $echo;
-app.config.globalProperties.$channels = $channels;
-app.config.globalProperties.$server = $server;
-app.use(router);
-app.component("VueDatePicker", VueDatePicker);
-/**
- * Custom components
- */
-customComponents.forEach((index) => {
-    app.component(index[0], index[1]);
-});
-
-app.use(Quasar, {
-    plugins: {
-        Notify,
-        Dialog,
-        Loading,
+createInertiaApp({
+    resolve: (name) => {
+        const pages = require.context("./app/pages", true, /\.vue$/);
+        return pages(`./${name}.vue`).default;
     },
-    directives: {
-        Ripple,
-        ClosePopup,
+    setup({ el, App, props, plugin }) {
+        const app = createApp({ render: () => h(App, props) });
+
+        customComponents.forEach((index) => {
+            app.component(index[0], index[1]);
+        });
+
+        layouts.forEach((index) => {
+            app.component(index[0], index[1]);
+        });
+
+        app.use(Quasar, {
+            plugins: {
+                Notify,
+                Dialog,
+                Loading,
+            },
+            directives: {
+                Ripple,
+                ClosePopup,
+            },
+        });
+
+        QComponents.forEach((item) => {
+            app.component(item.name, item);
+        });
+
+        app.config.globalProperties.$echo = $echo;
+        app.config.globalProperties.$channels = $channels;
+        app.config.globalProperties.$server = $server;
+
+        app.component("VueDatePicker", VueDatePicker);
+        app.use(plugin);
+        app.mount(el);
     },
 });
-
-QComponents.forEach((item) => {
-    app.component(item.name, item);
-});
-
-//Mount app
-app.mount("#app");

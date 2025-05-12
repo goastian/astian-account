@@ -28,12 +28,15 @@
         "webpack-dev-server": "^5.0.2"
     },
     "dependencies": {
+        "@inertiajs/vue3": "^2.0.8",
         "@mdi/font": "^7.4.47",
         "@popperjs/core": "^2.11.8",
         "@quasar/extras": "^1.16.17",
         "@tailwindcss/postcss": "^4.0.0",
         "@vuepic/vue-datepicker": "^11.0.1",
+        "apexcharts": "^4.7.0",
         "axios": "^1.1.2",
+        "dayjs": "^1.11.13",
         "echo-client-js": "^1.2.0",
         "flatpickr": "^4.6.13",
         "notyf": "^3.10.0",
@@ -45,6 +48,7 @@
         "stream-http": "^3.2.0",
         "tailwindcss": "^4.0.0",
         "vue": "^3.2.41",
-        "vue-router": "^4.2.5"
+        "vue-router": "^4.2.5",
+        "vue3-apexcharts": "^1.8.0"
     }
 }
