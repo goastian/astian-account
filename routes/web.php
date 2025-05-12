@@ -19,6 +19,7 @@ require __DIR__ . '/web/webhook.php';
 require __DIR__ . '/web/public.php';
 require __DIR__ . '/web/settings.php';
 require __DIR__ . '/web/admin.php';
+require __DIR__ . '/web/partner.php';
 
 Route::get("/", function () {
     return view('landing.home');

@@ -45,6 +45,15 @@ class AuthenticatedSessionController extends WebController
             return redirect()->route('authorize.module', ['redirect_to' => $request->redirect_to]);
         }
 
+        if (request()->wantsJson()) {
+            return $this->data([
+                'data' => [
+                    'message' => __("Login into account was successfully"),
+                    'user' => $this->authenticated_user(),
+                ]
+            ]);
+        }
+
         return RouteServiceProvider::home();
     }
 

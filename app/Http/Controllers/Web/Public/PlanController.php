@@ -1,12 +1,19 @@
 <?php
-namespace App\Http\Controllers\Web\User;
+namespace App\Http\Controllers\Web\Public;
 
+use App\Http\Controllers\WebController;
 use Inertia\Inertia;
 use App\Models\Subscription\Plan;
-use App\Http\Controllers\WebController;
+use App\Http\Controllers\Controller;
 
 class PlanController extends WebController
 {
+
+    public function __construct()
+    {
+
+    }
+
     public function index(Plan $plan)
     {
         $data = $plan->query();

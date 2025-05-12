@@ -2,6 +2,7 @@
 namespace App\Models\Subscription;
 
 use App\Models\Master;
+use App\Models\User\Partner;
 use App\Models\User\User;
 use Illuminate\Support\Str;
 use App\Models\Subscription\Package;
@@ -36,6 +37,8 @@ class Transaction extends Master
         'meta', //save package
         'code',
         'package_id',
+        'partner_id',
+        'partner_commission_rate'
     ];
 
     protected $casts = [
@@ -92,6 +95,15 @@ class Transaction extends Master
     public function package()
     {
         return $this->belongsTo(Package::class);
+    }
+
+    /**
+     * Partner
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class);
     }
 
     /**

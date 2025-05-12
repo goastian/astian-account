@@ -15,7 +15,7 @@
                 </p>
             </div>
             <div class="body">
-                <form action="/register" method="post" enctype="multipart/form-data">
+                <form action="{{ route('register') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
 
@@ -83,6 +83,12 @@
                                 <span class="text-red-500 text-sm mt-1 block">{{ $item }}</span>
                             @endforeach
                         @endif
+                    </div>
+
+                    <div class="mb-3 hidden">
+                        <input type="text" id="referral_code" name="referral_code"
+                            value="{{ request()->referral_code }}" placeholder="{{ __('Referral code') }}"
+                            class="w-full p-4 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50 transition duration-200 ease-in-out">
                     </div>
 
                     <div class="terms flex items-center mb-6">

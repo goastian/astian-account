@@ -53,6 +53,8 @@
                 class="full-width"
             />
         </div>
+
+        <v-login :guest="guest" @logged="updateUser" />
     </div>
 </template>
 
@@ -88,6 +90,7 @@ export default {
             selected_method: -1,
             methods: [],
             disabled: false,
+            guest: false,
         };
     },
 
@@ -101,8 +104,18 @@ export default {
             this.selected_method = key;
         },
 
+        updateUser(user) {
+            this.user = user;
+        },
+
+        getReferralLink() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get("referral_code");
+        },
+
         async payment() {
             if (!this.user?.id) {
+                this.guest = true;
                 this.$q.notify({
                     type: "negative",
                     message: "Please login and try again",
@@ -119,6 +132,7 @@ export default {
                 });
                 return;
             }
+            console.log(this.$page.props.user);
 
             if (this.buy) {
                 await this.continuePayment();
@@ -137,8 +151,8 @@ export default {
                         plan: this.plan.id,
                         billing_period: this.period.billing_period,
                         payment_method: this.methods[this.selected_method].key,
-                    },
-                    { headers: { "Content-Type": "multipart/form-data" } }
+                        refer_link: this.getReferralLink(),
+                    }
                 );
 
                 if (res.status == 201) {
@@ -159,8 +173,8 @@ export default {
                         package: this.package.id,
                         billing_period: this.period.billing_period,
                         payment_method: this.methods[this.selected_method].key,
-                    },
-                    { headers: { "Content-Type": "multipart/form-data" } }
+                        refer_link: this.getReferralLink(),
+                    }
                 );
 
                 if (res.status == 201) {
