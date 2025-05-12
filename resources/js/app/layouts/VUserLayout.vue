@@ -5,7 +5,7 @@
                 <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
                 <q-toolbar-title>
                     <q-avatar>
-                        <img src="../../../img/favicon.png" />
+                        <img src="../../../img/favicon.svg" />
                     </q-avatar>
                     {{ app_name }}
                 </q-toolbar-title>

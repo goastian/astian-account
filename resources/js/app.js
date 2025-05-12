@@ -5,7 +5,7 @@ import { customComponents } from "./app/config/customComponents.js";
 import { $channels, $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
 import { layouts } from "./app/config/layouts.js";
-import { layouts } from "./app/config/matomo.js";
+import "./app/config/matomo.js";
 
 //Quasar
 import { Quasar, Ripple, ClosePopup, Notify, Dialog, Loading } from "quasar";
