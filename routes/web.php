@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,4 @@ require __DIR__ . '/web/settings.php';
 require __DIR__ . '/web/admin.php';
 require __DIR__ . '/web/partner.php';
 
-Route::get("/", function () {
-    return view('landing.home');
-});
+Route::get("/", [HomeController::class, 'homePage'])->name('home.page');
