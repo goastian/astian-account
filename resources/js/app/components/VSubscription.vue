@@ -54,7 +54,7 @@
             />
         </div>
 
-        <v-login :guest="guest" @logged="updateUser" />
+        <v-login :guest="guest" @close="guest = false" />
     </div>
 </template>
 
