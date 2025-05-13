@@ -27,12 +27,12 @@
 
                     <!-- Menu Options -->
                     <q-list padding>
-                        <q-item v-if="!user?.id" clickable @click="homePage">
+                        <q-item clickable @click="homePage">
                             <q-item-section avatar>
                                 <q-icon name="mdi-home" />
                             </q-item-section>
                             <q-item-section>
-                                <q-item-label>Home Page</q-item-label>
+                                <q-item-label>Home page</q-item-label>
                             </q-item-section>
                         </q-item>
 
@@ -45,7 +45,7 @@
                                 <q-icon name="mdi-home-account" />
                             </q-item-section>
                             <q-item-section>
-                                <q-item-label>My Account</q-item-label>
+                                <q-item-label>Dashboard</q-item-label>
                             </q-item-section>
                         </q-item>
 
