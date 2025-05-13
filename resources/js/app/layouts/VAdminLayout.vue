@@ -1,6 +1,6 @@
 <template>
     <q-layout view="hHh Lpr lff" v-if="user.id">
-        <q-header class="bg-positive text-white">
+        <q-header>
             <q-toolbar>
                 <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
@@ -11,6 +11,7 @@
                     {{ app_name }}
                 </q-toolbar-title>
 
+                <v-theme />
                 <v-profile></v-profile>
             </q-toolbar>
         </q-header>
@@ -19,23 +20,12 @@
             <q-list bordered>
                 <div v-for="(item, index) in menus" :key="index">
                     <q-separator />
-                    <q-item
-                        clickable
-                        v-ripple
-                        @click="open(item)"
-                        active-class="active"
-                    >
+                    <q-item clickable v-ripple @click="open(item)">
                         <q-item-section avatar>
-                            <q-avatar
-                                color="primary"
-                                text-color="white"
-                                :icon="item.icon"
-                            />
+                            <q-avatar :icon="item.icon" />
                         </q-item-section>
 
-                        <q-item-section class="text-primary">{{
-                            item.name
-                        }}</q-item-section>
+                        <q-item-section>{{ item.name }}</q-item-section>
                     </q-item>
                 </div>
             </q-list>
@@ -71,7 +61,7 @@ export default {
     created() {
         this.user = this.$page.props.user;
         this.app_name = this.$page.props.app_name;
-        this.menus = this.$page.props.admin_routes; 
+        this.menus = this.$page.props.admin_routes;
     },
 
     methods: {

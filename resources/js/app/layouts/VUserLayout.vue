@@ -1,6 +1,6 @@
 <template>
     <q-layout view="hHh Lpr lff" v-if="user.id">
-        <q-header class="bg-positive text-white">
+        <q-header>
             <q-toolbar>
                 <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
                 <q-toolbar-title>
@@ -9,6 +9,7 @@
                     </q-avatar>
                     {{ app_name }}
                 </q-toolbar-title>
+                <v-theme />
                 <v-profile />
             </q-toolbar>
         </q-header>
@@ -21,7 +22,6 @@
                 :label="menu.name"
                 :icon="menu.icon"
                 v-show="menu.show"
-                header-class="text-positive"
                 default-opened
             >
                 <q-item
@@ -32,16 +32,11 @@
                     @click="open(item)"
                     class="item-admin"
                     :active="$page.component === item.route"
-                    active-class="active"
-                    :class="{
-                        'bg-grey-2 text-primary':
-                            $page.component === item.route,
-                    }"
                 >
                     <q-item-section avatar>
-                        <q-icon :name="item.icon" color="primary" />
+                        <q-icon :name="item.icon" />
                     </q-item-section>
-                    <q-item-section class="text-primary">
+                    <q-item-section>
                         {{ item.name }}
                     </q-item-section>
                 </q-item>
@@ -56,9 +51,9 @@
                 @click="goToAdmin"
             >
                 <q-item-section avatar>
-                    <q-icon color="positive" :name="admin_dashboard.icon" />
+                    <q-icon :name="admin_dashboard.icon" />
                 </q-item-section>
-                <q-item-section class="text-primary">
+                <q-item-section>
                     {{ admin_dashboard.name }}
                 </q-item-section>
             </q-item>
@@ -70,9 +65,9 @@
                 @click="open(partner_dashboard)"
             >
                 <q-item-section avatar>
-                    <q-icon color="positive" :name="partner_dashboard.icon" />
+                    <q-icon :name="partner_dashboard.icon" />
                 </q-item-section>
-                <q-item-section class="text-primary">
+                <q-item-section>
                     {{ partner_dashboard.name }}
                 </q-item-section>
             </q-item>
@@ -85,7 +80,7 @@
         </q-page-container>
     </q-layout>
 
-    <q-page v-else class="fixed-full flex flex-center bg-white">
+    <q-page v-else>
         <div class="text-center">
             <q-spinner size="3rem" color="indigo" class="q-mb-md" />
             <p class="text-h6 text-grey-7 q-animate--pulse">Loading ...</p>
