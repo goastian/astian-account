@@ -1,124 +1,96 @@
 <template>
-    <q-layout view="lHh Lpr lFf">
-        <q-header elevated class="bg-primary text-white">
-            <q-toolbar class="shadow-2">
-                <q-toolbar-title>Available Plans</q-toolbar-title>
-                <v-profile></v-profile>
-            </q-toolbar>
-        </q-header>
+    <v-guest-layout>
+        <template #title>{{ $page.props.app_name }}</template>
 
-        <q-page-container>
+        <template #body>
             <q-page padding>
-                <div class="row">
-                    <div
-                        v-for="plan in plans"
-                        :key="plan.id"
-                        class="col-12 col-md-4 col-md-3 q-gutter-sm q-pa-sm"
-                    >
-                        <q-card bordered class="q-hoverable shadow-2">
-                            <q-card-section class="bg-grey-2">
-                                <div class="text-h6">
+                <div class="plans-grid-container q-pt-xl q-px-md">
+                    <div class="plans-grid">
+                        <q-card
+                            v-for="plan in plans"
+                            :key="plan.id"
+                            class="plan-card"
+                            bordered
+                            flat
+                        >
+                            <q-card-section class="plan-header">
+                                <div class="text-h5 text-bold text-center">
                                     {{ plan.name }}
                                     <q-badge
                                         v-if="plan.bonus_enabled"
-                                        color="green"
+                                        color="amber"
                                         class="q-ml-sm"
-                                        align="top"
+                                        floating
                                     >
                                         +{{ plan.bonus_duration }} days
                                     </q-badge>
                                 </div>
-                                <div class="text-subtitle2 text-grey-7">
-                                    <span v-html="plan.description"></span>
-                                </div>
                             </q-card-section>
 
                             <q-separator />
 
                             <q-card-section>
                                 <div
-                                    class="text-subtitle2 text-primary q-mb-sm"
+                                    class="text-subtitle2 text-center text-deep-purple q-mb-sm"
                                 >
-                                    <q-icon name="vpn_key" class="q-mr-sm" />
                                     Included Services
                                 </div>
-
-                                <q-list
-                                    dense
-                                    bordered
-                                    class="rounded-borders bg-grey-1"
-                                >
-                                    <q-item
+                                <div class="q-mb-md text-center">
+                                    <q-chip
                                         v-for="(item, i) in plan.scopes"
                                         :key="i"
+                                        icon="check"
+                                        color="green-3"
+                                        text-color="green-10"
+                                        class="q-ma-xs"
+                                        outline
+                                        dense
                                     >
-                                        <q-item-section>
-                                            <div class="text-weight-medium">
-                                                {{ item.service.name }}
-                                            </div>
-                                            <div
-                                                class="text-caption text-grey-7"
-                                            >
-                                                Level : {{ item.role.name }}
-                                            </div>
-                                        </q-item-section>
-                                    </q-item>
-                                </q-list>
+                                        {{ item.service.name }} ({{
+                                            item.role.name
+                                        }})
+                                    </q-chip>
+                                </div>
                             </q-card-section>
 
                             <q-separator />
+
                             <q-card-section>
                                 <div
-                                    class="text-subtitle2 text-primary q-mb-sm"
+                                    class="text-subtitle2 text-center text-primary q-mb-sm"
                                 >
-                                    <q-icon
-                                        name="attach_money"
-                                        class="q-mr-sm"
-                                    />
                                     Available Prices
                                 </div>
-
                                 <q-list bordered separator>
                                     <q-item
-                                        v-for="(item, index) in plan.prices"
+                                        v-for="(price, index) in plan.prices"
                                         :key="index"
-                                        class="q-my-xs"
+                                        class="q-mt-xs"
                                     >
                                         <q-item-section side>
-                                            <q-badge color="primary" outline>
-                                                {{ item.billing_period }}
+                                            <q-badge color="blue-8" outline>
+                                                {{ price.billing_period }}
                                             </q-badge>
                                         </q-item-section>
 
                                         <q-item-section>
-                                            <div>
-                                                <span
-                                                    class="text-weight-bold"
-                                                    >{{ item.currency }}</span
-                                                >
-                                                <span class="q-ml-sm">{{
-                                                    item.amount_format
-                                                }}</span>
+                                            <div class="text-weight-bold">
+                                                {{ price.currency }}
+                                                {{ price.amount_format }}
                                             </div>
                                             <div class="text-caption text-grey">
                                                 Expires:
-                                                {{ item.expiration || "—" }}
+                                                {{ price.expiration || "—" }}
                                             </div>
                                         </q-item-section>
 
                                         <q-item-section side>
-                                            <q-item tag="label" v-ripple>
-                                                <q-item-section avatar>
-                                                    <q-radio
-                                                        :val="plan"
-                                                        v-model="selected_plan"
-                                                        color="orange"
-                                                        @click="
-                                                            selectPlan(item)
-                                                        "
-                                                    />
-                                                </q-item-section>
-                                            </q-item>
+                                            <q-radio
+                                                :val="plan"
+                                                v-model="selected_plan"
+                                                color="deep-orange"
+                                                @click="selectPlan(price)"
+                                            />
                                         </q-item-section>
                                     </q-item>
                                 </q-list>
@@ -127,7 +99,7 @@
                     </div>
                 </div>
 
-                <div class="row justify-center q-mt-lg">
+                <div class="row justify-center q-mt-xl">
                     <q-pagination
                         v-model="search.page"
                         color="primary"
@@ -135,32 +107,35 @@
                         :max-pages="6"
                         boundary-numbers
                         direction-links
+                        unelevated
+                        input
                     />
                 </div>
 
                 <v-subscription
                     :period="selected_period"
                     :plan="selected_plan"
-                ></v-subscription>
+                />
             </q-page>
-        </q-page-container>
-    </q-layout>
+        </template>
+    </v-guest-layout>
 </template>
 
 <script>
 export default {
     data() {
         return {
+            plans: [],
+            selected_plan: null,
+            selected_period: null,
+            dialogPlan: null,
+            search: {
+                page: 1,
+                per_page: 12,
+            },
             pages: {
                 total_pages: 0,
             },
-            search: {
-                page: 1,
-                per_page: 15,
-            },
-            plans: [],
-            selected_period: null,
-            selected_plan: null,
         };
     },
 
@@ -175,8 +150,13 @@ export default {
     },
 
     methods: {
-        selectPlan(period) {
-            this.selected_period = period;
+        showDescription(plan) {
+            this.dialogPlan = plan;
+            this.descriptionDialog = true;
+        },
+
+        selectPlan(price) {
+            this.selected_period = price;
         },
 
         async getPlans() {
@@ -185,13 +165,13 @@ export default {
                     params: this.search,
                 });
 
-                if (res.status == 200) {
+                if (res.status === 200) {
                     this.plans = res.data.data;
                     this.pages = res.data.meta.pagination;
                 }
             } catch (error) {
                 this.$q.notify({
-                    message: "Error loading plans.",
+                    message: "Error cargando los planes.",
                     type: "negative",
                 });
             }
@@ -199,3 +179,35 @@ export default {
     },
 };
 </script>
+<style scoped>
+.plans-grid-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.plans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+}
+
+.plan-card {
+    border-radius: 20px;
+    background: white;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.plan-header {
+    background: linear-gradient(145deg, #5c6bc0, #3949ab);
+    color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 1.2rem;
+}
+</style>
