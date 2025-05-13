@@ -38,8 +38,9 @@ class TerminalController extends WebController
             return $this->showAllByBuilder($data, $terminal->transformer);
         }
 
-        return Inertia::render('TerminalLayout', [
-            'commands' => $this->showAllByBuilderArray($data, $terminal->transformer)
+        return Inertia::render('Terminal/Index', [
+            'commands' => $this->showAllByBuilderArray($data, $terminal->transformer),
+            'route' => route('admin.terminals.index')
         ]);
     }
 
