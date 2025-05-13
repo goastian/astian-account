@@ -8,6 +8,7 @@
                     <q-avatar icon="mdi-currency-usd"> </q-avatar>
                     Partner system
                 </q-toolbar-title>
+                <v-theme />
                 <v-profile></v-profile>
             </q-toolbar>
         </q-header>
