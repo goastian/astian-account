@@ -29,12 +29,18 @@ class Menu
             "app_name" => config('app.name'),
             "user" => static::authenticated_user(),
             "user_routes" => static::userRoutes(),
-            "login" => route('login'),
-            "register" => route('register'),
-            "forgot_password" => route('forgot-password'),
-            "logout" => route('logout'),
             "user_dashboard" => route('users.dashboard'),
             "admin_routes" => static::adminRoutes(),
+            "auth_routes" => [
+                "login" => route('login'),
+                "forgot_password" => route('forgot-password'),
+                "register" => route('register'),
+                "logout" => route('logout'),
+            ],
+            "guest_routes" => [
+                "home_page" => url(config('system.home_page')),
+                "plans" => route('plans.index')
+            ],
             "admin_dashboard" => [
                 "name" => "Admin",
                 "route" => route("admin.users.index"),
