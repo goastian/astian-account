@@ -36,6 +36,7 @@
         "@vuepic/vue-datepicker": "^11.0.1",
         "apexcharts": "^4.7.0",
         "axios": "^1.1.2",
+        "chart.js": "^4.4.9",
         "dayjs": "^1.11.13",
         "echo-client-js": "^1.2.0",
         "flatpickr": "^4.6.13",
