@@ -100,6 +100,12 @@ class Menu
     {
         return [
             [
+                "name" => "Dashboard",
+                "route" => route("admin.dashboard"),
+                "icon" => "mdi-view-dashboard",
+                'show' => true,
+            ],
+            [
                 "name" => "Groups",
                 "route" => route("admin.groups.index"),
                 "icon" => "mdi-account-group",
