@@ -302,7 +302,7 @@
                         <q-item
                             v-for="(item, index) in scopes"
                             :key="index"
-                            class="q-mb-sm q-pa-sm bg-white shadow-1 rounded-borders"
+                            class="q-mb-sm q-pa-sm shadow-1 rounded-borders"
                         >
                             <q-item-section avatar>
                                 <q-avatar
@@ -355,7 +355,7 @@
                     </q-list>
                 </q-card-section>
 
-                <q-card-actions align="right" class="bg-white text-teal">
+                <q-card-actions align="right">
                     <q-btn
                         outline
                         color="positive"

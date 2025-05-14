@@ -1,12 +1,26 @@
 <template>
     <v-admin-layout>
-        <q-toolbar class="q-ma-sm">
+        <q-toolbar class="q-ma-sm flex items-center justify-between">
             <q-toolbar-title> List of clients </q-toolbar-title>
+            <q-space />
 
-            <v-create @created="getClients()" />
+            <div class="row items-center q-pa-md">
+                <v-create @created="getClients()" />
+
+                <q-btn-toggle
+                    v-model="viewMode"
+                    dense
+                    toggle-color="primary"
+                    :options="[
+                        { value: 'list', icon: 'list' },
+                        { value: 'grid', icon: 'grid_on' },
+                    ]"
+                    unelevated
+                />
+            </div>
         </q-toolbar>
 
-        <div class="row q-col-gutter-md q-ma-sm">
+        <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
             <div
                 class="col-xs-12 col-sm-6 col-md-4"
                 v-for="(client, index) in clients"
@@ -38,7 +52,6 @@
                                 <q-tooltip>Copy ID</q-tooltip>
                             </q-chip>
                         </div>
-
                         <div class="q-mb-sm">
                             <q-chip
                                 v-if="client.secret"
@@ -62,6 +75,59 @@
             </div>
         </div>
 
+        <div v-if="viewMode === 'list'" class="q-pa-sm">
+            <q-table
+                :rows="clients"
+                :columns="columns"
+                row-key="id"
+                flat
+                bordered
+                hide-bottom
+                :rows-per-page-options="[search.per_page]"
+            >
+                <template v-slot:body-cell-id="props">
+                    <q-td>
+                        <q-btn
+                            dense
+                            flat
+                            icon="mdi-content-copy"
+                            @click="copyToClipboard(props.row.id)"
+                            label="*****"
+                            size="sm"
+                            color="green"
+                        >
+                            <q-tooltip>Copy ID</q-tooltip>
+                        </q-btn>
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-secret="props">
+                    <q-td>
+                        <q-btn
+                            v-if="props.row.secret"
+                            dense
+                            flat
+                            icon="mdi-content-copy"
+                            @click="copyToClipboard(props.row.secret)"
+                            label="*****"
+                            size="sm"
+                            color="green"
+                        >
+                            <q-tooltip>Copy Secret</q-tooltip>
+                        </q-btn>
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-actions="props">
+                    <q-td align="right">
+                        <v-update :item="props.row" @updated="getClients" />
+                        <v-delete :item="props.row" @deleted="getClients" />
+                    </q-td>
+                </template>
+            </q-table>
+        </div>
+
+        <!-- 📄 Paginación -->
         <div class="row justify-center q-mt-md">
             <q-pagination
                 v-model="search.page"
@@ -87,8 +153,9 @@ export default {
 
     data() {
         return {
-            clients: [],
+            viewMode: "list", // cards or table
 
+            clients: [],
             pages: {
                 total_pages: 0,
             },
@@ -96,17 +163,29 @@ export default {
                 page: 1,
                 per_page: 15,
             },
-            snackbar: false,
+
+            columns: [
+                { name: "name", label: "Name", field: "name", align: "left" },
+                { name: "created_at", label: "Created", field: "created_at" },
+                { name: "updated_at", label: "Updated", field: "updated_at" },
+                { name: "id", label: "ID", field: "id" },
+                { name: "secret", label: "Secret", field: "secret" },
+                {
+                    name: "actions",
+                    label: "Actions",
+                    field: "actions",
+                    align: "right",
+                },
+            ],
         };
     },
 
     watch: {
-        "search.page"(value) {
+        "search.page"() {
             this.getClients();
         },
         "search.per_page"(value) {
             if (value) {
-                this.search.per_page = value;
                 this.getClients();
             }
         },
@@ -128,21 +207,17 @@ export default {
         },
 
         getClients(param = null) {
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            const params = { ...this.search, ...param };
 
             this.$server
-                .get(this.$page.props.route, {
-                    params: params,
-                })
+                .get(this.$page.props.route, { params })
                 .then((res) => {
                     this.clients = res.data.data;
-                    var meta = res.data.meta;
+                    const meta = res.data.meta;
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch((e) => {});
+                .catch(() => {});
         },
 
         async copyToClipboard(text) {

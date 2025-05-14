@@ -29,7 +29,7 @@
                 </q-input>
             </q-card-section>
 
-            <q-card-actions align="right" class="bg-white text-teal">
+            <q-card-actions align="right">
                 <q-btn
                     outline
                     color="primary"

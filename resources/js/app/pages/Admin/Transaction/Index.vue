@@ -6,10 +6,25 @@
                 <q-icon name="list_alt" class="q-mr-sm" />
                 List of transactions
             </q-toolbar-title>
+
+            <!-- Toggle View Mode -->
+            <q-btn-toggle
+                v-model="viewMode"
+                dense
+                toggle-color="primary"
+                :options="[
+                    { value: 'list', icon: 'list' },
+                    { value: 'grid', icon: 'grid_on' },
+                ]"
+                unelevated
+            />
         </q-toolbar>
 
         <div class="q-pa-md">
-            <div class="row q-col-gutter-md q-row-gutter-md">
+            <div
+                v-if="viewMode === 'grid'"
+                class="row q-col-gutter-md q-row-gutter-md"
+            >
                 <div
                     v-for="(item, index) in transactions"
                     :key="index"
@@ -41,15 +56,13 @@
                             </div>
                             <div class="q-mb-sm">
                                 <q-icon name="payments" class="q-mr-xs" />
-                                <strong>Price:</strong>
-                                {{ item.total }}
+                                <strong>Price:</strong> {{ item.total }}
                                 {{ item.currency }}
                             </div>
                             <div class="q-mb-sm">
                                 <q-icon name="event" class="q-mr-xs" />
                                 <strong>Created:</strong> {{ item.created }}
                             </div>
-
                             <div class="q-mb-sm">
                                 <q-icon
                                     name="event_available"
@@ -57,13 +70,11 @@
                                 />
                                 <strong>Updated:</strong> {{ item.updated }}
                             </div>
-
                             <div class="q-mb-sm">
                                 <q-icon name="credit_card" class="q-mr-xs" />
                                 <strong>Method:</strong>
                                 {{ item.payment_method }}
                             </div>
-
                             <div class="q-mb-sm">
                                 <q-icon name="check_circle" class="q-mr-xs" />
                                 <strong>Status:</strong>
@@ -74,7 +85,6 @@
                                             : 'orange'
                                     "
                                     text-color="white"
-                                    align="middle"
                                 >
                                     {{ item.status }}
                                 </q-badge>
@@ -88,6 +98,48 @@
                     </q-card>
                 </div>
             </div>
+
+            <!-- LIST VIEW -->
+            <q-table
+                v-else
+                :rows="transactions"
+                :columns="columns"
+                row-key="code"
+                flat
+                bordered
+                dense
+                separator="horizontal"
+                hide-bottom
+                :rows-per-page-options="[search.per_page]"
+            >
+                <template v-slot:body-cell-status="props">
+                    <q-td :props="props">
+                        <q-badge
+                            :color="
+                                props.row.status === 'successful'
+                                    ? 'green'
+                                    : 'orange'
+                            "
+                            text-color="white"
+                        >
+                            {{ props.row.status }}
+                        </q-badge>
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-actions="props">
+                    <q-td :props="props">
+                        <div class="row items-center q-gutter-sm">
+                            <v-activate
+                                @updated="getTransactions"
+                                v-if="check(props.row)"
+                                :item="props.row"
+                            />
+                            <v-detail :item="props.row" />
+                        </div>
+                    </q-td>
+                </template>
+            </q-table>
         </div>
 
         <div class="row justify-center q-mt-md">
@@ -102,6 +154,7 @@
         </div>
     </v-admin-layout>
 </template>
+
 <script>
 import VActivate from "./Activate.vue";
 import VDetail from "./Detail.vue";
@@ -114,6 +167,7 @@ export default {
 
     data() {
         return {
+            viewMode: "list",
             params: [
                 { key: "Code", value: "code" },
                 { key: "Session", value: "session_id" },
@@ -129,6 +183,57 @@ export default {
                 page: 1,
                 per_page: 15,
             },
+            columns: [
+                { name: "code", label: "Code", field: "code", align: "left" },
+                {
+                    name: "price",
+                    label: "Price",
+                    field: (row) => `${row.total} ${row.currency}`,
+                    align: "left",
+                },
+                {
+                    name: "billing_period",
+                    label: "Plan",
+                    field: "billing_period",
+                    align: "left",
+                },
+                {
+                    name: "created",
+                    label: "Created",
+                    field: "created",
+                    align: "left",
+                },
+                {
+                    name: "updated",
+                    label: "Updated",
+                    field: "updated",
+                    align: "left",
+                },
+                {
+                    name: "payment_method",
+                    label: "Method",
+                    field: "payment_method",
+                    align: "left",
+                },
+                {
+                    name: "status",
+                    label: "Status",
+                    field: "status",
+                    align: "left",
+                },
+                {
+                    name: "activated",
+                    label: "Activated",
+                    field: "activated",
+                    align: "left",
+                },
+                {
+                    name: "actions",
+                    label: "Actions",
+                    field: "actions",
+                    align: "center",
+                },
+            ],
         };
     },
 
@@ -176,6 +281,10 @@ export default {
 
         check(item) {
             return item.status == "pending" || item.status == "failed";
+        },
+
+        toggleView() {
+            this.viewMode = this.viewMode === "grid" ? "list" : "grid";
         },
     },
 };

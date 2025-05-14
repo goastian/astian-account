@@ -5,10 +5,23 @@
         <q-toolbar class="q-ma-sm">
             <q-toolbar-title> List of Services </q-toolbar-title>
 
-            <v-create @created="getServices"></v-create>
+            <!-- Toggle View Mode -->
+            <q-btn-toggle
+                v-model="viewMode"
+                dense
+                toggle-color="primary"
+                :options="[
+                    { value: 'list', icon: 'list' },
+                    { value: 'grid', icon: 'grid_on' },
+                ]"
+                unelevated
+            />
+
+            <v-create @created="getServices" />
         </q-toolbar>
 
-        <div class="row q-col-gutter-md q-pa-sm">
+        <!-- GRID VIEW -->
+        <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-pa-sm">
             <div
                 v-for="service in services"
                 :key="service.id"
@@ -17,7 +30,7 @@
                 <q-card
                     flat
                     bordered
-                    class="bg-white q-hoverable q-pa-sm q-mb-sm"
+                    class="q-hoverable q-pa-sm q-mb-sm"
                     :elevation="2"
                 >
                     <q-card-section class="q-pb-none">
@@ -25,8 +38,7 @@
                             <q-toolbar-title class="text-ucfirst text-primary">
                                 {{ service.name }}
                             </q-toolbar-title>
-
-                            <v-detail :service="service"></v-detail>
+                            <v-detail :service="service" />
                         </q-toolbar>
                     </q-card-section>
 
@@ -52,19 +64,56 @@
                     </q-card-section>
 
                     <q-card-actions align="right">
-                        <v-update
-                            :item="service"
-                            @updated="getServices"
-                        ></v-update>
+                        <v-update :item="service" @updated="getServices" />
                         <v-delete
                             v-if="!service.system"
                             :item="service"
                             @deleted="getServices"
-                        ></v-delete>
+                        />
                     </q-card-actions>
                 </q-card>
             </div>
         </div>
+
+        <!-- LIST VIEW -->
+        <q-list v-else bordered class="q-ma-sm">
+            <q-item
+                v-for="service in services"
+                :key="service.id"
+                class="q-my-sm"
+                clickable
+            >
+                <q-item-section>
+                    <q-item-label>{{ service.name }}</q-item-label>
+                    <q-item-label caption>
+                        {{ service.description }}
+                    </q-item-label>
+                    <q-item-label caption>
+                        <strong>Group:</strong> {{ service.group.name }}
+                        &nbsp;|&nbsp;
+                        <strong>System:</strong>
+                        <q-badge
+                            :color="service.system ? 'green' : 'orange'"
+                            outline
+                            class="q-ml-xs"
+                        >
+                            {{ service.system ? "Yes" : "No" }}
+                        </q-badge>
+                    </q-item-label>
+                </q-item-section>
+                <q-item-section side top>
+                    <div class="row no-wrap items-center">
+                        <v-detail :service="service" />
+                        <v-update :item="service" @updated="getServices" />
+                        <v-delete
+                            v-if="!service.system"
+                            :item="service"
+                            @deleted="getServices"
+                        />
+                    </div>
+                </q-item-section>
+            </q-item>
+        </q-list>
 
         <div class="row justify-center q-mt-md">
             <q-pagination
@@ -82,6 +131,7 @@ import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VDelete from "./Delete.vue";
 import VDetail from "./Scope.vue";
+
 export default {
     components: {
         VCreate,
@@ -92,6 +142,7 @@ export default {
 
     data() {
         return {
+            viewMode: "list",
             services: [],
             params: [
                 { key: "Name", value: "name" },
