@@ -100,12 +100,6 @@ class Menu
     {
         return [
             [
-                "name" => "My Account",
-                "route" => route("users.dashboard"),
-                "icon" => "mdi-account-cog-outline",
-                'show' => true,
-            ],
-            [
                 "name" => "Groups",
                 "route" => route("admin.groups.index"),
                 "icon" => "mdi-account-group",
