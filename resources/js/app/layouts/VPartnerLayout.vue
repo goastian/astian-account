@@ -21,19 +21,14 @@
                         clickable
                         v-ripple
                         @click="open(item)"
-                        active-class="active"
+                        :active="isActive(item)"
+                        active-class="secondary"
                     >
                         <q-item-section avatar>
-                            <q-avatar
-                                color="primary"
-                                text-color="white"
-                                :icon="item.icon"
-                            />
+                            <q-avatar :icon="item.icon" />
                         </q-item-section>
 
-                        <q-item-section class="text-primary">{{
-                            item.name
-                        }}</q-item-section>
+                        <q-item-section>{{ item.name }}</q-item-section>
                     </q-item>
                 </div>
             </q-list>
@@ -71,6 +66,10 @@ export default {
 
         open(item) {
             window.location.href = item.route;
+        },
+
+        isActive(item) {
+            return item.route == window.location.href;
         },
     },
 };
