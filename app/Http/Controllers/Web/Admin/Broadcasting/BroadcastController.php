@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\Broadcasting;
+namespace App\Http\Controllers\Web\Admin\Broadcasting;
 
 use Inertia\Inertia;
 use App\Rules\BooleanRule;

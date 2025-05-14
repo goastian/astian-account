@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\Setting;
+namespace App\Http\Controllers\Web\Admin\Setting;
 
 use Illuminate\Http\Request; 
 use App\Http\Controllers\WebController;

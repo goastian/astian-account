@@ -1,10 +1,9 @@
 <?php
-namespace App\Http\Controllers\Web\Public;
+namespace App\Http\Controllers\Web\Home;
 
-use App\Http\Controllers\WebController;
 use Inertia\Inertia;
 use App\Models\Subscription\Plan;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\WebController;
 
 class PlanController extends WebController
 {
