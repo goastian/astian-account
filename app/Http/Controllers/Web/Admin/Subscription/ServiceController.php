@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\Subscription;
+namespace App\Http\Controllers\Web\Admin\Subscription;
 
 use Illuminate\Database\UniqueConstraintViolationException;
 use Inertia\Inertia;

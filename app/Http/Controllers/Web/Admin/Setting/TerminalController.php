@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\Setting;
+namespace App\Http\Controllers\Web\Admin\Setting;
 
 use Inertia\Inertia;
 use Illuminate\Http\Request;
