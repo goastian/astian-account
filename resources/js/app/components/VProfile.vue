@@ -36,16 +36,12 @@
                             </q-item-section>
                         </q-item>
 
-                        <q-item
-                            v-if="user?.id"
-                            clickable
-                            @click="goToDashboard"
-                        >
+                        <q-item v-if="user?.id" clickable @click="myAccount">
                             <q-item-section avatar>
                                 <q-icon name="mdi-home-account" />
                             </q-item-section>
                             <q-item-section>
-                                <q-item-label>Dashboard</q-item-label>
+                                <q-item-label>My account</q-item-label>
                             </q-item-section>
                         </q-item>
 
@@ -100,7 +96,7 @@ export default {
             window.location.href = "/";
         },
 
-        goToDashboard() {
+        myAccount() {
             window.location.href = this.$page.props.user_dashboard;
         },
     },
