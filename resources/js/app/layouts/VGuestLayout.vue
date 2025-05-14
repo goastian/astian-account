@@ -57,6 +57,10 @@ export default {
         open(url) {
             window.location.href = url;
         },
+
+        isActive(item) {
+            return item.route == window.location.href;
+        },
     },
 };
 </script>

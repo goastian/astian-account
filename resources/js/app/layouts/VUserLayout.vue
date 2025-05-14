@@ -30,8 +30,8 @@
                     clickable
                     v-ripple
                     @click="open(item)"
-                    class="item-admin"
-                    :active="$page.component === item.route"
+                    :active="isActive(item)"
+                    active-class="secondary"
                 >
                     <q-item-section avatar>
                         <q-icon :name="item.icon" />
@@ -123,6 +123,10 @@ export default {
         },
         goToAdmin() {
             window.location.href = this.admin_dashboard.route;
+        },
+
+        isActive(item) {
+            return item.route == window.location.href;
         },
     },
 };

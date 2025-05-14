@@ -20,7 +20,13 @@
             <q-list bordered>
                 <div v-for="(item, index) in menus" :key="index">
                     <q-separator />
-                    <q-item clickable v-ripple @click="open(item)">
+                    <q-item
+                        clickable
+                        v-ripple
+                        @click="open(item)"
+                        :active="isActive(item)"
+                        active-class="secondary"
+                    >
                         <q-item-section avatar>
                             <q-avatar :icon="item.icon" />
                         </q-item-section>
@@ -71,6 +77,10 @@ export default {
 
         open(item) {
             window.location.href = item.route;
+        },
+
+        isActive(item) {
+            return item.route == window.location.href;
         },
     },
 };

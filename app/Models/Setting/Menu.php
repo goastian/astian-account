@@ -43,7 +43,7 @@ class Menu
             ],
             "admin_dashboard" => [
                 "name" => "Admin",
-                "route" => route("admin.users.index"),
+                "route" => route("admin.dashboard"),
                 "icon" => "mdi-security",
                 'show' => true,
             ],
