@@ -23,7 +23,7 @@
                 <q-chip color="blue-darken-1">{{ item.id }}</q-chip> ?
             </q-card-section>
 
-            <q-card-actions align="right" class="bg-white text-teal">
+            <q-card-actions align="right">
                 <q-btn
                     outline
                     color="positive"

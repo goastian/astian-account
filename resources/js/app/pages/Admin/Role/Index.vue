@@ -1,12 +1,32 @@
 <template>
     <v-admin-layout>
         <v-filter :params="params" @change="searching" />
-        <q-toolbar class="q-ma-sm">
-            <q-toolbar-title> List of roles </q-toolbar-title>
 
-            <v-create @created="getRoles"></v-create>
+        <q-toolbar class="q-ma-sm flex items-center justify-between">
+            <q-toolbar-title>List of roles</q-toolbar-title>
+
+            <div class="row items-center q-pa-md">
+                <!-- Create Button -->
+                <div class="q-mr-sm">
+                    <v-create @created="getRoles" />
+                </div>
+
+                <!-- Toggle View Mode -->
+                <q-btn-toggle
+                    v-model="viewMode"
+                    dense
+                    toggle-color="primary"
+                    :options="[
+                        { value: 'list', icon: 'list' },
+                        { value: 'grid', icon: 'grid_on' },
+                    ]"
+                    unelevated
+                />
+            </div>
         </q-toolbar>
-        <div class="row q-col-gutter-md q-ma-sm">
+
+        <!-- Grid view -->
+        <div class="row q-col-gutter-md q-ma-sm" v-if="viewMode === 'grid'">
             <div
                 class="col-xs-12 col-sm-6 col-md-4"
                 v-for="role in roles"
@@ -45,6 +65,40 @@
             </div>
         </div>
 
+        <!-- List view -->
+        <!-- List view con q-list -->
+        <div v-else class="q-ma-sm">
+            <q-list bordered separator>
+                <q-item
+                    v-for="role in roles"
+                    :key="role.id"
+                    clickable
+                    class="q-pa-sm"
+                >
+                    <q-item-section>
+                        <q-item-label class="text-h6">{{
+                            role.name
+                        }}</q-item-label>
+                        <q-item-label caption>{{ role.slug }}</q-item-label>
+                        <q-item-label>{{ role.description }}</q-item-label>
+                        <q-item-label caption>
+                            System:
+                            <strong>{{ role.system ? "Yes" : "No" }}</strong>
+                        </q-item-label>
+                    </q-item-section>
+
+                    <q-item-section side>
+                        <v-update @updated="getRoles" :item="role" />
+                        <v-delete
+                            v-if="!role.system"
+                            @deleted="getRoles"
+                            :item="role"
+                        />
+                    </q-item-section>
+                </q-item>
+            </q-list>
+        </div>
+
         <div class="row justify-center q-mt-md">
             <q-pagination
                 v-model="search.page"
@@ -65,12 +119,13 @@ export default {
     components: {
         VCreate,
         VUpdate,
-        VDelete, 
+        VDelete,
     },
 
     data() {
         return {
             roles: [],
+            viewMode: "list",
             params: [{ key: "Name", value: "name" }],
             pages: {
                 total_pages: 0,
@@ -79,6 +134,23 @@ export default {
                 page: 1,
                 per_page: 15,
             },
+            columns: [
+                { name: "name", label: "Name", field: "name", sortable: true },
+                { name: "slug", label: "Slug", field: "slug", sortable: true },
+                {
+                    name: "description",
+                    label: "Description",
+                    field: "description",
+                    sortable: false,
+                },
+                {
+                    name: "system",
+                    label: "System",
+                    field: (row) => (row.system ? "Yes" : "No"),
+                    sortable: true,
+                },
+                { name: "actions", label: "Actions", field: "actions" },
+            ],
         };
     },
 

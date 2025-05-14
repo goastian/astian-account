@@ -35,7 +35,7 @@
                 </q-input>
             </q-card-section>
 
-            <q-card-actions align="right" class="bg-white text-teal">
+            <q-card-actions align="right">
                 <q-btn
                     dense="dense"
                     color="primary"
@@ -45,7 +45,7 @@
 
                 <q-btn
                     dense="dense"
-                    caolor="secondary"
+                    color="secondary"
                     label="Close"
                     @click="close"
                 />
