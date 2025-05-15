@@ -51,7 +51,7 @@
 
             <div class="row q-col-gutter-md q-mt-md">
                 <div class="col">
-                    <q-card flat bordered class="bg-grey-1 text-primary">
+                    <q-card flat bordered>
                         <q-card-section>
                             <div class="text-subtitle1">Total Sales</div>
                             <div class="text-h6">{{ total_sales }}</div>
@@ -59,7 +59,7 @@
                     </q-card>
                 </div>
                 <div class="col">
-                    <q-card flat bordered class="bg-grey-1 text-secondary">
+                    <q-card flat bordered>
                         <q-card-section>
                             <div class="text-subtitle1">Total Commission</div>
 
