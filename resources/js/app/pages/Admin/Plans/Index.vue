@@ -193,7 +193,7 @@ export default {
     methods: {
         async getPlans() {
             try {
-                const res = await this.$server.get("/admin/plans");
+                const res = await this.$server.get(this.$page.props.route.plans);
 
                 if (res.status == 200) {
                     this.plans = res.data.data;

@@ -440,11 +440,15 @@ export default {
          */
         async create() {
             try {
-                const res = await this.$server.post("/admin/plans", this.form, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+                const res = await this.$server.post(
+                    this.$page.props.route.plans,
+                    this.form,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                );
 
                 if (res.status == 201) {
                     this.clean();
@@ -465,11 +469,15 @@ export default {
 
         async getServices() {
             try {
-                const res = await this.$server.get("/api/admin/services", {
-                    params: {
-                        per_page: 500,
-                    },
-                });
+                const res = await this.$server.get(
+                    this.$page.props.route.services,
+                    {
+                        params: {
+                            per_page: 500,
+                            visibility: "public",
+                        },
+                    }
+                );
 
                 if (res.status == 200) {
                     this.services = res.data.data;

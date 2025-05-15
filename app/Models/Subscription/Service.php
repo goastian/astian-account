@@ -33,7 +33,8 @@ class Service extends Master
         'slug',
         'description',
         'group_id',
-        'system'
+        'system',
+        'visibility'
     ];
 
     protected $casts = [
@@ -56,5 +57,14 @@ class Service extends Master
     public function scopes()
     {
         return $this->hasMany(Scope::class);
+    }
+
+    /**
+     * Show status for visibility field
+     * @return string[]
+     */
+    public static function visibilities()
+    {
+        return ['private', 'public'];
     }
 }

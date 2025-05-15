@@ -1,14 +1,15 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
-use Illuminate\Database\UniqueConstraintViolationException;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Service;
 use App\Http\Controllers\WebController;
 use Elyerr\ApiResponse\Exceptions\ReportError;
+use Illuminate\Database\UniqueConstraintViolationException;
 
 class ServiceController extends WebController
 {
@@ -26,17 +27,22 @@ class ServiceController extends WebController
     }
 
     /**
-     * show all resources
+     * index
+     * @param \Illuminate\Http\Request $request
      * @param \App\Models\Subscription\Service $service
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
      */
-    public function index(Service $service)
+    public function index(Request $request, Service $service)
     {
         $this->checkMethod('get');
 
         $params = $this->filter_transform($service->transformer);
 
         $data = $service->query();
+
+        if ($request->visibility) {
+            $data->where('visibility', $request->visibility);
+        }
 
         $data = $this->searchByBuilder($data, $params);
         $data = $this->orderByBuilder($data, $service->transformer);
@@ -68,6 +74,7 @@ class ServiceController extends WebController
             'description' => ['required', 'max:190'],
             'group_id' => ['required', 'exists:groups,id'],
             'system' => ['nullable', new BooleanRule()],
+            'visibility' => ['required', Rule::in(Service::visibilities())]
         ]);
 
         $this->checkMethod('post');
@@ -111,7 +118,8 @@ class ServiceController extends WebController
     public function update(Request $request, Service $service)
     {
         $this->validate($request, [
-            'description' => ['nullable', 'max:190']
+            'description' => ['nullable', 'max:190'],
+            'visibility' => ['nullable', Rule::in(Service::visibilities())]
         ]);
 
         $this->checkMethod('put');
@@ -130,6 +138,11 @@ class ServiceController extends WebController
             if ($request->has('name') && $service->name != $request->name) {
                 $update = true;
                 $service->name = $request->name;
+            }
+
+            if ($request->has('visibility') && $service->visibility != $request->visibility) {
+                $update = true;
+                $service->visibility = $request->visibility;
             }
 
             if ($update) {
