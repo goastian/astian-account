@@ -13,6 +13,12 @@ use App\Http\Controllers\WebController;
 class DashboardController extends WebController
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('userCanAny:administrator_admin_full,administrator_admin_dashboard');
+    }
+
     public function dashboard()
     {
         $users_by_month = User::query()
