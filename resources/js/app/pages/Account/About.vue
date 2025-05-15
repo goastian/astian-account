@@ -24,7 +24,7 @@
                     </div>
                 </div>
 
-                <q-card flat bordered class="bg-grey-1 q-mt-lg q-mb-md">
+                <q-card flat bordered class="q-mt-lg q-mb-md">
                     <q-card-section>
                         <div
                             class="text-h6 text-primary text-italic text-weight-medium"
@@ -42,7 +42,7 @@
                     </q-card-section>
                 </q-card>
 
-                <q-card flat bordered class="bg-grey-1 q-mt-lg q-mb-md">
+                <q-card flat bordered class="q-mt-lg q-mb-md">
                     <q-card-section>
                         <div class="text-h6">
                             🚀 Your dashboard is getting an upgrade
@@ -55,33 +55,79 @@
                     </q-card-section>
                 </q-card>
 
-                <q-card flat bordered class="bg-grey-1 q-mt-lg q-mb-md">
+                <q-card flat bordered class="q-mt-lg q-mb-md">
                     <q-card-section>
                         <div class="text-h6">🔧 What's coming soon?</div>
                         <q-list dense class="q-mt-sm q-pl-sm">
                             <q-item>
-                                <q-item-section avatar
-                                    ><q-icon name="mdi-chart-line"
-                                /></q-item-section>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-chart-line" />
+                                </q-item-section>
                                 <q-item-section
                                     >App usage analytics</q-item-section
                                 >
                             </q-item>
                             <q-item>
-                                <q-item-section avatar
-                                    ><q-icon name="mdi-bell-ring-outline"
-                                /></q-item-section>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-bell-ring-outline" />
+                                </q-item-section>
                                 <q-item-section
                                     >Custom notifications</q-item-section
                                 >
                             </q-item>
                             <q-item>
-                                <q-item-section avatar
-                                    ><q-icon name="mdi-tools"
-                                /></q-item-section>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-application-cog" />
+                                </q-item-section>
                                 <q-item-section
                                     >Application manager</q-item-section
                                 >
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-code-tags" />
+                                </q-item-section>
+                                <q-item-section
+                                    >Developer options</q-item-section
+                                >
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-file-outline" />
+                                </q-item-section>
+                                <q-item-section>File manager</q-item-section>
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-lock-check-outline" />
+                                </q-item-section>
+                                <q-item-section
+                                    >Encrypt end-to-end</q-item-section
+                                >
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-qrcode-scan" />
+                                </q-item-section>
+                                <q-item-section
+                                    >TOP and QR Login</q-item-section
+                                >
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon name="mdi-currency-btc" />
+                                </q-item-section>
+                                <q-item-section
+                                    >Cryptocurrency payment</q-item-section
+                                >
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar>
+                                    <q-icon
+                                        name="mdi-dots-horizontal-circle-outline"
+                                    />
+                                </q-item-section>
+                                <q-item-section>And much more</q-item-section>
                             </q-item>
                         </q-list>
                         <div class="text-caption text-grey q-mt-sm">
