@@ -269,3 +269,21 @@ if (!function_exists('billing_statuses')) {
     }
 }
 
+
+if (!function_exists('searchByDate')) {
+    /**
+     * Search type of date to search
+     * @param mixed $index
+     */
+    function searchByDate($index)
+    {
+        $attribute = [
+            'day' => 'YYYY-MM-DD',
+            'month' => 'YYYY-MM',
+            'year' => 'YYYY'
+        ];
+
+        return $attribute[$index] ?? 'YYYY-MM-DD';
+    }
+}
+

@@ -6,7 +6,7 @@
             <div class="row q-col-gutter-sm">
                 <div class="col">
                     <q-input
-                        v-model="start"
+                        v-model="params.start"
                         type="date"
                         label="Start date"
                         dense
@@ -15,7 +15,7 @@
                 </div>
                 <div class="col">
                     <q-input
-                        v-model="end"
+                        v-model="params.end"
                         type="date"
                         label="End date"
                         dense
@@ -31,6 +31,15 @@
                         outlined
                     />
                 </div>
+                <div class="col">
+                    <q-select
+                        v-model="params.type"
+                        :options="types"
+                        label="Date"
+                        dense
+                        outlined
+                    />
+                </div>
                 <div class="col-auto flex items-end">
                     <q-btn
                         label="Get sales"
@@ -40,7 +49,33 @@
                 </div>
             </div>
 
-            <apexchart
+            <div class="row q-col-gutter-md q-mt-md">
+                <div class="col">
+                    <q-card flat bordered class="bg-grey-1 text-primary">
+                        <q-card-section>
+                            <div class="text-subtitle1">Total Sales</div>
+                            <div class="text-h6">{{ total_sales }}</div>
+                        </q-card-section>
+                    </q-card>
+                </div>
+                <div class="col">
+                    <q-card flat bordered class="bg-grey-1 text-secondary">
+                        <q-card-section>
+                            <div class="text-subtitle1">Total Commission</div>
+
+                            <div
+                                v-for="(item, index) in total_commission"
+                                :key="index"
+                                class="text-h6"
+                            >
+                                {{ item.total }} {{ item.currency }}
+                            </div>
+                        </q-card-section>
+                    </q-card>
+                </div>
+            </div>
+
+            <apex-charts
                 width="100%"
                 height="350"
                 :type="chartType"
@@ -54,102 +89,124 @@
 
 <script>
 import ApexCharts from "vue3-apexcharts";
-import dayjs from "dayjs";
 
 export default {
     components: {
-        apexchart: ApexCharts,
+        ApexCharts,
     },
     data() {
         return {
-            sales: this.$page.props.sales || {},
-            start: null,
-            end: null,
-            chartType: "bar",
-            chartTypes: ["bar", "line", "area"],
-            chartOptions: {
-                chart: {
-                    id: "sales-chart",
-                },
-                xaxis: {
-                    categories: [],
-                },
-                title: {
-                    text: "Sales per Month",
-                    align: "center",
-                },
-                yaxis: [
-                    {
-                        title: {
-                            text: "Transactions",
-                        },
-                    },
-                    {
-                        opposite: true,
-                        title: {
-                            text: "Total Amount ($)",
-                        },
-                    },
-                ],
+            sales: [],
+            params: {
+                start: null,
+                end: null,
+                type: "day",
             },
+            chartType: "line",
+            chartTypes: ["bar", "line", "area"],
+            total_sales: 0,
+            total_commission: 0,
+            chartOptions: {},
             chartSeries: [],
+            types: ["day", "month", "year"],
         };
     },
-    mounted() {
-        this.updateChart();
+
+    watch: {
+        chartType(value) {
+            this.updateChart(this.sales);
+        },
+
+        "params.type"(value) {
+            this.getSales();
+        },
+    },
+
+    created() {
+        if (!this.params.start || !this.params.end) {
+            const { start, end } = this.getDefaultDates();
+            this.params.start = start;
+            this.params.end = end;
+        }
+
+        this.sales = this.$page.props.sales.data;
+        this.total_sales = this.$page.props.sales.total_sales;
+        this.total_commission = this.$page.props.sales.total_commission;
+
+        this.updateChart(this.sales);
 
         setInterval(() => {
             this.getSales();
-        }, 5000);
+        }, 10000);
     },
+
     methods: {
+        getDefaultDates() {
+            const today = new Date();
+            const end = today.toISOString().split("T")[0];
+
+            const pastDate = new Date(today);
+            pastDate.setMonth(today.getMonth() - 3);
+            const start = pastDate.toISOString().split("T")[0];
+
+            return { start, end };
+        },
+
         async getSales() {
             try {
                 const res = await this.$server.get(this.$page.props.route, {
-                    start: this.start,
-                    end: this.end,
+                    params: this.params,
                 });
 
-                this.sales = res.data;
-                this.updateChart();
-            } catch (error) {
-                console.error(error);
-            }
-        },
-        updateChart() {
-            const sales = this.sales.values || [];
-
-            const grouped = sales.reduce((acc, item) => {
-                const month = dayjs(item.created_at).format("YYYY-MM");
-                if (!acc[month]) {
-                    acc[month] = { count: 0, total: 0 };
+                if (res.status == 200) {
+                    this.sales = res.data.data;
+                    this.total_sales = res.data.total_sales;
+                    this.total_commission = res.data.total_commission;
+                    this.updateChart(this.sales);
                 }
-                acc[month].count += 1;
-                acc[month].total += parseFloat(
-                    item.total * (item.partner_commission_rate / 100) || 0
-                );
-                return acc;
-            }, {});
+            } catch (error) {}
+        },
 
-            const categories = Object.keys(grouped).sort();
-            const transactionData = categories.map((m) => grouped[m].count);
-            const totalAmountData = categories.map((m) =>
-                grouped[m].total.toFixed(2)
-            );
-
-            this.chartOptions.xaxis.categories = categories;
+        updateChart(data) {
             this.chartSeries = [
                 {
-                    name: "Transactions",
-                    type: "column",
-                    data: transactionData,
+                    name: "Sales",
+                    data: data.map((item) => item.total),
                 },
                 {
-                    name: "Total Amount",
-                    type: "line",
-                    data: totalAmountData,
+                    name: "Commission",
+                    data: data.map((item) => item.commission),
                 },
             ];
+
+            this.chartOptions = {
+                chart: {
+                    height: 350,
+                    type: this.chartType,
+                    zoom: {
+                        enabled: false,
+                    },
+                },
+                dataLabels: {
+                    enabled: true,
+                },
+                stroke: {
+                    curve: "smooth",
+                },
+                title: {
+                    text: "Sales by day",
+                    align: "left",
+                },
+                grid: {
+                    row: {
+                        colors: ["#f3f3f3", "transparent"],
+                        opacity: 0.5,
+                    },
+                },
+                xaxis: {
+                    categories: data.map((item) => item.date),
+                },
+            };
         },
     },
 };
