@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use Inertia\Inertia;
 use App\Models\User\User;
+use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use App\Models\Subscription\Role;
 use App\Models\Subscription\Group;
@@ -19,12 +20,23 @@ class DashboardController extends WebController
         $this->middleware('userCanAny:administrator_admin_full,administrator_admin_dashboard');
     }
 
-    public function dashboard()
+    public function dashboard(Request $request)
     {
-        $users_by_month = User::query()
-            ->selectRaw("TO_CHAR(created_at, 'TMMonth YYYY') as month, COUNT(id) as total")
-            ->groupByRaw("TO_CHAR(created_at, 'TMMonth YYYY')")
-            ->orderByRaw("MIN(created_at)")
+
+        //type of filter by day , month or year
+        $type = $request->type ?? 'day';
+        $time = searchByDate($type);
+
+        $users_by_month = User::query();
+
+        //Apply filter between days
+        if ($request->has('start') && $request->has('end')) {
+            $users_by_month->whereBetween('created_at', [$request->start, $request->end]);
+        }
+
+        $users_by_month = $users_by_month->selectRaw("TO_CHAR(created_at, '{$time}') as month, COUNT(id) as total")
+            ->groupByRaw("TO_CHAR(created_at, '{$time}')")
+            ->orderByRaw("TO_CHAR(created_at, '{$time}')")
             ->get();
 
         $last_users = User::latest('created_at')->take(10)->get();
@@ -37,7 +49,7 @@ class DashboardController extends WebController
         $plans = Plan::count();
 
         $data = [
-            'users_by_month' => $users_by_month,
+            'users_by_month' => $users_by_month->toArray(),
             'last_users' => $last_users,
             'groups' => $groups,
             'roles' => $roles,

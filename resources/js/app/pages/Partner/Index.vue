@@ -194,7 +194,7 @@ export default {
                     curve: "smooth",
                 },
                 title: {
-                    text: "Sales by day",
+                    text: `Sales by ${this.params.type}`,
                     align: "left",
                 },
                 grid: {
