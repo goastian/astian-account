@@ -24,21 +24,71 @@
                     </div>
                 </div>
 
-                <q-list bordered separator class="rounded-borders q-mt-lg">
-                    <q-item
-                        v-for="link in links"
-                        :key="link.route"
-                        clickable
-                        @click="$router.push({ name: link.route })"
-                    >
-                        <q-item-section>
-                            <q-item-label>{{ link.name }}</q-item-label>
-                        </q-item-section>
-                        <q-item-section side>
-                            <q-icon name="mdi-chevron-right" />
-                        </q-item-section>
-                    </q-item>
-                </q-list>
+                <q-card flat bordered class="bg-grey-1 q-mt-lg q-mb-md">
+                    <q-card-section>
+                        <div
+                            class="text-h6 text-primary text-italic text-weight-medium"
+                        >
+                            “Great things are done by a series of small things
+                            brought together.”
+                        </div>
+                        <div class="text-caption text-grey-7 q-mt-sm">
+                            — Vincent Van Gogh
+                        </div>
+                        <div class="text-subtitle2 text-grey-7 q-mt-md">
+                            Stay productive while we improve your experience.
+                            More tools will appear here soon.
+                        </div>
+                    </q-card-section>
+                </q-card>
+
+                <q-card flat bordered class="bg-grey-1 q-mt-lg q-mb-md">
+                    <q-card-section>
+                        <div class="text-h6">
+                            🚀 Your dashboard is getting an upgrade
+                        </div>
+                        <div class="text-subtitle2 text-grey-7 q-mt-sm">
+                            We’re working on personalized suggestions and
+                            insights. Soon, you’ll be able to manage your apps
+                            and track your activity from this section.
+                        </div>
+                    </q-card-section>
+                </q-card>
+
+                <q-card flat bordered class="bg-grey-1 q-mt-lg q-mb-md">
+                    <q-card-section>
+                        <div class="text-h6">🔧 What's coming soon?</div>
+                        <q-list dense class="q-mt-sm q-pl-sm">
+                            <q-item>
+                                <q-item-section avatar
+                                    ><q-icon name="mdi-chart-line"
+                                /></q-item-section>
+                                <q-item-section
+                                    >App usage analytics</q-item-section
+                                >
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar
+                                    ><q-icon name="mdi-bell-ring-outline"
+                                /></q-item-section>
+                                <q-item-section
+                                    >Custom notifications</q-item-section
+                                >
+                            </q-item>
+                            <q-item>
+                                <q-item-section avatar
+                                    ><q-icon name="mdi-tools"
+                                /></q-item-section>
+                                <q-item-section
+                                    >Application manager</q-item-section
+                                >
+                            </q-item>
+                        </q-list>
+                        <div class="text-caption text-grey q-mt-sm">
+                            We're building this for you. Stay tuned!
+                        </div>
+                    </q-card-section>
+                </q-card>
             </div>
         </q-page>
     </v-user-layout>
@@ -56,23 +106,7 @@ export default {
     },
     mounted() {},
     data() {
-        return {
-            links: [
-                { name: "Personal Information", route: "account.information" },
-                { name: "Change Password", route: "account.password" },
-                {
-                    name: "Set up two-factor authentication (2FA)",
-                    route: "account.2fa",
-                },
-
-                {
-                    name: "View my subscriptions",
-                    route: "account.subscriptions",
-                },
-                { name: "Contact support", route: "help" },
-                { name: "Privacy preferences", route: "privacy" },
-            ],
-        };
+        return {};
     },
 };
 </script>
