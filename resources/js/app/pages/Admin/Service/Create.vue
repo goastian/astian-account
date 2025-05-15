@@ -80,6 +80,13 @@
                                 </q-item-label>
                             </q-item-section>
                         </q-item>
+
+                        <q-select
+                            v-model="form.visibility"
+                            :options="visibility"
+                            label="Visibility"
+                        />
+                        <v-error :error="errors.visibility" />
                     </q-card-section>
                 </div>
 
@@ -110,6 +117,7 @@ export default {
     data() {
         return {
             dialog: false,
+            visibility: ["private", "public"],
             formGroup: {
                 name: null,
                 id: null,
@@ -120,6 +128,7 @@ export default {
                 group_id: null,
                 group_name: null,
                 system: false,
+                visibility: null,
             },
             errors: {},
             groups: [],

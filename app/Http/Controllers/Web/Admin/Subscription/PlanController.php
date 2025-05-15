@@ -47,7 +47,11 @@ class PlanController extends WebController
         }
 
         return Inertia::render("Admin/Plans/Index", [
-            'plans' => $this->showAllByBuilderArray($data, $plan->transformer)
+            'plans' => $this->showAllByBuilderArray($data, $plan->transformer),
+            'route' => [
+                'services' => route("admin.services.index"),
+                'plans' => route('admin.plans.index')
+            ]
         ]);
     }
 

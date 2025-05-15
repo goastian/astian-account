@@ -61,6 +61,12 @@
                                 {{ service.system ? "Yes" : "No" }}
                             </q-badge>
                         </div>
+                        <div class="text-caption">
+                            <strong>Visibility:</strong>
+                            <q-badge outline class="q-ml-xs" color="positive">
+                                {{ service.visibility }}
+                            </q-badge>
+                        </div>
                     </q-card-section>
 
                     <q-card-actions align="right">
@@ -87,6 +93,12 @@
                     <q-item-label>{{ service.name }}</q-item-label>
                     <q-item-label caption>
                         {{ service.description }}
+                    </q-item-label>
+                    <q-item-label caption>
+                        <strong>Visibility: </strong>
+                        <q-badge color="positive" outline>
+                            {{ service.visibility }}</q-badge
+                        >
                     </q-item-label>
                     <q-item-label caption>
                         <strong>Group:</strong> {{ service.group.name }}
@@ -147,6 +159,7 @@ export default {
             params: [
                 { key: "Name", value: "name" },
                 { key: "Group", value: "group" },
+                { key: "Visibility", value: "visibility" },
                 { key: "Created", value: "created" },
                 { key: "Updated", value: "updated" },
             ],
