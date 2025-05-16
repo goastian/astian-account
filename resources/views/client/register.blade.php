@@ -39,6 +39,8 @@
                     @enderror
                 </div>
 
+                <input type="text" name="website" class="hidden">
+
                 <!-- Email -->
                 <div>
                     <input type="email" name="email" placeholder="{{ __('Email') }}" value="{{ old('email') }}"
