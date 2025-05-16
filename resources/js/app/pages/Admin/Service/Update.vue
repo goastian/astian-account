@@ -35,6 +35,13 @@
                             <v-error :error="errors.description" />
                         </template>
                     </q-input>
+
+                    <q-select
+                        v-model="form.visibility"
+                        :options="visibility"
+                        label="Visibility"
+                    />
+                    <v-error :error="errors.visibility" />
                 </q-card-section>
             </div>
 
@@ -70,6 +77,7 @@ export default {
 
     data() {
         return {
+            visibility: ["private", "public"],
             errors: {
                 name: "",
                 description: "",

@@ -17,10 +17,10 @@
 @endsection
 
 @section('content')
-    <div class="grow-1 mx-4 py-4">
+    <div class="flex-grow mx-4 py-4">
         <div class="flex flex-col md:flex-row gap-4">
 
-            <div class="grow-1 mx-4">
+            <div class="flex-grow md:w-1/4 mx-0">
                 <button id="menu-toggle"
                     class="md:hidden px-4 py-2 text-white bg-indigo-600 rounded-md shadow-md hover:bg-indigo-700 transition duration-300">
                     <i class="mdi mdi-menu text-2xl"></i>
@@ -46,22 +46,22 @@
 
                     @foreach ($routes as $route => $data)
                         <li
-                            class="list-item hover:bg-indigo-100 cursor-pointer transition duration-300 {{ request()->routeIs($route) ? 'bg-indigo-50 text-blue-500' : 'text-gray-700' }}">
+                            class="hover:bg-indigo-100 cursor-pointer transition duration-300 {{ request()->routeIs($route) ? 'bg-indigo-50 text-blue-500' : 'text-gray-700' }}">
                             <a class="px-4 py-3 flex items-center gap-2" href="{{ route($route) }}">
-                                <i class="mdi {{ $data['icon'] }} text-2xl"></i> <span
-                                    class="font-medium">{{ $data['label'] }}</span>
+                                <i class="mdi {{ $data['icon'] }} text-2xl"></i>
+                                <span class="font-medium">{{ $data['label'] }}</span>
                             </a>
                         </li>
                     @endforeach
                 </ul>
             </div>
 
-            <div class="w-full h-screen md:w-3/4 ">
+            <div class="w-full md:w-3/4 h-full">
                 <form action="{{ route('settings.update') }}" method="post" autocomplete="off">
                     @method('put')
                     @csrf
                     <input type="hidden" name="current_route" value="{{ url()->current() }}">
-                    <div class="max-h-screen overflow-y-scroll">
+                    <div class="max-h-[100vh] overflow-y-auto">
                         @yield('form')
                     </div>
 
@@ -76,6 +76,7 @@
         </div>
     </div>
 @endsection
+
 
 @push('js')
     <script nonce="{{ $nonce }}">

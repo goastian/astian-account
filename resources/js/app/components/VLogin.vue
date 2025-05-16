@@ -1,10 +1,19 @@
 <template>
-    <q-dialog v-model="dialog">
+    <q-dialog v-model="dialog" persistent>
         <q-card
-            class="q-pa-lg q-rounded-xl shadow-10"
+            class="q-pa-lg q-rounded-xl shadow-10 relative-position"
             style="width: 100%; max-width: 400px"
         >
-            <q-card-section class="text-center">
+            <q-btn
+                icon="close"
+                round
+                dense
+                flat
+                class="absolute-top-right q-mt-sm q-mr-sm z-top"
+                @click="close"
+            />
+
+            <q-card-section class="text-center q-mt-md">
                 <div class="text-h5 text-weight-bold text-grey-8">
                     {{ $page.props.app_name }}
                 </div>
@@ -28,7 +37,7 @@
                     label="Password"
                     outlined
                     dense
-                    class="q-mb-sm"
+                    class="q-mb-md"
                     :error="!!errors.password"
                     :error-message="errors.password"
                 />
@@ -38,7 +47,9 @@
                         flat
                         label="Forgot your password?"
                         class="text-blue"
-                        @click="open($page.props.forgot_password)"
+                        @click="
+                            open($page.props.auth_routes['forgot_password'])
+                        "
                     />
                 </div>
 
@@ -49,6 +60,7 @@
                     outline
                     @click="login"
                 />
+
                 <div
                     v-if="$page.props.allow_register"
                     class="text-center text-sm text-grey-7 q-mt-md"
@@ -58,7 +70,7 @@
                         flat
                         label="Sign up."
                         class="text-blue"
-                        @click="open($page.props.register)"
+                        @click="open($page.props.auth_routes['register'])"
                     />
                 </div>
             </q-card-section>
@@ -68,7 +80,7 @@
 
 <script>
 export default {
-    emits: ["logged"],
+    emits: ["close"],
 
     props: {
         guest: {
@@ -102,7 +114,7 @@ export default {
         async login() {
             try {
                 const res = await this.$server.post(
-                    this.$page.props.login,
+                    this.$page.props.auth_routes["login"],
                     this.form
                 );
                 if (res.status == 200) {
@@ -112,7 +124,7 @@ export default {
                         timeout: 3000,
                     });
 
-                    this.$emit("logged", res.data.data.user);
+                    window.location.reload();
                     this.dialog = false;
                 }
             } catch (error) {}
@@ -120,6 +132,10 @@ export default {
 
         open(uri) {
             window.location.href = uri;
+        },
+
+        close() {
+            this.$emit("close", false);
         },
     },
 };

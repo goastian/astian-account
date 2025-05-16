@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\Subscription;
+namespace App\Http\Controllers\Web\Admin\Subscription;
 
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
@@ -47,7 +47,11 @@ class PlanController extends WebController
         }
 
         return Inertia::render("Admin/Plans/Index", [
-            'plans' => $this->showAllByBuilderArray($data, $plan->transformer)
+            'plans' => $this->showAllByBuilderArray($data, $plan->transformer),
+            'route' => [
+                'services' => route("admin.services.index"),
+                'plans' => route('admin.plans.index')
+            ]
         ]);
     }
 

@@ -1,20 +1,21 @@
 <?php
 
+use App\Http\Controllers\Web\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\User\UserController;
-use App\Http\Controllers\Web\User\UserGroupController;
-use App\Http\Controllers\Web\User\UserScopeController; 
-use App\Http\Controllers\Web\OAuth\ClientAdminController;
-use App\Http\Controllers\Web\Subscription\PlanController;
-use App\Http\Controllers\Web\Subscription\RoleController;
-use App\Http\Controllers\Web\Subscription\GroupController;
-use App\Http\Controllers\Web\Subscription\ScopeController;
-use App\Http\Controllers\Web\Subscription\ServiceController;
-use App\Http\Controllers\Web\Broadcasting\BroadcastController;
-use App\Http\Controllers\Web\Subscription\PlanPriceController;
-use App\Http\Controllers\Web\Subscription\PlanScopeController;
-use App\Http\Controllers\Web\Subscription\ServiceScopeController;
-use App\Http\Controllers\Web\Manager\TransactionManagerController;
+use App\Http\Controllers\Web\Admin\User\UserController;
+use App\Http\Controllers\Web\Admin\User\UserGroupController;
+use App\Http\Controllers\Web\Admin\User\UserScopeController; 
+use App\Http\Controllers\Web\Admin\OAuth\ClientAdminController;
+use App\Http\Controllers\Web\Admin\Subscription\PlanController;
+use App\Http\Controllers\Web\Admin\Subscription\RoleController;
+use App\Http\Controllers\Web\Admin\Subscription\GroupController;
+use App\Http\Controllers\Web\Admin\Subscription\ScopeController;
+use App\Http\Controllers\Web\Admin\Subscription\ServiceController;
+use App\Http\Controllers\Web\Admin\Broadcasting\BroadcastController;
+use App\Http\Controllers\Web\Admin\Subscription\PlanPriceController;
+use App\Http\Controllers\Web\Admin\Subscription\PlanScopeController;
+use App\Http\Controllers\Web\Admin\Subscription\ServiceScopeController;
+use App\Http\Controllers\Web\Admin\Manager\TransactionManagerController;
 
 /**
  *
@@ -25,6 +26,8 @@ Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
 ], function () {
+
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::resource('groups', GroupController::class)->except('edit', 'create');
     Route::resource('roles', RoleController::class)->except('create', 'edit');

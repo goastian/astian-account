@@ -40,6 +40,7 @@ class ServiceTransformer extends TransformerAbstract
             'slug' => $data->slug,
             'description' => $data->description,
             'system' => $data->system ? true : false,
+            'visibility' => $data->visibility,
             'group' => [
                 'id' => $data->id,
                 'name' => $data->group->name,
@@ -75,6 +76,7 @@ class ServiceTransformer extends TransformerAbstract
             'group_id' => "group_id",
             'created' => "created_at",
             'updated' => "updated_at",
+            'visibility' => 'visibility',
         ];
 
         return isset($attributes[$index]) ? $attributes[$index] : null;

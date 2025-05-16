@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\User;
+namespace App\Http\Controllers\Web\Admin\User;
 
 use Error;
 use Inertia\Inertia;
