@@ -14,11 +14,9 @@
                 <q-card
                     flat
                     bordered
-                    class="q-pa-lg bg-grey-1 q-gutter-y-md q-ml-sm q-mt-lg"
+                    class="q-pa-lg q-gutter-y-md q-ml-sm q-mt-lg"
                 >
-                    <div
-                        class="text-h6 text-weight-bold text-primary text-ucfirst"
-                    >
+                    <div class="text-h6 text-weight-bold text-ucfirst">
                         {{ group.name }}
                     </div>
 
@@ -30,7 +28,7 @@
                         <q-card
                             v-for="(roles, service) in group.services"
                             :key="service"
-                            class="text-primary q-pa-md"
+                            class="q-pa-md"
                             bordered
                         >
                             <div class="row items-center q-mb-sm">
@@ -40,7 +38,7 @@
                                     {{ service }}
                                 </span>
                                 <q-space />
-                                <span class="text-caption text-primary">
+                                <span class="text-caption">
                                     {{ roles[0]?.service_description || "" }}
                                 </span>
                             </div>
