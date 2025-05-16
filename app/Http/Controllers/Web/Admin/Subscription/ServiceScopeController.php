@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\Subscription;
+namespace App\Http\Controllers\Web\Admin\Subscription;
 
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;

@@ -13,6 +13,7 @@ use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\WebController;
+use Illuminate\Support\Facades\RateLimiter;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Notifications\Member\MemberCreatedAccount;
 
@@ -45,6 +46,25 @@ class RegisterClientController extends WebController
     {
         $this->checkMethod('post');
         $this->checkContentType($this->getPostHeader());
+
+        //anti bots
+        $ip = $request->ip();
+        $key = 'bots:' . $ip;
+
+        if (!empty($request->website) || RateLimiter::tooManyAttempts($key, 1)) {
+
+            if (!RateLimiter::tooManyAttempts($key, 1)) {
+                RateLimiter::hit($key, 3600 * 5);
+            }
+
+            $seconds = RateLimiter::availableIn($key);
+
+            return back()->with('error', __(
+                'Suspicious activity has been detected from your IP address. Registration has been temporarily blocked. Please try again in :minutes minutes.',
+                ['minutes' => ceil($seconds / 60)]
+            ));
+        }
+
 
         $this->validate($request, [
             'name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],

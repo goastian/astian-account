@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Home\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,15 +13,11 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
  */
+require __DIR__ . '/web/public.php';
 require __DIR__ . '/web/users.php';
 require __DIR__ . '/web/auth.php';
 require __DIR__ . '/web/oauth.php';
 require __DIR__ . '/web/webhook.php';
-require __DIR__ . '/web/public.php';
 require __DIR__ . '/web/settings.php';
 require __DIR__ . '/web/admin.php';
 require __DIR__ . '/web/partner.php';
-
-Route::get("/", function () {
-    return view('landing.home');
-});

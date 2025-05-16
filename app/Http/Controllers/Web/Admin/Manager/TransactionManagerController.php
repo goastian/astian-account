@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Web\Manager;
+namespace App\Http\Controllers\Web\Admin\Manager;
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;

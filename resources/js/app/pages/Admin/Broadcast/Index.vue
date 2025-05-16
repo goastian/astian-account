@@ -3,11 +3,23 @@
         <v-filter :params="params" @change="searching" />
         <q-toolbar class="q-ma-sm">
             <q-toolbar-title> List of channels </q-toolbar-title>
-
-            <v-create @created="getBroadcasting"></v-create>
+            <div class="row items-center q-pa-md">
+                <v-create @created="getBroadcasting"></v-create>
+                <q-space />
+                <q-btn-toggle
+                    v-model="viewMode"
+                    dense
+                    toggle-color="primary"
+                    :options="[
+                        { value: 'list', icon: 'list' },
+                        { value: 'grid', icon: 'grid_on' },
+                    ]"
+                    unelevated
+                />
+            </div>
         </q-toolbar>
 
-        <div class="row q-col-gutter-md q-ma-sm">
+        <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
             <div
                 class="col-xs-12 col-sm-6 col-md-4"
                 v-for="channel in channels"
@@ -15,7 +27,9 @@
             >
                 <q-card bordered flat>
                     <q-card-section class="q-pb-none">
-                        <div class="text-h6">{{ channel.name }}</div>
+                        <div class="text-h6">
+                            {{ channel.name }}
+                        </div>
                         <div class="text-subtitle2 text-grey">
                             {{ channel.slug }}
                         </div>
@@ -49,6 +63,45 @@
             </div>
         </div>
 
+        <div v-if="viewMode === 'list'" class="q-ma-sm">
+            <q-card flat bordered>
+                <q-card-section>
+                    <div class="text-h6">Channels Table</div>
+                </q-card-section>
+                <q-table
+                    :rows="channels"
+                    :columns="columns"
+                    row-key="id"
+                    flat
+                    bordered
+                    hide-bottom
+                    :rows-per-page-options="[search.per_page]"
+                >
+                    <template v-slot:body-cell-system="props">
+                        <q-td :props="props">
+                            <q-chip
+                                :color="props.value ? 'green' : 'red'"
+                                text-color="white"
+                                dense
+                            >
+                                {{ props.value ? "Yes" : "No" }}
+                            </q-chip>
+                        </q-td>
+                    </template>
+
+                    <template v-slot:body-cell-actions="props">
+                        <q-td :props="props">
+                            <v-destroy
+                                v-if="!props.row.system"
+                                :item="props.row"
+                                @deleted="getBroadcasting"
+                            />
+                        </q-td>
+                    </template>
+                </q-table>
+            </q-card>
+        </div>
+
         <div class="row justify-center q-mt-md">
             <q-pagination
                 v-model="search.page"
@@ -76,6 +129,25 @@ export default {
                 { key: "slug", value: "slug" },
                 { key: "System", value: "system" },
             ],
+            viewMode: "list",
+            columns: [
+                { name: "name", label: "Name", field: "name", sortable: true },
+                { name: "slug", label: "Slug", field: "slug", sortable: true },
+                {
+                    name: "description",
+                    label: "Description",
+                    field: "description",
+                    sortable: false,
+                },
+                {
+                    name: "system",
+                    label: "System",
+                    field: "system",
+                    sortable: true,
+                },
+                { name: "actions", label: "Actions", field: "actions" },
+            ],
+
             channels: [],
             pages: {
                 total_pages: 0,

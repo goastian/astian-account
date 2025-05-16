@@ -307,7 +307,7 @@
                         <q-item
                             v-for="(item, index) in scopes"
                             :key="index"
-                            class="q-mb-sm q-pa-sm bg-white shadow-1 rounded-borders"
+                            class="q-mb-sm q-pa-sm shadow-1 rounded-borders"
                         >
                             <q-item-section avatar>
                                 <q-avatar
@@ -360,7 +360,7 @@
                     </q-list>
                 </q-card-section>
 
-                <q-card-actions align="right" class="bg-white text-teal">
+                <q-card-actions align="right">
                     <q-btn
                         outline
                         color="positive"
@@ -440,11 +440,15 @@ export default {
          */
         async create() {
             try {
-                const res = await this.$server.post("/admin/plans", this.form, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+                const res = await this.$server.post(
+                    this.$page.props.route.plans,
+                    this.form,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                        },
+                    }
+                );
 
                 if (res.status == 201) {
                     this.clean();
@@ -465,11 +469,15 @@ export default {
 
         async getServices() {
             try {
-                const res = await this.$server.get("/api/admin/services", {
-                    params: {
-                        per_page: 500,
-                    },
-                });
+                const res = await this.$server.get(
+                    this.$page.props.route.services,
+                    {
+                        params: {
+                            per_page: 500,
+                            visibility: "public",
+                        },
+                    }
+                );
 
                 if (res.status == 200) {
                     this.services = res.data.data;

@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Web\Account;
 
+use App\Transformers\Partner\DataTransformer;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\User\Partner;
@@ -18,43 +19,75 @@ class PartnerController extends WebController
     }
 
     /**
-     * Show dashboard
-     * @return \Inertia\Response
+     * Summary of dashboard
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Subscription\Transaction $transaction
+     * @return \Inertia\Response | array
      */
     public function dashboard(Request $request, Transaction $transaction)
     {
-        $data = $transaction->query();
+        //Retrieve the user partner code
+        $partnerCode = auth()->user()->partner->code ?? null;
 
-        $data = $transaction->whereHas(
-            'partner',
-            function ($query) {
-                $query->where('code', auth()->user()->partner->code ?? null);
-            }
-        );
+        //type of filter by day , month or year
+        $type = $request->type ?? 'day';
+        $time = searchByDate($type);
 
+        //Generate a transaction query
+        $data = $transaction->newQuery();
+
+        //Retrieve transactions by partner code
+        $data->whereHas('partner', function ($query) use ($partnerCode) {
+            $query->where('code', $partnerCode);
+        });
+
+        //Filter by only status is successfully
         $data->where('status', config('billing.status.successful.name'));
 
+        //Apply filter between days
         if ($request->has('start') && $request->has('end')) {
             $data->whereBetween('created_at', [$request->start, $request->end]);
         }
 
-        $values = fractal($data->get(), TransactionTransformer::class)->toArray()['data'];
+        //Make a query to filter data
+        $data->selectRaw("
+                TO_CHAR(created_at, '{$time}') as date,  
+                COUNT(id) as total,
+                currency,
+                ROUND(SUM(total * (partner_commission_rate / 100))) as commission
+            ")
+            ->groupByRaw("TO_CHAR(created_at, '{$time}'), currency")
+            ->orderByRaw("TO_CHAR(created_at, '{$time}')");
 
-        $totalCommission = 0;
+        //Get all data
+        $data = $data->get();
+        //Sum all transactions
+        $total_sales = $data->sum(function ($item) {
+            return $item->total++;
+        });
 
-        foreach ($values as &$item) {
-            $commission = round($item['cents'] * ($item['partner_commission_rate'] / 100), 0);
-            $totalCommission += $commission;
-        }
+        //Sum commission by currency
+        $total_commissions = $data
+            ->groupBy('currency')
+            ->map(function ($items, $currency) {
+                $sum = $items->sum('commission');
+                return [
+                    'currency' => $currency,
+                    'total' => $this->formatMoney($sum),
+                ];
+            })
+            ->values()
+            ->toArray();
 
+        //Make output data
         $meta = [
-            'counter' => count($values),
-            'values' => $values,
-            'total' => $totalCommission
+            "data" => fractal($data, DataTransformer::class)->toArray()['data'],
+            "total_sales" => $total_sales,
+            "total_commission" => $total_commissions
         ];
 
-        if (request()->wantsJson()) {
-            return $this->data($meta);
+        if ($request->wantsJson()) {
+            return $meta;
         }
 
         return Inertia::render("Partner/Index", [
@@ -63,6 +96,7 @@ class PartnerController extends WebController
         ]);
     }
 
+
     /**
      * Show referral link
      * @return \Inertia\Response
@@ -70,7 +104,7 @@ class PartnerController extends WebController
     public function show()
     {
         $partner = auth()->user()->partner;
-        
+
         return Inertia::render("Partner/Refer", [
             "partner" => isset($partner) ? $partner->meta() : [],
             "route" => route('partners.generate'),

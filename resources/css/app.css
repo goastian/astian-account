@@ -1,3 +1,4 @@
-@import "tailwindcss";
-@source "../views";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import "flatpickr";

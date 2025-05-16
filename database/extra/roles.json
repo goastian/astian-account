@@ -82,5 +82,9 @@
     {
         "name": "advanced",
         "description": "Unlocks all premium features with full access and support."
+    },
+    {
+        "name": "dashboard",
+        "description": "Grants full access to the dashboard, including analytics, user management, and system controls."
     }
 ]

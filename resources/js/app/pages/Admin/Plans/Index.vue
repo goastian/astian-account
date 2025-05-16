@@ -52,12 +52,7 @@
                                 <q-icon name="vpn_key" class="q-mr-sm" /> Scopes
                             </div>
                             <div v-if="plan.scopes.length">
-                                <q-list
-                                    dense
-                                    bordered
-                                    padding
-                                    class="bg-grey-1"
-                                >
+                                <q-list dense bordered padding>
                                     <q-expansion-item
                                         v-for="(item, index) in plan.scopes"
                                         :key="index"
@@ -198,7 +193,7 @@ export default {
     methods: {
         async getPlans() {
             try {
-                const res = await this.$server.get("/admin/plans");
+                const res = await this.$server.get(this.$page.props.route.plans);
 
                 if (res.status == 200) {
                     this.plans = res.data.data;

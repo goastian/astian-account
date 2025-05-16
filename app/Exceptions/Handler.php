@@ -78,10 +78,25 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
+        //check the page exists
+        if ($e instanceof NotFoundHttpException) {
+
+            //The request wants json 
+            if (request()->wantsJson()) {
+                throw new ReportError(__("Page not found"), 404);
+            }   
+            //check if it the users is authenticable
+            if (auth()->check()) {
+                return redirect()->route('users.dashboard');
+            }
+            //redirect to the login
+            return redirect()->route('login')->with('error', __("Page not found"));
+        }
 
         if ($e instanceof ModelNotFoundException) {
             throw new ReportError(__("Not Found"), 404);
         }
+
 
         if ($e instanceof TokenMismatchException) {
             if (request()->wantsJson()) {

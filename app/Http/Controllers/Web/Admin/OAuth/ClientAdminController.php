@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Web\OAuth;
+namespace App\Http\Controllers\Web\Admin\OAuth;
 
 use Inertia\Inertia;
 use App\Rules\BooleanRule;

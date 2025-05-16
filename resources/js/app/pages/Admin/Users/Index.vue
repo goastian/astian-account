@@ -1,19 +1,39 @@
 <template>
     <v-admin-layout>
+        <!-- Filters and Create Button -->
         <v-filter :params="params" @change="searching" />
 
-        <q-toolbar class="q-ma-sm">
-            <q-toolbar-title> List of users </q-toolbar-title>
+        <q-toolbar class="q-ma-sm flex items-center justify-between">
+            <q-toolbar-title>List of Users</q-toolbar-title>
 
-            <v-create @created="getUsers"></v-create>
+            <div class="row items-center q-pa-md">
+                <!-- Create Button -->
+                <div class="q-mr-sm">
+                    <v-create @created="getUsers" />
+                </div>
+
+                <!-- Toggle View Mode -->
+                <q-btn-toggle
+                    v-model="viewMode"
+                    dense
+                    toggle-color="primary"
+                    :options="[
+                        { value: 'list', icon: 'list' },
+                        { value: 'grid', icon: 'grid_on' },
+                    ]"
+                    unelevated
+                />
+            </div>
         </q-toolbar>
-        <div class="row q-col-gutter-md q-ma-sm">
+
+        <!-- Grid View (Cards) -->
+        <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
             <div
                 class="col-xs-12 col-sm-6 col-md-4"
                 v-for="user in users"
                 :key="user.id"
             >
-                <q-card flat bordered>
+                <q-card flat bordered class="shadow-2">
                     <q-card-section class="q-pb-none">
                         <div class="text-h6 text-grey-7">
                             {{ user.name }} {{ user.last_name }}
@@ -39,6 +59,44 @@
             </div>
         </div>
 
+        <!-- List View (Table) -->
+        <div v-if="viewMode === 'list'" class="q-pa-md">
+            <q-table
+                :rows="users"
+                :columns="columns"
+                row-key="id"
+                class="shadow-1"
+                flat
+                bordered
+                hide-bottom
+                :rows-per-page-options="[search.per_page]"
+            >
+                <template v-slot:body-cell-actions="props">
+                    <q-td align="right">
+                        <v-update
+                            ref="update_{{ props.row.id }}"
+                            :item="props.row"
+                            @updated="getUsers"
+                        />
+                        <v-scopes
+                            ref="scopes_{{ props.row.id }}"
+                            :item="props.row"
+                        />
+                        <v-revoke
+                            ref="revoke_{{ props.row.id }}"
+                            :item="props.row"
+                        />
+                        <v-status
+                            ref="status_{{ props.row.id }}"
+                            :item="props.row"
+                            @updated="getUsers"
+                        />
+                    </q-td>
+                </template>
+            </q-table>
+        </div>
+
+        <!-- Pagination -->
         <div class="row justify-center q-mt-md">
             <q-pagination
                 v-model="search.page"
@@ -49,6 +107,7 @@
         </div>
     </v-admin-layout>
 </template>
+
 <script>
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
@@ -66,9 +125,33 @@ export default {
 
     data() {
         return {
+            viewMode: "list",
+            columns: [
+                {
+                    name: "name",
+                    label: "Name",
+                    field: (row) => `${row.name} ${row.last_name}`,
+                    sortable: true,
+                    align: "left",
+                },
+                {
+                    name: "email",
+                    label: "Email",
+                    field: "email",
+                    sortable: true,
+                    align: "left",
+                },
+                {
+                    name: "actions",
+                    label: "Actions",
+                    field: "actions",
+                    sortable: false,
+                    align: "center",
+                },
+            ],
             params: [
                 { key: "Name", value: "name" },
-                { key: "Last name", value: "last_name" },
+                { key: "Last Name", value: "last_name" },
                 { key: "Email", value: "email" },
                 { key: "Created", value: "created" },
                 { key: "Updated", value: "updated" },
@@ -110,11 +193,12 @@ export default {
         searching(event) {
             this.getUsers(event);
         },
+
         /**
          * Get the all users
          */
         async getUsers(param = null) {
-            //setting searching params
+            // Setting search params
             var params = {};
             Object.assign(params, this.search);
             Object.assign(params, param);

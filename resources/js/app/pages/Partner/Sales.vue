@@ -22,7 +22,8 @@
                                 (
                                     (parseFloat(props.row.total || 0) *
                                         parseFloat(
-                                            props.row.partner_commission_rate || 0
+                                            props.row.partner_commission_rate ||
+                                                0
                                         )) /
                                     100
                                 ).toFixed(2)
@@ -58,7 +59,6 @@ export default {
         return {
             sales: [],
             columns: [
-                { name: "id", label: "ID", field: "id", align: "left" },
                 {
                     name: "currency",
                     label: "Currency",

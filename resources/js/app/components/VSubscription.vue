@@ -34,7 +34,7 @@
                     <strong>Billing Period:</strong>
                     {{ period?.billing_period }} <br />
                     <strong>Amount:</strong>
-                    {{ period?.currency }} {{ period?.amount }} <br />
+                    {{ period?.currency }} {{ period?.amount_format }} <br />
                     <strong>Expires:</strong>
                     {{ period?.expiration }} <br />
                     <strong>Payment Method:</strong>
@@ -54,7 +54,7 @@
             />
         </div>
 
-        <v-login :guest="guest" @logged="updateUser" />
+        <v-login :guest="guest" @close="guest = false" />
     </div>
 </template>
 

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\Setting\SettingController;
+use App\Http\Controllers\Web\Admin\Setting\SettingController;
 
 
 Route::group([
