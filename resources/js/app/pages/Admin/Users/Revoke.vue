@@ -27,7 +27,7 @@
                     :key="groupName"
                     class="q-pa-md"
                 >
-                    <div class="text-h5 text-indigo-10 q-mb-md text-ucfirst">
+                    <div class="text-h5 q-mb-md text-ucfirst">
                         {{ groupName }}
                     </div>
 
@@ -37,7 +37,7 @@
                         class="q-mb-sm q-mb-md"
                     >
                         <div
-                            class="text-subtitle1 text-blue-9 q-mb-sm text-ucfirst grey-3 q-rounded-borders shadow-1 q-pa-sm"
+                            class="text-subtitle1 q-mb-sm text-ucfirst grey-3 q-rounded-borders shadow-1 q-pa-sm"
                         >
                             {{ serviceName }}
 
@@ -45,7 +45,7 @@
                                 <q-card
                                     v-for="(item, index) in roles"
                                     :key="index"
-                                    class="col-12 q-pa-sm q-ma-sm bg-grey-1"
+                                    class="col-12 q-pa-sm q-ma-sm"
                                     flat
                                     bordered
                                 >
@@ -60,9 +60,7 @@
                                             >
                                                 {{ item.scope.role.name }}
                                             </q-chip>
-                                            <div
-                                                class="text-caption text-grey-7"
-                                            >
+                                            <div class="text-caption">
                                                 {{
                                                     item.scope.role.description
                                                 }}
