@@ -73,6 +73,7 @@ class RegisterClientController extends WebController
             'password' => ['required', 'confirmed', 'min:8', 'max:60'],
             'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
             'accept_terms' => ['required', new BooleanRule()],
+            'accept_cookies' => ['nullable', new BooleanRule()],
             'referral_code' => ['nullable'],
         ]);
 
@@ -85,6 +86,7 @@ class RegisterClientController extends WebController
         DB::transaction(function () use ($request, $user, $group) {
             $user = $user->fill($request->except('password'));
             $user->password = Hash::make($request->password);
+            $user->accept_cookies = $request->accept_cookies ? true : false;
 
             if ($request->referral_code) {
                 $partner = Partner::where('code', $request->referral_code)->first();
