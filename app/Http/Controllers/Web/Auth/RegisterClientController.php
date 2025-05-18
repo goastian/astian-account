@@ -11,6 +11,7 @@ use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\RateLimiter;
@@ -52,6 +53,8 @@ class RegisterClientController extends WebController
         $key = 'bots:' . $ip;
 
         if (!empty($request->website) || RateLimiter::tooManyAttempts($key, 1)) {
+
+            Log::info("Bot detected from $ip and has been locked");
 
             if (!RateLimiter::tooManyAttempts($key, 1)) {
                 RateLimiter::hit($key, 3600 * 5);
