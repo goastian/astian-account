@@ -211,7 +211,15 @@ export default {
                         timeout: 3000,
                     });
                 }
-            } catch (error) {}
+            } catch (error) {
+                if (error.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: error.response.data.message,
+                        timeout: 3000,
+                    });
+                }
+            }
         },
     },
 };
