@@ -7,6 +7,18 @@
         </div>
 
         <div class="w-full md:w-3/4 space-y-4">
+            <div class="mb-4 px-2 py-2">
+                <label for="app_name" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('Organization name') }}
+                </label>
+                <input id="app_name" type="text" name="app[org_name]"
+                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    placeholder="{{ __('Enter the organization name') }}" value="{{ config('app.org_name') }}">
+                <small class="block mt-1 text-gray-600">
+                    {{ __('This field specifies the name of the organization') }}
+                </small>
+            </div>
+
 
             <div class="mb-4 px-2 py-2">
                 <label for="app_name" class="block text-sm font-medium text-gray-700 mb-2">
@@ -61,13 +73,26 @@
 
             <div class="mb-4 px-2 py-2">
                 <label for="home_page" class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ __('Policy services URL') }}
+                    {{ __('Service Agreement URL') }}
                 </label>
-                <input type="text" name="system[policy_services]"
+                <input type="text" name="system[service_agreement]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    value="{{ config('system.policy_services') }}">
-                <small
-                    class="block mt-1 text-gray-600">{{ __('This field specifies the URL of the home page of the application') }}</small>
+                    value="{{ config('system.service_agreement') }}">
+                <small class="block mt-1 text-gray-600">
+                    {{ __('This field specifies the URL where users can read the Service Agreement.') }}
+                </small>
+            </div>
+
+            <div class="mb-4 px-2 py-2">
+                <label for="home_page" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('Service Statement URL') }}
+                </label>
+                <input type="text" name="system[service_statement]"
+                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                    value="{{ config('system.service_statement') }}">
+                <small class="block mt-1 text-gray-600">
+                    {{ __('This field specifies the URL where users can read the Policy Statement.') }}
+                </small>
             </div>
 
             <div class="mb-4 px-2 py-2">
@@ -77,8 +102,9 @@
                 <input type="text" name="system[policy_cookies]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     value="{{ config('system.policy_cookies') }}">
-                <small
-                    class="block mt-1 text-gray-600">{{ __('This field specifies the URL of the home page of the application') }}</small>
+                <small class="block mt-1 text-gray-600">
+                    {{ __('This field specifies the URL where users can read the Cookies Policy.') }}
+                </small>
             </div>
 
 

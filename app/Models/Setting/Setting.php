@@ -35,6 +35,7 @@ class Setting extends Master
         }
 
         Config::set('app.name', settingItem('app.name', 'Oauth2 Server'));
+        Config::set('app.org_name', settingItem('app.org_name', 'Oauth2 org'));
 
         Config::set('passport.personal_access_client.id', settingItem('passport_personal_access_client_id'));
         Config::set('passport.personal_access_client.secret', settingItem('passport_personal_access_client_secret'));
@@ -59,6 +60,7 @@ class Setting extends Master
 
         //App name
         settingLoad('app.name', 'Oauth2 Server');
+        settingLoad('app.org_name', 'Server org');
 
         //expires time for reset password
         settingLoad('auth.passwords.users.expire', 10);
@@ -219,7 +221,8 @@ class Setting extends Master
         settingLoad('system.enable_register_member', true);
         settingLoad('system.csp_enabled', true);
         settingLoad('system.redirect_to', "/account");
-        settingLoad('system.policy_services', null);
+        settingLoad('system.service_statement', null);
+        settingLoad('system.service_services', null);
         settingLoad('system.policy_cookies', null);
 
         //Session settings
@@ -453,7 +456,8 @@ class Setting extends Master
         Config::set('system.enable_register_member', settingItem('system.enable_register_member', true));
         Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
-        Config::set('system.policy_services', settingItem('system.policy_services', null));
+        Config::set('system.service_statement', settingItem('system.service_statement', null));
+        Config::set('system.service_services', settingItem('system.service_services', null));
         Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
 
         Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));

@@ -36,6 +36,7 @@ return [
     "csp_enabled" => false,
 
     //Policies
-    "policy_services" => null,
-    "policy_cookies" => null
+    "service_agreement" => null,
+    "service_statement" => null,
+    "policy_cookies" => null,
 ];
