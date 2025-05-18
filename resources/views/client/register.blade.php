@@ -53,7 +53,7 @@
                 <!-- Birthday -->
                 <div>
                     <input type="text" name="birthday" placeholder="{{ __('Birthday') }}" value="{{ old('birthday') }}"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        class="w-full date px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                     @error('birthday')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
