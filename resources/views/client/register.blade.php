@@ -12,7 +12,7 @@
             <div class="text-center mb-3">
                 <h2 class="text-2xl font-bold text-gray-800">{{ __('Create a new Account') }}</h2>
                 <p class="text-sm text-gray-600 mt-1">
-                    {{ __('Join us and enjoy a new :name privacy and security.', ['name' => config('app.name')]) }}
+                    {{ __('Join :name and enjoy enhanced privacy and security.', ['name' => config('app.org_name')]) }}
                 </p>
             </div>
 
@@ -86,20 +86,33 @@
                         class="mt-1 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-400">
                     <label for="accept_terms">
                         {{ __('By choosing this option, you accept the') }}
-                        <a href="{{ config('system.home_page') }}" target="_blank" class="text-blue-600 hover:underline">
-                            {{ config('app.name') }}
-                        </a>,
-                        <a href="{{ config('system.policy_services') }}" target="_blank"
+                        <a href="{{ config('system.service_agreement') }}" target="_blank"
                             class="text-blue-600 hover:underline">
-                            Services Agreement, Privacy Statement
-                        </a>, {{ __('and') }}
-                        <a href="{{ config('system.policy_cookies') }}" target="_blank"
+                            {{ __('Services Agreement') }}</a> {{ __('and') }}
+                        <a href="{{ config('system.service_statement') }}" target="_blank"
                             class="text-blue-600 hover:underline">
-                            Cookies Policy
-                        </a>.
+                            {{ 'Privacy Statement.' }}
+                        </a>
                     </label>
                 </div>
                 @error('accept_terms')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+
+
+                <div class="flex items-start gap-2 text-sm text-gray-600">
+                    <input type="checkbox" name="accept_cookies" id="accept_cookies" value="1"
+                        class="mt-1 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-400">
+                    <label for="accept_cookies">
+                        {{ __('By choosing this option, you accept the') }}
+                        <a href="{{ config('system.policy_cookies') }}" target="_blank"
+                            class="text-blue-600 hover:underline">
+                            {{ __('Cookies Policy') }}.
+                        </a>
+                    </label>
+                </div>
+
+                @error('accept_cookies')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
 
