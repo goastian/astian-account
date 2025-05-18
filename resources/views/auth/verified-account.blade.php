@@ -42,7 +42,7 @@
                     {{ __('Thank you for verifying your email address. Your account is now fully activated.') }}
                 </p>
                 <div class="space-y-3">
-                    <a href=""
+                    <a href="{{ config('system.redirect_to') }}"
                         class="block w-full px-6 py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition duration-150">
                         {{ __('Continue to Dashboard') }}
                     </a>
