@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Web\Admin\DashboardController;
+use App\Http\Controllers\Web\Admin\DashboardController; 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Admin\User\UserController;
 use App\Http\Controllers\Web\Admin\User\UserGroupController;
@@ -26,6 +26,8 @@ Route::group([
     'prefix' => 'admin',
     'as' => 'admin.',
 ], function () {
+
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 

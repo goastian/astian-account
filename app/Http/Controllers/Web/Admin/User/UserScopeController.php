@@ -8,7 +8,7 @@ use App\Models\User\UserScope;
 use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\WebController;
-use Illuminate\Database\QueryException; 
+use Illuminate\Database\QueryException;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class UserScopeController extends WebController
@@ -132,7 +132,7 @@ class UserScopeController extends WebController
      */
     public function revoke(Request $request, User $user, UserScope $scope)
     {
-        if ($user->id != $scope->user_id) {
+        if (($user->id == auth()->user()->id) || ($user->id != $scope->user_id)) {
             throw new ReportError(__('Invalid request'), 400);
         }
 
