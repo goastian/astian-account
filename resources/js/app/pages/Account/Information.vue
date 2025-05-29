@@ -164,7 +164,7 @@
 
                     <div class="col column card state">
                         <div class="column q-gutter-y-md">
-                            <h3 class="subtitle">Estado del Perfil</h3>
+                            <h3 class="subtitle">Profile Status</h3>
                             <div
                                 class="row items-center no-wrap q-gutter-x-sm"
                                 v-if="!form['phone']?.trim()"
@@ -172,7 +172,7 @@
                                 <div class="container-icon danger">
                                     <q-icon class="icon danger" name="mdi-alert-circle-outline" />
                                 </div>
-                                <span>Falta tu número de teléfono para proteger tu cuenta.</span>
+                                <span>We need your phone number to help protect your account.</span>
                             </div>
                             <div
                                 class="row items-center no-wrap q-gutter-x-sm"
@@ -181,21 +181,21 @@
                                 <div class="container-icon warning">
                                     <q-icon class="icon warning" name="mdi-alert" />
                                 </div>
-                                <span>Aún faltan algunos datos en tu perfil.</span>
+                                <span>Some information is still missing from your profile.</span>
                             </div>
                             <div v-else class="row no-wrap q-gutter-x-md">
                                 <span>
                                     ✅
                                 </span>
                                 <span>
-                                    ¡Tu perfil está completo!
-                                    Gracias por proporcionar toda tu información. Esto ayuda a mantener tu cuenta segura y personalizada.
+                                    Your profile is complete!
+                                    Thank you for providing all your information. This helps keep your account secure and personalized.
                                 </span>
                             </div>
                         </div>
                         <div>
                             <div class="row justify-between">
-                                <span>Completado</span>
+                                <span>Completed</span>
                                 <span>{{ progress() }}%</span>
                             </div>
                             <div class="loader-wrapper">
@@ -203,7 +203,7 @@
                             </div>
                         </div>
                         <div v-if="!validatedForm()">
-                            <span>Información pendiente:</span>
+                            <span>Pending information:</span>
                             <div
                                 v-for="(item, index) in info"
                             >
