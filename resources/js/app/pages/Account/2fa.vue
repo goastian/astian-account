@@ -2,16 +2,44 @@
     <v-user-layout>
         <q-page padding>
             <div class="row q-col-gutter-md">
-                <div class="col q-ma-sm">
-                    <q-card bordered>
-                        <q-card-section>
-                            <q-toolbar class="q-ma-sm">
-                                <q-toolbar-title class="text-grey-7">
-                                    Two Factor Authentication
-                                </q-toolbar-title>
+                <div class="container-card col column items-center">
+                    <q-card bordered class="column card">
+                        <div class="column items-center card-top">
+                            <div class="container-icon row justify-center items-center">
+                                <q-icon name="mdi-shield-outline" />
+                            </div>
+                            <h2 class="title">
+                                Two Factor Authentication
+                            </h2>
+                            <span class="description">
+                                Enter the 6-digit code we sent to your email address to continue.
+                            </span>
+                        </div>
+                        <div class="column q-gutter-y-md">
+                            <div class="column text-start q-gutter-y-md">
+                                <label class="label">Enter Verification code</label>
+                                <div class="code-container">
+                                    <input
+                                        v-for="(digit, index) in code"
+                                        :key="index"
+                                        type="text"
+                                        class="code-input"
+                                        maxlength="1"
+                                        v-model="code[index]"
+                                        @input="onInput(index)"
+                                        @keydown.backspace="onBackspace(index)"
+                                        ref="inputs"
+                                    />
+                                </div>
+                                <span v-if="errorMessage" class="error-message">{{ errorMessage.token[0] }}</span>
+                            </div>
+                            <div class="column q-gutter-y-md items-center">
                                 <q-btn
-                                    icon="mdi-check-decagram-outline"
-                                    :color="user.m2fa ? 'positive' : 'negative'"
+                                    :label="user.m2fa ? 'Deactivate' : 'Activate'"
+                                    :color="user.m2fa ? 'negative' : 'positive'"
+                                    @click="activateFactor"
+                                    color="negative"
+                                    class="full-width"
                                 >
                                     <q-tooltip
                                         transition-show="rotate"
@@ -24,44 +52,14 @@
                                         }}
                                     </q-tooltip>
                                 </q-btn>
-                            </q-toolbar>
-                        </q-card-section>
-                        <q-card-section>
-                            <q-input
-                                v-model="token"
-                                label="Insert Code ..."
-                                outlined
-                                dense
-                            />
-                            <v-error :error="errors.token" />
-                        </q-card-section>
-
-                        <q-card-actions align="between">
-                            <q-btn
-                                @click="requestCode"
-                                label="Request token"
-                                color="positive"
-                                outline
-                            />
-                            <q-btn
-                                :label="user.m2fa ? 'Deactivate' : 'Activate'"
-                                :color="user.m2fa ? 'negative' : 'positive'"
-                                @click="activateFactor"
-                                outline
-                                color="negative"
-                            >
-                                <q-tooltip
-                                    transition-show="rotate"
-                                    transition-hide="rotate"
-                                >
-                                    {{
-                                        user.m2fa
-                                            ? "2FA Activated"
-                                            : "2FA inactive"
-                                    }}
-                                </q-tooltip>
-                            </q-btn>
-                        </q-card-actions>
+                                <q-btn
+                                    @click="requestCode"
+                                    label="Request token"
+                                    class="btn-request"
+                                    flat
+                                />
+                            </div>
+                        </div>
                     </q-card>
                 </div>
             </div>
@@ -75,13 +73,14 @@ export default {
         return {
             token: "",
             user: {},
-            errors: {},
+            errorMessage: "",
+            code: Array(6).fill(""),
         };
     },
     mounted() {
         this.listener();
-
         this.user = this.$page.props.user;
+        this.$refs.inputs[0].focus();
     },
     methods: {
         popup(message, type = "positive") {
@@ -120,7 +119,7 @@ export default {
                 const res = await this.$server.post(
                     this.user.links.f2a_activate,
                     {
-                        token: this.token,
+                        token: this.code.join(""),
                     }
                 );
                 if (res.status === 201) {
@@ -129,9 +128,13 @@ export default {
                     this.popup("2FA has been activated successfully");
                     this.getAuthUser();
                 }
+                if(res.status === 200) {
+                    this.errorMessage = '';
+                    this.popup(res.data.message, "warning");
+                }
             } catch (err) {
                 if (err.response) {
-                    this.errors = err.response.data.errors;
+                    this.errorMessage = err.response.data.errors;
                 }
             }
         },
@@ -143,6 +146,107 @@ export default {
                     this.getAuthUser();
                 });
         },
+
+        validated(value) {
+            if(value === "") {
+                return 'Ingresar Codigo';
+            } else if(value.length < 6) {
+                return 'El código debe tener 6 dígitos';
+            } else {
+                return true;
+            }
+        },
+
+        onInput(index) {
+            const value = this.code[index];
+            if (!/^\d$/.test(value)) {
+                this.code[index] = "";
+                return;
+            }
+
+            if (index < this.code.length - 1) {
+                this.$refs.inputs[index + 1].focus();
+            }
+        },
+
+        onBackspace(index) {
+            if (!this.code[index] && index > 0) {
+                this.$refs.inputs[index - 1].focus();
+            }
+        },
     },
 };
 </script>
+
+<style scoped>
+.container-card {
+    padding: 3rem;
+}
+
+.card {
+    background-color: var(--q-background-primary);
+    width: 410px;
+    text-align: center;
+    padding: 1.6rem;
+    gap: 1rem;
+}
+
+.card-top {
+    gap: 1rem;
+}
+
+.container-icon {
+    background-color: var(--q-color-blue-light);
+    padding: 1rem;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+}
+
+.container-icon > .q-icon {
+    color: var(--q-color-blue);
+    font-size: 30px;
+}
+
+.title {
+    color: var(--q-color);
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 30px;
+}
+
+.description {
+    color: var(--q-color-secondary);
+    font-size: 1rem;
+}
+
+.btn-request {
+    width: 100%;
+    border-radius: .3rem;
+}
+
+.label {
+    color: var(--q-color);
+}
+
+.code-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.code-input {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  text-align: center;
+  border: 1.7px solid #ccc;
+  border-radius: 8px;
+  background-color: var(--q-background-primary);
+}
+
+.code-input:focus {
+  border-color: var(--q-primary);
+  outline: none;
+}
+</style>
