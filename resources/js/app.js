@@ -20,6 +20,8 @@ import "@vuepic/vue-datepicker/dist/main.css";
 //icons https://pictogrammers.com/library/mdi/
 import "@mdi/font/css/materialdesignicons.css";
 
+import "@fontsource/outfit";
+
 createInertiaApp({
     resolve: (name) => {
         const pages = require.context("./app/pages", true, /\.vue$/);
