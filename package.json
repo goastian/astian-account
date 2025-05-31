@@ -30,6 +30,7 @@
         "webpack-dev-server": "^5.0.2"
     },
     "dependencies": {
+        "@fontsource/outfit": "^5.2.5",
         "@inertiajs/vue3": "^2.0.8",
         "@mdi/font": "^7.4.47",
         "@popperjs/core": "^2.11.8",
