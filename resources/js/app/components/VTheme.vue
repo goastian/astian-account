@@ -1,5 +1,5 @@
 <template>
-    <div class="q-pa-md">
+    <div>
         <q-select
             filled
             dense
