@@ -37,6 +37,9 @@ class Menu
                 "register" => route('register'),
                 "logout" => route('logout'),
             ],
+            "accounts_routes" => [
+                "suscriptions" => route('users.subscriptions.index'),
+            ],
             "guest_routes" => [
                 "home_page" => url(config('system.home_page')),
                 "plans" => route('plans.index')
