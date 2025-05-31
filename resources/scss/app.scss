@@ -13,6 +13,22 @@
     --q-warning: #ffb300;
     --q-dark: #263238;
     --q-dark-page: #1e1e1e;
+    --q-border: #E5E5E5;
+    --q-background-primary: #fff;
+    --q-background-secondary: #F1F5F9;
+    --q-color: #272727;
+    --q-color-secondary: #767676;
+    --q-color-green: #00A12B;
+    --q-color-green-light: #BBFFCE;
+    --q-color-red: #E97575;
+    --q-color-red-light: #FFBCBC;
+    --q-color-yellow: #B89900;
+    --q-color-yellow-light: #FFF4BB;
+    --q-color-blue: #37BBCF;
+    --q-color-blue-light: #CFF9FF;
+    --q-background-green: #ACF2BF;
+    --q-background-gradient-one: #1e3a8a;
+    --q-background-gradient-two: #1e293b;
 }
 
 /* Dark theme */
@@ -26,6 +42,11 @@
     --q-warning: #ffa000;
     --q-dark: #121212;
     --q-dark-page: #0d0d0d;
+    --q-border: #525252;
+    --q-background-primary: #121212;
+    --q-background-secondary: #2A2727;
+    --q-color: #dfdfdf;
+    --q-color-red-light: #fee2e2;
 }
 
 /* Red theme */
@@ -41,6 +62,18 @@
     --q-dark-page: #121212;
 }
 
+body {
+  font-family: 'Outfit', sans-serif !important;
+}
+
 .text-ucfirst::first-letter {
     text-transform: uppercase;
+}
+
+.q-layout {
+    background-color: var(--q-background-primary);
+}
+
+.q-layout-padding {
+    padding: 0 !important;
 }
