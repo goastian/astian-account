@@ -77,3 +77,11 @@ body {
 .q-layout-padding {
     padding: 0 !important;
 }
+
+
+
+@media (max-width: 470px) {
+    .header-title {
+        display: none !important;
+    }
+}
