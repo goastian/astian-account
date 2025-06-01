@@ -131,7 +131,9 @@ export default {
         },
 
         open(uri) {
-            window.location.href = uri;
+            const currentParams = window.location.search;
+            const newUrl = uri + currentParams;
+            window.location.href = newUrl;
         },
 
         close() {
