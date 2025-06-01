@@ -161,7 +161,7 @@ class Menu
             ],
             [
                 "name" => "Settings",
-                "route" => route("settings.general"),
+                "route" => route("admin.settings.general"),
                 "icon" => "mdi-cogs",
                 'show' => true,
             ],
