@@ -1,12 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Web\Admin\Subscription;
-
-use App\Http\Controllers\ApiController;
+ 
 use App\Models\Subscription\Plan;
 use App\Models\Subscription\Scope;
+use App\Http\Controllers\WebController;
 
-class PlanScopeController extends ApiController
+class PlanScopeController extends WebController
 {
 
     public function __construct()

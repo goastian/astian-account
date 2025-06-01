@@ -82,8 +82,7 @@ class BroadcastController extends WebController
             $broadcast->save();
         });
 
-        $this->privateChannel("StoreBroadcastEvent", "New channel created");
-
+        
         return $this->showOne($broadcast, $broadcast->transformer, 201);
     }
 
@@ -107,9 +106,7 @@ class BroadcastController extends WebController
         $this->checkContentType(null);
 
         $broadcast->delete();
-
-        $this->privateChannel("DestroyBroadcastEvent", "Channel deleted");
-
+ 
         return $this->showOne($broadcast, $broadcast->transformer);
     }
 }
