@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers\Web\Account;
 
-use App\Http\Controllers\ApiController as Controller;
 use App\Models\Notify\Notification;
-use App\Transformers\Notification\NotificationTransformer;
+use App\Http\Controllers\WebController;
 use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Transformers\Notification\NotificationTransformer;
 
-class UserNotificationController extends Controller
+class UserNotificationController extends WebController
 {
     /**
      * show the all notifications of the users
@@ -55,8 +55,7 @@ class UserNotificationController extends Controller
         $notification->push();
 
         //send event
-        $this->privateChannel("ReadNotificationEvent", "Notification read successfully");
-
+        
         return $this->message(__('notification marked as read'), 201);
     }
 
@@ -68,8 +67,6 @@ class UserNotificationController extends Controller
     {
         request()->user()->unreadNotifications->markAsRead();
 
-        //send event
-        $this->privateChannel("ReadNotificationEvent", "Notification read");
 
         return $this->message(__('notifications marked as read'), 201);
     }
@@ -85,8 +82,7 @@ class UserNotificationController extends Controller
 
         $notification->delete();
 
-        //send event
-        $this->privateChannel("DestroyNotificationEvent", "Notification deleted");
+        //send event 
 
         return $this->message(__('Notification deleted successfully'), 200);
     }
@@ -100,8 +96,7 @@ class UserNotificationController extends Controller
         request()->user()->notifications()->delete();
 
         //send event
-        $this->privateChannel("DestroyNotificationEvent", "Notifications deleted successfully");
-
+        
         return $this->message(__('Notifications deleted successfully'), 200);
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Traits\Standard;
 use Elyerr\ApiResponse\Assets\Asset;
-use Elyerr\EchoClient\Socket\Socket;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\TokenRepository;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +17,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, Socket, Standard, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
+    use AuthorizesRequests, Standard, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
 
     /**
      * Order by collection using params order_by and order_type
