@@ -169,7 +169,7 @@ class ServiceController extends WebController
 
         $service->delete();
 
-        $this->privateChannel("GroupDeleted", "Group deleted");
+
 
         return $this->showOne($service, $service->transformer);
     }

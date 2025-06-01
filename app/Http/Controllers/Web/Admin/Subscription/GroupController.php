@@ -87,7 +87,6 @@ class GroupController extends WebController
             $group = $group->fill($request->all());
             $group->save();
 
-            $this->privateChannel("GroupCreated", "New group created");
         });
 
         return $this->showOne($group, $group->transformer, 201);
@@ -127,7 +126,7 @@ class GroupController extends WebController
                 $group->description = $request->description;
                 $group->push();
 
-                $this->privateChannel("GroupUpdated", "Group updated");
+
             }
         });
 
@@ -156,7 +155,7 @@ class GroupController extends WebController
 
         $group->forceDelete();
 
-        $this->privateChannel("GroupDeleted", "Group deleted");
+
 
         return $this->showOne($group, $group->transformer);
     }

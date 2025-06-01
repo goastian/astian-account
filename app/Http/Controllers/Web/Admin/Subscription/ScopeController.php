@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
-use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Scope;
+use App\Http\Controllers\WebController;
 
 class ScopeController extends WebController
 {
