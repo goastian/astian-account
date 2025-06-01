@@ -103,6 +103,8 @@
                 </button>
             </div>
         </q-dialog>
+
+        <v-login :guest="guest" @close="guest = false" :refer="getReferralLink()" />
     </div>
 </template>
 
@@ -115,6 +117,7 @@ export default {
             user: [],
             methods: [],
             active: null,
+            guest: false,
         }
     },
     props: {
@@ -136,10 +139,6 @@ export default {
         this.user = this.$page.props.user;
     },
 
-    mounted() {
-        console.log('yes', this.plan);
-    },
-
     methods: {
         async getBillingPeriod() {
             try {
@@ -149,9 +148,12 @@ export default {
 
                 if (res.status == 200) {
                     this.methods = res.data.data;
-                    console.log(this.methods)
                 }
             } catch (error) {}
+        },
+
+       updateUser(user) {
+            this.user = user;
         },
 
         getReferralLink() {
@@ -179,12 +181,21 @@ export default {
                 return;
             }
 
+            if (this.active == null) {
+                this.$q.notify({
+                    type: "negative",
+                    message: "Please select the payment method to continue. ...",
+                    timeout: 3000,
+                });
+                return;
+            }
+
             await this.continuePayment();
         },
 
         async continuePayment() {
             this.disabled = true;
-            console.log(this.methods[this.active])
+            console.log(this.user.links.subscriptions_buy)
             try {
                 const res = await this.$server.post(
                     this.user.links.subscriptions_buy,

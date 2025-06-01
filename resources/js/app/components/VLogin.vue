@@ -88,6 +88,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        refer: {
+            type: String,
+            required: false,
+        }
     },
 
     data() {
@@ -131,7 +135,8 @@ export default {
         },
 
         open(uri) {
-            window.location.href = uri;
+            const url = `${uri}?referral_code=${this.refer}`;
+            window.location.href = url;
         },
 
         close() {
