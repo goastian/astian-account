@@ -46,7 +46,7 @@
                 </q-toolbar-title>
             </q-toolbar>
         </q-footer>-->
-        <!--<v-login :guest="guest" @close="guest = false" />-->
+        <v-login :guest="guest" @close="guest = false" />
     </q-layout>
 </template>
 

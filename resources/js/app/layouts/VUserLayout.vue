@@ -4,7 +4,7 @@
             <q-toolbar class="row justify-between">
                 <div class="row ga-1">
                     <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-                    <div class="row items-center q-gutter-x-md" v-if="!leftDrawerOpen">
+                    <div class="row items-center q-gutter-x-md header-title" v-if="!leftDrawerOpen">
                         <img src="../../../img/favicon.svg" width="30px"/>
                         <span>{{ app_name }}</span>
                     </div>
@@ -196,4 +196,5 @@ export default {
     height: 100%;
     background-color: var(--q-background-secondary);
 }
+
 </style>
