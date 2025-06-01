@@ -55,7 +55,6 @@ class Partner extends Master
 
         return [
             'For sales' => route('plans.index', ['referral_code' => $this->code]),
-            'For register' => route('register', ['referral_code' => $this->code])
         ];
     }
 
