@@ -35,7 +35,7 @@ class Master extends Model
 
     /**
      * Retrieve metadata of the model
-     * @param array $transformer
+     * @param $transformer
      */
     public function meta($transformer = null)
     {
