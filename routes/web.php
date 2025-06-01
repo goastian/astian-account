@@ -18,6 +18,18 @@ require __DIR__ . '/web/users.php';
 require __DIR__ . '/web/auth.php';
 require __DIR__ . '/web/oauth.php';
 require __DIR__ . '/web/webhook.php';
-require __DIR__ . '/web/settings.php';
-require __DIR__ . '/web/admin.php';
 require __DIR__ . '/web/partner.php';
+
+/**
+ * Admin Routes to manages users
+ *
+ */
+Route::group([
+    'prefix' => 'admin',
+    'as' => 'admin.',
+], function () {
+
+    require __DIR__ . '/web/settings.php';
+    require __DIR__ . '/web/admin.php';
+
+});
