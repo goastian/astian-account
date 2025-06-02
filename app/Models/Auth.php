@@ -55,7 +55,8 @@ class Auth extends Authenticatable
         'verified_at',
         'dial_code',
         'accept_terms',
-        'partner_id'
+        'partner_id',
+        'last_connected',
     ];
 
     /**
@@ -74,7 +75,8 @@ class Auth extends Authenticatable
      */
     protected $casts = [
         'verified_at' => 'datetime',
-        'accept_terms' => 'boolean'
+        'accept_terms' => 'boolean',
+        'last_connected' => 'datetime'
     ];
 
     /**
@@ -183,5 +185,15 @@ class Auth extends Authenticatable
         $data = fractal($this, $transformer ?? $this->transformer)->toArray()['data'];
         unset($data['links']);
         return $data;
+    }
+
+    /**
+     * Updated the las connection
+     * @return void
+     */
+    public function lastConnected()
+    {
+        $this->last_connected = now();
+        $this->push();
     }
 }
