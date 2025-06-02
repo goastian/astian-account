@@ -36,4 +36,28 @@ return [
         'key' => env('STRIPE_PUBLIC'),
         'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
     ],
+
+    /**
+     * Captcha driver
+     */
+    'captcha' => [
+        'driver' => 'hcaptcha',
+        'enabled' => false,
+
+        'providers' => [
+
+            'turnstile' => [
+                'api' => "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+                'secret' => env('TURNSTILE_SECRET'),
+                'sitekey' => env('TURNSTILE_SITEKEY'),
+            ],
+
+            'hcaptcha' => [
+                'api' => "https://hcaptcha.com/siteverify",
+                'sitekey' => env('HCAPTCHA_SITEKEY'),
+                'secret' => env('HCAPTCHA_SECRET'),
+            ],
+
+        ]
+    ],
 ];

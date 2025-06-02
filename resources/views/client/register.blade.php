@@ -37,9 +37,7 @@
                     @error('last_name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                </div>
-
-                <input type="text" name="website" class="hidden">
+                </div> 
 
                 <!-- Email -->
                 <div>
@@ -115,6 +113,8 @@
                 @error('accept_cookies')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
+
+                <x-captcha />
 
                 <!-- Submit -->
                 <div>

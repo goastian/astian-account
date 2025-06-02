@@ -53,7 +53,7 @@ class RouteServiceProvider extends ServiceProvider
         if (RouteServiceProvider::query()) {
             return RouteServiceProvider::redirectToAskForAuthorization();
         }
-        return  redirectToHome();
+        return redirectToHome();
     }
 
     /**
@@ -73,7 +73,15 @@ class RouteServiceProvider extends ServiceProvider
      */
     public static function query()
     {
-        return request()->except(['_token', 'email', 'password', 'token']);
+        return request()->except([
+            '_token',
+            'email',
+            'password',
+            'token',
+            'cf-turnstile-response',
+            'g-recaptcha-response',
+            'h-captcha-response'
+        ]);
     }
 
     /**

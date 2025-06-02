@@ -52,6 +52,7 @@
                         "
                     />
                 </div>
+                <v-captcha @verified="handleVerified" />
 
                 <q-btn
                     label="Sign in"
@@ -111,6 +112,10 @@ export default {
     },
 
     methods: {
+        handleVerified({ name, value }) {
+            this.form[name] = value;
+        },
+
         async login() {
             try {
                 const res = await this.$server.post(
