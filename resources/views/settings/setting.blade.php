@@ -40,6 +40,7 @@
                             'admin.settings.redis' => ['icon' => 'mdi-database-cog', 'label' => __('Redis')],
                             'admin.settings.queues' => ['icon' => 'mdi-queue-first-in-last-out', 'label' => __('Queues')],
                             'admin.settings.filesystem' => ['icon' => 'mdi-file-cog', 'label' => __('Filesystem')],
+                            'admin.settings.security' => ['icon' => 'mdi-shield', 'label' => __('Security')],
                             'log-viewer::dashboard' => ['icon' => 'mdi-math-log', 'label' => __('Logs')],
                         ];
                     @endphp

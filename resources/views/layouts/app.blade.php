@@ -11,7 +11,10 @@
 
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('/css/tailwind.css') }}">
+
     @inertiaHead
+    @stack('head')
+    @stack('css')
 </head>
 
 <body>
@@ -24,6 +27,7 @@
 
     <!-- Scripts -->
     <script src="{{ mix('/js/app.js') }}"></script>
+    @stack('js')
+    @stack('modals')
 </body>
-
 </html>

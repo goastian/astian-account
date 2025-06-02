@@ -32,6 +32,8 @@
                     @endif
                 </div>
 
+                <x-captcha />
+
                 <!-- Submit Button -->
                 <div>
                     <button type="submit"
