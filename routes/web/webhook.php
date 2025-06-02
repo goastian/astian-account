@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Models\Payment\Webhook\StripeWebhookController;
+use Illuminate\Support\Facades\Route; 
+use App\Services\Payment\Webhook\StripeWebhookController;
 
 
 Route::group([
