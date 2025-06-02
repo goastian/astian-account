@@ -54,7 +54,7 @@ class SecureHeaders
             "media-src 'self'",
             "object-src 'self'",
             "child-src 'self'",
-            "frame-src 'self'",
+            "frame-src 'self' https://newassets.hcaptcha.com/ https://challenges.cloudflare.com",
             "frame-ancestors 'self'",
             "img-src 'self' data:",
             "font-src 'self'",
