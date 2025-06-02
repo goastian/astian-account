@@ -1,12 +1,12 @@
 <?php
-namespace App\Models\Payment\Drivers;
+namespace App\Services\Payment\Drivers;
 
 use Stripe\Stripe;
+use Stripe\TaxRate;
 use Stripe\Customer;
 use Stripe\Checkout\Session;
-use App\Models\Subscription\Transaction;
-use App\Models\Payment\Contracts\PaymentMethod;
-use Stripe\TaxRate;
+use App\Models\Subscription\Transaction; 
+use App\Services\Payment\Contracts\PaymentMethod;
 
 class StripeSubscription implements PaymentMethod
 {
