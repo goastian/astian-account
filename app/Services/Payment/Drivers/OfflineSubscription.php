@@ -1,11 +1,11 @@
 <?php
-namespace App\Models\Payment\Drivers;
+namespace App\Services\Payment\Drivers;
 
-use App\Models\Subscription\Transaction;
-use App\Models\Payment\Contracts\PaymentMethod;
 use Illuminate\Support\Fluent;
+use App\Models\Subscription\Transaction;
+use App\Services\Payment\Contracts\PaymentMethod;
 
-class P2pSubscription implements PaymentMethod
+class OfflineSubscription implements PaymentMethod
 {
 
     protected $method = "offline";
