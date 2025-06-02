@@ -2,9 +2,7 @@
 
 
 @section('content')
-    @inertia
+    <x-captcha :only-links="true" />
 
-    {{-- 
-<div id="app" data-nonce="{{ $nonce }}" data-app-name="{{ config('app.name') }}"></div>
---}}
+    @inertia
 @endsection
