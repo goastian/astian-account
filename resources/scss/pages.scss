@@ -11,3 +11,124 @@
 .notyf__toast--error {
     background: #c03e4b;
 }
+
+.login-form {
+    background-color: #fff;
+    background-image: radial-gradient(circle, #e5e7eb 1px, transparent 1px);
+    background-size: 20px 20px;
+}
+
+.green-color-login-light {
+    background-color: #BEF0EF;
+}
+
+.green-color-login-card {
+    background-color: #00B9B5;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.animate-float {
+    animation: float 4s ease-in-out infinite;
+}
+
+.animate-slow-rotate {
+    animation: rotate 20s linear infinite;
+}
+
+.emoji {
+    position: absolute;
+    font-size: 2rem;
+    animation: float 6s ease-in-out infinite;
+    width: 40px;
+    height: 40px;
+}
+
+.emoji:nth-child(2) {
+    top: 44px;
+    left: 13%;
+    transform: translateX(-50%);
+    animation-delay: 0s;
+}
+
+.emoji:nth-child(3) {
+    top: 0%;
+    bottom: 0%;
+    margin: auto;
+    left: -60px;
+    animation-delay: 1s;
+}
+
+.emoji:nth-child(4) {
+    bottom: -2%;
+    right: -40px;
+    animation-delay: 2s;
+}
+
+.emoji:nth-child(5) {
+    bottom: -70px;
+    left: 40%;
+    animation-delay: 3s;
+}
+
+.emoji:nth-child(6) {
+    bottom: -10%;
+    left: -40px;
+    animation-delay: 4s;
+}
+
+.emoji:nth-child(7) {
+    top: -40px;
+    left: 0%;
+    right: 0%;
+    margin: auto;
+    animation-delay: 4s;
+
+}
+
+.emoji:nth-child(8) { top: 30%; right: -40px; animation-delay: 4s; }
+
