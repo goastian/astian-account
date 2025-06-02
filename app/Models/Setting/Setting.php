@@ -216,9 +216,9 @@ class Setting extends Master
         settingLoad('services.stripe.key', null);
         settingLoad('services.stripe.webhook_secret', null);
 
-        settingLoad('billing.methods.p2p.name', 'Peer 2 Peer');
-        settingLoad('billing.methods.p2p.icon', 'mdi-cash-register');
-        settingLoad('billing.methods.p2p.enable', true);
+        settingLoad('billing.methods.offline.name', 'Peer 2 Peer');
+        settingLoad('billing.methods.offline.icon', 'mdi-cash-register');
+        settingLoad('billing.methods.offline.enable', true);
 
         //System settings
         settingLoad('system.schema_mode', "https");
@@ -459,9 +459,9 @@ class Setting extends Master
         Config::set('services.stripe.key', settingItem('services.stripe.key', null));
         Config::set('services.stripe.webhook_secret', settingItem('services.stripe.webhook_secret', null));
 
-        Config::set('billing.methods.p2p.name', settingItem('billing.methods.p2p.name', 'Peer 2 Peer'));
-        Config::set('billing.methods.p2p.icon', settingItem('billing.methods.p2p.icon', 'mdi-cash-register'));
-        Config::set('billing.methods.p2p.enable', settingItem('billing.methods.p2p.enable', true));
+        Config::set('billing.methods.offline.name', settingItem('billing.methods.offline.name', 'Peer 2 Peer'));
+        Config::set('billing.methods.offline.icon', settingItem('billing.methods.offline.icon', 'mdi-cash-register'));
+        Config::set('billing.methods.offline.enable', settingItem('billing.methods.offline.enable', true));
     }
 
     /**

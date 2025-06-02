@@ -1,5 +1,5 @@
 <?php
-namespace App\Models\Payment\Webhook;
+namespace App\Services\Payment\Webhook;
 
 use Stripe\Stripe;
 use Stripe\Webhook;

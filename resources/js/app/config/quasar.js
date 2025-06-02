@@ -51,6 +51,7 @@ import {
     QRadio,
     QMarkupTable,
     QBtnToggle,
+    QFooter,
 } from "quasar";
 
 export const QComponents = [
@@ -106,4 +107,5 @@ export const QComponents = [
     QRadio,
     QMarkupTable,
     QBtnToggle,
+    QFooter,
 ];

@@ -6,10 +6,10 @@ use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use Illuminate\Support\Facades\DB;
-use App\Models\Subscription\Package;
-use App\Models\Payment\PaymentManager;
+use App\Models\Subscription\Package; 
 use App\Http\Controllers\WebController;
 use App\Models\Subscription\Transaction;
+use App\Services\Payment\PaymentManager;
 use App\Transformers\User\UserPackageTransformer;
 use App\Notifications\Subscription\RequestSubscription;
 
@@ -47,7 +47,8 @@ class UserSubscriptionController extends WebController
      * Buy subscription
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Subscription\Plan $plan
-     * @param \App\Models\Payment\PaymentManager $paymentManager
+     * @param \App\Services\Payment\PaymentManager $paymentManager
+     * @param \App\Models\Subscription\Transaction $transaction
      * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function buy(Request $request, Plan $plan, PaymentManager $paymentManager, Transaction $transaction)
@@ -151,7 +152,7 @@ class UserSubscriptionController extends WebController
     /**
      * Abort operation
      * @param string $transaction_id
-     * @param \App\Models\Payment\PaymentManager $paymentManager
+     * @param \App\Services\Payment\PaymentManager $paymentManager
      * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function cancel(string $transaction_id, PaymentManager $paymentManager)
@@ -167,7 +168,7 @@ class UserSubscriptionController extends WebController
      * renew package
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Subscription\Package $package
-     * @param \App\Models\Payment\PaymentManager $paymentManager
+     * @param \App\Services\Payment\PaymentManager $paymentManager
      * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function renew(Request $request, Package $package, PaymentManager $paymentManager)
