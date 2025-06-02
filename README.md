@@ -115,3 +115,37 @@ php artisan passport:install --force
         -   `checkout.session.expired`
 
 -   **P2P**: Offline payment method
+
+## Captcha Providers
+
+This project supports the following CAPTCHA providers to help protect your forms from spam and automated abuse:
+
+### 1. [hCaptcha](https://www.hcaptcha.com/)
+
+**Description:**  
+hCaptcha is a privacy-first CAPTCHA solution that blocks bots while respecting user privacy. It is a drop-in replacement for reCAPTCHA and offers generous free usage.
+
+**Register:**  
+Create your account and get a site key here:  
+[https://dashboard.hcaptcha.com/signup](https://dashboard.hcaptcha.com/signup)
+
+---
+
+### 2. [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/)
+
+**Description:**  
+Cloudflare Turnstile is a smart CAPTCHA alternative that provides frictionless user verification without user interaction, improving the user experience while maintaining security.
+
+**Register:**  
+Use your Cloudflare account to generate a site key:  
+[https://dash.cloudflare.com/](https://dash.cloudflare.com/)
+
+---
+
+### ⚙️ Configuration
+
+To configure the active CAPTCHA provider:
+
+> Go to **Admin → Settings → Security**, and select your preferred CAPTCHA provider (hCaptcha or Turnstile).
+
+Once configured, the system will automatically load and render the selected provider in the frontend forms.
