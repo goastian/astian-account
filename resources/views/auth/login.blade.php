@@ -17,7 +17,6 @@
 
             <form action="{{ route('login') }}" method="POST" class="space-y-6">
                 @csrf
-
                 <!-- Email -->
                 <div>
                     <input type="email" name="email" placeholder="{{ __('Email') }}"
@@ -52,6 +51,8 @@
                 @foreach ($query as $item => $value)
                     <input type="hidden" id="{{ $item }}" name="{{ $item }}" value="{{ $value }}">
                 @endforeach
+
+                <x-captcha />
 
                 <!-- Submit -->
                 <div>

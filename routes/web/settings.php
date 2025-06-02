@@ -18,6 +18,7 @@ Route::group([
     Route::get('/filesystem', [SettingController::class, 'filesystem'])->name('filesystem');
     Route::get('/payment', [SettingController::class, 'payment'])->name('payment');
     Route::get('/session', [SettingController::class, 'session'])->name('session');
+    Route::get('/security', [SettingController::class, 'security'])->name('security');
 
     Route::put('/', [SettingController::class, 'update'])->name('update');
 });
