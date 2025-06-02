@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Setting;
 
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use App\Http\Controllers\WebController;
 
 class SettingController extends WebController
@@ -153,5 +153,14 @@ class SettingController extends WebController
     public function session()
     {
         return view('settings.section.session');
+    }
+
+    /**
+     * Summary of security
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function security()
+    {
+        return view('settings.section.security');
     }
 }

@@ -30,16 +30,17 @@
                     class="hidden md:block w-full bg-white border border-gray-300 rounded-lg shadow-md divide-y divide-gray-200 md:mb-0 transition-all duration-300 ease-in-out">
                     @php
                         $routes = [
-                            'settings.general' => ['icon' => 'mdi-home', 'label' => __('General')],
-                            'settings.session' => ['icon' => 'mdi-cookie-settings', 'label' => __('Session')],
-                            'settings.payment' => ['icon' => 'mdi-cash-sync', 'label' => __('Payment')],
-                            'settings.passport' => ['icon' => 'mdi-file-key-outline', 'label' => __('Passport')],
-                            'settings.email' => ['icon' => 'mdi-at', 'label' => __('Email')],
-                            'settings.user' => ['icon' => 'mdi-account-key', 'label' => __('User')],
-                            'settings.routes' => ['icon' => 'mdi-router-network', 'label' => __('Routes')],
-                            'settings.redis' => ['icon' => 'mdi-database-cog', 'label' => __('Redis')],
-                            'settings.queues' => ['icon' => 'mdi-queue-first-in-last-out', 'label' => __('Queues')],
-                            'settings.filesystem' => ['icon' => 'mdi-file-cog', 'label' => __('Filesystem')],
+                            'admin.settings.general' => ['icon' => 'mdi-home', 'label' => __('General')],
+                            'admin.settings.session' => ['icon' => 'mdi-cookie-settings', 'label' => __('Session')],
+                            'admin.settings.payment' => ['icon' => 'mdi-cash-sync', 'label' => __('Payment')],
+                            'admin.settings.passport' => ['icon' => 'mdi-file-key-outline', 'label' => __('Passport')],
+                            'admin.settings.email' => ['icon' => 'mdi-at', 'label' => __('Email')],
+                            'admin.settings.user' => ['icon' => 'mdi-account-key', 'label' => __('User')],
+                            'admin.settings.routes' => ['icon' => 'mdi-router-network', 'label' => __('Routes')],
+                            'admin.settings.redis' => ['icon' => 'mdi-database-cog', 'label' => __('Redis')],
+                            'admin.settings.queues' => ['icon' => 'mdi-queue-first-in-last-out', 'label' => __('Queues')],
+                            'admin.settings.filesystem' => ['icon' => 'mdi-file-cog', 'label' => __('Filesystem')],
+                            'admin.settings.security' => ['icon' => 'mdi-shield', 'label' => __('Security')],
                             'log-viewer::dashboard' => ['icon' => 'mdi-math-log', 'label' => __('Logs')],
                         ];
                     @endphp
@@ -57,7 +58,7 @@
             </div>
 
             <div class="w-full md:w-3/4 h-full">
-                <form action="{{ route('settings.update') }}" method="post" autocomplete="off">
+                <form action="{{ route('admin.settings.update') }}" method="post" autocomplete="off">
                     @method('put')
                     @csrf
                     <input type="hidden" name="current_route" value="{{ url()->current() }}">

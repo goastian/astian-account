@@ -35,16 +35,17 @@ class Setting extends Master
         }
 
         Config::set('app.name', settingItem('app.name', 'Oauth2 Server'));
+        Config::set('app.org_name', settingItem('app.org_name', 'Oauth2 org'));
 
         Config::set('passport.personal_access_client.id', settingItem('passport_personal_access_client_id'));
         Config::set('passport.personal_access_client.secret', settingItem('passport_personal_access_client_secret'));
-
 
         Setting::getPassportSetting();
         Setting::getRedisConfig();
         Setting::getQueueSetting();
         Setting::getFileSystems();
         Setting::getEmailSettings();
+        Setting::getServicesSettings();
         Setting::getPaymentSettings();
         Setting::getSystemSetting();
         Setting::getSessionSettings();
@@ -59,6 +60,7 @@ class Setting extends Master
 
         //App name
         settingLoad('app.name', 'Oauth2 Server');
+        settingLoad('app.org_name', 'Server org');
 
         //expires time for reset password
         settingLoad('auth.passwords.users.expire', 10);
@@ -195,6 +197,17 @@ class Setting extends Master
         settingLoad('services.ses.secret', null);
         settingLoad('services.ses.region', null);
 
+        settingLoad('services.captcha.driver', "hcaptcha");
+        settingLoad('services.captcha.enabled', false);
+
+        settingLoad('services.captcha.providers.turnstile.api', 'https://challenges.cloudflare.com/turnstile/v0/siteverify');
+        settingLoad('services.captcha.providers.turnstile.secret', null);
+        settingLoad('services.captcha.providers.turnstile.sitekey', null);
+
+        settingLoad('services.captcha.providers.hcaptcha.api', 'https://hcaptcha.com/siteverify');
+        settingLoad('services.captcha.providers.hcaptcha.secret', null);
+        settingLoad('services.captcha.providers.hcaptcha.sitekey', null);
+
         //Payment settings 
         settingLoad('billing.methods.stripe.name', 'Credit Card (Stripe)');
         settingLoad('billing.methods.stripe.icon', 'mdi-credit-card-outline');
@@ -219,7 +232,8 @@ class Setting extends Master
         settingLoad('system.enable_register_member', true);
         settingLoad('system.csp_enabled', true);
         settingLoad('system.redirect_to', "/account");
-        settingLoad('system.policy_services', null);
+        settingLoad('system.service_statement', null);
+        settingLoad('system.service_services', null);
         settingLoad('system.policy_cookies', null);
 
         //Session settings
@@ -404,8 +418,11 @@ class Setting extends Master
 
         Config::set('mail.from.address', settingItem('mail.from.address', 'hello@example.com'));
         Config::set('mail.from.name', settingItem('mail.from.name', 'Example'));
+    }
 
 
+    public static function getServicesSettings()
+    {
         Config::set('services.mailgun.domain', settingItem('services.mailgun.domain', null));
         Config::set('services.mailgun.secret', settingItem('services.mailgun.secret', null));
         Config::set('services.mailgun.endpoint', settingItem('services.mailgun.endpoint', null));
@@ -416,6 +433,17 @@ class Setting extends Master
         Config::set('services.ses.key', settingItem('services.ses.key', null));
         Config::set('services.ses.secret', settingItem('services.ses.secret', null));
         Config::set('services.ses.region', settingItem('services.ses.region', null));
+
+        Config::set('services.captcha.driver', settingItem('services.captcha.driver', 'hcaptcha'));
+        Config::set('services.captcha.enabled', settingItem('services.captcha.enabled', false));
+
+        Config::set('services.captcha.providers.turnstile.api', settingItem('services.captcha.providers.turnstile.api', 'https://challenges.cloudflare.com/turnstile/v0/siteverify'));
+        Config::set('services.captcha.providers.turnstile.secret', settingItem('services.captcha.providers.turnstile.secret', null));
+        Config::set('services.captcha.providers.turnstile.sitekey', settingItem('services.captcha.providers.turnstile.sitekey', null));
+
+        Config::set('services.captcha.providers.hcaptcha.api', settingItem('services.captcha.providers.hcaptcha.api', 'https://hcaptcha.com/siteverify'));
+        Config::set('services.captcha.providers.hcaptcha.secret', settingItem('services.captcha.providers.hcaptcha.secret', null));
+        Config::set('services.captcha.providers.hcaptcha.sitekey', settingItem('services.captcha.providers.hcaptcha.sitekey', null));
     }
 
     /**
@@ -453,7 +481,8 @@ class Setting extends Master
         Config::set('system.enable_register_member', settingItem('system.enable_register_member', true));
         Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
-        Config::set('system.policy_services', settingItem('system.policy_services', null));
+        Config::set('system.service_statement', settingItem('system.service_statement', null));
+        Config::set('system.service_services', settingItem('system.service_services', null));
         Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
 
         Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));

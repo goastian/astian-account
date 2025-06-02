@@ -11,6 +11,7 @@ use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\RateLimiter;
@@ -44,28 +45,6 @@ class RegisterClientController extends WebController
      */
     public function store(Request $request, User $user)
     {
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
-
-        //anti bots
-        $ip = $request->ip();
-        $key = 'bots:' . $ip;
-
-        if (!empty($request->website) || RateLimiter::tooManyAttempts($key, 1)) {
-
-            if (!RateLimiter::tooManyAttempts($key, 1)) {
-                RateLimiter::hit($key, 3600 * 5);
-            }
-
-            $seconds = RateLimiter::availableIn($key);
-
-            return back()->with('error', __(
-                'Suspicious activity has been detected from your IP address. Registration has been temporarily blocked. Please try again in :minutes minutes.',
-                ['minutes' => ceil($seconds / 60)]
-            ));
-        }
-
-
         $this->validate($request, [
             'name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],
             'last_name' => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:3', 'max:100'],
@@ -73,6 +52,7 @@ class RegisterClientController extends WebController
             'password' => ['required', 'confirmed', 'min:8', 'max:60'],
             'birthday' => ['required', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
             'accept_terms' => ['required', new BooleanRule()],
+            'accept_cookies' => ['nullable', new BooleanRule()],
             'referral_code' => ['nullable'],
         ]);
 
@@ -85,6 +65,7 @@ class RegisterClientController extends WebController
         DB::transaction(function () use ($request, $user, $group) {
             $user = $user->fill($request->except('password'));
             $user->password = Hash::make($request->password);
+            $user->accept_cookies = $request->accept_cookies ? true : false;
 
             if ($request->referral_code) {
                 $partner = Partner::where('code', $request->referral_code)->first();

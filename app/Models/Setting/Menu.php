@@ -26,6 +26,7 @@ class Menu
     public static function shareEnvironmentKeys()
     {
         return [
+            "captcha" => static::captcha(),
             "app_name" => config('app.name'),
             "user" => static::authenticated_user(),
             "user_routes" => static::userRoutes(),
@@ -158,7 +159,7 @@ class Menu
             ],
             [
                 "name" => "Settings",
-                "route" => route("settings.general"),
+                "route" => route("admin.settings.general"),
                 "icon" => "mdi-cogs",
                 'show' => true,
             ],
@@ -190,6 +191,17 @@ class Menu
                 "icon" => "mdi-cash-multiple",
                 'show' => true,
             ],
+        ];
+    }
+
+    public static function captcha()
+    {
+        $provider = config("services.captcha.driver");
+        return [
+            "provider" => $provider,
+            "siteKey" => config("services.captcha.providers.$provider.sitekey"),
+            "status" => config("services.captcha.enabled"),
+            "providers" => array_keys(config('services.captcha.providers')),
         ];
     }
 }

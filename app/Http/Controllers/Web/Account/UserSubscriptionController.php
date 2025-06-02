@@ -1,8 +1,8 @@
 <?php
 namespace App\Http\Controllers\Web\Account;
 
-use App\Models\User\Partner;
 use Inertia\Inertia;
+use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use Illuminate\Support\Facades\DB;

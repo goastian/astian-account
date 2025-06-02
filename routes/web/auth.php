@@ -13,10 +13,10 @@ Route::group([
 ], function () {
 
     Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
-    Route::post('/login', [AuthenticatedSessionController::class, 'store']);
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->middleware('captcha');
 
     Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])->name('forgot-password');
-    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->name('password.email');
+    Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])->middleware('captcha')->name('password.email');
 
     Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
     Route::post('/reset-password', [NewPasswordController::class, 'store'])->name('password.store');
@@ -30,6 +30,6 @@ Route::group([
      */
     if (config('system.enable_register_member', true)) {
         Route::get('/register', [RegisterClientController::class, 'register'])->name('register');
-        Route::post('/register', [RegisterClientController::class, 'store']);
+        Route::post('/register', [RegisterClientController::class, 'store'])->middleware('captcha');
     }
 });

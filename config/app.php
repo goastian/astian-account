@@ -17,6 +17,11 @@ return [
 
     'name' => env('APP_NAME', 'Oauth2 Server'),
 
+    /**
+     * Set the Organization Name
+     */
+    'org_name' => "Server org",
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
