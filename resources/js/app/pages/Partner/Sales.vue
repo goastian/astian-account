@@ -95,7 +95,7 @@ export default {
                 total_pages: 0,
             },
             search: {
-                page: 0,
+                page: 1,
                 per_page: 15,
             },
         };
