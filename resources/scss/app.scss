@@ -43,9 +43,10 @@
     --q-dark: #121212;
     --q-dark-page: #0d0d0d;
     --q-border: #525252;
-    --q-background-primary: #121212;
-    --q-background-secondary: #2A2727;
-    --q-color: #dfdfdf;
+    --q-background-primary: #1e293b;
+    --q-background-secondary: #0f172a;
+    --q-color: #fff;
+    --q-color-secondary: #94a3b8;
     --q-color-red-light: #fee2e2;
 }
 
@@ -66,6 +67,22 @@ body {
   font-family: 'Outfit', sans-serif !important;
 }
 
+.btn-gradient {
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+}
+
 .text-ucfirst::first-letter {
     text-transform: uppercase;
 }
@@ -74,11 +91,34 @@ body {
     background-color: var(--q-background-primary);
 }
 
+.scroll-area {
+    background-color: var(--q-background-primary);
+    height: calc(100% - 80px);
+    margin-top: 80px;
+    padding: 0 1rem;
+}
+
+.q-list {
+    display: flex;
+    flex-direction: column;
+    gap: .4rem;
+}
+
+.q-item {
+    border-radius: .4rem;
+}
+
+.q-item--active {
+    background: linear-gradient(135deg, #6a93ff, #a26dff, #7f5eff);
+    color: white !important;
+}
 .q-layout-padding {
     padding: 0 !important;
 }
 
-
+.q-dark {
+    background-color: var(--q-background-primary) !important;
+}
 
 @media (max-width: 470px) {
     .header-title {

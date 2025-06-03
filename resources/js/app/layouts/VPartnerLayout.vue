@@ -96,14 +96,9 @@ export default {
     color: var(--q-color);
 }
 
-.item-admin.active {
-    background-color: rgba(0, 150, 136, 0.1);
-    border-left: 3px solid #26a69a;
-}
-
 .header {
     background-color: var(--q-background-primary);
-    color: black;
+    color: var(--q-color);
     padding-top: .6rem;
     padding-right: .6rem;
 }

@@ -166,6 +166,7 @@ export default {
     border: solid .02rem var(--q-border);
     padding: .6rem .8rem;
     background-color: var(--q-background-secondary);
+    color: var(--q-color);
 }
 
 .ga-1 {
@@ -173,13 +174,9 @@ export default {
 }
 
 .title {
+    background-color: var(--q-background-primary);
     border-bottom: .02rem solid var(--q-border);
     gap: 1rem;
-}
-
-.scroll-area {
-    height: calc(100% - 80px);
-    margin-top: 80px;
 }
 
 .main {
