@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Admin\Broadcasting;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
+use App\Rules\StringOnlyRule;
 use Illuminate\Support\Facades\DB;
 use App\Models\Broadcasting\Broadcast;
 use App\Http\Controllers\WebController;
@@ -56,6 +57,7 @@ class BroadcastController extends WebController
         $this->validate($request, [
             'name' => [
                 'required',
+                new StringOnlyRule(),
                 'max:100',
                 function ($attribute, $value, $fail) use ($broadcast) {
                     $slug = $this->slug($value);
@@ -70,9 +72,6 @@ class BroadcastController extends WebController
             'system' => ['nullable', new BooleanRule()],
         ]);
 
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
-
         $request->merge([
             'slug' => $this->slug($request->name)
         ]);
@@ -82,7 +81,7 @@ class BroadcastController extends WebController
             $broadcast->save();
         });
 
-        
+
         return $this->showOne($broadcast, $broadcast->transformer, 201);
     }
 
@@ -102,11 +101,8 @@ class BroadcastController extends WebController
             }
         });
 
-        $this->checkMethod('delete');
-        $this->checkContentType(null);
-
         $broadcast->delete();
- 
+
         return $this->showOne($broadcast, $broadcast->transformer);
     }
 }

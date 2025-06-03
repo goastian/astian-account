@@ -233,7 +233,7 @@ class Setting extends Master
         settingLoad('system.csp_enabled', true);
         settingLoad('system.redirect_to', "/account");
         settingLoad('system.service_statement', null);
-        settingLoad('system.service_services', null);
+        settingLoad('system.service_agreement', null);
         settingLoad('system.policy_cookies', null);
 
         //Session settings
@@ -482,7 +482,7 @@ class Setting extends Master
         Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
         Config::set('system.service_statement', settingItem('system.service_statement', null));
-        Config::set('system.service_services', settingItem('system.service_services', null));
+        Config::set('system.service_agreement', settingItem('system.service_agreement', null));
         Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
 
         Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));
