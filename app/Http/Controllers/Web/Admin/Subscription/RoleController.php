@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
+use App\Rules\StringOnlyRule;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
@@ -68,6 +69,7 @@ class RoleController extends WebController
         $this->validate($request, [
             'name' => [
                 'required',
+                new StringOnlyRule(),
                 function ($attribute, $value, $fail) use ($role) {
                     $slug = $this->slug($value);
                     $model = $role->where('slug', $slug)->first();
