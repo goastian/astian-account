@@ -1,7 +1,7 @@
 <?php
-namespace App\Models\Payment\Contracts;
+namespace App\Services\Payment\Contracts;
 
-use App\Models\Subscription\Transaction;
+use App\Models\Subscription\Transaction; 
 
 interface PaymentMethod
 {

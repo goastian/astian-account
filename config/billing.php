@@ -92,9 +92,9 @@ return [
             'icon' => 'mdi-contactless-payment',
             'enable' => false
         ],
-        'p2p' => [
-            'key' => 'p2p',
-            'name' => 'Peer 2 Peer',
+        'offline' => [
+            'key' => 'offline',
+            'name' => 'Offline',
             'icon' => 'mdi-cash-register',
             'enable' => true
         ],
