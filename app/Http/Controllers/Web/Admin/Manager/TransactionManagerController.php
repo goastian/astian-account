@@ -12,8 +12,8 @@ class TransactionManagerController extends WebController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('userCanAny:administrator_transaction_full,administrator_transaction_view')->only('index');
-        $this->middleware('userCanAny:administrator_transaction_full,administrator_transaction_update')->only('activate');
+        $this->middleware('userCanAny:administrator_transactions_full, administrator_transactions_view')->only('index');
+        $this->middleware('userCanAny:administrator_transactions_full, administrator_transactions_update')->only('activate');
     }
 
     /**
