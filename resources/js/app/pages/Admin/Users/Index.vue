@@ -161,7 +161,7 @@ export default {
                 total_pages: 0,
             },
             search: {
-                page: 0,
+                page: 1,
                 per_page: 15,
             },
         };
@@ -171,6 +171,10 @@ export default {
         const values = this.$page.props.users;
         this.users = values.data;
         this.pages = values.meta.pagination;
+    },
+
+    mounted() {
+        this.listenEvents();
     },
 
     watch: {
@@ -220,36 +224,21 @@ export default {
         },
 
         listenEvents() {
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("UpdateEmployeeEvent", (e) => {
+            const events = [
+                "UserCreated",
+                "UserUpdated",
+                "UserEnabled",
+                "UserDisabled",
+                "UserDestroyed",
+                "UserPasswordUpdated",
+                "UserRegistered",
+            ];
+
+            events.map((item) => {
+                this.$echo.private("auth").toOthers(item, (e) => {
                     this.getUsers();
                 });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("StoreEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("EnableEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("DisableEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("StoreEmployeeRoleEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("DestroyEmployeeRoleEvent", (e) => {
-                    this.getUsers();
-                });
+            });
         },
     },
 };
