@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Admin\Subscription;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
+use App\Rules\StringOnlyRule;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Service;
@@ -68,7 +69,7 @@ class ServiceController extends WebController
     public function store(Request $request, Service $service)
     {
         $this->validate($request, [
-            'name' => ['required'],
+            'name' => ['required', new StringOnlyRule(),],
             'description' => ['required', 'max:190'],
             'group_id' => ['required', 'exists:groups,id'],
             'system' => ['nullable', new BooleanRule()],
