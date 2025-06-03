@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
+use App\Rules\StringOnlyRule;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class RoleController extends WebController
     public function index(Role $role)
     {
         $params = $this->filter_transform($role->transformer);
-        
+
         $data = $role->query();
 
         $data = $this->searchByBuilder($data, $params);
@@ -54,9 +55,6 @@ class RoleController extends WebController
      */
     public function show(Role $role)
     {
-        $this->checkMethod('get');
-        $this->checkContentType(null);
-
         return $this->showOne($role, $role->transformer);
     }
 
@@ -71,6 +69,7 @@ class RoleController extends WebController
         $this->validate($request, [
             'name' => [
                 'required',
+                new StringOnlyRule(),
                 function ($attribute, $value, $fail) use ($role) {
                     $slug = $this->slug($value);
                     $model = $role->where('slug', $slug)->first();
@@ -82,9 +81,6 @@ class RoleController extends WebController
             ],
             'description' => ['required', 'max:190'],
         ]);
-
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
 
         $request->merge([
             'slug' => $this->slug($request->name),
@@ -114,9 +110,6 @@ class RoleController extends WebController
             'system' => ['nullable', new BooleanRule()]
         ]);
 
-        $this->checkMethod('put');
-        $this->checkContentType($this->getUpdateHeader());
-
         DB::transaction(function () use ($request, $role) {
 
             $update = false;
@@ -144,9 +137,6 @@ class RoleController extends WebController
      */
     public function destroy(Role $role)
     {
-        $this->checkMethod('delete');
-        $this->checkContentType(null);
-
         collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
             throw_if($value->name == $role->name, new ReportError(__("This action cannot be completed because this role is a system role and cannot be deleted."), 403));
         });

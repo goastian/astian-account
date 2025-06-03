@@ -9,6 +9,7 @@ class SettingController extends WebController
 
     public function __construct()
     {
+        parent::__construct();
         $this->middleware('userCanAny:administrator_settings_full, administrator_settings_view')->except('update');
         $this->middleware('userCanAny:administrator_settings_full, administrator_settings_update')->only('update');
     }
