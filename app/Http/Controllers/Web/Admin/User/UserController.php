@@ -44,8 +44,6 @@ class UserController extends WebController
      */
     public function index(Request $request, User $user)
     {
-        $this->checkMethod('get');
-
         $params = $this->filter_transform($user->transformer);
 
         $data = $user->query();
@@ -71,10 +69,6 @@ class UserController extends WebController
      */
     public function store(StoreRequest $request, User $user)
     {
-        $this->checkMethod('post');
-
-        $this->checkContentType($this->getPostHeader());
-
         DB::transaction(function () use ($request, $user) {
 
             $temp_password = $this->passwordTempGenerate();
@@ -86,11 +80,6 @@ class UserController extends WebController
                 $user->verified_at = now();
             }
             $user->save();
-
-            /**
-             * Send event
-             */
-            $this->privateChannel("StoreUserEvent", "New user created");
 
             Notification::send($user, new UserCreatedAccount($temp_password));
 
@@ -107,8 +96,6 @@ class UserController extends WebController
      */
     public function show($id)
     {
-        $this->checkMethod('get');
-
         $user = User::withTrashed()->find($id);
 
         return $this->showOne($user, $user->transformer);
@@ -123,10 +110,6 @@ class UserController extends WebController
      */
     public function update(UpdateRequest $request, User $user)
     {
-        $this->checkMethod('put');
-
-        $this->checkContentType($this->getUpdateHeader());
-
         DB::transaction(function () use ($request, $user) {
             $updated_password = false;
             $updated_email = false;
@@ -196,7 +179,6 @@ class UserController extends WebController
             if ($can_update) {
                 $user->push();
 
-                $this->privateChannel("UpdateUserEvent", "User updated");
             }
 
             if ($updated_password) {
@@ -219,10 +201,6 @@ class UserController extends WebController
      */
     public function disable(Request $request, User $user)
     {
-        $this->checkMethod('delete');
-
-        $this->checkContentType(null);
-
         DB::transaction(function () use ($user) {
 
             $tokens = $user->tokens;
@@ -247,10 +225,6 @@ class UserController extends WebController
      */
     public function enable($id)
     {
-        $this->checkMethod('get');
-
-        $this->checkContentType(null);
-
         try {
 
             $user = User::onlyTrashed()->find($id);
@@ -258,8 +232,6 @@ class UserController extends WebController
             $user->restore();
 
             Notification::send($user, new UserReactivateAccount());
-
-            $this->privateChannel("EnableUserEvent", "User enabled");
 
             return $this->showOne($user, $user->transformer);
 
