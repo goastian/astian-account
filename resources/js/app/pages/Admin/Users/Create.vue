@@ -1,6 +1,6 @@
 <template>
     <q-dialog v-model="dialog" persistent>
-        <q-card class="w-100">
+        <q-card class="q-pa-md full-width">
             <q-card-section>
                 <div class="text-h6">Add new user</div>
             </q-card-section>
@@ -44,18 +44,18 @@
 
                     <q-select
                         v-model="form.country"
-                        dense="dense"
+                        dense
+                        outlined
+                        use-input
+                        fill-input
+                        hide-selected
                         emit-value
                         map-options
-                        :options="
-                            countries.map((c) => ({
-                                label: `${c.emoji} ${c.name_en} `,
-                                value: c.name_en,
-                            }))
-                        "
+                        input-debounce="300"
+                        :options="filteredCountries"
                         label="Country"
-                        outlined
                         :error="!!errors.country"
+                        @filter="filterCountries"
                     >
                         <template v-slot:error>
                             <v-error :error="errors.country"></v-error>
@@ -64,18 +64,18 @@
 
                     <q-select
                         v-model="form.dial_code"
-                        dense="dense"
+                        dense
+                        outlined
+                        use-input
+                        fill-input
+                        hide-selected
                         emit-value
                         map-options
-                        :options="
-                            countries.map((c) => ({
-                                label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
-                                value: c.dial_code,
-                            }))
-                        "
+                        input-debounce="300"
+                        :options="filteredDialCodes"
                         label="Dial Code"
-                        outlined
                         :error="!!errors.dial_code"
+                        @filter="filterDialCodes"
                     >
                         <template v-slot:error>
                             <v-error :error="errors.dial_code"></v-error>
@@ -175,6 +175,8 @@ export default {
                 email: { label: "Email", type: "email" },
                 phone: { label: "Phone Number", type: "text" },
             },
+            filteredCountries: [],
+            filteredDialCodes: [],
         };
     },
 
@@ -194,6 +196,54 @@ export default {
             dialog.value = false;
             this.form = { groups: [] };
             this.countries = [];
+        },
+
+        filterCountries(val, update) {
+            if (!val) {
+                update(() => {
+                    this.filteredCountries = this.countries.map((c) => ({
+                        label: `${c.emoji} ${c.name_en}`,
+                        value: c.name_en,
+                    }));
+                });
+                return;
+            }
+
+            const needle = val.toLowerCase();
+            update(() => {
+                this.filteredCountries = this.countries
+                    .filter((c) => c.name_en.toLowerCase().includes(needle))
+                    .map((c) => ({
+                        label: `${c.emoji} ${c.name_en}`,
+                        value: c.name_en,
+                    }));
+            });
+        },
+
+        filterDialCodes(val, update) {
+            if (!val) {
+                update(() => {
+                    this.filteredDialCodes = this.countries.map((c) => ({
+                        label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
+                        value: c.dial_code,
+                    }));
+                });
+                return;
+            }
+
+            const needle = val.toLowerCase();
+            update(() => {
+                this.filteredDialCodes = this.countries
+                    .filter((c) =>
+                        `${c.name_en} ${c.dial_code}`
+                            .toLowerCase()
+                            .includes(needle)
+                    )
+                    .map((c) => ({
+                        label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
+                        value: c.dial_code,
+                    }));
+            });
         },
 
         async create() {
@@ -245,6 +295,15 @@ export default {
                 });
                 if (res.status === 200) this.countries = res.data;
             } catch (e) {}
+
+            this.filteredCountries = this.countries.map((c) => ({
+                label: `${c.emoji} ${c.name_en}`,
+                value: c.name_en,
+            }));
+            this.filteredDialCodes = this.countries.map((c) => ({
+                label: `${c.emoji} ${c.name_en} (${c.dial_code})`,
+                value: c.dial_code,
+            }));
         },
     },
 };

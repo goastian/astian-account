@@ -18,7 +18,7 @@
             transition-show="scale"
             transition-hide="scale"
         >
-            <q-card class="w-100 py-4">
+            <q-card class="q-pa-md full-width">
                 <q-card-section class="text-center">
                     <h6 class="text-gray-500">Add new role</h6>
                 </q-card-section>
@@ -112,7 +112,7 @@ export default {
         open() {
             this.form.name = null;
             this.form.description = null;
-            this.system = false;
+            this.form.system = false;
             this.errors = {};
             this.dialog = true;
         },
