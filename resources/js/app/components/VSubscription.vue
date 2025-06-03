@@ -132,7 +132,6 @@ export default {
                 });
                 return;
             }
-            console.log(this.$page.props.user);
 
             if (this.buy) {
                 await this.continuePayment();

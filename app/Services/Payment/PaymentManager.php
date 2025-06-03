@@ -1,16 +1,16 @@
 <?php
-namespace App\Models\Payment;
- 
+namespace App\Services\Payment;
+
 use Exception;
-use App\Models\Subscription\Transaction;
-use App\Models\Payment\Drivers\P2pSubscription;
-use App\Models\Payment\Drivers\StripeSubscription;
+use App\Models\Subscription\Transaction; 
+use App\Services\Payment\Drivers\StripeSubscription;
+use App\Services\Payment\Drivers\OfflineSubscription;
 
 class PaymentManager
 {
     protected array $drivers = [
         'stripe' => StripeSubscription::class,
-        'p2p' => P2pSubscription::class,
+        'offline' => OfflineSubscription::class,
     ];
 
     /**
