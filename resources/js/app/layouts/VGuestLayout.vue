@@ -1,8 +1,8 @@
 <template>
-    <q-layout view="hHh lpR fFf">
+    <q-layout view="hHh lpR fFf" class="main column justify-between">
         <!-- Header -->
-        <q-header elevated>
-            <q-toolbar>
+        <q-header>
+            <div class="toolbar row">
                 <q-toolbar-title>
                     <slot name="title"></slot>
                 </q-toolbar-title>
@@ -26,15 +26,19 @@
                     @click="guest = true"
                 />
                 <v-profile />
-            </q-toolbar>
+            </div>
         </q-header>
 
         <!-- Main Content -->
         <q-page-container>
-            <slot name="body" />
+            <div class="main row justify-center">
+                <div class="main-container">
+                    <slot name="body" />
+                </div>
+            </div>
         </q-page-container>
 
-        <!-- Footer 
+        <!-- Footer
         <q-footer class="text-center" elevated>
             <q-toolbar>
                 <q-toolbar-title class="text-center">
@@ -64,3 +68,29 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.q-header {
+    background-color: var(--q-background-secondary);
+    padding: 1rem 1rem 0 1rem;
+}
+
+.toolbar {
+    background-color: var(--q-background-primary);
+    color: var(--q-color);
+    align-items: center;
+    padding: .4rem 1rem;
+    border-radius: .7rem;
+}
+
+.main {
+    background-color: var(--q-background-secondary);
+}
+
+.main-container {
+    height: 100%;
+    width: 90%;
+    max-width: 1280px;
+}
+
+</style>

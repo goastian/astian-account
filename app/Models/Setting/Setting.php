@@ -40,12 +40,12 @@ class Setting extends Master
         Config::set('passport.personal_access_client.id', settingItem('passport_personal_access_client_id'));
         Config::set('passport.personal_access_client.secret', settingItem('passport_personal_access_client_secret'));
 
-
         Setting::getPassportSetting();
         Setting::getRedisConfig();
         Setting::getQueueSetting();
         Setting::getFileSystems();
         Setting::getEmailSettings();
+        Setting::getServicesSettings();
         Setting::getPaymentSettings();
         Setting::getSystemSetting();
         Setting::getSessionSettings();
@@ -197,6 +197,17 @@ class Setting extends Master
         settingLoad('services.ses.secret', null);
         settingLoad('services.ses.region', null);
 
+        settingLoad('services.captcha.driver', "hcaptcha");
+        settingLoad('services.captcha.enabled', false);
+
+        settingLoad('services.captcha.providers.turnstile.api', 'https://challenges.cloudflare.com/turnstile/v0/siteverify');
+        settingLoad('services.captcha.providers.turnstile.secret', null);
+        settingLoad('services.captcha.providers.turnstile.sitekey', null);
+
+        settingLoad('services.captcha.providers.hcaptcha.api', 'https://hcaptcha.com/siteverify');
+        settingLoad('services.captcha.providers.hcaptcha.secret', null);
+        settingLoad('services.captcha.providers.hcaptcha.sitekey', null);
+
         //Payment settings 
         settingLoad('billing.methods.stripe.name', 'Credit Card (Stripe)');
         settingLoad('billing.methods.stripe.icon', 'mdi-credit-card-outline');
@@ -205,9 +216,9 @@ class Setting extends Master
         settingLoad('services.stripe.key', null);
         settingLoad('services.stripe.webhook_secret', null);
 
-        settingLoad('billing.methods.p2p.name', 'Peer 2 Peer');
-        settingLoad('billing.methods.p2p.icon', 'mdi-cash-register');
-        settingLoad('billing.methods.p2p.enable', true);
+        settingLoad('billing.methods.offline.name', 'Peer 2 Peer');
+        settingLoad('billing.methods.offline.icon', 'mdi-cash-register');
+        settingLoad('billing.methods.offline.enable', true);
 
         //System settings
         settingLoad('system.schema_mode', "https");
@@ -407,8 +418,11 @@ class Setting extends Master
 
         Config::set('mail.from.address', settingItem('mail.from.address', 'hello@example.com'));
         Config::set('mail.from.name', settingItem('mail.from.name', 'Example'));
+    }
 
 
+    public static function getServicesSettings()
+    {
         Config::set('services.mailgun.domain', settingItem('services.mailgun.domain', null));
         Config::set('services.mailgun.secret', settingItem('services.mailgun.secret', null));
         Config::set('services.mailgun.endpoint', settingItem('services.mailgun.endpoint', null));
@@ -419,6 +433,17 @@ class Setting extends Master
         Config::set('services.ses.key', settingItem('services.ses.key', null));
         Config::set('services.ses.secret', settingItem('services.ses.secret', null));
         Config::set('services.ses.region', settingItem('services.ses.region', null));
+
+        Config::set('services.captcha.driver', settingItem('services.captcha.driver', 'hcaptcha'));
+        Config::set('services.captcha.enabled', settingItem('services.captcha.enabled', false));
+
+        Config::set('services.captcha.providers.turnstile.api', settingItem('services.captcha.providers.turnstile.api', 'https://challenges.cloudflare.com/turnstile/v0/siteverify'));
+        Config::set('services.captcha.providers.turnstile.secret', settingItem('services.captcha.providers.turnstile.secret', null));
+        Config::set('services.captcha.providers.turnstile.sitekey', settingItem('services.captcha.providers.turnstile.sitekey', null));
+
+        Config::set('services.captcha.providers.hcaptcha.api', settingItem('services.captcha.providers.hcaptcha.api', 'https://hcaptcha.com/siteverify'));
+        Config::set('services.captcha.providers.hcaptcha.secret', settingItem('services.captcha.providers.hcaptcha.secret', null));
+        Config::set('services.captcha.providers.hcaptcha.sitekey', settingItem('services.captcha.providers.hcaptcha.sitekey', null));
     }
 
     /**
@@ -434,9 +459,9 @@ class Setting extends Master
         Config::set('services.stripe.key', settingItem('services.stripe.key', null));
         Config::set('services.stripe.webhook_secret', settingItem('services.stripe.webhook_secret', null));
 
-        Config::set('billing.methods.p2p.name', settingItem('billing.methods.p2p.name', 'Peer 2 Peer'));
-        Config::set('billing.methods.p2p.icon', settingItem('billing.methods.p2p.icon', 'mdi-cash-register'));
-        Config::set('billing.methods.p2p.enable', settingItem('billing.methods.p2p.enable', true));
+        Config::set('billing.methods.offline.name', settingItem('billing.methods.offline.name', 'Peer 2 Peer'));
+        Config::set('billing.methods.offline.icon', settingItem('billing.methods.offline.icon', 'mdi-cash-register'));
+        Config::set('billing.methods.offline.enable', settingItem('billing.methods.offline.enable', true));
     }
 
     /**

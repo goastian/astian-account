@@ -53,6 +53,7 @@ class UserTransformer extends TransformerAbstract
             'verify_email' => $user->verified_at ? true : false,
             'verified' => $this->format_date($user->verified_at),
             'created' => $this->format_date($user->created_at),
+            'last_connected' => $this->format_date($user->last_connected),
             'updated' => $this->format_date($user->updated_at),
             'disabled' => $this->format_date($user->deleted_at),
             'links' => [

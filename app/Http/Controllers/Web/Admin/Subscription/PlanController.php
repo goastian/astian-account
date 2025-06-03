@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Web\Admin\Subscription;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
-use App\Models\Subscription\Plan;
-use App\Models\Subscription\Scope;
-use Illuminate\Support\Facades\DB;
-use App\Models\Subscription\Package;
-use Stevebauman\Purify\Facades\Purify;
-use App\Http\Controllers\ApiController;
+use App\Models\Subscription\Plan; 
+use Illuminate\Support\Facades\DB; 
 use App\Http\Controllers\WebController;
-use Elyerr\ApiResponse\Exceptions\ReportError;
+use Stevebauman\Purify\Facades\Purify;  
 
 class PlanController extends WebController
 {

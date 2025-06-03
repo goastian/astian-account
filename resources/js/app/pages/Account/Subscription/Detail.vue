@@ -1,116 +1,59 @@
 <template>
     <div>
-        <q-btn
+        <button
             @click="dialog = true"
-            color="positive"
-            outline
-            icon="mdi-eye-arrow-right"
-            size="md"
-        />
+            class="btn"
+        >View Details</button>
 
-        <q-dialog v-model="dialog" persistent full-width>
-            <q-card class="q-pa-md" style="min-width: 600px; max-width: 90vw">
-                <q-card-section class="bg-primary text-white">
-                    <div class="text-h6">
-                        <q-icon
-                            name="mdi-information-outline"
-                            class="q-mr-sm"
-                        />
-                        Product Details
+        <q-dialog v-model="dialog">
+            <q-card class="card-main column no-wrap">
+                <section class="row justify-between items-start">
+                    <div class="row items-center">
+                        <span>
+                            📦
+                        </span>
+                        <div>
+                            <h2 class="title">{{ item.meta.name }}</h2>
+                        </div>
                     </div>
-                </q-card-section>
+                    <button v-close-popup>
+                        <q-icon name="mdi-close" />
+                    </button>
+                </section>
 
-                <q-separator />
+                <section class="nav row no-wrap">
+                    <button
+                        v-for="(i, index) in navs"
+                        class="item-nav"
+                        @click="selectNav(i.id)"
+                        :class="{'active' : i.id == activeNav}"
+                    >{{ i.name }}</button>
+                </section>
 
                 <!-- General data -->
-                <q-card-section class="q-gutter-md">
-                    <div class="text-subtitle1 text-bold text-primary q-mb-sm">
-                        Plan Information
+                <section class="q-gutter-md" v-if="activeNav == 1">
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-cash-sync"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Transaction code:</strong>
+                        </div>
+                        <div>
+                            {{ item.transaction.code }}
+                            {{ item.transaction.currency }}
+                        </div>
                     </div>
 
-                    <div>
-                        <q-icon
-                            name="mdi-package-variant"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Plan Name:</strong> {{ item.meta.name }}
-                    </div>
-                    <div>
-                        <q-icon name="mdi-text" class="q-mr-sm text-primary" />
-                        <strong>Description:</strong>
-                        {{ item.meta.description }}
-                    </div>
-                    <div>
-                        <q-icon
-                            name="mdi-cash-sync"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Transaction code:</strong>
-                        {{ item.transaction.code }}
-                        {{ item.transaction.currency }}
-                    </div>
-                    <div>
-                        <q-icon
-                            name="mdi-currency-usd"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Price:</strong> {{ item.transaction.total }}
-                        {{ item.transaction.currency }}
-                    </div>
-                    <div>
-                        <q-icon
-                            name="mdi-calendar-clock"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Billing Period:</strong>
-                        {{ item.transaction.billing_period }}
-                    </div>
-                    <div>
-                        <q-icon
-                            name="mdi-credit-card-outline"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Payment Method:</strong>
-                        {{ item.transaction.payment_method }}
-                    </div>
-                    <div>
-                        <q-icon
-                            name="mdi-calendar-start"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Start Date:</strong> {{ item.start_at }}
-                    </div>
-                    <div>
-                        <q-icon
-                            name="mdi-calendar-end"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>End Date:</strong> {{ item.end_at }}
-                    </div>
-
-                    <div v-if="item.last_renewal_at">
-                        <q-icon
-                            name="mdi-calendar-end"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Last renewal:</strong>
-                        {{ item.last_renewal_at }}
-                    </div>
-                    <div v-if="item.cancellation_at">
-                        <q-icon
-                            name="mdi-calendar-end"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Cancellation :</strong>
-                        {{ item.cancellation_at }}
-                    </div>
-
-                    <div>
-                        <q-icon
-                            name="mdi-check-circle-outline"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Status:</strong>
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-check-circle-outline"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Status:</strong>
+                        </div>
                         <q-badge
                             color="green"
                             v-if="item.status === 'successful'"
@@ -118,16 +61,118 @@
                         >
                             {{ item.status }}
                         </q-badge>
+                        <q-badge
+                            v-else-if="item.status === 'pending'"
+                            color="yellow"
+                        >
+                            {{ item.status }}
+                        </q-badge>
                         <q-badge color="red" v-else class="q-ml-sm">
                             {{ item.status }}
                         </q-badge>
                     </div>
-                    <div>
-                        <q-icon
-                            name="mdi-refresh-auto"
-                            class="q-mr-sm text-primary"
-                        />
-                        <strong>Recurring:</strong>
+
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-currency-usd"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Price:</strong>
+                        </div>
+                        <div>
+                            {{ item.transaction.total }}
+                            {{ item.transaction.currency }}
+                        </div>
+                    </div>
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-calendar-clock"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Billing Period:</strong>
+                        </div>
+                        <span>
+                            {{ item.transaction.billing_period }}
+                        </span>
+                    </div>
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-credit-card-outline"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Payment Method:</strong>
+                        </div>
+                        <span>
+                            {{ item.transaction.payment_method }}
+                        </span>
+                    </div>
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-calendar-start"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Start Date:</strong>
+                        </div>
+                        <span v-if="item.start_at">
+                            {{ item.start_at }}
+                        </span>
+                        <span v-else>
+                            -
+                        </span>
+                    </div>
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-calendar-end"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>End Date:</strong>
+                        </div>
+                        <span v-if="item.end_at">
+                            {{ item.end_at }}
+                        </span>
+                        <span v-else>
+                            -
+                        </span>
+                    </div>
+
+                    <div v-if="item.last_renewal_at" class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-calendar-end"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Last renewal:</strong>
+                        </div>
+                        <span>
+                            {{ item.last_renewal_at }}
+                        </span>
+                    </div>
+                    <div v-if="item.cancellation_at" class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-calendar-end"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Cancellation :</strong>
+                        </div>
+                        <span>
+                            {{ item.cancellation_at }}
+                        </span>
+                    </div>
+
+                    <div class="row justify-between">
+                        <div>
+                            <q-icon
+                                name="mdi-refresh-auto"
+                                class="q-mr-sm text-primary"
+                            />
+                            <strong>Recurring:</strong>
+                        </div>
                         <q-icon
                             :name="
                                 item.is_recurring ? 'mdi-check' : 'mdi-close'
@@ -135,11 +180,9 @@
                             :color="item.is_recurring ? 'positive' : 'negative'"
                         />
                     </div>
-                </q-card-section>
+                </section>
 
-                <q-separator class="q-my-md" />
-
-                <q-card-section>
+                <section v-if="activeNav == 3">
                     <div class="text-subtitle1 text-bold text-primary q-mb-sm">
                         Included Services
                     </div>
@@ -160,11 +203,10 @@
                             </q-item-section>
                         </q-item>
                     </q-list>
-                </q-card-section>
+                    <span v-html="item.meta.description"></span>
+                </section>
 
-                <q-separator class="q-my-md" />
-
-                <q-card-section>
+                <section v-if="activeNav == 2">
                     <div class="text-subtitle1 text-bold text-primary q-mb-sm">
                         Transactions
                     </div>
@@ -333,9 +375,9 @@
                             </q-item-section>
                         </q-item>
                     </q-list>
-                </q-card-section>
+                </section>
 
-                <q-card-section>
+                <section v-if="activeNav == 4">
                     <v-subscription
                         :period="item.meta.price"
                         :plan="item"
@@ -343,11 +385,7 @@
                         :buy="false"
                         :package="item"
                     />
-                </q-card-section>
-
-                <q-card-actions align="right">
-                    <q-btn flat label="Close" color="primary" v-close-popup />
-                </q-card-actions>
+                </section>
             </q-card>
         </q-dialog>
     </div>
@@ -372,6 +410,25 @@ export default {
     data() {
         return {
             dialog: false,
+            navs: [
+                {
+                    id: 1,
+                    name: 'Details'
+                },
+                {
+                    id: 3,
+                    name: 'Features'
+                },
+                {
+                    id: 2,
+                    name: 'History'
+                },
+                {
+                    id: 4,
+                    name: 'Actions'
+                }
+            ],
+            activeNav: 1,
         };
     },
 
@@ -379,6 +436,57 @@ export default {
         emitEvent() {
             this.emit("reload");
         },
+        selectNav(id) {
+            this.activeNav = id;
+        }
     },
 };
 </script>
+
+<style scoped>
+.card-main {
+    width: 500px;
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.btn {
+    padding: .5rem 1.5rem;
+    color: var(--q-color);
+    border-radius: .4rem;
+    border: 1px solid var(--q-border);
+}
+
+.btn:hover {
+    background-color: var(--q-color-blue-light);
+}
+
+.title {
+    font-size: 1.5rem;
+    color: var(--q-color);
+    line-height: 1.5rem;
+}
+
+.nav {
+    background-color: var(--q-background-secondary);
+    padding: .3rem;
+    border-radius: .4rem;
+    gap: .4rem;
+}
+
+.nav > .item-nav {
+    width: 100%;
+    padding: .4rem 1rem;
+    border-radius: .3rem;
+    color: var(--q-color-secondary);
+}
+
+.nav > .item-nav.active {
+    background-color: var(--q-background-primary);
+    color: var(--q-color);
+}
+
+.card-footer {
+    background-color: red;
+}
+</style>

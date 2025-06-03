@@ -52,6 +52,7 @@
                         "
                     />
                 </div>
+                <v-captcha @verified="handleVerified" />
 
                 <q-btn
                     label="Sign in"
@@ -88,6 +89,10 @@ export default {
             type: Boolean,
             default: false,
         },
+        refer: {
+            type: String,
+            required: false,
+        }
     },
 
     data() {
@@ -111,6 +116,10 @@ export default {
     },
 
     methods: {
+        handleVerified({ name, value }) {
+            this.form[name] = value;
+        },
+
         async login() {
             try {
                 const res = await this.$server.post(
@@ -131,7 +140,8 @@ export default {
         },
 
         open(uri) {
-            window.location.href = uri;
+            const url = `${uri}?referral_code=${this.refer}`;
+            window.location.href = url;
         },
 
         close() {

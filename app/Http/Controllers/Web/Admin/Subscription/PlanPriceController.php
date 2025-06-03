@@ -1,13 +1,11 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
-use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use App\Models\Subscription\Price;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\ApiController;
+use App\Http\Controllers\WebController;
 
-class PlanPriceController extends ApiController
+class PlanPriceController extends WebController
 {
 
     public function __construct()

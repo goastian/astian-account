@@ -1,13 +1,13 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
-use App\Http\Controllers\WebController;
+use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Role;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\WebController;
 use Elyerr\ApiResponse\Exceptions\ReportError;
-use Inertia\Inertia;
 
 class RoleController extends WebController
 {
@@ -19,7 +19,7 @@ class RoleController extends WebController
         $this->middleware('userCanAny:administrator_role_full,administrator_role_create')->only('store');
         $this->middleware('userCanAny:administrator_role_full,administrator_role_update')->only('update');
         $this->middleware('userCanAny:administrator_role_full,administrator_role_destroy')->only('destroy');
-        
+
         $this->middleware('wants.json')->only('show');
     }
 
@@ -31,7 +31,7 @@ class RoleController extends WebController
     public function index(Role $role)
     {
         $params = $this->filter_transform($role->transformer);
-
+        
         $data = $role->query();
 
         $data = $this->searchByBuilder($data, $params);
@@ -96,7 +96,7 @@ class RoleController extends WebController
         });
 
         //send event
-        $this->privateChannel("StoreRoleEvent", "New role created");
+
 
         return $this->showOne($role, $role->transformer, 201);
     }
@@ -129,7 +129,7 @@ class RoleController extends WebController
             if ($update) {
                 $role->push();
                 //send event
-                $this->privateChannel("UpdateRoleEvent", "Role updated");
+
             }
 
         });
@@ -158,7 +158,7 @@ class RoleController extends WebController
         $role->delete();
 
         //send event
-        $this->privateChannel("DestroyRoleEvent", "Role deleted");
+
 
         return $this->showOne($role, $role->transformer);
     }

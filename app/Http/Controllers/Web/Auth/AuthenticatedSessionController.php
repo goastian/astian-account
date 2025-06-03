@@ -41,6 +41,9 @@ class AuthenticatedSessionController extends WebController
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        auth()->user()->lastConnected();
+
         if ($request->module) {
             return redirect()->route('authorize.module', ['redirect_to' => $request->redirect_to]);
         }
@@ -62,6 +65,8 @@ class AuthenticatedSessionController extends WebController
      */
     public function destroy(Request $request)
     {
+        auth()->user()->lastConnected();
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

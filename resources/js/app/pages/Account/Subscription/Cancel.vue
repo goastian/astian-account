@@ -1,14 +1,9 @@
 <template>
     <div>
-        <q-btn
-            outline
-            label="Cancel payment"
-            icon="mdi-cart-remove"
-            color="negative"
-            size="sm"
-            class="q-mt-sm full-width"
+        <button
+            class="btn"
             @click="dialog = true"
-        />
+        >Cancel</button>
         <q-dialog v-model="dialog">
             <q-card>
                 <q-card-section class="row items-center q-pb-none">
@@ -63,10 +58,20 @@ export default {
 
                 if (res.status == 200) {
                     this.dialog = false;
-                    this.emit("canceled");
+                    this.$emit("canceled");
                 }
             } catch (error) {}
         },
     },
 };
 </script>
+
+<style scoped>
+.btn {
+    background-color: var(--q-color-red);
+    color: white;
+    padding: .5rem 2rem;
+    width: 100%;
+    border-radius: .4rem;
+}
+</style>

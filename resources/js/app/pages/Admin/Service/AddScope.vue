@@ -158,7 +158,7 @@ export default {
                 const res = await this.$server.get(
                     this.$page.props.route.roles,
                     {
-                        headers: {
+                        params: {
                             per_page: 100,
                         },
                     }
