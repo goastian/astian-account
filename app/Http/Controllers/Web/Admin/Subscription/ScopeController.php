@@ -25,8 +25,6 @@ class ScopeController extends WebController
      */
     public function index(Request $request, Scope $scope)
     {
-        $this->checkMethod('get');
-
         $data = $scope->query();
         $data->where('active', true)->where('public', false);
 

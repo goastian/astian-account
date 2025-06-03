@@ -22,7 +22,7 @@ class ServiceScopeController extends WebController
         $this->middleware('userCanAny:administrator_service_full,administrator_service_view')->only('index');
         $this->middleware('userCanAny:administrator_service_full,administrator_service_assign')->only('assign');
         $this->middleware('userCanAny:administrator_service_full,administrator_service_revoke')->only('revoke');
-    
+
         $this->middleware('wants.json')->only('index');
     }
 
@@ -53,9 +53,6 @@ class ServiceScopeController extends WebController
             'active' => ['required', new BooleanRule()],
             'api_key' => ['required', new BooleanRule()],
         ]);
-
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
 
         DB::transaction(function () use ($request, $service) {
             $service->scopes()->updateOrCreate(

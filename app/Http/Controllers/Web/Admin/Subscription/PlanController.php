@@ -117,10 +117,6 @@ class PlanController extends WebController
             'prices.*.amount' => ['required', 'integer', 'min:0'],
         ]);
 
-        $this->checkMethod('post');
-
-        $this->checkContentType($this->getPostHeader());
-
         DB::transaction(function () use ($request, $plan) {
             $plan = $plan->fill($request->except('description'));
             $plan->description = Purify::clean($request->description);
@@ -148,10 +144,6 @@ class PlanController extends WebController
      */
     public function show(Plan $plan)
     {
-        $this->checkMethod('get');
-
-        $this->checkContentType(null);
-
         return $this->showOne($plan, $plan->transformer);
     }
 
@@ -209,10 +201,6 @@ class PlanController extends WebController
             ],
             'prices.*.amount' => ['required', 'integer', 'min:0'],
         ]);
-
-        $this->checkMethod('put');
-
-        $this->checkContentType($this->getUpdateHeader());
 
         DB::transaction(function () use ($request, $plan) {
             $update = false;

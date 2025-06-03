@@ -34,8 +34,6 @@ class ServiceController extends WebController
      */
     public function index(Request $request, Service $service)
     {
-        $this->checkMethod('get');
-
         $params = $this->filter_transform($service->transformer);
 
         $data = $service->query();
@@ -76,9 +74,6 @@ class ServiceController extends WebController
             'system' => ['nullable', new BooleanRule()],
             'visibility' => ['required', Rule::in(Service::visibilities())]
         ]);
-
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
 
         $request->merge([
             'slug' => $this->slug($request->name),
@@ -122,9 +117,6 @@ class ServiceController extends WebController
             'visibility' => ['nullable', Rule::in(Service::visibilities())]
         ]);
 
-        $this->checkMethod('put');
-        $this->checkContentType($this->getUpdateHeader());
-
         DB::transaction(function () use ($request, $service) {
 
             $update = false;
@@ -160,9 +152,6 @@ class ServiceController extends WebController
      */
     public function destroy(Service $service)
     {
-        $this->checkMethod('delete');
-        $this->checkContentType(null);
-
         throw_if($service->system, new ReportError(__("This action cannot be completed because this service is a system service and cannot be deleted."), 403));
 
         throw_if($service->scopes()->count() > 0, new ReportError(__("This action can't be done"), 400));
