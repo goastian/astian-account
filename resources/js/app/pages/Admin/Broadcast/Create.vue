@@ -1,6 +1,6 @@
 <template>
     <q-dialog v-model="dialog" persistent>
-        <q-card class="w-100">
+        <q-card class="q-pa-md full-width">
             <q-card-section>
                 <div class="text-h6">Add new channel</div>
             </q-card-section>
@@ -50,7 +50,6 @@
                             </q-item-label>
                         </q-item-section>
                     </q-item>
-                    this.getBroadcasting();
                 </div>
             </q-card-section>
 
