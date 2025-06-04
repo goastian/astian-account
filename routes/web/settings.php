@@ -13,6 +13,7 @@ Route::group([
     Route::get('/email', [SettingController::class, 'email'])->name('email');
     Route::get('/user', [SettingController::class, 'user'])->name('user');
     Route::get('/routes', [SettingController::class, 'routes'])->name('routes');
+    Route::get('/cache', [SettingController::class, 'cache'])->name('cache');
     Route::get('/redis', [SettingController::class, 'redis'])->name('redis');
     Route::get('/queues', [SettingController::class, 'queues'])->name('queues');
     Route::get('/filesystem', [SettingController::class, 'filesystem'])->name('filesystem');
