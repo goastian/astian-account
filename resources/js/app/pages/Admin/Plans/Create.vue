@@ -302,7 +302,7 @@
                         v-if="scopes.length"
                         bordered
                         padding
-                        class="rounded-borders q-mt-md bg-grey-1"
+                        class="rounded-borders q-mt-md bg-grey-1 list"
                     >
                         <q-item
                             v-for="(item, index) in scopes"
@@ -544,3 +544,10 @@ export default {
     },
 };
 </script>
+
+
+<style scoped>
+.list {
+    background-color: var(--q-background-primary) !important;
+}
+</style>

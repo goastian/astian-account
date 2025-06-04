@@ -448,6 +448,7 @@ export default {
     width: 500px;
     gap: 1rem;
     padding: 1.5rem;
+    background-color: var(--q-background-primary);
 }
 
 .btn {

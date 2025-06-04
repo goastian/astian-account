@@ -220,6 +220,7 @@ export default {
 .card {
     gap: 1rem;
     width: 100%;
+    background-color: var(--q-background-primary);
 }
 
 .name {

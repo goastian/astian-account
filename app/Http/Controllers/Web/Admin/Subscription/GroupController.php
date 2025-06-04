@@ -80,9 +80,6 @@ class GroupController extends WebController
             'slug' => $this->slug($request->name),
         ]);
 
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
-
         DB::transaction(function () use ($request, $group) {
             $group = $group->fill($request->all());
             $group->save();
@@ -99,9 +96,6 @@ class GroupController extends WebController
      */
     public function show(Group $group)
     {
-        $this->checkMethod('get');
-        $this->checkContentType(null);
-
         return $this->showOne($group, $group->transformer);
     }
 
@@ -117,8 +111,6 @@ class GroupController extends WebController
             'description' => ['nullable', 'max:200'],
         ]);
 
-        $this->checkMethod('put');
-        $this->checkContentType($this->getUpdateHeader());
 
         DB::transaction(function () use ($request, $group) {
 
@@ -140,9 +132,6 @@ class GroupController extends WebController
      */
     public function destroy(Group $group)
     {
-        $this->checkMethod('delete');
-        $this->checkContentType(null);
-
         if ($group->services()->count() === 0 && $group->users()->count()) {
             new ReportError(__("This action cannot be completed because this group is currently in use by another resource."), 403);
         }

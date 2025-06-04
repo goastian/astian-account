@@ -167,6 +167,7 @@ export default {
     border: solid .02rem var(--q-border);
     padding: .6rem .8rem;
     background-color: var(--q-background-secondary);
+    color: var(--q-color);
 }
 
 .ga-1 {

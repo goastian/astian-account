@@ -73,27 +73,28 @@
 
             <div class="mb-4 px-2 py-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ __('Service Agreement URL') }}
+                    {{ __('Terms and Conditions URL') }}
                 </label>
-                <input type="text" name="system[service_agreement]"
+                <input type="text" name="system[terms_url]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    value="{{ config('system.service_agreement') }}">
+                    value="{{ config('system.terms_url') }}">
                 <small class="block mt-1 text-gray-600">
-                    {{ __('This field specifies the URL where users can read the Service Agreement.') }}
+                    {{ __('This field specifies the URL where users can read the Terms and Conditions.') }}
                 </small>
             </div>
 
             <div class="mb-4 px-2 py-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ __('Service Statement URL') }}
+                    {{ __('Privacy Policy URL') }}
                 </label>
-                <input type="text" name="system[service_statement]"
+                <input type="text" name="system[privacy_url]"
                     class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                    value="{{ config('system.service_statement') }}">
+                    value="{{ config('system.privacy_url') }}">
                 <small class="block mt-1 text-gray-600">
-                    {{ __('This field specifies the URL where users can read the Policy Statement.') }}
+                    {{ __('This field specifies the URL where users can read the Privacy Policy.') }}
                 </small>
             </div>
+
 
             <div class="mb-4 px-2 py-2">
                 <label class="block text-sm font-medium text-gray-700 mb-2">

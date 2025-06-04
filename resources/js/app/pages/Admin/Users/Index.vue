@@ -173,6 +173,10 @@ export default {
         this.pages = values.meta.pagination;
     },
 
+    mounted() {
+        this.listenEvents();
+    },
+
     watch: {
         "search.page"(value) {
             this.getUsers();
@@ -220,36 +224,21 @@ export default {
         },
 
         listenEvents() {
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("UpdateEmployeeEvent", (e) => {
+            const events = [
+                "UserCreated",
+                "UserUpdated",
+                "UserEnabled",
+                "UserDisabled",
+                "UserDestroyed",
+                "UserPasswordUpdated",
+                "UserRegistered",
+            ];
+
+            events.map((item) => {
+                this.$echo.private("auth").toOthers(item, (e) => {
                     this.getUsers();
                 });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("StoreEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("EnableEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("DisableEmployeeEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("StoreEmployeeRoleEvent", (e) => {
-                    this.getUsers();
-                });
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("DestroyEmployeeRoleEvent", (e) => {
-                    this.getUsers();
-                });
+            });
         },
     },
 };

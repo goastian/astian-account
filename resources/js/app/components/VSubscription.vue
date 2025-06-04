@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="q-mt-lg">
-            <q-banner v-if="selected_method >= 0" class="bg-grey-2 q-pa-md">
+            <q-banner v-if="selected_method >= 0" class="bg-grey-2 q-pa-md banner">
                 <div class="text-h6 q-mb-sm">Summary</div>
                 <div class="text-body2">
                     <strong>Plan:</strong> {{ plan?.name }} <br />
@@ -203,8 +203,13 @@ export default {
 .my-card {
     width: 150px;
     transition: 0.3s;
+    background-color: var(--q-background-primary);
 }
 .my-card:hover {
     transform: scale(1.05);
+}
+
+.banner {
+    background-color: var(--q-background-primary) !important;
 }
 </style>
