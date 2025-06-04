@@ -4,6 +4,7 @@ namespace App\Models\Setting;
 
 use App\Models\Master;
 use App\Models\OAuth\Token;
+use Illuminate\Support\Str;
 use App\Models\OAuth\Client;
 use App\Models\OAuth\AuthCode;
 use Laravel\Passport\Passport;
@@ -49,6 +50,7 @@ class Setting extends Master
         Setting::getPaymentSettings();
         Setting::getSystemSetting();
         Setting::getSessionSettings();
+        Setting::getCacheSettings();
     }
 
     /**
@@ -75,6 +77,7 @@ class Setting extends Master
         settingLoad('database.redis.default.password', null);
         settingLoad('database.redis.default.port', '6379');
         settingLoad('database.redis.default.database', 0);
+
         //redis cache settings
         settingLoad('database.redis.cache.url', null);
         settingLoad('database.redis.cache.host', '127.0.0.1');
@@ -82,6 +85,32 @@ class Setting extends Master
         settingLoad('database.redis.cache.password', null);
         settingLoad('database.redis.cache.port', '6379');
         settingLoad('database.redis.cache.database', 1);
+        //------------------------END REDIS CONFIGURATION-------------------//
+
+        //------------------------CACHE CONFIGURATION-------------------//
+        settingLoad('cache.default', 'file');
+        settingLoad('cache.expires', 30);
+        settingLoad('cache.prefix', Str::slug(config('app.name', 'oauth2_server'), '_') . '_cache_');
+
+        settingLoad('cache.stores.database.connection', null);
+        settingLoad('cache.stores.database.table', 'cache');
+
+        settingLoad('cache.stores.redis.connection', 'cache');
+        settingLoad('cache.stores.redis.lock_connection', 'default');
+
+        settingLoad('cache.stores.memcached.persistent_id', null);
+        settingLoad('cache.stores.memcached.sasl.username', null);
+        settingLoad('cache.stores.memcached.sasl.password', null);
+        settingLoad('cache.stores.memcached.servers.0.host', '127.0.0.1');
+        settingLoad('cache.stores.memcached.servers.0.port', 11211);
+        settingLoad('cache.stores.memcached.servers.0.weight', 100);
+
+        settingLoad('cache.stores.dynamodb.key', null);
+        settingLoad('cache.stores.dynamodb.secret', null);
+        settingLoad('cache.stores.dynamodb.region', 'us-east-1');
+        settingLoad('cache.stores.dynamodb.table', 'cache');
+        settingLoad('cache.stores.dynamodb.endpoint', null);
+        //------------------------END CACHE CONFIGURATION-------------------//
 
 
         //---------------------QUEUES CONFIG--------------------///
@@ -128,7 +157,7 @@ class Setting extends Master
         settingLoad('queue.failed.driver', 'database-uuids');
         settingLoad('queue.failed.database', 'mysql');
         settingLoad('queue.failed.table', 'failed_jobs');
-
+        //---------------------END QUEUES CONFIG--------------------///
 
         //----------FILESYSTEM SETTINGS------------------------------------------
         settingLoad('filesystems.default', 'local');
@@ -232,8 +261,8 @@ class Setting extends Master
         settingLoad('system.enable_register_member', true);
         settingLoad('system.csp_enabled', true);
         settingLoad('system.redirect_to', "/account");
-        settingLoad('system.service_statement', null);
-        settingLoad('system.service_agreement', null);
+        settingLoad('system.privacy_url', null);
+        settingLoad('system.terms_url', null);
         settingLoad('system.policy_cookies', null);
 
         //Session settings
@@ -481,8 +510,8 @@ class Setting extends Master
         Config::set('system.enable_register_member', settingItem('system.enable_register_member', true));
         Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
-        Config::set('system.service_statement', settingItem('system.service_statement', null));
-        Config::set('system.service_agreement', settingItem('system.service_agreement', null));
+        Config::set('system.privacy_url', settingItem('system.privacy_url', null));
+        Config::set('system.terms_url', settingItem('system.terms_url', null));
         Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
 
         Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));
@@ -508,5 +537,29 @@ class Setting extends Master
         Config::set('session.partitioned', settingItem('session.partitioned', false));
     }
 
+    public static function getCacheSettings()
+    {
+        Config::set('cache.default', settingItem('cache.default', 'file', false));
+        Config::set('cache.expires', settingItem('cache.expires', 30, false));
+        Config::set('cache.prefix', settingItem('cache.prefix', null, false));
 
+        Config::set('cache.stores.database.connection', settingItem('cache.stores.database.connection', null, null));
+        Config::set('cache.stores.database.table', settingItem('cache.stores.database.table', 'cache', null));
+
+        Config::set('cache.stores.redis.connection', settingItem('cache.stores.redis.connection', 'cache', null));
+        Config::set('cache.stores.redis.lock_connection', settingItem('cache.stores.redis.lock_connection', 'default', null));
+
+        Config::set('cache.stores.memcached.persistent_id', settingItem('cache.stores.memcached.persistent_id', null, null));
+        Config::set('cache.stores.memcached.sasl.username', settingItem('cache.stores.memcached.sasl.username', null, null));
+        Config::set('cache.stores.memcached.sasl.password', settingItem('cache.stores.memcached.sasl.password', null, null));
+        Config::set('cache.stores.memcached.servers.0.host.', settingItem('cache.stores.memcached.servers.0.host', '127.0.0.1', null));
+        Config::set('cache.stores.memcached.servers.0.port', settingItem('cache.stores.memcached.servers.0.port', 11211, null));
+        Config::set('cache.stores.memcached.servers.0.weight', settingItem('cache.stores.memcached.servers.0.weight', 100, null));
+
+        Config::set('cache.stores.dynamodb.key', settingItem('cache.stores.dynamodb.key', null, null));
+        Config::set('cache.stores.dynamodb.secret', settingItem('cache.stores.dynamodb.secret', null, null));
+        Config::set('cache.stores.dynamodb.region', settingItem('cache.stores.dynamodb.region', 'us-east-1', null));
+        Config::set('cache.stores.dynamodb.table', settingItem('cache.stores.dynamodb.table', 'cache', null));
+        Config::set('cache.stores.dynamodb.table', settingItem('cache.stores.dynamodb.endpoint', null, null));
+    }
 }
