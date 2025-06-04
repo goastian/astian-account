@@ -38,6 +38,7 @@
                             'admin.settings.user' => ['icon' => 'mdi-account-key', 'label' => __('User')],
                             'admin.settings.routes' => ['icon' => 'mdi-router-network', 'label' => __('Routes')],
                             'admin.settings.redis' => ['icon' => 'mdi-database-cog', 'label' => __('Redis')],
+                            'admin.settings.cache' => ['icon' => 'mdi-cached', 'label' => __('Cache')],
                             'admin.settings.queues' => ['icon' => 'mdi-queue-first-in-last-out', 'label' => __('Queues')],
                             'admin.settings.filesystem' => ['icon' => 'mdi-file-cog', 'label' => __('Filesystem')],
                             'admin.settings.security' => ['icon' => 'mdi-shield', 'label' => __('Security')],

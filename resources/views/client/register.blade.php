@@ -37,7 +37,7 @@
                     @error('last_name')
                         <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                     @enderror
-                </div> 
+                </div>
 
                 <!-- Email -->
                 <div>
@@ -84,15 +84,15 @@
                         class="mt-1 rounded border-gray-300 text-blue-500 focus:ring-2 focus:ring-blue-400">
                     <label for="accept_terms">
                         {{ __('By choosing this option, you accept the') }}
-                        <a href="{{ config('system.service_agreement') }}" target="_blank"
-                            class="text-blue-600 hover:underline">
-                            {{ __('Services Agreement') }}</a> {{ __('and') }}
-                        <a href="{{ config('system.service_statement') }}" target="_blank"
-                            class="text-blue-600 hover:underline">
-                            {{ 'Privacy Statement.' }}
-                        </a>
+                        <a href="{{ config('system.terms_url') }}" target="_blank" class="text-blue-600 hover:underline">
+                            {{ __('Terms and Conditions') }}
+                        </a> {{ __('and') }}
+                        <a href="{{ config('system.privacy_url') }}" target="_blank" class="text-blue-600 hover:underline">
+                            {{ __('Privacy Policy') }}
+                        </a>.
                     </label>
                 </div>
+
                 @error('accept_terms')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                 @enderror
