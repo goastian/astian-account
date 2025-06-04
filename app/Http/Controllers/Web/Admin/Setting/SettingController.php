@@ -35,7 +35,10 @@ class SettingController extends WebController
         $data = $this->transformRequest($data);
 
         foreach ($data as $key => $value) {
-            settingAdd($key, $value);
+
+            $cache = str_contains($key, 'cache');
+
+            settingAdd($key, $value, !$cache);
         }
 
         return redirect($request->current_route)->with('status', __('Setting updated successfully'));
@@ -125,6 +128,15 @@ class SettingController extends WebController
     public function queues()
     {
         return view('settings.section.queues');
+    }
+
+    /**
+     * Show of cache view
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function cache()
+    {
+        return view('settings.section.cache');
     }
 
 
