@@ -85,4 +85,23 @@ class Controller extends BaseController
             $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
         }
     }
+
+    /**
+     * search by builder
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $params
+     * @return Builder
+     */
+    public function searchByBuilder(Builder $query, array $params)
+    {
+        foreach ($params as $key => $value) {
+            if (!isset($value) || trim($value) === '') {
+                continue;
+            }
+
+            $query->whereRaw("LOWER({$key}) LIKE ?", ['%' . strtolower($value) . '%']);
+        }
+
+        return $query;
+    }
 }
