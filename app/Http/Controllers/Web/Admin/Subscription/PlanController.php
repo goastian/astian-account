@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Web\Admin\Subscription;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
-use App\Models\Subscription\Plan; 
-use Illuminate\Support\Facades\DB; 
+use App\Models\Subscription\Plan;
+use App\Models\Subscription\Scope;
+use Illuminate\Support\Facades\DB;
+use Stevebauman\Purify\Facades\Purify;
 use App\Http\Controllers\WebController;
-use Stevebauman\Purify\Facades\Purify;  
 
 class PlanController extends WebController
 {
@@ -82,7 +83,18 @@ class PlanController extends WebController
                 'min:0',
                 'max:255',
             ],
-            'scopes' => ['required', 'array', 'exists:scopes,id'],
+            'scopes' => [
+                'required',
+                'array',
+                'exists:scopes,id',
+                function ($attribute, $value, $fail) {
+                    $duplicated = $this->checkServices($value);
+
+                    if (count($duplicated) > 0) {
+                        $fail(__("The following services (:services) contain duplicate roles", ['services' => implode(', ', $duplicated)]));
+                    }
+                }
+            ],
             'prices' => ['required', 'array'],
             'prices.*.billing_period' => [
                 'required',
@@ -104,10 +116,6 @@ class PlanController extends WebController
             ],
             'prices.*.amount' => ['required', 'integer', 'min:0'],
         ]);
-
-        $this->checkMethod('post');
-
-        $this->checkContentType($this->getPostHeader());
 
         DB::transaction(function () use ($request, $plan) {
             $plan = $plan->fill($request->except('description'));
@@ -136,10 +144,6 @@ class PlanController extends WebController
      */
     public function show(Plan $plan)
     {
-        $this->checkMethod('get');
-
-        $this->checkContentType(null);
-
         return $this->showOne($plan, $plan->transformer);
     }
 
@@ -163,7 +167,19 @@ class PlanController extends WebController
                 'min:0',
                 'max:255',
             ],
-            'nullable' => ['nullable', 'array', 'exists:scopes,id'],
+            'scopes' => [
+                'required',
+                'array',
+                'exists:scopes,id',
+                function ($attribute, $value, $fail) use ($plan) {
+
+                    $duplicated = $this->checkServices($value);
+
+                    if (count($duplicated) > 0) {
+                        $fail(__("The following services (:services) contain duplicate roles", ['services' => implode(', ', $duplicated)]));
+                    }
+                }
+            ],
             'prices' => ['nullable', 'array'],
             'prices.*.billing_period' => [
                 'required',
@@ -185,10 +201,6 @@ class PlanController extends WebController
             ],
             'prices.*.amount' => ['required', 'integer', 'min:0'],
         ]);
-
-        $this->checkMethod('put');
-
-        $this->checkContentType($this->getUpdateHeader());
 
         DB::transaction(function () use ($request, $plan) {
             $update = false;
@@ -265,5 +277,28 @@ class PlanController extends WebController
         $plan->delete();
 
         return $this->message(__("Plan deleted successfully"), 200);
+    }
+
+    /**
+     * Check duplicated scopes in the same service
+     * @param mixed $value
+     * @return array
+     */
+    public function checkServices($value)
+    {
+        $services = [];
+
+        foreach ($value as $key) {
+            $scope = Scope::find($key);
+            array_push($services, $scope->service->slug);
+        }
+
+        $count = array_count_values($services);
+
+        $duplicated = array_keys(array_filter($count, function ($amount) {
+            return $amount > 1;
+        }));
+
+        return $duplicated;
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Web\Home;
 
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use App\Http\Controllers\WebController;
 
@@ -13,17 +14,25 @@ class PlanController extends WebController
 
     }
 
-    public function index(Plan $plan)
+    public function index(Request $request, Plan $plan)
     {
         $data = $plan->query();
+        $data = $data->with(['scopes', 'prices'])
+            ->where('active', true)
+            ->where('public', true);
 
-        $data = $data->where('active', true)->where('public', true);
+        // Search by service like cloud , vpn , etc
+        if (!empty($service_name = $request->service)) {
+            $data->whereHas('scopes.service', function ($query) use ($service_name) {
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($service_name) . '%']);
+            });
+        }
 
         $params = $this->filter_transform($plan->transformer);
 
-        $data = $this->searchByBuilder($data, $params);
+        $this->searchByBuilder($data, $params);
 
-        $data = $this->orderByBuilder($data, $plan->transformer);
+        $this->orderByBuilder($data, $plan->transformer);
 
         if (request()->wantsJson()) {
             $data = $this->showAllByBuilder($data, $plan->transformer);
