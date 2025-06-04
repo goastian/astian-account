@@ -1,30 +1,37 @@
 <?php
 
 use App\Models\Setting\Setting;
+use Illuminate\Support\Facades\Cache;
 
 if (!function_exists('settingAdd')) {
     /**
      * Add or update an item
      * @param mixed $key
      * @param mixed $value
-     * @param mixed $user
+     * @param mixed $cache
      * @return void
      */
-    function settingAdd($key, $value, $user = false)
+    function settingAdd($key, $value, $cache = true)
     {
-        $user = $user ? auth()->user()->id : null;
+        if ($cache) {
+            Cache::forget($key);
+        }
+
         try {
             Setting::updateOrCreate(
                 [
                     'key' => $key,
-                    'user_id' => $user
                 ],
                 [
                     'key' => $key,
                     'value' => $value,
-                    'user_id' => $user,
                 ]
             );
+
+            if ($cache) {
+                cacheAdd($key, $value);
+            }
+
         } catch (\Exception $th) {
         }
     }
@@ -36,22 +43,26 @@ if (!function_exists('settingLoad')) {
      * Add an item only if it does not exist
      * @param mixed $key
      * @param mixed $value
-     * @param mixed $user
+     * @param mixed $cache
      * @return void
      */
-    function settingLoad($key, $value, $user = false)
+    function settingLoad($key, $value, $cache = true)
     {
-        $user = $user ? auth()->user()->id : null;
         try {
+
+            if ($cache) {
+                cacheAdd($key, $value);
+            }
+
             Setting::firstOrCreate(
                 [
                     'key' => $key,
-                    'user_id' => $user
                 ],
                 [
                     'value' => $value
                 ]
             );
+
         } catch (\Exception $th) {
         }
     }
@@ -63,31 +74,28 @@ if (!function_exists('settingItem')) {
      * Get the setting item
      * @param mixed $key
      * @param mixed $default
-     * @param mixed $user
+     * @param mixed $cache
      */
-    function settingItem($key, $default = null, $user = false)
+    function settingItem($key, $default = null, $cache = true)
     {
         try {
-            $userId = $user ? auth()->user()->id : null;
+            if ($cache) {
+                return cacheKey($key, function () use ($key, $default) {
 
-            $query = Setting::query();
+                    $data = Setting::where('key', $key)->first();
 
-            $query->where('key', $key)->where(function ($subQuery) use ($userId) {
-                if ($userId) {
-                    $subQuery->where('user_id', $userId);
-                } else {
-                    $subQuery->whereNull('user_id');
-                }
-            });
+                    return $data ? $data->value : $default;
+                });
+            }
 
-            $setting = $query->first();
-
-            return $setting ? $setting->value : $default;
+            $data = Setting::where('key', $key)->first();
+            return $data ? $data->value : $default;
 
         } catch (\Exception $e) {
         }
         return $default;
     }
+
 }
 
 if (!function_exists('redirectToHome')) {
@@ -100,5 +108,47 @@ if (!function_exists('redirectToHome')) {
     {
         $url = config('app.url') . config('system.redirect_to', '/about');
         return redirect($url);
+    }
+}
+
+
+if (!function_exists('cacheAdd')) {
+    /**
+     * add cache
+     * @param mixed $key
+     * @param mixed $value
+     * @return void
+     */
+    function cacheAdd($key, $value)
+    {
+        $expires = now()->addDays(config('cache.expires'));
+        Cache::forget($key);
+        Cache::put(
+            $key,
+            $value,
+            $expires
+        );
+    }
+}
+
+
+if (!function_exists('cacheKey')) {
+    /**
+     * add cache
+     * @param mixed $key
+     * @param mixed $callback
+     * @return string
+     */
+    function cacheKey($key, $callback)
+    {
+        if (Cache::has($key)) {
+            return Cache::get($key);
+        }
+
+        $expires = now()->addDays(config('cache.expires', 1));
+        $value = $callback();
+        Cache::put($key, $value, $expires);
+
+        return $value;
     }
 }
