@@ -123,7 +123,7 @@
                                 </svg>
                                 <input type="text" name="birthday" placeholder="{{ __('Birthday') }}"
                                     value="{{ old('birthday') }}"
-                                    class="modern-input pl-12 w-full py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                    class="modern-input pl-12 w-full py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 date" />
                                 @error('birthday')
                                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                                 @enderror
