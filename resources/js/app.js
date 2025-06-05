@@ -1,4 +1,7 @@
 import { createApp, h } from "vue";
+import { createPinia } from 'pinia';
+import piniaPersist from 'pinia-plugin-persistedstate';
+
 import { createInertiaApp } from "@inertiajs/vue3";
 
 import { customComponents } from "./app/config/customComponents.js";
@@ -22,6 +25,7 @@ import "@mdi/font/css/materialdesignicons.css";
 
 import "@fontsource/outfit";
 
+
 createInertiaApp({
     resolve: (name) => {
         const pages = require.context("./app/pages", true, /\.vue$/);
@@ -29,6 +33,9 @@ createInertiaApp({
     },
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) });
+        const pinia = createPinia();
+
+        pinia.use(piniaPersist);
 
         customComponents.forEach((index) => {
             app.component(index[0], index[1]);
@@ -60,6 +67,7 @@ createInertiaApp({
 
         app.component("VueDatePicker", VueDatePicker);
         app.use(plugin);
+        app.use(pinia);
         app.mount(el);
     },
 });
