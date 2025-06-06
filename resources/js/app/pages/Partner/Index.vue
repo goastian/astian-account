@@ -39,13 +39,23 @@
                                             </div>
                                         </div>
                                         <div
+                                            v-if="total_commission.length > 0"
                                             v-for="(item, index) in total_commission"
                                             :key="index"
                                             class="text-h4 text-secondary textPrimary"
                                         >
                                             <strong>
                                                 <span v-if="item.currency == 'USD'" class="textPrimary">$</span>
-                                                <span>{{ item.total }}</span>
+                                                <span v-else>{{ item.currency }}</span>
+                                                <span v-if="item.total">{{ item.total }}</span>
+                                            </strong>
+                                        </div>
+                                        <div
+                                            v-else
+                                            class="text-h4 textPrimary"
+                                        >
+                                            <strong>
+                                                <span>$0</span>
                                             </strong>
                                         </div>
                                         <div>
@@ -199,6 +209,7 @@ export default {
 
     mounted() {
         this.updateChart(this.sales);
+        console.log(this.total_commission);
     },
 
     watch: {
