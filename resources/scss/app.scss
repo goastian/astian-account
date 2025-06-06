@@ -34,7 +34,7 @@
 
 /* Dark theme */
 [data-theme="dark"] {
-    --q-primary: #395671;
+    --q-primary: #4FA1C1;
     --q-secondary: #00acc1;
     --q-accent: #c2185b;
     --q-positive: #43a047;
@@ -47,7 +47,7 @@
     --q-background-primary: #1e293b;
     --q-background-secondary: #0f172a;
     --q-color: #fff;
-    --q-color-secondary: #94a3b8;
+    --q-color-secondary: #D0D0D0;
     --q-color-light: #243B59;
     --q-color-red-light: #fee2e2;
 }
@@ -129,7 +129,7 @@ body {
 }
 
 .apexcharts-tooltip-title {
-  background-color: var(--q-background-primary) !important;
+  background-color: var(--q-background-secondary) !important;
   color: var(--q-color) !important;
   padding: 6px 10px !important;
   border-bottom: 1px solid #444 !important;
@@ -138,7 +138,7 @@ body {
 }
 
 .apexcharts-tooltip {
-  background-color: var(--q-background-secondary) !important;
+  background-color: var(--q-background-primary) !important;
   color: var(--q-color) !important;
   font-size: 14px;
   border-radius: 6px;
