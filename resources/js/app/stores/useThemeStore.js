@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-const useThemeStore = defineStore('theme', {
+const useThemeStore = defineStore('themeStore', {
     state: () => ({
         selectedTheme: {
             label: 'Light',
