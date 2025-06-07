@@ -15,7 +15,7 @@ class OfflineSubscription implements PaymentMethod
      * @param array $data
      * @return  
      */
-    public function process(array $data)
+    public function buy(array $data)
     {
         $session_id = Transaction::generateSessionId();
 
@@ -32,6 +32,17 @@ class OfflineSubscription implements PaymentMethod
         return $session;
     }
 
+    public function subscription(array $data)
+    {
+
+    }
+
+
+    public function chargeRecurringPayment(array $package)
+    {
+
+    }
+
 
     /**
      * Abort operation
@@ -39,6 +50,12 @@ class OfflineSubscription implements PaymentMethod
      * @return void
      */
     public function cancel(Transaction $transaction)
+    {
+
+    }
+
+
+    public function forceActivation(array $response)
     {
 
     }
