@@ -3,14 +3,10 @@ namespace App\Models\Subscription;
 
 use App\Models\Master;
 use App\Models\User\User;
-use App\Notifications\Subscription\PaymentFailed;
-use App\Notifications\Subscription\PaymentSuccessfully;
-use App\Notifications\Subscription\RenewSuccessfully;
-use Illuminate\Support\Facades\Log;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Models\Subscription\Transaction;
 use App\Transformers\Subscription\PackageTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Transformers\Subscription\TransactionTransformer;
 
 class Package extends Master
 {
@@ -54,21 +50,22 @@ class Package extends Master
     ];
 
     /**
-     * appends
-     * @var array
-     */
-    protected $appends = [
-        'scope'
-    ];
-
-    /**
      * Get the user that owns the UserSubscription
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The last transaction
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function lastTransaction()
+    {
+        return $this->hasOne(Transaction::class, 'code', 'transaction_code');
     }
 
     /**
@@ -90,14 +87,17 @@ class Package extends Master
     }
 
     /**
-     * Get the all transactions 
-     * @param mixed $transformer
+     * Determine if the package renewal is still possible.
+     * @throws \Elyerr\ApiResponse\Exceptions\ReportError
+     * @return void
      */
-    public function getTransactions($transformer = TransactionTransformer::class)
+    public function lastGracePeriodCheck()
     {
-        $transactions = $this->transactions()->get();
+        $last_day = $this->end_at->addDays(config('billing.renew.grace_period_days'));
 
-        return fractal($transactions, $transformer)->toArray()['data'];
+        if (now() > $last_day) {
+            throw new ReportError(__("Renewal Failed: The request cannot be processed because the renewal date has already passed. Please contact support for further assistance."), 400);
+        }
     }
 
     /**
@@ -106,24 +106,47 @@ class Package extends Master
      */
     public function getEndDate()
     {
-        //Retrieve metadata of the plan
+        // Retrieve plan metadata
         $meta = $this->meta;
 
-        //set end date
+        // Set the initial end date to the existing value or use the current date/time if not set
         $end_date = $this->end_at ?? now();
 
-        if (empty($this->end_at) && $meta['bonus_enabled']) {
-            $end_date->addDays($meta['bonus_duration']);
+        // If this is the initial purchase (no end_at set)
+        if (empty($this->end_at)) {
+
+            // If a trial is enabled and has a duration, add it to the end date
+            if ($meta['trial_enabled'] && $meta['trial_duration']) {
+                $end_date->addDays($meta['trial_duration']);
+            }
+
+            // If a bonus is enabled and has a positive duration, add it to the end date
+            if ($meta['bonus_enabled'] && $meta['bonus_duration'] > 0) {
+                $end_date->addDays($meta['bonus_duration']);
+            }
         }
 
-        if (!empty($this->end_at) && config("billing.renew.bonus_enabled") && $meta['bonus_enabled']) {
-            $end_date->addDays($meta['bonus_duration']);
+        // If the subscription is being renewed (end_at is set)
+        if (!empty($this->end_at)) {
+
+            // Calculate the last valid day for renewal (grace period)
+            $last_day = $this->end_at->addDays(config('billing.renew.grace_period_days'));
+
+            // If we're within the renewal grace period and bonuses are enabled
+            if (
+                $last_day > now() && // still within the renewal window
+                config("billing.renew.bonus_enabled") && // bonus on renewals is enabled globally
+                $meta['bonus_enabled'] && // bonus is enabled in the plan
+                $meta['bonus_duration'] > 0 // bonus duration is a positive number
+            ) {
+                $end_date->addDays($meta['bonus_duration']);
+            }
         }
 
-        //add billing period
+        // Finally, add the billing period duration to the end date
         $period = config('billing.period.' . $meta['price']['billing_period']);
-        $unit = $period['unit'];
-        $interval = $period['interval'];
+        $unit = $period['unit']; // e.g., 'days', 'months'
+        $interval = $period['interval']; // e.g., 1, 3, 6
 
         return $end_date->{"add" . ucfirst($unit)}($interval);
     }
@@ -161,8 +184,6 @@ class Package extends Master
      */
     public function paymentSuccessfully()
     {
-        $user = User::find($this->user_id);
-
         $this->start_at = now();
         $this->end_at = $this->getEndDate();
         $this->status = config('billing.status.successful.name');
@@ -170,28 +191,23 @@ class Package extends Master
 
         //add payments scopes
         $this->addOrUpdatedScopeSubscription();
-
-        $user->notify(new PaymentSuccessfully());
-
     }
 
     /**
      * Renew package
+     * @param string $transaction_code
      * @return void
      */
-    public function renewSuccessfully()
+    public function renewSuccessfully(string $transaction_code)
     {
-        $user = User::find($this->user_id);
-
         $this->end_at = $this->getEndDate();
         $this->status = config('billing.status.successful.name');
         $this->last_renewal_at = now();
+        $this->transaction_code = $transaction_code;
         $this->push();
 
         //add payments scopes
         $this->addOrUpdatedScopeSubscription();
-
-        $user->notify(new RenewSuccessfully());
     }
 
     /**
@@ -200,12 +216,8 @@ class Package extends Master
      */
     public function paymentFailed()
     {
-        $user = User::find($this->user_id);
-
         $this->status = config('billing.status.failed.name');
         $this->push();
-
-        $user->notify(new PaymentFailed());
     }
 
     /**
@@ -227,14 +239,5 @@ class Package extends Master
     {
         $this->status = config('billing.status.expired.name');
         $this->push();
-    }
-
-    /**
-     * Retrieve the current transaction
-     */
-    public function transaction($transformer = TransactionTransformer::class)
-    {
-        $transaction = Transaction::where('code', $this->transaction_code)->first();
-        return $transaction->meta($transformer);
     }
 }

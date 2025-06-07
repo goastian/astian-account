@@ -47,8 +47,8 @@ class UserPackageTransformer extends TransformerAbstract
             'is_recurring' => $package->is_recurring,
             'status' => $package->status,
             'meta' => $package->meta,
-            'transaction' => $package->transaction(UserTransactionTransformer::class),
-            'transactions' => $package->getTransactions(UserTransactionTransformer::class),
+            'transaction' => $package->transform($package->lastTransaction, UserTransactionTransformer::class),
+            'transactions' => $package->transform($package->transactions, UserTransactionTransformer::class),
             'created' => $this->format_date($package->created_at),
             'updated' => $this->format_date($package->updated),
             'links' => [

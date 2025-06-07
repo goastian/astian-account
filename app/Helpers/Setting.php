@@ -13,10 +13,6 @@ if (!function_exists('settingAdd')) {
      */
     function settingAdd($key, $value, $cache = true)
     {
-        if ($cache) {
-            Cache::forget($key);
-        }
-
         try {
             Setting::updateOrCreate(
                 [
@@ -27,11 +23,6 @@ if (!function_exists('settingAdd')) {
                     'value' => $value,
                 ]
             );
-
-            if ($cache) {
-                cacheAdd($key, $value);
-            }
-
         } catch (\Exception $th) {
         }
     }
@@ -49,10 +40,6 @@ if (!function_exists('settingLoad')) {
     function settingLoad($key, $value, $cache = true)
     {
         try {
-
-            if ($cache) {
-                cacheAdd($key, $value);
-            }
 
             Setting::firstOrCreate(
                 [
@@ -79,15 +66,6 @@ if (!function_exists('settingItem')) {
     function settingItem($key, $default = null, $cache = true)
     {
         try {
-            if ($cache) {
-                return cacheKey($key, function () use ($key, $default) {
-
-                    $data = Setting::where('key', $key)->first();
-
-                    return $data ? $data->value : $default;
-                });
-            }
-
             $data = Setting::where('key', $key)->first();
             return $data ? $data->value : $default;
 
