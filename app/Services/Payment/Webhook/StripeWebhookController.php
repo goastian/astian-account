@@ -40,23 +40,30 @@ class StripeWebhookController extends Controller
         switch ($event->type) {
             case 'checkout.session.completed':
                 $metadata = $event->data->object->toArray();
+
+                Log::info("checkout.session.completed", $metadata);
                 Transaction::paymentSuccessfully($metadata);
                 break;
 
             case 'payment_intent.payment_failed':
                 $metadata = $event->data->object->toArray();
-
                 $sessions = Session::all([
                     'limit' => 1,
                     'payment_intent' => $metadata['id'],
                 ]);
-                Transaction::paymentFailed($sessions->data[0]->toArray());
+
+                $metadata['session'] = $sessions->data[0]->toArray();
+                Transaction::paymentFailed($metadata);
                 break;
 
             case "checkout.session.expired":
                 $metadata = $event->data->object->toArray();
-                Transaction::paymentExpires($metadata['id']);
+                Transaction::paymentExpires($metadata);
                 break;
+
+            case "charge.succeeded":
+                $metadata = $event->data->object->toArray();
+                Transaction::paymentSuccessfully($metadata, 'succeed');
             default:
                 Log::info("Listen unknown event : ", $event->toArray());
         }

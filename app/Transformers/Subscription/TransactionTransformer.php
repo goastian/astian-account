@@ -57,6 +57,7 @@ class TransactionTransformer extends TransformerAbstract
             'activated' => $transaction->user_id ? $transaction->user->email : 'System',
             'created' => $this->format_date($transaction->created_at),
             'updated' => $this->format_date($transaction->updated_at),
+            'payment_method_id' => $transaction->payment_method_id,
             'links' => [
                 'index' => route('admin.transactions.index'),
                 'activate' => route('admin.transactions.activate', ['transaction' => $transaction->id]),
