@@ -97,7 +97,7 @@ class UserSubscriptionController extends WebController
                 'status' => config("billing.status.pending.name"),
                 'is_recurring' => true,
                 'transaction_code' => $code,
-                'user_id' => auth()->id(),
+                'user_id' => auth()->user()->id,
                 'meta' => $plan,
             ]);
 
@@ -203,10 +203,10 @@ class UserSubscriptionController extends WebController
             'transactions',
             'lastTransaction'
         ])->find($request->package);
-        
-         
+
+
         $data->lastGracePeriodCheck();
-        
+
         $package = $data->toArray();
 
         //Generate unique transaction code
@@ -265,7 +265,7 @@ class UserSubscriptionController extends WebController
     {
         $transaction = Transaction::with([
             'package',
-            'user'
+            'package.user'
         ])->where("code", $request->code)->first();
 
         return view('payment.success', ['transaction' => $transaction->toArray()]);
