@@ -25,7 +25,9 @@ class Plan extends Master
         'public',
         'active',
         'bonus_activated',
-        'bonus_duration'
+        'bonus_duration',
+        'trial_enabled',
+        'trial_duration'
     ];
 
     protected $casts = [
@@ -54,15 +56,6 @@ class Plan extends Master
     }
 
     /**
-     * Relationship with packages
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function packages()
-    {
-        return $this->hasMany(Package::class);
-    }
-
-    /**
      * Summary of prices
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
@@ -79,7 +72,7 @@ class Plan extends Master
         $prices = fractal($this->prices()->get(), PlanPriceTransformer::class)->toArray()['data'];
         return $prices;
     }
-
+    
     /**
      * Details of the plan to save 
      * @param string $billing_period

@@ -11,18 +11,27 @@ class RequestSubscription extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $code;
+    /**
+     * Code
+     * @var 
+     */
+    public string $code;
 
-    public $url;
+    /**
+     * URl
+     * @var 
+     */
+    public string $url;
 
     /**
      * Create a new notification instance.
+     * @param string $url
+     * @param string $code
      */
-    public function __construct($code)
+    public function __construct(string $url, string $code)
     {
+        $this->url = $url;
         $this->code = $code;
-        $this->url = config('app.url') . config('system.redirect_to', '/about');
-
     }
 
     /**
@@ -32,7 +41,7 @@ class RequestSubscription extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database'];
     }
 
     /**
