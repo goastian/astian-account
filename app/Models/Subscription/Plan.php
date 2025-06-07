@@ -56,15 +56,6 @@ class Plan extends Master
     }
 
     /**
-     * Relationship with packages
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function packages()
-    {
-        return $this->hasMany(Package::class);
-    }
-
-    /**
      * Summary of prices
      * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
