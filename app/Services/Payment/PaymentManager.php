@@ -2,7 +2,7 @@
 namespace App\Services\Payment;
 
 use Exception;
-use App\Models\Subscription\Transaction; 
+use App\Models\Subscription\Transaction;
 use App\Services\Payment\Drivers\StripeSubscription;
 use App\Services\Payment\Drivers\OfflineSubscription;
 
@@ -35,7 +35,27 @@ class PaymentManager
      */
     public function buy(string $method, array $data)
     {
-        return $this->resolve($method)->process($data);
+        return $this->resolve($method)->buy($data);
+    }
+
+    /**
+     * Charge recurring payment
+     * @param string $method
+     * @param array $package
+     */
+    public function chargeRecurringPayment(string $method, $package)
+    {
+        return $this->resolve($method)->chargeRecurringPayment($package);
+    }
+
+    /**
+     * Force activation of failed transactions
+     * @param string $method
+     * @param array $response
+     */
+    public function forceActivation(string $method, array $response)
+    {
+        return $this->resolve($method)->forceActivation($response);
     }
 
     /**

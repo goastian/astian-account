@@ -25,7 +25,9 @@ class Plan extends Master
         'public',
         'active',
         'bonus_activated',
-        'bonus_duration'
+        'bonus_duration',
+        'trial_enabled',
+        'trial_duration'
     ];
 
     protected $casts = [
@@ -79,7 +81,7 @@ class Plan extends Master
         $prices = fractal($this->prices()->get(), PlanPriceTransformer::class)->toArray()['data'];
         return $prices;
     }
-
+    
     /**
      * Details of the plan to save 
      * @param string $billing_period

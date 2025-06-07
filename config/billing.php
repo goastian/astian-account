@@ -3,22 +3,16 @@
 return [
 
     'renew' => [
-        'default_method' => 'stripe',
-        'bonus_enabled' => true
+        'enable' => false,
+        'hours_before' => 10,
+        'bonus_enabled' => true,
+        'grace_period_days' => 10,
     ],
 
     'taxes' => [
         'id' => null,
-        'name' => 'VAT',
-        'description' => 'Peru VAT 18%', 
-        'jurisdiction' => 'PE',
-        'percentage' => 18.0,
-        'exclusive' => true,
         'enabled' => false,
     ],
-
-    'retry_attempts' => 3,
-    'grace_period_days' => 5,
 
     'currency' => [
         'USD' => [
@@ -32,11 +26,6 @@ return [
     ],
 
     'period' => [
-        'trial' => [
-            'interval' => 30,
-            'unit' => 'days',
-            'name' => 'trial',
-        ],
         'daily' => [
             'interval' => 1,
             'unit' => 'days',

@@ -43,4 +43,15 @@ class Master extends Model
         unset($data['links']);
         return $data;
     }
+
+    /**
+     * Transform data
+     * @param mixed $data
+     * @param mixed $transformer
+     * @return array
+     */
+    public function transform($data, $transformer)
+    {
+        return fractal($data, $transformer)->toArray()['data'];
+    }
 }

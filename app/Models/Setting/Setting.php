@@ -249,6 +249,11 @@ class Setting extends Master
         settingLoad('billing.methods.offline.icon', 'mdi-cash-register');
         settingLoad('billing.methods.offline.enable', true);
 
+        SettingLoad('billing.renew.enable', false);
+        SettingLoad('billing.renew.hours_before', 10);
+        SettingLoad('billing.renew.bonus_enabled', false);
+        SettingLoad('billing.renew.grace_period_days', 5);
+
         //System settings
         settingLoad('system.schema_mode', "https");
         settingLoad('system.home_page', "/");
@@ -481,6 +486,7 @@ class Setting extends Master
      */
     public static function getPaymentSettings()
     {
+
         Config::set('billing.methods.stripe.name', settingItem('billing.methods.stripe.name', 'Credit Card (Stripe)'));
         Config::set('billing.methods.stripe.icon', settingItem('billing.methods.stripe.icon', 'mdi-credit-card-outline'));
         Config::set('billing.methods.stripe.enable', settingItem('billing.methods.stripe.enable', true));
@@ -491,6 +497,11 @@ class Setting extends Master
         Config::set('billing.methods.offline.name', settingItem('billing.methods.offline.name', 'Peer 2 Peer'));
         Config::set('billing.methods.offline.icon', settingItem('billing.methods.offline.icon', 'mdi-cash-register'));
         Config::set('billing.methods.offline.enable', settingItem('billing.methods.offline.enable', true));
+
+        Config::set('billing.renew.enable', settingItem('billing.renew.enable', false));
+        Config::set('billing.renew.hours_before', settingItem('billing.renew.hours_before', 10));
+        Config::set('billing.renew.bonus_enabled', settingItem('billing.renew.bonus_enabled', false));
+        Config::set('billing.renew.grace_period_days', settingItem('billing.renew.grace_period_days', 5));
     }
 
     /**

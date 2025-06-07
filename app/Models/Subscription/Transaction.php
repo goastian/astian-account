@@ -2,11 +2,14 @@
 namespace App\Models\Subscription;
 
 use App\Models\Master;
-use App\Models\User\Partner;
 use App\Models\User\User;
 use Illuminate\Support\Str;
+use App\Models\User\Partner;
 use App\Models\Subscription\Package;
+use App\Notifications\Subscription\PaymentFailed;
+use App\Notifications\Subscription\RenewSuccessfully;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Notifications\Subscription\PaymentSuccessfully;
 use App\Transformers\Subscription\TransactionTransformer;
 
 class Transaction extends Master
@@ -38,7 +41,8 @@ class Transaction extends Master
         'code',
         'package_id',
         'partner_id',
-        'partner_commission_rate'
+        'partner_commission_rate',
+        'payment_method_id'
     ];
 
     protected $casts = [
@@ -111,22 +115,65 @@ class Transaction extends Master
      * @param array $meta
      * @return void
      */
-    public static function paymentSuccessfully(array $meta)
+    public static function paymentSuccessfully(array $meta, string $mode = 'session')
     {
-        $transaction = Transaction::where('session_id', $meta['id'])->first();
-        $transaction->status = config('billing.status.successful.name');
-        $transaction->payment_intent_id = $meta['payment_intent'];
-        $transaction->response = $meta;
-        $transaction->user_id = auth()->check() ? auth()->user()->id : null;
+        // Search transaction
+        $transaction = Transaction::where(
+            'code',
+            $meta['metadata']['transaction_code']
+        )->first();
 
-        if ($transaction->renew) {
-            $transaction->package->renewSuccessfully();
-        } else {
-            $transaction->package->paymentSuccessfully();
+        //customer 
+        $customer = User::find($meta['metadata']['user_id']);
+
+        //Page to redirect after payment
+        $redirect_to = route('users.checkout.success', [
+            "code" => $meta['metadata']['transaction_code']
+        ]);
+
+        switch ($mode) {
+            case 'session':
+                $transaction->payment_intent_id = $meta['payment_intent'];
+                $transaction->session_id = $meta['id'];
+                $transaction->user_id = auth()->check() ? auth()->user()->id : null;
+                $transaction->push();
+
+                break;
+
+            case "succeed":
+                $transaction->payment_method_id = $meta['payment_method'];
+                $transaction->payment_intent_id = $meta['payment_intent'];
+                $transaction->response = $meta;
+                $transaction->status = config('billing.status.successful.name');
+                $transaction->payment_url = $meta["receipt_url"];
+                $transaction->user_id = auth()->check() ? auth()->user()->id : null;
+
+                //Dispatch only renew packages
+                if ($transaction->renew) {
+                    $transaction->package->RenewSuccessfully($transaction->code);
+
+                    //dispatch notification
+                    $customer->notify(new RenewSuccessfully($redirect_to));
+
+                } else {// Dispatch only buy packages
+                    $transaction->package->paymentSuccessfully();
+
+                    //Dispatch notification
+                    $customer->notify(new PaymentSuccessfully($redirect_to));
+                }
+
+                //Set the package metadata
+                $package_meta = $transaction->package->meta();
+                unset($package_meta['transactions']);
+                unset($package_meta['transaction']);
+                unset($package_meta['user']);
+
+                $transaction->meta = $package_meta;
+                $transaction->push();
+                break;
+            default:
+                break;
         }
-
-        $transaction->meta = $transaction->package->meta();
-        $transaction->push();
     }
 
     /**
@@ -136,12 +183,33 @@ class Transaction extends Master
      */
     public static function paymentFailed(array $meta)
     {
-        $transaction = Transaction::where('session_id', $meta['id'])->first();
+        $transaction = Transaction::where(
+            'code',
+            $meta['metadata']['transaction_code']
+        )->first();
+
+        //customer 
+        $customer = User::find($meta['metadata']['user_id']);
+
+        //Page to redirect after payment
+        $redirect_to = route('users.subscriptions.index');
+
         $transaction->status = config('billing.status.failed.name');
-        $transaction->payment_intent_id = $meta['payment_intent'];
+        $transaction->session_id = $meta['session']['id'];
+        $transaction->payment_intent_id = $meta['id'];
+        $transaction->payment_method_id = $meta['payment_method'];
         $transaction->response = $meta;
-        $transaction->meta = $transaction->package->meta();
+        $transaction->payment_url = $meta['session']['url'];
+        //Set the package metadata
+        $package_meta = $transaction->package->meta();
+        unset($package_meta['transactions']);
+        unset($package_meta['transaction']);
+        unset($package_meta['user']);
+
+        $transaction->meta = $package_meta;
         $transaction->push();
+
+        $customer->notify(new PaymentFailed($redirect_to));
     }
 
     /**
@@ -152,7 +220,13 @@ class Transaction extends Master
     public static function paymentCancelled(Transaction $transaction)
     {
         $transaction->status = config('billing.status.cancelled.name');
-        $transaction->meta = $transaction->package->meta();
+        //Set the package metadata
+        $package_meta = $transaction->package->meta();
+        unset($package_meta['transactions']);
+        unset($package_meta['transaction']);
+        unset($package_meta['user']);
+
+        $transaction->meta = $package_meta;
         $transaction->push();
 
         $transaction->package->paymentCancelled();
@@ -163,16 +237,22 @@ class Transaction extends Master
      * @param \App\Models\Subscription\Transaction $transaction
      * @return void
      */
-    public static function paymentExpires(string $session_id)
+    public static function paymentExpires(array $meta)
     {
-        $transaction = Transaction::where('session_id', $session_id);
-        // if ($transaction->status != config('billing.status.successful.name')) {
+        $transaction = Transaction::where(
+            'code',
+            $meta['metadata']['transaction_code']
+        )->first();
+
         $transaction->status = config('billing.status.expired.name');
+        $transaction->session_id = $meta['id'];
+        $transaction->payment_intent_id = $meta['payment_intent'];
+        $transaction->payment_url = $meta['url'];
+        $transaction->response = $meta;
         $transaction->package->paymentExpires();
 
         $transaction->meta = $transaction->package->meta();
         $transaction->push();
-        //}
     }
 
 }
