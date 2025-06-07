@@ -31,11 +31,11 @@
                 <!-- User Info -->
                 <div>
                     <h2 class="text-lg font-semibold mb-2 border-b pb-1">👤 User Info</h2>
-                    <p><span class="font-medium">Name:</span> {{ $transaction['user']['name'] }}
-                        {{ $transaction['user']['last_name'] }}</p>
-                    <p><span class="font-medium">Email:</span> {{ $transaction['user']['email'] }}</p>
-                    <p><span class="font-medium">Verified At:</span> {{ $transaction['user']['verified_at'] }}</p>
-                    <p><span class="font-medium">Stripe Customer ID:</span> {{ $transaction['user']['stripe_customer_id'] }}
+                    <p><span class="font-medium">Name:</span> {{ $transaction['package']['user']['name'] }}
+                        {{ $transaction['package']['user']['last_name'] }}</p>
+                    <p><span class="font-medium">Email:</span> {{ $transaction['package']['user']['email'] }}</p>
+                    <p><span class="font-medium">Verified At:</span> {{ $transaction['package']['user']['verified_at'] }}</p>
+                    <p><span class="font-medium">Stripe Customer ID:</span> {{ $transaction['package']['user']['stripe_customer_id'] }}
                     </p>
                 </div>
 
