@@ -40,8 +40,6 @@ class StripeWebhookController extends Controller
         switch ($event->type) {
             case 'checkout.session.completed':
                 $metadata = $event->data->object->toArray();
-
-                Log::info("checkout.session.completed", $metadata);
                 Transaction::paymentSuccessfully($metadata);
                 break;
 
