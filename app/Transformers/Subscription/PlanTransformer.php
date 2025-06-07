@@ -71,9 +71,6 @@ class PlanTransformer extends TransformerAbstract
         $attributes = [
             'id' => 'id',
             'name' => 'name',
-            'slug' => 'slug',
-            'description' => 'description',
-            'public' => 'public',
             'created' => 'created_at',
             'updated' => 'updated_at'
         ];

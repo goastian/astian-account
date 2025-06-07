@@ -16,10 +16,19 @@ class PlanController extends WebController
 
     public function index(Request $request, Plan $plan)
     {
+        //Prepare query
         $data = $plan->query();
+
+        // Search plans only active an public
         $data = $data->with(['scopes', 'prices'])
-            ->where('active', true)
-            ->where('public', true);
+            ->where('active', true);
+
+        // Search by billing period
+        if (!empty($billing_period = $request->billing_period)) {
+            $data->whereHas('prices', function ($query) use ($billing_period) {
+                $query->where('billing_period', $billing_period);
+            });
+        }
 
         // Search by service like cloud , vpn , etc
         if (!empty($service_name = $request->service)) {
@@ -35,12 +44,12 @@ class PlanController extends WebController
         $this->orderByBuilder($data, $plan->transformer);
 
         if (request()->wantsJson()) {
-            $data = $this->showAllByBuilder($data, $plan->transformer);
+            return $this->showAllByBuilder($data, $plan->transformer);
         }
 
         return Inertia::render('Resources/Plan', [
-            'plans' => $this->showAllByBuilderArray($data, $plan->transformer),
-            'user' => $this->authenticated_user()
+            'user' => $this->authenticated_user(),
+            'route' => route('plans.index'),
         ]);
     }
 }
