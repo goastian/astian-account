@@ -5,6 +5,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\WebController;
 use App\Models\Subscription\Transaction;
+use App\Services\Payment\PaymentManager; 
 use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class TransactionManagerController extends WebController
@@ -60,7 +61,9 @@ class TransactionManagerController extends WebController
 
             $meta = $transaction->response;
 
-            Transaction::paymentSuccessfully($meta);
+            $paymentManager = new PaymentManager();
+            $paymentManager->forceActivation($transaction->payment_method, $meta);
+
         });
 
         return $this->message("Transaction activated successfully");

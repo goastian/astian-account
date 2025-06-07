@@ -37,7 +37,6 @@ class PackageTransformer extends TransformerAbstract
      */
     public function transform(Package $package)
     {
-
         return [
             'id' => $package->id,
             'start_at' => $this->format_date($package->start_at),
@@ -46,10 +45,10 @@ class PackageTransformer extends TransformerAbstract
             'last_renewal_at' => $this->format_date($package->last_renewal_at),
             'is_recurring' => $package->is_recurring,
             'status' => $package->status,
-            'transaction' => $package->transaction(),
-            'transactions' => $package->getTransactions(),
-            'meta' => $package->meta,
-            'user' => fractal(User::find($package->user_id), UserTransformer::class),
+            'transaction' => $package->transform($package->lastTransaction, TransactionTransformer::class),
+            'transactions' => $package->transform($package->transactions, TransactionTransformer::class),
+            'meta' => $package->meta, // save plan
+            'user' => $package->transform($package->user, UserTransformer::class),
             'create' => $this->format_date($package->created_at),
             'updated' => $this->format_date($package->updated),
         ];

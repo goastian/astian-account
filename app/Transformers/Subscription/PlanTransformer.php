@@ -44,6 +44,8 @@ class PlanTransformer extends TransformerAbstract
             'active' => $plan->active ? true : false,
             'bonus_enabled' => $plan->bonus_enabled ? true : false,
             'bonus_duration' => $plan->bonus_duration,
+            'trial_enabled' => $plan->trial_enabled ? true : false,
+            'trial_duration' => $plan->trial_duration,
             'created' => $this->format_date($plan->created_at),
             'updated' => $this->format_date($plan->updated_at),
             'scopes' => $plan->assignedScopes(),

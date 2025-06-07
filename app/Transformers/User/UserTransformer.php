@@ -56,6 +56,7 @@ class UserTransformer extends TransformerAbstract
             'last_connected' => $this->format_date($user->last_connected),
             'updated' => $this->format_date($user->updated_at),
             'disabled' => $this->format_date($user->deleted_at),
+            'stripe_customer_id' => $user->stripe_customer_id,
             'links' => [
                 'index' => route('admin.users.index'),
                 'store' => route('admin.users.store'),
