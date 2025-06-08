@@ -31,10 +31,9 @@
                     v-ripple
                     @click="open(item)"
                     :active="isActive(item)"
-                    active-class="secondary"
                 >
                     <q-item-section avatar>
-                        <q-icon :name="item.icon" />
+                        <q-avatar class="text-primary" :icon="item.icon" />
                     </q-item-section>
                     <q-item-section>
                         {{ item.name }}
@@ -51,7 +50,10 @@
                 @click="goToAdmin"
             >
                 <q-item-section avatar>
-                    <q-icon :name="admin_dashboard.icon" />
+                    <q-avatar
+                        class="text-primary"
+                        :icon="admin_dashboard.icon"
+                    />
                 </q-item-section>
                 <q-item-section>
                     {{ admin_dashboard.name }}
@@ -65,7 +67,10 @@
                 @click="open(partner_dashboard)"
             >
                 <q-item-section avatar>
-                    <q-icon :name="partner_dashboard.icon" />
+                    <q-avatar
+                        class="text-primary"
+                        :icon="partner_dashboard.icon"
+                    />
                 </q-item-section>
                 <q-item-section>
                     {{ partner_dashboard.name }}
