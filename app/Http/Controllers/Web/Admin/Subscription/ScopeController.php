@@ -25,9 +25,18 @@ class ScopeController extends WebController
      */
     public function index(Request $request, Scope $scope)
     {
+        // Create query
         $data = $scope->query();
-        $data->where('active', true)->where('public', false);
 
+        // Apply eager loading and filter by active and public
+        $data = $data->with([
+            'role',
+            'service',
+            'service.group'
+        ])->where('active', true)
+            ->where('public', false);
+
+        // search by role name or slug
         if ($request->has('role')) {
             $data->whereHas('role', function ($query) use ($request) {
                 return $query
@@ -36,6 +45,7 @@ class ScopeController extends WebController
             });
         }
 
+        // Search by service name or slug
         if ($request->has('service')) {
             $data->whereHas('service', function ($query) use ($request) {
                 return $query

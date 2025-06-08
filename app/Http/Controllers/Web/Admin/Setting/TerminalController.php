@@ -26,12 +26,16 @@ class TerminalController extends WebController
      */
     public function index(Terminal $terminal)
     {
-        $data = $terminal->query();
-
+        // Retrieve params of the request
         $params = $this->filter_transform($terminal->transformer);
 
+        // prepare query
+        $data = $terminal->query();
+        // Eager loading
+        $data = $data->with(['user']);
+        // Search
         $data = $this->searchByBuilder($data, $params);
-
+        // Order by
         $data = $this->orderByBuilder($data, $terminal->transformer);
 
         if (request()->wantsJson()) {
@@ -39,7 +43,6 @@ class TerminalController extends WebController
         }
 
         return Inertia::render('Terminal/Index', [
-            'commands' => $this->showAllByBuilderArray($data, $terminal->transformer),
             'route' => route('admin.terminals.index')
         ]);
     }
@@ -50,9 +53,6 @@ class TerminalController extends WebController
         $request->validate([
             'command' => ['required', 'string', 'max:255']
         ]);
-
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
 
         $allowed_commands = $terminal->whiteList();
 

@@ -44,19 +44,26 @@ class UserController extends WebController
      */
     public function index(Request $request, User $user)
     {
+        // Retrieve params of request
         $params = $this->filter_transform($user->transformer);
 
+        // Prepare query
         $data = $user->query();
-        $data = $data->withTrashed();
-        $data = $this->searchByBuilder($data, $params);
-        $data = $this->orderByBuilder($data, $user->transformer);
 
+        // Add users trashed
+        $data = $data->withTrashed();
+
+        // Search by params
+        $data = $this->searchByBuilder($data, $params);
+
+        // Order by
+        $data = $this->orderByBuilder($data, $user->transformer);
+        
         if (request()->wantsJson()) {
             return $this->showAllByBuilder($data, $user->transformer);
         }
 
         return Inertia::render("Admin/Users/Index", [
-            "users" => $this->showAllByBuilderArray($data, $user->transformer),
             "route" => route('admin.users.index')
         ]);
     }
