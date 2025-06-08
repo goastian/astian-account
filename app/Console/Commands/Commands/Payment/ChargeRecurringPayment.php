@@ -42,7 +42,7 @@ class ChargeRecurringPayment extends Command
                         ->where('payment_method', '!=', config('billing.methods.offline.key'))
                         ->where('status', config('billing.status.successful.name')); //Last successful transaction
                 })
-                ->whereBetween('end_at', [now(), now()->addHours(config('billing.renew.hours_before', 10))])
+                ->whereBetween('end_at', [now(), now()->addHours(intval(config('billing.renew.hours_before', 10)))])
                 ->chunk(500, function ($packages) {
                     foreach ($packages as $package) {
                         $data = $package->meta();
