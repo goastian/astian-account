@@ -30,20 +30,23 @@ class BroadcastController extends WebController
      */
     public function index(Broadcast $broadcast)
     {
+        // Retrieve params of the request
         $params = $this->filter_transform($broadcast->transformer);
 
+        // Prepare query
         $data = $broadcast->query();
 
+        // Search 
         $data = $this->searchByBuilder($data, $params);
+
+        // Order by
         $data = $this->orderByBuilder($data, $params);
 
         if (request()->wantsJson()) {
             return $this->showAllByBuilder($data, $broadcast->transformer);
         }
 
-        return Inertia::render("Admin/Broadcast/Index", [
-            'channels' => $this->showAllByBuilderArray($data, $broadcast->transformer)
-        ]);
+        return Inertia::render("Admin/Broadcast/Index");
     }
 
     /**

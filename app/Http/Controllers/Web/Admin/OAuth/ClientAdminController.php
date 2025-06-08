@@ -36,19 +36,26 @@ class ClientAdminController extends WebController
      */
     public function index(Client $client)
     {
+        // Retrieve params of the request
         $params = $this->filter_transform($client->transformer);
 
+        // Prepare query
         $data = $client->query();
+
+        // Filter entries without a user ID and that do not belong to a personal access client
         $data = $data->whereNull('user_id')->where('personal_access_client', false);
 
+        // Search 
         $data = $this->searchByBuilder($data, $params);
+        
+        // Order by
         $data = $this->orderByBuilder($data, $client->transformer);
+
         if (request()->wantsJson()) {
             return $this->showAllByBuilder($data, $client->transformer);
         }
 
         return Inertia::render("Admin/Clients/Index", [
-            "clients" => $this->showAllByBuilderArray($data, $client->transformer),
             "route" => route("admin.clients.index")
         ]);
     }
