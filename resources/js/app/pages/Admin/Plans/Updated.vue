@@ -29,45 +29,8 @@
                             :text="form.description"
                             @content="setContent"
                         />
-                        <!--
-                            <q-input
-                            outlined
-                            v-model="form.description"
-                            label="Description"
-                            type="textarea"
-                            :error="!!errors.description"
-                        >
-                            <template v-slot:error>
-                                <v-error :error="errors.description" />
-                            </template>
-                        </q-input>
-                        -->
 
                         <div class="row q-col-gutter-md">
-                            <q-item
-                                tag="label"
-                                v-ripple
-                                class="col-xs-12 col-md-6 col-lg-4"
-                            >
-                                <q-item-section avatar>
-                                    <q-checkbox
-                                        v-model="form.public"
-                                        color="orange"
-                                        :error="!!errors.public"
-                                    >
-                                        <template v-slot:error>
-                                            <v-error :error="errors.public" />
-                                        </template>
-                                    </q-checkbox>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>Public</q-item-label>
-                                    <q-item-label caption
-                                        >Available for purchase</q-item-label
-                                    >
-                                </q-item-section>
-                            </q-item>
-
                             <q-item
                                 tag="label"
                                 v-ripple
@@ -128,6 +91,45 @@
                             >
                                 <template v-slot:error>
                                     <v-error :error="errors.bonus_duration" />
+                                </template>
+                            </q-input>
+
+                            <q-item
+                                tag="label"
+                                v-ripple
+                                class="col-xs-12 col-md-6 col-lg-4"
+                            >
+                                <q-item-section avatar>
+                                    <q-checkbox
+                                        v-model="form.trial_enabled"
+                                        color="orange"
+                                        :error="!!errors.trial_enabled"
+                                    >
+                                        <template v-slot:error>
+                                            <v-error
+                                                :error="errors.trial_enabled"
+                                            />
+                                        </template>
+                                    </q-checkbox>
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label> Trial enabled </q-item-label>
+                                    <q-item-label caption>
+                                        Enable an additional trial for the plan
+                                    </q-item-label>
+                                </q-item-section>
+                            </q-item>
+
+                            <q-input
+                                class="col-xs-12 col-md-6 col-lg-4"
+                                v-model="form.trial_duration"
+                                label="Trial duration"
+                                type="number"
+                                outlined
+                                :error="!!errors.trial_duration"
+                            >
+                                <template v-slot:error>
+                                    <v-error :error="errors.trial_duration" />
                                 </template>
                             </q-input>
                         </div>
@@ -436,12 +438,7 @@ export default {
             try {
                 const res = await this.$server.put(
                     this.form.links.update,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                    }
+                    this.form
                 );
 
                 if (res.status == 200) {

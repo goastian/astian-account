@@ -26,13 +26,6 @@
                             <div class="q-mt-sm q-gutter-sm">
                                 <q-badge
                                     :color="
-                                        plan.public ? 'primary' : 'secondary'
-                                    "
-                                >
-                                    Public : {{ plan.public ? "Yes" : "No" }}
-                                </q-badge>
-                                <q-badge
-                                    :color="
                                         plan.active ? 'primary' : 'secondary'
                                     "
                                 >
@@ -44,6 +37,13 @@
                                     class="q-ml-sm"
                                 >
                                     Bonus: {{ plan.bonus_duration }} days
+                                </q-badge>
+                                <q-badge
+                                    color="green"
+                                    v-if="plan.trial_enabled"
+                                    class="q-ml-sm"
+                                >
+                                    Trial: {{ plan.trial_duration }} days
                                 </q-badge>
                             </div>
                         </q-card-section>
@@ -193,7 +193,9 @@ export default {
     methods: {
         async getPlans() {
             try {
-                const res = await this.$server.get(this.$page.props.route.plans);
+                const res = await this.$server.get(
+                    this.$page.props.route.plans
+                );
 
                 if (res.status == 200) {
                     this.plans = res.data.data;
