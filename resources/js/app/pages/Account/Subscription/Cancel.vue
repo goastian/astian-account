@@ -41,7 +41,7 @@
 </template>
 <script>
 export default {
-    emits: ["canceled"],
+    emits: ["success"],
 
     props: {
         item: {
@@ -62,10 +62,12 @@ export default {
                 const res = await this.$server.put(this.item.links.cancel);
 
                 if (res.status == 200) {
-                    this.dialog = false;
-                    this.emit("canceled");
+                    this.$emit("success");
                 }
-            } catch (error) {}
+            } catch (error) {
+            } finally {
+                this.dialog = false;
+            }
         },
     },
 };

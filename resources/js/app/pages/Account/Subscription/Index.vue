@@ -8,89 +8,83 @@
         </q-toolbar>
 
         <div class="q-pa-md">
-            <div class="row q-col-gutter-md q-row-gutter-md">
-                <div
-                    v-for="(item, index) in packages"
-                    :key="index"
-                    class="col-12 col-sm-6 col-md-4 col-lg-3"
-                >
-                    <q-card bordered class="shadow-2">
-                        <q-card-section
-                            class="flex align-center justify-content-between"
+            <q-table
+                title="Your Packages"
+                :rows="packages"
+                :columns="columns"
+                row-key="id"
+                flat
+                bordered
+                hide-bottom
+                :rows-per-page-options="[search.per_page]"
+            >
+                <template v-slot:body-cell-name="props">
+                    <q-td>
+                        <div class="text-weight-medium text-primary">
+                            {{ props.row.meta.name }}
+                        </div>
+                        <div class="text-caption text-grey">
+                            {{ props.row.transaction.billing_period }} plan
+                        </div>
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-price="props">
+                    <q-td>
+                        {{ props.row.transaction.total }}
+                        {{ props.row.transaction.currency }}
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-bonus="props">
+                    <q-td>
+                        <div v-if="props.row.meta.bonus_enabled">
+                            🎁 {{ props.row.meta.bonus_duration }} days
+                        </div>
+                        <div v-else class="text-grey">—</div>
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-start="props">
+                    <q-td>{{ props.row.start_at }}</q-td>
+                </template>
+
+                <template v-slot:body-cell-end="props">
+                    <q-td>{{ props.row.end_at }}</q-td>
+                </template>
+
+                <template v-slot:body-cell-method="props">
+                    <q-td>{{ props.row.transaction.payment_method }}</q-td>
+                </template>
+
+                <template v-slot:body-cell-status="props">
+                    <q-td>
+                        <q-badge
+                            :color="
+                                props.row.status === 'successful'
+                                    ? 'green'
+                                    : 'orange'
+                            "
+                            text-color="white"
+                            align="middle"
                         >
-                            <div>
-                                <div class="text-h6 text-primary">
-                                    {{ item?.meta.name }}
-                                </div>
-                                <div class="text-caption text-grey">
-                                    {{ item.transaction.billing_period }}
-                                    plan
-                                </div>
-                            </div>
-                            <q-space></q-space>
-                            <v-detail :item="item" @reload="getPackages" />
-                        </q-card-section>
+                            {{ props.row.status }}
+                        </q-badge>
+                    </q-td>
+                </template>
 
-                        <q-separator />
-
-                        <q-card-section class="q-pt-none">
-                            <div class="q-mb-sm">
-                                <q-icon name="payments" class="q-mr-xs" />
-                                <strong>Price:</strong>
-                                {{ item.transaction.total }}
-                                {{ item.transaction.currency }}
-                            </div>
-
-                            <div class="q-mb-sm" v-if="item.meta.bonus_enabled">
-                                <q-icon name="card_giftcard" class="q-mr-xs" />
-                                <strong>Bonus:</strong>
-                                {{ item.meta.bonus_duration }} days
-                            </div>
-
-                            <div class="q-mb-sm">
-                                <q-icon name="event" class="q-mr-xs" />
-                                <strong>Start:</strong> {{ item.start_at }}
-                            </div>
-
-                            <div class="q-mb-sm">
-                                <q-icon
-                                    name="event_available"
-                                    class="q-mr-xs"
-                                />
-                                <strong>End:</strong> {{ item.end_at }}
-                            </div>
-
-                            <div class="q-mb-sm">
-                                <q-icon name="credit_card" class="q-mr-xs" />
-                                <strong>Method:</strong>
-                                {{ item.transaction.payment_method }}
-                            </div>
-
-                            <div class="q-mb-sm">
-                                <q-icon name="check_circle" class="q-mr-xs" />
-                                <strong>Status:</strong>
-                                <q-badge
-                                    :color="
-                                        item.status === 'successful'
-                                            ? 'green'
-                                            : 'orange'
-                                    "
-                                    text-color="white"
-                                    align="middle"
-                                >
-                                    {{ item.status }}
-                                </q-badge>
-                            </div>
-                        </q-card-section>
-                    </q-card>
-                </div>
-            </div>
+                <template v-slot:body-cell-actions="props">
+                    <q-td>
+                        <v-detail :item="props.row" @reload="getPackages" />
+                    </q-td>
+                </template>
+            </q-table>
         </div>
 
         <div class="row justify-center q-mt-md">
             <q-pagination
                 v-model="search.page"
-                color="primary"
+                color="grey-8"
                 :max="pages.total_pages"
                 size="md"
                 direction-links
@@ -110,6 +104,9 @@ export default {
 
     data() {
         return {
+            loading: false,
+            user: [],
+            packages: [],
             pages: {
                 total_pages: 0,
             },
@@ -117,28 +114,61 @@ export default {
                 page: 1,
                 per_page: 15,
             },
-            packages: [],
+            columns: [
+                {
+                    name: "name",
+                    label: "Name",
+                    field: "meta.name",
+                    align: "left",
+                },
+                { name: "price", label: "Price", align: "left" },
+                { name: "bonus", label: "Bonus", align: "left" },
+                { name: "start", label: "Start", align: "left" },
+                { name: "end", label: "End", align: "left" },
+                { name: "method", label: "Method", align: "left" },
+                { name: "status", label: "Status", align: "center" },
+                { name: "actions", label: "", align: "center" },
+            ],
         };
     },
 
-    mounted() {
-        const values = this.$page.props.packages;
-        this.packages = values.data;
-        this.pages = values.meta.pagination;
+    created() {
+        this.user = this.$page.props.user;
+
+        this.getPackages();
+    },
+
+    watch: {
+        "search.page"(value) {
+            this.getPackages();
+        },
+        "search.per_page"(value) {
+            if (value) {
+                this.search.per_page = value;
+                this.getPackages();
+            }
+        },
     },
 
     methods: {
         async getPackages() {
             try {
                 const res = await this.$server.get(
-                    this.$user.links.subscriptions
+                    this.user.links.subscriptions,
+                    {
+                        params: this.search,
+                    }
                 );
 
-                if (res.status == 200) {
+                if (res.status === 200) {
                     this.packages = res.data.data;
                     this.pages = res.data.meta.pagination;
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.loading = false;
+            }
         },
     },
 };
