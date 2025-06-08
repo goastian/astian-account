@@ -3,8 +3,7 @@ namespace App\Models\Subscription;
 
 use App\Models\Master;
 use App\Models\Subscription\Price;
-use App\Models\Subscription\Scope;
-use App\Models\Subscription\Package;
+use App\Models\Subscription\Scope; 
 use App\Transformers\Subscription\PlanTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Transformers\Subscription\PlanPriceTransformer;
@@ -22,7 +21,6 @@ class Plan extends Master
         'name',
         'slug',
         'description',
-        'public',
         'active',
         'bonus_activated',
         'bonus_duration',
