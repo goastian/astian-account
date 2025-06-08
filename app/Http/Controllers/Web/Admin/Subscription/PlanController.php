@@ -74,8 +74,14 @@ class PlanController extends WebController
                 }
             ],
             'description' => ['required'],
-            'public' => ['required', new BooleanRule()],
             'active' => ['required', new BooleanRule()],
+            'trial_enabled' => ['nullable', new BooleanRule()],
+            'trial_duration' => [
+                'required_if:trial_enabled,true',
+                'integer',
+                'min:0',
+                'max:255',
+            ],
             'bonus_enabled' => ['nullable', new BooleanRule()],
             'bonus_duration' => [
                 'required_if:bonus_enabled,true',
@@ -158,8 +164,14 @@ class PlanController extends WebController
         $this->validate($request, [
             'name' => ['nullable', 'max:150'],
             'description' => ['nullable'],
-            'public' => ['nullable', new BooleanRule()],
             'active' => ['nullable', new BooleanRule()],
+            'trial_enabled' => ['nullable', new BooleanRule()],
+            'trial_duration' => [
+                'required_if:trial_enabled,true',
+                'integer',
+                'min:0',
+                'max:255',
+            ],
             'bonus_enabled' => ['nullable', new BooleanRule()],
             'bonus_duration' => [
                 'required_if:bonus_enabled,true',
@@ -215,14 +227,19 @@ class PlanController extends WebController
                 $plan->description = Purify::clean($request->description);
             }
 
-            if ($request->has('public') && $plan->public != $request->public) {
-                $update = true;
-                $plan->public = $request->public;
-            }
-
             if ($request->has('active') && $plan->active != $request->active) {
                 $update = true;
                 $plan->active = $request->active;
+            }
+
+            if ($request->has('trial_enabled') && $plan->trial_enabled != $request->trial_enabled) {
+                $update = true;
+                $plan->trial_enabled = $request->trial_enabled;
+            }
+
+            if ($request->has('trial_duration') && $plan->trial_duration != $request->trial_duration) {
+                $update = true;
+                $plan->trial_duration = $request->trial_duration;
             }
 
             if ($request->has('bonus_enabled') && $plan->bonus_enabled != $request->bonus_enabled) {
