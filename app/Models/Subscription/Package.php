@@ -93,7 +93,9 @@ class Package extends Master
      */
     public function lastGracePeriodCheck()
     {
-        $last_day = $this->end_at->addDays(config('billing.renew.grace_period_days'));
+        $grace_period_days = intval(config('billing.renew.grace_period_days', 5));
+
+        $last_day = $this->end_at->addDays($grace_period_days);
 
         if (now() > $last_day) {
             throw new ReportError(__("Renewal Failed: The request cannot be processed because the renewal date has already passed. Please contact support for further assistance."), 400);
