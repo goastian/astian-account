@@ -145,12 +145,15 @@
             </div>
         </div>
 
-        <div class="row justify-center q-mt-md">
+        <div class="row justify-center q-my-md">
             <q-pagination
                 v-model="search.page"
-                color="grey-8"
+                color="primary"
                 :max="pages.total_pages"
                 size="sm"
+                boundary-numbers
+                direction-links
+                class="q-pa-xs q-gutter-sm rounded-borders"
             />
         </div>
     </v-admin-layout>
@@ -184,22 +187,39 @@ export default {
         };
     },
 
+    watch: {
+        "search.page"(value) {
+            this.getPlans();
+        },
+        "search.per_page"(value) {
+            if (value) {
+                this.search.per_page = value;
+                this.getPlans();
+            }
+        },
+    },
+
     created() {
-        const values = this.$page.props.plans;
-        this.plans = values.data;
-        this.pages = values.meta.pagination;
+        this.getPlans();
     },
 
     methods: {
-        async getPlans() {
+        async getPlans(param) {
+            var params = { ...this.search, ...param };
+
             try {
                 const res = await this.$server.get(
-                    this.$page.props.route.plans
+                    this.$page.props.route.plans,
+                    {
+                        params: params,
+                    }
                 );
 
                 if (res.status == 200) {
                     this.plans = res.data.data;
-                    this.pages = res.data.meta.pagination;
+                    let meta = res.data.meta;
+                    this.pages = meta.pagination;
+                    this.search.current_page = meta.pagination.current_page;
                 }
             } catch (error) {}
         },
