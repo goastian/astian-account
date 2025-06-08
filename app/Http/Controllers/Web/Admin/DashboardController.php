@@ -31,6 +31,11 @@ class DashboardController extends WebController
 
         //Apply filter between days
         if ($request->has('start') && $request->has('end')) {
+            $request->merge([
+                'start' => $request->start . ' 00:00:00',
+                'end' => $request->end . ' 23:59:59',
+            ]);
+
             $users_by_month->whereBetween('created_at', [$request->start, $request->end]);
         }
 

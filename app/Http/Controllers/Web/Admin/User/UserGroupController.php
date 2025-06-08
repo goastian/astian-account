@@ -59,10 +59,6 @@ class UserGroupController extends WebController
             ],
         ]);
 
-        $this->checkMethod('post');
-
-        $this->checkContentType($this->getPostHeader());
-
         $user->groups()->syncWithoutDetaching($request->groups);
 
         return $this->message(__('Groups assigned successfully'), 201);
@@ -77,9 +73,6 @@ class UserGroupController extends WebController
      */
     public function revoke(Request $request, User $user, Group $group)
     {
-        $this->checkMethod('delete');
-        $this->checkContentType(null);
-
         $group->users()->detach($user->id);
 
         return $this->message(__('Groups revoked successfully'), 200);

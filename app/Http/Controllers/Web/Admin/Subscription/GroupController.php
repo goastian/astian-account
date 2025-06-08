@@ -32,10 +32,13 @@ class GroupController extends WebController
      */
     public function index(Group $group)
     {
+        // Retrieve params of the request
         $params = $this->filter_transform($group->transformer);
 
+        // Prepare query
         $data = $group->query();
 
+        // Search
         $data = $this->searchByBuilder($data, $params);
 
         if (request()->wantsJson()) {
@@ -45,7 +48,6 @@ class GroupController extends WebController
         return Inertia::render(
             "Admin/Groups/Index",
             [
-                "groups" => $this->showAllByBuilderArray($data, $group->transformer),
                 "route" => route('admin.groups.index')
             ]
         );
