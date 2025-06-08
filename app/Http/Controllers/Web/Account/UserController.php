@@ -43,9 +43,6 @@ class UserController extends WebController
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
         ]);
 
-        $this->checkMethod('put');
-        $this->checkContentType($this->getUpdateHeader());
-
         DB::transaction(function () use ($user, $request) {
 
             $user->name = $request->name;
@@ -95,9 +92,6 @@ class UserController extends WebController
             ],
             'password' => ['required', 'confirmed', 'min:10', 'max:200']
         ]);
-
-        $this->checkMethod('put');
-        $this->checkContentType($this->getUpdateHeader());
 
         DB::transaction(function () use ($request, $user) {
             $user->password = Hash::make($request->password);
