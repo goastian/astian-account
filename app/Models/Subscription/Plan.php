@@ -3,7 +3,7 @@ namespace App\Models\Subscription;
 
 use App\Models\Master;
 use App\Models\Subscription\Price;
-use App\Models\Subscription\Scope; 
+use App\Models\Subscription\Scope;
 use App\Transformers\Subscription\PlanTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Transformers\Subscription\PlanPriceTransformer;
@@ -37,11 +37,10 @@ class Plan extends Master
     /**
      * Show the scopes available for the plan
      */
-    public function assignedScopes()
+    public function assignedScopes($scopes)
     {
-        $data = $this->scopes()->where('active', 1)->get();
-        $data = fractal($data, new PlanScopeTransformer($this));
-        return !empty($data) ? json_decode(json_encode($data))->data : [];
+        $scopes = $scopes->where('active', 1);
+        return $this->transform($scopes, new PlanScopeTransformer($this));
     }
 
     /**
@@ -62,15 +61,6 @@ class Plan extends Master
         return $this->morphMany(Price::class, 'priceable');
     }
 
-    /**
-     * Prices
-     */
-    public function priceable()
-    {
-        $prices = fractal($this->prices()->get(), PlanPriceTransformer::class)->toArray()['data'];
-        return $prices;
-    }
-    
     /**
      * Details of the plan to save 
      * @param string $billing_period

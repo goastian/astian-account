@@ -48,8 +48,8 @@ class PlanTransformer extends TransformerAbstract
             'trial_duration' => $plan->trial_duration,
             'created' => $this->format_date($plan->created_at),
             'updated' => $this->format_date($plan->updated_at),
-            'scopes' => $plan->assignedScopes(),
-            'prices' => $plan->priceable(),
+            'scopes' => $plan->assignedScopes($plan->scopes),
+            'prices' => $plan->transform($plan->prices, PlanPriceTransformer::class),
             'links' => [
                 'parent' => route('admin.plans.index'),
                 'store' => route('admin.plans.store'),

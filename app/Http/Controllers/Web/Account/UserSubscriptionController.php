@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Web\Account;
 
 use App\Notifications\Subscription\AutoPaymentSuccess;
+use Exception;
 use Inertia\Inertia;
 use App\Models\User\Partner;
 use Illuminate\Http\Request;
@@ -266,7 +267,14 @@ class UserSubscriptionController extends WebController
         $transaction = Transaction::with([
             'package',
             'package.user'
-        ])->where("code", $request->code)->first();
+        ])->where("code", $request->code)
+            ->whereHas('package.user', function ($query) {
+                $query->where('id', auth()->user()->id);
+            })->first();
+
+        if (empty($transaction)) {
+            throw new Exception("Page not found", 404);
+        }
 
         return view('payment.success', ['transaction' => $transaction->toArray()]);
     }

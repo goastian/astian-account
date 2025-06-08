@@ -32,19 +32,31 @@ class PlanController extends WebController
      */
     public function index(Plan $plan)
     {
-        $data = $plan->query();
-
+        // Retrieve params of the request
         $params = $this->filter_transform($plan->transformer);
 
+        //Prepare query
+        $data = $plan->query();
+
+        // Eager loading
+        $data = $data->with([
+            'scopes',
+            'prices',
+            'scopes.role',
+            'scopes.service.group'
+        ]);
+
+        // Search
         $data = $this->searchByBuilder($data, $params);
 
+        // Order by
         $data = $this->orderByBuilder($data, $plan->transformer);
+
         if (request()->wantsJson()) {
             return $this->showAllByBuilder($data, $plan->transformer);
         }
 
         return Inertia::render("Admin/Plans/Index", [
-            'plans' => $this->showAllByBuilderArray($data, $plan->transformer),
             'route' => [
                 'services' => route("admin.services.index"),
                 'plans' => route('admin.plans.index')
