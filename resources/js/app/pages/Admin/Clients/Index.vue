@@ -127,13 +127,15 @@
             </q-table>
         </div>
 
-        <!-- 📄 Paginación -->
-        <div class="row justify-center q-mt-md">
+        <div class="row justify-center q-my-md">
             <q-pagination
                 v-model="search.page"
-                color="grey-8"
+                color="primary"
                 :max="pages.total_pages"
                 size="sm"
+                boundary-numbers
+                direction-links
+                class="q-pa-xs q-gutter-sm rounded-borders"
             />
         </div>
     </v-admin-layout>
@@ -192,9 +194,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.clients;
-        this.clients = values.data;
-        this.pages = values.meta.pagination;
+        this.getClients();
     },
 
     methods: {
@@ -213,7 +213,7 @@ export default {
                 .get(this.$page.props.route, { params })
                 .then((res) => {
                     this.clients = res.data.data;
-                    const meta = res.data.meta;
+                    let meta = res.data.meta;
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })

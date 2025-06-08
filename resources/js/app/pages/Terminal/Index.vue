@@ -62,12 +62,15 @@
                 </template>
             </q-table>
 
-            <div class="row justify-center q-mt-md">
+            <div class="row justify-center q-my-md">
                 <q-pagination
                     v-model="search.page"
-                    color="grey-8"
+                    color="primary"
                     :max="pages.total_pages"
                     size="sm"
+                    boundary-numbers
+                    direction-links
+                    class="q-pa-xs q-gutter-sm rounded-borders"
                 />
             </div>
 
@@ -147,9 +150,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.commands;
-        this.commands = values.data;
-        this.pages = values.meta.pagination;
+        this.getCommands();
     },
 
     watch: {
@@ -172,9 +173,9 @@ export default {
                 });
                 if (res.status === 200) {
                     this.commands = res.data.data;
-                    const meta = res.data.meta.pagination;
-                    this.pages = meta;
-                    this.search.current_page = meta.current_page;
+                    let meta = res.data.meta;
+                    this.pages = meta.pagination;
+                    this.search.current_page = meta.pagination.current_page;
                 }
             } catch (e) {}
         },
@@ -182,12 +183,7 @@ export default {
             try {
                 const res = await this.$server.post(
                     this.$page.props.route,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                    this.form
                 );
                 if (res.status === 201) {
                     this.getCommands();
