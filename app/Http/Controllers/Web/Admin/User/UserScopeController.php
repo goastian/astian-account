@@ -34,8 +34,6 @@ class UserScopeController extends WebController
      */
     public function index(User $user, UserScope $userScope, Scope $scope)
     {
-        $this->checkMethod('get');
-
         $scopes = $userScope->query();
 
         $scopes = $userScope->where('user_id', $user->id)
@@ -93,9 +91,6 @@ class UserScopeController extends WebController
                 }
             ]
         ]);
-
-        $this->checkMethod('post');
-        $this->checkContentType($this->getPostHeader());
 
         DB::transaction(function () use ($request, $user, $userScope) {
             foreach ($request->scopes as $id) {
@@ -155,8 +150,6 @@ class UserScopeController extends WebController
      */
     public function history(User $user, UserScope $userScope)
     {
-        $this->checkMethod('get');
-
         $scopes = $userScope->query();
         $scopes->where('user_id', $user->id);
 

@@ -22,17 +22,21 @@
             </div>
         </q-toolbar>
 
+        <!-- Modo GRID -->
         <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
             <div
                 class="col-xs-12 col-sm-6 col-md-4"
                 v-for="group in groups"
                 :key="group.id"
             >
-                <q-card flat bordered>
+                <q-card flat bordered class="q-hoverable">
                     <q-card-section class="q-pb-none">
-                        <div class="text-h6 text-ucfirst">{{ group.name }}</div>
+                        <div class="text-h6 text-primary">
+                            <q-icon name="group" class="q-mr-sm" />
+                            {{ group.name }}
+                        </div>
                         <div class="text-subtitle2 text-grey-7">
-                            {{ group.slug }}
+                            @{{ group.slug }}
                         </div>
                     </q-card-section>
 
@@ -40,9 +44,16 @@
                         <div class="line-clamp-2">{{ group.description }}</div>
                     </q-card-section>
 
-                    <q-card-section class="text-caption text-grey-8">
-                        System:
-                        <strong>{{ group.system ? "Yes" : "No" }}</strong>
+                    <q-card-section class="text-caption">
+                        <q-chip
+                            dense
+                            square
+                            :color="group.system ? 'blue-1' : 'grey-2'"
+                            :text-color="group.system ? 'blue-10' : 'grey-9'"
+                            icon="verified_user"
+                        >
+                            {{ group.system ? "System Group" : "User Group" }}
+                        </q-chip>
                     </q-card-section>
 
                     <q-separator />
@@ -59,18 +70,33 @@
             </div>
         </div>
 
+        <!-- Modo LIST -->
         <div v-else class="q-ma-sm">
             <q-list bordered separator>
-                <q-item v-for="group in groups" :key="group.id" class="q-py-md">
+                <q-item v-for="group in groups" :key="group.id" class="q-py-sm">
                     <q-item-section>
-                        <q-item-label class="text-h6 text-ucfirst">{{
-                            group.name
-                        }}</q-item-label>
-                        <q-item-label caption>{{ group.slug }}</q-item-label>
+                        <div class="row items-center q-gutter-sm">
+                            <q-icon name="group" />
+                            <q-item-label class="text-h6 text-primary">{{
+                                group.name
+                            }}</q-item-label>
+                        </div>
+                        <q-item-label caption>@{{ group.slug }}</q-item-label>
                         <q-item-label>{{ group.description }}</q-item-label>
-                        <q-item-label caption class="text-grey-8">
-                            System:
-                            <strong>{{ group.system ? "Yes" : "No" }}</strong>
+                        <q-item-label caption class="q-mt-sm">
+                            <q-chip
+                                dense
+                                square
+                                :color="group.system ? 'blue-1' : 'grey-2'"
+                                :text-color="
+                                    group.system ? 'blue-10' : 'grey-9'
+                                "
+                                icon="verified_user"
+                            >
+                                {{
+                                    group.system ? "System Group" : "User Group"
+                                }}
+                            </q-chip>
                         </q-item-label>
                     </q-item-section>
 
@@ -86,12 +112,15 @@
             </q-list>
         </div>
 
-        <div class="row justify-center q-mt-md">
+        <div class="row justify-center q-my-md">
             <q-pagination
                 v-model="search.page"
-                color="grey-8"
+                color="primary"
                 :max="pages.total_pages"
                 size="sm"
+                boundary-numbers
+                direction-links
+                class="q-pa-xs q-gutter-sm rounded-borders"
             />
         </div>
     </v-admin-layout>
@@ -146,9 +175,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.groups;
-        this.groups = values.data;
-        this.pages = values.meta.pagination;
+        this.getGroups();
     },
 
     watch: {
@@ -173,9 +200,7 @@ export default {
         },
 
         getGroups(param = null) {
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            var params = { ...this.search, ...param };
 
             this.$server
                 .get(this.$page.props.route, {
@@ -183,7 +208,7 @@ export default {
                 })
                 .then((res) => {
                     this.groups = res.data.data;
-                    var meta = res.data.meta;
+                    let meta = res.data.meta;
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })

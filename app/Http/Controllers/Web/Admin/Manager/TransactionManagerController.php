@@ -5,7 +5,7 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\WebController;
 use App\Models\Subscription\Transaction;
-use App\Services\Payment\PaymentManager; 
+use App\Services\Payment\PaymentManager;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class TransactionManagerController extends WebController
@@ -24,20 +24,27 @@ class TransactionManagerController extends WebController
      */
     public function index(Transaction $transaction)
     {
-        $data = $transaction->query();
-
+        // Retrieve params of the request
         $params = $this->filter_transform($transaction->transformer);
 
+        // Prepare query
+        $data = $transaction->query();
+
+        // Eager loading
+        $data->with(['user', 'package', 'partner']);
+
+
+        // Search 
         $data = $this->searchByBuilder($data, $params);
+
+        // Order by
         $data = $this->orderByBuilder($data, $transaction->transformer);
 
         if (request()->wantsJson()) {
             return $this->showAllByBuilder($data, $transaction->transformer);
         }
 
-        return Inertia::render("Admin/Transaction/Index", [
-            "transactions" => $this->showAllByBuilderArray($data, $transaction->transformer)
-        ]);
+        return Inertia::render("Admin/Transaction/Index", ["route" => route('admin.transactions.index')]);
     }
 
     /**

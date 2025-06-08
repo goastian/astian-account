@@ -35,23 +35,32 @@ class ServiceController extends WebController
      */
     public function index(Request $request, Service $service)
     {
+        // Retrieve params of the request
         $params = $this->filter_transform($service->transformer);
 
+        // Prepare query
         $data = $service->query();
 
+        // Eager loading
+        $data = $data->with(['group', 'scopes', 'scopes.role']);
+
+        // Filter by visibility
         if ($request->visibility) {
             $data->where('visibility', $request->visibility);
         }
 
+        // Search data with the param request
         $data = $this->searchByBuilder($data, $params);
+
+        // Order by
         $data = $this->orderByBuilder($data, $service->transformer);
 
         if (request()->wantsJson()) {
             return $this->showAllByBuilder($data, $service->transformer);
         }
 
+        // Render vue component
         return Inertia::render("Admin/Service/Index", [
-            'services' => $this->showAllByBuilderArray($data, $service->transformer),
             'route' => [
                 'services' => route("admin.services.index"),
                 'groups' => route("admin.groups.index"),
@@ -99,9 +108,6 @@ class ServiceController extends WebController
      */
     public function show(Service $service)
     {
-        $this->checkMethod('get');
-        $this->checkContentType(null);
-
         return $this->showOne($service, $service->transformer, 201);
     }
 

@@ -31,11 +31,16 @@ class RoleController extends WebController
      */
     public function index(Role $role)
     {
+        // Retrieve params of the request
         $params = $this->filter_transform($role->transformer);
 
+        // Prepare query
         $data = $role->query();
 
+        // Search
         $data = $this->searchByBuilder($data, $params);
+
+        // Order by
         $data = $this->orderByBuilder($data);
 
         if (request()->wantsJson()) {
@@ -43,7 +48,6 @@ class RoleController extends WebController
         }
 
         return Inertia::render("Admin/Role/Index", [
-            'roles' => $this->showAllByBuilderArray($data, $role->transformer),
             'route' => route('admin.roles.index')
         ]);
     }

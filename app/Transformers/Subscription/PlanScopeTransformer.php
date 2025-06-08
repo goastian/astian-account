@@ -45,36 +45,36 @@ class PlanScopeTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Scope $data)
+    public function transform(Scope $scope)
     {
         return [
-            'id' => $data->id,
-            'public' => $data->public ? true : false,
-            'active' => $data->active ? true : false,
-            'gsr_id' => $data->getGsrID(),
-            'api_key' => $data->api_key,
+            'id' => $scope->id,
+            'public' => $scope->public ? true : false,
+            'active' => $scope->active ? true : false,
+            'gsr_id' => $scope->getGsrId(),
+            'api_key' => $scope->api_key,
             'service' => [
-                'id' => $data->service->id,
-                'name' => $data->service->name,
-                'slug' => $data->service->slug,
-                'description' => $data->service->description,
-                'system' => $data->service->system ? true : false,
+                'id' => $scope->service->id,
+                'name' => $scope->service->name,
+                'slug' => $scope->service->slug,
+                'description' => $scope->service->description,
+                'system' => $scope->service->system ? true : false,
                 'group' => [
-                    'id' => $data->service->group->id,
-                    'name' => $data->service->group->name,
-                    'description' => $data->service->group->description,
+                    'id' => $scope->service->group->id,
+                    'name' => $scope->service->group->name,
+                    'description' => $scope->service->group->description,
                 ]
             ],
             'role' => [
-                'id' => $data->role->id,
-                'name' => $data->role->name,
-                'slug' => $data->role->slug,
-                'description' => $data->role->description
+                'id' => $scope->role->id,
+                'name' => $scope->role->name,
+                'slug' => $scope->role->slug,
+                'description' => $scope->role->description
             ],
-            'created' => $this->format_date($data->created_at),
-            'updated' => $this->format_date($data->updated_at),
+            'created' => $this->format_date($scope->created_at),
+            'updated' => $this->format_date($scope->updated_at),
             'links' => [
-                'revoke' => route('admin.plans.scopes.revoke', ['plan' => $this->plan->id, 'scope' => $data->id]),
+                'revoke' => route('admin.plans.scopes.revoke', ['plan' => $this->plan->id, 'scope' => $scope->id]),
             ]
         ];
     }

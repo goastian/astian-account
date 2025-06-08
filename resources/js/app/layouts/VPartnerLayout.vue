@@ -25,7 +25,7 @@
                         active-class="secondary"
                     >
                         <q-item-section avatar>
-                            <q-avatar :icon="item.icon" />
+                            <q-avatar class="text-primary" :icon="item.icon" />
                         </q-item-section>
 
                         <q-item-section>{{ item.name }}</q-item-section>
