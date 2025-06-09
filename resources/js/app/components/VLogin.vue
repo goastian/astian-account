@@ -29,7 +29,11 @@
                     class="q-mb-md"
                     :error="!!errors.email"
                     :error-message="errors.email"
-                />
+                >
+                    <template v-slot:error>
+                        <v-error :error="errors.email" />
+                    </template>
+                </q-input>
 
                 <q-input
                     v-model="form.password"
@@ -39,8 +43,11 @@
                     dense
                     class="q-mb-md"
                     :error="!!errors.password"
-                    :error-message="errors.password"
-                />
+                >
+                    <template v-slot:error>
+                        <v-error :error="errors.password" />
+                    </template>
+                </q-input>
 
                 <div class="text-right q-mb-md">
                     <q-btn
@@ -52,6 +59,7 @@
                         "
                     />
                 </div>
+
                 <v-captcha @verified="handleVerified" />
 
                 <q-btn
@@ -97,10 +105,7 @@ export default {
                 email: null,
                 password: null,
             },
-            errors: {
-                email: null,
-                password: null,
-            },
+            errors: {},
             dialog: false,
         };
     },
@@ -132,7 +137,11 @@ export default {
                     window.location.reload();
                     this.dialog = false;
                 }
-            } catch (error) {}
+            } catch (error) {
+                if (error?.response?.status == 422) {
+                    this.errors = error.response.data.errors;
+                }
+            }
         },
 
         open(uri) {
