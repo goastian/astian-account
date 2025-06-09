@@ -100,7 +100,7 @@ class Handler extends ExceptionHandler
 
         if ($e instanceof OAuthAuthenticationException) {
 
-            return RouteServiceProvider::redirectToLogin();
+            return redirectToHome();
         }
 
         if (method_exists($e, 'render') && $response = $e->render($request)) {

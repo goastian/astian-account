@@ -20,51 +20,70 @@ class AuthenticatedSessionController extends WebController
     }
 
     /**
-     * login del sistema
+     * Show login form
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function create()
+    public function create(Request $request)
     {
         if (auth()->check()) {
             return redirectToHome();
         }
 
-        $params = request()->all();
-
-        return view('auth.login', ['query' => $params]);
+        return view('auth.login');
     }
 
     /**
      * Handle an incoming authentication request.
+     * @param \App\Http\Requests\Auth\LoginRequest $request
+     * @return mixed|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|null
      */
     public function store(LoginRequest $request)
     {
+        // Redirect to
+        $redirect_to = session()->get('redirect_to');
+
+        // Delete session key
+        session()->forget('redirect_to');
+
         $request->authenticate();
 
         $request->session()->regenerate();
 
+        // Save the las connection
         auth()->user()->lastConnected();
 
-        if ($request->module) {
-            return redirect()->route('authorize.module', ['redirect_to' => $request->redirect_to]);
-        }
-
+        // Only json request
         if (request()->wantsJson()) {
-            return $this->data([
-                'data' => [
-                    'message' => __("Login into account was successfully"),
-                    'user' => $this->authenticated_user(),
-                ]
-            ]);
+            // data
+            $data = [
+                'message' => __("Login into account was successfully"),
+                'user' => $this->authenticated_user(),
+            ];
+
+            // add page to redirect
+            if (!empty($redirect_to)) {
+                $data['redirect_to'] = $redirect_to;
+            }
+
+            return $this->data(['data' => $data]);
         }
 
-        return RouteServiceProvider::home();
+        // Redirect to the origin url
+        if (!empty($redirect_to)) {
+            return redirect($redirect_to);
+        }
+
+        return redirectToHome();
     }
 
     /**
      * Destroy an authenticated session.
+     * @param \Illuminate\Http\Request $request
      */
     public function destroy(Request $request)
     {
+        // Save the last connected
         auth()->user()->lastConnected();
 
         Auth::guard('web')->logout();
@@ -73,6 +92,6 @@ class AuthenticatedSessionController extends WebController
 
         $request->session()->regenerateToken();
 
-        return $request->wantsJson() ? route('login') : config('system.home_page', '/');
+        return route('login');
     }
 }
