@@ -47,11 +47,6 @@
                     </div>
                 </div>
 
-                <!-- Hidden fields -->
-                @foreach ($query as $item => $value)
-                    <input type="hidden" id="{{ $item }}" name="{{ $item }}" value="{{ $value }}">
-                @endforeach
-
                 <x-captcha />
 
                 <!-- Submit -->
