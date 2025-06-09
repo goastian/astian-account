@@ -48,50 +48,8 @@ class RouteServiceProvider extends ServiceProvider
      * Redirect user after login
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|null
      */
-    public static function home()
+    public static function home(Request $request)
     {
-        if (RouteServiceProvider::query()) {
-            return RouteServiceProvider::redirectToAskForAuthorization();
-        }
         return redirectToHome();
-    }
-
-    /**
-     * Redirect to the user after login to authorize third party application
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
-    public static function redirectToAskForAuthorization()
-    {
-        $query = http_build_query(RouteServiceProvider::query());
-
-        return redirect(config('app.url') . '/oauth/authorize?' . $query);
-    }
-
-    /**
-     * Get the query params
-     * @return array
-     */
-    public static function query()
-    {
-        return request()->except([
-            '_token',
-            'email',
-            'password',
-            'token',
-            'cf-turnstile-response',
-            'g-recaptcha-response',
-            'h-captcha-response'
-        ]);
-    }
-
-    /**
-     * Redirect to the login if the user is not authenticatable
-     * @return mixed|\Illuminate\Http\RedirectResponse
-     */
-    public static function redirectToLogin()
-    {
-        $params = RouteServiceProvider::query();
-
-        return redirect()->route('login', $params);
     }
 }

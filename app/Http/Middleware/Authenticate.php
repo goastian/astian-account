@@ -15,29 +15,25 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        $this->denyRedirectForGateways($request);
+        if ($request->wantsJson()) {
+            $uri = $_SERVER['REQUEST_URI'] ?? '';
 
-        if (!$request->expectsJson()) {
-
-            $params = $request->all();
-
-            return route('login', $params);
+            if (preg_match('#/gateway\b#', $uri)) {
+                throw new ReportError('You are not logged in.', 401);
+            }
         }
-    }
 
-    /**
-     * Deny redirection for Gateways
-     * @param mixed $request
-     * @throws \Elyerr\ApiResponse\Exceptions\ReportError
-     * @return void
-     */
-    protected function denyRedirectForGateways($request)
-    {
-        $URI = $_SERVER['REQUEST_URI'];
-
-        if (strpos($URI, 'gateway')) {
-
-            throw new ReportError(__("Unauthorized"), 401);
+        // Only referral redirect to the login
+        if (!empty($referral_code = $request->referral_code)) {
+            return route('login', ['referral_code' => $referral_code]);
         }
+
+        // For the rest of the params get the full url
+        $next_page = $request->fullUrl();
+
+        // Save url into the session
+        session(['redirect_to' => $next_page]);
+
+        return route('login');
     }
 }
