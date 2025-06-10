@@ -1,12 +1,12 @@
 <?php
 namespace App\Http\Controllers\Web\Auth;
 
-use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Providers\RouteServiceProvider;
+use App\Http\Controllers\WebController;
 use App\Http\Requests\Auth\LoginRequest;
 use Elyerr\ApiResponse\Assets\JsonResponser;
+use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
 
 class AuthenticatedSessionController extends WebController
 {
@@ -81,10 +81,13 @@ class AuthenticatedSessionController extends WebController
      * Destroy an authenticated session.
      * @param \Illuminate\Http\Request $request
      */
-    public function destroy(Request $request)
+    public function destroy(Request $request, OAuthSessionTokenRepository $oAuthSessionTokenRepository)
     {
         // Save the last connected
         auth()->user()->lastConnected();
+
+        // Destroy oauth sessions
+        $oAuthSessionTokenRepository->destroyTokenSession(session()->getId());
 
         Auth::guard('web')->logout();
 

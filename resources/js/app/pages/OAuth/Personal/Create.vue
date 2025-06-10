@@ -133,9 +133,7 @@ export default {
             return grouped;
         },
     },
-    mounted() {
-        this.listenEvent();
-    },
+    
     methods: {
         async open() {
             this.getScopes();
@@ -194,17 +192,6 @@ export default {
                     this.scopes = res.data;
                 })
                 .catch(() => {});
-        },
-        listenEvent() {
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen(".StoreRoleEvent", () => this.getScopes());
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen(".UpdateRoleEvent", () => this.getScopes());
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen(".DestroyRoleEvent", () => this.getScopes());
         },
     },
 };

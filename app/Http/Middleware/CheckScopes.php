@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Traits\Scopes;
+use Laravel\Passport\Client;
 use Elyerr\ApiResponse\Exceptions\ReportError;
-use Laravel\Passport\Exceptions\MissingScopeException;
 use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Http\Middleware\CheckScopes as middleware;
 
@@ -25,41 +25,45 @@ class CheckScopes extends middleware
      */
     public function handle($request, $next, ...$scopes)
     {
-        if (!$request->user() || !$request->user()->token()) {
+        // Retrieve token to the  request
+        $token = $request->user()->token();
+
+        // Retrieve the client to the token
+        $client = Client::find($token->client_id);
+
+        // Checking Authentication
+        if (!$request->user() || !$token) {
             throw new AuthenticationException;
         }
 
-        //Check the api key
-        $apiKey = $request->user()->token();
-        if (isset($apiKey->id)) {
+        // Use personal access token like a api key
+        if ($client->personal_access_client) {
 
-            if (in_array(auth()->user()->adminScopeName(), $apiKey->scopes)) {
-                return $next($request);
-            }
-
-            if (empty(array_diff($scopes, $apiKey->scopes))) {
+            if (empty(array_diff($scopes, $token->scopes))) {
                 return $next($request);
             }
 
             throw new ReportError("You do not have the necessary permissions", 403);
         }
 
-        //admin users
+        // Verify the admin user and add top level
         if (auth()->user()->isAdmin()) {
             return $next($request);
         }
 
-        //Verification for non-admin users
-        if (auth()->check()) {
+        /**
+         * Verification for non-admin users
+         */
 
-            $userScopes = $this->scopes()->pluck('id')->toArray();
-            if (!empty($userScopes) && empty(array_diff($scopes, $userScopes))) {
-                return $next($request);
-            }
+        // Retrieve the owner scopes
+        $userScopes = $this->scopes()->pluck('id')->toArray();
 
-            throw new ReportError("You do not have the necessary permissions", 403);
+        // Checking the incoming scopes exist in the user scopes
+        if (!empty($userScopes) && empty(array_diff($scopes, $userScopes))) {
+            return $next($request);
         }
 
-        return $next($request);
+        throw new ReportError("You do not have the necessary permissions", 403);
+
     }
 }
