@@ -2,10 +2,9 @@
 namespace App\Http\Controllers\Api\OAuth;
 
 use App\Traits\Scopes;
-use Illuminate\Http\Request;
-use Laravel\Passport\TokenRepository;
-use App\Http\Controllers\ApiController;
-use Laravel\Passport\RefreshTokenRepository;
+use Illuminate\Http\Request; 
+use App\Http\Controllers\ApiController; 
+use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
 
 class PassportConnectController extends ApiController
 {
@@ -97,15 +96,13 @@ class PassportConnectController extends ApiController
      * @param \Illuminate\Http\Request $request
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function revokeAuthorization(Request $request)
+    public function revokeAuthorization(Request $request, OAuthSessionTokenRepository $oAuthSessionTokenRepository)
     {
         $token = auth()->user()->token();
 
-        $tokenRepository = app(TokenRepository::class);
-        $refreshTokenRepository = app(RefreshTokenRepository::class);
+        $session = $oAuthSessionTokenRepository->findToken($token->id);
 
-        $tokenRepository->revokeAccessToken($token->id);
-        $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
+        $oAuthSessionTokenRepository->destroyTokenSession($session->getSessionId());
 
         return $this->message(__('Session finished successfully'), 200);
     }
