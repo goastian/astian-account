@@ -67,25 +67,6 @@ class Controller extends BaseController
         return json_decode(json_encode($user))->data;
     }
 
-
-    /**
-     * Remove the all credential 
-     * @param mixed $tokens
-     * @return void
-     */
-    public function removeCredentials($tokens)
-    {
-        $tokenRepository = app(TokenRepository::class);
-        $refreshTokenRepository = app(RefreshTokenRepository::class);
-
-        foreach ($tokens as $token) {
-
-            $tokenRepository->revokeAccessToken($token->id);
-
-            $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
-        }
-    }
-
     /**
      * search by builder
      * @param \Illuminate\Database\Eloquent\Builder $query
