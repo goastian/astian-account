@@ -39,7 +39,7 @@ class AuthServiceProvider extends ServiceProvider
 
                 $server->enableGrantType(
                     $grant,
-                    new \DateInterval('PT1H')
+                    new \DateInterval('P1Y')
                 );
 
                 return $server;
