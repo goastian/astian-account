@@ -55,7 +55,7 @@ class Menu
                 'show' => true,
             ],
             "partner_routes" => static::partnerRoutes(),
-            "allow_register" => config('system.enable_register_member', true),
+            "allow_register" => config('routes.guest.register', true),
         ];
     }
 
@@ -72,21 +72,55 @@ class Menu
                     'icon' => 'mdi-account-star',
                     'show' => true,
                     'menu' => [
-                        ['name' => 'Me', 'route' => route('users.dashboard'), 'icon' => 'mdi-information'],
-                        ['name' => 'profile', 'route' => route('users.profile'), 'icon' => 'mdi-account-details-outline'],
-                        ['name' => 'Password', 'route' => route('users.password'), 'icon' => 'mdi-lock-reset'],
-                        ['name' => '2FA', 'route' => route('users.2fa.request'), 'icon' => 'mdi-two-factor-authentication'],
-                        ['name' => 'Subscriptions', 'route' => route('users.subscriptions.index'), 'icon' => 'mdi-gift-outline'],
-                        ['name' => 'Store', 'route' => route('plans.index'), 'icon' => 'mdi-store-search'],
+                        [
+                            'name' => 'Me',
+                            'route' => route('users.dashboard'),
+                            'icon' => 'mdi-information'
+                        ],
+                        [
+                            'name' => 'profile',
+                            'route' => route('users.profile'),
+                            'icon' => 'mdi-account-details-outline'
+                        ],
+                        [
+                            'name' => 'Password',
+                            'route' => route('users.password'),
+                            'icon' => 'mdi-lock-reset'
+                        ],
+                        [
+                            'name' => '2FA',
+                            'route' => route('users.2fa.request'),
+                            'icon' => 'mdi-two-factor-authentication'
+                        ],
+                        [
+                            'name' => 'Subscriptions',
+                            'route' => route('users.subscriptions.index'),
+                            'icon' => 'mdi-gift-outline'
+                        ],
+                        [
+                            'name' => 'Store',
+                            'route' => route('plans.index'),
+                            'icon' => 'mdi-store-search'
+                        ],
                     ]
                 ],
                 [
                     'name' => 'Developers',
                     'icon' => 'mdi-tools',
-                    'show' => false,
+                    'show' => config('routes.users.developers'),
                     'menu' => [
-                        ['name' => 'Applications', 'route' => route('passport.clients.index'), 'icon' => 'mdi-wan'],
-                        ['name' => 'API Key', 'route' => route('passport.personal.tokens.index'), 'icon' => 'mdi-shield-key-outline'],
+                        [
+                            'name' => 'Applications',
+                            'route' => route('passport.clients.index'),
+                            'icon' => 'mdi-wan',
+                            'show' => config('routes.users.clients')
+                        ],
+                        [
+                            'name' => 'API Key',
+                            'route' => route('passport.personal.tokens.index'),
+                            'icon' => 'mdi-shield-key-outline',
+                            'show' => config('routes.users.api'),
+                        ],
                     ]
                 ],
             ];

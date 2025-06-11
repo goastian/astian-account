@@ -51,6 +51,7 @@ class Setting extends Master
         Setting::getSystemSetting();
         Setting::getSessionSettings();
         Setting::getCacheSettings();
+        Setting::getRoutesSettings();
     }
 
     /**
@@ -263,7 +264,6 @@ class Setting extends Master
         settingLoad('system.disable_create_user_by_command', false);
         settingLoad('system.destroy_user_after', 30);
         settingLoad('system.code_2fa_email_expires', 5);
-        settingLoad('system.enable_register_member', true);
         settingLoad('system.csp_enabled', true);
         settingLoad('system.redirect_to', "/account");
         settingLoad('system.privacy_url', null);
@@ -271,7 +271,7 @@ class Setting extends Master
         settingLoad('system.policy_cookies', null);
 
         //Session settings
-        settingLoad('session.driver', 'database');
+        //settingLoad('session.driver', 'database');
         settingLoad('session.lifetime', 7200);
         settingLoad('session.expire_on_close', false);
         settingLoad('session.encrypt', false);
@@ -282,6 +282,12 @@ class Setting extends Master
         settingLoad('session.secure', true);
         settingLoad('session.http_only', true);
         settingLoad('session.partitioned', false);
+
+        // Settings routes
+        settingLoad('routes.users.developers', false);
+        settingLoad('routes.users.api', false);
+        settingLoad('routes.users.clients', false);
+        settingLoad('routes.guest.register', true);
     }
 
     /**
@@ -518,7 +524,6 @@ class Setting extends Master
         Config::set('system.disable_create_user_by_command', settingItem('system.disable_create_user_by_command', false));
         Config::set('system.destroy_user_after', settingItem('system.destroy_user_after', 30));
         Config::set('system.code_2fa_email_expires', settingItem('system.code_2fa_email_expires', 5));
-        Config::set('system.enable_register_member', settingItem('system.enable_register_member', true));
         Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
         Config::set('system.privacy_url', settingItem('system.privacy_url', null));
@@ -535,7 +540,7 @@ class Setting extends Master
      */
     public static function getSessionSettings()
     {
-        Config::set('session.driver', settingItem('session.driver', 'database'));
+        Config::set('session.driver', 'database');// default session driver
         Config::set('session.lifetime', settingItem('session.lifetime', 7200));
         Config::set('session.expire_on_close', settingItem('session.expire_on_close', false));
         Config::set('session.encrypt', settingItem('session.encrypt', false));
@@ -572,5 +577,14 @@ class Setting extends Master
         Config::set('cache.stores.dynamodb.region', settingItem('cache.stores.dynamodb.region', 'us-east-1', null));
         Config::set('cache.stores.dynamodb.table', settingItem('cache.stores.dynamodb.table', 'cache', null));
         Config::set('cache.stores.dynamodb.table', settingItem('cache.stores.dynamodb.endpoint', null, null));
+    }
+
+
+    public static function getRoutesSettings()
+    {
+        Config::set('routes.users.developers', settingItem('routes.users.developers', false));
+        Config::set('routes.users.api', settingItem('routes.users.api', false));
+        Config::set('routes.users.clients', settingItem('routes.users.clients', false));
+        Config::set('routes.guest.register', settingItem('routes.guest.register', true));
     }
 }
