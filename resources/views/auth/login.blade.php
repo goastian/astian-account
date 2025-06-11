@@ -47,11 +47,6 @@
                     </div>
                 </div>
 
-                <!-- Hidden fields -->
-                @foreach ($query as $item => $value)
-                    <input type="hidden" id="{{ $item }}" name="{{ $item }}" value="{{ $value }}">
-                @endforeach
-
                 <x-captcha />
 
                 <!-- Submit -->
@@ -63,7 +58,7 @@
                 </div>
 
                 <!-- Register link -->
-                @if (config('system.enable_register_member', true))
+                @if (config('routes.guest.register', true))
                     <p class="text-center text-sm text-gray-600">
                         {{ __("Don't have an account?") }}
                         <a href="{{ route('register') }}" class="text-blue-600 hover:underline">
