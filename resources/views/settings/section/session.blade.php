@@ -12,41 +12,9 @@
         <div class="w-full md:w-3/4 space-y-4">
 
             <div class="p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm">
-                <label for="">Driver</label>
-                <select name="session[driver]"
-                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="" disabled>{{ __('Choose option') }}</option>
-                    <option value="file" {{ config('session.driver') == 'file' ? 'selected' : '' }}>
-                        file
-                    </option>
-                    <option value="cookie" {{ config('session.driver') == 'cookie' ? 'selected' : '' }}>
-                        cookie
-                    </option>
-                    <option value="database" {{ config('session.driver') == 'database' ? 'selected' : '' }}>
-                        database
-                    </option>
-                    <option value="apc" {{ config('session.driver') == 'apc' ? 'selected' : '' }}>
-                        apc
-                    </option>
-                    <option value="memcached" {{ config('session.driver') == 'memcached' ? 'selected' : '' }}>
-                        memcached
-                    </option>
-                    <option value="redis" {{ config('session.driver') == 'redis' ? 'selected' : '' }}>
-                        redis
-                    </option>
-                    <option value="dynamodb" {{ config('session.driver') == 'dynamodb' ? 'selected' : '' }}>
-                        dynamodb
-                    </option>
-                    <option value="array" {{ config('session.driver') == 'array' ? 'selected' : '' }}>
-                        array
-                    </option>
-                </select>
-            </div>
-
-            <div class="p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm">
                 <div class="mb-2">
                     <label class="block text-sm font-medium text-gray-700">{{ __('Session Lifetime') }}</label>
-                    <input type="text" name="session[lifetime]"
+                    <input type="number" name="session[lifetime]"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
                         value="{{ config('session.lifetime') }}">
                     <small
@@ -62,8 +30,7 @@
                     <option value="{{ true }}" {{ config('session.expire_on_close') == true ? 'selected' : '' }}>
                         {{ __('Yes') }}
                     </option>
-                    <option value="{{ false }}"
-                        {{ config('session.expire_on_close') == false ? 'selected' : '' }}>
+                    <option value="{{ false }}" {{ config('session.expire_on_close') == false ? 'selected' : '' }}>
                         {{ __('No') }}
                     </option>
                 </select>
@@ -88,37 +55,6 @@
                     class="text-gray-500">{{ __('This option allows you to easily specify that all of your session data should be encrypted before it is stored.') }}</small>
             </div>
 
-            {{-- 
-            <div class="p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm">
-                <label for="">{{ __('Session Database Connection') }}</label>
-                <select name="session[connection]"
-                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="" disabled>{{ __('Choose option') }}</option>
-                    <option value="database" {{ config('session.connection') == 'database' ? 'selected' : '' }}>
-                        {{ __('Database') }}
-                    </option>
-                    <option value="redis" {{ config('session.connection') == 'database' ? 'selected' : '' }}>
-                        {{ __('Redis') }}
-                    </option>
-                </select>
-                <small class="text-gray-500">
-                    {{ __('you may specify a connection that should be used to manage these sessions') }}
-                </small>
-            </div>
-             --}}
-
-            <div class="p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm">
-                <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">{{ __('Session Lifetime') }}</label>
-                    <input type="text" name="session[table]"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
-                        value="{{ config('session.table') }}">
-                    <small
-                        class="text-gray-500">{{ __('When using the "database" session driver, you may specify the table we should use to manage the sessions') }}</small>
-                </div>
-            </div>
-
-
             <div class="p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm">
                 <h1 class="mb-2">{{ __('Cookie settings') }}</h1>
                 <div class="mb-2">
@@ -141,23 +77,6 @@
                     </small>
                 </div>
 
-                <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">{{ __('Session Cookie Path') }}</label>
-                    <input type="text" name="session[path]"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
-                        value="{{ config('session.path') }}">
-                    <small class="text-gray-500">
-                        {{ __('The session cookie path determines the path for which the cookie will be regarded as available') }}
-                    </small>
-                </div>
-                {{-- 
-                <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">{{ __('Session Cookie Domain') }}</label>
-                    <input type="text" name="session[domain]"
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
-                    value="{{ config('session.domain') }}">
-                </div>
-                --}}
                 <div class="mb-2">
                     <label for="">HTTPS Only Cookies</label>
                     <select name="session[secure]"
