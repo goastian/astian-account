@@ -5,11 +5,9 @@ namespace App\Http\Controllers;
 use App\Traits\Standard;
 use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\TokenRepository;
 use Illuminate\Database\Eloquent\Builder;
 use App\Transformers\User\AuthTransformer;
 use Elyerr\ApiResponse\Assets\JsonResponser;
-use Laravel\Passport\RefreshTokenRepository;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -17,7 +15,12 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, Standard, DispatchesJobs, ValidatesRequests, JsonResponser, Asset;
+    use AuthorizesRequests,
+        Standard,
+        DispatchesJobs,
+        ValidatesRequests,
+        JsonResponser,
+        Asset;
 
     /**
      * Order by collection using params order_by and order_type

@@ -8,17 +8,15 @@ use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Setting\Terminal;
 use App\Models\Subscription\Group;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Elyerr\EchoClient\Socket\Socket;
+use Illuminate\Support\Facades\DB; 
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Notifications\Member\MemberDestroyAccount; 
+use App\Notifications\Member\MemberDestroyAccount;
 
 class User extends Auth
 {
-    use SoftDeletes, Socket;
+    use SoftDeletes;
 
     /**
      * Transformer
@@ -47,7 +45,6 @@ class User extends Auth
             foreach ($users as $user) {
                 $user->notify(new MemberDestroyAccount());
                 $user->forceDelete();
-                Log::info("deleted user account", $user->toArray());
             }
         }
     }
@@ -72,10 +69,7 @@ class User extends Auth
 
         foreach ($users as $user) {
             $user->forceDelete();
-            Log::info("deleted unverified user", $user->toArray());
         }
-
-
 
         DB::table('password_resets')->where('created_at', '<', $date)->delete();
     }
