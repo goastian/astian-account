@@ -8,6 +8,7 @@ export const $server = axios.create({
     headers: {
         "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
         Accept: "application/json",
+        "X-Socket-ID": window.$echo.socket_id,
     },
 
     validateStatus: function (status) {
@@ -19,7 +20,7 @@ $server.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response && error.response.status === 401) {
-          //  window.location.href = "/login";
+            //  window.location.href = "/login";
         }
         return Promise.reject(error);
     }

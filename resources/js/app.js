@@ -2,7 +2,7 @@ import { createApp, h } from "vue";
 import { createInertiaApp } from "@inertiajs/vue3";
 
 import { customComponents } from "./app/config/customComponents.js";
-import { $channels, $echo } from "./app/config/echo.js";
+import { $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
 import { layouts } from "./app/config/layouts.js";
 
@@ -51,8 +51,7 @@ createInertiaApp({
             app.component(item.name, item);
         });
 
-        app.config.globalProperties.$echo = $echo;
-        app.config.globalProperties.$channels = $channels;
+        app.config.globalProperties.$echo = $echo; 
         app.config.globalProperties.$server = $server;
 
         app.component("VueDatePicker", VueDatePicker);

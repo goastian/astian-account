@@ -7,13 +7,4 @@ const options = {
 };
 
 export const $echo = new EchoClient(options);
-
-export const $channels = {
-    ch_0() {
-        return "auth";
-    },
-
-    ch_1(id) {
-        return `auth.${id}`;
-    },
-};
+window.$echo = $echo;
