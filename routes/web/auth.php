@@ -28,7 +28,7 @@ Route::group([
     /**
      * Register user account
      */
-    if (config('system.enable_register_member', true)) {
+    if (config('routes.guest.register', true)) {
         Route::get('/register', [RegisterClientController::class, 'register'])->name('register');
         Route::post('/register', [RegisterClientController::class, 'store'])->middleware('captcha');
     }
