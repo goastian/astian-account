@@ -83,16 +83,18 @@ class PartnerController extends WebController
                 ];
             })
             ->values()
-	    ->toArray();
+            ->toArray();
 
-	  
+
 
         //Make output data
+        $partner = auth()->user()->partner;
+
         $meta = [
             "data" => fractal($data, DataTransformer::class)->toArray()['data'],
             "total_sales" => $total_sales,
-	    "total_commission" => $total_commissions,
-	    "partner" => auth()->user()->partner_id,
+            "total_commission" => $total_commissions,
+            "partner" => isset($partner) ? $partner->meta() : [],
         ];
 
         if ($request->wantsJson()) {
@@ -112,9 +114,9 @@ class PartnerController extends WebController
      */
     public function show()
     {
-       $partner = auth()->user()->partner;
+        $partner = auth()->user()->partner;
 
-       return Inertia::render("Partner/Refer", [
+        return Inertia::render("Partner/Refer", [
             "partner" => isset($partner) ? $partner->meta() : [],
             "route" => route('partners.generate'),
         ]);

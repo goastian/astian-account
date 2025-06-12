@@ -38,22 +38,16 @@
                                                 <span><q-icon name="mdi-cash" /></span>
                                             </div>
                                         </div>
-                                        <div
-                                            v-if="total_commission.length > 0"
-                                            v-for="(item, index) in total_commission"
-                                            :key="index"
-                                            class="text-h4 text-secondary textPrimary"
-                                        >
+                                        <div v-if="total_commission.length > 0"
+                                            v-for="(item, index) in total_commission" :key="index"
+                                            class="text-h4 text-secondary textPrimary">
                                             <strong>
                                                 <span v-if="item.currency == 'USD'" class="textPrimary">$</span>
                                                 <span v-else>{{ item.currency }}</span>
                                                 <span v-if="item.total">{{ item.total }}</span>
                                             </strong>
                                         </div>
-                                        <div
-                                            v-else
-                                            class="text-h4 textPrimary"
-                                        >
+                                        <div v-else class="text-h4 textPrimary">
                                             <strong>
                                                 <span>$0</span>
                                             </strong>
@@ -74,10 +68,8 @@
                                                 <span><q-icon name="percent" /></span>
                                             </div>
                                         </div>
-                                        <div
-                                            class="text-h4 strong textPrimary"
-                                        >
-                                            {{ percentage }}%
+                                        <div class="text-h4 strong textPrimary">
+                                            {{ partner?.percentage }}%
                                         </div>
                                         <div>
                                             <span class="textSecondary">Monthly average</span>
@@ -91,58 +83,25 @@
                         <q-card flat bordered class="card q-pa-md">
                             <div class="row q-col-gutter-sm">
                                 <div class="col">
-                                    <q-input
-                                        v-model="params.start"
-                                        type="date"
-                                        label="Start date"
-                                        dense
-                                        outlined
-                                    />
+                                    <q-input v-model="params.start" type="date" label="Start date" dense outlined />
                                 </div>
                                 <div class="col">
-                                    <q-input
-                                        v-model="params.end"
-                                        type="date"
-                                        label="End date"
-                                        dense
-                                        outlined
-                                    />
+                                    <q-input v-model="params.end" type="date" label="End date" dense outlined />
                                 </div>
                                 <div class="col">
-                                    <q-select
-                                        v-model="chartType"
-                                        :options="chartTypes"
-                                        label="Chart type"
-                                        dense
-                                        outlined
-                                    />
+                                    <q-select v-model="chartType" :options="chartTypes" label="Chart type" dense
+                                        outlined />
                                 </div>
                                 <div class="col">
-                                    <q-select
-                                        v-model="params.type"
-                                        :options="types"
-                                        label="Date"
-                                        dense
-                                        outlined
-                                    />
+                                    <q-select v-model="params.type" :options="types" label="Date" dense outlined />
                                 </div>
                                 <div class="col-auto flex items-end">
-                                    <q-btn
-                                        label="Get sales"
-                                        @click="getSales"
-                                        color="primary"
-                                    />
+                                    <q-btn label="Get sales" @click="getSales" color="primary" />
                                 </div>
                             </div>
 
-                            <apex-charts
-                                width="100%"
-                                height="350"
-                                :type="chartType"
-                                :options="chartOptions"
-                                :series="chartSeries"
-                                class="q-mt-md grapic"
-                            />
+                            <apex-charts width="100%" height="350" :type="chartType" :options="chartOptions"
+                                :series="chartSeries" class="q-mt-md grapic" />
                         </q-card>
                     </div>
                 </div>
@@ -175,7 +134,7 @@ export default {
             chartSeries: [],
             types: ["day", "month", "year"],
             theme: useThemeStore(),
-            percentage: '',
+            partner: []
         };
     },
 
@@ -200,7 +159,7 @@ export default {
         this.total_sales = this.$page.props.sales.total_sales;
         this.total_commission = this.$page.props.sales.total_commission;
 
-        this.percentage = this.$page.props.sales.percentage
+        this.partner = this.$page.props.sales.partner
 
         setInterval(() => {
             this.getSales();
@@ -244,7 +203,7 @@ export default {
                     this.total_commission = res.data.total_commission;
                     this.updateChart(this.sales);
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
 
         handlerDate(date) {

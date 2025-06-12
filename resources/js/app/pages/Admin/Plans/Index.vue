@@ -7,11 +7,7 @@
 
         <div class="q-pa-sm">
             <div class="row">
-                <div
-                    v-for="plan in plans"
-                    :key="plan.id"
-                    class="col-12 col-md-6 col-md-3 q-gutter-sm q-pa-sm"
-                >
+                <div v-for="plan in plans" :key="plan.id" class="col-12 col-md-6 col-md-3 q-gutter-sm q-pa-sm">
                     <q-card flat bordered>
                         <q-card-section>
                             <div class="text-h6 flex">
@@ -24,25 +20,15 @@
                                 <span v-html="plan.description"></span>
                             </div>
                             <div class="q-mt-sm q-gutter-sm">
-                                <q-badge
-                                    :color="
-                                        plan.public ? 'primary' : 'secondary'
-                                    "
-                                >
+                                <q-badge :color="plan.public ? 'primary' : 'secondary'
+                                    ">
                                     Public : {{ plan.public ? "Yes" : "No" }}
                                 </q-badge>
-                                <q-badge
-                                    :color="
-                                        plan.active ? 'primary' : 'secondary'
-                                    "
-                                >
+                                <q-badge :color="plan.active ? 'primary' : 'secondary'
+                                    ">
                                     Active : {{ plan.active ? "Yes" : "No" }}
                                 </q-badge>
-                                <q-badge
-                                    color="green"
-                                    v-if="plan.bonus_enabled"
-                                    class="q-ml-sm"
-                                >
+                                <q-badge color="green" v-if="plan.bonus_enabled" class="q-ml-sm">
                                     Bonus: {{ plan.bonus_duration }} days
                                 </q-badge>
                             </div>
@@ -53,36 +39,23 @@
                             </div>
                             <div v-if="plan.scopes.length">
                                 <q-list dense bordered padding>
-                                    <q-expansion-item
-                                        v-for="(item, index) in plan.scopes"
-                                        :key="index"
+                                    <q-expansion-item v-for="(item, index) in plan.scopes" :key="index"
                                         expand-icon="keyboard_arrow_down"
                                         :label="`Service : ${item.service.name} - ${item.role.name}`"
-                                        :caption="`Group : ${item.service.group.name}`"
-                                        expand-separator
-                                        dense
-                                    >
+                                        :caption="`Group : ${item.service.group.name}`" expand-separator dense>
                                         <q-item>
                                             <q-item-section>
-                                                <q-badge
-                                                    color="primary"
-                                                    class="q-mr-sm"
-                                                >
+                                                <q-badge color="primary" class="q-mr-sm">
                                                     Role
                                                 </q-badge>
                                                 <span>{{
                                                     item.role.name
                                                 }}</span>
-                                                <div
-                                                    class="text-caption text-grey-7"
-                                                >
+                                                <div class="text-caption text-grey-7">
                                                     {{ item.role.description }}
                                                 </div>
                                                 <div>
-                                                    <v-revoke-scope
-                                                        @revoked="getPlans"
-                                                        :item="item"
-                                                    />
+                                                    <v-revoke-scope @revoked="getPlans" :item="item" />
                                                 </div>
                                             </q-item-section>
                                         </q-item>
@@ -98,11 +71,7 @@
                             <div class="text-grey-7 text-subtitle2">Prices</div>
 
                             <q-list dense bordered class="q-mt-sm">
-                                <q-item
-                                    v-for="(item, index) in plan.prices"
-                                    :key="index"
-                                    class="q-my-xs q-px-sm"
-                                >
+                                <q-item v-for="(item, index) in plan.prices" :key="index" class="q-my-xs q-px-sm">
                                     <q-item-section side>
                                         <q-badge color="primary" outline>
                                             {{ item.billing_period }}
@@ -125,10 +94,7 @@
                                     </q-item-section>
 
                                     <q-item-section side>
-                                        <v-delete-price
-                                            :item="item"
-                                            @deleted="getPlans"
-                                        />
+                                        <v-delete-price :item="item" @deleted="getPlans" />
                                     </q-item-section>
                                 </q-item>
                             </q-list>
@@ -146,12 +112,7 @@
         </div>
 
         <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="sm"
-            />
+            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
         </div>
     </v-admin-layout>
 </template>
@@ -184,22 +145,47 @@ export default {
         };
     },
 
+    watch: {
+        "search.page"(value) {
+            this.getPlans();
+        },
+        "search.per_page"(value) {
+            if (value) {
+                this.search.per_page = value;
+                this.getPlans();
+            }
+        },
+    },
+
+
     created() {
-        const values = this.$page.props.plans;
-        this.plans = values.data;
-        this.pages = values.meta.pagination;
+        this.getPlans()
     },
 
     methods: {
-        async getPlans() {
+
+        changePage(event) {
+            this.search.page = event;
+        },
+
+        searching(event) {
+            this.getPlans(event);
+        },
+
+        async getPlans(param = null) {
+
+            var params = { ...this.search, ...param };
+
             try {
-                const res = await this.$server.get(this.$page.props.route.plans);
+                const res = await this.$server.get(this.$page.props.route.plans, {
+                    params: params,
+                });
 
                 if (res.status == 200) {
                     this.plans = res.data.data;
                     this.pages = res.data.meta.pagination;
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
     },
 };

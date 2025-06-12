@@ -13,26 +13,16 @@
                 </div>
 
                 <!-- Toggle View Mode -->
-                <q-btn-toggle
-                    v-model="viewMode"
-                    dense
-                    toggle-color="primary"
-                    :options="[
-                        { value: 'list', icon: 'list' },
-                        { value: 'grid', icon: 'grid_on' },
-                    ]"
-                    unelevated
-                />
+                <q-btn-toggle v-model="viewMode" dense toggle-color="primary" :options="[
+                    { value: 'list', icon: 'list' },
+                    { value: 'grid', icon: 'grid_on' },
+                ]" unelevated />
             </div>
         </q-toolbar>
 
         <!-- Grid View (Cards) -->
         <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
-            <div
-                class="col-xs-12 col-sm-6 col-md-4"
-                v-for="user in users"
-                :key="user.id"
-            >
+            <div class="col-xs-12 col-sm-6 col-md-4" v-for="user in users" :key="user.id">
                 <q-card flat bordered class="shadow-2">
                     <q-card-section class="q-pb-none">
                         <div class="text-h6 text-grey-7">
@@ -46,11 +36,7 @@
                     <q-separator />
 
                     <q-card-actions align="around">
-                        <v-update
-                            v-if="!user.disabled"
-                            @updated="getUsers"
-                            :item="user"
-                        />
+                        <v-update v-if="!user.disabled" @updated="getUsers" :item="user" />
                         <v-scopes v-if="!user.disabled" :item="user" />
                         <v-revoke v-if="!user.disabled" :item="user" />
                         <v-status :item="user" @updated="getUsers" />
@@ -61,36 +47,14 @@
 
         <!-- List View (Table) -->
         <div v-if="viewMode === 'list'" class="q-pa-md">
-            <q-table
-                :rows="users"
-                :columns="columns"
-                row-key="id"
-                class="shadow-1"
-                flat
-                bordered
-                hide-bottom
-                :rows-per-page-options="[search.per_page]"
-            >
+            <q-table :rows="users" :columns="columns" row-key="id" class="shadow-1" flat bordered hide-bottom
+                :rows-per-page-options="[search.per_page]">
                 <template v-slot:body-cell-actions="props">
                     <q-td align="right">
-                        <v-update
-                            ref="update_{{ props.row.id }}"
-                            :item="props.row"
-                            @updated="getUsers"
-                        />
-                        <v-scopes
-                            ref="scopes_{{ props.row.id }}"
-                            :item="props.row"
-                        />
-                        <v-revoke
-                            ref="revoke_{{ props.row.id }}"
-                            :item="props.row"
-                        />
-                        <v-status
-                            ref="status_{{ props.row.id }}"
-                            :item="props.row"
-                            @updated="getUsers"
-                        />
+                        <v-update ref="update_{{ props.row.id }}" :item="props.row" @updated="getUsers" />
+                        <v-scopes ref="scopes_{{ props.row.id }}" :item="props.row" />
+                        <v-revoke ref="revoke_{{ props.row.id }}" :item="props.row" />
+                        <v-status ref="status_{{ props.row.id }}" :item="props.row" @updated="getUsers" />
                     </q-td>
                 </template>
             </q-table>
@@ -98,12 +62,7 @@
 
         <!-- Pagination -->
         <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="sm"
-            />
+            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
         </div>
     </v-admin-layout>
 </template>
@@ -168,9 +127,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.users;
-        this.users = values.data;
-        this.pages = values.meta.pagination;
+        this.getUsers()
     },
 
     mounted() {
@@ -203,9 +160,8 @@ export default {
          */
         async getUsers(param = null) {
             // Setting search params
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            var params = { ...this.search, ...param };
+
 
             try {
                 const res = await this.$server.get(this.$page.props.route, {
@@ -220,7 +176,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 }
-            } catch (e) {}
+            } catch (e) { }
         },
 
         listenEvents() {

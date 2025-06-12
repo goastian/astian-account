@@ -81,15 +81,6 @@
                             <a class="text-blue-500 text-sm hover:underline mt-6 block text-right"
                                 href="{{ route('forgot-password') }}">{{ __('forgot your password?') }}</a>
 
-                            <!--do not remove this lines-->
-                            <div>
-                                @foreach ($query as $item => $value)
-                                    <input type="hidden" id="{{ $item }}" name="{{ $item }}"
-                                        value="{{ $value }}">
-                                @endforeach
-                            </div>
-                            <!--end of the lines-->
-
                             <x-captcha />
 
                             <div class="buttons mt-6 relative">

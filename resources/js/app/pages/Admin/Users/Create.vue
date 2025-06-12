@@ -7,117 +7,58 @@
 
             <q-card-section>
                 <div class="q-gutter-md">
-                    <q-input
-                        outlined
-                        v-model="form.name"
-                        dense="dense"
-                        label="Name"
-                        :error="!!errors.name"
-                    >
+                    <q-input outlined v-model="form.name" dense="dense" label="Name" :error="!!errors.name">
                         <template v-slot:error>
                             <v-error :error="errors.name"></v-error>
                         </template>
                     </q-input>
-                    <q-input
-                        outlined
-                        v-model="form.last_name"
-                        dense="dense"
-                        label="Last name"
-                        :error="!!errors.last_name"
-                    >
+                    <q-input outlined v-model="form.last_name" dense="dense" label="Last name"
+                        :error="!!errors.last_name">
                         <template v-slot:error>
                             <v-error :error="errors.last_name"></v-error>
                         </template>
                     </q-input>
 
-                    <q-input
-                        outlined
-                        v-model="form.email"
-                        dense="dense"
-                        label="Email"
-                        :error="!!errors.email"
-                    >
+                    <q-input outlined v-model="form.email" dense="dense" label="Email" :error="!!errors.email">
                         <template v-slot:error>
                             <v-error :error="errors.email"></v-error>
                         </template>
                     </q-input>
 
-                    <q-select
-                        v-model="form.country"
-                        dense
-                        outlined
-                        use-input
-                        fill-input
-                        hide-selected
-                        emit-value
-                        map-options
-                        input-debounce="300"
-                        :options="filteredCountries"
-                        label="Country"
-                        :error="!!errors.country"
-                        @filter="filterCountries"
-                    >
+                    <q-select v-model="form.country" dense outlined use-input fill-input hide-selected emit-value
+                        map-options input-debounce="300" :options="filteredCountries" label="Country"
+                        :error="!!errors.country" @filter="filterCountries">
                         <template v-slot:error>
                             <v-error :error="errors.country"></v-error>
                         </template>
                     </q-select>
 
-                    <q-select
-                        v-model="form.dial_code"
-                        dense
-                        outlined
-                        use-input
-                        fill-input
-                        hide-selected
-                        emit-value
-                        map-options
-                        input-debounce="300"
-                        :options="filteredDialCodes"
-                        label="Dial Code"
-                        :error="!!errors.dial_code"
-                        @filter="filterDialCodes"
-                    >
+                    <q-select v-model="form.dial_code" dense outlined use-input fill-input hide-selected emit-value
+                        map-options input-debounce="300" :options="filteredDialCodes" label="Dial Code"
+                        :error="!!errors.dial_code" @filter="filterDialCodes">
                         <template v-slot:error>
                             <v-error :error="errors.dial_code"></v-error>
                         </template>
                     </q-select>
 
-                    <q-input
-                        outlined
-                        v-model="form.phone"
-                        dense="dense"
-                        label="Phone"
-                        :error="!!errors.phone"
-                    >
+                    <q-input outlined v-model="form.phone" dense="dense" label="Phone" :error="!!errors.phone">
                         <template v-slot:error>
                             <v-error :error="errors.phone"></v-error>
                         </template>
                     </q-input>
 
                     <div class="w-full mb-2">
-                        <label
-                            class="block text-gray-700 text-sm font-bold mb-2"
-                        >
+                        <label class="block text-gray-700 text-sm font-bold mb-2">
                             Birthday
                         </label>
-                        <VueDatePicker
-                            v-model="form.birthday"
-                            :enable-time-picker="false"
-                            :max-date="new Date()"
-                            format="yyyy-MM-dd"
-                            model-type="format"
-                            placeholder="YYYY-MM-DD"
-                        />
+                        <VueDatePicker v-model="form.birthday" :enable-time-picker="false" :max-date="new Date()"
+                            format="yyyy-MM-dd" model-type="format" placeholder="YYYY-MM-DD" />
 
                         <v-error :error="errors.birthday"></v-error>
                     </div>
 
-                    <q-checkbox
-                        dense="dense"
-                        v-model="form.verify_email"
-                        label="Mark user email as verified"
-                        :error="!!form.groups"
-                    >
+                    <q-checkbox dense="dense" v-model="form.verify_email" label="Mark user email as verified"
+                        :error="!!form.groups">
                         <template v-slot:error>
                             <v-error :error="errors.groups"></v-error>
                         </template>
@@ -126,18 +67,8 @@
             </q-card-section>
 
             <q-card-actions align="right">
-                <q-btn
-                    label="Save"
-                    icon="mdi-content-save-alert"
-                    color="primary"
-                    @click="create"
-                />
-                <q-btn
-                    label="Close"
-                    icon="mdi-close-circle"
-                    color="negative"
-                    @click="dialog = false"
-                />
+                <q-btn label="Save" icon="mdi-content-save-alert" color="primary" @click="create" />
+                <q-btn label="Close" icon="mdi-close-circle" color="negative" @click="dialog = false" />
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -267,11 +198,7 @@ export default {
                     this.$emit("created", true);
                 }
             } catch (e) {
-                if (
-                    e.response &&
-                    e.response.data.errors &&
-                    e.response.status == 422
-                ) {
+                if (e.response?.data?.errors && e.response?.status == 422) {
                     this.errors = e.response.data.errors;
                 }
 
@@ -286,6 +213,14 @@ export default {
                         message: e.response.data.message,
                     });
                 }
+
+                if (e.response?.status == 403 && e.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
+                }
             }
         },
         async getCountries() {
@@ -294,7 +229,7 @@ export default {
                     params: { order_by: "name_en", order_type: "asc" },
                 });
                 if (res.status === 200) this.countries = res.data;
-            } catch (e) {}
+            } catch (e) { }
 
             this.filteredCountries = this.countries.map((c) => ({
                 label: `${c.emoji} ${c.name_en}`,

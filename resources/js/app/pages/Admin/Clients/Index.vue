@@ -7,25 +7,15 @@
             <div class="row items-center q-pa-md">
                 <v-create @created="getClients()" />
 
-                <q-btn-toggle
-                    v-model="viewMode"
-                    dense
-                    toggle-color="primary"
-                    :options="[
-                        { value: 'list', icon: 'list' },
-                        { value: 'grid', icon: 'grid_on' },
-                    ]"
-                    unelevated
-                />
+                <q-btn-toggle v-model="viewMode" dense toggle-color="primary" :options="[
+                    { value: 'list', icon: 'list' },
+                    { value: 'grid', icon: 'grid_on' },
+                ]" unelevated />
             </div>
         </q-toolbar>
 
         <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
-            <div
-                class="col-xs-12 col-sm-6 col-md-4"
-                v-for="(client, index) in clients"
-                :key="index"
-            >
+            <div class="col-xs-12 col-sm-6 col-md-4" v-for="(client, index) in clients" :key="index">
                 <q-card class="q-pa-md">
                     <q-card-section>
                         <div class="text-h6">{{ client.name }}</div>
@@ -41,27 +31,14 @@
 
                     <q-card-section class="q-pt-sm">
                         <div class="q-mb-sm">
-                            <q-chip
-                                clickable
-                                @click="copyToClipboard(client.id)"
-                                color="green"
-                                text-color="white"
-                                icon="mdi-content-copy"
-                                label="ID: *****"
-                            >
+                            <q-chip clickable @click="copyToClipboard(client.id)" color="green" text-color="white"
+                                icon="mdi-content-copy" label="ID: *****">
                                 <q-tooltip>Copy ID</q-tooltip>
                             </q-chip>
                         </div>
                         <div class="q-mb-sm">
-                            <q-chip
-                                v-if="client.secret"
-                                clickable
-                                @click="copyToClipboard(client.secret)"
-                                color="green"
-                                text-color="white"
-                                icon="mdi-content-copy"
-                                label="Secret: *****"
-                            >
+                            <q-chip v-if="client.secret" clickable @click="copyToClipboard(client.secret)" color="green"
+                                text-color="white" icon="mdi-content-copy" label="Secret: *****">
                                 <q-tooltip>Copy Secret</q-tooltip>
                             </q-chip>
                         </div>
@@ -76,26 +53,12 @@
         </div>
 
         <div v-if="viewMode === 'list'" class="q-pa-sm">
-            <q-table
-                :rows="clients"
-                :columns="columns"
-                row-key="id"
-                flat
-                bordered
-                hide-bottom
-                :rows-per-page-options="[search.per_page]"
-            >
+            <q-table :rows="clients" :columns="columns" row-key="id" flat bordered hide-bottom
+                :rows-per-page-options="[search.per_page]">
                 <template v-slot:body-cell-id="props">
                     <q-td>
-                        <q-btn
-                            dense
-                            flat
-                            icon="mdi-content-copy"
-                            @click="copyToClipboard(props.row.id)"
-                            label="*****"
-                            size="sm"
-                            color="green"
-                        >
+                        <q-btn dense flat icon="mdi-content-copy" @click="copyToClipboard(props.row.id)" label="*****"
+                            size="sm" color="green">
                             <q-tooltip>Copy ID</q-tooltip>
                         </q-btn>
                     </q-td>
@@ -103,16 +66,8 @@
 
                 <template v-slot:body-cell-secret="props">
                     <q-td>
-                        <q-btn
-                            v-if="props.row.secret"
-                            dense
-                            flat
-                            icon="mdi-content-copy"
-                            @click="copyToClipboard(props.row.secret)"
-                            label="*****"
-                            size="sm"
-                            color="green"
-                        >
+                        <q-btn v-if="props.row.secret" dense flat icon="mdi-content-copy"
+                            @click="copyToClipboard(props.row.secret)" label="*****" size="sm" color="green">
                             <q-tooltip>Copy Secret</q-tooltip>
                         </q-btn>
                     </q-td>
@@ -129,12 +84,7 @@
 
         <!-- 📄 Paginación -->
         <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="sm"
-            />
+            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
         </div>
     </v-admin-layout>
 </template>
@@ -192,9 +142,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.clients;
-        this.clients = values.data;
-        this.pages = values.meta.pagination;
+        this.getClients()
     },
 
     methods: {
@@ -217,7 +165,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch(() => {});
+                .catch((e) => { });
         },
 
         async copyToClipboard(text) {
@@ -228,7 +176,7 @@ export default {
                     message: "Copy successfully",
                     timeout: 3000,
                 });
-            } catch (err) {}
+            } catch (err) { }
         },
     },
 };

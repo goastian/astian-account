@@ -1,12 +1,6 @@
 <template>
     <div class="q-pa-md q-gutter-sm">
-        <q-btn
-            round
-            outline
-            color="positive"
-            @click="open"
-            icon="mdi-plus-circle"
-        >
+        <q-btn round outline color="positive" @click="open" icon="mdi-plus-circle">
             <q-tooltip transition-show="rotate" transition-hide="rotate">
                 Add new plan
             </q-tooltip>
@@ -20,12 +14,7 @@
 
                 <q-card-section>
                     <div class="q-gutter-y-sm">
-                        <q-input
-                            outlined
-                            v-model="form.name"
-                            label="Name"
-                            :error="!!errors.name"
-                        >
+                        <q-input outlined v-model="form.name" label="Name" :error="!!errors.name">
                             <template v-slot:error>
                                 <v-error :error="errors.name" />
                             </template>
@@ -48,17 +37,9 @@
                     -->
 
                         <div class="row q-col-gutter-md">
-                            <q-item
-                                tag="label"
-                                v-ripple
-                                class="col-xs-12 col-md-6 col-lg-4"
-                            >
+                            <q-item tag="label" v-ripple class="col-xs-12 col-md-6 col-lg-4">
                                 <q-item-section avatar>
-                                    <q-checkbox
-                                        v-model="form.public"
-                                        color="orange"
-                                        :error="!!errors.public"
-                                    >
+                                    <q-checkbox v-model="form.public" color="orange" :error="!!errors.public">
                                         <template v-slot:error>
                                             <v-error :error="errors.public" />
                                         </template>
@@ -66,23 +47,13 @@
                                 </q-item-section>
                                 <q-item-section>
                                     <q-item-label>Public</q-item-label>
-                                    <q-item-label caption
-                                        >Available for purchase</q-item-label
-                                    >
+                                    <q-item-label caption>Available for purchase</q-item-label>
                                 </q-item-section>
                             </q-item>
 
-                            <q-item
-                                tag="label"
-                                v-ripple
-                                class="col-xs-12 col-md-6 col-lg-4"
-                            >
+                            <q-item tag="label" v-ripple class="col-xs-12 col-md-6 col-lg-4">
                                 <q-item-section avatar>
-                                    <q-checkbox
-                                        v-model="form.active"
-                                        color="orange"
-                                        :error="!!errors.active"
-                                    >
+                                    <q-checkbox v-model="form.active" color="orange" :error="!!errors.active">
                                         <template v-slot:error>
                                             <v-error :error="errors.active" />
                                         </template>
@@ -96,21 +67,12 @@
                                 </q-item-section>
                             </q-item>
 
-                            <q-item
-                                tag="label"
-                                v-ripple
-                                class="col-xs-12 col-md-6 col-lg-4"
-                            >
+                            <q-item tag="label" v-ripple class="col-xs-12 col-md-6 col-lg-4">
                                 <q-item-section avatar>
-                                    <q-checkbox
-                                        v-model="form.bonus_enabled"
-                                        color="orange"
-                                        :error="!!errors.bonus_enabled"
-                                    >
+                                    <q-checkbox v-model="form.bonus_enabled" color="orange"
+                                        :error="!!errors.bonus_enabled">
                                         <template v-slot:error>
-                                            <v-error
-                                                :error="errors.bonus_enabled"
-                                            />
+                                            <v-error :error="errors.bonus_enabled" />
                                         </template>
                                     </q-checkbox>
                                 </q-item-section>
@@ -122,14 +84,8 @@
                                 </q-item-section>
                             </q-item>
 
-                            <q-input
-                                class="col-xs-12 col-md-6 col-lg-4"
-                                v-model="form.bonus_duration"
-                                label="Bonus duration"
-                                type="number"
-                                outlined
-                                :error="!!errors.bonus_duration"
-                            >
+                            <q-input class="col-xs-12 col-md-6 col-lg-4" v-model="form.bonus_duration"
+                                label="Bonus duration" type="number" outlined :error="!!errors.bonus_duration">
                                 <template v-slot:error>
                                     <v-error :error="errors.bonus_duration" />
                                 </template>
@@ -141,130 +97,74 @@
                 <q-card-section>
                     <div class="text-subtitle2 q-mb-sm">Prices</div>
                     <v-error :error="errors.prices" />
-                    <div
-                        v-for="(price, index) in form.prices"
-                        :key="index"
-                        class="row q-mb-md"
-                    >
+                    <div v-for="(price, index) in form.prices" :key="index" class="row q-mb-md">
                         <div class="col-12 col-md-3">
-                            <q-select
-                                v-model="price.billing_period"
-                                map-options
-                                emit-value
-                                :options="billing_periods"
-                                label="Billing Period"
-                                :error="
-                                    !!errors[`prices.${index}.billing_period`]
-                                "
-                            >
+                            <q-select v-model="price.billing_period" map-options emit-value :options="billing_periods"
+                                label="Billing Period" :error="!!errors[`prices.${index}.billing_period`]
+                                    ">
                                 <template v-slot:error>
-                                    <v-error
-                                        :error="
-                                            errors[
-                                                `prices.${index}.billing_period`
-                                            ]
-                                        "
-                                    />
+                                    <v-error :error="errors[
+                                        `prices.${index}.billing_period`
+                                    ]
+                                        " />
                                 </template>
                             </q-select>
                         </div>
 
                         <div class="col-12 col-md-3">
-                            <q-select
-                                v-model="price.currency"
-                                :options="currencies"
-                                emit-value
-                                label="Currency"
-                                :error="!!errors[`prices.${index}.currency`]"
-                            >
+                            <q-select v-model="price.currency" :options="currencies" emit-value label="Currency"
+                                :error="!!errors[`prices.${index}.currency`]">
                                 <template v-slot:error>
-                                    <v-error
-                                        :error="
-                                            errors[`prices.${index}.currency`]
-                                        "
-                                    />
+                                    <v-error :error="errors[`prices.${index}.currency`]
+                                        " />
                                 </template>
                             </q-select>
                         </div>
 
                         <div class="col-12 col-md-3">
-                            <q-input
-                                v-model.number="price.amount"
-                                label="Amount"
-                                type="number"
-                                step="0.01"
-                                :error="!!errors[`prices.${index}.amount`]"
-                            >
+                            <q-input v-model.number="price.amount" label="Amount" type="number" step="0.01"
+                                :error="!!errors[`prices.${index}.amount`]">
                                 <template v-slot:error>
-                                    <v-error
-                                        :error="
-                                            errors[`prices.${index}.amount`]
-                                        "
-                                    />
+                                    <v-error :error="errors[`prices.${index}.amount`]
+                                        " />
                                 </template>
                             </q-input>
                         </div>
 
-                        <div
-                            class="col-12 col-md-3 flex justify-center items-center"
-                        >
-                            <q-btn
-                                icon="delete"
-                                color="negative"
-                                outline
-                                @click="form.prices.splice(index, 1)"
-                            />
+                        <div class="col-12 col-md-3 flex justify-center items-center">
+                            <q-btn icon="delete" color="negative" outline @click="form.prices.splice(index, 1)" />
                         </div>
                     </div>
 
-                    <q-btn
-                        color="primary"
-                        icon="add"
-                        label="Add Price"
-                        @click="
-                            form.prices.push({
-                                billing_period: billing_periods.length
-                                    ? billing_periods[0].value
-                                    : '',
-                                currency: currencies.length
-                                    ? currencies[0].value
-                                    : '',
-                                amount: null,
-                            })
-                        "
-                    />
+                    <q-btn color="primary" icon="add" label="Add Price" @click="
+                        form.prices.push({
+                            billing_period: billing_periods.length
+                                ? billing_periods[0].value
+                                : '',
+                            currency: currencies.length
+                                ? currencies[0].value
+                                : '',
+                            amount: null,
+                        })
+                        " />
                 </q-card-section>
 
                 <q-card-section>
                     <div class="text-subtitle2 q-mb-sm">Choose scopes</div>
 
-                    <q-select
-                        filled
-                        v-model="service"
-                        :options="services"
-                        label="Service"
-                        color="teal"
-                        clearable
-                        :error="!!errors.scopes"
-                        options-selected-class="text-deep-orange"
-                    >
+                    <q-select filled v-model="service" :options="services" label="Service" color="teal" clearable
+                        :error="!!errors.scopes" options-selected-class="text-deep-orange">
                         <template v-slot:option="scope">
                             <q-item v-bind="scope.itemProps">
                                 <q-item-section avatar>
-                                    <q-icon
-                                        color="positive"
-                                        name="mdi-check-all"
-                                    />
+                                    <q-icon color="positive" name="mdi-check-all" />
                                 </q-item-section>
                                 <q-item-section>
                                     <q-item-label class="text-ucfirst">
                                         {{ scope.opt.name }}
                                     </q-item-label>
                                     <q-item-label caption class="text-ucfirst">
-                                        <q-icon
-                                            color="positive"
-                                            name="mdi-group"
-                                        />
+                                        <q-icon color="positive" name="mdi-group" />
                                         {{ scope.opt.group.name }} <br />
                                         {{ scope.opt.group.description }}
                                     </q-item-label>
@@ -274,20 +174,14 @@
                         <template v-slot:selected>
                             <q-item v-if="service && service.name">
                                 <q-item-section avatar>
-                                    <q-icon
-                                        color="positive"
-                                        name="mdi-check-all"
-                                    />
+                                    <q-icon color="positive" name="mdi-check-all" />
                                 </q-item-section>
                                 <q-item-section>
                                     <q-item-label class="text-ucfirst">
                                         {{ service.name }}
                                     </q-item-label>
                                     <q-item-label caption class="text-ucfirst">
-                                        <q-icon
-                                            color="positive"
-                                            name="mdi-group"
-                                        />
+                                        <q-icon color="positive" name="mdi-group" />
                                         {{ service.group.name }}
                                     </q-item-label>
                                 </q-item-section>
@@ -298,31 +192,17 @@
                         </template>
                     </q-select>
 
-                    <q-list
-                        v-if="scopes.length"
-                        bordered
-                        padding
-                        class="rounded-borders q-mt-md bg-grey-1 list"
-                    >
-                        <q-item
-                            v-for="(item, index) in scopes"
-                            :key="index"
-                            class="q-mb-sm q-pa-sm shadow-1 rounded-borders"
-                        >
+                    <q-list v-if="scopes.length" bordered padding class="rounded-borders q-mt-md bg-grey-1 list">
+                        <q-item v-for="(item, index) in scopes" :key="index"
+                            class="q-mb-sm q-pa-sm shadow-1 rounded-borders">
                             <q-item-section avatar>
-                                <q-avatar
-                                    rounded
-                                    color="primary"
-                                    text-color="white"
-                                >
+                                <q-avatar rounded color="primary" text-color="white">
                                     <q-icon name="mdi-account-key" />
                                 </q-avatar>
                             </q-item-section>
 
                             <q-item-section>
-                                <div
-                                    class="text-subtitle3 text-bold text-ucfirst"
-                                >
+                                <div class="text-subtitle3 text-bold text-ucfirst">
                                     {{ item.role.name }}
                                 </div>
                                 <div class="text-caption text-grey-7">
@@ -331,22 +211,13 @@
                             </q-item-section>
 
                             <q-item-section side top>
-                                <q-btn
-                                    :icon="
-                                        hasScope(item.id)
-                                            ? 'mdi-trash-can-outline'
-                                            : 'mdi-plus'
-                                    "
-                                    :color="
-                                        hasScope(item.id)
-                                            ? 'negative'
-                                            : 'positive'
-                                    "
-                                    outline
-                                    round
-                                    dense
-                                    @click="toggleScope(item.id)"
-                                >
+                                <q-btn :icon="hasScope(item.id)
+                                    ? 'mdi-trash-can-outline'
+                                    : 'mdi-plus'
+                                    " :color="hasScope(item.id)
+                                        ? 'negative'
+                                        : 'positive'
+                                        " outline round dense @click="toggleScope(item.id)">
                                     <q-tooltip>
                                         {{
                                             hasScope(item.id)
@@ -361,19 +232,9 @@
                 </q-card-section>
 
                 <q-card-actions align="right">
-                    <q-btn
-                        outline
-                        color="positive"
-                        label="Accept"
-                        @click="create"
-                    />
+                    <q-btn outline color="positive" label="Accept" @click="create" />
 
-                    <q-btn
-                        outline
-                        color="secondary"
-                        label="Close"
-                        @click="close"
-                    />
+                    <q-btn outline color="secondary" label="Close" @click="close" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -461,8 +322,23 @@ export default {
                     });
                 }
             } catch (e) {
-                if (e.response && e.response.data.errors) {
+                if (e.response?.data?.errors && e.response?.status == 422) {
                     this.errors = e.response.data.errors;
+                }
+                if (e.response?.status == 400 && e.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
+                }
+
+                if (e.response?.status == 403 && e.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
                 }
             }
         },
@@ -482,7 +358,7 @@ export default {
                 if (res.status == 200) {
                     this.services = res.data.data;
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
 
         async getBillingPeriod() {
@@ -497,7 +373,7 @@ export default {
                         value: item.name,
                     }));
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
 
         async getCurrencies() {
@@ -512,7 +388,7 @@ export default {
                         value: item.code,
                     }));
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
 
         async getServicesScope() {
@@ -526,7 +402,7 @@ export default {
                 if (res.status == 200) {
                     this.scopes = res.data.data;
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
 
         hasScope(id) {

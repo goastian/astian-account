@@ -1,56 +1,31 @@
 <template>
     <div class="q-pa-md q-gutter-sm">
-        <q-btn
-            round
-            outline
-            color="positive"
-            @click="open"
-            icon="mdi-plus-circle"
-        >
+        <q-btn round outline color="positive" @click="open" icon="mdi-plus-circle">
             <q-tooltip transition-show="rotate" transition-hide="rotate">
                 Add new client
             </q-tooltip>
         </q-btn>
 
-        <q-dialog
-            v-model="dialog"
-            persistent
-            transition-show="scale"
-            transition-hide="scale"
-        >
+        <q-dialog v-model="dialog" persistent transition-show="scale" transition-hide="scale">
             <q-card class="q-pa-md full-width">
                 <q-card-section class="text-center">
                     <h6 class="text-gray-500">Add new client</h6>
                 </q-card-section>
                 <q-card-section>
-                    <q-input
-                        v-model="form.name"
-                        label="Name"
-                        dense="dense"
-                        :error="!!errors.name"
-                    >
+                    <q-input v-model="form.name" label="Name" dense="dense" :error="!!errors.name">
                         <template v-slot:error>
                             <v-error :error="errors.name"></v-error>
                         </template>
                     </q-input>
 
-                    <q-input
-                        v-model="form.redirect"
-                        label="Redirect"
-                        dense="dense"
-                        :error="!!errors.redirect"
-                    >
+                    <q-input v-model="form.redirect" label="Redirect" dense="dense" :error="!!errors.redirect">
                         <template v-slot:error>
                             <v-error :error="errors.redirect"></v-error>
                         </template>
                     </q-input>
 
-                    <q-checkbox
-                        v-model="form.confidential"
-                        label="Confidential client"
-                        color="orange"
-                        :error="!!errors.confidential"
-                    >
+                    <q-checkbox v-model="form.confidential" label="Confidential client" color="orange"
+                        :error="!!errors.confidential">
                         <template v-slot:error>
                             <v-error :error="errors.confidential"></v-error>
                         </template>
@@ -58,19 +33,9 @@
                 </q-card-section>
 
                 <q-card-actions align="right">
-                    <q-btn
-                        outline
-                        color="positive"
-                        label="Accept"
-                        @click="create"
-                    />
+                    <q-btn outline color="positive" label="Accept" @click="create" />
 
-                    <q-btn
-                        outline
-                        color="secondary"
-                        label="Close"
-                        @click="close"
-                    />
+                    <q-btn outline color="secondary" label="Close" @click="close" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -127,8 +92,23 @@ export default {
                     this.dialog = false;
                 }
             } catch (e) {
-                if (e.response && e.response.data.errors) {
+                if (e.response?.data?.errors && e.response?.status == 422) {
                     this.errors = e.response.data.errors;
+                }
+                if (e.response?.status == 400 && e.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
+                }
+
+                if (e.response?.status == 403 && e.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
                 }
             }
         },

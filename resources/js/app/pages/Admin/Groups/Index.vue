@@ -9,25 +9,15 @@
                 <v-create @created="getGroups" class="q-mr-md" />
 
                 <!-- Toggle View Mode -->
-                <q-btn-toggle
-                    v-model="viewMode"
-                    dense
-                    toggle-color="primary"
-                    :options="[
-                        { value: 'list', icon: 'list' },
-                        { value: 'grid', icon: 'grid_on' },
-                    ]"
-                    unelevated
-                />
+                <q-btn-toggle v-model="viewMode" dense toggle-color="primary" :options="[
+                    { value: 'list', icon: 'list' },
+                    { value: 'grid', icon: 'grid_on' },
+                ]" unelevated />
             </div>
         </q-toolbar>
 
         <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
-            <div
-                class="col-xs-12 col-sm-6 col-md-4"
-                v-for="group in groups"
-                :key="group.id"
-            >
+            <div class="col-xs-12 col-sm-6 col-md-4" v-for="group in groups" :key="group.id">
                 <q-card flat bordered>
                     <q-card-section class="q-pb-none">
                         <div class="text-h6 text-ucfirst">{{ group.name }}</div>
@@ -49,11 +39,7 @@
 
                     <q-card-actions align="right">
                         <v-update @updated="getGroups" :item="group" />
-                        <v-delete
-                            v-if="!group.system"
-                            @deleted="getGroups"
-                            :item="group"
-                        />
+                        <v-delete v-if="!group.system" @deleted="getGroups" :item="group" />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -76,23 +62,14 @@
 
                     <q-item-section side class="q-gutter-sm">
                         <v-update @updated="getGroups" :item="group" />
-                        <v-delete
-                            v-if="!group.system"
-                            @deleted="getGroups"
-                            :item="group"
-                        />
+                        <v-delete v-if="!group.system" @deleted="getGroups" :item="group" />
                     </q-item-section>
                 </q-item>
             </q-list>
         </div>
 
         <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="sm"
-            />
+            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
         </div>
     </v-admin-layout>
 </template>
@@ -146,9 +123,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.groups;
-        this.groups = values.data;
-        this.pages = values.meta.pagination;
+        this.getGroups()
     },
 
     watch: {
@@ -173,9 +148,7 @@ export default {
         },
 
         getGroups(param = null) {
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            var params = { ...this.search, ...param };
 
             this.$server
                 .get(this.$page.props.route, {
@@ -187,7 +160,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch((e) => {});
+                .catch((e) => { });
         },
     },
 };
