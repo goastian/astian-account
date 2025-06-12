@@ -1,3 +1,50 @@
+<!--English description
+Captcha Component
+
+Usage:
+<v-captcha @verified="handleVerified" />
+
+Description:
+This component renders either hCaptcha or Turnstile based on the configuration from the backend.
+
+It emits a `verified` event when the user successfully completes the CAPTCHA challenge.
+
+The emitted payload includes:
+{
+    name: <inputName>,   // e.g. "h-captcha-response" or "g-recaptcha-response"
+    value: <token>       // the CAPTCHA response token
+}
+
+You can use this in your form like this:
+
+handleVerified({ name, value }) {
+    this.form[name] = value;
+}
+-->
+
+<!--Descripción en español
+Componente Captcha
+
+Uso:
+<v-captcha @verified="handleVerified" />
+
+Descripción:
+Este componente renderiza hCaptcha o Turnstile según la configuración proporcionada desde el backend.
+
+Emite un evento `verified` cuando el usuario completa correctamente el desafío CAPTCHA.
+
+La carga útil emitida contiene:
+{
+    name: <nombreDelInput>,   // por ejemplo: "h-captcha-response" o "g-recaptcha-response"
+    value: <token>            // el token de respuesta del CAPTCHA
+}
+
+Puedes usarlo en tu formulario así:
+
+handleVerified({ name, value }) {
+    this.form[name] = value;
+}
+-->
 <template>
     <div v-if="captcha.status">
         <div v-if="provider === 'turnstile'" ref="captchaEl" class="cf-turnstile" :data-sitekey="captcha.siteKey"></div>
@@ -11,12 +58,26 @@
 export default {
     emits: ["verified"],
 
+    props: {
+        render: {
+            required: true,
+            type: Number
+        }
+    },
+
     data() {
         return {
             captcha: {},
             provider: "",
         };
     },
+
+    watch: {
+        render(value) {
+            this.reRenderCaptcha();
+        }
+    },
+
     mounted() {
 
         this.captcha = this.$page.props.captcha;
@@ -76,6 +137,14 @@ export default {
                     setTimeout(this.renderCaptcha, 500);
                 }
             });
+        },
+
+        reRenderCaptcha() {
+            if (this.$refs.captchaEl instanceof HTMLElement) {
+                this.$refs.captchaEl.innerHTML = "";
+            }
+
+            this.renderCaptcha();
         },
     },
 };
