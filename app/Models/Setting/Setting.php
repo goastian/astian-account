@@ -246,7 +246,7 @@ class Setting extends Master
         settingLoad('services.stripe.key', null);
         settingLoad('services.stripe.webhook_secret', null);
 
-        settingLoad('billing.methods.offline.name', 'Peer 2 Peer');
+        settingLoad('billing.methods.offline.name', 'Offline');
         settingLoad('billing.methods.offline.icon', 'mdi-cash-register');
         settingLoad('billing.methods.offline.enable', true);
 
