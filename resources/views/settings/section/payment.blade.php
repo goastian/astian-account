@@ -130,7 +130,7 @@
             <div class="p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm">
                 <h3 class="text-lg font-semibold text-blue-700 mb-2 border-b pb-2">
                     <span class="mdi {{ config('billing.methods.offline.icon') }} text-2xl"></span>
-                    P2P
+                    Offline
                 </h3>
                 <div class="mb-2">
                     <label class="block text-sm font-medium text-gray-700">{{ __('Name') }}</label>
