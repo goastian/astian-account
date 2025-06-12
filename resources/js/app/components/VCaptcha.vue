@@ -1,67 +1,9 @@
-<!--English description
-Captcha Component
-
-Usage:
-<v-captcha @verified="handleVerified" />
-
-Description:
-This component renders either hCaptcha or Turnstile based on the configuration from the backend.
-
-It emits a `verified` event when the user successfully completes the CAPTCHA challenge.
-
-The emitted payload includes:
-{
-    name: <inputName>,   // e.g. "h-captcha-response" or "g-recaptcha-response"
-    value: <token>       // the CAPTCHA response token
-}
-
-You can use this in your form like this:
-
-handleVerified({ name, value }) {
-    this.form[name] = value;
-}
--->
-
-<!--Descripción en español
-Componente Captcha
-
-Uso:
-<v-captcha @verified="handleVerified" />
-
-Descripción:
-Este componente renderiza hCaptcha o Turnstile según la configuración proporcionada desde el backend.
-
-Emite un evento `verified` cuando el usuario completa correctamente el desafío CAPTCHA.
-
-La carga útil emitida contiene:
-{
-    name: <nombreDelInput>,   // por ejemplo: "h-captcha-response" o "g-recaptcha-response"
-    value: <token>            // el token de respuesta del CAPTCHA
-}
-
-Puedes usarlo en tu formulario así:
-
-handleVerified({ name, value }) {
-    this.form[name] = value;
-}
--->
 <template>
     <div v-if="captcha.status">
-        <div
-            v-if="provider === 'turnstile'"
-            ref="captchaEl"
-            class="cf-turnstile"
-            :data-sitekey="captcha.siteKey"
-            :data-callback="callback"
-        ></div>
+        <div v-if="provider === 'turnstile'" ref="captchaEl" class="cf-turnstile" :data-sitekey="captcha.siteKey"></div>
 
-        <div
-            v-else-if="provider === 'hcaptcha'"
-            ref="captchaEl"
-            class="h-captcha"
-            :data-sitekey="captcha.siteKey"
-            :data-callback="callback"
-        ></div>
+        <div v-else-if="provider === 'hcaptcha'" ref="captchaEl" class="h-captcha" :data-sitekey="captcha.siteKey">
+        </div>
     </div>
 </template>
 
@@ -71,37 +13,22 @@ export default {
 
     data() {
         return {
-            callback: "",
             captcha: {},
             provider: "",
         };
     },
     mounted() {
-        //Retrieve the captcha data
+
         this.captcha = this.$page.props.captcha;
         this.provider = this.captcha.provider;
 
-        //Generate callback function
-        this.callback = this.generatecallback();
-        window[this.callback] = this.onVerified;
-
-        //Call function to render captcha
         this.renderCaptcha();
     },
-
-    beforeUnmount() {
-        if (window[this.callback]) {
-            delete window[this.callback];
-        }
-    },
     computed: {
-        /**
-         * Set the provider input name
-         */
         inputName() {
             switch (this.provider) {
                 case "turnstile":
-                    return "g-recaptcha-response";
+                    return "cf-turnstile-response";
                 case "hcaptcha":
                     return "h-captcha-response";
                 default:
@@ -111,18 +38,7 @@ export default {
     },
     methods: {
         /**
-         * Generate a unique function name for callback
-         */
-        generatecallback() {
-            return (
-                "onCaptchaVerified_" +
-                Math.random().toString(36).substring(2, 15)
-            );
-        },
-
-        /**
-         * Emit event
-         * @param token
+         * Callback verification
          */
         onVerified(token) {
             this.$emit("verified", {
@@ -132,7 +48,7 @@ export default {
         },
 
         /**
-         * Render captcha provider
+         * Render captcha
          */
         renderCaptcha() {
             this.$nextTick(() => {
@@ -145,7 +61,7 @@ export default {
                 ) {
                     window.turnstile.render(el, {
                         sitekey: this.captcha.siteKey,
-                        callback: this.callback,
+                        callback: this.onVerified,
                     });
                 } else if (
                     this.provider === "hcaptcha" &&
@@ -154,7 +70,7 @@ export default {
                 ) {
                     window.hcaptcha.render(el, {
                         sitekey: this.captcha.siteKey,
-                        callback: this.callback,
+                        callback: this.onVerified,
                     });
                 } else {
                     setTimeout(this.renderCaptcha, 500);
