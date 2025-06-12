@@ -30,7 +30,7 @@
                         " />
                 </div>
 
-                <v-captcha @verified="handleVerified" />
+                <v-captcha @verified="handleVerified" :render="render_captcha" />
 
                 <q-btn label="Sign in" color="primary" class="full-width q-mt-md" outline @click="login" />
 
@@ -63,6 +63,7 @@ export default {
             },
             errors: {},
             dialog: false,
+            render_captcha: 0,
         };
     },
 
@@ -77,7 +78,7 @@ export default {
             this.form[name] = value;
         },
 
-        async login() { 
+        async login() {
             try {
                 const res = await this.$server.post(
                     this.$page.props.auth_routes["login"],
@@ -94,6 +95,8 @@ export default {
                     this.dialog = false;
                 }
             } catch (error) {
+                this.render_captcha = Math.round(Math.random() * 1000);
+
                 if (error?.response?.status == 422) {
                     this.errors = error.response.data.errors;
                 }
