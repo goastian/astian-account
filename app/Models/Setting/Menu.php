@@ -107,19 +107,19 @@ class Menu
                 [
                     'name' => 'Developers',
                     'icon' => 'mdi-tools',
-                    'show' => config('routes.users.developers'),
+                    'show' => intval(config('routes.users.developers')) ? true : false,
                     'menu' => [
                         [
                             'name' => 'Applications',
                             'route' => route('passport.clients.index'),
                             'icon' => 'mdi-wan',
-                            'show' => config('routes.users.clients')
+                            'show' => intval(config('routes.users.clients')) ? true : false
                         ],
                         [
                             'name' => 'API Key',
                             'route' => route('passport.personal.tokens.index'),
                             'icon' => 'mdi-shield-key-outline',
-                            'show' => config('routes.users.api'),
+                            'show' => intval(config('routes.users.api')) ? true : false,
                         ],
                     ]
                 ],
@@ -237,7 +237,7 @@ class Menu
         return [
             "provider" => $provider,
             "siteKey" => config("services.captcha.providers.$provider.sitekey"),
-            "status" => config("services.captcha.enabled"),
+            "status" => intval(config("services.captcha.enabled")) ? true : false,
             "providers" => array_keys(config('services.captcha.providers')),
         ];
     }
