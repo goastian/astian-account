@@ -21,14 +21,6 @@
                                     >{{ item.name }}</button>
                                 </template>
                             </div>
-                            <div class="row nav-apps">
-                                <template v-for="(item, index) in apps">
-                                    <button
-                                        :class="{'active' : app == item.name }"
-                                        @click="select_app(item.name)"
-                                    >{{ item.label }}</button>
-                                </template>
-                            </div>
                         </div>
                     </section>
                     <div class="q-pa-md">
@@ -251,7 +243,7 @@ export default {
     },
 
     mounted() {
-        this.loadPlans();
+        this.getPlans();
     },
 
     watch: {
@@ -259,30 +251,6 @@ export default {
     },
 
     methods: {
-        loadPlans() {
-            const values = this.$page.props.plans;
-            //this.plans = values.data;
-            const data = values.data.filter(data => {
-                const app = data.scopes.filter(da => da.service.name == this.app);
-                const period = data.prices.filter(da => da.billing_period == this.period);
-                if(this.app == 'all') {
-                    if(period.length == 1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if(app.length == 1 && period.length == 1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-            this.plans = data;
-            this.pages = values.meta.pagination;
-        },
-
         select_period(period) {
             this.period = period;
             this.loadPlans();
@@ -304,9 +272,7 @@ export default {
 
         async getPlans() {
             try {
-                const res = await this.$server.get("/api/public/plans", {
-                    params: this.search,
-                });
+                const res = await this.$server.get("/plans");
 
                 if (res.status === 200) {
                     this.plans = res.data.data;
