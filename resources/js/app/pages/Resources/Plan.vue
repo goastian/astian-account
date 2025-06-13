@@ -16,7 +16,7 @@
                             <div class="row nav-period">
                                 <template v-for="(item, index) in periods">
                                     <button
-                                        :class="{'active' : period == item.name }"
+                                        :class="{'active' : params.billing_period == item.name }"
                                         @click="select_period(item.name)"
                                     >{{ item.name }}</button>
                                 </template>
@@ -37,7 +37,7 @@
                                         >
                                             <div
                                                 class="row items-end"
-                                                v-if="i.billing_period == period"
+                                                v-if="i.billing_period == params.billing_period"
                                             >
                                                 <div class="price">
                                                     <span v-if="i.currency == 'USD'">$</span>
@@ -52,7 +52,7 @@
                                         <div v-html="plan.description" class="column items-start justify-center"></div>
                                     </div>
                                     <div class="card-footer">
-                                        <v-suscribe :plan="plan" :period="period" />
+                                        <v-suscribe :plan="plan" :period="params.billing_period" />
                                     </div>
                                 </q-card>
                             </div>
@@ -193,7 +193,9 @@ export default {
             pages: {
                 total_pages: 0,
             },
-            period: 'daily',
+            params: {
+                billing_period: 'daily'
+            },
             app: 'vpn',
             apps: [
                 {
@@ -252,13 +254,8 @@ export default {
 
     methods: {
         select_period(period) {
-            this.period = period;
-            this.loadPlans();
-        },
-
-        select_app(app) {
-            this.app = app;
-            this.loadPlans();
+            this.params.billing_period = period;
+            this.getPlans();
         },
 
         showDescription(plan) {
@@ -272,7 +269,9 @@ export default {
 
         async getPlans() {
             try {
-                const res = await this.$server.get("/plans");
+                const res = await this.$server.get("/plans", {
+                    params: this.params,
+                });
 
                 if (res.status === 200) {
                     this.plans = res.data.data;
