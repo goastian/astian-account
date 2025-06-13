@@ -5,6 +5,7 @@
 
 :root {
     --q-primary: #1976d2;
+    --q-primary-light: #BFDCE5;
     --q-secondary: #64b5f6;
     --q-accent: #82b1ff;
     --q-positive: #4caf50;
@@ -15,6 +16,7 @@
     --q-dark-page: #1e1e1e;
     --q-border: #E5E5E5;
     --q-background-primary: #fff;
+    --q-background-primary-transparent: rgba(255, 255, 255, .7);
     --q-background-secondary: #F1F5F9;
     --q-color: #272727;
     --q-color-secondary: #767676;
@@ -36,6 +38,7 @@
 /* Dark theme */
 [data-theme="dark"] {
     --q-primary: #4FA1C1;
+    --q-primary-light: #BFDCE5;
     --q-secondary: #00acc1;
     --q-accent: #c2185b;
     --q-positive: #43a047;
