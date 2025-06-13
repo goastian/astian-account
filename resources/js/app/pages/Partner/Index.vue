@@ -146,6 +146,10 @@ export default {
         "params.type"(value) {
             this.getSales();
         },
+
+        'theme.selectedTheme'() {
+            this.updateChart(this.sales);
+        }
     },
 
     created() {
@@ -169,12 +173,6 @@ export default {
     mounted() {
         this.updateChart(this.sales);
         console.log(this.total_commission);
-    },
-
-    watch: {
-        'theme.selectedTheme'() {
-            this.updateChart(this.sales);
-        }
     },
 
     methods: {
