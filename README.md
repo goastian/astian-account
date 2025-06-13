@@ -6,23 +6,11 @@ This server was developed to facilitate the creation of microservices applicatio
 
 ---
 
-## License
-
-This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.
-
----
-
 ## Resources
 
 -   [Official Documentation](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home)
 -   [Echo Server](https://gitlab.com/elyerr/echo-server)
 -   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
-
----
-
-## Contact
-
-For direct contact, visit [Telegram](https://t.me/elyerr).
 
 # 🚀 Deploy & First User Setup
 
@@ -122,25 +110,21 @@ php artisan passport:install --force
 
 This project supports the following CAPTCHA providers to help protect your forms from spam and automated abuse:
 
-### 1. [hCaptcha](https://www.hcaptcha.com/)
+## 🛡️ CAPTCHA Providers
 
-**Description:**  
-hCaptcha is a privacy-first CAPTCHA solution that blocks bots while respecting user privacy. It is a drop-in replacement for reCAPTCHA and offers generous free usage.
+### [hCaptcha](https://www.hcaptcha.com/)
 
-**Register:**  
-Create your account and get a site key here:  
-[https://dashboard.hcaptcha.com/signup](https://dashboard.hcaptcha.com/signup)
+-   Privacy-first alternative to reCAPTCHA
+-   Generous free usage
+-   [Get site key](https://dashboard.hcaptcha.com/signup)
 
 ---
 
-### 2. [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/)
+### [Cloudflare Turnstile](https://www.cloudflare.com/products/turnstile/)
 
-**Description:**  
-Cloudflare Turnstile is a smart CAPTCHA alternative that provides frictionless user verification without user interaction, improving the user experience while maintaining security.
-
-**Register:**  
-Use your Cloudflare account to generate a site key:  
-[https://dash.cloudflare.com/](https://dash.cloudflare.com/)
+-   CAPTCHA-free user verification
+-   Seamless and user-friendly
+-   [Get site key](https://dash.cloudflare.com/)
 
 ---
 
@@ -151,3 +135,16 @@ To configure the active CAPTCHA provider:
 > Go to **Admin → Settings → Security**, and select your preferred CAPTCHA provider (hCaptcha or Turnstile).
 
 Once configured, the system will automatically load and render the selected provider in the frontend forms.
+
+---
+
+## License
+
+This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.
+
+---
+
+## Contact
+
+-   Want to collaborate, contribute, or ask questions?
+-   For direct contact, visit [Telegram](https://t.me/elyerr).
