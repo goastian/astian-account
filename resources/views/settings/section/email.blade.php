@@ -22,75 +22,77 @@
                         </option>
                     @endforeach
                 </select>
-            </div>
 
-            {{-- SMTP Settings --}}
-            <div id="smtp" class="mail-config p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm hidden">
-                <h3 class="text-lg font-semibold text-blue-700 mb-2 border-b pb-2">{{ __('SMTP Mailer') }}</h3>
-                @foreach (['host', 'port', 'encryption', 'username', 'password', 'timeout', 'local_domain'] as $key)
-                    <div class="mb-2">
-                        <label
-                            class="block text-sm font-medium text-gray-700">{{ ucfirst(str_replace('_', ' ', $key)) }}</label>
-                        <input type="{{ $key === 'password' ? 'password' : 'text' }}"
-                            name="mail[mailers][smtp][{{ $key }}]"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
-                            value="{{ config('mail.mailers.smtp.' . $key) }}">
-                    </div>
-                @endforeach
-            </div>
+                <div class="pb-3"></div>
 
-
-            {{-- Mailgun Settings --}}
-            <div id="mailgun" class="mail-config border border-gray-300 rounded-lg p-4 bg-white shadow-sm hidden">
-                <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('Mailgun Settings') }}</h3>
-                @foreach (['domain', 'secret', 'endpoint', 'scheme'] as $key)
-                    <div class="mb-2">
-                        <label class="block text-sm font-medium text-gray-700">{{ ucfirst($key) }}</label>
-                        <input type="text" name="services[mailgun][{{ $key }}]"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                            value="{{ config('services.mailgun.' . $key, null) }}">
-                    </div>
-                @endforeach
-            </div>
-
-            {{-- SES Settings --}}
-            <div id="ses" class="mail-config border border-gray-300 rounded-lg p-4 bg-white shadow-sm hidden">
-                <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('SES Settings') }}</h3>
-                @foreach (['key', 'secret', 'region'] as $key)
-                    <div class="mb-2">
-                        <label class="block text-sm font-medium text-gray-700">{{ ucfirst($key) }}</label>
-                        <input type="text" name="services[ses][{{ $key }}]"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                            value="{{ config('services.ses.' . $key, null) }}">
-                    </div>
-                @endforeach
-            </div>
-
-            {{-- Passport Settings --}}
-            <div id="passport" class="mail-config border border-gray-300 rounded-lg p-4 bg-white shadow-sm hidden">
-                <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('Passport Settings') }}</h3>
-                <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">Token</label>
-                    <input type="text" name="services[passport][token]"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                        value="{{ config('services.passport.token', null) }}">
+                {{-- SMTP Settings --}}
+                <div id="smtp" class="mail-config p-4 border border-blue-300 rounded-lg bg-blue-50 shadow-sm hidden">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-2 border-b pb-2">{{ __('SMTP Mailer') }}</h3>
+                    @foreach (['host', 'port', 'encryption', 'username', 'password', 'timeout', 'local_domain'] as $key)
+                        <div class="mb-2">
+                            <label
+                                class="block text-sm font-medium text-gray-700">{{ ucfirst(str_replace('_', ' ', $key)) }}</label>
+                            <input type="{{ $key === 'password' ? 'password' : 'text' }}"
+                                name="mail[mailers][smtp][{{ $key }}]"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
+                                value="{{ config('mail.mailers.smtp.' . $key) }}">
+                        </div>
+                    @endforeach
                 </div>
-            </div>
 
-            {{-- Email From Address --}}
-            <div id="from" class="  border-gray-300 rounded-lg p-4 bg-white shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('From Address') }}</h3>
-                <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="text" name="mail[from][address]"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                        value="{{ config('mail.from.address') }}">
+
+                {{-- Mailgun Settings --}}
+                <div id="mailgun" class="mail-config border border-gray-300 rounded-lg p-4 bg-white shadow-sm hidden">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('Mailgun Settings') }}</h3>
+                    @foreach (['domain', 'secret', 'endpoint', 'scheme'] as $key)
+                        <div class="mb-2">
+                            <label class="block text-sm font-medium text-gray-700">{{ ucfirst($key) }}</label>
+                            <input type="text" name="services[mailgun][{{ $key }}]"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
+                                value="{{ config('services.mailgun.' . $key, null) }}">
+                        </div>
+                    @endforeach
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Name</label>
-                    <input type="text" name="mail[from][name]"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
-                        value="{{ config('mail.from.name') }}">
+
+                {{-- SES Settings --}}
+                <div id="ses" class="mail-config border border-gray-300 rounded-lg p-4 bg-white shadow-sm hidden">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('SES Settings') }}</h3>
+                    @foreach (['key', 'secret', 'region'] as $key)
+                        <div class="mb-2">
+                            <label class="block text-sm font-medium text-gray-700">{{ ucfirst($key) }}</label>
+                            <input type="text" name="services[ses][{{ $key }}]"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
+                                value="{{ config('services.ses.' . $key, null) }}">
+                        </div>
+                    @endforeach
+                </div>
+
+                {{-- Passport Settings --}}
+                <div id="passport" class="mail-config border border-gray-300 rounded-lg p-4 bg-white shadow-sm hidden">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('Passport Settings') }}</h3>
+                    <div class="mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Token</label>
+                        <input type="text" name="services[passport][token]"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
+                            value="{{ config('services.passport.token', null) }}">
+                    </div>
+                </div>
+
+                {{-- Email From Address --}}
+                <div id="from" class="  border-gray-300 rounded-lg p-4 bg-white shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-700 mb-2 border-b pb-2">{{ __('From Address') }}</h3>
+                    <div class="mb-2">
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="text" name="mail[from][address]"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
+                            value="{{ config('mail.from.address') }}">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" name="mail[from][name]"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
+                            value="{{ config('mail.from.name') }}">
+                    </div>
                 </div>
             </div>
 
