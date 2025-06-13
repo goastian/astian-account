@@ -35,8 +35,7 @@
   - **General**: General application configuration.
   - **Session**: App session management.
   - **Payment**: Configure payment providers (stripe, offline).
-  - **Email**: Manage email service settings.
-  - **User**: User configuration settings *(pending updates)*.
+  - **Email**: Manage email service settings. 
   - **Routes**: Manage internal app routes.
   - **Redis**: Redis connection configuration.
   - **Cache**: Cache system settings *(currently inactive)*.
