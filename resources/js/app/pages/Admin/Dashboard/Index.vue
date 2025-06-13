@@ -98,6 +98,7 @@
 
 <script>
 import ApexCharts from "vue3-apexcharts";
+import useThemeStore from '../../../stores/useThemeStore';
 
 export default {
     components: {
@@ -126,7 +127,8 @@ export default {
             chartSeries: [],
             chartOptions: {},
             canScrollLeft: false,
-            canScrollRight: true
+            canScrollRight: true,
+            theme: useThemeStore(),
         };
     },
 
@@ -157,6 +159,12 @@ export default {
             this.checkScroll();
         });
         window.addEventListener('resize', this.checkScroll);
+    },
+
+    watch: {
+        'theme.selectedTheme'() {
+            this.loadData(this.$page.props.data);
+        }
     },
 
     methods: {
@@ -227,6 +235,7 @@ export default {
         },
 
         renderChart() {
+            const textColor = this.getCssVariable('--q-color');
             this.chartSeries = [
                 {
                     name: "Users",
@@ -238,6 +247,7 @@ export default {
                 chart: {
                     height: 350,
                     type: this.chartType,
+                    foreColor: textColor,
                     zoom: {
                         enabled: false,
                     },
@@ -262,6 +272,11 @@ export default {
                     categories: this.users_by_month.map((item) => item.month),
                 },
             };
+        },
+
+        getCssVariable(name) {
+            const themeElement = document.querySelector('[data-theme]');
+            return getComputedStyle(themeElement).getPropertyValue(name).trim();
         },
 
         formatDate(dateStr) {
