@@ -24,7 +24,7 @@
 
 - **User Management**: View, edit, or deactivate user accounts.
 - **Group Management**: Organize users into groups.
-- **Role Management**: Assign and define user permissions.
+- **Role Management**:  define service roles.
 - **Service Management**: Create and manage available services.
 - **Client Management**: Manage application integrations (OAuth clients).
 - **Broadcast Management**: Configure real-time channels.
