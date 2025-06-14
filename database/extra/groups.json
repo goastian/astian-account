@@ -471,6 +471,12 @@
                 "name": "transactions",
                 "description": "Service to manage transaction into the admin manager",
                 "actions": [
+                     {
+                        "name": "full",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 0
+                    },
                     {
                         "name": "view",
                         "public": 0,

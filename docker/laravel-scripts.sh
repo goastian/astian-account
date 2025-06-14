@@ -4,7 +4,7 @@ set -e
 cd /var/www 
 
 echo "🔑 Generating application key..."
-php artisan key:generate
+php artisan settings:key-generator
 
 echo "🔄 Running database migrations..."
 php artisan migrate --force
