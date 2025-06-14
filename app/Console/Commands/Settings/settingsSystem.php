@@ -29,7 +29,6 @@ class settingsSystem extends Command
     public function handle()
     {
         $this->info("Install server");
-        Artisan::call('key:generate');
         Artisan::call('settings:roles-upload');
         Artisan::call('settings:countries-upload');
         Artisan::call('settings:channels-upload');
