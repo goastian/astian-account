@@ -11,14 +11,20 @@ class PaymentFailed extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $url;
+    /**
+     * Url to redirect
+     * @var string
+     */
+    public string $url;
+
 
     /**
      * Create a new notification instance.
+     * @param string $url
      */
-    public function __construct()
+    public function __construct(string $url)
     {
-        $this->url = config('app.url') . config('system.redirect_to', '/about');
+        $this->url = $url;
     }
 
     /**

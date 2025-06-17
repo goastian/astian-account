@@ -114,13 +114,11 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.sales;
-        this.sales = values.data;
-        this.pages = values.meta.pagination;
+        this.getSales();
     },
 
     methods: {
-        async getSales() {
+        async getSales(param = null) {
             var params = {};
             Object.assign(params, this.search);
             Object.assign(params, param);

@@ -77,30 +77,12 @@ class SettingController extends WebController
     }
 
     /**
-     * Show the view of passport
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function passport()
-    {
-        return view('settings.section.passport');
-    }
-
-    /**
      * Show the view of email
      * @return \Illuminate\Contracts\View\View
      */
     public function email()
     {
         return view('settings.section.email');
-    }
-
-    /**
-     * Show the view of user
-     * @return \Illuminate\Contracts\View\View
-     */
-    public function user()
-    {
-        return view('settings.section.user');
     }
 
     /**

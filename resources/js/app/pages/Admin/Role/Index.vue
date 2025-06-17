@@ -12,26 +12,16 @@
                 </div>
 
                 <!-- Toggle View Mode -->
-                <q-btn-toggle
-                    v-model="viewMode"
-                    dense
-                    toggle-color="primary"
-                    :options="[
-                        { value: 'list', icon: 'list' },
-                        { value: 'grid', icon: 'grid_on' },
-                    ]"
-                    unelevated
-                />
+                <q-btn-toggle v-model="viewMode" dense toggle-color="primary" :options="[
+                    { value: 'list', icon: 'list' },
+                    { value: 'grid', icon: 'grid_on' },
+                ]" unelevated />
             </div>
         </q-toolbar>
 
         <!-- Grid view -->
         <div class="row q-col-gutter-md q-ma-sm" v-if="viewMode === 'grid'">
-            <div
-                class="col-xs-12 col-sm-6 col-md-4"
-                v-for="role in roles"
-                :key="role.id"
-            >
+            <div class="col-xs-12 col-sm-6 col-md-4" v-for="role in roles" :key="role.id">
                 <q-card flat bordered>
                     <q-card-section class="q-pb-none">
                         <div class="text-h6 text-ucfirst">{{ role.name }}</div>
@@ -55,11 +45,7 @@
 
                     <q-card-actions align="right">
                         <v-update @updated="getRoles" :item="role" />
-                        <v-delete
-                            v-if="!role.system"
-                            @deleted="getRoles"
-                            :item="role"
-                        />
+                        <v-delete v-if="!role.system" @deleted="getRoles" :item="role" />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -69,12 +55,7 @@
         <!-- List view con q-list -->
         <div v-else class="q-ma-sm">
             <q-list bordered separator>
-                <q-item
-                    v-for="role in roles"
-                    :key="role.id"
-                    clickable
-                    class="q-pa-sm"
-                >
+                <q-item v-for="role in roles" :key="role.id" clickable class="q-pa-sm">
                     <q-item-section>
                         <q-item-label class="text-h6">{{
                             role.name
@@ -89,23 +70,14 @@
 
                     <q-item-section side>
                         <v-update @updated="getRoles" :item="role" />
-                        <v-delete
-                            v-if="!role.system"
-                            @deleted="getRoles"
-                            :item="role"
-                        />
+                        <v-delete v-if="!role.system" @deleted="getRoles" :item="role" />
                     </q-item-section>
                 </q-item>
             </q-list>
         </div>
 
         <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="sm"
-            />
+            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
         </div>
     </v-admin-layout>
 </template>
@@ -155,9 +127,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.roles;
-        this.roles = values.data;
-        this.pages = values.meta.pagination;
+        this.getRoles()
     },
 
     watch: {
@@ -182,9 +152,7 @@ export default {
         },
 
         getRoles(param = null) {
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            var params = { ...this.search, ...params };
 
             this.$server
                 .get(this.$page.props.route, {
@@ -196,7 +164,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch((e) => {});
+                .catch((e) => { });
         },
 
         async copyToClipboard(text) {
@@ -207,7 +175,7 @@ export default {
                     message: "Copy successfully",
                     timeout: 3000,
                 });
-            } catch (err) {}
+            } catch (err) { }
         },
     },
 };

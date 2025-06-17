@@ -156,6 +156,7 @@
                         </div>
                         <div class="column q-gutter-y-md">
                             <div
+                                v-if="suscription.length > 0"
                                 class="row card-default justify-between items-start"
                                 v-for="(item, index) in suscription"
                                 :key="index"
@@ -174,6 +175,15 @@
                                 <div>
                                     <span>Ends in: {{ item.end_at }}</span>
                                 </div>
+                            </div>
+                            <div v-else>
+                                <div class="row q-gutter-x-sm items-center">
+                                    <q-icon name="mdi-information" />
+                                    <h6>You haven’t purchased any plan yet</h6>
+                                </div>
+                                <span>
+                                    Buy a plan to start enjoying all the benefits available in your dashboard.
+                                </span>
                             </div>
                         </div>
                     </div>
@@ -217,7 +227,6 @@ export default {
             security: [
                 {
                     title: 'Password',
-                    description: 'Updated 2 months ago',
                     icon: 'mdi-key-outline',
                     btnTitle: 'change',
                     route: this.loadRoute(this.$page.props.user_routes, 'Password'),
@@ -471,7 +480,7 @@ export default {
 }
 
 .subtitle {
-    font-size: 16px;
+    font-size: 17px;
     margin: 0;
     line-height: 22px;
     font-weight: 600;

@@ -5,6 +5,7 @@
 
 :root {
     --q-primary: #1976d2;
+    --q-primary-light: #BFDCE5;
     --q-secondary: #64b5f6;
     --q-accent: #82b1ff;
     --q-positive: #4caf50;
@@ -15,17 +16,20 @@
     --q-dark-page: #1e1e1e;
     --q-border: #E5E5E5;
     --q-background-primary: #fff;
+    --q-background-primary-transparent: rgba(255, 255, 255, .7);
     --q-background-secondary: #F1F5F9;
     --q-color: #272727;
     --q-color-secondary: #767676;
+    --q-color-light: #dfdfdf;
     --q-color-green: #00A12B;
-    --q-color-green-light: #BBFFCE;
+    --q-color-green-light: #f0fdf4;
+    --q-color-green-secondary: rgb(187, 247, 208);
     --q-color-red: #E97575;
     --q-color-red-light: #FFBCBC;
     --q-color-yellow: #B89900;
-    --q-color-yellow-light: #FFF4BB;
-    --q-color-blue: #37BBCF;
-    --q-color-blue-light: #CFF9FF;
+    --q-color-yellow-light: #fffbeb;
+    --q-color-blue: #3B5998;
+    --q-color-blue-light: #eff6ff;
     --q-background-green: #ACF2BF;
     --q-background-gradient-one: #1e3a8a;
     --q-background-gradient-two: #1e293b;
@@ -33,7 +37,8 @@
 
 /* Dark theme */
 [data-theme="dark"] {
-    --q-primary: #395671;
+    --q-primary: #4FA1C1;
+    --q-primary-light: #BFDCE5;
     --q-secondary: #00acc1;
     --q-accent: #c2185b;
     --q-positive: #43a047;
@@ -46,8 +51,16 @@
     --q-background-primary: #1e293b;
     --q-background-secondary: #0f172a;
     --q-color: #fff;
-    --q-color-secondary: #94a3b8;
-    --q-color-red-light: #fee2e2;
+    --q-color-secondary: #D0D0D0;
+    --q-color-light: #243B59;
+    --q-color-green: #62CF8E;
+    --q-color-green-light: #00903A;
+    --q-color-green-secondary: #A6E5BF;
+    --q-color-red-light: ##E0C066;
+    --q-color-yellow: #FFF4B2;
+    --q-color-yellow-light: #D4AF37;
+    --q-color-blue: #A3DFEB;
+    --q-color-blue-light: #0193B1;
 }
 
 /* Red theme */
@@ -124,4 +137,20 @@ body {
     .header-title {
         display: none !important;
     }
+}
+
+.apexcharts-tooltip-title {
+  background-color: var(--q-background-secondary) !important;
+  color: var(--q-color) !important;
+  padding: 6px 10px !important;
+  border-bottom: 1px solid #444 !important;
+  border-radius: 6px 6px 0 0 !important;
+  font-weight: bold !important;
+}
+
+.apexcharts-tooltip {
+  background-color: var(--q-background-primary) !important;
+  color: var(--q-color) !important;
+  font-size: 14px;
+  border-radius: 6px;
 }

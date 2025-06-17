@@ -355,7 +355,7 @@
                                 <div class="q-mt-md row q-gutter-sm">
                                     <q-btn
                                         v-if="
-                                            tx.status === 'pending' &&
+                                            tx.status === 'successful' &&
                                             tx.payment_url
                                         "
                                         :href="tx.payment_url"

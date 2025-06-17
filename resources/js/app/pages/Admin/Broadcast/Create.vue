@@ -7,24 +7,13 @@
 
             <q-card-section>
                 <div class="q-gutter-md">
-                    <q-input
-                        outlined
-                        v-model="form.name"
-                        dense="dense"
-                        label="Name"
-                        :error="!!errors.name"
-                    >
+                    <q-input outlined v-model="form.name" dense="dense" label="Name" :error="!!errors.name">
                         <template v-slot:error>
                             <v-error :error="errors.name"></v-error>
                         </template>
                     </q-input>
-                    <q-input
-                        outlined
-                        v-model="form.description"
-                        dense="dense"
-                        label="description"
-                        :error="!!errors.description"
-                    >
+                    <q-input outlined v-model="form.description" dense="dense" label="description"
+                        :error="!!errors.description">
                         <template v-slot:error>
                             <v-error :error="errors.description"></v-error>
                         </template>
@@ -32,12 +21,7 @@
 
                     <q-item tag="label" v-ripple>
                         <q-item-section avatar>
-                            <q-checkbox
-                                v-model="form.system"
-                                val="orange"
-                                color="orange"
-                                :error="!!errors.system"
-                            >
+                            <q-checkbox v-model="form.system" val="orange" color="orange" :error="!!errors.system">
                                 <template v-slot:error>
                                     <v-error :error="errors.system" />
                                 </template>
@@ -54,30 +38,12 @@
             </q-card-section>
 
             <q-card-actions align="right">
-                <q-btn
-                    label="Save"
-                    outline
-                    icon="mdi-content-save-alert"
-                    color="positive"
-                    @click="create"
-                />
-                <q-btn
-                    label="Close"
-                    outline
-                    icon="mdi-close-circle"
-                    color="secondary"
-                    @click="dialog = false"
-                />
+                <q-btn label="Save" outline icon="mdi-content-save-alert" color="positive" @click="create" />
+                <q-btn label="Close" outline icon="mdi-close-circle" color="secondary" @click="dialog = false" />
             </q-card-actions>
         </q-card>
     </q-dialog>
-    <q-btn
-        outline
-        round
-        color="positive"
-        icon="mdi-plus"
-        @click="dialog = true"
-    >
+    <q-btn outline round color="positive" icon="mdi-plus" @click="dialog = true">
         <q-tooltip> Add new channel</q-tooltip>
     </q-btn>
 </template>
@@ -140,12 +106,24 @@ export default {
                     this.dialog = false;
                 }
             } catch (e) {
-                if (
-                    e.response &&
-                    e.response.data.errors &&
-                    e.response.status == 422
-                ) {
+                if (e.response?.data?.errors && e.response?.status == 422) {
                     this.errors = e.response.data.errors;
+                }
+
+                if (e.response?.status == 400 && e.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
+                }
+
+                if (e.response?.status == 403 && e.response?.data?.message) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 3000,
+                    });
                 }
             }
         },

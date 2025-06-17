@@ -47,21 +47,10 @@ handleVerified({ name, value }) {
 -->
 <template>
     <div v-if="captcha.status">
-        <div
-            v-if="provider === 'turnstile'"
-            ref="captchaEl"
-            class="cf-turnstile"
-            :data-sitekey="captcha.siteKey"
-            :data-callback="callback"
-        ></div>
+        <div v-if="provider === 'turnstile'" ref="captchaEl" class="cf-turnstile" :data-sitekey="captcha.siteKey"></div>
 
-        <div
-            v-else-if="provider === 'hcaptcha'"
-            ref="captchaEl"
-            class="h-captcha"
-            :data-sitekey="captcha.siteKey"
-            :data-callback="callback"
-        ></div>
+        <div v-else-if="provider === 'hcaptcha'" ref="captchaEl" class="h-captcha" :data-sitekey="captcha.siteKey">
+        </div>
     </div>
 </template>
 
@@ -69,39 +58,38 @@ handleVerified({ name, value }) {
 export default {
     emits: ["verified"],
 
+    props: {
+        render: {
+            required: true,
+            type: Number
+        }
+    },
+
     data() {
         return {
-            callback: "",
             captcha: {},
             provider: "",
         };
     },
+
+    watch: {
+        render(value) {
+            this.reRenderCaptcha();
+        }
+    },
+
     mounted() {
-        //Retrieve the captcha data
+
         this.captcha = this.$page.props.captcha;
         this.provider = this.captcha.provider;
 
-        //Generate callback function
-        this.callback = this.generatecallback();
-        window[this.callback] = this.onVerified;
-
-        //Call function to render captcha
         this.renderCaptcha();
     },
-
-    beforeUnmount() {
-        if (window[this.callback]) {
-            delete window[this.callback];
-        }
-    },
     computed: {
-        /**
-         * Set the provider input name
-         */
         inputName() {
             switch (this.provider) {
                 case "turnstile":
-                    return "g-recaptcha-response";
+                    return "cf-turnstile-response";
                 case "hcaptcha":
                     return "h-captcha-response";
                 default:
@@ -111,18 +99,7 @@ export default {
     },
     methods: {
         /**
-         * Generate a unique function name for callback
-         */
-        generatecallback() {
-            return (
-                "onCaptchaVerified_" +
-                Math.random().toString(36).substring(2, 15)
-            );
-        },
-
-        /**
-         * Emit event
-         * @param token
+         * Callback verification
          */
         onVerified(token) {
             this.$emit("verified", {
@@ -132,7 +109,7 @@ export default {
         },
 
         /**
-         * Render captcha provider
+         * Render captcha
          */
         renderCaptcha() {
             this.$nextTick(() => {
@@ -145,7 +122,7 @@ export default {
                 ) {
                     window.turnstile.render(el, {
                         sitekey: this.captcha.siteKey,
-                        callback: this.callback,
+                        callback: this.onVerified,
                     });
                 } else if (
                     this.provider === "hcaptcha" &&
@@ -154,12 +131,20 @@ export default {
                 ) {
                     window.hcaptcha.render(el, {
                         sitekey: this.captcha.siteKey,
-                        callback: this.callback,
+                        callback: this.onVerified,
                     });
                 } else {
                     setTimeout(this.renderCaptcha, 500);
                 }
             });
+        },
+
+        reRenderCaptcha() {
+            if (this.$refs.captchaEl instanceof HTMLElement) {
+                this.$refs.captchaEl.innerHTML = "";
+            }
+
+            this.renderCaptcha();
         },
     },
 };

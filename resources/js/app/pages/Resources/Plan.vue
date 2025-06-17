@@ -16,17 +16,9 @@
                             <div class="row nav-period">
                                 <template v-for="(item, index) in periods">
                                     <button
-                                        :class="{'active' : period == item.name }"
+                                        :class="{'active' : params.billing_period == item.name }"
                                         @click="select_period(item.name)"
                                     >{{ item.name }}</button>
-                                </template>
-                            </div>
-                            <div class="row nav-apps">
-                                <template v-for="(item, index) in apps">
-                                    <button
-                                        :class="{'active' : app == item.name }"
-                                        @click="select_app(item.name)"
-                                    >{{ item.label }}</button>
                                 </template>
                             </div>
                         </div>
@@ -45,7 +37,7 @@
                                         >
                                             <div
                                                 class="row items-end"
-                                                v-if="i.billing_period == period"
+                                                v-if="i.billing_period == params.billing_period"
                                             >
                                                 <div class="price">
                                                     <span v-if="i.currency == 'USD'">$</span>
@@ -60,7 +52,7 @@
                                         <div v-html="plan.description" class="column items-start justify-center"></div>
                                     </div>
                                     <div class="card-footer">
-                                        <v-suscribe :plan="plan" :period="period" />
+                                        <v-suscribe :plan="plan" :period="params.billing_period" />
                                     </div>
                                 </q-card>
                             </div>
@@ -201,7 +193,9 @@ export default {
             pages: {
                 total_pages: 0,
             },
-            period: 'daily',
+            params: {
+                billing_period: 'daily'
+            },
             app: 'vpn',
             apps: [
                 {
@@ -251,7 +245,7 @@ export default {
     },
 
     mounted() {
-        this.loadPlans();
+        this.getPlans();
     },
 
     watch: {
@@ -259,38 +253,9 @@ export default {
     },
 
     methods: {
-        loadPlans() {
-            const values = this.$page.props.plans;
-            //this.plans = values.data;
-            const data = values.data.filter(data => {
-                const app = data.scopes.filter(da => da.service.name == this.app);
-                const period = data.prices.filter(da => da.billing_period == this.period);
-                if(this.app == 'all') {
-                    if(period.length == 1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                } else {
-                    if(app.length == 1 && period.length == 1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-            });
-            this.plans = data;
-            this.pages = values.meta.pagination;
-        },
-
         select_period(period) {
-            this.period = period;
-            this.loadPlans();
-        },
-
-        select_app(app) {
-            this.app = app;
-            this.loadPlans();
+            this.params.billing_period = period;
+            this.getPlans();
         },
 
         showDescription(plan) {
@@ -304,8 +269,8 @@ export default {
 
         async getPlans() {
             try {
-                const res = await this.$server.get("/api/public/plans", {
-                    params: this.search,
+                const res = await this.$server.get("/plans", {
+                    params: this.params,
                 });
 
                 if (res.status === 200) {

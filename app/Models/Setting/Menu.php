@@ -58,7 +58,7 @@ class Menu
                 'show' => true,
             ],
             "partner_routes" => static::partnerRoutes(),
-            "allow_register" => config('system.enable_register_member', true),
+            "allow_register" => config('routes.guest.register', true),
         ];
     }
 
@@ -75,21 +75,55 @@ class Menu
                     'icon' => 'mdi-account-star',
                     'show' => true,
                     'menu' => [
-                        ['name' => 'Me', 'route' => route('users.dashboard'), 'icon' => 'mdi-information'],
-                        ['name' => 'profile', 'route' => route('users.profile'), 'icon' => 'mdi-account-details-outline'],
-                        ['name' => 'Password', 'route' => route('users.password'), 'icon' => 'mdi-lock-reset'],
-                        ['name' => '2FA', 'route' => route('users.2fa.request'), 'icon' => 'mdi-two-factor-authentication'],
-                        ['name' => 'Subscriptions', 'route' => route('users.subscriptions.index'), 'icon' => 'mdi-gift-outline'],
-                        ['name' => 'Store', 'route' => route('plans.index'), 'icon' => 'mdi-store-search'],
+                        [
+                            'name' => 'Me',
+                            'route' => route('users.dashboard'),
+                            'icon' => 'mdi-information'
+                        ],
+                        [
+                            'name' => 'profile',
+                            'route' => route('users.profile'),
+                            'icon' => 'mdi-account-details-outline'
+                        ],
+                        [
+                            'name' => 'Password',
+                            'route' => route('users.password'),
+                            'icon' => 'mdi-lock-reset'
+                        ],
+                        [
+                            'name' => '2FA',
+                            'route' => route('users.2fa.request'),
+                            'icon' => 'mdi-two-factor-authentication'
+                        ],
+                        [
+                            'name' => 'Subscriptions',
+                            'route' => route('users.subscriptions.index'),
+                            'icon' => 'mdi-gift-outline'
+                        ],
+                        [
+                            'name' => 'Store',
+                            'route' => route('plans.index'),
+                            'icon' => 'mdi-store-search'
+                        ],
                     ]
                 ],
                 [
                     'name' => 'Developers',
                     'icon' => 'mdi-tools',
-                    'show' => false,
+                    'show' => intval(config('routes.users.developers')) ? true : false,
                     'menu' => [
-                        ['name' => 'Applications', 'route' => route('passport.clients.index'), 'icon' => 'mdi-wan'],
-                        ['name' => 'API Key', 'route' => route('passport.personal.tokens.index'), 'icon' => 'mdi-shield-key-outline'],
+                        [
+                            'name' => 'Applications',
+                            'route' => route('passport.clients.index'),
+                            'icon' => 'mdi-wan',
+                            'show' => intval(config('routes.users.clients')) ? true : false
+                        ],
+                        [
+                            'name' => 'API Key',
+                            'route' => route('passport.personal.tokens.index'),
+                            'icon' => 'mdi-shield-key-outline',
+                            'show' => intval(config('routes.users.api')) ? true : false,
+                        ],
                     ]
                 ],
             ];
@@ -200,7 +234,7 @@ class Menu
         return [
             "provider" => $provider,
             "siteKey" => config("services.captcha.providers.$provider.sitekey"),
-            "status" => config("services.captcha.enabled"),
+            "status" => intval(config("services.captcha.enabled")) ? true : false,
             "providers" => array_keys(config('services.captcha.providers')),
         ];
     }

@@ -32,19 +32,31 @@ class PlanController extends WebController
      */
     public function index(Plan $plan)
     {
-        $data = $plan->query();
-
+        // Retrieve params of the request
         $params = $this->filter_transform($plan->transformer);
 
+        //Prepare query
+        $data = $plan->query();
+
+        // Eager loading
+        $data = $data->with([
+            'scopes',
+            'prices',
+            'scopes.role',
+            'scopes.service.group'
+        ]);
+
+        // Search
         $data = $this->searchByBuilder($data, $params);
 
+        // Order by
         $data = $this->orderByBuilder($data, $plan->transformer);
+
         if (request()->wantsJson()) {
             return $this->showAllByBuilder($data, $plan->transformer);
         }
 
         return Inertia::render("Admin/Plans/Index", [
-            'plans' => $this->showAllByBuilderArray($data, $plan->transformer),
             'route' => [
                 'services' => route("admin.services.index"),
                 'plans' => route('admin.plans.index')
@@ -74,8 +86,14 @@ class PlanController extends WebController
                 }
             ],
             'description' => ['required'],
-            'public' => ['required', new BooleanRule()],
             'active' => ['required', new BooleanRule()],
+            'trial_enabled' => ['nullable', new BooleanRule()],
+            'trial_duration' => [
+                'required_if:trial_enabled,true',
+                'integer',
+                'min:0',
+                'max:255',
+            ],
             'bonus_enabled' => ['nullable', new BooleanRule()],
             'bonus_duration' => [
                 'required_if:bonus_enabled,true',
@@ -158,8 +176,14 @@ class PlanController extends WebController
         $this->validate($request, [
             'name' => ['nullable', 'max:150'],
             'description' => ['nullable'],
-            'public' => ['nullable', new BooleanRule()],
             'active' => ['nullable', new BooleanRule()],
+            'trial_enabled' => ['nullable', new BooleanRule()],
+            'trial_duration' => [
+                'required_if:trial_enabled,true',
+                'integer',
+                'min:0',
+                'max:255',
+            ],
             'bonus_enabled' => ['nullable', new BooleanRule()],
             'bonus_duration' => [
                 'required_if:bonus_enabled,true',
@@ -215,14 +239,19 @@ class PlanController extends WebController
                 $plan->description = Purify::clean($request->description);
             }
 
-            if ($request->has('public') && $plan->public != $request->public) {
-                $update = true;
-                $plan->public = $request->public;
-            }
-
             if ($request->has('active') && $plan->active != $request->active) {
                 $update = true;
                 $plan->active = $request->active;
+            }
+
+            if ($request->has('trial_enabled') && $plan->trial_enabled != $request->trial_enabled) {
+                $update = true;
+                $plan->trial_enabled = $request->trial_enabled;
+            }
+
+            if ($request->has('trial_duration') && $plan->trial_duration != $request->trial_duration) {
+                $update = true;
+                $plan->trial_duration = $request->trial_duration;
             }
 
             if ($request->has('bonus_enabled') && $plan->bonus_enabled != $request->bonus_enabled) {

@@ -46,6 +46,12 @@ class PartnerController extends WebController
 
         //Apply filter between days
         if ($request->has('start') && $request->has('end')) {
+
+            $request->merge([
+                'start' => $request->start . ' 00:00:00',
+                'end' => $request->end . ' 23:59:59',
+            ]);
+
             $data->whereBetween('created_at', [$request->start, $request->end]);
         }
 
@@ -79,11 +85,16 @@ class PartnerController extends WebController
             ->values()
             ->toArray();
 
+
+
         //Make output data
+        $partner = auth()->user()->partner;
+
         $meta = [
             "data" => fractal($data, DataTransformer::class)->toArray()['data'],
             "total_sales" => $total_sales,
-            "total_commission" => $total_commissions
+            "total_commission" => $total_commissions,
+            "partner" => isset($partner) ? $partner->meta() : [],
         ];
 
         if ($request->wantsJson()) {

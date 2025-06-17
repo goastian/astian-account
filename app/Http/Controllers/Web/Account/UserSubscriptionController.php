@@ -1,12 +1,14 @@
 <?php
 namespace App\Http\Controllers\Web\Account;
 
+use App\Notifications\Subscription\AutoPaymentSuccess;
+use Exception;
 use Inertia\Inertia;
 use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use Illuminate\Support\Facades\DB;
-use App\Models\Subscription\Package; 
+use App\Models\Subscription\Package;
 use App\Http\Controllers\WebController;
 use App\Models\Subscription\Transaction;
 use App\Services\Payment\PaymentManager;
@@ -24,7 +26,12 @@ class UserSubscriptionController extends WebController
     public function index(Package $package)
     {
         $data = $package->query();
-        $data = $data->where('user_id', auth()->user()->id);
+        $data = $data->with([
+            'lastTransaction',
+            'transactions',
+            'user'
+        ])->where('user_id', auth()->user()->id);
+
         $params = $this->filter_transform(UserPackageTransformer::class);
         $data = $this->searchByBuilder($data, $params);
         $data = $this->orderByBuilder($data, UserPackageTransformer::class);
@@ -73,26 +80,29 @@ class UserSubscriptionController extends WebController
             ],
         ]);
 
+        //Generate unique transaction code
+        $code = Transaction::generateTransactionCode();
+
         //Generate metadata
         $plan = $plan->processPlan($request->plan, $request->billing_period);
 
-        //Generate payment  
-        $paymentManager = $paymentManager->buy($request->payment_method, $plan);
+        $plan['transaction_code'] = $code;
 
-        //Generate transaction code
-        $code = Transaction::generateTransactionCode();
+        //Generate payment
+        $paymentManager = $paymentManager->buy($request->payment_method, $plan);
 
         DB::transaction(function () use ($plan, $request, $paymentManager, $code) {
 
             //Register package
             $package = Package::create([
                 'status' => config("billing.status.pending.name"),
-                'is_recurring' => false,
+                'is_recurring' => true,
                 'transaction_code' => $code,
-                'user_id' => auth()->id(),
+                'user_id' => auth()->user()->id,
                 'meta' => $plan,
             ]);
 
+            //Generate transaction
             $transaction = [
                 'tax_applied' => config('billing.taxes.enabled'),
                 'subtotal' => $paymentManager->amount_subtotal,
@@ -101,45 +111,48 @@ class UserSubscriptionController extends WebController
                 'status' => config("billing.status.pending.name"),
                 'payment_method' => $request->payment_method,
                 'billing_period' => $plan['price']['billing_period'],
-                'session_id' => $paymentManager->id,
-                'payment_intent_id' => $paymentManager->payment_intent,
-                'payment_url' => $paymentManager->url,
                 'renew' => false,
                 'code' => $code,
                 'response' => $paymentManager->toArray(),
                 'package_id' => $package->id,
             ];
 
+            /**
+             * Associate a partner to the user's transaction if applicable
+             */
+
+            // Check if the authenticated user already has an assigned partner
             if (!empty($partner_id = auth()->user()->partner_id)) {
 
+                // Find the partner by ID
                 $partner = Partner::find($partner_id);
-
+                // If the partner exists, associate it with the transaction
                 if (!empty($partner)) {
                     $transaction['partner_id'] = $partner->id;
                     $transaction['partner_commission_rate'] = $partner->commission_rate;
                 }
 
+                // If the user has no assigned partner, check for a referral code
             } else if ($request->referral_code && empty(auth()->user()->partner_id)) {
+
+                // Find the partner by referral code
                 $partner = Partner::where('code', $request->referral_code)->first();
+
+                // If a valid partner is found, associate it with the transaction
                 if (!empty($partner)) {
                     $transaction['partner_id'] = $partner->id;
                     $transaction['partner_commission_rate'] = $partner->commission_rate;
                 }
-            }
-
-            if (config('billing.taxes.enabled')) {
-                $transaction['tax_rate_id'] = null;
-                $transaction['tax_percentage'] = null;
-                $transaction['tax_amount'] = null;
-                $transaction['tax_inclusive'] = null;
             }
 
             Transaction::create($transaction);
-
-
         });
 
-        auth()->user()->notify(new RequestSubscription($code));
+        // Send request notification 
+        auth()->user()->notify(new RequestSubscription(
+            route('users.subscriptions.index'),
+            $code
+        ));
 
         return $this->data([
             'data' => [
@@ -171,7 +184,7 @@ class UserSubscriptionController extends WebController
      * @param \App\Services\Payment\PaymentManager $paymentManager
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function renew(Request $request, Package $package, PaymentManager $paymentManager)
+    public function renew(Request $request, PaymentManager $paymentManager)
     {
         $request->validate([
             'package' => ['required', 'exists:packages,id'],
@@ -185,41 +198,56 @@ class UserSubscriptionController extends WebController
             ],
         ]);
 
-        $package = $package->find($request->package);
+        // Search for a package  to renew
+        $data = Package::with([
+            'user',
+            'transactions',
+            'lastTransaction'
+        ])->find($request->package);
 
+
+        $data->lastGracePeriodCheck();
+
+        $package = $data->toArray();
+
+        //Generate unique transaction code
+        $code = Transaction::generateTransactionCode();
+        $package['meta']['transaction_code'] = $code;
+
+        // New instance of Payment Manager class to use the correct driver
         $paymentManager = $paymentManager->buy(
             $request->payment_method,
-            $package->meta
+            $package['meta'] // plan saved
         );
 
-        DB::transaction(function () use ($package, $paymentManager, $request) {
+        // Add payment manager inside the package
+        $package['payment_manager'] = $paymentManager->toArray();
 
-            $transaction = [
+        //Generate new transaction
+        DB::transaction(function () use ($package, $request, $code) {
+            Transaction::create([
                 'tax_applied' => config('billing.taxes.enabled'),
-                'subtotal' => $paymentManager->amount_subtotal,
-                'total' => $paymentManager->amount_total,
-                'currency' => $package->meta['price']['currency'],
+                'subtotal' => $package['payment_manager']['amount_subtotal'],
+                'total' => $package['payment_manager']['amount_total'],
+                'currency' => $package['meta']['price']['currency'],
                 'status' => config("billing.status.pending.name"),
                 'payment_method' => $request->payment_method,
-                'billing_period' => $package->meta['price']['billing_period'],
-                'session_id' => $paymentManager->id,
-                'payment_intent_id' => $paymentManager->payment_intent,
-                'payment_url' => $paymentManager->url,
+                'billing_period' => $package['meta']['price']['billing_period'],
+                'session_id' => $package['payment_manager']['id'],
+                'payment_intent_id' => $package['payment_manager']['payment_intent'],
+                'payment_url' => $package['payment_manager']['url'],
                 'renew' => true,
-                'code' => Transaction::generateTransactionCode(),
-                'response' => $paymentManager->toArray(),
-                'package_id' => $package->id,
-            ];
-
-            if (config('billing.taxes.enabled')) {
-                $transaction['tax_rate_id'] = null;
-                $transaction['tax_percentage'] = null;
-                $transaction['tax_amount'] = null;
-                $transaction['tax_inclusive'] = null;
-            }
-
-            Transaction::create($transaction);
+                'code' => $code,
+                'response' => $package['payment_manager'],
+                'package_id' => $package['id'],
+            ]);
         });
+
+        // Send request notification 
+        auth()->user()->notify(new RequestSubscription(
+            route('users.subscriptions.index'),
+            $code
+        ));
 
         return $this->data([
             'data' => [
@@ -227,11 +255,27 @@ class UserSubscriptionController extends WebController
                 "redirect_to" => $paymentManager->url,
             ]
         ], 201);
-
     }
 
-    public function success()
+    /**
+     * Show the transaction
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     */
+    public function success(Request $request)
     {
-        return view('payment.success');
+        $transaction = Transaction::with([
+            'package',
+            'package.user'
+        ])->where("code", $request->code)
+            ->whereHas('package.user', function ($query) {
+                $query->where('id', auth()->user()->id);
+            })->first();
+
+        if (empty($transaction)) {
+            throw new Exception("Page not found", 404);
+        }
+
+        return view('payment.success', ['transaction' => $transaction->toArray()]);
     }
 }

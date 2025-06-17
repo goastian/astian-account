@@ -87,15 +87,18 @@ server {
 ```bash
 php artisan passport:install --force
 ```
-
 ## Payment Methods
 
 -   **Stripe**: Third-party payment method
 
     -   **Webhook (POST)**: `https://domain.com/webhook/stripe`
-    -   **Listen event**
+    -   **Events handled**:
         -   `checkout.session.completed`
         -   `payment_intent.payment_failed`
         -   `checkout.session.expired`
+        -   `charge.succeeded`
 
--   **P2P**: Offline payment method
+-   **Offline**: Offline payment method
+
+> **Note:** Automatic renewal support has been added for all payment methods **except Offline**.  
+> You can configure renewal options in the Admin panel under **Settings → Payment → Renew**.

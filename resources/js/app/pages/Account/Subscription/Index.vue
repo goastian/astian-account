@@ -172,11 +172,8 @@ export default {
         };
     },
 
-    mounted() {
-        const values = this.$page.props.packages;
-        this.packages = values.data;
-        this.pages = values.meta.pagination;
-        console.log(this.packages);
+    async created() {
+        await this.getPackages();
     },
 
     watch: {

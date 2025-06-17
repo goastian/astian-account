@@ -51,6 +51,7 @@ class Setting extends Master
         Setting::getSystemSetting();
         Setting::getSessionSettings();
         Setting::getCacheSettings();
+        Setting::getRoutesSettings();
     }
 
     /**
@@ -245,9 +246,14 @@ class Setting extends Master
         settingLoad('services.stripe.key', null);
         settingLoad('services.stripe.webhook_secret', null);
 
-        settingLoad('billing.methods.offline.name', 'Peer 2 Peer');
+        settingLoad('billing.methods.offline.name', 'Offline');
         settingLoad('billing.methods.offline.icon', 'mdi-cash-register');
         settingLoad('billing.methods.offline.enable', true);
+
+        SettingLoad('billing.renew.enable', false);
+        SettingLoad('billing.renew.hours_before', 10);
+        SettingLoad('billing.renew.bonus_enabled', false);
+        SettingLoad('billing.renew.grace_period_days', 5);
 
         //System settings
         settingLoad('system.schema_mode', "https");
@@ -258,7 +264,6 @@ class Setting extends Master
         settingLoad('system.disable_create_user_by_command', false);
         settingLoad('system.destroy_user_after', 30);
         settingLoad('system.code_2fa_email_expires', 5);
-        settingLoad('system.enable_register_member', true);
         settingLoad('system.csp_enabled', true);
         settingLoad('system.redirect_to', "/account");
         settingLoad('system.privacy_url', null);
@@ -266,7 +271,7 @@ class Setting extends Master
         settingLoad('system.policy_cookies', null);
 
         //Session settings
-        settingLoad('session.driver', 'database');
+        //settingLoad('session.driver', 'database');
         settingLoad('session.lifetime', 7200);
         settingLoad('session.expire_on_close', false);
         settingLoad('session.encrypt', false);
@@ -277,6 +282,12 @@ class Setting extends Master
         settingLoad('session.secure', true);
         settingLoad('session.http_only', true);
         settingLoad('session.partitioned', false);
+
+        // Settings routes
+        settingLoad('routes.users.developers', false);
+        settingLoad('routes.users.api', false);
+        settingLoad('routes.users.clients', false);
+        settingLoad('routes.guest.register', true);
     }
 
     /**
@@ -481,6 +492,7 @@ class Setting extends Master
      */
     public static function getPaymentSettings()
     {
+
         Config::set('billing.methods.stripe.name', settingItem('billing.methods.stripe.name', 'Credit Card (Stripe)'));
         Config::set('billing.methods.stripe.icon', settingItem('billing.methods.stripe.icon', 'mdi-credit-card-outline'));
         Config::set('billing.methods.stripe.enable', settingItem('billing.methods.stripe.enable', true));
@@ -491,6 +503,11 @@ class Setting extends Master
         Config::set('billing.methods.offline.name', settingItem('billing.methods.offline.name', 'Peer 2 Peer'));
         Config::set('billing.methods.offline.icon', settingItem('billing.methods.offline.icon', 'mdi-cash-register'));
         Config::set('billing.methods.offline.enable', settingItem('billing.methods.offline.enable', true));
+
+        Config::set('billing.renew.enable', settingItem('billing.renew.enable', false));
+        Config::set('billing.renew.hours_before', settingItem('billing.renew.hours_before', 10));
+        Config::set('billing.renew.bonus_enabled', settingItem('billing.renew.bonus_enabled', false));
+        Config::set('billing.renew.grace_period_days', settingItem('billing.renew.grace_period_days', 5));
     }
 
     /**
@@ -507,7 +524,6 @@ class Setting extends Master
         Config::set('system.disable_create_user_by_command', settingItem('system.disable_create_user_by_command', false));
         Config::set('system.destroy_user_after', settingItem('system.destroy_user_after', 30));
         Config::set('system.code_2fa_email_expires', settingItem('system.code_2fa_email_expires', 5));
-        Config::set('system.enable_register_member', settingItem('system.enable_register_member', true));
         Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
         Config::set('system.privacy_url', settingItem('system.privacy_url', null));
@@ -524,7 +540,7 @@ class Setting extends Master
      */
     public static function getSessionSettings()
     {
-        Config::set('session.driver', settingItem('session.driver', 'database'));
+        Config::set('session.driver', 'database');// default session driver
         Config::set('session.lifetime', settingItem('session.lifetime', 7200));
         Config::set('session.expire_on_close', settingItem('session.expire_on_close', false));
         Config::set('session.encrypt', settingItem('session.encrypt', false));
@@ -561,5 +577,14 @@ class Setting extends Master
         Config::set('cache.stores.dynamodb.region', settingItem('cache.stores.dynamodb.region', 'us-east-1', null));
         Config::set('cache.stores.dynamodb.table', settingItem('cache.stores.dynamodb.table', 'cache', null));
         Config::set('cache.stores.dynamodb.table', settingItem('cache.stores.dynamodb.endpoint', null, null));
+    }
+
+
+    public static function getRoutesSettings()
+    {
+        Config::set('routes.users.developers', settingItem('routes.users.developers', false));
+        Config::set('routes.users.api', settingItem('routes.users.api', false));
+        Config::set('routes.users.clients', settingItem('routes.users.clients', false));
+        Config::set('routes.guest.register', settingItem('routes.guest.register', true));
     }
 }

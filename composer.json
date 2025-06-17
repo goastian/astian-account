@@ -22,7 +22,6 @@
         "arcanedev/log-viewer": "^10.1",
         "doctrine/dbal": "^3.9",
         "elyerr/api-response": "^1.0",
-        "elyerr/echo-client-php": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^10.0",
