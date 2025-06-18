@@ -1,5 +1,5 @@
 <?php
-namespace App\Traits;
+namespace App\Repositories\Traits;
 
 use App\Models\User\UserScope;
 use Laravel\Passport\Scope;
@@ -10,11 +10,11 @@ trait Scopes
 {
     /**
      * Retrieve all scopes available for the authenticated user corresponding to the API key.
-     * @return array|\Illuminate\Database\Eloquent\Collection<int, Scope>|\Illuminate\Support\Collection<int, Scope>
+     * @param mixed $api_key
+     * @return \Illuminate\Database\Eloquent\Collection<int, Scope>|\Illuminate\Support\Collection<int, Scope>
      */
     public function scopes($api_key = true)
     {
-
         $query = ModelScope::query();
         $query->where('active', true)->with('role');
 

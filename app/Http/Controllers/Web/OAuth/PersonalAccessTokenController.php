@@ -1,15 +1,14 @@
 <?php
 namespace App\Http\Controllers\Web\OAuth;
-
-use App\Traits\Scopes;
-use App\Models\OAuth\Token;
+ 
+use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use App\Transformers\OAuth\PersonalTokenTransformer;
-use Inertia\Inertia;
 use Laravel\Passport\Http\Controllers\PersonalAccessTokenController as Controller;
 
-final class PersonalAccessTokenController extends Controller
+class PersonalAccessTokenController extends Controller
 {
 
     use Scopes, JsonResponser;

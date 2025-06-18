@@ -32,7 +32,7 @@ class Authenticate extends Middleware
         $next_page = $request->fullUrl();
 
         // Save url into the session
-        session(['redirect_to' => $next_page]);
+        session()->put('redirect_to', $next_page);
 
         return route('login');
     }

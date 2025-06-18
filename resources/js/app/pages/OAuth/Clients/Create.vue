@@ -14,7 +14,7 @@
             transition-show="scale"
             transition-hide="scale"
         >
-            <q-card class="w-100 py-4">
+            <q-card class="q-pa-md full-width">
                 <q-card-section class="text-center">
                     <h6 class="text-gray-500">Add new client</h6>
                 </q-card-section>
@@ -42,7 +42,7 @@
                     </q-input>
 
                     <q-checkbox
-                        v-model="confidential"
+                        v-model="form.confidential"
                         label="Confidential client"
                         color="orange"
                         :error="!!errors.confidential"
@@ -90,16 +90,14 @@ export default {
          */
         close() {
             this.client = {};
-            this.errors = {};
-            this.confidential = false;
+            this.errors = {}; 
             this.dialog = false;
         },
 
         open() {
             this.form.name = null;
             this.form.redirect = null;
-            this.form.confidential = false;
-            this.confidential = false;
+            this.form.confidential = false; 
             this.errors = {};
             this.dialog = true;
         },

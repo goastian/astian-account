@@ -5,24 +5,14 @@
         </q-tooltip>
     </q-btn>
 
-    <q-dialog
-        v-model="dialog"
-        persistent
-        transition-show="scale"
-        transition-hide="scale"
-    >
+    <q-dialog v-model="dialog" persistent transition-show="scale" transition-hide="scale">
         <q-card class="q-pa-md full-width">
             <q-card-section class="text-center">
                 <h6 class="text-gray-500">Update role</h6>
             </q-card-section>
             <q-card-section>
-                <q-input
-                    v-model="form.description"
-                    label="Description"
-                    outline
-                    :error="!!errors.redirect"
-                    type="textarea"
-                >
+                <q-input v-model="form.description" label="Description" outline :error="!!errors.redirect"
+                    type="textarea">
                     <template v-slot:error>
                         <v-error :error="errors.redirect"></v-error>
                     </template>
@@ -30,12 +20,7 @@
             </q-card-section>
 
             <q-card-actions align="right">
-                <q-btn
-                    outline
-                    color="primary"
-                    label="Accept"
-                    @click="updateRole"
-                />
+                <q-btn outline color="primary" label="Accept" @click="updateRole" />
 
                 <q-btn outline color="secondary" label="Close" @click="close" />
             </q-card-actions>
@@ -82,12 +67,7 @@ export default {
             try {
                 const res = await this.$server.put(
                     this.form.links.update,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                    }
+                    this.form
                 );
 
                 if (res.status == 200) {

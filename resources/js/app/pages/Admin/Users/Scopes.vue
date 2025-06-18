@@ -90,10 +90,7 @@ export default {
             try {
                 const res = await this.$server.post(
                     this.item.links.scopes,
-                    this.form,
-                    {
-                        headers: { "Content-Type": "multipart/form-data" },
-                    }
+                    this.form
                 );
 
                 if (res.status == 201) {

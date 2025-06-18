@@ -55,4 +55,10 @@ class OAuthSessionToken extends Master
     {
         return $this->belongsTo(Session::class);
     }
+
+
+    public function token()
+    {
+        return $this->hasOne(Token::class, 'id', 'oauth_access_token_id');
+    }
 }

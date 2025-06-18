@@ -9,50 +9,26 @@
                 </q-toolbar>
                 <div class="row q-col-gutter-md q-ma-sm">
                     <div class="col-xs-12">
-                        <q-input
-                            filled
-                            dense
-                            v-model="form.current_password"
-                            label="Current password"
-                            type="password"
-                            :error="!!errors.current_password"
-                        />
+                        <q-input filled dense v-model="form.current_password" label="Current password" type="password"
+                            :error="!!errors.current_password" />
                         <v-error :error="errors.current_password" />
                     </div>
 
                     <div class="col-xs-12">
-                        <q-input
-                            filled
-                            dense
-                            type="password"
-                            v-model="form.password"
-                            label="New password"
-                            :error="!!errors.password"
-                        />
+                        <q-input filled dense type="password" v-model="form.password" label="New password"
+                            :error="!!errors.password" />
                         <v-error :error="errors.password" />
                     </div>
 
                     <div class="col-xs-12">
-                        <q-input
-                            filled
-                            dense
-                            type="password"
-                            v-model="form.password_confirmation"
-                            label="Confirm password"
-                            :error="!!errors.password_confirmation"
-                        />
+                        <q-input filled dense type="password" v-model="form.password_confirmation"
+                            label="Confirm password" :error="!!errors.password_confirmation" />
                         <v-error :error="errors.password_confirmation" />
                     </div>
                 </div>
 
                 <div class="q-mt-lg">
-                    <q-btn
-                        label="Submit"
-                        color="primary"
-                        unelevated
-                        no-caps
-                        @click="update"
-                    />
+                    <q-btn label="Submit" color="primary" unelevated no-caps @click="update" />
                 </div>
             </div>
         </q-page>
@@ -77,12 +53,7 @@ export default {
             try {
                 const res = await this.$server.put(
                     this.$page.props.user.links.change_password,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                    }
+                    this.form
                 );
                 if (res.status === 200) {
                     this.form = {};

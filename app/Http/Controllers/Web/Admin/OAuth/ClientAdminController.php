@@ -3,27 +3,26 @@
 namespace App\Http\Controllers\Web\Admin\OAuth;
 
 use Inertia\Inertia;
-use App\Rules\BooleanRule;
 use App\Models\OAuth\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Laravel\Passport\ClientRepository;
 use App\Http\Controllers\WebController;
-use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Http\Requests\Client\StoreRequest;
+use App\Http\Requests\Client\UpdateRequest;
+use App\Repositories\OAuth\ClientRepository;
 
 class ClientAdminController extends WebController
 {
     /**
      * The client repository instance.
      *
-     * @var \Laravel\Passport\ClientRepository
+     * @var  ClientRepository
      */
-    protected $clients;
+    protected $repository;
 
-    public function __construct(ClientRepository $clients)
+    public function __construct(ClientRepository $clientRepository)
     {
         parent::__construct();
-        $this->clients = $clients;
+        $this->repository = $clientRepository;
         $this->middleware('userCanAny:administrator_application_full,administrator_application_view')->only('index');
         $this->middleware('userCanAny:administrator_application_full,administrator_application_show')->only('show');
         $this->middleware('userCanAny:administrator_application_full,administrator_application_create')->only('store');
@@ -32,27 +31,14 @@ class ClientAdminController extends WebController
     }
 
     /**
-     * 
+     * Retrieve the all clients for admin users
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
      */
-    public function index(Client $client)
+    public function index(Request $request)
     {
-        // Retrieve params of the request
-        $params = $this->filter_transform($client->transformer);
-
-        // Prepare query
-        $data = $client->query();
-
-        // Filter entries without a user ID and that do not belong to a personal access client
-        $data = $data->whereNull('user_id')->where('personal_access_client', false);
-
-        // Search 
-        $data = $this->searchByBuilder($data, $params);
-        
-        // Order by
-        $data = $this->orderByBuilder($data, $client->transformer);
-
-        if (request()->wantsJson()) {
-            return $this->showAllByBuilder($data, $client->transformer);
+        if ($request->wantsJson()) {
+            return $this->repository->searchClientsForAdmin($request);
         }
 
         return Inertia::render("Admin/Clients/Index", [
@@ -61,58 +47,23 @@ class ClientAdminController extends WebController
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Create admin resource
+     * @param \App\Http\Requests\Client\StoreRequest $request
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, Client $client)
+    public function store(StoreRequest $request)
     {
-        $this->validate($request, [
-            'name' => 'required|max:191',
-            'redirect' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    $urls = explode(',', $value);
-                    foreach ($urls as $url) {
-                        $url = trim($url);
-                        if (!preg_match('/^(https?:\/\/)/i', $url)) {
-                            $fail(__('Each URL in :attribute must start with http or https.', ['attribute' => $attribute]));
-                            break;
-                        }
-                    }
-
-                }
-            ],
-            'confidential' => new BooleanRule(),
-        ]);
-
-        $client = $this->clients->create(
-            null,
-            $request->name,
-            $request->redirect,
-            null,
-            false,
-            false,
-            (bool) $request->confidential
-        );
-
-        return $this->showOne($client, $client->transformer, 201);
+        return $this->repository->createClientForAdmin($request->toArray());
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Display specific resource for admin
+     * @param \App\Models\OAuth\Client $client
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function show(Client $client)
     {
-        if ($client->personal_access_client) {
-            throw new ReportError(__('Not found'), 404);
-        }
-
-        return $this->showOne($client, $client->transformer);
+        return $this->repository->retrieveClientForAdmin($client->id);
     }
 
     /**
@@ -122,56 +73,9 @@ class ClientAdminController extends WebController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+    public function update(UpdateRequest $request, Client $client)
     {
-        if ($client->personal_access_client) {
-            throw new ReportError(__('Not found'), 404);
-        }
-
-        $this->validate($request, [
-            'name' => 'nullable|max:191',
-            'redirect' => [
-                'nullable',
-                function ($attribute, $value, $fail) {
-                    if (!empty($value)) {
-                        $urls = explode(',', $value);
-                        foreach ($urls as $url) {
-                            $url = trim($url);
-                            if (!preg_match('/^(https?:\/\/)/i', $url)) {
-                                $fail(__('Each URL in :attribute must start with http or https.', ['attribute' => $attribute]));
-                                break;
-                            }
-                        }
-                    }
-                }
-            ],
-        ]);
-
-        DB::transaction(function () use ($request, $client) {
-            $updated = false;
-
-            if ($this->is_different($client->name, $request->name)) {
-                $client->name = $request->name;
-                $updated = true;
-            }
-
-            if ($this->is_different($client->redirect, $request->redirect)) {
-                $client->redirect = $request->redirect;
-                $updated = true;
-            }
-
-            if ($this->is_different($client->revoked, $request->revoked)) {
-                $client->revoked = $request->revoked;
-                $client->tokens()->update(['revoked' => true]);
-                $updated = true;
-            }
-
-            if ($updated) {
-                $client->push();
-            }
-        });
-
-        return $this->showOne($client, $client->transformer);
+        return $this->repository->updateClientForAdmin($client->id, $request->toArray());
     }
 
     /**
@@ -182,14 +86,6 @@ class ClientAdminController extends WebController
      */
     public function destroy(Client $client)
     {
-        if ($client->personal_access_client) {
-            throw new ReportError(__('Not found'), 404);
-        }
-
-        $client->tokens()->update(['revoked' => true]);
-
-        $client->delete();
-
-        return $this->showOne($client, $client->transformer);
+        return $this->repository->revokeClientForAdmin($client->id);
     }
 }

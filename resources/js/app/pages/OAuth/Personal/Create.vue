@@ -133,7 +133,7 @@ export default {
             return grouped;
         },
     },
-    
+
     methods: {
         async open() {
             this.getScopes();
@@ -166,6 +166,7 @@ export default {
             } catch (err) {}
         },
         async create() {
+            this.token = null;
             try {
                 const res = await this.$server.post(
                     this.$page.props.route,

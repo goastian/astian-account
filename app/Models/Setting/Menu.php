@@ -75,32 +75,38 @@ class Menu
                         [
                             'name' => 'Me',
                             'route' => route('users.dashboard'),
-                            'icon' => 'mdi-information'
+                            'icon' => 'mdi-information',
+                            'show' => true,
                         ],
                         [
                             'name' => 'profile',
                             'route' => route('users.profile'),
-                            'icon' => 'mdi-account-details-outline'
+                            'icon' => 'mdi-account-details-outline',
+                            'show' => true,
                         ],
                         [
                             'name' => 'Password',
                             'route' => route('users.password'),
-                            'icon' => 'mdi-lock-reset'
+                            'icon' => 'mdi-lock-reset',
+                            'show' => true,
                         ],
                         [
                             'name' => '2FA',
                             'route' => route('users.2fa.request'),
-                            'icon' => 'mdi-two-factor-authentication'
+                            'icon' => 'mdi-two-factor-authentication',
+                            'show' => true,
                         ],
                         [
                             'name' => 'Subscriptions',
                             'route' => route('users.subscriptions.index'),
-                            'icon' => 'mdi-gift-outline'
+                            'icon' => 'mdi-gift-outline',
+                            'show' => true,
                         ],
                         [
                             'name' => 'Store',
                             'route' => route('plans.index'),
-                            'icon' => 'mdi-store-search'
+                            'icon' => 'mdi-store-search',
+                            'show' => true,
                         ],
                     ]
                 ],

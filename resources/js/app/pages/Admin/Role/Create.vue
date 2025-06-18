@@ -1,46 +1,25 @@
 <template>
     <div class="q-pa-md q-gutter-sm">
-        <q-btn
-            round
-            outline
-            color="positive"
-            @click="open"
-            icon="mdi-plus-circle"
-        >
+        <q-btn round outline color="positive" @click="open" icon="mdi-plus-circle">
             <q-tooltip transition-show="rotate" transition-hide="rotate">
                 Add new role
             </q-tooltip>
         </q-btn>
 
-        <q-dialog
-            v-model="dialog"
-            persistent
-            transition-show="scale"
-            transition-hide="scale"
-        >
+        <q-dialog v-model="dialog" persistent transition-show="scale" transition-hide="scale">
             <q-card class="q-pa-md full-width">
                 <q-card-section class="text-center">
                     <h6 class="text-gray-500">Add new role</h6>
                 </q-card-section>
                 <q-card-section>
-                    <q-input
-                        v-model="form.name"
-                        label="Name"
-                        outline
-                        :error="!!errors.name"
-                    >
+                    <q-input v-model="form.name" label="Name" outline :error="!!errors.name">
                         <template v-slot:error>
                             <v-error :error="errors.name"></v-error>
                         </template>
                     </q-input>
 
-                    <q-input
-                        v-model="form.description"
-                        label="Description"
-                        outline
-                        :error="!!errors.description"
-                        type="textarea"
-                    >
+                    <q-input v-model="form.description" label="Description" outline :error="!!errors.description"
+                        type="textarea">
                         <template v-slot:error>
                             <v-error :error="errors.description" />
                         </template>
@@ -48,12 +27,7 @@
 
                     <q-item tag="label" v-ripple>
                         <q-item-section avatar>
-                            <q-checkbox
-                                v-model="form.system"
-                                val="orange"
-                                color="orange"
-                                :error="!!errors.system"
-                            >
+                            <q-checkbox v-model="form.system" val="orange" color="orange" :error="!!errors.system">
                                 <template v-slot:error>
                                     <v-error :error="errors.system" />
                                 </template>
@@ -69,19 +43,9 @@
                 </q-card-section>
 
                 <q-card-actions align="right">
-                    <q-btn
-                        outline
-                        color="positive"
-                        label="Accept"
-                        @click="create"
-                    />
+                    <q-btn outline color="positive" label="Accept" @click="create" />
 
-                    <q-btn
-                        outline
-                        color="secondary"
-                        label="Close"
-                        @click="close"
-                    />
+                    <q-btn outline color="secondary" label="Close" @click="close" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -124,12 +88,7 @@ export default {
             try {
                 const res = await this.$server.post(
                     this.$page.props.route,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                    this.form
                 );
 
                 if (res.status == 201) {

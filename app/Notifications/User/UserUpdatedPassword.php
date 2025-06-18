@@ -1,11 +1,11 @@
 <?php
 namespace App\Notifications\User;
-
-use App\Traits\Standard;
+ 
 use Illuminate\Bus\Queueable;
+use App\Repositories\Traits\Standard;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
 class UserUpdatedPassword extends Notification implements ShouldQueue
 {

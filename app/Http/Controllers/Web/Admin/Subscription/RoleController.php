@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
+use App\Http\Requests\Role\StoreRequest;
+use App\Http\Requests\Role\UpdateRequest;
+use App\Repositories\RoleRepository;
 use App\Rules\StringOnlyRule;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
@@ -12,39 +15,38 @@ use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class RoleController extends WebController
 {
-    public function __construct()
+
+    /**
+     * Repository
+     * @var RoleRepository
+     */
+    public $repository;
+
+    /**
+     * Construct
+     * @param \App\Repositories\RoleRepository $roleRepository
+     */
+    public function __construct(RoleRepository $roleRepository)
     {
         parent::__construct();
+        $this->repository = $roleRepository;
         $this->middleware('userCanAny:administrator_role_full,administrator_role_view')->only('index');
         $this->middleware('userCanAny:administrator_role_full,administrator_role_show')->only('show');
         $this->middleware('userCanAny:administrator_role_full,administrator_role_create')->only('store');
         $this->middleware('userCanAny:administrator_role_full,administrator_role_update')->only('update');
         $this->middleware('userCanAny:administrator_role_full,administrator_role_destroy')->only('destroy');
-
         $this->middleware('wants.json')->only('show');
     }
 
     /**
-     *  Display a listing of the resource.
-     * @param \App\Models\Subscription\Role $role
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * Show the all resources
+     * @param \Illuminate\Http\Request $request
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser|\Inertia\Response
      */
-    public function index(Role $role)
+    public function index(Request $request)
     {
-        // Retrieve params of the request
-        $params = $this->filter_transform($role->transformer);
-
-        // Prepare query
-        $data = $role->query();
-
-        // Search
-        $data = $this->searchByBuilder($data, $params);
-
-        // Order by
-        $data = $this->orderByBuilder($data);
-
-        if (request()->wantsJson()) {
-            return $this->showAllByBuilder($data, $role->transformer);
+        if ($request->wantsJson()) {
+            return $this->repository->search($request);
         }
 
         return Inertia::render("Admin/Role/Index", [
@@ -53,107 +55,43 @@ class RoleController extends WebController
     }
 
     /**
-     * Show one resource
+     * Show detail
      * @param \App\Models\Subscription\Role $role
      * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function show(Role $role)
     {
-        return $this->showOne($role, $role->transformer);
+        return $this->repository->details($role->id);
     }
 
     /**
-     * Create new resource
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Subscription\Role $role
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * Create new role
+     * @param \App\Http\Requests\Role\StoreRequest $request
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
-    public function store(Request $request, Role $role)
+    public function store(StoreRequest $request)
     {
-        $this->validate($request, [
-            'name' => [
-                'required',
-                new StringOnlyRule(),
-                function ($attribute, $value, $fail) use ($role) {
-                    $slug = $this->slug($value);
-                    $model = $role->where('slug', $slug)->first();
-
-                    if ($model) {
-                        $fail(__("The :attribute already exists", ['attribute' => $attribute]));
-                    }
-                }
-            ],
-            'description' => ['required', 'max:190'],
-        ]);
-
-        $request->merge([
-            'slug' => $this->slug($request->name),
-        ]);
-
-        DB::transaction(function () use ($request, $role) {
-            $role = $role->fill($request->all());
-            $role->save();
-        });
-
-        //send event
-
-
-        return $this->showOne($role, $role->transformer, 201);
+        return $this->repository->create($request->toArray());
     }
 
     /**
-     * Update resources
-     * @param \Illuminate\Http\Request $request
+     * Update resource
+     * @param \App\Http\Requests\Role\UpdateRequest $request
      * @param \App\Models\Subscription\Role $role
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRequest $request, Role $role)
     {
-        $this->validate($request, [
-            'description' => ['nullable', 'max:300'],
-            'system' => ['nullable', new BooleanRule()]
-        ]);
-
-        DB::transaction(function () use ($request, $role) {
-
-            $update = false;
-
-            if ($request->has('description') && $role->description != $request->description) {
-                $update = true;
-                $role->description = $request->description;
-            }
-
-            if ($update) {
-                $role->push();
-                //send event
-
-            }
-
-        });
-
-        return $this->showOne($role, $role->transformer, 200);
+        return $this->repository->update($role->id, $request->toArray());
     }
 
     /**
-     * Destroy resources
+     * Delete role
      * @param \App\Models\Subscription\Role $role
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
     public function destroy(Role $role)
     {
-        collect(Role::rolesByDefault())->map(function ($value, $key) use ($role) {
-            throw_if($value->name == $role->name, new ReportError(__("This action cannot be completed because this role is a system role and cannot be deleted."), 403));
-        });
-
-        throw_if($role->system, new ReportError(__("This action cannot be completed because this role is a system role and cannot be deleted."), 403));
-
-        throw_if($role->scopes()->count() > 0, new ReportError(__("This action cannot be completed because this role is currently assigned to one or more scopes and cannot be deleted."), 403));
-
-        $role->delete();
-
-        //send event
-
-
-        return $this->showOne($role, $role->transformer);
+        return $this->repository->delete($role->id);
     }
 }

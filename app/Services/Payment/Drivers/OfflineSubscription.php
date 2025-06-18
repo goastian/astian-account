@@ -3,12 +3,27 @@ namespace App\Services\Payment\Drivers;
 
 use Illuminate\Support\Fluent;
 use App\Models\Subscription\Transaction;
+use App\Repositories\TransactionRepository;
 use App\Services\Payment\Contracts\PaymentMethod;
 
 class OfflineSubscription implements PaymentMethod
 {
-
+    /**
+     * Provider name
+     * @var string
+     */
     protected $method = "offline";
+
+
+    /**
+     * Repository of the transaction
+     */
+    public $repository;
+
+    public function __construct(TransactionRepository $transactionRepository)
+    {
+        $this->repository = $transactionRepository;
+    }
 
     /**
      * Process data
@@ -20,11 +35,11 @@ class OfflineSubscription implements PaymentMethod
         $user = auth()->user();
 
         $session = new Fluent([
-            'id' => Transaction::generateSessionId(),
+            'id' => $this->repository->generateSessionId(),
             'currency' => $data['price']['currency'],
             'amount_subtotal' => $data['price']['amount'],
             'amount_total' => $data['price']['amount'],
-            'payment_intent' => Transaction::generateIntent(),
+            'payment_intent' => $this->repository->generateIntent(),
             'metadata' => [
                 'user_id' => $user->id,
                 'transaction_code' => $data['transaction_code'],
@@ -58,6 +73,6 @@ class OfflineSubscription implements PaymentMethod
         $response["status"] = config('billing.status.successful.name');
         $response["receipt_url"] = route('users.checkout.success') . "?code={$response['metadata']['transaction_code']}";
 
-        Transaction::paymentSuccessfully($response, 'succeed');
+        $this->repository->paymentSuccessfully($response, 'succeed');
     }
 }
