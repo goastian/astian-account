@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Middleware;
-
-use Closure;
-use App\Traits\Scopes;
+  
 use Laravel\Passport\Client;
+use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Http\Middleware\CheckScopes as middleware;

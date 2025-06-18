@@ -1,13 +1,10 @@
 <?php
 
 namespace App\Http\Middleware;
-
-use Closure;
-use App\Traits\Scopes;
-use Laravel\Passport\Token;
+  
 use Laravel\Passport\Client;
-use Elyerr\ApiResponse\Exceptions\ReportError;
-use Laravel\Passport\Exceptions\MissingScopeException;
+use App\Repositories\Traits\Scopes;
+use Elyerr\ApiResponse\Exceptions\ReportError; 
 use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Http\Middleware\CheckForAnyScope as middleware;
 

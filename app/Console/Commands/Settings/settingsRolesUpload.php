@@ -88,13 +88,14 @@ class settingsRolesUpload extends Command
                         //Uploading Services Available for this groups
                         $service = Service::firstOrCreate(
                             [
-                                'name' => $this->slug($srv->name),
+                                'name' => $srv->name,
                                 'group_id' => $group->id
                             ],
                             [
                                 'name' => $srv->name,
                                 'slug' => $this->slug($srv->name),
                                 'description' => $srv->description,
+                                'visibility' => $srv->visibility ?? 'private',
                                 'system' => 1,
                                 'group_id' => $group->id
                             ]

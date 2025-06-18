@@ -8,7 +8,7 @@ use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\Setting\Terminal;
 use App\Models\Subscription\Group;
-use Illuminate\Support\Facades\DB; 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,11 +18,46 @@ class User extends Auth
 {
     use SoftDeletes;
 
+
     /**
      * Transformer
      * @var 
      */
     public $transformer = UserTransformer::class;
+
+    protected $fillable = [
+        "name",
+        "last_name",
+        "email",
+        'password',
+        'country',
+        'city',
+        'address',
+        'dial_code',
+        'phone',
+        'birthday',
+        'verified_at',
+        'm2fa',
+        'totp',
+        'stripe_customer_id',
+        'partner_id',
+        'accept_cookies',
+        'accept_terms',
+        'last_connected',
+    ];
+
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'verified_at' => 'datetime',
+        'accept_cookies' => 'boolean',
+        'accept_terms' => 'boolean',
+        'last_connected' => 'datetime'
+    ];
 
     /**
      * Destroy users

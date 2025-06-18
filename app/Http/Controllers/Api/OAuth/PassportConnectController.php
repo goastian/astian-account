@@ -1,9 +1,9 @@
 <?php
 namespace App\Http\Controllers\Api\OAuth;
-
-use App\Traits\Scopes;
-use Illuminate\Http\Request; 
-use App\Http\Controllers\ApiController; 
+ 
+use Illuminate\Http\Request;
+use App\Repositories\Traits\Scopes;
+use App\Http\Controllers\ApiController;
 use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
 
 class PassportConnectController extends ApiController
@@ -29,10 +29,9 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Gateway to verify if a user is authenticated. This request includes Authorization headers.
-     *
-     * @param Request $request
-     *
+     * Gateway to verify if a user is authenticated. 
+     * This request includes Authorization headers.
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     public function check_authentication(Request $request)
@@ -40,8 +39,9 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Gateway to verify if at least one scope is present. This request includes Authorization and X-SCOPES headers.
-     *
+     * Gateway to verify if at least one scope is present. 
+     * This request includes Authorization and X-SCOPES headers.
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     public function check_scope(Request $request)
@@ -49,8 +49,9 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Gateway to verify if all scopes are present. This request includes Authorization and X-SCOPES headers.
-     *
+     * Gateway to verify if all scopes are present. 
+     * This request includes Authorization and X-SCOPES headers.
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     public function check_scopes(Request $request)
@@ -58,8 +59,9 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Gateway to verify if client credentials are correct. This request includes Authorization header and optionally X-SCOPES header.
-     *
+     * Gateway to verify if client credentials are correct. 
+     * This request includes Authorization header and optionally X-SCOPES header.
+     * @param \Illuminate\Http\Request $request
      * @return void
      */
     public function check_client_credentials(Request $request)
@@ -67,7 +69,8 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Check if the user has scope
+     * Gateway to verify whether the user is authorized to perform an action.
+     * This request includes Authorization header and optionally X-SCOPE header.
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
@@ -83,7 +86,7 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Gateway to get information about the authenticatable user
+     * Gateway to retrieve information about the auth user
      * @param \Illuminate\Http\Request $request
      */
     public function authenticated(Request $request)
@@ -92,8 +95,9 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Revoke authorization to the current client
+     * Gateway close session
      * @param \Illuminate\Http\Request $request
+     * @param \App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository $oAuthSessionTokenRepository
      * @return mixed|\Illuminate\Http\JsonResponse
      */
     public function revokeAuthorization(Request $request, OAuthSessionTokenRepository $oAuthSessionTokenRepository)
@@ -108,7 +112,8 @@ class PassportConnectController extends ApiController
     }
 
     /**
-     * Get the all available scopes for the auth user
+     * Gateway to retrieve the all scopes available for the auth user
+     * @return \Illuminate\Database\Eloquent\Collection<int, \Laravel\Passport\Scope>|\Illuminate\Support\Collection<int, \Laravel\Passport\Scope>
      */
     public function access()
     {

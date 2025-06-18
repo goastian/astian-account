@@ -45,41 +45,11 @@ class Partner extends Master
 
     /**
      * Referral Link
-     * @return array
+     * @return string|null
      */
     public function referLinks()
     {
-        if (empty($this->code)) {
-            return [];
-        }
-
-        return [
-            'For sales' => route('plans.index', ['referral_code' => $this->code]),
-        ];
-    }
-
-    /**
-     * Generate code
-     * @param mixed $prefix
-     * @param mixed $length
-     * @return string
-     */
-    public static function generateReferralCode($length = 32)
-    {
-        $prefix = strtoupper(substr(auth()->user()->name, 0, 2));
-        $random = strtoupper(Str::random($length));
-        return $prefix . "_" . $random;
-    }
-
-    /**
-     * Update commission rate
-     * @param mixed $percentage
-     * @return void
-     */
-    public function updateCommissionRate($percentage)
-    {
-        $this->commission_rate = $percentage;
-        $this->push();
+        return $this->code ? route('plans.index', ['referral_code' => $this->code]) : null;
     }
 
     /**

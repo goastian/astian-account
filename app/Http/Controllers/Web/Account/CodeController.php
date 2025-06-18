@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\WebController;
-use App\Providers\RouteServiceProvider;
 use App\Http\Middleware\Auth2faMiddleware;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -31,19 +30,15 @@ class CodeController extends WebController
     public function create()
     {
         if (!request()->user()) {
-
-            $params = request()->all();
-
-            return view('factor.email', ['query' => $params]);
+            return view('factor.email');
         }
 
-        return redirect(RouteServiceProvider::home());
+        return redirectToHome();
     }
 
     /**
-     * get token using session id
-     *
-     * @param Request $request
+     * Recovery token
+     * @param \Illuminate\Http\Request $request
      * @return Code
      */
     public function getToken(Request $request)
@@ -56,7 +51,7 @@ class CodeController extends WebController
     }
 
     /**
-     * User authentication via 2FA
+     * Make login with 2FA token 
      * @param \Illuminate\Http\Request $request
      * @return mixed|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|null
      */
@@ -70,40 +65,46 @@ class CodeController extends WebController
 
         $date = new DateTime($code->created_at);
 
-
         $date->add(new DateInterval("PT" . config('system.code_2fa_email_expires', 5) . "M"));
         $expire = $date->format('Y-m-d H:i:s');
 
-        if ($code->email != $request->email) {
-            return redirect('login')->with([
-                'status' => __('Avoid reloading the page before entering the code 2FA'),
+        // Verify email
+        if ($code->email != session()->get('email')) {
+            return redirect()->route('login')
+                ->with([
+                    'status' => __('Email validation failed due to detected tampering. The process cannot continue.'),
+                ]);
+        }
+
+        // Verify token
+        if (!Hash::check($request->token, $code->code)) { 
+            return back()->with([
+                'warning' => __('Invalid verification code. Please check your email and try again.'),
             ]);
         }
 
-        if (!Hash::check($request->token, $code->code)) {
-            return redirect()->back()->with([
-                'warning' => __('Token invalid'),
-                'email' => $request->email,
-            ]);
-        }
-
+        //Destroy expired token
         if (now() > $expire) {
             Code::destroyToken($code->status);
-            return redirect()->back()->with([
-                'warning' => __('Token expired'),
-                'email' => $request->email,
+            return back()->with([
+                'warning' => __('The authentication code is no longer valid. Please try again.'),
             ]);
         }
 
+        //Login user by email
         Auth::login(User::where('email', $code->email)->first());
 
+        // Remove token
         Code::destroyToken($code->status);
 
-        return RouteServiceProvider::home();
+        //Remove email of the session
+        session()->forget('email');
+
+        return redirectToHome();
     }
 
     /**
-     * shoe form to request token
+     * Show the form to type code 2fa
      * @return \Inertia\Response
      */
     public function formToRequestToken()
@@ -112,7 +113,7 @@ class CodeController extends WebController
     }
 
     /**
-     * Send request to obtain 2FA activation token.
+     * Send request to generate a new token
      * @param \Illuminate\Http\Request $request
      * @throws \Elyerr\ApiResponse\Exceptions\ReportError
      * @return mixed|\Illuminate\Http\JsonResponse
@@ -143,7 +144,7 @@ class CodeController extends WebController
     }
 
     /**
-     *  Authorize users to activate 2FA using a token.
+     * Send request to enable or disable 2FA authorization code
      * @param \Illuminate\Http\Request $request
      * @return mixed|\Illuminate\Http\JsonResponse
      */
