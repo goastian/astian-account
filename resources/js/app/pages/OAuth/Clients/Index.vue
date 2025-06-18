@@ -1,62 +1,56 @@
 <template>
     <v-user-layout>
         <q-toolbar>
-            <q-toolbar-title> List of clients </q-toolbar-title>
+            <q-toolbar-title>List of clients</q-toolbar-title>
             <v-create @created="getClients()"></v-create>
         </q-toolbar>
-        <div class="row q-col-gutter-md">
-            <div
-                class="col-xs-12 col-md-4 col-lg-3 q-gutter-sm"
-                v-for="client in clients"
-                :key="client.id"
-            >
-                <q-card flat bordered>
-                    <q-card-section>
-                        <div class="text-h6">{{ client.name }}</div>
-                        <div class="text-caption text-grey">
-                            Created: {{ client.created_at }}
-                        </div>
-                    </q-card-section>
 
-                    <q-separator />
+        <q-table
+            flat
+            bordered
+            :rows="clients"
+            :columns="columns"
+            row-key="id"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+        >
+            <template v-slot:body-cell-credentials="props">
+                <q-td :props="props">
+                    <div class="q-gutter-xs">
+                        <q-chip
+                            clickable
+                            @click="copyToClipboard(props.row.id)"
+                            color="green"
+                            text-color="white"
+                            icon="mdi-content-copy"
+                            label="ID"
+                        >
+                            <q-tooltip>Copy ID</q-tooltip>
+                        </q-chip>
+                        <q-chip
+                            v-if="props.row.secret"
+                            clickable
+                            @click="copyToClipboard(props.row.secret)"
+                            color="green"
+                            text-color="white"
+                            icon="mdi-content-copy"
+                            label="Secret"
+                        >
+                            <q-tooltip>Copy Secret</q-tooltip>
+                        </q-chip>
+                    </div>
+                </q-td>
+            </template>
 
-                    <q-card-section class="q-gutter-sm">
-                        <div>
-                            <q-chip
-                                clickable
-                                @click="copyToClipboard(client.id)"
-                                color="green"
-                                text-color="white"
-                                icon="mdi-content-copy"
-                                label="*****"
-                            >
-                                <q-tooltip>Copy ID</q-tooltip>
-                            </q-chip>
-                        </div>
-
-                        <div v-if="client.secret">
-                            <q-chip
-                                clickable
-                                @click="copyToClipboard(client.secret)"
-                                color="green"
-                                text-color="white"
-                                icon="mdi-content-copy"
-                                label="*****"
-                            >
-                                <q-tooltip>Copy Secret</q-tooltip>
-                            </q-chip>
-                        </div>
-                    </q-card-section>
-
-                    <q-separator />
-
-                    <q-card-actions align="right">
-                        <v-update :item="client" @updated="getClients" />
-                        <v-delete :item="client" @deleted="getClients" />
-                    </q-card-actions>
-                </q-card>
-            </div>
-        </div>
+            <template v-slot:body-cell-actions="props">
+                <q-td :props="props">
+                    <div class="q-gutter-xs">
+                        <v-update :item="props.row" @updated="getClients" />
+                        <v-delete :item="props.row" @deleted="getClients" />
+                    </div>
+                </q-td>
+            </template>
+        </q-table>
 
         <div class="row justify-center q-mt-md">
             <q-pagination
@@ -85,12 +79,41 @@ export default {
         return {
             clients: [],
             pages: {
-                total_pages: 0,
+                total_pages: 1,
             },
             search: {
                 page: 1,
                 per_page: 15,
             },
+            columns: [
+                {
+                    name: "name",
+                    required: true,
+                    label: "Name",
+                    align: "left",
+                    field: (row) => row.name,
+                    sortable: true,
+                },
+                {
+                    name: "created_at",
+                    label: "Created",
+                    align: "left",
+                    field: (row) => row.created_at,
+                    sortable: true,
+                },
+                {
+                    name: "credentials",
+                    label: "Credentials",
+                    align: "center",
+                    field: (row) => row.id,
+                },
+                {
+                    name: "actions",
+                    label: "Actions",
+                    align: "right",
+                    field: (row) => row.id,
+                },
+            ],
         };
     },
 
@@ -107,9 +130,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.clients;
-        this.clients = values.data;
-        this.pages = values.meta.pagination;
+        this.getClients();
     },
 
     methods: {

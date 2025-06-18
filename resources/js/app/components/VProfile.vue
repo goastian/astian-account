@@ -1,17 +1,12 @@
 <template>
     <div class="text-center">
-        <q-btn flat round dense icon="mdi-dots-vertical">
+        <q-btn flat round dense icon="mdi-dots-vertical-circle-outline">
             <q-menu fit anchor="bottom right" self="top right">
                 <q-card style="min-width: 240px" class="q-pa-sm">
                     <!-- User Info -->
                     <div v-if="user?.id" class="q-pa-sm flex items-center">
                         <q-avatar size="40px" class="q-mr-sm">
-                            <q-avatar
-                                size="40px"
-                                class="q-mr-sm bg-primary text-white"
-                            >
-                                <q-icon name="mdi-account-circle" size="28px" />
-                            </q-avatar>
+                            <q-icon color="primary" name="mdi-account-circle" size="28px" />
                         </q-avatar>
                         <div>
                             <div class="text-weight-medium">
@@ -29,16 +24,21 @@
                     <q-list padding>
                         <q-item clickable @click="homePage">
                             <q-item-section avatar>
-                                <q-icon name="mdi-home" />
+                                <q-icon color="primary" name="mdi-home" />
                             </q-item-section>
                             <q-item-section>
                                 <q-item-label>Home page</q-item-label>
                             </q-item-section>
                         </q-item>
 
+                        <q-separator class="q-my-sm" />
+
                         <q-item v-if="user?.id" clickable @click="myAccount">
                             <q-item-section avatar>
-                                <q-icon name="mdi-home-account" />
+                                <q-icon
+                                    color="primary"
+                                    name="mdi-home-account"
+                                />
                             </q-item-section>
                             <q-item-section>
                                 <q-item-label>My account</q-item-label>
@@ -54,12 +54,12 @@
                             @click="logout"
                         >
                             <q-item-section avatar>
-                                <q-icon name="mdi-logout" />
+                                <q-icon color="negative" name="mdi-logout" />
                             </q-item-section>
                             <q-item-section>
-                                <q-item-label class="text-negative"
-                                    >Logout</q-item-label
-                                >
+                                <q-item-label class="text-negative">
+                                    Logout
+                                </q-item-label>
                             </q-item-section>
                         </q-item>
                     </q-list>

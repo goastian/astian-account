@@ -23,7 +23,9 @@
                         />
                     </q-item-section>
                     <q-item-section>
-                        <q-item-label>{{ scope.opt.label }}</q-item-label>
+                        <q-item-label>
+                            {{ scope.opt.label }}
+                        </q-item-label>
                     </q-item-section>
                 </q-item>
             </template>

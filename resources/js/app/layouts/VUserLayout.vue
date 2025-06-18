@@ -31,6 +31,7 @@
                     v-ripple
                     @click="open(item)"
                     :active="isActive(item)"
+                    v-show="item.show"
                 >
                     <q-item-section avatar>
                         <q-avatar class="text-primary" :icon="item.icon" />
