@@ -1,6 +1,6 @@
 <template>
-    <q-dialog v-model="dialog" full-screen persistent>
-        <q-card>
+    <q-dialog v-model="dialog" persistent>
+        <q-card class="q-pa-md full-width">
             <!-- Header -->
             <q-card-section class="row items-center">
                 <div class="text-h6 text-weight-bold">Assigned Scopes</div>
@@ -13,51 +13,26 @@
             <!-- Body -->
             <q-card-section class="q-gutter-y-md">
                 <div>
-                    <q-inner-loading
-                        :showing="loading"
-                        label="Please wait..."
-                        label-class="text-teal "
-                        label-style="font-size: 2em"
-                    />
+                    <q-inner-loading :showing="loading" label="Please wait..." label-class="text-teal "
+                        label-style="font-size: 2em" />
                 </div>
 
-                <div
-                    v-show="!loading"
-                    v-for="[groupName, services] in groupedRoles"
-                    :key="groupName"
-                    class="q-pa-md"
-                >
+                <div v-show="!loading" v-for="[groupName, services] in groupedRoles" :key="groupName" class="q-pa-md">
                     <div class="text-h5 q-mb-md text-ucfirst">
                         {{ groupName }}
                     </div>
 
-                    <div
-                        v-for="[serviceName, roles] in Object.entries(services)"
-                        :key="serviceName"
-                        class="q-mb-sm q-mb-md"
-                    >
-                        <div
-                            class="text-subtitle1 q-mb-sm text-ucfirst grey-3 q-rounded-borders shadow-1 q-pa-sm"
-                        >
+                    <div v-for="[serviceName, roles] in Object.entries(services)" :key="serviceName"
+                        class="q-mb-sm q-mb-md">
+                        <div class="text-subtitle1 q-mb-sm text-ucfirst grey-3 q-rounded-borders shadow-1 q-pa-sm">
                             {{ serviceName }}
 
                             <div class="row q-col-gutter-sm q-ma-sm q-pa-md">
-                                <q-card
-                                    v-for="(item, index) in roles"
-                                    :key="index"
-                                    class="col-12 q-pa-sm q-ma-sm"
-                                    flat
-                                    bordered
-                                >
+                                <q-card v-for="(item, index) in roles" :key="index" class="col-12 q-pa-sm q-ma-sm" flat
+                                    bordered>
                                     <div class="flex justify-between">
                                         <div>
-                                            <q-chip
-                                                color="blue-4"
-                                                text-color="white"
-                                                square
-                                                dense
-                                                icon="mdi-key"
-                                            >
+                                            <q-chip color="blue-4" text-color="white" square dense icon="mdi-key">
                                                 {{ item.scope.role.name }}
                                             </q-chip>
                                             <div class="text-caption">
@@ -67,13 +42,8 @@
                                             </div>
                                         </div>
                                         <div class="q-mt-sm">
-                                            <q-btn
-                                                outline
-                                                round
-                                                icon="mdi-delete-outline"
-                                                color="negative"
-                                                @click="confirmAction(item)"
-                                            />
+                                            <q-btn outline round icon="mdi-delete-outline" color="negative"
+                                                @click="confirmAction(item)" />
                                         </div>
                                     </div>
                                 </q-card>
@@ -104,25 +74,13 @@
 
             <q-card-actions align="right">
                 <q-btn outline label="Cancel" color="primary" v-close-popup />
-                <q-btn
-                    outline
-                    label="Accept"
-                    icon="mdi-delete-outline"
-                    color="positive"
-                    @click="revoke"
-                />
+                <q-btn outline label="Accept" icon="mdi-delete-outline" color="positive" @click="revoke" />
             </q-card-actions>
         </q-card>
     </q-dialog>
 
     <!-- Trigger Button -->
-    <q-btn
-        outline
-        round
-        icon="mdi-shield-remove-outline"
-        color="positive"
-        @click="openDialog"
-    >
+    <q-btn outline round icon="mdi-shield-remove-outline" color="positive" @click="openDialog">
         <q-tooltip transition-show="rotate" transition-hide="rotate">
             View assigned scopes
         </q-tooltip>
@@ -193,7 +151,7 @@ export default {
                     this.user_roles = res.data.data;
                     this.loading = false;
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
 
         async revoke() {

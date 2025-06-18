@@ -15,51 +15,29 @@
                 <q-separator />
 
                 <q-card-section class="column no-wrap q-gutter-y-md card-body">
-                    <q-input
-                        v-model="form.name"
-                        label="Name"
-                        :error="!!errors.name"
-                    >
+                    <q-input v-model="form.name" label="Name" :error="!!errors.name">
                         <template v-slot:error>
                             <v-error :error="errors.name" />
                         </template>
                     </q-input>
 
-                    <q-input
-                        v-model="form.description"
-                        label="Description"
-                        type="textarea"
-                        :error="!!errors.description"
-                    >
+                    <q-input v-model="form.description" label="Description" type="textarea"
+                        :error="!!errors.description">
                         <template v-slot:error>
                             <v-error :error="errors.description" />
                         </template>
                     </q-input>
 
-                    <q-select
-                        v-model="form.visibility"
-                        :options="visibility"
-                        label="Visibility"
-                    />
+                    <q-select v-model="form.visibility" :options="visibility" label="Visibility" />
                     <v-error :error="errors.visibility" />
                 </q-card-section>
             </div>
 
             <q-separator />
             <q-card-section class="flex justify-between card-footer">
-                <q-btn
-                    outline
-                    color="positive"
-                    label="Update"
-                    @click="updateService"
-                />
+                <q-btn outline color="positive" label="Update" @click="updateService" />
 
-                <q-btn
-                    outline
-                    color="secondary"
-                    label="Cancel"
-                    @click="close"
-                />
+                <q-btn outline color="secondary" label="Cancel" @click="close" />
             </q-card-section>
         </q-card>
     </q-dialog>
@@ -106,14 +84,9 @@ export default {
                 const res = await this.$server.put(
                     this.form.links.update,
                     this.form,
-                    {
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                    }
                 );
 
-                console.log(res);
+                
                 if (res.status == 200) {
                     this.$emit("updated", true);
                     this.errors = {};
@@ -167,7 +140,7 @@ export default {
     flex-shrink: 0;
 }
 
-.card-footer > .q-btn {
+.card-footer>.q-btn {
     padding: 0.4rem 2rem;
     border-radius: 0.6rem;
 }

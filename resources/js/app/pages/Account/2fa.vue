@@ -9,14 +9,8 @@
                                 <q-toolbar-title class="text-grey-7">
                                     Two Factor Authentication
                                 </q-toolbar-title>
-                                <q-btn
-                                    icon="mdi-check-decagram-outline"
-                                    :color="user.m2fa ? 'positive' : 'negative'"
-                                >
-                                    <q-tooltip
-                                        transition-show="rotate"
-                                        transition-hide="rotate"
-                                    >
+                                <q-btn icon="mdi-check-decagram-outline" :color="user.m2fa ? 'positive' : 'negative'">
+                                    <q-tooltip transition-show="rotate" transition-hide="rotate">
                                         {{
                                             user.m2fa
                                                 ? "2FA Activated"
@@ -27,33 +21,16 @@
                             </q-toolbar>
                         </q-card-section>
                         <q-card-section>
-                            <q-input
-                                v-model="token"
-                                label="Insert Code ..."
-                                outlined
-                                dense
-                            />
+                            <q-input v-model="token" label="Insert Code ..." outlined dense />
                             <v-error :error="errors.token" />
                         </q-card-section>
 
                         <q-card-actions align="between">
-                            <q-btn
-                                @click="requestCode"
-                                label="Request token"
-                                color="positive"
-                                outline
-                            />
-                            <q-btn
-                                :label="user.m2fa ? 'Deactivate' : 'Activate'"
-                                :color="user.m2fa ? 'negative' : 'positive'"
-                                @click="activateFactor"
-                                outline
-                                color="negative"
-                            >
-                                <q-tooltip
-                                    transition-show="rotate"
-                                    transition-hide="rotate"
-                                >
+                            <q-btn @click="requestCode" label="Request token" color="positive" outline />
+                            <q-btn :label="user.m2fa ? 'Deactivate' : 'Activate'"
+                                :color="user.m2fa ? 'negative' : 'positive'" @click="activateFactor" outline
+                                color="negative">
+                                <q-tooltip transition-show="rotate" transition-hide="rotate">
                                     {{
                                         user.m2fa
                                             ? "2FA Activated"
@@ -79,8 +56,6 @@ export default {
         };
     },
     mounted() {
-        this.listener();
-
         this.user = this.$page.props.user;
     },
     methods: {
@@ -107,14 +82,7 @@ export default {
                 }
             }
         },
-        async getAuthUser() {
-            try {
-                const res = await this.$server.get("/api/gateway/user");
-                if (res.status === 200) {
-                    this.user = res.data;
-                }
-            } catch (_) {}
-        },
+
         async activateFactor() {
             try {
                 const res = await this.$server.post(
@@ -127,7 +95,7 @@ export default {
                     this.token = "";
                     this.errors = {};
                     this.popup("2FA has been activated successfully");
-                    this.getAuthUser();
+                    window.location.reload()
                 }
             } catch (err) {
                 if (err.response) {
@@ -136,13 +104,6 @@ export default {
             }
         },
 
-        listener() {
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("M2FAEvent", () => {
-                    this.getAuthUser();
-                });
-        },
     },
 };
 </script>

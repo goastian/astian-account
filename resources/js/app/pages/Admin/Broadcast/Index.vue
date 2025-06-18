@@ -6,25 +6,15 @@
             <div class="row items-center q-pa-md">
                 <v-create @created="getBroadcasting"></v-create>
                 <q-space />
-                <q-btn-toggle
-                    v-model="viewMode"
-                    dense
-                    toggle-color="primary"
-                    :options="[
-                        { value: 'list', icon: 'list' },
-                        { value: 'grid', icon: 'grid_on' },
-                    ]"
-                    unelevated
-                />
+                <q-btn-toggle v-model="viewMode" dense toggle-color="primary" :options="[
+                    { value: 'list', icon: 'list' },
+                    { value: 'grid', icon: 'grid_on' },
+                ]" unelevated />
             </div>
         </q-toolbar>
 
         <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
-            <div
-                class="col-xs-12 col-sm-6 col-md-4"
-                v-for="channel in channels"
-                :key="channel.id"
-            >
+            <div class="col-xs-12 col-sm-6 col-md-4" v-for="channel in channels" :key="channel.id">
                 <q-card bordered flat>
                     <q-card-section class="q-pb-none">
                         <div class="text-h6">
@@ -42,22 +32,14 @@
                         </div>
                         <div>
                             <strong>System:</strong>
-                            <q-chip
-                                :color="channel.system ? 'green' : 'red'"
-                                text-color="white"
-                                dense
-                            >
+                            <q-chip :color="channel.system ? 'green' : 'red'" text-color="white" dense>
                                 {{ channel.system ? "Yes" : "No" }}
                             </q-chip>
                         </div>
                     </q-card-section>
 
                     <q-card-actions align="right">
-                        <v-destroy
-                            v-if="!channel.system"
-                            :item="channel"
-                            @deleted="getBroadcasting"
-                        />
+                        <v-destroy v-if="!channel.system" :item="channel" @deleted="getBroadcasting" />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -68,22 +50,11 @@
                 <q-card-section>
                     <div class="text-h6">Channels Table</div>
                 </q-card-section>
-                <q-table
-                    :rows="channels"
-                    :columns="columns"
-                    row-key="id"
-                    flat
-                    bordered
-                    hide-bottom
-                    :rows-per-page-options="[search.per_page]"
-                >
+                <q-table :rows="channels" :columns="columns" row-key="id" flat bordered hide-bottom
+                    :rows-per-page-options="[search.per_page]">
                     <template v-slot:body-cell-system="props">
                         <q-td :props="props">
-                            <q-chip
-                                :color="props.value ? 'green' : 'red'"
-                                text-color="white"
-                                dense
-                            >
+                            <q-chip :color="props.value ? 'green' : 'red'" text-color="white" dense>
                                 {{ props.value ? "Yes" : "No" }}
                             </q-chip>
                         </q-td>
@@ -91,11 +62,7 @@
 
                     <template v-slot:body-cell-actions="props">
                         <q-td :props="props">
-                            <v-destroy
-                                v-if="!props.row.system"
-                                :item="props.row"
-                                @deleted="getBroadcasting"
-                            />
+                            <v-destroy v-if="!props.row.system" :item="props.row" @deleted="getBroadcasting" />
                         </q-td>
                     </template>
                 </q-table>
@@ -103,12 +70,7 @@
         </div>
 
         <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="sm"
-            />
+            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
         </div>
     </v-admin-layout>
 </template>
@@ -160,9 +122,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.channels;
-        this.channels = values.data;
-        this.pages = values.meta.pagination;
+        this.getBroadcasting();
     },
 
     watch: {
@@ -190,9 +150,7 @@ export default {
          */
         async getBroadcasting(param = null) {
             //setting searching params
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            var params = { ...this.search, ...param };
 
             try {
                 const res = await this.$server.get("/admin/broadcasts", {
@@ -207,7 +165,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 }
-            } catch (e) {}
+            } catch (e) { }
         },
 
         listenEvents() {

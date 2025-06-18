@@ -52,8 +52,8 @@
                             <q-item-section>
                                 <q-item-label
                                     ><strong>Description:</strong>
-                                    {{ item.meta.description }}</q-item-label
-                                >
+                                    <span v-html="item.meta.description"></span>
+                                </q-item-label>
                             </q-item-section>
                         </q-item>
 

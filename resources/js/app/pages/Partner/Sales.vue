@@ -95,7 +95,7 @@ export default {
                 total_pages: 0,
             },
             search: {
-                page: 0,
+                page: 1,
                 per_page: 15,
             },
         };
@@ -114,16 +114,12 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.sales;
-        this.sales = values.data;
-        this.pages = values.meta.pagination;
+        this.getSales();
     },
 
     methods: {
-        async getSales() {
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+        async getSales(param = null) {
+            var params = { ...this.search, ...param };
 
             try {
                 const res = await this.$server.get(this.$page.props.route, {
@@ -133,7 +129,9 @@ export default {
                 if (res.status == 200) {
                     var values = res.data;
                     this.sales = values.data;
-                    this.pages = values.meta;
+                    this.pages = res.data.meta.pagination;
+                    this.search.total_pages =
+                        res.data.meta.pagination.total_pages;
                 }
             } catch (error) {}
         },

@@ -7,24 +7,13 @@
 
             <q-card-section>
                 <div class="q-gutter-md">
-                    <q-input
-                        outlined
-                        v-model="form.name"
-                        dense="dense"
-                        label="Name"
-                        :error="!!errors.name"
-                    >
+                    <q-input outlined v-model="form.name" dense="dense" label="Name" :error="!!errors.name">
                         <template v-slot:error>
                             <v-error :error="errors.name"></v-error>
                         </template>
                     </q-input>
-                    <q-input
-                        outlined
-                        v-model="form.description"
-                        dense="dense"
-                        label="description"
-                        :error="!!errors.description"
-                    >
+                    <q-input outlined type="textarea" v-model="form.description" dense="dense" label="description"
+                        :error="!!errors.description">
                         <template v-slot:error>
                             <v-error :error="errors.description"></v-error>
                         </template>
@@ -32,12 +21,7 @@
 
                     <q-item tag="label" v-ripple>
                         <q-item-section avatar>
-                            <q-checkbox
-                                v-model="form.system"
-                                val="orange"
-                                color="orange"
-                                :error="!!errors.system"
-                            >
+                            <q-checkbox v-model="form.system" val="orange" color="orange" :error="!!errors.system">
                                 <template v-slot:error>
                                     <v-error :error="errors.system" />
                                 </template>
@@ -54,30 +38,12 @@
             </q-card-section>
 
             <q-card-actions align="right">
-                <q-btn
-                    label="Save"
-                    outline
-                    icon="mdi-content-save-alert"
-                    color="positive"
-                    @click="create"
-                />
-                <q-btn
-                    label="Close"
-                    outline
-                    icon="mdi-close-circle"
-                    color="secondary"
-                    @click="dialog = false"
-                />
+                <q-btn label="Save" outline icon="mdi-content-save-alert" color="positive" @click="create" />
+                <q-btn label="Close" outline icon="mdi-close-circle" color="secondary" @click="close" />
             </q-card-actions>
         </q-card>
     </q-dialog>
-    <q-btn
-        outline
-        round
-        color="positive"
-        icon="mdi-plus"
-        @click="dialog = true"
-    >
+    <q-btn outline round color="positive" icon="mdi-plus" @click="open">
         <q-tooltip> Add new channel</q-tooltip>
     </q-btn>
 </template>
@@ -87,20 +53,10 @@ export default {
 
     data() {
         return {
-            form: {
-                name: null,
-                description: null,
-                system: false,
-            },
+            form: {},
             errors: {},
             dialog: false,
-            system: false,
         };
-    },
-    watch: {
-        system(value) {
-            this.form.system = value ? 1 : 0;
-        },
     },
 
     methods: {
@@ -109,7 +65,20 @@ export default {
          */
         close() {
             this.dialog = false;
-            this.form = [];
+            this.clean()
+
+        },
+
+        open() {
+            this.dialog = true;
+            this.clean();
+        },
+
+        clean() {
+            this.form.name = null;
+            this.form.description = null;
+            this.form.system = false;
+            this.errors = {}
         },
 
         /**
@@ -120,17 +89,11 @@ export default {
             try {
                 const res = await this.$server.post(
                     "/admin/broadcasts",
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                    this.form
                 );
 
                 if (res.status == 201) {
-                    this.form = {};
-                    this.errors = {};
+                    this.clean()
                     this.$emit("created", true);
                     this.$q.notify({
                         type: "positive",
