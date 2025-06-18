@@ -2,46 +2,39 @@
 namespace App\Http\Controllers\Web\Admin\Manager;
 
 use Inertia\Inertia;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Http\Controllers\WebController;
-use App\Models\Subscription\Transaction;
-use App\Services\Payment\PaymentManager;
-use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Repositories\TransactionRepository;
 
 class TransactionManagerController extends WebController
 {
-    public function __construct()
+    /**
+     * Repository
+     * @var 
+     */
+    public $repository;
+
+    /**
+     * Constructor
+     * @param \App\Repositories\TransactionRepository $transactionRepository
+     */
+    public function __construct(TransactionRepository $transactionRepository)
     {
         parent::__construct();
+        $this->repository = $transactionRepository;
         $this->middleware('userCanAny:administrator_transactions_full, administrator_transactions_view')->only('index');
         $this->middleware('userCanAny:administrator_transactions_full, administrator_transactions_update')->only('activate');
     }
 
     /**
-     * index
-     * @param \App\Models\Subscription\Transaction $transaction
-     * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
+     * Show the resources
+     * @param \Illuminate\Http\Request $request
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser|\Inertia\Response
      */
-    public function index(Transaction $transaction)
+    public function index(Request $request)
     {
-        // Retrieve params of the request
-        $params = $this->filter_transform($transaction->transformer);
-
-        // Prepare query
-        $data = $transaction->query();
-
-        // Eager loading
-        $data->with(['user', 'package', 'partner']);
-
-
-        // Search 
-        $data = $this->searchByBuilder($data, $params);
-
-        // Order by
-        $data = $this->orderByBuilder($data, $transaction->transformer);
-
         if (request()->wantsJson()) {
-            return $this->showAllByBuilder($data, $transaction->transformer);
+            return $this->repository->search($request);
         }
 
         return Inertia::render("Admin/Transaction/Index", ["route" => route('admin.transactions.index')]);
@@ -53,27 +46,8 @@ class TransactionManagerController extends WebController
      * @throws \Elyerr\ApiResponse\Exceptions\ReportError
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function activate(Transaction $transaction)
+    public function activate(string $id)
     {
-        if (
-            !in_array($transaction->status, [
-                config('billing.status.pending.name'),
-                config('billing.status.failed.name')
-            ])
-        ) {
-            throw new ReportError("This action is not allowed for the current transaction.", 403);
-        }
-
-        DB::transaction(function () use ($transaction) {
-
-            $meta = $transaction->response;
-
-            $paymentManager = new PaymentManager();
-            $paymentManager->forceActivation($transaction->payment_method, $meta);
-
-        });
-
-        return $this->message("Transaction activated successfully");
+        return $this->repository->activate($id);
     }
-
 }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Web\OAuth;
 
+use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Inertia\Inertia;
 use Laravel\Passport\Passport;
-use Illuminate\Support\Facades\DB;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use App\Transformers\OAuth\ClientTransformer;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -16,30 +15,6 @@ use Laravel\Passport\Http\Controllers\ClientController as Controller;
 class ClientController extends Controller
 {
     use JsonResponser;
-
-
-    /**
-     * Show all
-     * @param mixed $collection
-     * @param mixed $transformer
-     * @param mixed $code
-     * @param mixed $pagination
-     * @return mixed|\Illuminate\Http\JsonResponse
-     */
-    public function showAllByArray($collection, $transformer = null, $code = 200, $pagination = true)
-    {
-        $collection = $this->orderBy($collection);
-
-        if ($pagination) {
-            $collection = $this->paginate($collection);
-        }
-
-        if ($transformer != null && gettype($transformer) != "integer") {
-            $collection = fractal($collection, $transformer);
-        }
-
-        return $collection->toArray();
-    }
 
     /**
      * Summary of forUser
@@ -57,12 +32,12 @@ class ClientController extends Controller
         }
 
         $clients->makeVisible('secret');
+
         if (request()->wantsJson()) {
             return $this->showAll($clients, ClientTransformer::class);
         }
 
         return Inertia::render("OAuth/Clients/Index", [
-            'clients' => $this->showAllByArray($clients, ClientTransformer::class),
             'route' => route('passport.clients.index')
         ]);
     }
@@ -78,7 +53,7 @@ class ClientController extends Controller
         $this->validation->make($request->all(), [
             'name' => 'required|max:191',
             'redirect' => ['required', $this->redirectRule],
-            'confidential' => [new BooleanRule()],
+            'confidential' => ['boolean'],
         ])->validate();
 
         //create a new client

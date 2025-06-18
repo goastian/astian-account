@@ -1,10 +1,10 @@
 <?php
 namespace App\Http\Controllers\Web\OAuth;
-
-use App\Traits\Scopes;
+ 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Laravel\Passport\Bridge\User;
+use App\Repositories\Traits\Scopes;
 use Laravel\Passport\TokenRepository;
 use Laravel\Passport\ClientRepository;
 use Nyholm\Psr7\Response as Psr7Response;

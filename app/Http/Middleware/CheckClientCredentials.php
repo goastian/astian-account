@@ -2,7 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use App\Traits\Scopes;
+ 
+use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Laravel\Passport\Exceptions\MissingScopeException;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials as middleware;

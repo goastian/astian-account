@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Payment\Webhook;
 
+use App\Repositories\TransactionRepository;
 use Stripe\Stripe;
 use Stripe\Webhook;
 use Illuminate\Http\Request;
@@ -12,6 +13,26 @@ use Stripe\Exception\SignatureVerificationException;
 
 class StripeWebhookController extends Controller
 {
+    /**
+     * Repository
+     * @var 
+     */
+    public $repository;
+
+    /**
+     * Constructor
+     * @param \App\Repositories\TransactionRepository $transactionRepository
+     */
+    public function __construct(TransactionRepository $transactionRepository)
+    {
+        $this->repository = $transactionRepository;
+    }
+
+    /**
+     * Listen events form stripe provider
+     * @param \Illuminate\Http\Request $request
+     * @return mixed|\Illuminate\Http\JsonResponse
+     */
     public function handle(Request $request)
     {
         $payload = $request->getContent();
@@ -40,7 +61,7 @@ class StripeWebhookController extends Controller
         switch ($event->type) {
             case 'checkout.session.completed':
                 $metadata = $event->data->object->toArray();
-                Transaction::paymentSuccessfully($metadata);
+                $this->repository->paymentSuccessfully($metadata);
                 break;
 
             case 'payment_intent.payment_failed':
@@ -51,17 +72,17 @@ class StripeWebhookController extends Controller
                 ]);
 
                 $metadata['session'] = $sessions->data[0]->toArray();
-                Transaction::paymentFailed($metadata);
+                $this->repository->paymentFailed($metadata);
                 break;
 
             case "checkout.session.expired":
                 $metadata = $event->data->object->toArray();
-                Transaction::paymentExpires($metadata);
+                $this->repository->paymentExpires($metadata);
                 break;
 
             case "charge.succeeded":
                 $metadata = $event->data->object->toArray();
-                Transaction::paymentSuccessfully($metadata, 'succeed');
+                $this->repository->paymentSuccessfully($metadata, 'succeed');
             default:
                 Log::info("Listen unknown event : ", $event->toArray());
         }

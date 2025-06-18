@@ -32,12 +32,6 @@ Route::group([
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
         ->name('passport.token')
         ->middleware('authorize');
-    /* 
- 
-    Route::delete('/credentials/revoke', [CredentialsController::class, "revokeCredentials"])
-        ->name('passport.revoke-credentials');
-
-    */
 });
 
 

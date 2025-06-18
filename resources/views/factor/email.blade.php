@@ -13,10 +13,8 @@
                     {{ __('Please check your email address and type your code in the field below.') }}</p>
             </div>
 
-            <form action="{{ route('factor.email.login') }}" method="post">
+            <form action="{{ route('users.2fa.login') }}" method="post">
                 @csrf
-                <input type="hidden" id="email" name="email" value="{{ session('email') ?: old('email') }}">
-
                 <div class="mb-4">
                     <label for="token"
                         class="block text-sm font-medium text-gray-700">{{ __('Verification Code') }}</label>
@@ -32,7 +30,9 @@
 
                 <div class="mb-6 text-center">
                     <button type="submit"
-                        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">{{ __('Check my account') }}</button>
+                        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        <span class="mdi mdi-lock"></span> {{ __('Verify token') }}
+                    </button>
                 </div>
 
                 <div class="text-center mb-6">
@@ -40,11 +40,6 @@
                         <p class="text-yellow-600 text-sm">{{ session('warning') }}</p>
                     @endif
                 </div>
-
-                @foreach ($query as $item => $value)
-                    <input type="hidden" id="{{ $item }}" name="{{ $item }}"
-                        value="{{ $value }}">
-                @endforeach
 
                 <div class="text-center mt-4">
                     <a href="{{ route('login') }}" class="text-sm text-blue-500 hover:underline">

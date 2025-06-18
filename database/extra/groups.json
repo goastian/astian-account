@@ -8,13 +8,13 @@
                 "description": "Top level service for admin users",
                 "actions": [
                     {
-                        "name": "full", 
+                        "name": "full",
                         "public": 0,
                         "active": 1,
                         "api_key": 0
                     },
                     {
-                        "name": "dashboard", 
+                        "name": "dashboard",
                         "public": 0,
                         "active": 1,
                         "api_key": 0
@@ -113,7 +113,7 @@
                         "name": "full",
                         "public": 0,
                         "active": 1,
-                        "api_key": 1
+                        "api_key": 0
                     },
                     {
                         "name": "view",
@@ -284,6 +284,12 @@
                 "description": "Service to manage resource of the scopes",
                 "actions": [
                     {
+                        "name": "full",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 0
+                    },
+                    {
                         "name": "view",
                         "public": 0,
                         "active": 1,
@@ -429,7 +435,6 @@
                     }
                 ]
             },
-
             {
                 "name": "vpn",
                 "description": "Service to manage and configure VPN access and connections",
@@ -466,12 +471,11 @@
                     }
                 ]
             },
-
             {
                 "name": "transactions",
                 "description": "Service to manage transaction into the admin manager",
                 "actions": [
-                     {
+                    {
                         "name": "full",
                         "public": 0,
                         "active": 1,
@@ -570,6 +574,7 @@
             {
                 "name": "vpn",
                 "description": "Service to manage, configure, and process payments for VPN access and subscriptions",
+                "visibility": "public",
                 "actions": [
                     {
                         "name": "basic",

@@ -12,8 +12,6 @@ class HomePageController extends WebController
      */
     public function dashboard()
     {
-        return Inertia::render(
-            "Account/About",
-        );
+        return Inertia::render("Account/About");
     }
 }

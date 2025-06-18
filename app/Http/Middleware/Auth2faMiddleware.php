@@ -7,7 +7,6 @@ use App\Models\User\User;
 use App\Models\Setting\Code;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use App\Providers\RouteServiceProvider;
 use App\Notifications\Setting\CodeNotification;
 
 class Auth2faMiddleware
@@ -25,7 +24,9 @@ class Auth2faMiddleware
 
             Auth2faMiddleware::generateToken($request);
 
-            return redirect()->route('factor.email', RouteServiceProvider::query())->with(['email' => $request->email]);
+            session(['email' => $request->email]);
+
+            return redirect()->route('users.2fa.send-code');
         }
 
         return $next($request);

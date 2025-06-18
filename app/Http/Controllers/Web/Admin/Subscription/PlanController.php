@@ -1,6 +1,9 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
+use App\Http\Requests\Plan\StoreRequest;
+use App\Http\Requests\Plan\UpdateRequest;
+use App\Repositories\PlanRepository;
 use Inertia\Inertia;
 use App\Rules\BooleanRule;
 use Illuminate\Http\Request;
@@ -12,48 +15,37 @@ use App\Http\Controllers\WebController;
 
 class PlanController extends WebController
 {
+    /**
+     * Repository
+     * @var PlanRepository
+     */
+    public $repository;
 
-    public function __construct()
+    /**
+     * Construct
+     * @param \App\Repositories\PlanRepository $planRepository
+     */
+    public function __construct(PlanRepository $planRepository)
     {
         parent::__construct();
+        $this->repository = $planRepository;
         $this->middleware('userCanAny:administrator_plan_full,administrator_plan_view')->only('index');
         $this->middleware('userCanAny:administrator_plan_full,administrator_plan_show')->only('show');
         $this->middleware('userCanAny:administrator_plan_full,administrator_plan_create')->only('store');
         $this->middleware('userCanAny:administrator_plan_full,administrator_plan_update')->only('update');
         $this->middleware('userCanAny:administrator_plan_full,administrator_plan_destroy')->only('destroy');
-
         $this->middleware('wants.json')->only('show');
     }
 
     /**
-     * Show the plan resources
-     * @param \App\Models\Subscription\Plan $plan
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * Show resources
+     * @param \Illuminate\Http\Request $request
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser|\Inertia\Response
      */
-    public function index(Plan $plan)
+    public function index(Request $request)
     {
-        // Retrieve params of the request
-        $params = $this->filter_transform($plan->transformer);
-
-        //Prepare query
-        $data = $plan->query();
-
-        // Eager loading
-        $data = $data->with([
-            'scopes',
-            'prices',
-            'scopes.role',
-            'scopes.service.group'
-        ]);
-
-        // Search
-        $data = $this->searchByBuilder($data, $params);
-
-        // Order by
-        $data = $this->orderByBuilder($data, $plan->transformer);
-
         if (request()->wantsJson()) {
-            return $this->showAllByBuilder($data, $plan->transformer);
+            return $this->repository->search($request);
         }
 
         return Inertia::render("Admin/Plans/Index", [
@@ -65,269 +57,43 @@ class PlanController extends WebController
     }
 
     /**
-     * create a new resource
-     * @param \Illuminate\Http\Request $request
+     * Create new plan
+     * @param \App\Http\Requests\Plan\StoreRequest $request
      * @param \App\Models\Subscription\Plan $plan
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
-    public function store(Request $request, Plan $plan)
+    public function store(StoreRequest $request, Plan $plan)
     {
-        $this->validate($request, [
-            'name' => [
-                'required',
-                'max:150',
-                function ($attribute, $value, $fail) use ($plan) {
-                    $plan = $plan->where('slug', $this->slug($value))->first();
-
-                    if (!empty($plan)) {
-                        $fail(__("This plan has been registered"));
-                    }
-
-                }
-            ],
-            'description' => ['required'],
-            'active' => ['required', new BooleanRule()],
-            'trial_enabled' => ['nullable', new BooleanRule()],
-            'trial_duration' => [
-                'required_if:trial_enabled,true',
-                'integer',
-                'min:0',
-                'max:255',
-            ],
-            'bonus_enabled' => ['nullable', new BooleanRule()],
-            'bonus_duration' => [
-                'required_if:bonus_enabled,true',
-                'integer',
-                'min:0',
-                'max:255',
-            ],
-            'scopes' => [
-                'required',
-                'array',
-                'exists:scopes,id',
-                function ($attribute, $value, $fail) {
-                    $duplicated = $this->checkServices($value);
-
-                    if (count($duplicated) > 0) {
-                        $fail(__("The following services (:services) contain duplicate roles", ['services' => implode(', ', $duplicated)]));
-                    }
-                }
-            ],
-            'prices' => ['required', 'array'],
-            'prices.*.billing_period' => [
-                'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    if (empty(billing_get_period($value))) {
-                        $fail("The billing period is invalid");
-                    }
-                }
-            ],
-            'prices.*.currency' => [
-                'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    if (empty(billing_get_currency($value))) {
-                        $fail("The billing period is invalid");
-                    }
-                }
-            ],
-            'prices.*.amount' => ['required', 'integer', 'min:0'],
-        ]);
-
-        DB::transaction(function () use ($request, $plan) {
-            $plan = $plan->fill($request->except('description'));
-            $plan->description = Purify::clean($request->description);
-            $plan->slug = $this->slug($request->name);
-            $plan->save();
-
-            $plan->scopes()->attach($request->scopes);
-
-            foreach ($request->prices as $key => $value) {
-                $plan->prices()->create([
-                    'amount' => $value['amount'],
-                    'billing_period' => $value['billing_period'],
-                    'currency' => $value['currency']
-                ]);
-            }
-        });
-
-        return $this->showOne($plan, $plan->transformer, 201);
+        return $this->repository->create($request->toArray());
     }
 
     /**
-     * show one resource
+     * Show details of the plan
      * @param \App\Models\Subscription\Plan $plan
-     * @return void
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
     public function show(Plan $plan)
     {
-        return $this->showOne($plan, $plan->transformer);
+        return $this->repository->details($plan->id);
     }
 
     /**
-     * Update resource
-     * @param \Illuminate\Http\Request $request
+     * Update specific resource
+     * @param \App\Http\Requests\Plan\UpdateRequest $request
      * @param \App\Models\Subscription\Plan $plan
-     * @return void
      */
-    public function update(Request $request, Plan $plan)
+    public function update(UpdateRequest $request, Plan $plan)
     {
-        $this->validate($request, [
-            'name' => ['nullable', 'max:150'],
-            'description' => ['nullable'],
-            'active' => ['nullable', new BooleanRule()],
-            'trial_enabled' => ['nullable', new BooleanRule()],
-            'trial_duration' => [
-                'required_if:trial_enabled,true',
-                'integer',
-                'min:0',
-                'max:255',
-            ],
-            'bonus_enabled' => ['nullable', new BooleanRule()],
-            'bonus_duration' => [
-                'required_if:bonus_enabled,true',
-                'integer',
-                'min:0',
-                'max:255',
-            ],
-            'scopes' => [
-                'required',
-                'array',
-                'exists:scopes,id',
-                function ($attribute, $value, $fail) use ($plan) {
-
-                    $duplicated = $this->checkServices($value);
-
-                    if (count($duplicated) > 0) {
-                        $fail(__("The following services (:services) contain duplicate roles", ['services' => implode(', ', $duplicated)]));
-                    }
-                }
-            ],
-            'prices' => ['nullable', 'array'],
-            'prices.*.billing_period' => [
-                'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    if (empty(billing_get_period($value))) {
-                        $fail("The billing period is invalid");
-                    }
-                }
-            ],
-            'prices.*.currency' => [
-                'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    if (empty(billing_get_currency($value))) {
-                        $fail("The billing period is invalid");
-                    }
-                }
-            ],
-            'prices.*.amount' => ['required', 'integer', 'min:0'],
-        ]);
-
-        DB::transaction(function () use ($request, $plan) {
-            $update = false;
-
-            if ($request->has('name') && $plan->name != $request->name) {
-                $update = true;
-                $plan->name = $request->name;
-            }
-
-            if ($request->has('description') && $plan->description != $request->description) {
-                $update = true;
-                $plan->description = Purify::clean($request->description);
-            }
-
-            if ($request->has('active') && $plan->active != $request->active) {
-                $update = true;
-                $plan->active = $request->active;
-            }
-
-            if ($request->has('trial_enabled') && $plan->trial_enabled != $request->trial_enabled) {
-                $update = true;
-                $plan->trial_enabled = $request->trial_enabled;
-            }
-
-            if ($request->has('trial_duration') && $plan->trial_duration != $request->trial_duration) {
-                $update = true;
-                $plan->trial_duration = $request->trial_duration;
-            }
-
-            if ($request->has('bonus_enabled') && $plan->bonus_enabled != $request->bonus_enabled) {
-                $update = true;
-                $plan->bonus_enabled = $request->bonus_enabled;
-            }
-
-            if ($request->has('bonus_duration') && $plan->bonus_duration != $request->bonus_duration) {
-                $update = true;
-                $plan->bonus_duration = $request->bonus_duration;
-            }
-
-            if ($update) {
-                $plan->save();
-            }
-
-            if (!empty($request->scopes)) {
-
-                $plan->scopes()->syncWithoutDetaching($request->scopes);
-            }
-
-            if (!empty($request->prices)) {
-                foreach ($request->prices as $key => $value) {
-                    $plan->prices()->updateOrCreate(
-                        [
-                            'billing_period' => strtolower($value['billing_period']),
-                        ],
-                        [
-                            'billing_period' => strtolower($value['billing_period']),
-                            'amount' => $value['amount'],
-                            'currency' => $value['currency']
-                        ]
-                    );
-                }
-            }
-        });
-
-        return $this->showOne($plan, $plan->transformer, 200);
+        return $this->repository->update($plan->id, $request->toArray());
     }
 
     /**
-     * Function to destroy plans
+     * Delete specific resource
      * @param \App\Models\Subscription\Plan $plan
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
     public function destroy(Plan $plan)
     {
-        $plan->scopes()->detach();
-
-        $plan->prices()->delete();
-
-        $plan->delete();
-
-        return $this->message(__("Plan deleted successfully"), 200);
-    }
-
-    /**
-     * Check duplicated scopes in the same service
-     * @param mixed $value
-     * @return array
-     */
-    public function checkServices($value)
-    {
-        $services = [];
-
-        foreach ($value as $key) {
-            $scope = Scope::find($key);
-            array_push($services, $scope->service->slug);
-        }
-
-        $count = array_count_values($services);
-
-        $duplicated = array_keys(array_filter($count, function ($amount) {
-            return $amount > 1;
-        }));
-
-        return $duplicated;
+        return $this->repository->delete($plan->id);
     }
 }

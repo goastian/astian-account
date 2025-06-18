@@ -1,8 +1,8 @@
 <?php
 namespace App\Transformers\User;
 
-use App\Models\User\User;
-use App\Traits\Scopes;
+use App\Models\User\User; 
+use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 

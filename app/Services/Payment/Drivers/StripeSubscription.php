@@ -6,8 +6,9 @@ use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\PaymentIntent;
 use Stripe\Checkout\Session;
-use Illuminate\Support\Facades\DB;
 use App\Models\Subscription\Transaction;
+use App\Repositories\TransactionRepository;
+use Stripe\Exception\InvalidRequestException;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Services\Payment\Contracts\PaymentMethod;
 
@@ -19,6 +20,12 @@ class StripeSubscription implements PaymentMethod
      * @var string
      */
     protected $method = "stripe_checkout";
+
+
+    /**
+     * Repository
+     */
+    public $repository;
 
     /**
      * Billing period supported by stripe
@@ -35,9 +42,10 @@ class StripeSubscription implements PaymentMethod
         'biannual' => ['interval' => 'year', 'interval_count' => 2]
     ];
 
-    public function __construct()
+    public function __construct(TransactionRepository $transactionRepository)
     {
         Stripe::setApiKey(config('services.stripe.secret'));
+        $this->repository = $transactionRepository;
     }
 
     /**
@@ -81,9 +89,13 @@ class StripeSubscription implements PaymentMethod
             ],
         ];
 
-        $session = Session::create($meta);
+        try {
+            $session = Session::create($meta);
+            return $session;
 
-        return $session;
+        } catch (InvalidRequestException $th) {
+            throw new ReportError($th->getMessage(), 403);
+        }
     }
 
     /**
@@ -93,7 +105,26 @@ class StripeSubscription implements PaymentMethod
      */
     public function chargeRecurringPayment(array $package)
     {
-        $this->paymentIntent($package);
+        //Generate new transaction code
+        $code = $this->repository->generateTransactionCode();
+
+        //Generate a new payment intent to renew package
+        $intent = PaymentIntent::create([
+            'amount' => $package['meta']['price']['amount'],
+            'currency' => strtolower($package['meta']['price']['currency']),
+            'customer' => $package["user"]["stripe_customer_id"],
+            'payment_method' => $package['transaction']['payment_method_id'],
+            'off_session' => true,
+            'confirm' => true,
+            'metadata' => [
+                'transaction_code' => $code,
+                'user_id' => $package['user']['id'],
+                'renew' => true
+            ],
+        ]);
+
+        //Create new transaction for this payment intent
+        $this->repository->createStripeRecurringPayment($intent, $package);
     }
 
     /**
@@ -129,7 +160,7 @@ class StripeSubscription implements PaymentMethod
         // Retrieve the last charge succeeded
         $last_charge = Charge::retrieve($payment_intent->latest_charge);
 
-        Transaction::paymentSuccessfully($last_charge->toArray(), 'succeed');
+        $this->repository->paymentSuccessfully($last_charge->toArray(), 'succeed');
     }
 
     /**
@@ -150,53 +181,5 @@ class StripeSubscription implements PaymentMethod
         }
 
         return $user;
-    }
-
-    /**
-     * Summary of paymentIntent
-     * @param array $package
-     * @throws \Exception
-     * @return \Stripe\PaymentIntent
-     */
-    public function paymentIntent(array $package)
-    {
-        //Generate new transaction code
-        $code = Transaction::generateTransactionCode();
-
-        //Generate a new payment intent to renew package
-        $intent = PaymentIntent::create([
-            'amount' => $package['meta']['price']['amount'],
-            'currency' => strtolower($package['meta']['price']['currency']),
-            'customer' => $package["user"]["stripe_customer_id"],
-            'payment_method' => $package['transaction']['payment_method_id'],
-            'off_session' => true,
-            'confirm' => true,
-            'metadata' => [
-                'transaction_code' => $code,
-                'user_id' => $package['user']['id'],
-                'renew' => true
-            ],
-        ]);
-
-        //Create new transaction for this payment intent
-        DB::transaction(function () use ($package, $intent, $code) {
-            Transaction::create([
-                'tax_applied' => config('billing.taxes.enabled'),
-                'subtotal' => $intent->amount,
-                'total' => $intent->amount,
-                'currency' => $package['meta']['price']['currency'],
-                'status' => config("billing.status.pending.name"),
-                'billing_period' => $package['meta']['price']['billing_period'],
-                'session_id' => null,
-                'payment_method' => $package['transaction']['payment_method'],
-                'payment_intent_id' => $intent->id,
-                'payment_url' => null,
-                'renew' => true,
-                'code' => $code,
-                'payment_method_id' => $intent->payment_method,
-                'response' => $intent->toArray(),
-                'package_id' => $package['id'],
-            ]);
-        });
     }
 }
