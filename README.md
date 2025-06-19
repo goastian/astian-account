@@ -14,15 +14,10 @@ This project is licensed under the GNU Affero General Public License v3.0. See t
 
 ## Resources
 
--   [Official Documentation](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home)
 -   [Echo Server](https://gitlab.com/elyerr/echo-server)
 -   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
 
 ---
-
-## Contact
-
-For direct contact, visit [Telegram](https://t.me/elyerr).
 
 # 🚀 Deploy & First User Setup
 
@@ -114,7 +109,7 @@ php artisan passport:install --force
         -   `payment_intent.payment_failed`
         -   `checkout.session.expired`
 
--   **P2P**: Offline payment method
+-   **Offline**: Offline payment method
 
 ## Captcha Providers
 
@@ -149,3 +144,7 @@ To configure the active CAPTCHA provider:
 > Go to **Admin → Settings → Security**, and select your preferred CAPTCHA provider (hCaptcha or Turnstile).
 
 Once configured, the system will automatically load and render the selected provider in the frontend forms.
+
+## Contact
+
+For direct contact, visit [Telegram](https://t.me/elyerr).
