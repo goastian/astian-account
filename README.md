@@ -8,9 +8,10 @@ This server was developed to facilitate the creation of microservices applicatio
 
 ## Resources
 
--   [Official Documentation](https://gitlab.com/elyerr/outh2-passport-server/-/wikis/home)
 -   [Echo Server](https://gitlab.com/elyerr/echo-server)
 -   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
+
+---
 
 # 🚀 Deploy & First User Setup
 
@@ -136,15 +137,6 @@ To configure the active CAPTCHA provider:
 
 Once configured, the system will automatically load and render the selected provider in the frontend forms.
 
----
-
-## License
-
-This project is licensed under the GNU Affero General Public License v3.0. See the [LICENSE](./LICENSE) file for details.
-
----
-
 ## Contact
 
--   Want to collaborate, contribute, or ask questions?
--   For direct contact, visit [Telegram](https://t.me/elyerr).
+For direct contact, visit [Telegram](https://t.me/elyerr).
