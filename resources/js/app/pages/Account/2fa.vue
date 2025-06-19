@@ -106,14 +106,7 @@ export default {
                 }
             }
         },
-        async getAuthUser() {
-            try {
-                const res = await this.$server.get("/api/gateway/user");
-                if (res.status === 200) {
-                    this.user = res.data;
-                }
-            } catch (_) {}
-        },
+
         async activateFactor() {
             try {
                 const res = await this.$server.post(

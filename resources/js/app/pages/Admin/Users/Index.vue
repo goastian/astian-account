@@ -60,9 +60,16 @@
             </q-table>
         </div>
 
-        <!-- Pagination -->
-        <div class="row justify-center q-mt-md">
-            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
+        <div class="row justify-center q-my-md">
+            <q-pagination
+                v-model="search.page"
+                color="primary"
+                :max="pages.total_pages"
+                size="sm"
+                boundary-numbers
+                direction-links
+                class="q-pa-xs q-gutter-sm rounded-borders"
+            />
         </div>
     </v-admin-layout>
 </template>
@@ -127,11 +134,7 @@ export default {
     },
 
     created() {
-        this.getUsers()
-    },
-
-    mounted() {
-        this.listenEvents();
+        this.getUsers();
     },
 
     watch: {
@@ -162,23 +165,21 @@ export default {
             // Setting search params
             var params = { ...this.search, ...param };
 
-
             try {
                 const res = await this.$server.get(this.$page.props.route, {
                     params: params,
                 });
 
                 if (res.status == 200 && res.data.data.length) {
-                    const values = res.data.data;
-                    const meta = res.data.meta;
-
-                    this.users = values;
+                    this.users = res.data.data;
+                    let meta = res.data.meta;
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 }
             } catch (e) { }
         },
 
+        /**
         listenEvents() {
             const events = [
                 "UserCreated",
@@ -195,7 +196,7 @@ export default {
                     this.getUsers();
                 });
             });
-        },
+        },*/
     },
 };
 </script>

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\Web\OAuth;
 
-use App\Traits\Scopes;
+ 
 use Illuminate\Http\Request;
+use App\Repositories\Traits\Scopes;
 use Laravel\Passport\TokenRepository;
 use App\Http\Controllers\ApiController;
 use Laravel\Passport\RefreshTokenRepository;
@@ -15,7 +16,7 @@ class PassportConnectController extends ApiController
 
     public function __construct()
     {
-        //headers
+        //Retrieve header X-SCOPES
         $scopes = request()->header('X-SCOPES');
 
         parent::__construct();

@@ -119,9 +119,7 @@ export default {
 
     methods: {
         async getSales(param = null) {
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            var params = { ...this.search, ...param };
 
             try {
                 const res = await this.$server.get(this.$page.props.route, {
@@ -131,7 +129,9 @@ export default {
                 if (res.status == 200) {
                     var values = res.data;
                     this.sales = values.data;
-                    this.pages = values.meta;
+                    this.pages = res.data.meta.pagination;
+                    this.search.total_pages =
+                        res.data.meta.pagination.total_pages;
                 }
             } catch (error) {}
         },

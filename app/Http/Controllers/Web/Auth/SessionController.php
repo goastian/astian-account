@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
-use App\Http\Controllers\Controller as Controller;
 use App\Http\Controllers\WebController;
 use App\Models\Auth\Session;
-use Illuminate\Http\Request;
 
 class SessionController extends WebController
 {

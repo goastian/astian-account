@@ -124,7 +124,7 @@ export default {
             params: {
                 start: null,
                 end: null,
-                type: "day",
+                type: "month",
             },
             chartType: "line",
             chartTypes: ["bar", "line", "area"],
@@ -159,9 +159,7 @@ export default {
             this.params.end = end;
         }
 
-        this.sales = this.$page.props.sales.data;
-        this.total_sales = this.$page.props.sales.total_sales;
-        this.total_commission = this.$page.props.sales.total_commission;
+        this.getSales();
 
         this.partner = this.$page.props.sales.partner
 

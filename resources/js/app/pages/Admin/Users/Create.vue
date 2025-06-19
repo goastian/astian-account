@@ -85,17 +85,7 @@ export default {
     data() {
         return {
             dialog: false,
-            form: {
-                name: null,
-                last_name: null,
-                email: null,
-                country: null,
-                dial_code: null,
-                phone: null,
-                birthday: null,
-                groups: [],
-                verify_email: false,
-            },
+            form: {},
             selected_groups: [],
             errors: {},
             countries: [],
@@ -119,8 +109,23 @@ export default {
 
     methods: {
         async open() {
+            this.clean()
             this.dialog = true;
             await this.getCountries();
+        },
+
+        clean() {
+            this.form.name = null;
+            this.form.last_name = null;
+            this.form.email = null;
+            this.form.country = null;
+            this.form.dial_code = null;
+            this.form.phone = null;
+            this.form.birthday = null;
+            this.form.groups = [];
+            this.form.verify_email = false;
+            this.errors = {}
+            this.dialog = false;
         },
 
         close(dialog) {
@@ -181,13 +186,10 @@ export default {
             try {
                 const res = await this.$server.post(
                     this.$page.props.route,
-                    this.form,
-                    { headers: { "Content-Type": "multipart/form-data" } }
+                    this.form
                 );
                 if (res.status === 201) {
-                    this.form = { groups: [] };
-                    this.errors = {};
-                    this.selected_groups = [];
+                    this.clean()
 
                     this.$q.notify({
                         type: "positive",

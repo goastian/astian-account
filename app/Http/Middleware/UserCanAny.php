@@ -2,9 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Traits\Scopes;
+
 use Closure;
 use Illuminate\Http\Request;
+use App\Repositories\Traits\Scopes;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserCanAny
@@ -22,9 +23,13 @@ class UserCanAny
             return redirect()->route('login');
         }
 
+        if (auth()->user()->isAdmin()) {
+            return $next($request);
+        }
+
         $scopes = explode(',', $scopes);
 
-        $userScopes = $this->scopes(false);
+        $userScopes = $this->scopes();
 
         if (!empty($userScopes) && array_intersect($userScopes->pluck('id')->toArray(), $scopes)) {
             return $next($request);

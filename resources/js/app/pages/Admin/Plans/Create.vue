@@ -9,127 +9,108 @@
         <q-dialog v-model="dialog" persistent full-width>
             <q-card class="w-100 py-4">
                 <q-card-section class="text-center">
-                    <h6 class="text-gray-500">Add new plan</h6>
+                    <h6 class="text-h6 text-grey-8">Add New Plan</h6>
                 </q-card-section>
 
+                <!-- Formulario principal -->
                 <q-card-section>
-                    <div class="q-gutter-y-sm">
+                    <div class="q-gutter-y-md">
+                        <!-- Nombre del plan -->
                         <q-input outlined v-model="form.name" label="Name" :error="!!errors.name">
                             <template v-slot:error>
                                 <v-error :error="errors.name" />
                             </template>
                         </q-input>
 
+                        <!-- Editor de contenido -->
                         <v-editor @content="setContent" />
 
-                        <!--
-                        <q-input
-                        outlined
-                        v-model="form.description"
-                        label="Description"
-                        type="textarea"
-                        :error="!!errors.description"
-                        >
-                        <template v-slot:error>
-                            <v-error :error="errors.description" />
-                        </template>
-                    </q-input>
-                    -->
-
+                        <!-- Opciones de activación, bonus y trial -->
                         <div class="row q-col-gutter-md">
-                            <q-item tag="label" v-ripple class="col-xs-12 col-md-6 col-lg-4">
+                            <!-- Active -->
+                            <q-item tag="label" v-ripple class="col-xs-12 col-md-4">
                                 <q-item-section avatar>
-                                    <q-checkbox v-model="form.public" color="orange" :error="!!errors.public">
-                                        <template v-slot:error>
-                                            <v-error :error="errors.public" />
-                                        </template>
-                                    </q-checkbox>
-                                </q-item-section>
-                                <q-item-section>
-                                    <q-item-label>Public</q-item-label>
-                                    <q-item-label caption>Available for purchase</q-item-label>
-                                </q-item-section>
-                            </q-item>
-
-                            <q-item tag="label" v-ripple class="col-xs-12 col-md-6 col-lg-4">
-                                <q-item-section avatar>
-                                    <q-checkbox v-model="form.active" color="orange" :error="!!errors.active">
-                                        <template v-slot:error>
-                                            <v-error :error="errors.active" />
-                                        </template>
-                                    </q-checkbox>
+                                    <q-checkbox v-model="form.active" color="orange" :error="!!errors.active" />
                                 </q-item-section>
                                 <q-item-section>
                                     <q-item-label>Active</q-item-label>
-                                    <q-item-label caption>
-                                        Enable plan availability
-                                    </q-item-label>
+                                    <q-item-label caption>Enable plan availability</q-item-label>
                                 </q-item-section>
                             </q-item>
 
-                            <q-item tag="label" v-ripple class="col-xs-12 col-md-6 col-lg-4">
+                            <!-- Bonus enabled -->
+                            <q-item tag="label" v-ripple class="col-xs-12 col-md-4">
                                 <q-item-section avatar>
                                     <q-checkbox v-model="form.bonus_enabled" color="orange"
-                                        :error="!!errors.bonus_enabled">
-                                        <template v-slot:error>
-                                            <v-error :error="errors.bonus_enabled" />
-                                        </template>
-                                    </q-checkbox>
+                                        :error="!!errors.bonus_enabled" />
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label> Bonus enabled </q-item-label>
-                                    <q-item-label caption>
-                                        Enable an additional bonus for the plan
-                                    </q-item-label>
+                                    <q-item-label>Bonus enabled</q-item-label>
+                                    <q-item-label caption>Enable an additional bonus for the
+                                        plan</q-item-label>
                                 </q-item-section>
                             </q-item>
 
-                            <q-input class="col-xs-12 col-md-6 col-lg-4" v-model="form.bonus_duration"
-                                label="Bonus duration" type="number" outlined :error="!!errors.bonus_duration">
+                            <!-- Bonus duration -->
+                            <q-input class="col-xs-12 col-md-4" v-model="form.bonus_duration" label="Bonus duration"
+                                type="number" outlined :error="!!errors.bonus_duration">
                                 <template v-slot:error>
                                     <v-error :error="errors.bonus_duration" />
+                                </template>
+                            </q-input>
+
+                            <!-- Trial enabled -->
+                            <q-item tag="label" v-ripple class="col-xs-12 col-md-4">
+                                <q-item-section avatar>
+                                    <q-checkbox v-model="form.trial_enabled" color="orange"
+                                        :error="!!errors.trial_enabled" />
+                                </q-item-section>
+                                <q-item-section>
+                                    <q-item-label>Trial enabled</q-item-label>
+                                    <q-item-label caption>Enable an additional trial for the
+                                        plan</q-item-label>
+                                </q-item-section>
+                            </q-item>
+
+                            <!-- Trial duration -->
+                            <q-input class="col-xs-12 col-md-4" v-model="form.trial_duration" label="Trial duration"
+                                type="number" outlined :error="!!errors.trial_duration">
+                                <template v-slot:error>
+                                    <v-error :error="errors.trial_duration" />
                                 </template>
                             </q-input>
                         </div>
                     </div>
                 </q-card-section>
 
+                <!-- Sección de precios -->
                 <q-card-section>
                     <div class="text-subtitle2 q-mb-sm">Prices</div>
                     <v-error :error="errors.prices" />
-                    <div v-for="(price, index) in form.prices" :key="index" class="row q-mb-md">
-                        <div class="col-12 col-md-3">
-                            <q-select v-model="price.billing_period" map-options emit-value :options="billing_periods"
-                                label="Billing Period" :error="!!errors[`prices.${index}.billing_period`]
-                                    ">
-                                <template v-slot:error>
-                                    <v-error :error="errors[
-                                        `prices.${index}.billing_period`
-                                    ]
-                                        " />
-                                </template>
-                            </q-select>
-                        </div>
 
-                        <div class="col-12 col-md-3">
-                            <q-select v-model="price.currency" :options="currencies" emit-value label="Currency"
-                                :error="!!errors[`prices.${index}.currency`]">
-                                <template v-slot:error>
-                                    <v-error :error="errors[`prices.${index}.currency`]
-                                        " />
-                                </template>
-                            </q-select>
-                        </div>
+                    <div v-for="(price, index) in form.prices" :key="index" class="row q-col-gutter-md q-mb-md">
+                        <q-select class="col-12 col-md-3" v-model="price.billing_period" :options="billing_periods"
+                            emit-value map-options label="Billing Period"
+                            :error="!!errors[`prices.${index}.billing_period`]">
+                            <template v-slot:error>
+                                <v-error :error="errors[`prices.${index}.billing_period`]
+                                    " />
+                            </template>
+                        </q-select>
 
-                        <div class="col-12 col-md-3">
-                            <q-input v-model.number="price.amount" label="Amount" type="number" step="0.01"
-                                :error="!!errors[`prices.${index}.amount`]">
-                                <template v-slot:error>
-                                    <v-error :error="errors[`prices.${index}.amount`]
-                                        " />
-                                </template>
-                            </q-input>
-                        </div>
+                        <q-select class="col-12 col-md-3" v-model="price.currency" :options="currencies" emit-value
+                            label="Currency" :error="!!errors[`prices.${index}.currency`]">
+                            <template v-slot:error>
+                                <v-error :error="errors[`prices.${index}.currency`]" />
+                            </template>
+                        </q-select>
+
+                        <q-input class="col-12 col-md-3" v-model.number="price.amount" label="Amount" type="number"
+                            step="0.01" :error="!!errors[`prices.${index}.amount`]">
+                            <template v-slot:error>
+                                <v-error :error="errors[`prices.${index}.amount`]" />
+                            </template>
+                        </q-input>
 
                         <div class="col-12 col-md-3 flex justify-center items-center">
                             <q-btn icon="delete" color="negative" outline @click="form.prices.splice(index, 1)" />
@@ -149,8 +130,9 @@
                         " />
                 </q-card-section>
 
+                <!-- Scopes -->
                 <q-card-section>
-                    <div class="text-subtitle2 q-mb-sm">Choose scopes</div>
+                    <div class="text-subtitle2 q-mb-sm">Choose Scopes</div>
 
                     <q-select filled v-model="service" :options="services" label="Service" color="teal" clearable
                         :error="!!errors.scopes" options-selected-class="text-deep-orange">
@@ -160,9 +142,9 @@
                                     <q-icon color="positive" name="mdi-check-all" />
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label class="text-ucfirst">
-                                        {{ scope.opt.name }}
-                                    </q-item-label>
+                                    <q-item-label class="text-ucfirst">{{
+                                        scope.opt.name
+                                    }}</q-item-label>
                                     <q-item-label caption class="text-ucfirst">
                                         <q-icon color="positive" name="mdi-group" />
                                         {{ scope.opt.group.name }} <br />
@@ -171,15 +153,16 @@
                                 </q-item-section>
                             </q-item>
                         </template>
+
                         <template v-slot:selected>
                             <q-item v-if="service && service.name">
                                 <q-item-section avatar>
                                     <q-icon color="positive" name="mdi-check-all" />
                                 </q-item-section>
                                 <q-item-section>
-                                    <q-item-label class="text-ucfirst">
-                                        {{ service.name }}
-                                    </q-item-label>
+                                    <q-item-label class="text-ucfirst">{{
+                                        service.name
+                                    }}</q-item-label>
                                     <q-item-label caption class="text-ucfirst">
                                         <q-icon color="positive" name="mdi-group" />
                                         {{ service.group.name }}
@@ -187,12 +170,14 @@
                                 </q-item-section>
                             </q-item>
                         </template>
+
                         <template v-slot:error>
-                            <v-error :error="errors.scopes"></v-error>
+                            <v-error :error="errors.scopes" />
                         </template>
                     </q-select>
 
-                    <q-list v-if="scopes.length" bordered padding class="rounded-borders q-mt-md bg-grey-1 list">
+                    <!-- Lista de scopes -->
+                    <q-list v-if="scopes.length" bordered padding class="rounded-borders q-mt-md bg-grey-1">
                         <q-item v-for="(item, index) in scopes" :key="index"
                             class="q-mb-sm q-pa-sm shadow-1 rounded-borders">
                             <q-item-section avatar>
@@ -231,9 +216,9 @@
                     </q-list>
                 </q-card-section>
 
+                <!-- Acciones -->
                 <q-card-actions align="right">
                     <q-btn outline color="positive" label="Accept" @click="create" />
-
                     <q-btn outline color="secondary" label="Close" @click="close" />
                 </q-card-actions>
             </q-card>
@@ -279,10 +264,11 @@ export default {
         clean() {
             this.form.name = "";
             this.form.description = "";
-            this.form.public = false;
             this.form.active = false;
             this.form.bonus_enabled = false;
             this.form.bonus_duration = 0;
+            this.form.trial_enabled = false;
+            this.form.trial_duration = 0;
             this.form.scopes = [];
             this.form.prices = [];
             this.errors = {};
@@ -300,15 +286,11 @@ export default {
          * Create a new client
          */
         async create() {
+
             try {
                 const res = await this.$server.post(
                     this.$page.props.route.plans,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                    this.form
                 );
 
                 if (res.status == 201) {

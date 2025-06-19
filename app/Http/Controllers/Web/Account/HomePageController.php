@@ -14,16 +14,6 @@ class HomePageController extends WebController
      */
     public function dashboard(Package $package)
     {
-        $package = $package->query();
-        $package->where('user_id', auth()->user()->id);
-        $package->where("status", config('billing.status.successful.name'));
-        $packages = $package->latest('created_at')->take(3)->get();
-
-        return Inertia::render(
-            "Account/About",
-            [
-                'transactions' => fractal($packages, UserPackageTransformer::class)->toArray()['data'],
-            ]
-        );
+        return Inertia::render("Account/About");
     }
 }

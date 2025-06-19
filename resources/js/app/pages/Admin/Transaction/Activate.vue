@@ -49,32 +49,21 @@ export default {
 
                 if (res.status == 200) {
                     this.dialog = false;
+                    this.$q.notify({
+                        type: "positive",
+                        message: "Transaction has been activated",
+                    });
                     this.$emit("updated");
                 }
             } catch (error) {
-                if (e.response?.status == 400 && e.response?.data?.message) {
+                if (error?.response?.status == 402) {
                     this.$q.notify({
                         type: "negative",
-                        message: e.response.data.message,
-                        timeout: 3000,
+                        message: `This transaction can be activated : ${error.response.data.message}`,
                     });
                 }
-
-                if (e.response?.status == 403 && e.response?.data?.message) {
-                    this.$q.notify({
-                        type: "negative",
-                        message: e.response.data.message,
-                        timeout: 3000,
-                    });
-                }
-
-                if (e.response?.status == 402 && e.response?.data?.message) {
-                    this.$q.notify({
-                        type: "negative",
-                        message: e.response.data.message,
-                        timeout: 3000,
-                    });
-                }
+            } finally {
+                this.dialog = false;
             }
         },
     },

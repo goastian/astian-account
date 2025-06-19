@@ -4,13 +4,20 @@ namespace App\Http\Controllers\Web\Admin\Subscription;
 use App\Models\Subscription\Plan;
 use App\Models\Subscription\Price;
 use App\Http\Controllers\WebController;
+use App\Repositories\PlanRepository;
 
 class PlanPriceController extends WebController
 {
+    /**
+     * Repository
+     * @var PlanRepository
+     */
+    public $repository;
 
-    public function __construct()
+    public function __construct(PlanRepository $planRepository)
     {
         parent::__construct();
+        $this->repository = $planRepository;
         $this->middleware('userCanAny:administrator_plan_full,administrator_plan_destroy')->only('destroy');
     }
 
@@ -22,8 +29,6 @@ class PlanPriceController extends WebController
      */
     public function destroy(Plan $plan, Price $price)
     {
-        $price->delete();
-
-        return $this->message(__('Price has been deleted successfully'), 200);
+        return $this->repository->deletePrice($plan->id, $price->id);
     }
 }

@@ -12,17 +12,8 @@
             </q-card-section>
 
             <q-card-section class="q-pt-none">
-                <q-select
-                    v-model="form.role_id"
-                    label="Roles"
-                    :options="roles"
-                    option-label="name"
-                    option-value="id"
-                    filter
-                    emit-value
-                    map-options
-                    :error="!!errors.role_id"
-                >
+                <q-select v-model="form.role_id" label="Roles" :options="roles" option-label="name" option-value="id"
+                    filter emit-value map-options :error="!!errors.role_id">
                     <template v-slot:error>
                         <v-error :error="errors.role_id" />
                     </template>
@@ -30,12 +21,7 @@
 
                 <q-item tag="label" v-ripple>
                     <q-item-section avatar>
-                        <q-checkbox
-                            v-model="form.api_key"
-                            val="orange"
-                            color="orange"
-                            :error="!!errors.api_key"
-                        >
+                        <q-checkbox v-model="form.api_key" val="orange" color="orange" :error="!!errors.api_key">
                             <template v-slot:error>
                                 <v-error :error="errors.api_key" />
                             </template>
@@ -51,12 +37,7 @@
 
                 <q-item tag="label" v-ripple>
                     <q-item-section avatar>
-                        <q-checkbox
-                            v-model="form.active"
-                            val="orange"
-                            color="orange"
-                            :error="!!errors.active"
-                        >
+                        <q-checkbox v-model="form.active" val="orange" color="orange" :error="!!errors.active">
                             <template v-slot:error>
                                 <v-error :error="errors.active" />
                             </template>
@@ -72,12 +53,7 @@
 
                 <q-item tag="label" v-ripple>
                     <q-item-section avatar>
-                        <q-checkbox
-                            v-model="form.public"
-                            val="orange"
-                            color="orange"
-                            :error="!!errors.public"
-                        >
+                        <q-checkbox v-model="form.public" val="orange" color="orange" :error="!!errors.public">
                             <template v-slot:error>
                                 <v-error :error="errors.public" />
                             </template>
@@ -93,18 +69,8 @@
             </q-card-section>
 
             <q-card-actions align="right">
-                <q-btn
-                    outline
-                    :label="scope ? 'Update' : 'Add'"
-                    color="primary"
-                    @click="addScopes"
-                />
-                <q-btn
-                    outline
-                    label="Close"
-                    color="negative"
-                    @click="dialog = false"
-                />
+                <q-btn outline :label="scope ? 'Update' : 'Add'" color="primary" @click="addScopes" />
+                <q-btn outline label="Close" color="negative" @click="dialog = false" />
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -167,16 +133,12 @@ export default {
                 if (res.status == 200) {
                     this.roles = res.data.data;
                 }
-            } catch (error) {}
+            } catch (error) { }
         },
 
         async addScopes() {
             try {
-                const res = await this.$server.post(this.link, this.form, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                });
+                const res = await this.$server.post(this.link, this.form);
 
                 if (res.status == 201) {
                     this.roles = res.data.data;

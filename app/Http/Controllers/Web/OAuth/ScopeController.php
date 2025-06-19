@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Web\OAuth;
 
+use App\Repositories\Traits\Scopes;
 use App\Http\Controllers\WebController;
-use App\Traits\Scopes;
-
 
 class ScopeController extends WebController
 {

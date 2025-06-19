@@ -117,12 +117,7 @@ export default {
             try {
                 const res = await this.$server.post(
                     this.$page.props.route.services,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                        },
-                    }
+                    this.form
                 );
 
                 if (res.status == 201) {
