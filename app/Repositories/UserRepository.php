@@ -493,8 +493,8 @@ class UserRepository implements Contracts
             $user->address = $data['address'];
         }
 
-        if (!empty($data['dial_phone'])) {
-            $user->dial_phone = $data['dial_phone'];
+        if (!empty($data['dial_code'])) {
+            $user->dial_code = $data['dial_code'];
         }
 
         if (!empty($data['phone'])) {
