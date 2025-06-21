@@ -140,4 +140,22 @@ class DashboardRepository
             "total_commission" => $total_commissions
         ];
     }
+
+    /**
+     * Show the data for dashboard on the user
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponser
+     */
+    public function home(Request $request)
+    {
+        $latest = Transaction::whereHas('package', function ($query) {
+            $query->where('id', auth()->user()->id);
+        });
+
+        return $this->data([
+            'data' => [
+                'transactions' => $latest->latest()->take(10)->get(),
+            ]
+        ]);
+    }
 }
