@@ -6,17 +6,27 @@
                     <div class="column container-left">
                         <div class="container-welcome rounded pa-md card">
                             <div class="img flex justify-center items-center">
-                                <q-icon name="mdi-account" size="40px"/>
+                                <q-icon name="mdi-account" size="40px" />
                             </div>
                             <div class="column greet w-full no-wrap">
-                                <div class="row no-wrap justify-between items-center">
-                                    <span class="inline back">Welcome, back</span>
+                                <div
+                                    class="row no-wrap justify-between items-center"
+                                >
+                                    <span class="inline back"
+                                        >Welcome, back</span
+                                    >
                                     <span class="inline tag">Verified</span>
                                 </div>
                                 <div class="welcome__name">
-                                    <h2>¡Hello, {{ user.name }} {{ user.last_name }}!</h2>
+                                    <h2>
+                                        ¡Hello, {{ user.name }}
+                                        {{ user.last_name }}!
+                                    </h2>
                                     <span class="welcome__description">
-                                        We're glad you're here.  What would you like to do today? Below are several options to manage  your account and set it up as you prefer.
+                                        We're glad you're here. What would you
+                                        like to do today? Below are several
+                                        options to manage your account and set
+                                        it up as you prefer.
                                     </span>
                                 </div>
                             </div>
@@ -26,17 +36,20 @@
                                 <h3 class="subtitle">Apps</h3>
                                 <div class="flex q-gutter-x-md">
                                     <button @click="moveLeft">
-                                        <q-icon name="mdi-arrow-left" size="20px" />
+                                        <q-icon
+                                            name="mdi-arrow-left"
+                                            size="20px"
+                                        />
                                     </button>
                                     <button @click="moveRight">
-                                        <q-icon name="mdi-arrow-right" size="20px" />
+                                        <q-icon
+                                            name="mdi-arrow-right"
+                                            size="20px"
+                                        />
                                     </button>
                                 </div>
                             </div>
-                            <div
-                                class="apps"
-                                ref="carousel"
-                            >
+                            <div class="apps" ref="carousel">
                                 <a
                                     v-for="(item, index) in apps"
                                     :key="index"
@@ -44,7 +57,11 @@
                                     target="_blank"
                                     class="cardApp"
                                 >
-                                    <q-icon :name="item.icon" :class="item.color" size="26px" />
+                                    <q-icon
+                                        :name="item.icon"
+                                        :class="item.color"
+                                        size="26px"
+                                    />
                                     <h4>{{ item.name }}</h4>
                                     <span>{{ item.description }}</span>
                                 </a>
@@ -136,15 +153,25 @@
                                 v-for="(item, index) in security"
                                 :key="index"
                             >
-                                <div class="row items-center q-gutter-x-md no-wrap">
-                                    <q-icon :name="item.icon" class="icon" size="21px" />
+                                <div
+                                    class="row items-center q-gutter-x-md no-wrap"
+                                >
+                                    <q-icon
+                                        :name="item.icon"
+                                        class="icon"
+                                        size="21px"
+                                    />
                                     <div>
                                         <h4>{{ item.title }}</h4>
                                         <span>{{ item.description }}</span>
                                     </div>
                                 </div>
                                 <div>
-                                    <a @click="open(item.route)" v-if="item.btnTitle">{{ item.btnTitle }}</a>
+                                    <a
+                                        @click="open(item.route)"
+                                        v-if="item.btnTitle"
+                                        >{{ item.btnTitle }}</a
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -152,23 +179,42 @@
                     <div class="col card ga-y-md">
                         <div class="flex justify-between">
                             <h3 class="subtitle">Subscriptions</h3>
-                            <button @click="open(suscriptionRoute.route)">See All</button>
+                            <button @click="open(subscriptionRoute.route)">
+                                See All
+                            </button>
                         </div>
                         <div class="column q-gutter-y-md">
                             <div
-                                v-if="suscription.length > 0"
+                                v-if="subscriptions.length > 0"
                                 class="row card-default justify-between items-start"
-                                v-for="(item, index) in suscription"
+                                v-for="(item, index) in subscription"
                                 :key="index"
                             >
                                 <div class="row items-center q-gutter-x-md">
-                                    <q-icon name="mdi-playlist-check" class="icon" size="21px" />
+                                    <q-icon
+                                        name="mdi-playlist-check"
+                                        class="icon"
+                                        size="21px"
+                                    />
                                     <div>
                                         <h4>{{ item.meta.name }}</h4>
-                                        <div class="flex description items-center">
-                                            <span>{{ item.meta.price.billing_period }} Plan</span>
+                                        <div
+                                            class="flex description items-center"
+                                        >
+                                            <span
+                                                >{{
+                                                    item.meta.price
+                                                        .billing_period
+                                                }}
+                                                Plan</span
+                                            >
                                             <span>-</span>
-                                            <span>Price: ${{ item.meta.price.amount_format }}</span>
+                                            <span
+                                                >Price: ${{
+                                                    item.meta.price
+                                                        .amount_format
+                                                }}</span
+                                            >
                                         </div>
                                     </div>
                                 </div>
@@ -182,7 +228,8 @@
                                     <h6>You haven’t purchased any plan yet</h6>
                                 </div>
                                 <span>
-                                    Buy a plan to start enjoying all the benefits available in your dashboard.
+                                    Buy a plan to start enjoying all the
+                                    benefits available in your dashboard.
                                 </span>
                             </div>
                         </div>
@@ -195,10 +242,98 @@
 
 <script>
 export default {
-    created() {
-        this.app_name = this.$page.props.app_name;
-        this.suscription = this.$page.props.transactions;
+    data() {
+        return {
+            offset: 0,
+            step: 100,
+            subscriptions: [],
+            subscriptionRoute: {
+                route: this.loadRoute(
+                    this.$page.props.user_routes,
+                    "Subscriptions"
+                ),
+            },
+            security: [
+                {
+                    title: "Password",
+                    icon: "mdi-key-outline",
+                    btnTitle: "change",
+                    route: this.loadRoute(
+                        this.$page.props.user_routes,
+                        "Password"
+                    ),
+                },
+                {
+                    title: "Two-factor authentication",
+                    description: this.$page.props.user.m2fa
+                        ? "Enabled"
+                        : "Not Enabled",
+                    icon: "mdi-cellphone",
+                    btnTitle: this.$page.props.user.m2fa ? "Change" : "Enable",
+                    route: this.loadRoute(this.$page.props.user_routes, "2FA"),
+                },
+                {
+                    title: "Account Security: Good",
+                    description: this.$page.props.user.m2fa
+                        ? "Your account is secure."
+                        : "Your account is secure, but you can improve it even more by enabling two-factor authentication.",
+                    icon: "mdi-check",
+                },
+            ],
+            apps: [
+                {
+                    name: "Contacts",
+                    route: "https://contacts.astian.org",
+                    icon: "mdi-contacts",
+                    description: "Store and access your contacts.",
+                    color: "teal",
+                },
+                {
+                    name: "AstianGO",
+                    route: "https://astiango.co",
+                    icon: "mdi-magnify",
+                    description: "Find information quickly",
+                    color: "orange",
+                },
+                {
+                    name: "Cloud",
+                    route: "https://cloud.astian.org",
+                    icon: "mdi-cloud-check-outline",
+                    description: "Store and share files",
+                    color: "purple",
+                },
+                {
+                    name: "Calendar",
+                    route: "https://calendar.astian.org",
+                    icon: "mdi-calendar-blank-outline",
+                    description: "Organize your events and reminders",
+                    color: "green",
+                },
+                {
+                    name: "Midori",
+                    route: "https://astian.org/midori-browser/",
+                    icon: "mdi-earth",
+                    description: "Browse fast and secure",
+                    color: "teal",
+                },
+                {
+                    name: "Notes",
+                    route: "https://notes.astian.org",
+                    icon: "mdi-note-multiple-outline",
+                    description: "Take notes and organize ideas",
+                    color: "orange",
+                },
+                {
+                    name: "AstianVPN",
+                    route: "https://vpn.astian.org",
+                    icon: "mdi-shield-outline",
+                    description: "Browse securely and privately",
+                    color: "purple",
+                },
+            ],
+        };
     },
+
     computed: {
         user() {
             return this.$page.props.user;
@@ -209,95 +344,20 @@ export default {
         rowStyle() {
             return {
                 transform: `translateX(${this.offset}px)`,
-                transition: 'transform 0.3s ease',
+                transition: "transform 0.3s ease",
             };
         },
     },
+
+    created() {
+        this.app_name = this.$page.props.app_name;
+        this.getData();
+    },
+
     mounted() {
         document.title = `Dashboard - ${this.app_name}`;
     },
-    data() {
-        return {
-            offset: 0,
-            step: 100,
-            suscription: [],
-            suscriptionRoute: {
-                route: this.loadRoute(this.$page.props.user_routes, 'Subscriptions'),
-            },
-            security: [
-                {
-                    title: 'Password',
-                    icon: 'mdi-key-outline',
-                    btnTitle: 'change',
-                    route: this.loadRoute(this.$page.props.user_routes, 'Password'),
-                },
-                {
-                    title: 'Two-factor authentication',
-                    description: this.$page.props.user.m2fa ? 'Enabled' : 'Not Enabled',
-                    icon: 'mdi-cellphone',
-                    btnTitle: this.$page.props.user.m2fa ? 'Change' : 'Enable',
-                    route: this.loadRoute(this.$page.props.user_routes, '2FA'),
-                },
-                {
-                    title: 'Account Security: Good',
-                    description: this.$page.props.user.m2fa ? 'Your account is secure.' : 'Your account is secure, but you can improve it even more by enabling two-factor authentication.',
-                    icon: 'mdi-check',
-                }
-            ],
-            apps: [
-                {
-                    name: 'Contacts',
-                    route: 'https://contacts.astian.org',
-                    icon: 'mdi-contacts',
-                    description: 'Store and access your contacts.',
-                    color: 'teal',
-                },
-                {
-                    name: 'AstianGO',
-                    route: 'https://astiango.co',
-                    icon: 'mdi-magnify',
-                    description: 'Find information quickly',
-                    color: 'orange',
-                },
-                {
-                    name: 'Cloud',
-                    route: 'https://cloud.astian.org',
-                    icon: 'mdi-cloud-check-outline',
-                    description: 'Store and share files',
-                    color: 'purple'
-                },
-                {
-                    name: 'Calendar',
-                    route: 'https://calendar.astian.org',
-                    icon: 'mdi-calendar-blank-outline',
-                    description: 'Organize your events and reminders',
-                    color: 'green'
 
-                },
-                {
-                    name: 'Midori',
-                    route: 'https://astian.org/midori-browser/',
-                    icon: 'mdi-earth',
-                    description: 'Browse fast and secure',
-                    color: 'teal'
-                },
-                {
-                    name: 'Notes',
-                    route: 'https://notes.astian.org',
-                    icon: 'mdi-note-multiple-outline',
-                    description: 'Take notes and organize ideas',
-                    color: 'orange'
-                },
-                {
-                    name: 'AstianVPN',
-                    route: 'https://vpn.astian.org',
-                    icon: 'mdi-shield-outline',
-                    description: 'Browse securely and privately',
-                    color: 'purple',
-                }
-            ]
-        };
-    },
     methods: {
         moveLeft() {
             this.$refs.carousel.scrollLeft -= 200;
@@ -308,16 +368,27 @@ export default {
         open(item) {
             window.location.href = item;
         },
+
+        async getData() {
+            try {
+                const res = this.$server.get(this.$page.props.route);
+                if (res.status == 200) {
+                    this.subscriptions = res.data.data.Subscriptions;
+                }
+            } catch (error) {}
+        },
         loadRoute(routes, name) {
             let res;
-            for(const group in routes) {
-                if(routes[group].show) {
-                    const data = routes[group].menu.filter(data => data.name == name);
+            for (const group in routes) {
+                if (routes[group].show) {
+                    const data = routes[group].menu.filter(
+                        (data) => data.name == name
+                    );
                     res = data[0];
                 }
             }
             return res.route;
-        }
+        },
     },
 };
 </script>
@@ -345,15 +416,15 @@ export default {
 
 .icon {
     color: var(--q-primary);
-    padding: .5rem;
+    padding: 0.5rem;
     border-radius: 50%;
 }
 
 .card-default > div:last-child > a {
-    border-radius: .4rem;
-    border: .04rem solid var(--q-primary);
+    border-radius: 0.4rem;
+    border: 0.04rem solid var(--q-primary);
     color: var(--q-primary);
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
     cursor: pointer;
 }
 
@@ -381,13 +452,13 @@ export default {
     font-size: 13px;
     font-weight: 500;
     color: var(--q-color-secondary);
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .card-default {
-    border-radius: .4rem;
-    border: .04rem solid var(--q-border);
-    padding: .5rem 1rem;
+    border-radius: 0.4rem;
+    border: 0.04rem solid var(--q-border);
+    padding: 0.5rem 1rem;
 }
 
 .container-welcome {
@@ -429,22 +500,22 @@ export default {
 }
 
 .orange {
-    background: linear-gradient(to bottom, #FF7478, #A74547);
+    background: linear-gradient(to bottom, #ff7478, #a74547);
     color: white;
 }
 
 .purple {
-    background: linear-gradient(to bottom, #FC30AA, #9C1867);
+    background: linear-gradient(to bottom, #fc30aa, #9c1867);
     color: white;
 }
 
 .green {
-    background: linear-gradient(to bottom, #7FDD00, #559500);
+    background: linear-gradient(to bottom, #7fdd00, #559500);
     color: white;
 }
 
 .teal {
-    background: linear-gradient(to bottom, #00B9B4, #009793);
+    background: linear-gradient(to bottom, #00b9b4, #009793);
     color: white;
 }
 
@@ -467,11 +538,11 @@ export default {
 
 .tag {
     width: auto;
-    padding: .2rem 1rem;
+    padding: 0.2rem 1rem;
     background-color: var(--q-background-green);
-    border-radius: .4rem;
+    border-radius: 0.4rem;
     color: var(--q-color-green);
-    border: .04rem solid var(--q-color-green);
+    border: 0.04rem solid var(--q-color-green);
     font-size: 12px;
 }
 
@@ -500,8 +571,8 @@ export default {
 }
 
 .apps .q-icon {
-    padding: .5rem;
-    border-radius: .4rem;
+    padding: 0.5rem;
+    border-radius: 0.4rem;
 }
 
 .cardApp {
@@ -512,9 +583,9 @@ export default {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    padding: .8rem 1.4rem;
-    border-radius: .8rem;
-    border: .04rem solid var(--q-border);
+    padding: 0.8rem 1.4rem;
+    border-radius: 0.8rem;
+    border: 0.04rem solid var(--q-border);
 }
 
 .cardApp > h4 {
@@ -562,5 +633,4 @@ export default {
         max-width: 100%;
     }
 }
-
 </style>
