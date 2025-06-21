@@ -35,6 +35,7 @@
 
                         <!-- Editor de contenido -->
                         <v-editor @content="setContent" />
+                        <v-error :error="errors.description" />
 
                         <!-- Opciones de activación, bonus y trial -->
                         <div class="row q-col-gutter-md">
