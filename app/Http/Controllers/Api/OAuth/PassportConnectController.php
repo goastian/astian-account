@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api\OAuth;
- 
+
 use Illuminate\Http\Request;
 use App\Repositories\Traits\Scopes;
 use App\Http\Controllers\ApiController;
@@ -106,7 +106,12 @@ class PassportConnectController extends ApiController
 
         $session = $oAuthSessionTokenRepository->findToken($token->id);
 
-        $oAuthSessionTokenRepository->destroyTokenSession($session->getSessionId());
+        // Revoke token with session
+        if (!empty($session)) {
+            $oAuthSessionTokenRepository->destroyTokenSession($session->getSessionId());
+        } else {
+            $token->revoke();
+        }
 
         return $this->message(__('Session finished successfully'), 200);
     }

@@ -26,6 +26,7 @@ class PartnerController extends WebController
         DashboardRepository $dashboardRepository,
         PartnerRepository $partnerRepository
     ) {
+        parent::__construct();
         $this->dashboardRepository = $dashboardRepository;
         $this->repository = $partnerRepository;
         $this->middleware("userCanAny:reseller_partner_full");

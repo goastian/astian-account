@@ -1,17 +1,13 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
+use Inertia\Inertia; 
+use Illuminate\Http\Request;
+use App\Models\Subscription\Role; 
+use App\Repositories\RoleRepository; 
+use App\Http\Controllers\WebController; 
 use App\Http\Requests\Role\StoreRequest;
 use App\Http\Requests\Role\UpdateRequest;
-use App\Repositories\RoleRepository;
-use App\Rules\StringOnlyRule;
-use Inertia\Inertia;
-use App\Rules\BooleanRule;
-use Illuminate\Http\Request;
-use App\Models\Subscription\Role;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\WebController;
-use Elyerr\ApiResponse\Exceptions\ReportError;
 
 class RoleController extends WebController
 {

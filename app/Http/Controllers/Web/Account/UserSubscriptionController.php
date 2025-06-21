@@ -31,6 +31,7 @@ class UserSubscriptionController extends WebController
      */
     public function __construct(TransactionRepository $transactionRepository, PackageRepository $packageRepository)
     {
+        parent::__construct();
         $this->transactionRepository = $transactionRepository;
         $this->packageRepository = $packageRepository;
     }
