@@ -194,7 +194,7 @@ export default {
                 total_pages: 0,
             },
             params: {
-                billing_period: 'daily'
+                billing_period: 'monthly'
             },
             app: 'vpn',
             apps: [
