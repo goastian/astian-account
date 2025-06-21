@@ -16,6 +16,7 @@ class HomePageController extends WebController
 
     public function __construct(DashboardRepository $dashboardRepository)
     {
+        parent::__construct();
         $this->repository = $dashboardRepository;
     }
 
