@@ -8,6 +8,8 @@ This server was developed to facilitate the creation of microservices applicatio
 
 ## Resources
 
+-   [Documentation](https://gitlab.com/elyerr/oauth2-passport-server/-/wikis/home)
+-   [API Documentation](https://documenter.getpostman.com/view/5625104/2sB2xBDq6o)
 -   [Echo Server](https://gitlab.com/elyerr/echo-server)
 -   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
 
