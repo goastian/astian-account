@@ -3,7 +3,7 @@
         <q-page class="q-pa-md">
             <div class="row">
                 <q-card class="col-xs-12 col-sm-6 col-md-3" bordered flat v-for="card in cards" :key="card.label">
-                    <q-card-section class="row items-center q-py-sm">
+                    <div class="row items-center q-py-sm">
                         <q-icon :name="card.icon" size="32px" color="primary" />
                         <div class="q-ml-md">
                             <div class="text-h6">{{ card.value }}</div>
@@ -12,6 +12,8 @@
                             </div>
                         </div>
                     </div>
+                </q-card>
+            </div>
 
             <q-separator class="q-my-lg" />
             <div class="row q-col-gutter-sm">
@@ -133,20 +135,22 @@ export default {
         setInterval(() => {
             this.getData();
         }, 10000);
-
+        /*
         this.$nextTick(() => {
             this.checkScroll();
         });
         window.addEventListener('resize', this.checkScroll);
+        /*/
     },
 
     watch: {
         'theme.selectedTheme'() {
-            this.loadData(this.$page.props.data);
+            this.getData();
         }
     },
 
     methods: {
+        /*
         moveLeft() {
             this.$refs.carousel.scrollLeft -= 200;
             this.$nextTick(this.checkScroll);
@@ -162,6 +166,7 @@ export default {
             this.canScrollLeft = el.scrollLeft > 0;
             this.canScrollRight = (el.scrollLeft + el.clientWidth) < el.scrollWidth;
         },
+        */
 
         getDefaultDates() {
             const today = new Date();
