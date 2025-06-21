@@ -31,7 +31,7 @@
                                         ref="inputs"
                                     />
                                 </div>
-                                <span v-if="errorMessage" class="error-message">{{ errorMessage.token[0] }}</span>
+                                <v-error :error="errors.token" />
                             </div>
                             <div class="column q-gutter-y-md items-center">
                                 <q-btn
@@ -73,12 +73,11 @@ export default {
         return {
             token: "",
             user: {},
-            errorMessage: "",
+            errors: {},
             code: Array(6).fill(""),
         };
     },
     mounted() {
-        this.listener();
         this.user = this.$page.props.user;
         this.$refs.inputs[0].focus();
     },
@@ -125,9 +124,13 @@ export default {
                     this.errorMessage = '';
                     this.popup(res.data.message, "warning");
                 }
+                
             } catch (err) {
-                if (err.response) {
-                    this.errorMessage = err.response.data.errors;
+                if (err.response && err.response.status == 422) {
+                    this.errors = err.response.data.errors;
+                }
+                if (err.response && err.response.status == 403) {
+                    this.popup(err.response.data.errors);
                 }
             }
         },
