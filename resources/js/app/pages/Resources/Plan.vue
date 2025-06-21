@@ -255,6 +255,7 @@ export default {
     methods: {
         select_period(period) {
             this.params.billing_period = period;
+            this.plans = [];
             this.getPlans();
         },
 
@@ -277,9 +278,14 @@ export default {
 
             Object.assign(this.search, query_data);
 
+            const paramss = {
+                ...this.search,
+                ...this.params
+            }
+
             try {
                 const res = await this.$server.get(this.$page.props.route, {
-                    params: this.search,
+                    params: paramss
                 });
 
                 if (res.status === 200) {
@@ -420,9 +426,6 @@ button {
 
 .description > div {
     margin: 0;
-}
-
-.card-footer {
 }
 
 .card-footer > button {
