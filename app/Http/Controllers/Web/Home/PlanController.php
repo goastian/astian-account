@@ -41,36 +41,15 @@ class PlanController extends WebController
         ]);
     }
 
+    /**
+     * show
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Subscription\Plan $plan
+     * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
+     */
     public function pay(Request $request, plan $plan) {
-        //Prepare query
-        $data = $plan->query();
-
-        // Search plans only active an public
-        $data = $data->with(['scopes', 'prices'])
-            ->where('active', true);
-
-        // Search by billing period
-        if (!empty($billing_period = $request->billing_period)) {
-            $data->whereHas('prices', function ($query) use ($billing_period) {
-                $query->where('billing_period', $billing_period);
-            });
-        }
-
-        // Search by service like cloud , vpn , etc
-        if (!empty($service_name = $request->service)) {
-            $data->whereHas('scopes.service', function ($query) use ($service_name) {
-                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($service_name) . '%']);
-            });
-        }
-
-        $params = $this->filter_transform($plan->transformer);
-
-        $this->searchByBuilder($data, $params);
-
-        $this->orderByBuilder($data, $plan->transformer);
-
-        if (request()->wantsJson()) {
-            return $this->showAllByBuilder($data, $plan->transformer);
+        if ($request->wantsJson()) {
+            return $this->repository->searchPlanForGuest($request);
         }
 
         return Inertia::render('Resources/Pay', [
