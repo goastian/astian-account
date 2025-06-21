@@ -8,91 +8,74 @@
                         List of Packages
                     </q-toolbar-title>
                 </q-toolbar>
+            </div>
 
-        <div class="q-pa-md">
-            <q-table
-                title="Your Packages"
-                :rows="packages"
-                :columns="columns"
-                row-key="id"
-                flat
-                bordered
-                hide-bottom
-                :rows-per-page-options="[search.per_page]"
-            >
-                <template v-slot:body-cell-name="props">
-                    <q-td>
-                        <div class="text-weight-medium text-primary">
-                            {{ props.row.meta.name }}
-                        </div>
-                        <div class="text-caption text-grey">
-                            {{ props.row.transaction.billing_period }} plan
-                        </div>
-                    </q-td>
-                </template>
+            <div class="q-pa-md">
+                <q-table title="Your Packages" :rows="packages" :columns="columns" row-key="id" flat bordered
+                    hide-bottom :rows-per-page-options="[search.per_page]">
+                    <template v-slot:body-cell-name="props">
+                        <q-td>
+                            <div class="text-weight-medium text-primary">
+                                {{ props.row.meta.name }}
+                            </div>
+                            <div class="text-caption text-grey">
+                                {{ props.row.transaction.billing_period }} plan
+                            </div>
+                        </q-td>
+                    </template>
 
-                <template v-slot:body-cell-price="props">
-                    <q-td>
-                        {{ props.row.transaction.total }}
-                        {{ props.row.transaction.currency }}
-                    </q-td>
-                </template>
+                    <template v-slot:body-cell-price="props">
+                        <q-td>
+                            {{ props.row.transaction.total }}
+                            {{ props.row.transaction.currency }}
+                        </q-td>
+                    </template>
 
-                <template v-slot:body-cell-bonus="props">
-                    <q-td>
-                        <div v-if="props.row.meta.bonus_enabled">
-                            🎁 {{ props.row.meta.bonus_duration }} days
-                        </div>
-                        <div v-else class="text-grey">—</div>
-                    </q-td>
-                </template>
+                    <template v-slot:body-cell-bonus="props">
+                        <q-td>
+                            <div v-if="props.row.meta.bonus_enabled">
+                                🎁 {{ props.row.meta.bonus_duration }} days
+                            </div>
+                            <div v-else class="text-grey">—</div>
+                        </q-td>
+                    </template>
 
-                <template v-slot:body-cell-start="props">
-                    <q-td>{{ props.row.start_at }}</q-td>
-                </template>
+                    <template v-slot:body-cell-start="props">
+                        <q-td>{{ props.row.start_at }}</q-td>
+                    </template>
 
-                <template v-slot:body-cell-end="props">
-                    <q-td>{{ props.row.end_at }}</q-td>
-                </template>
+                    <template v-slot:body-cell-end="props">
+                        <q-td>{{ props.row.end_at }}</q-td>
+                    </template>
 
-                <template v-slot:body-cell-method="props">
-                    <q-td>{{ props.row.transaction.payment_method }}</q-td>
-                </template>
+                    <template v-slot:body-cell-method="props">
+                        <q-td>{{ props.row.transaction.payment_method }}</q-td>
+                    </template>
 
-                <template v-slot:body-cell-status="props">
-                    <q-td>
-                        <q-badge
-                            :color="
-                                props.row.status === 'successful'
+                    <template v-slot:body-cell-status="props">
+                        <q-td>
+                            <q-badge :color="props.row.status === 'successful'
                                     ? 'green'
                                     : 'orange'
-                            "
-                            text-color="white"
-                            align="middle"
-                        >
-                            {{ props.row.status }}
-                        </q-badge>
-                    </q-td>
-                </template>
+                                " text-color="white" align="middle">
+                                {{ props.row.status }}
+                            </q-badge>
+                        </q-td>
+                    </template>
 
-                <template v-slot:body-cell-actions="props">
-                    <q-td>
-                        <v-detail :item="props.row" @reload="getPackages" />
-                    </q-td>
-                </template>
-            </q-table>
-        </div>
+                    <template v-slot:body-cell-actions="props">
+                        <q-td>
+                            <v-detail :item="props.row" @reload="getPackages" />
+                        </q-td>
+                    </template>
+                </q-table>
+            </div>
 
-        <div class="row justify-center q-mt-md">
-            <q-pagination
-                v-model="search.page"
-                color="grey-8"
-                :max="pages.total_pages"
-                size="md"
-                direction-links
-                boundary-numbers
-            />
-        </div>
+            <div class="row justify-center q-mt-md">
+                <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="md" direction-links
+                    boundary-numbers />
+            </div>
+        </q-page>
     </v-user-layout>
 </template>
 
