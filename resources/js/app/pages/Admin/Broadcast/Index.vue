@@ -122,7 +122,7 @@ export default {
     },
 
     created() {
-        this.getBroadcasting()
+        this.getBroadcasting();
     },
 
     watch: {
@@ -150,7 +150,7 @@ export default {
          */
         async getBroadcasting(param = null) {
             //setting searching params
-            var params = { ... this.search, ...param };
+            var params = { ...this.search, ...param };
 
             try {
                 const res = await this.$server.get("/admin/broadcasts", {

@@ -5,13 +5,13 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use DateTime;
-use DateInterval;
-use App\Traits\Scopes;
-use App\Traits\Standard;
+use DateInterval;  
 use App\Models\User\UserScope;
 use App\Models\Subscription\Group;
 use Laravel\Passport\HasApiTokens;
+use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Assets\Asset;
+use App\Repositories\Traits\Standard;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\Auth\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -40,24 +40,7 @@ class Auth extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'last_name',
-        'email',
-        'password',
-        'country',
-        'city',
-        'address',
-        'phone',
-        'birthday',
-        'm2fa',
-        'totp',
-        'verified_at',
-        'dial_code',
-        'accept_terms',
-        'partner_id',
-        'last_connected',
-    ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -66,17 +49,6 @@ class Auth extends Authenticatable
      */
     protected $hidden = [
         'password',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'verified_at' => 'datetime',
-        'accept_terms' => 'boolean',
-        'last_connected' => 'datetime'
     ];
 
     /**

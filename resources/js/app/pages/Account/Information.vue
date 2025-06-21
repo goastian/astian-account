@@ -327,12 +327,7 @@ export default {
             try {
                 const res = await this.$server.put(
                     this.form.links.update,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                    }
+                    this.form
                 );
                 if (res.status === 200) {
                     this.form = res.data.data;
@@ -358,7 +353,7 @@ export default {
                 if (res.status === 200) {
                     this.countries = res.data;
                 }
-            } catch (e) {}
+            } catch (e) { }
         },
 
         validated(name) {

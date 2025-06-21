@@ -113,12 +113,7 @@ export default {
             try {
                 const res = await this.$server.put(
                     this.$page.props.user.links.change_password,
-                    this.form,
-                    {
-                        headers: {
-                            "Content-Type": "application/x-www-form-urlencoded",
-                        },
-                    }
+                    this.form
                 );
                 if (res.status === 200) {
                     this.form = {};

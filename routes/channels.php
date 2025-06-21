@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Broadcasting\Broadcast;
+use App\Repositories\BroadcastRepository;
 
 
-Broadcast::register();
+BroadcastRepository::register();

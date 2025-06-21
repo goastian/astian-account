@@ -1,19 +1,26 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
-use App\Http\Controllers\WebController;
-use App\Rules\BooleanRule;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Group;
-use Illuminate\Support\Facades\DB;
-use Elyerr\ApiResponse\Exceptions\ReportError;
-use Inertia\Inertia;
+use App\Repositories\GroupRepository;
+use App\Http\Controllers\WebController;
+use App\Http\Requests\Group\StoreRequest;
 
 class GroupController extends WebController
 {
-    public function __construct()
+
+    /**
+     * Repository
+     * @var GroupRepository
+     */
+    public $repository;
+
+    public function __construct(GroupRepository $groupRepository)
     {
         parent::__construct();
+        $this->repository = $groupRepository;
         $this->middleware('userCanAny:administrator_group_full,administrator_group_view')->only('index');
         $this->middleware('userCanAny:administrator_group_full,administrator_group_show')->only('show');
         $this->middleware('userCanAny:administrator_group_full,administrator_group_create')->only('store');
@@ -21,28 +28,18 @@ class GroupController extends WebController
         $this->middleware('userCanAny:administrator_group_full,administrator_group_destroy')->only('destroy');
         $this->middleware('userCanAny:administrator_group_full,administrator_group_enable')->only('enable');
         $this->middleware('userCanAny:administrator_group_full,administrator_group_disable')->only('disable');
-
         $this->middleware('wants.json')->only('show');
     }
 
     /**
-     * index
-     * @param \App\Models\Subscription\Group $group
-     * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
+     * Show resources
+     * @param \Illuminate\Http\Request $request
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser|\Inertia\Response
      */
-    public function index(Group $group)
+    public function index(Request $request)
     {
-        // Retrieve params of the request
-        $params = $this->filter_transform($group->transformer);
-
-        // Prepare query
-        $data = $group->query();
-
-        // Search
-        $data = $this->searchByBuilder($data, $params);
-
-        if (request()->wantsJson()) {
-            return $this->showAllByBuilder($data, $group->transformer);
+        if ($request->wantsJson()) {
+            return $this->repository->search($request);
         }
 
         return Inertia::render(
@@ -55,40 +52,12 @@ class GroupController extends WebController
 
     /**
      * Store a newly created resource in storage.
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Subscription\Group $group
+     * @param \App\Http\Requests\Group\StoreRequest $request 
      * @return mixed|\Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, Group $group)
+    public function store(StoreRequest $request)
     {
-        $this->validate($request, [
-            'name' => [
-                'required',
-                'max:100',
-                function ($attribute, $value, $fail) use ($request, $group) {
-                    $slug = $this->slug($value);
-
-                    $checkSlug = $group->where('slug', $slug)->first();
-                    if ($checkSlug) {
-                        $fail(__("The :attribute already exists", ['attribute' => $attribute]));
-                    }
-                }
-            ],
-            'description' => ['required', 'max:190'],
-            'system' => ['required', new BooleanRule()],
-        ]);
-
-        $request->merge([
-            'slug' => $this->slug($request->name),
-        ]);
-
-        DB::transaction(function () use ($request, $group) {
-            $group = $group->fill($request->all());
-            $group->save();
-
-        });
-
-        return $this->showOne($group, $group->transformer, 201);
+        return $this->repository->create($request->toArray());
     }
 
     /**
@@ -98,14 +67,14 @@ class GroupController extends WebController
      */
     public function show(Group $group)
     {
-        return $this->showOne($group, $group->transformer);
+        return $this->repository->detail($group->id);
     }
 
     /**
      * Update the specified resource in storage.
      * @param \Illuminate\Http\Request $request
      * @param \App\Models\Subscription\Group $group
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
     public function update(Request $request, Group $group)
     {
@@ -113,41 +82,16 @@ class GroupController extends WebController
             'description' => ['nullable', 'max:200'],
         ]);
 
-
-        DB::transaction(function () use ($request, $group) {
-
-            if ($request->has('description') && $group->description != $request->description) {
-                $group->description = $request->description;
-                $group->push();
-
-
-            }
-        });
-
-        return $this->showOne($group, $group->transformer, 201);
+        return $this->repository->update($group->id, $request->toArray());
     }
 
     /**
-     * destroy resources
+     * Destroy specific resource
      * @param \App\Models\Subscription\Group $group
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
      */
     public function destroy(Group $group)
     {
-        if ($group->services()->count() === 0 && $group->users()->count()) {
-            new ReportError(__("This action cannot be completed because this group is currently in use by another resource."), 403);
-        }
-
-        throw_if($group->system, new ReportError(__("This group cannot be deleted because it is a system group."), 403));
-
-        collect(Group::groupByDefault())->map(function ($value, $key) use ($group) {
-            throw_if($value->name == $group->name, new ReportError(__("This group cannot be deleted because it is a system group."), 403));
-        });
-
-        $group->forceDelete();
-
-
-
-        return $this->showOne($group, $group->transformer);
+        return $this->repository->delete($group->id);
     }
 }

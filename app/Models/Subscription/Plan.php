@@ -60,30 +60,4 @@ class Plan extends Master
     {
         return $this->morphMany(Price::class, 'priceable');
     }
-
-    /**
-     * Details of the plan to save 
-     * @param string $billing_period
-     * @return array
-     */
-    public function processPlan(string $plan_id, string $billing_period)
-    {
-        $plan = $this::where('id', $plan_id)->first();
-
-        $price = $plan->prices()->where('billing_period', $billing_period)->first();
-        $price = fractal($price, PlanPriceTransformer::class)->toArray()['data'];
-
-        $meta = fractal($plan, $this->transformer)->toArray()['data'];
-
-        unset($meta['prices']); //remove prices
-        unset($meta['links']); //remove links
-        unset($meta['scopes']['links']); //remove links
-        unset($price['links']); //remove links
-        unset($price['expiration']); //remove links
-
-        //add price to renew plan
-        $meta['price'] = $price;
-
-        return $meta;
-    }
 }

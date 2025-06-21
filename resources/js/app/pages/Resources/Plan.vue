@@ -268,9 +268,18 @@ export default {
         },
 
         async getPlans() {
+            const query = new URLSearchParams(window.location.search);
+
+            const query_data = {};
+            for (const [key, value] of query.entries()) {
+                query_data[key] = value;
+            }
+
+            Object.assign(this.search, query_data);
+
             try {
-                const res = await this.$server.get("/plans", {
-                    params: this.params,
+                const res = await this.$server.get(this.$page.props.route, {
+                    params: this.search,
                 });
 
                 if (res.status === 200) {
@@ -279,7 +288,7 @@ export default {
                 }
             } catch (error) {
                 this.$q.notify({
-                    message: "Error cargando los planes.",
+                    message: "Failed to load plans",
                     type: "negative",
                 });
             }

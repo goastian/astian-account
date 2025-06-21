@@ -200,9 +200,7 @@ export default {
     },
 
     created() {
-        const values = this.$page.props.transactions;
-        this.transactions = values.data;
-        this.pages = values.meta.pagination;
+        this.getTransactions();
     },
 
     methods: {
@@ -218,14 +216,12 @@ export default {
             var params = { ...this.search, ...param };
 
             try {
-                const res = await this.$server.get("/admin/transactions", {
+                const res = await this.$server.get(this.$page.props.route, {
                     params: params,
                 });
                 if (res.status == 200) {
                     this.transactions = res.data.data;
-                    var meta = res.data.meta;
-                    this.pages = meta.pagination;
-                    this.search.current_page = meta.pagination.current_page;
+                    this.pages = res.data.meta.pagination
                 }
             } catch (error) { }
         },

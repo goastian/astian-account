@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Repositories\Traits;
 
 use App\Models\User\User;
 use Illuminate\Support\Str;

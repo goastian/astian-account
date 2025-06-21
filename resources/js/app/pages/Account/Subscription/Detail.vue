@@ -5,16 +5,16 @@
             class="btn"
         >View Details</button>
 
-        <q-dialog v-model="dialog">
-            <q-card class="card-main column no-wrap">
-                <section class="row justify-between items-start">
-                    <div class="row items-center">
-                        <span>
-                            📦
-                        </span>
-                        <div>
-                            <h2 class="title">{{ item.meta.name }}</h2>
-                        </div>
+        <q-dialog v-model="dialog" persistent>
+            <q-card class="q-pa-md dialog">
+                <!-- Encabezado -->
+                <section class="bg-primary text-white row justify-between q-pa-md">
+                    <div class="text-h6 flex items-center">
+                        <q-icon
+                            name="mdi-information-outline"
+                            class="q-mr-sm"
+                        />
+                        Product Details
                     </div>
                     <button v-close-popup>
                         <q-icon name="mdi-close" />
@@ -30,158 +30,200 @@
                     >{{ i.name }}</button>
                 </section>
 
-                <!-- General data -->
-                <section class="q-gutter-md" v-if="activeNav == 1">
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-cash-sync"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Transaction code:</strong>
-                        </div>
-                        <div>
-                            {{ item.transaction.code }}
-                            {{ item.transaction.currency }}
-                        </div>
+                <!-- Información del plan -->
+                <q-card-section class="q-gutter-md" v-if="activeNav == 1">
+                    <div class="text-subtitle1 text-bold text-primary">
+                        Plan Information
                     </div>
 
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-check-circle-outline"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Status:</strong>
-                        </div>
-                        <q-badge
-                            color="green"
-                            v-if="item.status === 'successful'"
-                            class="q-ml-sm"
-                        >
-                            {{ item.status }}
-                        </q-badge>
-                        <q-badge
-                            v-else-if="item.status === 'pending'"
-                            color="yellow"
-                        >
-                            {{ item.status }}
-                        </q-badge>
-                        <q-badge color="red" v-else class="q-ml-sm">
-                            {{ item.status }}
-                        </q-badge>
-                    </div>
+                    <q-list dense>
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-package-variant"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label
+                                    ><strong>Plan Name:</strong>
+                                    {{ item.meta.name }}</q-item-label
+                                >
+                            </q-item-section>
+                        </q-item>
 
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-currency-usd"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Price:</strong>
-                        </div>
-                        <div>
-                            {{ item.transaction.total }}
-                            {{ item.transaction.currency }}
-                        </div>
-                    </div>
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-calendar-clock"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Billing Period:</strong>
-                        </div>
-                        <span>
-                            {{ item.transaction.billing_period }}
-                        </span>
-                    </div>
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-credit-card-outline"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Payment Method:</strong>
-                        </div>
-                        <span>
-                            {{ item.transaction.payment_method }}
-                        </span>
-                    </div>
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-calendar-start"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Start Date:</strong>
-                        </div>
-                        <span v-if="item.start_at">
-                            {{ item.start_at }}
-                        </span>
-                        <span v-else>
-                            -
-                        </span>
-                    </div>
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-calendar-end"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>End Date:</strong>
-                        </div>
-                        <span v-if="item.end_at">
-                            {{ item.end_at }}
-                        </span>
-                        <span v-else>
-                            -
-                        </span>
-                    </div>
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon name="mdi-cash-sync" color="primary" />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Transaction code:</strong>
+                                    {{ item.transaction.code }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
 
-                    <div v-if="item.last_renewal_at" class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-calendar-end"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Last renewal:</strong>
-                        </div>
-                        <span>
-                            {{ item.last_renewal_at }}
-                        </span>
-                    </div>
-                    <div v-if="item.cancellation_at" class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-calendar-end"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Cancellation :</strong>
-                        </div>
-                        <span>
-                            {{ item.cancellation_at }}
-                        </span>
-                    </div>
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-currency-usd"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Price:</strong>
+                                    {{ item.transaction.total }}
+                                    {{ item.transaction.currency }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
 
-                    <div class="row justify-between">
-                        <div>
-                            <q-icon
-                                name="mdi-refresh-auto"
-                                class="q-mr-sm text-primary"
-                            />
-                            <strong>Recurring:</strong>
-                        </div>
-                        <q-icon
-                            :name="
-                                item.is_recurring ? 'mdi-check' : 'mdi-close'
-                            "
-                            :color="item.is_recurring ? 'positive' : 'negative'"
-                        />
-                    </div>
-                </section>
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-calendar-clock"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Billing Period:</strong>
+                                    {{ item.transaction.billing_period }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
 
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-credit-card-outline"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Payment Method:</strong>
+                                    {{ item.transaction.payment_method }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-calendar-start"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Start Date:</strong>
+                                    {{ item.start_at }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-calendar-end"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>End Date:</strong> {{ item.end_at }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-item v-if="item.last_renewal_at">
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-calendar-refresh"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Last Renewal:</strong>
+                                    {{ item.last_renewal_at }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-item v-if="item.cancellation_at">
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-calendar-remove"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Cancellation:</strong>
+                                    {{ item.cancellation_at }}
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-check-circle-outline"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Status:</strong>
+                                    <q-badge
+                                        :color="
+                                            item.status === 'successful'
+                                                ? 'green'
+                                                : 'red'
+                                        "
+                                        class="q-ml-sm"
+                                    >
+                                        {{ item.status }}
+                                    </q-badge>
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+
+                        <q-item>
+                            <q-item-section avatar>
+                                <q-icon
+                                    name="mdi-refresh-auto"
+                                    color="primary"
+                                />
+                            </q-item-section>
+                            <q-item-section>
+                                <q-item-label>
+                                    <strong>Recurring:</strong>
+                                    <q-icon
+                                        :name="
+                                            item.is_recurring
+                                                ? 'mdi-check'
+                                                : 'mdi-close'
+                                        "
+                                        :color="
+                                            item.is_recurring
+                                                ? 'positive'
+                                                : 'negative'
+                                        "
+                                    />
+                                </q-item-label>
+                            </q-item-section>
+                        </q-item>
+                    </q-list>
+                </q-card-section>
+
+                <q-separator class="q-my-md" />
+
+                <!-- Servicios incluidos -->
                 <section v-if="activeNav == 3">
                     <div class="text-subtitle1 text-bold text-primary q-mb-sm">
                         Included Services
@@ -206,6 +248,7 @@
                     <span v-html="item.meta.description"></span>
                 </section>
 
+                <!-- Transacciones -->
                 <section v-if="activeNav == 2">
                     <div class="text-subtitle1 text-bold text-primary q-mb-sm">
                         Transactions
@@ -218,7 +261,6 @@
                             class="q-pa-md"
                         >
                             <q-item-section>
-                                <!-- Encabezado de estado y método -->
                                 <div
                                     class="row items-center justify-between q-mb-sm"
                                 >
@@ -263,7 +305,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Información de la transacción -->
                                 <q-separator spaced />
 
                                 <div class="q-mb-xs">
@@ -271,13 +312,11 @@
                                     <strong>Transaction Code:</strong>
                                     {{ tx.code }}
                                 </div>
-
                                 <div class="q-mb-xs">
                                     <q-icon name="mdi-cash" class="q-mr-sm" />
                                     <strong>Subtotal:</strong>
                                     {{ tx.subtotal }} {{ tx.currency }}
                                 </div>
-
                                 <div class="q-mb-xs" v-if="tx.tax_applied">
                                     <q-icon
                                         name="mdi-percent"
@@ -295,7 +334,6 @@
                                         >Inclusive</q-badge
                                     >
                                 </div>
-
                                 <div class="q-mb-xs">
                                     <q-icon
                                         name="mdi-cash-multiple"
@@ -307,11 +345,10 @@
 
                                 <q-separator spaced />
 
-                                <!-- Información técnica -->
                                 <div class="q-mb-xs">
                                     <q-icon name="mdi-link" class="q-mr-sm" />
                                     <strong>Session ID:</strong>
-                                    {{ tx.session_id }}
+                                    <span class="session-id">{{ tx.session_id }}</span>
                                 </div>
                                 <div class="q-mb-xs">
                                     <q-icon
@@ -360,7 +397,7 @@
                                         "
                                         :href="tx.payment_url"
                                         target="_blank"
-                                        label="Pay now"
+                                        label="Invoice"
                                         icon="mdi-credit-card"
                                         size="sm"
                                         color="positive"
@@ -369,7 +406,7 @@
                                     <v-cancel
                                         v-if="tx.status === 'pending'"
                                         :item="tx"
-                                        @canceled="emitEvent"
+                                        @success="emitEvent"
                                     />
                                 </div>
                             </q-item-section>
@@ -377,6 +414,7 @@
                     </q-list>
                 </section>
 
+                <!-- Botón para renovar -->
                 <section v-if="activeNav == 4">
                     <v-subscription
                         :period="item.meta.price"
@@ -434,7 +472,7 @@ export default {
 
     methods: {
         emitEvent() {
-            this.emit("reload");
+            this.$emit("reload");
         },
         selectNav(id) {
             this.activeNav = id;
@@ -444,6 +482,10 @@ export default {
 </script>
 
 <style scoped>
+.dialog {
+    width: 500px;
+}
+
 .card-main {
     width: 500px;
     gap: 1rem;
@@ -489,5 +531,13 @@ export default {
 
 .card-footer {
     background-color: red;
+}
+
+.session-id {
+    display: inline-block;
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>

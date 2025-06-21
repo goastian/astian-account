@@ -20,16 +20,26 @@
                                 <span v-html="plan.description"></span>
                             </div>
                             <div class="q-mt-sm q-gutter-sm">
-                                <q-badge :color="plan.public ? 'primary' : 'secondary'
-                                    ">
-                                    Public : {{ plan.public ? "Yes" : "No" }}
-                                </q-badge>
-                                <q-badge :color="plan.active ? 'primary' : 'secondary'
-                                    ">
+                                <q-badge
+                                    :color="
+                                        plan.active ? 'primary' : 'secondary'
+                                    "
+                                >
                                     Active : {{ plan.active ? "Yes" : "No" }}
                                 </q-badge>
-                                <q-badge color="green" v-if="plan.bonus_enabled" class="q-ml-sm">
+                                <q-badge
+                                    color="green"
+                                    v-if="plan.bonus_enabled"
+                                    class="q-ml-sm"
+                                >
                                     Bonus: {{ plan.bonus_duration }} days
+                                </q-badge>
+                                <q-badge
+                                    color="green"
+                                    v-if="plan.trial_enabled"
+                                    class="q-ml-sm"
+                                >
+                                    Trial: {{ plan.trial_duration }} days
                                 </q-badge>
                             </div>
                         </q-card-section>
@@ -111,8 +121,16 @@
             </div>
         </div>
 
-        <div class="row justify-center q-mt-md">
-            <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="sm" />
+        <div class="row justify-center q-my-md">
+            <q-pagination
+                v-model="search.page"
+                color="primary"
+                :max="pages.total_pages"
+                size="sm"
+                boundary-numbers
+                direction-links
+                class="q-pa-xs q-gutter-sm rounded-borders"
+            />
         </div>
     </v-admin-layout>
 </template>
@@ -157,33 +175,27 @@ export default {
         },
     },
 
-
     created() {
-        this.getPlans()
+        this.getPlans();
     },
 
     methods: {
-
-        changePage(event) {
-            this.search.page = event;
-        },
-
-        searching(event) {
-            this.getPlans(event);
-        },
-
-        async getPlans(param = null) {
-
+        async getPlans(param) {
             var params = { ...this.search, ...param };
 
             try {
-                const res = await this.$server.get(this.$page.props.route.plans, {
-                    params: params,
-                });
+                const res = await this.$server.get(
+                    this.$page.props.route.plans,
+                    {
+                        params: params,
+                    }
+                );
 
                 if (res.status == 200) {
                     this.plans = res.data.data;
-                    this.pages = res.data.meta.pagination;
+                    let meta = res.data.meta;
+                    this.pages = meta.pagination;
+                    this.search.current_page = meta.pagination.current_page;
                 }
             } catch (error) { }
         },

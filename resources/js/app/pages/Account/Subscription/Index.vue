@@ -8,131 +8,72 @@
                         List of Packages
                     </q-toolbar-title>
                 </q-toolbar>
+            </div>
 
-                <div class="q-pa-md">
-                    <div class="row q-col-gutter-md q-row-gutter-md">
-                        <div
-                            v-for="(item, index) in packages"
-                            :key="index"
-                            class="col-12 col-sm-6 col-md-4 col-lg-3"
-                        >
-                            <q-card bordered class="shadow-2 q-pa-md column card">
-                                <div
-                                    class="flex items-start justify-between"
-                                >
-                                    <div class="row items-center q-gutter-x-md">
-                                        <template
-                                            v-if="getIcon(item).length == 1"
-                                            v-for="(ic, idx) in icons"
-                                        >
-                                            <div
-                                                class="icon flex justify-center"
-                                                v-if="item.meta.scopes[0].service.name == ic.name"
-                                            >
-                                                <span
-                                                >{{ ic.icon }}</span>
-                                            </div>
-                                        </template>
-                                        <div
-                                            class="icon"
-                                            v-else
-                                        >
-                                            <span>
-                                                📦
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <div class="meta-name description">
-                                                {{ item?.meta.name }}
-                                            </div>
-                                            <div class="text-caption name">
-                                                {{ item.transaction.billing_period }}
-                                                plan
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <span
-                                        class="tag"
-                                        :class="[{'danger' : item.status == 'cancelled'}, {'success' : item.status == 'successful'}]"
-                                    >{{ item.status }}</span>
-                                </div>
+            <div class="q-pa-md">
+                <q-table title="Your Packages" :rows="packages" :columns="columns" row-key="id" flat bordered
+                    hide-bottom :rows-per-page-options="[search.per_page]">
+                    <template v-slot:body-cell-name="props">
+                        <q-td>
+                            <div class="text-weight-medium text-primary">
+                                {{ props.row.meta.name }}
+                            </div>
+                            <div class="text-caption text-grey">
+                                {{ props.row.transaction.billing_period }} plan
+                            </div>
+                        </q-td>
+                    </template>
 
-                                <div class="q-pt-none">
-                                    <div class="q-mb-sm row justify-between">
-                                        <div class="name">
-                                            <q-icon name="payments" class="q-mr-xs" />
-                                            <span>Price</span>
-                                        </div>
-                                        <span class="description">
-                                            {{ item.transaction.total }}
-                                            {{ item.transaction.currency }}
-                                        </span>
-                                    </div>
+                    <template v-slot:body-cell-price="props">
+                        <q-td>
+                            {{ props.row.transaction.total }}
+                            {{ props.row.transaction.currency }}
+                        </q-td>
+                    </template>
 
-                                    <div class="q-mb-sm row justify-between" v-if="item.meta.bonus_enabled">
-                                        <div class="name">
-                                            <q-icon name="card_giftcard" class="q-mr-xs" />
-                                            <span>Bonus</span>
-                                        </div>
-                                        <span class="description">
-                                            {{ item.meta.bonus_duration }} days
-                                        </span>
-                                    </div>
+                    <template v-slot:body-cell-bonus="props">
+                        <q-td>
+                            <div v-if="props.row.meta.bonus_enabled">
+                                🎁 {{ props.row.meta.bonus_duration }} days
+                            </div>
+                            <div v-else class="text-grey">—</div>
+                        </q-td>
+                    </template>
 
-                                    <div class="q-mb-sm row justify-between">
-                                        <div class="name">
-                                            <q-icon name="event" class="q-mr-xs" />
-                                            <span>Start</span>
-                                        </div>
-                                        <span v-if="item.start_at" class="description">{{ item.start_at}}</span>
-                                        <span v-else class="description">-</span>
-                                    </div>
+                    <template v-slot:body-cell-start="props">
+                        <q-td>{{ props.row.start_at }}</q-td>
+                    </template>
 
-                                    <div class="q-mb-sm row justify-between">
-                                        <div class="name">
-                                            <q-icon
-                                                name="event_available"
-                                                class="q-mr-xs"
-                                            />
-                                            <span>Next Renewal</span>
-                                        </div>
-                                        <span v-if="item.end_at" class="description">{{ item.end_at }}</span>
-                                        <span v-else class="description">-</span>
-                                    </div>
+                    <template v-slot:body-cell-end="props">
+                        <q-td>{{ props.row.end_at }}</q-td>
+                    </template>
 
-                                    <div class="q-mb-sm row justify-between">
-                                        <div class="name">
-                                            <q-icon name="credit_card" class="q-mr-xs" />
-                                            <span>Method</span>
-                                        </div>
-                                        <span class="description">
-                                            {{ item.transaction.payment_method }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="row justify-between q-gutter-x-md">
-                                    <v-detail :item="item" @reload="getPackages" />
-                                    <v-cancel
-                                        v-if="item.status === 'pending'"
-                                        :item="item.transactions[0]"
-                                        @canceled="getPackages"
-                                    />
-                                </div>
-                            </q-card>
-                        </div>
-                    </div>
-                </div>
+                    <template v-slot:body-cell-method="props">
+                        <q-td>{{ props.row.transaction.payment_method }}</q-td>
+                    </template>
 
-                <div class="row justify-center q-mt-md">
-                    <q-pagination
-                        v-model="search.page"
-                        color="primary"
-                        :max="pages.total_pages"
-                        size="md"
-                        direction-links
-                        boundary-numbers
-                    />
-                </div>
+                    <template v-slot:body-cell-status="props">
+                        <q-td>
+                            <q-badge :color="props.row.status === 'successful'
+                                    ? 'green'
+                                    : 'orange'
+                                " text-color="white" align="middle">
+                                {{ props.row.status }}
+                            </q-badge>
+                        </q-td>
+                    </template>
+
+                    <template v-slot:body-cell-actions="props">
+                        <q-td>
+                            <v-detail :item="props.row" @reload="getPackages" />
+                        </q-td>
+                    </template>
+                </q-table>
+            </div>
+
+            <div class="row justify-center q-mt-md">
+                <q-pagination v-model="search.page" color="grey-8" :max="pages.total_pages" size="md" direction-links
+                    boundary-numbers />
             </div>
         </q-page>
     </v-user-layout>
@@ -150,6 +91,9 @@ export default {
 
     data() {
         return {
+            loading: false,
+            user: [],
+            packages: [],
             pages: {
                 total_pages: 0,
             },
@@ -157,23 +101,28 @@ export default {
                 page: 1,
                 per_page: 10,
             },
-            packages: [],
-            icons: [
+            columns: [
                 {
-                    name: 'vpn',
-                    icon: '🛡️',
+                    name: "name",
+                    label: "Name",
+                    field: "meta.name",
+                    align: "left",
                 },
-                {
-                    name: 'cloud',
-                    icon: '☁️',
-                },
+                { name: "price", label: "Price", align: "left" },
+                { name: "bonus", label: "Bonus", align: "left" },
+                { name: "start", label: "Start", align: "left" },
+                { name: "end", label: "End", align: "left" },
+                { name: "method", label: "Method", align: "left" },
+                { name: "status", label: "Status", align: "center" },
+                { name: "actions", label: "", align: "center" },
             ],
-            count: 0,
         };
     },
 
-    async created() {
-        await this.getPackages();
+    created() {
+        this.user = this.$page.props.user;
+
+        this.getPackages();
     },
 
     watch: {
@@ -195,15 +144,21 @@ export default {
             Object.assign(params, param);
             try {
                 const res = await this.$server.get(
-                    this.$page.props.user.links.subscriptions, {
-                        params: params
+                    this.user.links.subscriptions,
+                    {
+                        params: this.search,
                     }
                 );
-                if (res.status == 200) {
+
+                if (res.status === 200) {
                     this.packages = res.data.data;
                     this.pages = res.data.meta.pagination;
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.loading = false;
+            }
         },
 
         getIcon(service) {

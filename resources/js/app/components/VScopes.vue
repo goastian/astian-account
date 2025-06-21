@@ -92,7 +92,6 @@ export default {
 
     mounted() {
         this.getScopes();
-        // console.log(this.default_roles);
     },
 
     computed: {
@@ -131,7 +130,7 @@ export default {
     methods: {
         async getScopes() {
             try {
-                const res = await this.$server.get("/admin/scopes", {
+                const res = await this.$server.get(this.$page.props.scopes, {
                     params: { per_page: 150 },
                 });
 
@@ -140,7 +139,9 @@ export default {
                     this.syncSelectedScopes();
                     this.loading = false;
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.log(e);
+            }
         },
 
         syncSelectedScopes() {

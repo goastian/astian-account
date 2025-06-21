@@ -19,23 +19,20 @@
                     />
                 </q-card-actions>
                 <q-separator />
-                <q-card-section
-                    v-if="
-                        partner &&
-                        Object.keys(partner.referral_links || {}).length
-                    "
-                >
-                    <div
-                        v-for="(url, key) in partner.referral_links"
-                        :key="key"
-                        class="q-mb-md"
-                    >
-                        <q-input readonly :label="key" :model-value="url" dense>
+                <q-card-section>
+                    <div class="q-mb-md" v-if="partner?.referral_links">
+                        <q-input
+                            readonly
+                            v-model="partner.referral_links"
+                            dense
+                        >
                             <template v-slot:append>
                                 <q-btn
                                     flat
                                     icon="content_copy"
-                                    @click="copyToClipboard(url)"
+                                    @click="
+                                        copyToClipboard(partner.referral_links)
+                                    "
                                 />
                             </template>
                         </q-input>
@@ -59,14 +56,14 @@ export default {
     data() {
         return {
             partner: {
-                referral_links: {},
+                referral_links: null,
             },
             copied: false,
         };
     },
 
     mounted() {
-        this.partner = this.$page.props.partner;
+        this.generateReferralLink();
     },
 
     methods: {

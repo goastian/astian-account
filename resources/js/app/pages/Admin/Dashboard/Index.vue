@@ -1,95 +1,72 @@
 <template>
     <v-admin-layout>
-        <q-page padding>
-            <div class="container-main q-gutter-y-md q-pa-md">
-                <div class="main q-gutter-y-md">
-                    <div class="">
-                        <div class="column">
-                            <h2 class="text-h4">Dashboard</h2>
-                            <span class="textSecondary">Control center for users, applications, and services</span>
-                        </div>
-                        <div class="row">
-                            <button></button>
-                        </div>
-                    </div>
-                    <div class="card info">
-                        <button v-if="canScrollLeft" @click="moveLeft"
-                            class="move-left row justify-center items-center">
-                            <q-icon name="mdi-arrow-left" size="20px" />
-                        </button>
-                        <button v-if="canScrollRight" @click="moveRight"
-                            class="move-right row justify-center items-center">
-                            <q-icon name="mdi-arrow-right" size="20px" />
-                        </button>
-                        <div class="row gap-05 items-center container-card" ref="carousel">
-                            <template v-for="(card, index) in cards">
-                                <div class="card-item row items-start gap-1 no-wrap">
-                                    <div class="card-icon row justify-center items-center">
-                                        <q-icon :name="card.icon" />
-                                    </div>
-                                    <div class="column gap-05">
-                                        <span>{{ card.label }}</span>
-                                        <span class="card-value">{{ card.value }}</span>
-                                    </div>
-                                </div>
-                                <div v-if="index < cards.length - 1" class="divider"></div>
-                            </template>
+        <q-page class="q-pa-md">
+            <div class="row">
+                <q-card class="col-xs-12 col-sm-6 col-md-3" bordered flat v-for="card in cards" :key="card.label">
+                    <div class="row items-center q-py-sm">
+                        <q-icon :name="card.icon" size="32px" color="primary" />
+                        <div class="q-ml-md">
+                            <div class="text-h6">{{ card.value }}</div>
+                            <div class="text-caption text-grey">
+                                {{ card.label }}
+                            </div>
                         </div>
                     </div>
+                </q-card>
+            </div>
 
-                    <div class="row q-col-gutter-sm">
-                        <div class="col">
-                            <q-input v-model="params.start" type="date" label="Start date" dense outlined />
-                        </div>
-                        <div class="col">
-                            <q-input v-model="params.end" type="date" label="End date" dense outlined />
-                        </div>
-                        <div class="col">
-                            <q-select v-model="chartType" :options="chartTypes" label="Chart type" dense outlined />
-                        </div>
-                        <div class="col">
-                            <q-select v-model="params.type" :options="types" label="Date" dense outlined />
-                        </div>
-                        <div class="col-auto flex items-end">
-                            <q-btn label="Filter" @click="getData" color="primary" />
-                        </div>
-                    </div>
+            <q-separator class="q-my-lg" />
+            <div class="row q-col-gutter-sm">
+                <div class="col">
+                    <q-input v-model="params.start" type="date" label="Start date" dense outlined />
+                </div>
+                <div class="col">
+                    <q-input v-model="params.end" type="date" label="End date" dense outlined />
+                </div>
+                <div class="col">
+                    <q-select v-model="chartType" :options="chartTypes" label="Chart type" dense outlined />
+                </div>
+                <div class="col">
+                    <q-select v-model="params.type" :options="types" label="Date" dense outlined />
+                </div>
+                <div class="col-auto flex items-end">
+                    <q-btn label="Filter" @click="getData" color="primary" />
+                </div>
+            </div>
 
-                    <div class="row q-col-gutter-md q-mt-lg">
-                        <div class="col-12 col-md-8">
-                            <q-card flat bordered>
-                                <q-card-section>
-                                    <apex-charts width="100%" height="400" type="line" :options="chartOptions"
-                                        :series="chartSeries" class="q-mt-md" />
-                                </q-card-section>
-                            </q-card>
-                        </div>
+            <div class="row q-col-gutter-md q-mt-lg">
+                <div class="col-12 col-md-8">
+                    <q-card flat bordered>
+                        <q-card-section>
+                            <apex-charts width="100%" height="400" type="line" :options="chartOptions"
+                                :series="chartSeries" class="q-mt-md" />
+                        </q-card-section>
+                    </q-card>
+                </div>
 
-                        <div class="col-12 col-md-4">
-                            <q-card flat bordered>
-                                <q-card-section>
-                                    <div class="text-subtitle1 text-weight-medium q-mb-sm">
-                                        Last {{ last_users.length }} users
-                                    </div>
-                                    <q-list dense>
-                                        <q-item v-for="user in last_users" :key="user.id" clickable>
-                                            <q-item-section>
-                                                <q-item-label>{{
-                                                    user.name
-                                                }}</q-item-label>
-                                                <q-item-label caption>{{
-                                                    user.email
-                                                }}</q-item-label>
-                                            </q-item-section>
-                                            <q-item-section side>
-                                                <q-badge outline color="primary" :label="formatDate(user.created_at)" />
-                                            </q-item-section>
-                                        </q-item>
-                                    </q-list>
-                                </q-card-section>
-                            </q-card>
-                        </div>
-                    </div>
+                <div class="col-12 col-md-4">
+                    <q-card flat bordered>
+                        <q-card-section>
+                            <div class="text-subtitle1 text-weight-medium q-mb-sm">
+                                Last {{ last_users.length }} users
+                            </div>
+                            <q-list dense>
+                                <q-item v-for="user in last_users" :key="user.id" clickable>
+                                    <q-item-section>
+                                        <q-item-label>{{
+                                            user.name
+                                            }}</q-item-label>
+                                        <q-item-label caption>{{
+                                            user.email
+                                            }}</q-item-label>
+                                    </q-item-section>
+                                    <q-item-section side>
+                                        <q-badge outline color="primary" :label="formatDate(user.created_at)" />
+                                    </q-item-section>
+                                </q-item>
+                            </q-list>
+                        </q-card-section>
+                    </q-card>
                 </div>
             </div>
         </q-page>
@@ -110,7 +87,7 @@ export default {
             params: {
                 start: null,
                 end: null,
-                type: "day",
+                type: "month",
             },
             chartType: "line",
             chartTypes: ["bar", "line", "area"],
@@ -142,32 +119,38 @@ export default {
         },
     },
 
-    mounted() {
+    created() {
+
         if (!this.params.start || !this.params.end) {
             const { start, end } = this.getDefaultDates();
             this.params.start = start;
             this.params.end = end;
         }
 
-        this.loadData(this.$page.props.data);
 
+        this.getData()
+    },
+
+    mounted() {
         setInterval(() => {
             this.getData();
         }, 10000);
-
+        /*
         this.$nextTick(() => {
             this.checkScroll();
         });
         window.addEventListener('resize', this.checkScroll);
+        /*/
     },
 
     watch: {
         'theme.selectedTheme'() {
-            this.loadData(this.$page.props.data);
+            this.getData();
         }
     },
 
     methods: {
+        /*
         moveLeft() {
             this.$refs.carousel.scrollLeft -= 200;
             this.$nextTick(this.checkScroll);
@@ -183,6 +166,7 @@ export default {
             this.canScrollLeft = el.scrollLeft > 0;
             this.canScrollRight = (el.scrollLeft + el.clientWidth) < el.scrollWidth;
         },
+        */
 
         getDefaultDates() {
             const today = new Date();
