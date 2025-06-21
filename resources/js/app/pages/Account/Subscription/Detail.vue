@@ -5,10 +5,10 @@
             class="btn"
         >View Details</button>
 
-        <q-dialog v-model="dialog" persistent full-width>
-            <q-card class="q-pa-md" style="min-width: 600px; max-width: 90vw">
+        <q-dialog v-model="dialog" persistent>
+            <q-card class="q-pa-md dialog">
                 <!-- Encabezado -->
-                <q-card-section class="bg-primary text-white">
+                <section class="bg-primary text-white row justify-between q-pa-md">
                     <div class="text-h6 flex items-center">
                         <q-icon
                             name="mdi-information-outline"
@@ -31,7 +31,7 @@
                 </section>
 
                 <!-- Información del plan -->
-                <q-card-section class="q-gutter-md">
+                <q-card-section class="q-gutter-md" v-if="activeNav == 1">
                     <div class="text-subtitle1 text-bold text-primary">
                         Plan Information
                     </div>
@@ -49,18 +49,6 @@
                                     ><strong>Plan Name:</strong>
                                     {{ item.meta.name }}</q-item-label
                                 >
-                            </q-item-section>
-                        </q-item>
-
-                        <q-item>
-                            <q-item-section avatar>
-                                <q-icon name="mdi-text" color="primary" />
-                            </q-item-section>
-                            <q-item-section>
-                                <q-item-label
-                                    ><strong>Description:</strong>
-                                    <span v-html="item.meta.description"></span>
-                                </q-item-label>
                             </q-item-section>
                         </q-item>
 
@@ -236,7 +224,7 @@
                 <q-separator class="q-my-md" />
 
                 <!-- Servicios incluidos -->
-                <q-card-section>
+                <section v-if="activeNav == 3">
                     <div class="text-subtitle1 text-bold text-primary q-mb-sm">
                         Included Services
                     </div>
@@ -260,10 +248,8 @@
                     <span v-html="item.meta.description"></span>
                 </section>
 
-                <q-separator class="q-my-md" />
-
                 <!-- Transacciones -->
-                <q-card-section>
+                <section v-if="activeNav == 2">
                     <div class="text-subtitle1 text-bold text-primary q-mb-sm">
                         Transactions
                     </div>
@@ -362,7 +348,7 @@
                                 <div class="q-mb-xs">
                                     <q-icon name="mdi-link" class="q-mr-sm" />
                                     <strong>Session ID:</strong>
-                                    {{ tx.session_id }}
+                                    <span class="session-id">{{ tx.session_id }}</span>
                                 </div>
                                 <div class="q-mb-xs">
                                     <q-icon
@@ -429,7 +415,7 @@
                 </section>
 
                 <!-- Botón para renovar -->
-                <q-card-section>
+                <section v-if="activeNav == 4">
                     <v-subscription
                         :period="item.meta.price"
                         :plan="item"
@@ -496,6 +482,10 @@ export default {
 </script>
 
 <style scoped>
+.dialog {
+    width: 500px;
+}
+
 .card-main {
     width: 500px;
     gap: 1rem;
@@ -541,5 +531,13 @@ export default {
 
 .card-footer {
     background-color: red;
+}
+
+.session-id {
+    display: inline-block;
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 </style>
