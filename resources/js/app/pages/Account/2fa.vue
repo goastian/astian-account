@@ -98,7 +98,7 @@ export default {
                     window.location.reload()
                 }
             } catch (err) {
-                if (err.response) {
+                if (err.response && err.response.status == 422) {
                     this.errors = err.response.data.errors;
                 }
             }
