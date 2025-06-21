@@ -5,11 +5,24 @@
 
         <!-- Barra superior -->
         <q-toolbar class="q-ma-sm q-gutter-sm items-center justify-between">
-            <q-toolbar-title class="text-h6 text-primary"
-                >List of Services</q-toolbar-title
-            >
+            <q-toolbar-title class="text-h6 text-primary">
+                List of Services
+            </q-toolbar-title>
 
             <div class="row items-center q-gutter-sm">
+                <q-select
+                    filled
+                    dense
+                    clearable
+                    label="Group"
+                    v-model="group"
+                    use-input
+                    input-debounce="300"
+                    :options="groups"
+                    option-label="name"
+                    option-value="slug"
+                    @update:model-value="filterByGroup"
+                />
                 <v-create @created="getServices" />
 
                 <!-- Toggle vista -->
@@ -189,11 +202,14 @@ export default {
                 page: 1,
                 per_page: 15,
             },
+            groups: [],
+            group: null,
         };
     },
 
     created() {
         this.getServices();
+        this.getGroups();
     },
 
     watch: {
@@ -209,6 +225,11 @@ export default {
     },
 
     methods: {
+        filterByGroup(value) {
+            this.search.group = value;
+            this.getServices();
+        },
+
         changePage(event) {
             this.search.page = event;
         },
@@ -217,8 +238,24 @@ export default {
             this.getServices(event);
         },
 
+        async getGroups() {
+            try {
+                const res = await this.$server.get(
+                    this.$page.props.route["groups"]
+                );
+
+                if (res.status == 200) {
+                    this.groups = res.data.data;
+                }
+            } catch (err) {}
+        },
+
         getServices(param = null) {
-            var params = { ...this.search, ...param };
+            var params = {
+                ...this.search,
+                group: this.group?.name || null,
+                ...param,
+            };
 
             this.$server
                 .get(this.$page.props.route.services, {
