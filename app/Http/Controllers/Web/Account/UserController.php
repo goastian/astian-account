@@ -21,6 +21,7 @@ class UserController extends WebController
      */
     public function __construct(UserRepository $userRepository)
     {
+        parent::__construct();
         $this->repository = $userRepository;
     }
 
