@@ -3,15 +3,10 @@
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
 use App\Http\Requests\ServiceScope\StoreRequest;
-use App\Repositories\ServiceRepository;
-use App\Rules\BooleanRule;
-use Illuminate\Http\Request;
-use App\Models\Subscription\Scope;
-use Illuminate\Support\Facades\DB;
+use App\Repositories\ServiceRepository; 
+use App\Models\Subscription\Scope; 
 use App\Models\Subscription\Service;
-use App\Http\Controllers\WebController;
-use Elyerr\ApiResponse\Exceptions\ReportError;
-use App\Transformers\Subscription\ServiceScopeTransformer;
+use App\Http\Controllers\WebController;  
 
 class ServiceScopeController extends WebController
 {

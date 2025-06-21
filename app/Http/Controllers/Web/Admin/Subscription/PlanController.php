@@ -1,17 +1,13 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Subscription;
 
+use Inertia\Inertia; 
+use Illuminate\Http\Request;
+use App\Models\Subscription\Plan; 
+use App\Repositories\PlanRepository;
+use App\Http\Controllers\WebController;
 use App\Http\Requests\Plan\StoreRequest;
 use App\Http\Requests\Plan\UpdateRequest;
-use App\Repositories\PlanRepository;
-use Inertia\Inertia;
-use App\Rules\BooleanRule;
-use Illuminate\Http\Request;
-use App\Models\Subscription\Plan;
-use App\Models\Subscription\Scope;
-use Illuminate\Support\Facades\DB;
-use Stevebauman\Purify\Facades\Purify;
-use App\Http\Controllers\WebController;
 
 class PlanController extends WebController
 {
