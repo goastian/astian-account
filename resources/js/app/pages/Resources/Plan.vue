@@ -221,18 +221,6 @@ export default {
             ],
             periods: [
                 {
-                    name: 'daily',
-                    label: 'Daily',
-                },
-                {
-                    name: 'weekly',
-                    label: 'Weekly'
-                },
-                {
-                    name: 'biweekly',
-                    label: 'Biweekly'
-                },
-                {
                     name: 'monthly',
                     label: 'Monthly',
                 },
