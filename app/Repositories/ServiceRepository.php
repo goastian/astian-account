@@ -52,6 +52,15 @@ class ServiceRepository implements Contracts
         // Eager loading
         $data = $data->with(['group', 'scopes', 'scopes.role']);
 
+        if ($request->group) {
+            $data->whereHas(
+                'group',
+                function ($query) use ($request) {
+                    $query->whereRaw("LOWER(name) LIKE ?", ['%' . strtolower($request->group) . '%']);
+                }
+            );
+        }
+
         // Filter by visibility
         if ($request->visibility) {
             $data->where('visibility', $request->visibility);
@@ -180,7 +189,7 @@ class ServiceRepository implements Contracts
     {
 
         $model = $this->find($service_id);
-        
+
         return $this->showAll($model->scopes, ServiceScopeTransformer::class);
     }
 
