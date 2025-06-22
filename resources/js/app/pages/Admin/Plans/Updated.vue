@@ -24,10 +24,10 @@
                                 <v-error :error="errors.name" />
                             </template>
                         </q-input>
-
                         <v-editor
                             :text="form.description"
                             @content="setContent"
+                            :error="errors?.description"
                         />
 
                         <div class="row q-col-gutter-md">
@@ -422,7 +422,7 @@ export default {
         open() {
             this.form = { ...this.item };
             this.form.scopes = this.form.scopes.map((item) => item.id);
-
+            this.errors = {};
             this.getServices();
             this.getBillingPeriod();
             this.getCurrencies();
