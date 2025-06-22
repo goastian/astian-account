@@ -82,7 +82,7 @@ class Menu
                             'show' => true,
                         ],
                         [
-                            'name' => 'profile',
+                            'name' => 'Profile',
                             'route' => route('users.profile'),
                             'icon' => 'mdi-account-details-outline',
                             'show' => true,
