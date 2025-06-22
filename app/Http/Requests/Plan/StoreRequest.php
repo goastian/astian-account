@@ -28,6 +28,7 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'name' => [
                 'required',
@@ -41,7 +42,13 @@ class StoreRequest extends FormRequest
 
                 }
             ],
-            'description' => ['required'],
+            'description' => [
+                function ($attribute, $value, $fail) {
+                    if (!strip_tags($value)) {
+                        $fail(__('The :attribute field is required'));
+                    }
+                }
+            ],
             'active' => ['required', 'boolean'],
             'trial_enabled' => ['nullable', 'boolean'],
             'trial_duration' => [
@@ -101,6 +108,6 @@ class StoreRequest extends FormRequest
             'prices.*.amount' => ['required', 'integer', 'min:0'],
         ];
     }
- 
+
 
 }

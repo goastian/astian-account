@@ -29,6 +29,7 @@
                             :text="form.description"
                             @content="setContent"
                         />
+                        <v-error :error="errors.description" />
 
                         <div class="row q-col-gutter-md">
                             <q-item

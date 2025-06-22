@@ -64,4 +64,5 @@ Route::group([
     Route::get('/payments/currencies', [PaymentController::class, 'currencies'])->name('payments.currencies');
     Route::get('/payments/payment-status', [PaymentController::class, 'currencies'])->name('payments.payment_status');
     Route::get('/payments/methods', [PaymentController::class, 'methods'])->name('payments.methods');
+    Route::get('/services/list', [PaymentController::class, 'services'])->name('services.services');;
 });

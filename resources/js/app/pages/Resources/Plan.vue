@@ -194,7 +194,7 @@ export default {
                 total_pages: 0,
             },
             params: {
-                billing_period: 'daily'
+                billing_period: 'monthly'
             },
             app: 'vpn',
             apps: [
@@ -221,18 +221,6 @@ export default {
             ],
             periods: [
                 {
-                    name: 'daily',
-                    label: 'Daily',
-                },
-                {
-                    name: 'weekly',
-                    label: 'Weekly'
-                },
-                {
-                    name: 'biweekly',
-                    label: 'Biweekly'
-                },
-                {
                     name: 'monthly',
                     label: 'Monthly',
                 },
@@ -255,6 +243,7 @@ export default {
     methods: {
         select_period(period) {
             this.params.billing_period = period;
+            this.plans = [];
             this.getPlans();
         },
 
@@ -277,9 +266,14 @@ export default {
 
             Object.assign(this.search, query_data);
 
+            const paramss = {
+                ...this.search,
+                ...this.params
+            }
+
             try {
                 const res = await this.$server.get(this.$page.props.route, {
-                    params: this.search,
+                    params: paramss
                 });
 
                 if (res.status === 200) {
@@ -420,9 +414,6 @@ button {
 
 .description > div {
     margin: 0;
-}
-
-.card-footer {
 }
 
 .card-footer > button {

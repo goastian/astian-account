@@ -47,7 +47,8 @@ class PlanController extends WebController
      * @param \App\Models\Subscription\Plan $plan
      * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
      */
-    public function pay(Request $request, plan $plan) {
+    public function pay(Request $request, plan $plan)
+    {
         if ($request->wantsJson()) {
             return $this->repository->searchPlanForGuest($request);
         }

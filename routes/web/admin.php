@@ -54,5 +54,3 @@ Route::delete('/plans/{plan}/prices/{price}', [PlanPriceController::class, 'dest
 
 Route::get('/transactions', [TransactionManagerController::class, 'index'])->name('transactions.index');
 Route::put('/transactions/{transaction}', [TransactionManagerController::class, 'activate'])->name('transactions.activate');
-
-Route::resource('terminals', TerminalController::class)->only('index', 'store');

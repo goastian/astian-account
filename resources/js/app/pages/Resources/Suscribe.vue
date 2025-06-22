@@ -1,8 +1,6 @@
 <template>
     <div>
-        <button @click="dialog = true" class="btn open">
-            Suscribe Now
-        </button>
+        <button @click="dialog = true" class="btn open">Suscribe Now</button>
 
         <q-dialog v-model="dialog">
             <div class="row no-wrap card">
@@ -13,10 +11,19 @@
                         <span class="strong">{{ plan.name }}</span>
                         <span>{{ plan.scopes[0].service.name }}</span>
                         <template v-for="price in plan.prices">
-                            <div v-if="price.billing_period == period" class="row items-end">
-                                <span v-if="price.currency == 'USD'" class="price strong">$</span>
+                            <div
+                                v-if="price.billing_period == period"
+                                class="row items-end"
+                            >
+                                <span
+                                    v-if="price.currency == 'USD'"
+                                    class="price strong"
+                                    >$</span
+                                >
                                 <span v-else>{{ price.currency }}</span>
-                                <span class="price strong">{{ price.amount_format }}</span>
+                                <span class="price strong">{{
+                                    price.amount_format
+                                }}</span>
                                 <span> /{{ period }}</span>
                             </div>
                         </template>
@@ -32,7 +39,10 @@
                     <q-separator />
 
                     <template v-for="price in plan.prices">
-                        <div class="column gap-05" v-if="price.billing_period == period">
+                        <div
+                            class="column gap-05"
+                            v-if="price.billing_period == period"
+                        >
                             <div class="row justify-between">
                                 <label>Subtotal</label>
                                 <span>{{ price.amount_format }}</span>
@@ -43,7 +53,9 @@
                             </div>
                             <div class="row justify-between">
                                 <label class="strong">Total</label>
-                                <span class="strong">{{ price.amount_format }}</span>
+                                <span class="strong">{{
+                                    price.amount_format
+                                }}</span>
                             </div>
                         </div>
                     </template>
@@ -84,7 +96,7 @@
                                 <button
                                     class="btn column items-center justify-center"
                                     v-if="method.enable"
-                                    :class="{'active' : active == method.key}"
+                                    :class="{ active: active == method.key }"
                                     @click="changeMethod(method.key)"
                                 >
                                     <q-icon :name="method.icon" />
@@ -95,21 +107,26 @@
                     </div>
 
                     <div>
-                        <button class="btn suscribe" @click="payment">Suscribe Now</button>
+                        <button class="btn suscribe" @click="payment">
+                            Suscribe Now
+                        </button>
                     </div>
                 </div>
-                <button class="btn-close" >
+                <button class="btn-close">
                     <q-icon name="mdi-close" @click="dialog = false" />
                 </button>
             </div>
         </q-dialog>
 
-        <v-login :guest="guest" @close="guest = false" :refer="getReferralLink()" />
+        <v-login
+            :guest="guest"
+            @close="guest = false"
+            :refer="getReferralLink()"
+        />
     </div>
 </template>
 
 <script>
-
 export default {
     data() {
         return {
@@ -118,7 +135,7 @@ export default {
             methods: [],
             active: null,
             guest: false,
-        }
+        };
     },
     props: {
         plan: {
@@ -132,7 +149,7 @@ export default {
         period: {
             type: String,
             require: true,
-        }
+        },
     },
     created() {
         this.getBillingPeriod();
@@ -152,7 +169,7 @@ export default {
             } catch (error) {}
         },
 
-       updateUser(user) {
+        updateUser(user) {
             this.user = user;
         },
 
@@ -184,7 +201,8 @@ export default {
             if (this.active == null) {
                 this.$q.notify({
                     type: "negative",
-                    message: "Please select the payment method to continue. ...",
+                    message:
+                        "Please select the payment method to continue. ...",
                     timeout: 3000,
                 });
                 return;
@@ -195,7 +213,6 @@ export default {
 
         async continuePayment() {
             this.disabled = true;
-            console.log(this.user.links.subscriptions_buy)
             try {
                 const res = await this.$server.post(
                     this.user.links.subscriptions_buy,
@@ -211,16 +228,15 @@ export default {
                     window.location.href = res.data.data.redirect_to;
                 }
             } catch (error) {
-                console.log(error);
                 this.disabled = false;
             }
         },
 
         changeMethod(key) {
             this.active = key;
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
 <style scoped>
@@ -231,7 +247,7 @@ export default {
     height: auto;
     background-color: var(--q-background-secondary);
     border: 1px solid var(--q-background-secondary);
-    border-radius: .5rem;
+    border-radius: 0.5rem;
     position: relative;
 }
 
@@ -245,8 +261,8 @@ export default {
 }
 
 .subtitle {
-    font-size: .9rem;
-    line-height: .8rem;
+    font-size: 0.9rem;
+    line-height: 0.8rem;
 }
 
 .strong {
@@ -260,7 +276,7 @@ export default {
 }
 
 .gap-05 {
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .gap-1 {
@@ -277,7 +293,11 @@ export default {
     max-width: 300px;
     padding: 2rem;
     gap: 1rem;
-    background: linear-gradient(260deg, var(--q-background-gradient-one), var(--q-background-gradient-two));
+    background: linear-gradient(
+        260deg,
+        var(--q-background-gradient-one),
+        var(--q-background-gradient-two)
+    );
     color: white;
 }
 
@@ -293,7 +313,7 @@ export default {
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
     background-color: var(--q-background-primary);
     padding: 1rem;
-    border-radius: .5rem;
+    border-radius: 0.5rem;
 }
 
 .btn.active {
@@ -303,16 +323,16 @@ export default {
 
 .btn.open {
     width: 100%;
-    padding: .5rem;
-    border-radius: .2rem;
+    padding: 0.5rem;
+    border-radius: 0.2rem;
     background-color: var(--q-primary);
     color: white;
 }
 
 .btn-close {
     position: absolute;
-    right: .5rem;
-    top: .4rem;
+    right: 0.5rem;
+    top: 0.4rem;
     color: var(--q-color);
 }
 
@@ -320,12 +340,12 @@ export default {
     width: 100%;
     background-color: var(--q-primary);
     color: white;
-    padding: .5rem;
+    padding: 0.5rem;
 }
 
 input {
-    padding: .5rem 1rem;
-    border-radius: .5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 0px 1px;
 }
 

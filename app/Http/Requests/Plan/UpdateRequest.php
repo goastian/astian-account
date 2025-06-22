@@ -28,7 +28,13 @@ class UpdateRequest extends FormRequest
     {
         return [
             'name' => ['nullable', 'max:150'],
-            'description' => ['nullable'],
+            'description' => [
+                function ($attribute, $value, $fail) {
+                    if (!strip_tags($value)) {
+                        $fail(__('The :attribute field is required'));
+                    }
+                }
+            ],
             'active' => ['nullable', 'boolean'],
             'trial_enabled' => ['nullable', 'boolean'],
             'trial_duration' => [
