@@ -3,13 +3,12 @@
         <q-toolbar>
             <q-toolbar-title>
                 <q-icon name="list_alt" class="q-mr-sm" />
-                List of Packages
+                List of packages
             </q-toolbar-title>
         </q-toolbar>
 
         <div class="q-pa-md">
             <q-table
-                title="Your Packages"
                 :rows="packages"
                 :columns="columns"
                 row-key="id"
