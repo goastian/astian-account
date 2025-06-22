@@ -4,7 +4,14 @@
         <q-header elevated>
             <q-toolbar>
                 <q-toolbar-title>
-                    <slot name="title"></slot>
+                    <q-btn
+                        dense
+                        flat
+                        round
+                        icon="mdi-view-dashboard-variant"
+                        @click="homePage"
+                    />
+                    {{ $page.props.app_name }}
                 </q-toolbar-title>
                 <v-theme />
                 <q-btn
@@ -60,6 +67,9 @@ export default {
 
         isActive(item) {
             return item.route == window.location.href;
+        },
+        homePage() {
+            window.location.href = this.$page.props.user_routes[0].menu[0]['route'];
         },
     },
 };
