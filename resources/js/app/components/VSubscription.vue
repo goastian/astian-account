@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="q-mt-lg">
-            <q-banner v-if="selected_method >= 0" class="bg-grey-2 q-pa-md">
+            <q-banner v-if="selected_method >= 0" class="q-pa-md">
                 <div class="text-h6 q-mb-sm">Summary</div>
                 <div class="text-body2">
                     <strong>Plan:</strong> {{ plan?.name }} <br />

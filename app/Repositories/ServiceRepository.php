@@ -7,6 +7,7 @@ use Elyerr\ApiResponse\Assets\Asset;
 use App\Repositories\Contracts\Contracts;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
+use App\Transformers\User\ServiceUserTransformer;
 use App\Transformers\Subscription\ServiceScopeTransformer;
 use Illuminate\Database\UniqueConstraintViolationException;
 
@@ -73,6 +74,26 @@ class ServiceRepository implements Contracts
         $data = $this->orderByBuilder($data, $this->model->transformer);
 
         return $this->showAllByBuilder($data, $this->model->transformer);
+    }
+
+    /**
+     * Search service for guest
+     * @param \Illuminate\Http\Request $request
+     * @return JsonResponser
+     */
+    public function searchForGuest(Request $request)
+    {
+        // Prepare query
+        $data = $this->model->query();
+
+        $data->where('visibility', 'public');
+
+        if ($request->group) {
+
+            $data->whereRaw("LOWER(name) LIKE ?", ['%' . strtolower($request->service) . '%']);
+        }
+
+        return $this->showAllByBuilder($data, ServiceUserTransformer::class);
     }
 
     /**
