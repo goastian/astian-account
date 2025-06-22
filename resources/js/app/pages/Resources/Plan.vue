@@ -86,10 +86,10 @@
 
                                         <q-item-section side>
                                             <q-radio
-                                                :val="plan"
-                                                v-model="selected_plan"
+                                                :val="price"
+                                                v-model="selected_period"
                                                 color="deep-orange"
-                                                @click="selectPlan(price)"
+                                                @click="selectPlan(plan)"
                                             />
                                         </q-item-section>
                                     </q-item>
@@ -143,18 +143,14 @@ export default {
         this.getPlans();
     },
 
-    watch: {
-        "search.page": "getPlans",
-    },
-
     methods: {
         showDescription(plan) {
             this.dialogPlan = plan;
             this.descriptionDialog = true;
         },
 
-        selectPlan(price) {
-            this.selected_period = price;
+        selectPlan(plan) {
+            this.selected_plan = plan;
         },
 
         async getPlans() {
