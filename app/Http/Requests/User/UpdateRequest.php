@@ -31,7 +31,7 @@ class UpdateRequest extends FormRequest
             'email' => ['nullable', 'email', 'max:100', 'unique:users,email,' . Request('user')->id],
             'country' => ['nullable', 'max:100', 'exists:countries,name_en'],
             'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
-            'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone,' . request('user')],
+            'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone,' . Request('user')->id],
             'city' => ['nullable', 'string', 'max:100'],
             'address' => ['nullable', 'max:150'],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
