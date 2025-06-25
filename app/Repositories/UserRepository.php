@@ -125,7 +125,7 @@ class UserRepository implements Contracts
             'dial_code' => $data['dial_code'] ?? null,
             'phone' => $data['phone'] ?? null,
             'birthday' => $data['birthday'] ?? null,
-            'verified_at' => $data['verify_email'] ? now() : false,
+            'verified_at' => $data['verify_email'] ? now() : null,
             'accept_terms' => $data['accept_terms'] ?? true,
             'accept_cookies' => $data['accept_cookies'] ?? true,
             'partner_id' => $data['partner_id'] ?? null,
