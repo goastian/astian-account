@@ -34,6 +34,7 @@
         </div>
 
         <div class="editor" id="editor" ref="editor"></div>
+        <v-error :error="error"></v-error>
     </div>
 </template>
 <script>
@@ -46,6 +47,11 @@ export default {
         text: {
             type: String,
             required: false,
+            default: "",
+        },
+        error: {
+            required: false,
+            type: [Object, String],
             default: "",
         },
     },

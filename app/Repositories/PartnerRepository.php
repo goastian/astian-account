@@ -156,7 +156,7 @@ class PartnerRepository implements Contracts
 
         if (is_null($partner)) {
             $partner = $this->model->create([
-                'code' => Partner::generateReferralCode(),
+                'code' => $this->generateReferralCode(),
                 'user_id' => auth()->user()->id
             ]);
         }

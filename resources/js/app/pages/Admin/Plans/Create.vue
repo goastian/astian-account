@@ -34,8 +34,10 @@
                         </q-input>
 
                         <!-- Editor de contenido -->
-                        <v-editor @content="setContent" />
-                        <v-error :error="errors.description" />
+                        <v-editor
+                            @content="setContent"
+                            :error="errors?.description"
+                        />
 
                         <!-- Opciones de activación, bonus y trial -->
                         <div class="row q-col-gutter-md">
@@ -294,7 +296,7 @@
                         v-if="scopes.length"
                         bordered
                         padding
-                        class="rounded-borders q-mt-md"
+                        class="rounded-borders q-mt-md bg-grey-1"
                     >
                         <q-item
                             v-for="(item, index) in scopes"
