@@ -29,15 +29,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * show the currencies
-     * @return mixed|\Illuminate\Http\JsonResponse
-     */
-    public function currencies()
-    {
-        return $this->data(['data' => billing_currencies()]);
-    }
-
-    /**
      * show the status of payments
      * @return mixed|\Illuminate\Http\JsonResponse
      */

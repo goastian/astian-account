@@ -185,10 +185,10 @@ export default {
             plans: [],
             selected_plan: null,
             selected_period: null,
-            dialogPlan: null,
+            showSidebar: false,
             search: {
                 page: 1,
-                per_page: 12,
+                per_page: 100,
             },
             pages: {
                 total_pages: 0,
@@ -236,10 +236,6 @@ export default {
         this.getPlans();
     },
 
-    watch: {
-        "search.page": "getPlans",
-    },
-
     methods: {
         select_period(period) {
             this.params.billing_period = period;
@@ -258,12 +254,10 @@ export default {
 
         async getPlans() {
             const query = new URLSearchParams(window.location.search);
-
             const query_data = {};
             for (const [key, value] of query.entries()) {
                 query_data[key] = value;
             }
-
             Object.assign(this.search, query_data);
 
             const paramss = {
@@ -290,6 +284,7 @@ export default {
     },
 };
 </script>
+
 <style scoped>
 .plans-grid-container {
     width: 100%;
@@ -302,15 +297,20 @@ export default {
 }
 
 .plan-card {
-    border-radius: 20px;
-    background: white;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+    border-radius: 12px;
+    background: var(--q-card);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .plan-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    border-color: var(--q-primary);
 }
 
 .plan-header {

@@ -17,8 +17,8 @@ class CountriesController extends Controller
     {
         $countries = $country->query();
 
-        if ($request->has('name_en')) {
-            $countries = $countries->where('name_en', "LIKE", "%" . $request->name_en . "%");
+        if ($request->name) {
+            $countries = $countries->whereRaw("LOWER(name_en) LIKE ?", ['%' . strtolower($request->name) . '%']);
         }
 
         $countries = $this->orderByBuilder($countries);

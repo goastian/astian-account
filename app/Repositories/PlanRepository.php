@@ -1,6 +1,7 @@
 <?php
 namespace App\Repositories;
 
+use App\Transformers\User\UserPlanTransformer;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Plan;
 use Illuminate\Support\Facades\DB;
@@ -92,7 +93,7 @@ class PlanRepository implements Contracts
 
         $this->orderByBuilder($data, $this->model->transformer);
 
-        return $this->showAllByBuilder($data, $this->model->transformer);
+        return $this->showAllByBuilder($data, UserPlanTransformer::class);
     }
 
     /**
