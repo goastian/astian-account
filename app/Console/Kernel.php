@@ -21,8 +21,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command("users:delete-accounts")->withoutOverlapping();
-        //$schedule->command("users:delete-unverified-account")->withoutOverlapping();
         $schedule->command('passport:purge')->withoutOverlapping();
         $schedule->command("payment:charge-recurring")->everyFourHours()->withoutOverlapping();
     }
