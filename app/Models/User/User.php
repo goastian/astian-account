@@ -60,54 +60,17 @@ class User extends Auth
     ];
 
     /**
-     * Destroy users
-     * @return void
+     * Retrieve a middle name
+     * @return string
      */
-    public function destroyAccounts()
+    public function getMiddleName()
     {
-        $now = new DateTime();
-        $now->sub(new DateInterval('P' . config('system.destroy_user_after', 30) . 'D'));
-        $date = $now->format('Y-m-d H:i:s');
+        $data = explode(" ", $this->name);
+        unset($data[0]);
 
-        $users = User::onlyTrashed()
-            ->whereHas('groups', function ($query) {
-                $query->where('slug', 'member');
-            })
-            ->where('deleted_at', '<', $date)
-            ->get();
-
-        if (count($users) > 0) {
-            foreach ($users as $user) {
-                $user->notify(new MemberDestroyAccount());
-                $user->forceDelete();
-            }
-        }
+        return implode($data);
     }
 
-    /**
-     * Remove unverified accounts
-     *
-     * @return void
-     */
-    public function destroyUnverifiedMembers()
-    {
-        $now = new DateTime();
-        $now->sub(new DateInterval('PT' . config('system.verify_account_time', 5) . 'M'));
-        $date = $now->format('Y-m-d H:i:s');
-
-        $users = User::whereHas('groups', function ($query) {
-            $query->where('slug', 'member');
-        })
-            ->whereNull('verified_at')
-            ->where('created_at', '<', $date)
-            ->get();
-
-        foreach ($users as $user) {
-            $user->forceDelete();
-        }
-
-        DB::table('password_resets')->where('created_at', '<', $date)->delete();
-    }
 
     /**
      * Verify the correct user and check if they have activated 2FA.

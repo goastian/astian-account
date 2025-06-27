@@ -81,10 +81,13 @@ class OAuthSessionTokenRepository
         foreach ($source as $key) {
             // Searching by token id
             $token = Token::find($key->oauth_access_token_id);
+
             // Revoke access token
-            $tokenRepository->revokeAccessToken($token->id);
-            // Revoke refresh token
-            $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
+            if (!empty($token)) {
+                $tokenRepository->revokeAccessToken($token->id);
+                // Revoke refresh token
+                $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
+            }
 
         }
         // delete all oauth session token 
