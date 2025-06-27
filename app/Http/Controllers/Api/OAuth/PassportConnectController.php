@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\OAuth;
 use Illuminate\Http\Request;
 use App\Repositories\Traits\Scopes;
 use App\Http\Controllers\ApiController;
+use App\Transformers\User\OpenIDTransformer;
 use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
 
 class PassportConnectController extends ApiController
@@ -18,8 +19,8 @@ class PassportConnectController extends ApiController
 
         parent::__construct();
 
-        $this->middleware('scope:' . $scopes)->only('check_scope');
-        $this->middleware('scopes:' . $scopes)->only('check_scopes');
+        $this->middleware('scope:' . $scopes)->only('check_scope_any');
+        $this->middleware('scopes:' . $scopes)->only('check_scope_all');
 
         if (isset($scopes)) {
             $this->middleware('client:' . $scopes)->only('check_client_credentials');
@@ -44,7 +45,7 @@ class PassportConnectController extends ApiController
      * @param \Illuminate\Http\Request $request
      * @return void
      */
-    public function check_scope(Request $request)
+    public function check_scope_any(Request $request)
     {
     }
 
@@ -54,7 +55,7 @@ class PassportConnectController extends ApiController
      * @param \Illuminate\Http\Request $request
      * @return void
      */
-    public function check_scopes(Request $request)
+    public function check_scope_all(Request $request)
     {
     }
 
@@ -74,7 +75,7 @@ class PassportConnectController extends ApiController
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
      */
-    public function token_can(Request $request)
+    public function user_can(Request $request)
     {
         $scope = $request->header('X-SCOPE');
 
@@ -91,7 +92,10 @@ class PassportConnectController extends ApiController
      */
     public function authenticated(Request $request)
     {
-        return $this->authenticated_user();
+        return fractal(
+            auth()->user(),
+            OpenIDTransformer::class
+        )->toArray()['data'];
     }
 
     /**
