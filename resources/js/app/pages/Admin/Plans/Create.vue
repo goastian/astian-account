@@ -451,23 +451,8 @@ export default {
                     });
                 }
             } catch (e) {
-                if (e.response?.data?.errors && e.response?.status == 422) {
+                if (e.response && e.response.data.errors) {
                     this.errors = e.response.data.errors;
-                }
-                if (e.response?.status == 400 && e.response?.data?.message) {
-                    this.$q.notify({
-                        type: "negative",
-                        message: e.response.data.message,
-                        timeout: 3000,
-                    });
-                }
-
-                if (e.response?.status == 403 && e.response?.data?.message) {
-                    this.$q.notify({
-                        type: "negative",
-                        message: e.response.data.message,
-                        timeout: 3000,
-                    });
                 }
             }
         },
@@ -549,9 +534,3 @@ export default {
     },
 };
 </script>
-
-<style scoped>
-.list {
-    background-color: var(--q-background-primary) !important;
-}
-</style>
