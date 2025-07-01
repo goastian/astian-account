@@ -615,7 +615,7 @@ class UserRepository implements Contracts
             if (date('Y-m-d H:i:s', strtotime(now())) > $date) {
                 return redirect()->route('login')
                     ->with(
-                        'status',
+                        'error',
                         __("Time's up to activate the account, please login and try again.")
                     );
             }
@@ -630,8 +630,11 @@ class UserRepository implements Contracts
 
             return redirect()->route('users.verified.account')
                 ->with(
-                    'status',
-                    __('Your account has been activated.')
+                    [
+                        'status' =>
+                            __('Your account has been activated.'),
+                        'token' => uniqid()
+                    ]
                 );
 
         } catch (Exception $e) {
