@@ -19,8 +19,8 @@ class TerminalController extends WebController
     {
         parent::__construct();
         $this->repository = $terminalRepository;
-        $this->middleware('userCanAny:administrator_terminal_full,administrator_user_view')->only('index');
-        $this->middleware('userCanAny:administrator_terminal_full,administrator_user_execute')->only('show');
+        $this->middleware('userCanAny:administrator:terminal:full,administrator:user:view')->only('index');
+        $this->middleware('userCanAny:administrator:terminal:full,administrator:user:execute')->only('show');
     }
 
     /**

@@ -1,19 +1,20 @@
 <?php
 namespace App\Http\Controllers\Web\OAuth;
- 
+
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Laravel\Passport\Bridge\User;
 use App\Repositories\Traits\Scopes;
-use Laravel\Passport\TokenRepository;
 use Laravel\Passport\ClientRepository;
-use Nyholm\Psr7\Response as Psr7Response;
+use Psr\Http\Message\ResponseInterface;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Psr\Http\Message\ServerRequestInterface;
 use League\OAuth2\Server\AuthorizationServer;
-use App\Exceptions\OAuthAuthenticationException;
-use League\OAuth2\Server\Exception\OAuthServerException;
+use Symfony\Component\HttpFoundation\Response;
+use Laravel\Passport\Exceptions\OAuthServerException;
+use Laravel\Passport\Exceptions\AuthenticationException;
 use Laravel\Passport\Contracts\AuthorizationViewResponse;
+use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 use Laravel\Passport\Http\Controllers\AuthorizationController as Controller;
 
 class AuthorizationController extends Controller
@@ -30,14 +31,11 @@ class AuthorizationController extends Controller
      * @return void
      */
     public function __construct(
-        AuthorizationServer $server,
-        StatefulGuard $guard,
-        AuthorizationViewResponse $response
+        protected AuthorizationServer $server,
+        protected StatefulGuard $guard,
+        protected ClientRepository $clients
     ) {
-        parent::__construct($server, $guard, $response);
-        
-        $this->userHasScopes(request());
-
+        parent::__construct($server, $guard, $clients); 
     }
 
     /**
@@ -51,18 +49,25 @@ class AuthorizationController extends Controller
     public function authorize(
         ServerRequestInterface $psrRequest,
         Request $request,
-        ClientRepository $clients,
-        TokenRepository $tokens
-    ) {
+        ResponseInterface $psrResponse,
+        AuthorizationViewResponse $viewResponse
+    ): Response|AuthorizationViewResponse {
 
-        $authRequest = $this->withErrorHandling(function () use ($psrRequest) {
-            return $this->server->validateAuthorizationRequest($psrRequest);
-        });
+        $authRequest = $this->withErrorHandling(
+            fn(): AuthorizationRequestInterface => $this->server->validateAuthorizationRequest($psrRequest),
+            ($psrRequest->getQueryParams()['response_type'] ?? null) === 'token'
+        );
 
         if ($this->guard->guest()) {
-            return $request->get('prompt') === 'none'
-                ? $this->denyRequest($authRequest)
-                : $this->promptForLogin($request);
+            switch ($request->get('prompt')) {
+                case 'none':
+                    throw OAuthServerException::loginRequired($authRequest);
+                case 'internal':
+                    return $this->internalPrompt($authRequest, $psrResponse);
+                default:
+                    $this->promptForLogin($request);
+                    break;
+            }
         }
 
         if (
@@ -72,33 +77,36 @@ class AuthorizationController extends Controller
             $this->guard->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
-
-            return $this->promptForLogin($request);
+            $this->promptForLogin($request);
         }
 
         $request->session()->forget('promptedForLogin');
 
-        $scopes = $this->parseScopes($authRequest);
-
         $user = $this->guard->user();
+        $authRequest->setUser(new User($user->getAuthIdentifier()));
 
-        $client = $clients->find($authRequest->getClient()->getIdentifier());
+        $scopes = $this->parseScopes($authRequest);
+        $client = $this->clients->find($authRequest->getClient()->getIdentifier());
 
         if (
             $request->get('prompt') !== 'consent' &&
-            ($client->skipsAuthorization() || $this->hasValidToken($tokens, $user, $client, $scopes))
+            ($client->skipsAuthorization($user, $scopes) || $this->hasGrantedScopes($user, $client, $scopes))
         ) {
-            return $this->approveRequest($authRequest, $user);
+            return $this->approveRequest($authRequest, $psrResponse);
         }
 
         if ($request->get('prompt') === 'none') {
-            return $this->denyRequest($authRequest, $user);
+            throw OAuthServerException::consentRequired($authRequest);
+        }
+
+        if ($request->get('prompt') === 'internal' && $client->private) {
+            return $this->internalPrompt($authRequest, $psrResponse);
         }
 
         $request->session()->put('authToken', $authToken = Str::random());
         $request->session()->put('authRequest', $authRequest);
 
-        return $this->response->withParameters([
+        return $viewResponse->withParameters([
             'client' => $client,
             'user' => $user,
             'scopes' => $scopes,
@@ -108,77 +116,68 @@ class AuthorizationController extends Controller
     }
 
     /**
-     * Prompt the user to login by throwing an OAuthAuthenticationException.
+     * Prompt the user to login by throwing an AuthenticationException.
      *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @throws \App\Exceptions\OAuthAuthenticationException
+     * @throws \Laravel\Passport\Exceptions\AuthenticationException
      */
-    protected function promptForLogin($request)
+    protected function promptForLogin(Request $request): never
     {
+        $this->redirectTo();
         $request->session()->put('promptedForLogin', true);
 
-        throw new OAuthAuthenticationException;
+        throw new AuthenticationException(guards: isset($this->guard->name) ? [$this->guard->name] : []);
     }
 
     /**
-     * Deny the authorization request.
+     * Handles the custom "internal" prompt type for trusted first-party applications.
      *
-     * @param  \League\OAuth2\Server\RequestTypes\AuthorizationRequest  $authRequest
-     * @param  \Illuminate\Contracts\Auth\Authenticatable|null  $user
-     * @return \Illuminate\Http\Response
+     * This flow allows internal applications to perform silent authorization if the user is
+     * already authenticated. If the user is not logged in, they are redirected to the login page
+     * and the authorization request is stored in session for continuation after login.
+     *
+     * If the user is authenticated, the request is automatically approved without requiring consent.
+     *
+     * @param  \League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface  $authRequest
+     * @param  \Psr\Http\Message\ResponseInterface  $responseInterface
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    protected function denyRequest($authRequest, $user = null)
+    protected function internalPrompt($authRequest, ResponseInterface $responseInterface)
     {
+        $user = auth()->user();
+
         if (is_null($user)) {
-            $uri = $authRequest->getRedirectUri() ?? (is_array($authRequest->getClient()->getRedirectUri())
-                ? $authRequest->getClient()->getRedirectUri()[0]
-                : $authRequest->getClient()->getRedirectUri());
 
-            $separator = $authRequest->getGrantTypeId() === 'implicit' ? '#' : '?';
+            $this->redirectTo();
 
-            $uri = $uri . (str_contains($uri, $separator) ? '&' : $separator) . 'state=' . $authRequest->getState();
-
-            return $this->withErrorHandling(function () use ($uri) {
-                throw OAuthServerException::accessDenied('Unauthenticated', $uri);
-            });
+            return redirect()->route('login');
         }
 
         $authRequest->setUser(new User($user->getAuthIdentifier()));
 
         $authRequest->setAuthorizationApproved(true);
 
-        return $this->withErrorHandling(function () use ($authRequest) {
+        return $this->withErrorHandling(function () use ($authRequest, $responseInterface) {
             return $this->convertResponse(
-                $this->server->completeAuthorizationRequest($authRequest, new Psr7Response)
+                $this->server->completeAuthorizationRequest($authRequest, $responseInterface)
             );
         });
     }
 
     /**
-     * Check available scopes to the requested user
-     * @param \Illuminate\Http\Request $request
+     * Stores the intended authorization URL in the session
+     * before redirecting the user to the login page.
+     *
+     * This ensures that after a successful authentication,
+     * the user is redirected back to the original authorization request.
+     *
      * @return void
      */
-    public function userHasScopes(Request $request)
+    private function redirectTo()
     {
-        $scopes_accepted = [];
+        $authorize_route = route('passport.authorizations.authorize');
+        $redirect_to = $authorize_route . "?" . http_build_query(request()->all());
 
-        $request_scopes = explode(' ', $request->scope);
-
-        $owner_scopes = collect($this->scopes())->pluck('id');
-
-        if (str_contains($request->scope, '*')) {
-            foreach ($owner_scopes as $key) {
-                array_push($scopes_accepted, $key);
-            }
-        } else {
-            foreach ($owner_scopes as $key) {
-                if (in_array($key, $request_scopes)) {
-                    array_push($scopes_accepted, $key);
-                }
-            }
-        }
-        $request->merge(['scope' => implode(" ", $scopes_accepted)]);
+        session()->put('redirect_to', $redirect_to);
     }
+
 }

@@ -22,10 +22,10 @@ class UserScopeController extends WebController
     {
         parent::__construct();
         $this->repository = $userRepository;
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_view')->only('index');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_assign')->only('assign');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_revoke')->only('revoke');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_history')->only('history');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:view')->only('index');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:assign')->only('assign');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:revoke')->only('revoke');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:history')->only('history');
     }
 
     /**

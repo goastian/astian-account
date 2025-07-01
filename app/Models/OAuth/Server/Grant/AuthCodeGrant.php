@@ -81,7 +81,7 @@ class AuthCodeGrant extends AuthCodeGrantModel
         ServerRequestInterface $request,
         ResponseTypeInterface $responseType,
         DateInterval $accessTokenTTL
-    ) {
+    ): ResponseTypeInterface {
 
         list($clientId) = $this->getClientCredentials($request);
 

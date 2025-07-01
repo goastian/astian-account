@@ -31,7 +31,10 @@ class UpdateRequest extends FormRequest
                         foreach ($urls as $url) {
                             $url = trim($url);
                             if (!preg_match('/^(https?:\/\/)/i', $url)) {
-                                $fail(__('Each URL in :attribute must start with http or https.', ['attribute' => $attribute]));
+                                $fail(__(
+                                    'Each URL in :attribute must start with http or https. invalid url :value',
+                                    ['attribute' => $attribute, 'value' => $url]
+                                ));
                                 break;
                             }
                         }

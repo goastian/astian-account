@@ -1,141 +1,36 @@
 <template>
     <v-admin-layout>
-        <q-toolbar class="q-ma-sm flex items-center justify-between">
-            <q-toolbar-title> List of clients </q-toolbar-title>
-            <q-space />
-
-            <div class="row items-center q-pa-md">
-                <v-create @created="getClients()" />
-
-                <q-btn-toggle
-                    v-model="viewMode"
-                    dense
-                    toggle-color="primary"
-                    :options="[
-                        { value: 'list', icon: 'list' },
-                        { value: 'grid', icon: 'grid_on' },
-                    ]"
-                    unelevated
-                />
-            </div>
+        <q-toolbar>
+            <q-toolbar-title>List of clients</q-toolbar-title>
+            <v-personal-client @created="getClients()"></v-personal-client>
+            <v-create @created="getClients()"></v-create>
         </q-toolbar>
 
-        <div v-if="viewMode === 'grid'" class="row q-col-gutter-md q-ma-sm">
-            <div
-                class="col-xs-12 col-sm-6 col-md-4"
-                v-for="(client, index) in clients"
-                :key="index"
-            >
-                <q-card class="q-pa-md">
-                    <q-card-section>
-                        <div class="text-h6">{{ client.name }}</div>
-                        <div class="text-caption text-grey">
-                            Created: {{ client.created_at }}
-                        </div>
-                        <div class="text-caption text-grey">
-                            Updated: {{ client.updated_at }}
-                        </div>
-                    </q-card-section>
-
-                    <q-separator />
-
-                    <q-card-section class="q-pt-sm">
-                        <div class="q-mb-sm">
-                            <q-chip
-                                clickable
-                                @click="copyToClipboard(client.id)"
-                                color="green"
-                                text-color="white"
-                                icon="mdi-content-copy"
-                                label="ID: *****"
-                            >
-                                <q-tooltip>Copy ID</q-tooltip>
-                            </q-chip>
-                        </div>
-                        <div class="q-mb-sm">
-                            <q-chip
-                                v-if="client.secret"
-                                clickable
-                                @click="copyToClipboard(client.secret)"
-                                color="green"
-                                text-color="white"
-                                icon="mdi-content-copy"
-                                label="Secret: *****"
-                            >
-                                <q-tooltip>Copy Secret</q-tooltip>
-                            </q-chip>
-                        </div>
-                    </q-card-section>
-
-                    <q-card-actions align="right">
-                        <v-update :item="client" @updated="getClients" />
-                        <v-delete :item="client" @deleted="getClients" />
-                    </q-card-actions>
-                </q-card>
-            </div>
-        </div>
-
-        <div v-if="viewMode === 'list'" class="q-pa-sm">
-            <q-table
-                :rows="clients"
-                :columns="columns"
-                row-key="id"
-                flat
-                bordered
-                hide-bottom
-                :rows-per-page-options="[search.per_page]"
-            >
-                <template v-slot:body-cell-id="props">
-                    <q-td>
-                        <q-btn
-                            dense
-                            flat
-                            icon="mdi-content-copy"
-                            @click="copyToClipboard(props.row.id)"
-                            label="*****"
-                            size="sm"
-                            color="green"
-                        >
-                            <q-tooltip>Copy ID</q-tooltip>
-                        </q-btn>
-                    </q-td>
-                </template>
-
-                <template v-slot:body-cell-secret="props">
-                    <q-td>
-                        <q-btn
-                            v-if="props.row.secret"
-                            dense
-                            flat
-                            icon="mdi-content-copy"
-                            @click="copyToClipboard(props.row.secret)"
-                            label="*****"
-                            size="sm"
-                            color="green"
-                        >
-                            <q-tooltip>Copy Secret</q-tooltip>
-                        </q-btn>
-                    </q-td>
-                </template>
-
-                <template v-slot:body-cell-actions="props">
-                    <q-td align="right">
+        <q-table
+            flat
+            bordered
+            :rows="clients"
+            :columns="columns"
+            row-key="id"
+            hide-bottom
+            :rows-per-page-options="[search.per_page]"
+        >
+            <template v-slot:body-cell-actions="props">
+                <q-td :props="props">
+                    <div class="q-gutter-xs">
                         <v-update :item="props.row" @updated="getClients" />
                         <v-delete :item="props.row" @deleted="getClients" />
-                    </q-td>
-                </template>
-            </q-table>
-        </div>
+                    </div>
+                </q-td>
+            </template>
+        </q-table>
 
-        <div class="row justify-center q-my-md">
+        <div class="row justify-center q-mt-md">
             <q-pagination
                 v-model="search.page"
-                color="primary"
+                color="grey-8"
                 :max="pages.total_pages"
                 size="sm"
-                boundary-numbers
-                direction-links
-                class="q-pa-xs q-gutter-sm rounded-borders"
             />
         </div>
     </v-admin-layout>
@@ -145,49 +40,88 @@
 import VCreate from "./Create.vue";
 import VUpdate from "./Update.vue";
 import VDelete from "./Delete.vue";
+import VPersonalClient from "./PersonalClient.vue";
 
 export default {
     components: {
         VCreate,
         VUpdate,
         VDelete,
+        VPersonalClient,
     },
 
     data() {
         return {
-            viewMode: "list", // cards or table
-
             clients: [],
             pages: {
-                total_pages: 0,
+                total_pages: 1,
             },
             search: {
                 page: 1,
                 per_page: 15,
             },
-
             columns: [
-                { name: "name", label: "Name", field: "name", align: "left" },
-                { name: "created_at", label: "Created", field: "created_at" },
-                { name: "updated_at", label: "Updated", field: "updated_at" },
-                { name: "id", label: "ID", field: "id" },
-                { name: "secret", label: "Secret", field: "secret" },
+                {
+                    name: "name",
+                    required: true,
+                    label: "Name",
+                    align: "left",
+                    field: (row) => row.name,
+                    sortable: true,
+                },
+                {
+                    name: "provider",
+                    required: true,
+                    label: "Provider",
+                    align: "left",
+                    field: (row) => row.provider,
+                    sortable: true,
+                },
+                {
+                    name: "created_at",
+                    label: "Created",
+                    align: "left",
+                    field: (row) => row.created_at,
+                    sortable: true,
+                },
+                {
+                    name: "confidential",
+                    label: "Confidential",
+                    align: "left",
+                    field: (row) => (row.confidential ? "Yes" : "No"),
+                    sortable: true,
+                },
+                {
+                    name: "created_by",
+                    label: "Created by",
+                    align: "left",
+                    field: (row) => row.created_by.email,
+                    sortable: true,
+                },
+                {
+                    name: "grant_types",
+                    label: "Grant types",
+                    align: "left",
+                    field: (row) => row.grant_types,
+                    sortable: true,
+                },
                 {
                     name: "actions",
                     label: "Actions",
-                    field: "actions",
                     align: "right",
+                    field: (row) => row.id,
                 },
             ],
         };
     },
 
     watch: {
-        "search.page"() {
+        "search.page"(value) {
             this.getClients();
         },
         "search.per_page"(value) {
             if (value) {
+                this.search.per_page = value;
                 this.getClients();
             }
         },
@@ -203,21 +137,23 @@ export default {
         },
 
         searching(event) {
-            this.getClients(event);
+            this.getUsers(event);
         },
 
         getClients(param = null) {
             const params = { ...this.search, ...param };
 
             this.$server
-                .get(this.$page.props.route, { params })
+                .get(this.$page.props.route["clients"], {
+                    params: params,
+                })
                 .then((res) => {
                     this.clients = res.data.data;
-                    let meta = res.data.meta;
+                    var meta = res.data.meta;
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch(() => {});
+                .catch((e) => {});
         },
 
         async copyToClipboard(text) {

@@ -126,6 +126,6 @@ class PassportConnectController extends ApiController
      */
     public function access()
     {
-        return $this->availableScopes();
+        return $this->scopes(false);
     }
 }

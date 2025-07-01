@@ -21,7 +21,7 @@ class ScopeController extends WebController
     {
         parent::__construct();
         $this->repository = $scopeRepository;
-        $this->middleware('userCanAny:administrator_scope_full,administrator_scope_view')->only('index');
+        $this->middleware('userCanAny:administrator:scope:full,administrator:scope:view')->only('index');
         $this->middleware('wants.json');
     }
 

@@ -24,7 +24,7 @@ class PlanScopeController extends WebController
     {
         parent::__construct();
         $this->repository = $planRepository;
-        $this->middleware('userCanAny:administrator_plan_full,administrator_plan_revoke')->only('revoke');
+        $this->middleware('userCanAny:administrator:plan:full,administrator:plan:revoke')->only('revoke');
     }
 
     /**

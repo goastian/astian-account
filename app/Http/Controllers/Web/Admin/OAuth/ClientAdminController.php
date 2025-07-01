@@ -23,11 +23,11 @@ class ClientAdminController extends WebController
     {
         parent::__construct();
         $this->repository = $clientRepository;
-        $this->middleware('userCanAny:administrator_application_full,administrator_application_view')->only('index');
-        $this->middleware('userCanAny:administrator_application_full,administrator_application_show')->only('show');
-        $this->middleware('userCanAny:administrator_application_full,administrator_application_create')->only('store');
-        $this->middleware('userCanAny:administrator_application_full,administrator_application_update')->only('update');
-        $this->middleware('userCanAny:administrator_application_full,administrator_application_destroy')->only('destroy');
+        $this->middleware('userCanAny:administrator:application:full,administrator:application:view')->only('index');
+        $this->middleware('userCanAny:administrator:application:full,administrator:application:show')->only('show');
+        $this->middleware('userCanAny:administrator:application:full,administrator:application:create')->only(['store', 'createPersonalClient']);
+        $this->middleware('userCanAny:administrator:application:full,administrator:application:update')->only('update');
+        $this->middleware('userCanAny:administrator:application:full,administrator:application:destroy')->only('destroy');
     }
 
     /**
@@ -42,7 +42,10 @@ class ClientAdminController extends WebController
         }
 
         return Inertia::render("Admin/Clients/Index", [
-            "route" => route("admin.clients.index")
+            "route" => [
+                'clients' => route("admin.clients.index"),
+                'personal' => route("admin.clients.personal.store")
+            ]
         ]);
     }
 
@@ -87,5 +90,34 @@ class ClientAdminController extends WebController
     public function destroy(Client $client)
     {
         return $this->repository->revokeClientForAdmin($client->id);
+    }
+
+
+    /**
+     * Create new personal access client
+     * @param \Illuminate\Http\Request $request
+     * @return void
+     */
+    public function createPersonalClient(Request $request)
+    {
+        $this->validate($request, [
+            'name' => ['required', 'max:100'],
+        ]);
+
+        $this->repository->createPersonalAccessGrantClient(
+            $request->name,
+            'users'
+        );
+
+        return $this->message(__("Personal access client registered successfully"), 201);
+    }
+
+    /**
+     * Create a new client credentials access
+     * @return void
+     */
+    public function createClientCredentials()
+    {
+        // coming soon
     }
 }

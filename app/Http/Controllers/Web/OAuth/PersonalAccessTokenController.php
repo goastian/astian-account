@@ -1,59 +1,54 @@
 <?php
 namespace App\Http\Controllers\Web\OAuth;
- 
+
 use Inertia\Inertia;
+use App\Models\OAuth\Token;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Repositories\Traits\Scopes;
+use Laravel\Passport\TokenRepository;
+use App\Http\Controllers\WebController;
 use Elyerr\ApiResponse\Assets\JsonResponser;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Transformers\OAuth\PersonalTokenTransformer;
-use Laravel\Passport\Http\Controllers\PersonalAccessTokenController as Controller;
 
-class PersonalAccessTokenController extends Controller
+class PersonalAccessTokenController extends WebController
 {
-
     use Scopes, JsonResponser;
 
     /**
-     * Show all
-     * @param mixed $collection
-     * @param mixed $transformer
-     * @param mixed $code
-     * @param mixed $pagination
-     * @return mixed|\Illuminate\Http\JsonResponse
+     * Token repository name
+     * @var TokenRepository
      */
-    public function showAllByArray($collection, $transformer = null, $code = 200, $pagination = true)
+    public $repository;
+
+    /**
+     * Construct
+     * @param \Laravel\Passport\TokenRepository $tokenRepository
+     */
+    public function __construct(TokenRepository $tokenRepository)
     {
-        $collection = $this->orderBy($collection);
-
-        if ($pagination) {
-            $collection = $this->paginate($collection);
-        }
-
-        if ($transformer != null && gettype($transformer) != "integer") {
-            $collection = fractal($collection, $transformer);
-        }
-
-        return $collection->toArray();
+        $this->repository = $tokenRepository;
     }
 
     /**
-     * Retrieve tokens forUser
+     * List token
      * @param \Illuminate\Http\Request $request
      * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
      */
     public function forUser(Request $request)
     {
-        $tokens = $this->tokenRepository->forUser($request->user()->getAuthIdentifier());
-        $tokens = $tokens->load('client')->filter(function ($token) {
-            return $token->client->personal_access_client && !$token->revoked;
-        })->values();
+        $tokens = $this->repository->forUser($request->user())
+            ->filter(
+                fn(Token $token): bool => !$token->client->revoked && $token->client->hasGrantType('personal_access')
+            )
+            ->values();
 
         if (request()->wantsJson()) {
             return $this->showAll($tokens, PersonalTokenTransformer::class);
         }
 
         return Inertia::render("OAuth/Personal/Index", [
-            'tokens' => $this->showAllByArray($tokens, PersonalTokenTransformer::class),
             'route' => route('passport.personal.tokens.index')
         ]);
     }
@@ -66,30 +61,51 @@ class PersonalAccessTokenController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validation->make($request->all(), [
-            'name' => 'required|max:191',
-            'scopes' => 'array|in:' . implode(',', $this->scopesForUser()),
-            'expiration_date' => ['nullable', 'date_format:Y-m-d H:i']
-        ])->validate();
+        $this->validate($request, [
+            'name' => ['required', 'max:255'],
+            'scopes' => ['array', Rule::in($this->scopes()->pluck('id')->toArray())],
+        ]);
 
-        $generateToken = $request->user()->createToken(
-            $request->name,
-            $request->scopes ?? []
-        );
-
-        if ($request->expiration_date) {
-            $generateToken->token->expires_at = $request->expiration_date;
-            $generateToken->token->push();
+        try {
+            return $request->user()->createToken(
+                $request->name,
+                $request->scopes ?? []
+            );
+        } catch (\Throwable $th) {
+            throw new ReportError(__($th->getMessage()), 404);
         }
-
-        return $generateToken;
     }
 
     /**
-     * Get the scopes for current user
+     * Destroy token 
+     * @param \Illuminate\Http\Request $request
+     * @param string $tokenId
+     * @throws \Elyerr\ApiResponse\Exceptions\ReportError
+     * @return mixed|\Illuminate\Http\JsonResponse
      */
-    private function scopesForUser()
+    public function destroy(Request $request, string $tokenId)
     {
-        return $this->scopes()->pluck('id')->toArray();
+        $token = $this->repository->findForUser(
+            $tokenId,
+            $request->user()
+        );
+
+        if (is_null($token)) {
+            throw new ReportError(__('Token cannot be found'), 404);
+        }
+
+        $token->revoke();
+
+        return $this->message(__("Token revoked successfully"));
+    }
+
+
+    /**
+     * List scopes for api key
+     * @return \Illuminate\Support\Collection<int, \Laravel\Passport\Scope>
+     */
+    public function listScopesForApiToken()
+    {
+        return $this->scopes();
     }
 }

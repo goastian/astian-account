@@ -14,34 +14,6 @@
             hide-bottom
             :rows-per-page-options="[search.per_page]"
         >
-            <template v-slot:body-cell-credentials="props">
-                <q-td :props="props">
-                    <div class="q-gutter-xs">
-                        <q-chip
-                            clickable
-                            @click="copyToClipboard(props.row.id)"
-                            color="green"
-                            text-color="white"
-                            icon="mdi-content-copy"
-                            label="ID"
-                        >
-                            <q-tooltip>Copy ID</q-tooltip>
-                        </q-chip>
-                        <q-chip
-                            v-if="props.row.secret"
-                            clickable
-                            @click="copyToClipboard(props.row.secret)"
-                            color="green"
-                            text-color="white"
-                            icon="mdi-content-copy"
-                            label="Secret"
-                        >
-                            <q-tooltip>Copy Secret</q-tooltip>
-                        </q-chip>
-                    </div>
-                </q-td>
-            </template>
-
             <template v-slot:body-cell-actions="props">
                 <q-td :props="props">
                     <div class="q-gutter-xs">
@@ -102,10 +74,18 @@ export default {
                     sortable: true,
                 },
                 {
-                    name: "credentials",
-                    label: "Credentials",
-                    align: "center",
-                    field: (row) => row.id,
+                    name: "confidential",
+                    label: "Confidential",
+                    align: "left",
+                    field: (row) => (row.confidential ? "Yes" : "No"),
+                    sortable: true,
+                },
+                {
+                    name: "grant_types",
+                    label: "Grant types",
+                    align: "left",
+                    field: (row) => row.grant_types,
+                    sortable: true,
                 },
                 {
                     name: "actions",
@@ -143,9 +123,7 @@ export default {
         },
 
         getClients(param = null) {
-            var params = {};
-            Object.assign(params, this.search);
-            Object.assign(params, param);
+            const params = { ...this.search, ...param };
 
             this.$server
                 .get(this.$page.props.route, {

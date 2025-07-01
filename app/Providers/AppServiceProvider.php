@@ -9,7 +9,6 @@ use App\Models\OAuth\Bridge\AuthCodeRepository;
 use App\Models\OAuth\Bridge\AccessTokenRepository;
 use Laravel\Passport\Bridge\AuthCodeRepository as LaravelAuthCodeRepository;
 use Laravel\Passport\Bridge\AccessTokenRepository as LaravelAccessTokenRepository;
-
 class AppServiceProvider extends ServiceProvider
 {
     /**

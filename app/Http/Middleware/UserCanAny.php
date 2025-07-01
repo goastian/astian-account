@@ -17,7 +17,7 @@ class UserCanAny
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $scopes): Response
+    public function handle(Request $request, Closure $next, ...$scopes): Response
     {
         if (!auth()->check()) {
             return redirect()->route('login');
@@ -27,14 +27,12 @@ class UserCanAny
             return $next($request);
         }
 
-        $scopes = explode(',', $scopes);
+        $userScopes = $this->scopes(false)->pluck('id') ?? [];
 
-        $userScopes = $this->scopes();
-
-        if (!empty($userScopes) && array_intersect($userScopes->pluck('id')->toArray(), $scopes)) {
+        if (count($userScopes) && array_intersect($userScopes->toArray(), $scopes)) {
             return $next($request);
         }
 
-        return redirect()->back()->with('error', __('You do not have the necessary permissions'));
+        return redirect()->route('users.dashboard');
     }
 }

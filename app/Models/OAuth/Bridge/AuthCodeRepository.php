@@ -23,7 +23,7 @@ class AuthCodeRepository extends Model
     /**
      * {@inheritdoc}
      */
-    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
+    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity): void
     {
         $identifier = $authCodeEntity->getIdentifier();
 
@@ -35,7 +35,7 @@ class AuthCodeRepository extends Model
             'revoked' => false,
             'expires_at' => $authCodeEntity->getExpiryDateTime(),
         ];
-
+       
         Passport::authCode()->forceFill($attributes)->save();
 
         // Set code to the current session

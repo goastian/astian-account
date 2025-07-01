@@ -29,7 +29,7 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->extend(
             AuthorizationServer::class,
             function (AuthorizationServer $server) {
-                
+
                 $grant = new AuthCodeGrant(
                     $this->app->make(AuthCodeRepository::class),
                     $this->app->make(RefreshTokenRepository::class),

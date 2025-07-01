@@ -21,13 +21,13 @@ class GroupController extends WebController
     {
         parent::__construct();
         $this->repository = $groupRepository;
-        $this->middleware('userCanAny:administrator_group_full,administrator_group_view')->only('index');
-        $this->middleware('userCanAny:administrator_group_full,administrator_group_show')->only('show');
-        $this->middleware('userCanAny:administrator_group_full,administrator_group_create')->only('store');
-        $this->middleware('userCanAny:administrator_group_full,administrator_group_update')->only('update');
-        $this->middleware('userCanAny:administrator_group_full,administrator_group_destroy')->only('destroy');
-        $this->middleware('userCanAny:administrator_group_full,administrator_group_enable')->only('enable');
-        $this->middleware('userCanAny:administrator_group_full,administrator_group_disable')->only('disable');
+        $this->middleware('userCanAny:administrator:group:full,administrator:group:view')->only('index');
+        $this->middleware('userCanAny:administrator:group:full,administrator:group:show')->only('show');
+        $this->middleware('userCanAny:administrator:group:full,administrator:group:create')->only('store');
+        $this->middleware('userCanAny:administrator:group:full,administrator:group:update')->only('update');
+        $this->middleware('userCanAny:administrator:group:full,administrator:group:destroy')->only('destroy');
+        $this->middleware('userCanAny:administrator:group:full,administrator:group:enable')->only('enable');
+        $this->middleware('userCanAny:administrator:group:full,administrator:group:disable')->only('disable');
         $this->middleware('wants.json')->only('show');
     }
 

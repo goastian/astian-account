@@ -3,9 +3,7 @@ namespace App\Repositories\OAuth\Server\Grant;
 
 use App\Models\OAuth\Token;
 use App\Models\Setting\Session;
-use Laravel\Passport\TokenRepository;
 use App\Models\OAuth\OAuthSessionToken;
-use Laravel\Passport\RefreshTokenRepository;
 
 
 class OAuthSessionTokenRepository
@@ -65,34 +63,43 @@ class OAuthSessionTokenRepository
     }
 
     /**
-     * Revoke the all tokens of the session
-     * @param string $session_id
+     * Revoke and remove all OAuth2 tokens associated with a given session.
+     *
+     * This method iterates through all token records tied to the specified session ID,
+     * revoking both access and refresh tokens (if available) for each session entry.
+     * After revocation, it deletes the session's token records from the database,
+     * and finally removes the session itself.
+     *
+     * This is particularly useful for revoking Personal Access Tokens (PATs) linked to a user's session,
+     * ensuring full logout and token invalidation across client applications.
+     *
+     * @param string $session_id The unique session ID for which tokens should be revoked.
      * @return void
      */
     public function destroyTokenSession(string $session_id)
     {
         // Retrieve the current session
-        $source = $this->model->where('session_id', session()->getId())->get();
+        $oauth2_session = $this->model->where('session_id', session()->getId())->get();
 
-        // Instance repositories
-        $tokenRepository = app(TokenRepository::class);
-        $refreshTokenRepository = app(RefreshTokenRepository::class);
+        foreach ($oauth2_session as $session) {
 
-        foreach ($source as $key) {
-            // Searching by token id
-            $token = Token::find($key->oauth_access_token_id);
+            // Verify has a token
+            if (!empty($session->token)) {
 
-            // Revoke access token
-            if (!empty($token)) {
-                $tokenRepository->revokeAccessToken($token->id);
-                // Revoke refresh token
-                $refreshTokenRepository->revokeRefreshTokensByAccessTokenId($token->id);
+                // revoke refresh
+                if (!empty($session->token->refreshToken)) {
+                    $session->token->refreshToken->revoke();
+                }
+
+                // Revoke access token 
+                $session->token->revoke();
             }
-
         }
+
         // delete all oauth session token 
         $this->model->where('session_id', $session_id)->delete();
 
+        // Delete current session
         Session::find($session_id)->delete();
     }
 }

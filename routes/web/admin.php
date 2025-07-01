@@ -48,6 +48,7 @@ Route::post('/users/{user}/groups', [UserGroupController::class, 'assign'])->nam
 Route::delete('/users/{user}/groups/{group}', [UserGroupController::class, 'revoke'])->name('users.groups.revoke');
 
 Route::resource('/clients', ClientAdminController::class)->except('edit', 'create');
+Route::post('/clients/personal', [ClientAdminController::class, 'createPersonalClient'])->name('clients.personal.store');
 
 Route::resource('/plans', PlanController::class)->except('edit', 'create');
 Route::delete('/plans/{plan}/scopes/{scope}', [PlanScopeController::class, 'revoke'])->name('plans.scopes.revoke');

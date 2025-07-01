@@ -1,85 +1,130 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Web\OAuth\ScopeController;
+use App\Http\Controllers\Web\OAuth\ClientController;
+use Laravel\Passport\Http\Controllers\ScopeController;
+use App\Http\Controllers\Web\OAuth\AuthorizationController;
+use Laravel\Passport\Http\Controllers\DeviceCodeController;
+use Laravel\Passport\Http\Controllers\DeviceUserCodeController;
+use Laravel\Passport\Http\Controllers\TransientTokenController;
+use App\Http\Controllers\Web\OAuth\PersonalAccessTokenController;
+use Laravel\Passport\Http\Controllers\DenyAuthorizationController;
+use Laravel\Passport\Http\Controllers\ApproveAuthorizationController;
+use Laravel\Passport\Http\Controllers\DeviceAuthorizationController;
+use Laravel\Passport\Http\Controllers\AuthorizedAccessTokenController;
+use Laravel\Passport\Http\Controllers\DenyDeviceAuthorizationController;
+use Laravel\Passport\Http\Controllers\ApproveDeviceAuthorizationController;
 
 Route::group([
     'as' => 'passport.',
     'prefix' => config('passport.path', 'oauth'),
 ], function () {
 
-    Route::get('/authorize', [
-        'uses' => '\App\Http\Controllers\Web\OAuth\AuthorizationController@authorize',
-        'as' => 'authorizations.authorize',
-        'middleware' => ['web', 'auth:web'],
-    ]);
+    Route::get(
+        '/authorize',
+        [AuthorizationController::class, 'authorize']
+    )->name('authorizations.authorize')->middleware('web');
+
+    Route::get(
+        '/device',
+        [DeviceUserCodeController::class]
+    )->name('device')->middleware('web');
+
+    Route::post(
+        '/device/code',
+        [DeviceCodeController::class]
+    )->name('device.code')->middleware('throttle');
+
 
     $guard = config('passport.guard', null);
 
-    Route::middleware(['web', $guard ? 'auth:' . $guard : 'auth'])->group(function () {
+    Route::middleware(['web', $guard ? 'auth:' . $guard : 'auth'])
+        ->group(function () {
 
-        Route::get('/scopes', [ScopeController::class, 'all'])->name('scopes.index');
+            Route::post(
+                '/token/refresh',
+                [TransientTokenController::class, 'refresh']
+            )->name('token.refresh');
 
-        Route::post('/token/refresh', [
-            'uses' => '\Laravel\Passport\Http\Controllers\TransientTokenController@refresh',
-            'as' => 'token.refresh',
-        ]);
+            Route::post(
+                '/authorize',
+                [ApproveAuthorizationController::class, 'approve']
+            )->name('authorizations.approve');
 
-        Route::post('/authorize', [
-            'uses' => '\Laravel\Passport\Http\Controllers\ApproveAuthorizationController@approve',
-            'as' => 'authorizations.approve',
-        ]);
+            Route::delete(
+                '/authorize',
+                [DenyAuthorizationController::class, 'deny']
+            )->name('authorizations.deny');
 
-        Route::delete('/authorize', [
-            'uses' => '\App\Http\Controllers\Web\OAuth\DenyAuthorizationController@deny',
-            'as' => 'authorizations.deny'
-        ]);
+            Route::get(
+                '/device/authorize',
+                [DeviceAuthorizationController::class]
+            )->name('device.authorizations.authorize');
 
-        Route::get('/tokens', [
-            'uses' => '\Laravel\Passport\Http\Controllers\AuthorizedAccessTokenController@forUser',
-            'as' => 'tokens.index',
-            'middleware' => 'wants.json',
-        ]);
+            Route::post(
+                '/device/authorize',
+                [ApproveDeviceAuthorizationController::class]
+            )->name('device.authorizations.approve');
 
-        Route::delete('/tokens/{token_id}', [
-            'uses' => '\Laravel\Passport\Http\Controllers\AuthorizedAccessTokenController@destroy',
-            'as' => 'tokens.destroy',
-        ]);
+            Route::delete(
+                '/device/authorize',
+                [DenyDeviceAuthorizationController::class]
+            )->name('device.authorizations.deny');
 
-        Route::get('/clients', [
-            'uses' => '\App\Http\Controllers\Web\OAuth\ClientController@forUser',
-            'as' => 'clients.index',
-        ]);
+            Route::get(
+                '/scopes',
+                [ScopeController::class, 'all']
+            )->name('scopes.index');
 
-        Route::post('/clients', [
-            'uses' => '\App\Http\Controllers\Web\OAuth\ClientController@store',
-            'as' => 'clients.store',
-        ]);
+            Route::get(
+                '/tokens',
+                [AuthorizedAccessTokenController::class, 'forUser']
+            )->name('tokens.index')->middleware('wants.json');
 
-        Route::put('/clients/{client_id}', [
-            'uses' => '\App\Http\Controllers\Web\OAuth\ClientController@update',
-            'as' => 'clients.update',
-        ]);
+            Route::delete(
+                '/tokens/{token_id}',
+                [AuthorizedAccessTokenController::class, 'destroy']
+            )->name('tokens.destroy');
 
-        Route::delete('/clients/{client_id}', [
-            'uses' => '\App\Http\Controllers\Web\OAuth\ClientController@destroy',
-            'as' => 'clients.destroy',
-        ]);
+            Route::get(
+                '/clients',
+                [ClientController::class, 'index']
+            )->name('clients.index');
 
-        Route::get('/api-keys', [
-            'uses' => '\App\Http\Controllers\Web\OAuth\PersonalAccessTokenController@forUser',
-            'as' => 'personal.tokens.index',
-        ]);
+            Route::post(
+                '/clients',
+                [ClientController::class, 'store']
+            )->name('clients.store');
 
-        Route::post('/api-keys', [
-            'uses' => '\App\Http\Controllers\Web\OAuth\PersonalAccessTokenController@store',
-            'as' => 'personal.tokens.store',
-        ]);
+            Route::put(
+                '/clients/{client_id}',
+                [ClientController::class, 'update']
+            )->name('clients.update');
 
-        Route::delete('/api-keys/{token_id}', [
-            'uses' => '\Laravel\Passport\Http\Controllers\PersonalAccessTokenController@destroy',
-            'as' => 'personal.tokens.destroy',
-        ]);
-    });
+            Route::delete(
+                '/clients/{client_id}',
+                [ClientController::class, 'delete']
+            )->name('clients.destroy');
 
+            Route::get(
+                '/scopes',
+                [PersonalAccessTokenController::class, 'listScopesForApiToken']
+            )->name('scopes.index');
+
+            Route::get(
+                '/api-keys',
+                [PersonalAccessTokenController::class, 'forUser']
+            )->name('personal.tokens.index');
+
+            Route::post(
+                '/api-keys',
+                [PersonalAccessTokenController::class, 'store']
+            )->name('personal.tokens.store');
+
+            Route::delete(
+                '/api-keys/{token_id}',
+                [PersonalAccessTokenController::class, 'destroy']
+            )->name('personal.tokens.destroy');
+
+        });
 });

@@ -1,42 +1,37 @@
 <?php
 
 namespace App\Http\Middleware;
-  
+
+use Closure;
+use Illuminate\Http\Request;
 use Laravel\Passport\Client;
 use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Exceptions\ReportError;
+use Symfony\Component\HttpFoundation\Response;
 use Laravel\Passport\Exceptions\AuthenticationException;
-use Laravel\Passport\Http\Middleware\CheckScopes as middleware;
+use Laravel\Passport\Http\Middleware\CheckToken as middleware;
 
 class CheckScopes extends middleware
 {
     use Scopes;
 
     /**
-     * Handle the incoming request.
+     * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  mixed  ...$scopes
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Laravel\Passport\Exceptions\AuthenticationException|\Laravel\Passport\Exceptions\MissingScopeException
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, $next, ...$scopes)
+    public function handle(Request $request, Closure $next, string ...$scopes): Response
     {
         // Retrieve token to the  request
         $token = $request->user()->token();
-
-        // Retrieve the client to the token
-        $client = Client::find($token->client_id);
-
+ 
         // Checking Authentication
         if (!$request->user() || !$token) {
             throw new AuthenticationException;
         }
 
         // Use personal access token like a api key
-        if ($client->personal_access_client) {
+        if ($token->client->hasGrantType('personal_access')) {
 
             if (empty(array_diff($scopes, $token->scopes))) {
                 return $next($request);
@@ -55,7 +50,7 @@ class CheckScopes extends middleware
          */
 
         // Retrieve the owner scopes
-        $userScopes = $this->scopes()->pluck('id')->toArray();
+        $userScopes = $this->scopes(false)->pluck('id')->toArray();
 
         // Checking the incoming scopes exist in the user scopes
         if (!empty($userScopes) && empty(array_diff($scopes, $userScopes))) {

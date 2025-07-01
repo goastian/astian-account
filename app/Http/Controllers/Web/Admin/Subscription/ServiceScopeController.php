@@ -23,9 +23,9 @@ class ServiceScopeController extends WebController
     {
         parent::__construct();
         $this->repository = $serviceRepository;
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_view')->only('index');
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_assign')->only('assign');
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_revoke')->only('revoke');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:view')->only('index');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:assign')->only('assign');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:revoke')->only('revoke');
         $this->middleware('wants.json')->only('index');
     }
 
