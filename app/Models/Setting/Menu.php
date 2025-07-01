@@ -2,7 +2,6 @@
 
 namespace App\Models\Setting;
 
-use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
 use App\Transformers\User\AuthTransformer;
 
@@ -117,13 +116,13 @@ class Menu
                     'menu' => [
                         [
                             'name' => 'Applications',
-                            'route' => route('passport.clients.index'),
+                            'route' => intval(config('routes.users.api')) ? route('passport.clients.index') : null,
                             'icon' => 'mdi-wan',
                             'show' => intval(config('routes.users.clients')) ? true : false
                         ],
                         [
                             'name' => 'API Key',
-                            'route' => route('passport.personal.tokens.index'),
+                            'route' => intval(config('routes.users.api')) ? route('passport.personal.tokens.index') : null,
                             'icon' => 'mdi-shield-key-outline',
                             'show' => intval(config('routes.users.api')) ? true : false,
                         ],

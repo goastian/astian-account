@@ -86,45 +86,54 @@ Route::group([
                 [AuthorizedAccessTokenController::class, 'destroy']
             )->name('tokens.destroy');
 
-            Route::get(
-                '/clients',
-                [ClientController::class, 'index']
-            )->name('clients.index');
 
-            Route::post(
-                '/clients',
-                [ClientController::class, 'store']
-            )->name('clients.store');
+            if (config('routes.users.clients')) {
+                Route::get(
+                    '/clients',
+                    [ClientController::class, 'index']
+                )->name('clients.index');
 
-            Route::put(
-                '/clients/{client_id}',
-                [ClientController::class, 'update']
-            )->name('clients.update');
+                Route::post(
+                    '/clients',
+                    [ClientController::class, 'store']
+                )->name('clients.store');
 
-            Route::delete(
-                '/clients/{client_id}',
-                [ClientController::class, 'delete']
-            )->name('clients.destroy');
+                Route::put(
+                    '/clients/{client_id}',
+                    [ClientController::class, 'update']
+                )->name('clients.update');
 
-            Route::get(
-                '/scopes',
-                [PersonalAccessTokenController::class, 'listScopesForApiToken']
-            )->name('scopes.index');
+                Route::delete(
+                    '/clients/{client_id}',
+                    [ClientController::class, 'delete']
+                )->name('clients.destroy');
+            }
 
-            Route::get(
-                '/api-keys',
-                [PersonalAccessTokenController::class, 'forUser']
-            )->name('personal.tokens.index');
 
-            Route::post(
-                '/api-keys',
-                [PersonalAccessTokenController::class, 'store']
-            )->name('personal.tokens.store');
+            if (config('routes.users.api')) {
 
-            Route::delete(
-                '/api-keys/{token_id}',
-                [PersonalAccessTokenController::class, 'destroy']
-            )->name('personal.tokens.destroy');
+                Route::get(
+                    '/scopes',
+                    [PersonalAccessTokenController::class, 'listScopesForApiToken']
+                )->name('scopes.index');
+
+
+                Route::get(
+                    '/api-keys',
+                    [PersonalAccessTokenController::class, 'forUser']
+                )->name('personal.tokens.index');
+
+
+                Route::post(
+                    '/api-keys',
+                    [PersonalAccessTokenController::class, 'store']
+                )->name('personal.tokens.store');
+
+                Route::delete(
+                    '/api-keys/{token_id}',
+                    [PersonalAccessTokenController::class, 'destroy']
+                )->name('personal.tokens.destroy');
+            }
 
         });
 });
