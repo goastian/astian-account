@@ -67,7 +67,7 @@ class Auth extends Authenticatable
      */
     public function adminScopeName()
     {
-        return "administrator_admin_full";
+        return "administrator:admin:full";
     }
 
     /**

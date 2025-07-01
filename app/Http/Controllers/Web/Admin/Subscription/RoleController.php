@@ -26,11 +26,11 @@ class RoleController extends WebController
     {
         parent::__construct();
         $this->repository = $roleRepository;
-        $this->middleware('userCanAny:administrator_role_full,administrator_role_view')->only('index');
-        $this->middleware('userCanAny:administrator_role_full,administrator_role_show')->only('show');
-        $this->middleware('userCanAny:administrator_role_full,administrator_role_create')->only('store');
-        $this->middleware('userCanAny:administrator_role_full,administrator_role_update')->only('update');
-        $this->middleware('userCanAny:administrator_role_full,administrator_role_destroy')->only('destroy');
+        $this->middleware('userCanAny:administrator:role:full,administrator:role:view')->only('index');
+        $this->middleware('userCanAny:administrator:role:full,administrator:role:show')->only('show');
+        $this->middleware('userCanAny:administrator:role:full,administrator:role:create')->only('store');
+        $this->middleware('userCanAny:administrator:role:full,administrator:role:update')->only('update');
+        $this->middleware('userCanAny:administrator:role:full,administrator:role:destroy')->only('destroy');
         $this->middleware('wants.json')->only('show');
     }
 

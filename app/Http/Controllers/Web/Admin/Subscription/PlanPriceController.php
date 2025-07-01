@@ -18,7 +18,7 @@ class PlanPriceController extends WebController
     {
         parent::__construct();
         $this->repository = $planRepository;
-        $this->middleware('userCanAny:administrator_plan_full,administrator_plan_destroy')->only('destroy');
+        $this->middleware('userCanAny:administrator:plan:full,administrator:plan:destroy')->only('destroy');
     }
 
     /**

@@ -18,12 +18,12 @@
         }
     ],
     "require": {
-        "php": "^8.2.0", 
+        "php": "^8.2.0",
         "elyerr/api-response": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^12.0",
-        "laravel/passport": "^12.0",
+        "laravel/passport": "13.0",
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.2",
         "spatie/laravel-fractal": "^6.0",
@@ -83,7 +83,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "stable",

@@ -22,20 +22,6 @@
                     </template>
                 </q-input>
 
-                <div>
-                    <label class="text-gray-600 font-medium block">
-                        Expiration date
-                    </label>
-                    <VueDatePicker
-                        v-model="form.expiration_date"
-                        :enable-time-picker="false"
-                        :max-date="new Date()"
-                        format="yyyy-MM-dd"
-                    />
-
-                    <v-error :error="errors.expiration_date"></v-error>
-                </div>
-
                 <div class="q-mt-md">
                     <q-btn
                         @click="create"
@@ -100,9 +86,6 @@
 </template>
 
 <script>
-import flatpickr from "flatpickr";
-import { nextTick } from "vue";
-
 export default {
     emits: ["created"],
     data() {
@@ -123,7 +106,7 @@ export default {
             const grouped = {};
             this.scopes.forEach((scope) => {
                 if (scope.id) {
-                    const [group, service, role] = scope.id.split("_");
+                    const [group, service, role] = scope.id.split(":");
                     if (!grouped[group]) grouped[group] = {};
                     if (!grouped[group][service]) grouped[group][service] = [];
                     Object.assign(scope, { name: role });
@@ -139,7 +122,6 @@ export default {
             this.getScopes();
             this.token = null;
             this.errors = {};
-            await this.calendar();
             this.dialog = true;
         },
         close() {
@@ -147,14 +129,7 @@ export default {
             this.errors = {};
             this.dialog = false;
         },
-        async calendar() {
-            await nextTick();
-            flatpickr(".datetime", {
-                enableTime: true,
-                dateFormat: "Y-m-d H:i",
-                minDate: "today",
-            });
-        },
+
         async copyToClipboard(text) {
             try {
                 await navigator.clipboard.writeText(text);
@@ -181,8 +156,16 @@ export default {
                     this.$emit("created");
                 }
             } catch (e) {
-                if (e.response && e.response.status == 422) {
+                if (e?.response?.status == 422) {
                     this.errors = e.response.data.errors;
+                }
+
+                if (e?.response.status == 404) {
+                    this.$q.notify({
+                        type: "negative",
+                        message: e.response.data.message,
+                        timeout: 5000,
+                    });
                 }
             }
         },

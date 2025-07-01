@@ -24,9 +24,9 @@ class BroadcastController extends WebController
     {
         parent::__construct();
         $this->repository = $broadcastRepository;
-        $this->middleware('userCanAny:administrator_broadcast_full,administrator_broadcast_view')->only('index');
-        $this->middleware('userCanAny:administrator_broadcast_full,administrator_broadcast_create')->only('store');
-        $this->middleware('userCanAny:administrator_broadcast_full,administrator_broadcast_destroy')->only('destroy');
+        $this->middleware('userCanAny:administrator:broadcast:full,administrator:broadcast:view')->only('index');
+        $this->middleware('userCanAny:administrator:broadcast:full,administrator:broadcast:create')->only('store');
+        $this->middleware('userCanAny:administrator:broadcast:full,administrator:broadcast:destroy')->only('destroy');
     }
 
     /**

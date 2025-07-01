@@ -76,18 +76,19 @@
                         {{ __('Here you may change the name of the cookie used to identify a session instance by ID') }}
                     </small>
                 </div>
-
+                {{-- 
                 <div class="mb-2">
                     <label for="cookie_name" class="block text-sm font-medium text-gray-700 mb-2">
                         {{ __('Laravel Passport cookie name') }}
                     </label>
                     <input id="cookie_name" type="text" name="system[cookie_name]"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
-                        placeholder="{{ __('Enter the cookie name for Laravel passport') }}"
-                        value="{{ config('system.cookie_name') }}">
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
+                    placeholder="{{ __('Enter the cookie name for Laravel passport') }}"
+                    value="{{ config('system.cookie_name') }}">
                     <small
-                        class="block mt-1 text-gray-600">{{ __('This field specifies the name of the cookie used by Laravel Passport for authentication') }}</small>
+                    class="block mt-1 text-gray-600">{{ __('This field specifies the name of the cookie used by Laravel Passport for authentication') }}</small>
                 </div>
+                --}}
 
                 <div class="mb-2">
                     <label for="">HTTPS Only Cookies</label>

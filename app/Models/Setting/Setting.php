@@ -13,7 +13,6 @@ use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\QueryException;
-use App\Models\OAuth\PersonalAccessClient;
 
 class Setting extends Master
 {
@@ -37,9 +36,6 @@ class Setting extends Master
 
         Config::set('app.name', settingItem('app.name', 'Oauth2 Server'));
         Config::set('app.org_name', settingItem('app.org_name', 'Oauth2 org'));
-
-        Config::set('passport.personal_access_client.id', settingItem('passport_personal_access_client_id'));
-        Config::set('passport.personal_access_client.secret', settingItem('passport_personal_access_client_secret'));
 
         Setting::getPassportSetting();
         Setting::getRedisConfig();
@@ -349,10 +345,11 @@ class Setting extends Master
      */
     public static function getPassportSetting()
     {
+        Passport::authorizationView('vendor.passport.authorize');
         Passport::loadKeysFrom(base_path('secrets/oauth'));
 
         //Cookies names
-        Passport::cookie(settingItem('cookie_name'));
+        //Passport::cookie(settingItem('cookie_name'));
 
         try {
             //Scopes
@@ -371,7 +368,6 @@ class Setting extends Master
         Passport::useRefreshTokenModel(RefreshToken::class);
         Passport::useAuthCodeModel(AuthCode::class);
         Passport::useClientModel(Client::class);
-        Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
     }
 
     /**
@@ -518,7 +514,7 @@ class Setting extends Master
     {
         Config::set('system.schema_mode', settingItem('system.schema_mode', "https"));
         Config::set('system.home_page', settingItem('system.home_page', "/"));
-        Config::set('system.cookie_name', settingItem('system.cookie_name', null));
+        //    Config::set('system.cookie_name', settingItem('system.cookie_name', null));
         Config::set('system.passport_token_services', settingItem('system.passport_token_services', null));
         Config::set('system.verify_account_time', settingItem('system.verify_account_time', 5));
         Config::set('system.disable_create_user_by_command', settingItem('system.disable_create_user_by_command', false));
@@ -530,8 +526,6 @@ class Setting extends Master
         Config::set('system.terms_url', settingItem('system.terms_url', null));
         Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
 
-        Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));
-        Config::set('passport.personal_access_client.secret', settingItem('passport.personal_access_client.secret', null));
     }
 
     /**

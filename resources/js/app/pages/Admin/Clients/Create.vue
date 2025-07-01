@@ -1,16 +1,12 @@
 <template>
     <div class="q-pa-md q-gutter-sm">
         <q-btn
-            round
             outline
-            color="positive"
+            color="primary"
             @click="open"
-            icon="mdi-plus-circle"
-        >
-            <q-tooltip transition-show="rotate" transition-hide="rotate">
-                Add new client
-            </q-tooltip>
-        </q-btn>
+            icon="mdi-plus-circle-outline"
+            label="Create client"
+        />
 
         <q-dialog
             v-model="dialog"
@@ -26,7 +22,7 @@
                     <q-input
                         v-model="form.name"
                         label="Name"
-                        dense="dense"
+                        dense
                         :error="!!errors.name"
                     >
                         <template v-slot:error>
@@ -37,7 +33,7 @@
                     <q-input
                         v-model="form.redirect"
                         label="Redirect"
-                        dense="dense"
+                        dense
                         :error="!!errors.redirect"
                     >
                         <template v-slot:error>
@@ -52,30 +48,53 @@
                         :error="!!errors.confidential"
                     >
                         <template v-slot:error>
-                            <v-error :error="errors.confidential"></v-error>
+                            <v-error :error="errors.redirect"></v-error>
                         </template>
                     </q-checkbox>
                 </q-card-section>
 
                 <q-card-actions align="right">
                     <q-btn
-                        outline
-                        color="positive"
+                        dense
+                        color="primary"
                         label="Accept"
                         @click="create"
                     />
 
                     <q-btn
-                        outline
+                        dense
                         color="secondary"
                         label="Close"
                         @click="close"
                     />
                 </q-card-actions>
+
+                <q-card-section>
+                    <div
+                        v-if="client && Object.keys(client).length"
+                        class="q-mt-md"
+                    >
+                        <div
+                            class="text-negative text-bold text-center q-mb-sm"
+                        >
+                            These credentials are available only once. Please
+                            store them safely.
+                        </div>
+                        <q-btn
+                            label="Download credentials"
+                            color="red"
+                            icon="mdi-download"
+                            unelevated
+                            class="full-width"
+                            @click="downloadJsonFile"
+                        />
+                    </div>
+                </q-card-section>
             </q-card>
         </q-dialog>
     </div>
 </template>
+
 <script>
 export default {
     emits: ["created"],
@@ -83,48 +102,63 @@ export default {
     data() {
         return {
             dialog: false,
-            form: {
-                name: null,
-                redirect: null,
-                confidential: false,
-            },
+            form: {},
             errors: {},
+            client: {},
         };
     },
 
     methods: {
-        /**
-         * Clean the form when it is closed
-         */
         close() {
-            this.client = {};
-            this.errors = {};
+            this.clean();
             this.dialog = false;
         },
 
-        open() {
+        clean() {
+            this.client = {};
+            this.errors = {};
             this.form.name = null;
             this.form.redirect = null;
             this.form.confidential = false;
-            this.errors = {};
+        },
+
+        open() {
+            this.clean();
             this.dialog = true;
         },
 
-        /**
-         * Create a new client
-         */
+        downloadJsonFile() {
+            const clientCopy = { ...this.client };
+            delete clientCopy.links;
+            delete clientCopy.revoked;
+            delete clientCopy.provider;
+            delete clientCopy.redirect;
+
+            const filename = `${clientCopy.name || "client"}-credentials.json`;
+            const jsonString = JSON.stringify(clientCopy, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        },
+
         async create() {
             try {
                 const res = await this.$server.post(
-                    this.$page.props.route,
+                    this.$page.props.route["clients"],
                     this.form
                 );
 
-                if (res.status == 201) {
-                    this.form = {};
-                    this.errors = {};
+                if (res.status === 201) {
+                    this.clean();
                     this.$emit("created", true);
-                    this.dialog = false;
+                    this.client = res.data.data;
                 }
             } catch (e) {
                 if (e.response && e.response.data.errors) {

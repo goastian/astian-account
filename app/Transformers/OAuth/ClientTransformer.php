@@ -2,6 +2,7 @@
 
 namespace App\Transformers\OAuth;
 
+use App\Models\OAuth\Client;
 use Elyerr\ApiResponse\Assets\Asset;
 use League\Fractal\TransformerAbstract;
 
@@ -33,18 +34,17 @@ class ClientTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($client)
+    public function transform(Client $client)
     {
         return [
             "id" => $client->id,
-            "user_id" => $client->user_id,
             "name" => $client->name,
-            "secret" => $client->secret,
+            "secret" => $client->plainSecret ?: $client->secret,
             "confidential" => $client->secret ? true : false,
             "provider" => $client->provider,
-            "redirect" => $client->redirect,
-            "personal_access_client" => $client->personal_access_client,
-            "password_client" => $client->password_client,
+            "redirect_uris" => $client->redirect_uris,
+            "redirect" => implode(", ", $client->redirect_uris),
+            "grant_types" => implode(", ", $client->grant_types),
             "revoked" => $client->revoked,
             "created_at" => $this->format_date($client->created_at),
             "updated_at" => $this->format_date($client->updated_at),

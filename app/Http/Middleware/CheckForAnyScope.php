@@ -1,42 +1,36 @@
 <?php
 
 namespace App\Http\Middleware;
-  
+
+use Closure;
+use Illuminate\Http\Request;
 use Laravel\Passport\Client;
 use App\Repositories\Traits\Scopes;
-use Elyerr\ApiResponse\Exceptions\ReportError; 
+use Symfony\Component\HttpFoundation\Response;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Laravel\Passport\Exceptions\AuthenticationException;
-use Laravel\Passport\Http\Middleware\CheckForAnyScope as middleware;
+use Laravel\Passport\Http\Middleware\CheckTokenForAnyScope as middleware;
 
 class CheckForAnyScope extends middleware
 {
     use Scopes;
 
     /**
-     * Handle the incoming request.
+     * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @param  mixed  ...$scopes
-     * @return \Illuminate\Http\Response
-     *
-     * @throws \Laravel\Passport\Exceptions\AuthenticationException|\Laravel\Passport\Exceptions\MissingScopeException
+     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle($request, $next, ...$scopes)
+    public function handle(Request $request, Closure $next, string ...$scopes): Response
     {
         // Retrieve token to the  request
-        $token = $request->user()->token();
-
-        // Retrieve the client to the token
-        $client = Client::find($token->client_id);
-
+        $token = $request->user()->token(); 
         // Checking authentication
         if (!$request->user() || !$token) {
             throw new AuthenticationException;
         }
 
         // Use personal access token like a api key
-        if ($client->personal_access_client) {
+        if ($token->client->hasGrantType('personal_access')) {
 
             if (array_intersect($token->scopes, $scopes)) {
                 return $next($request);
@@ -55,13 +49,13 @@ class CheckForAnyScope extends middleware
          */
 
         // Retrieve the all scopes available for this users
-        $userScopes = $this->scopes()->pluck('id')->toArray();
+        $userScopes = $this->scopes(false)->pluck('id')->toArray();
 
         // Intersect the owner scope with incoming scopes
         if (!empty($userScopes) && count(array_intersect($userScopes, $scopes)) > 0) {
             return $next($request);
         }
-        
+
         throw new ReportError("You do not have the necessary permissions", 403);
     }
 }
