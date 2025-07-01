@@ -33,8 +33,18 @@ class StoreRequest extends FormRequest
             'country' => ['required', 'max:150'],
             'city' => ['nullable', 'string', 'max:100'],
             'address' => ['nullable', 'max:150'],
-            'dial_code' => [Rule::requiredIf(request()->phone != null), 'max:8', 'exists:countries,dial_code'],
-            'phone' => [Rule::requiredIf(request()->dial_code != null), 'max:25', 'unique:users,phone'],
+            'dial_code' => [
+                'nullable',
+                'required_with:phone',
+                'max:8',
+                'exists:countries,dial_code',
+            ],
+            'phone' => [
+                'nullable',
+                'required_with:dial_code',
+                'max:25',
+                Rule::unique('users', 'phone'),
+            ],
             'birthday' => ['nullable', 'date_format:Y-m-d', 'before: ' . User::setBirthday()],
             'verify_email' => ['nullable', 'boolean'],
         ];
