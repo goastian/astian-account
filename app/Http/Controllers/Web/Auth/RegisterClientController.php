@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
-use Illuminate\Http\Request; 
-use App\Repositories\UserRepository; 
-use App\Http\Controllers\WebController; 
+use Illuminate\Http\Request;
+use App\Repositories\UserRepository;
+use App\Http\Controllers\WebController;
 use App\Http\Requests\User\RegisterRequest;
 use App\Notifications\Member\MemberCreatedAccount;
 
@@ -95,8 +95,10 @@ class RegisterClientController extends WebController
     public function verifiedAccount()
     {
         if (session('token')) {
+            session()->forget('token');
             return view('auth.verified-account');
         }
+
         return redirectToHome();
     }
 }
