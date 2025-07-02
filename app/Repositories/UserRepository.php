@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\User\UserScope;
 use App\Models\Subscription\Group;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Support\Facades\Hash;
 use App\Repositories\Contracts\Contracts;
@@ -580,43 +581,74 @@ class UserRepository implements Contracts
     public function verifyUserAccount(array $data)
     {
         try {
+            // Verify the auth user and incoming use are the same
+            if (auth()->check() && auth()->user()->email !== $data['email']) {
+                // Destroy token 
+                DB::table('password_resets')->where('email', '=', $data['email'])->delete();
+                // Logout user
+                auth()->logout();
+            }
 
-            $data = DB::table('password_resets')->where([
+            // Verify the user has activated account
+            if (auth()->check() && auth()->user()->verified_at) {
+                return redirectToHome();
+            }
+
+            // Retrieve the token
+            $token = DB::table('password_resets')->where([
                 'token' => $data['token'],
                 'email' => $data['email'],
             ])->first();
 
-            $now = new DateTime($data->created_at);
+            // Calculate time valid token
+            $now = new DateTime($token->created_at);
             $now->add(new DateInterval("PT" . config("system.verify_account_time", 5) . "M"));
             $date = $now->format("Y-m-d H:i:s");
 
-            DB::table('password_resets')->where('email', '=', $data['email'])->delete();
+            // Destroy current token
+            DB::table('password_resets')->where('email', '=', $token->email)->delete();
 
-            $user = $this->model->where('email', $data['email'])->first();
+            // Retrieve the user object
+            $user = $this->model->where('email', $token->email)->first();
 
+            // Validate expiration token
             if (date('Y-m-d H:i:s', strtotime(now())) > $date) {
-                $user->forceDelete();
-                throw new ReportError(__("Time's up to activate the account"), 403);
+                return redirect()->route('login')
+                    ->with(
+                        'error',
+                        __("Time's up to activate the account, please login and try again.")
+                    );
             }
 
             $user->verified_at = now();
             $user->save();
 
-            $token = uniqid();
+            // Authenticate the user
+            if (!auth()->check()) {
+                auth()->login($user);
+            }
 
-            return redirect()->route('users.verified.account')->with(
-                [
-                    'status' => __('Your account has been activated.'),
-                    'token' => $token
-                ]
-            );
+            return redirect()->route('users.verified.account')
+                ->with(
+                    [
+                        'status' =>
+                            __('Your account has been activated.'),
+                        'token' => uniqid()
+                    ]
+                );
 
-        } catch (ErrorException $e) {
+        } catch (Exception $e) {
+
+            Log::error("verifyUserAccount : " . $e->getMessage());
+
             if (auth()->check()) {
                 auth()->logout();
             }
 
-            return redirect()->route('login');
+            return redirect()->route('login')->with(
+                'error',
+                __("Something is wrong, please login and tray again")
+            );
         }
     }
 

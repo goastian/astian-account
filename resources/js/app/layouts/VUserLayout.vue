@@ -37,7 +37,16 @@
                         <q-avatar class="text-primary" :icon="item.icon" />
                     </q-item-section>
                     <q-item-section>
-                        {{ item.name }}
+                        <div class="row items-center no-wrap">
+                            <span>{{ item.name }}</span>
+                            <q-badge
+                                v-if="item?.count"
+                                color="red"
+                                class="q-ml-sm"
+                            >
+                                {{ item.count }}
+                            </q-badge>
+                        </div>
                     </q-item-section>
                 </q-item>
             </q-expansion-item>

@@ -112,6 +112,17 @@ class ClientAdminController extends WebController
         return $this->message(__("Personal access client registered successfully"), 201);
     }
 
+    public function createDeviceClient(Request $request)
+    {
+        $this->validate($request, [
+            'name' => ['required', 'max:100'],
+        ]);
+
+        $client = $this->repository->createDeviceAuthorizationGrantClient($request->name);
+
+        return $client;
+    }
+
     /**
      * Create a new client credentials access
      * @return void
