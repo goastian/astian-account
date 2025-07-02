@@ -107,6 +107,13 @@ class Menu
                             'icon' => 'mdi-store-search',
                             'show' => true,
                         ],
+                        [
+                            'name' => 'Notifications',
+                            'route' => route('users.notification.index'),
+                            'icon' => 'mdi-bell-badge-outline',
+                            'show' => true,
+                            'count' => request()->user()->unreadNotifications()->count()
+                        ]
                     ]
                 ],
                 [

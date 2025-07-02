@@ -52,6 +52,9 @@ import {
     QMarkupTable,
     QBtnToggle,
     QFooter,
+    QTab,
+    QTabPanels,
+    QTabPanel,
 } from "quasar";
 
 export const QComponents = [
@@ -108,4 +111,7 @@ export const QComponents = [
     QMarkupTable,
     QBtnToggle,
     QFooter,
+    QTab,
+    QTabPanels,
+    QTabPanel,
 ];

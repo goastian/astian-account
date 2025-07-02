@@ -1,10 +1,12 @@
 <?php
 
-use Illuminate\Support\Facades\Route; 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Account\CodeController;
 use App\Http\Controllers\Web\Account\UserController;
 use App\Http\Controllers\Web\Account\HomePageController;
-use App\Http\Controllers\Web\Auth\RegisterClientController; 
+use App\Http\Controllers\Web\Auth\RegisterClientController;
+use App\Http\Controllers\Web\Account\NotificationController;
+use App\Http\Controllers\Web\Account\UserNotificationController;
 use App\Http\Controllers\Web\Account\UserSubscriptionController;
 
 Route::group([
@@ -36,4 +38,39 @@ Route::group([
     Route::post('/subscriptions/renew', [UserSubscriptionController::class, 'renew'])->name('subscriptions.renew');
     Route::put('/subscriptions/cancel/{transaction_id}', [UserSubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
     Route::get('/subscriptions/checkout/success', [UserSubscriptionController::class, 'success'])->name('checkout.success');
+
+    Route::prefix('notifications')
+        ->as('notification.')
+        ->group(function () {
+
+            Route::get(
+                '/',
+                [NotificationController::class, 'listAllNotifications']
+            )->name('index');
+
+            Route::get(
+                '/unread',
+                [NotificationController::class, 'listUnreadNotifications']
+            )->name('unread');
+
+            Route::get(
+                '/{notification_id}',
+                [NotificationController::class, 'show']
+            )->name('show');
+
+            Route::post(
+                '/mark-as-read/{notification_id}',
+                [NotificationController::class, 'markAsReadNotification']
+            )->name('mark-as-read');
+
+            Route::post(
+                '/mark-all-as-read',
+                [NotificationController::class, 'markAsReadAllNotifications']
+            )->name('mark-all-as-read');
+
+            Route::delete(
+                '/destroy-all',
+                [NotificationController::class, 'destroyNotifications']
+            )->name('destroy-all');
+        });
 });
