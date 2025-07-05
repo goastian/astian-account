@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [v2.0.0]
 
 ### Framework & Package Upgrades
 
@@ -17,6 +17,10 @@
 -   Added notification UI with read/unread tabs.
 -   Notifications mark as read before opening.
 -   Badge indicators and modern design using Quasar.
+
+### User Payment 
+
+- Added new functionality to enable or disable recurring payment for the user
 
 ### Account Validation
 
