@@ -47,6 +47,7 @@ class ClientAdminTransformer extends TransformerAbstract
             "redirect_uris" => $client->redirect_uris,
             "redirect" => implode(", ", $client->redirect_uris),
             "grant_types" => implode(", ", $client->grant_types),
+            "discovery_uri" => $client->openid_connect_configuration,
             "revoked" => $client->revoked,
             "created_at" => $this->format_date($client->created_at),
             "updated_at" => $this->format_date($client->updated_at),

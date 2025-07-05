@@ -3,11 +3,10 @@ namespace App\Models\OAuth\Bridge;
 
 use DateTime; 
 use Laravel\Passport\Passport;
-use Laravel\Passport\Events\AccessTokenCreated;
-use Laravel\Passport\Bridge\AccessTokenRepository as Model;
+use Laravel\Passport\Events\AccessTokenCreated; 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 
-class AccessTokenRepository extends Model
+class AccessTokenRepository extends \OpenIDConnect\Repositories\AccessTokenRepository
 {
 
     /**
@@ -39,10 +38,10 @@ class AccessTokenRepository extends Model
         Passport::token()->forceFill($data)->save();
 
         // Dispatch token
-        $this->events->dispatch(new AccessTokenCreated(
+       /* $this->events->dispatch(new AccessTokenCreated(
             $accessTokenEntity->getIdentifier(),
             $accessTokenEntity->getUserIdentifier(),
             $accessTokenEntity->getClient()->getIdentifier()
-        ));
+        ));*/
     }
 }

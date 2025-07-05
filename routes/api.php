@@ -37,29 +37,8 @@ Route::group([
 ], function () {
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
         ->name('passport.token')
-        ->middleware('authorize');
+        ->middleware('throttle');
 });
-
-
-
-/**
- * Routes to send notifications
- */
-/*
-Route::group([
-    'prefix' => 'notifications',
-    'middleware' => ['wants.json'],
-
-], function () {
-    Route::get('/', [UserNotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/unread', [UserNotificationController::class, 'show_unread_notifications'])->name('notifications.unread');
-    Route::get('/{notification}', [UserNotificationController::class, 'show'])->name('notifications.show');
-    Route::post('/mark_as_read', [UserNotificationController::class, 'mark_as_read_notifications'])->name('notifications.read_all');
-    Route::post('/{notification}', [UserNotificationController::class, 'mark_as_read_notification'])->name('notifications.read');
-    Route::delete('/clean', [UserNotificationController::class, 'clean'])->name('notifications.clean');
-    Route::delete('/{notification}', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
-});*/
-
 
 Route::group([
     'prefix' => 'public',
@@ -67,6 +46,7 @@ Route::group([
 ], function () {
     Route::resource('/countries', CountriesController::class)->only('index');
     Route::get('/payments/billing-period', [PaymentController::class, 'billingPeriod'])->name('payments.billing-period');
+    Route::get('/payments/currencies', [PaymentController::class, 'currencies'])->name('payments.currencies');
     Route::get('/payments/methods', [PaymentController::class, 'methods'])->name('payments.methods');
     Route::get('/services/list', [PaymentController::class, 'services'])->name('services.services');
 });

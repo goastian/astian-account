@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\WebController;
 use App\Http\Requests\Auth\LoginRequest;
 use Elyerr\ApiResponse\Assets\JsonResponser;
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
 
 class AuthenticatedSessionController extends WebController
@@ -83,6 +84,11 @@ class AuthenticatedSessionController extends WebController
      */
     public function destroy(Request $request, OAuthSessionTokenRepository $oAuthSessionTokenRepository)
     {
+
+        if (!$request->isMethod('get') && !$request->isMethod('post')) {
+            throw new ReportError("Method not allowed", 405);
+        }
+
         // Save the last connected
         auth()->user()->lastConnected();
 
@@ -94,6 +100,11 @@ class AuthenticatedSessionController extends WebController
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
+
+        // Added support for OpenID Connect
+        if (!empty($request->post_logout_redirect_uri)) {
+            return redirect($request->post_logout_redirect_uri);
+        }
 
         return route('login');
     }

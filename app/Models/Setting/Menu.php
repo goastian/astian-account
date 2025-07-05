@@ -112,7 +112,7 @@ class Menu
                             'route' => route('users.notification.index'),
                             'icon' => 'mdi-bell-badge-outline',
                             'show' => true,
-                            'count' => request()->user()->unreadNotifications()->count()
+                            'count' => request()->user() ? request()->user()->unreadNotifications()->count() : 0
                         ]
                     ]
                 ],

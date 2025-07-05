@@ -10,10 +10,9 @@ use Elyerr\ApiResponse\Assets\JsonResponser;
 use App\Transformers\OAuth\ClientTransformer;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Symfony\Component\HttpFoundation\Response;
-use Laravel\Passport\ClientRepository as Repository;
+use Symfony\Component\HttpFoundation\Response; 
 
-class ClientRepository extends Repository
+class ClientRepository extends \OpenIDConnect\Repositories\ClientRepository
 {
 
     use JsonResponser;
@@ -160,6 +159,7 @@ class ClientRepository extends Repository
         );
 
         $client->secret = $client->plainSecret;
+        $client->openid_connect_configuration = route('openid.discovery');
 
         return $client->makeVisible('secret');
     }
@@ -247,6 +247,8 @@ class ClientRepository extends Repository
         );
 
         $client->secret = $client->plainSecret;
+
+        $client->openid_connect_configuration = route('openid.discovery');
 
         return $this->showOne($client->makeVisible('secret'), $this->model->transformer, 201);
     }

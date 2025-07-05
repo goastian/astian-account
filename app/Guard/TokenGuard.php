@@ -3,9 +3,7 @@ namespace App\Guard;
 
 use Illuminate\Cookie\CookieValuePrefix;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Laravel\Passport\Guards\TokenGuard as GuardsTokenGuard;
-
-final class TokenGuard extends GuardsTokenGuard
+final class TokenGuard extends \Laravel\Passport\Guards\TokenGuard
 {
 
     /**
@@ -14,12 +12,12 @@ final class TokenGuard extends GuardsTokenGuard
      * @param  \Illuminate\Http\Request  $request
      * @return string
      */
-    protected function getTokenFromRequest($request)
+    protected function getTokenFromRequest(): string
     {
-        $token = $request->header('X-CSRF-TOKEN');
+        $token = $this->request->header('X-CSRF-TOKEN');
 
-        if (!$token && $header = $request->cookie(config('session.xcsrf-token'))) {
-            $token = CookieValuePrefix::remove($this->encrypter->decrypt($header, static::serialized()));
+        if (!$token && $header = $this->request->cookie(config('session.xcsrf-token'))) {
+            $token = $token = CookieValuePrefix::remove($this->encrypter->decrypt($header, static::serialized()));
         }
 
         return $token;
@@ -31,7 +29,7 @@ final class TokenGuard extends GuardsTokenGuard
      *
      * @return bool
      */
-    public static function serialized()
+    public static function serialized(): bool
     {
         return EncryptCookies::serialized(config('session.xcsrf-token'));
     }

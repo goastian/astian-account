@@ -349,11 +349,11 @@ class Setting extends Master
         Passport::loadKeysFrom(base_path('secrets/oauth'));
 
         //Cookies names
-        //Passport::cookie(settingItem('cookie_name'));
+        Passport::cookie(settingItem('system.cookie_name'));
 
         try {
             //Scopes
-            $scopes = [];
+            $scopes = config('openid.passport.tokens_can');
             foreach (Scope::where('active', true)->get() as $key => $value) {
                 $scopes += array($value->gsr_id => $value->role->description);
             }
@@ -514,7 +514,7 @@ class Setting extends Master
     {
         Config::set('system.schema_mode', settingItem('system.schema_mode', "https"));
         Config::set('system.home_page', settingItem('system.home_page', "/"));
-        //    Config::set('system.cookie_name', settingItem('system.cookie_name', null));
+        Config::set('system.cookie_name', settingItem('system.cookie_name', null));
         Config::set('system.passport_token_services', settingItem('system.passport_token_services', null));
         Config::set('system.verify_account_time', settingItem('system.verify_account_time', 5));
         Config::set('system.disable_create_user_by_command', settingItem('system.disable_create_user_by_command', false));

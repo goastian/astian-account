@@ -5,17 +5,20 @@
 @endsection
 
 @section('content')
-    <div class="min-h-screen flex items-center justify-center bg-gray-50">
-        <div class="w-full max-w-lg bg-white shadow-lg rounded-lg p-6">
-            <h2 class="text-xl font-semibold text-gray-800 mb-4">{{ __('Authorization Request') }}</h2>
-            <p class="text-gray-700 mb-6">
-                <strong>{{ $client->name }}</strong> {{ __('is requesting permission to access your account.') }}
-            </p>
+    <div class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div class="w-full max-w-md bg-white rounded-xl shadow-md p-8 space-y-6 border border-gray-200">
+            <div class="space-y-1">
+                <h1 class="text-xl font-semibold text-gray-900">{{ __('Authorization Request') }}</h1>
+                <p class="text-gray-700">
+                    <span class="font-medium">{{ $client->name }}</span>
+                    {{ __('is requesting access to your account.') }}
+                </p>
+            </div>
 
             @if (count($scopes) > 0)
-                <div class="bg-gray-100 rounded-lg p-4 mb-6">
-                    <p class="font-medium text-gray-800">{{ __('This application will be able to:') }}</p>
-                    <ul class="list-disc list-inside text-gray-700 mt-2">
+                <div class="bg-gray-100 rounded-md p-4">
+                    <p class="text-sm font-medium text-gray-800 mb-2">{{ __('This application will be able to:') }}</p>
+                    <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
                         @foreach ($scopes as $scope)
                             <li>{{ $scope->description }}</li>
                         @endforeach
@@ -23,26 +26,28 @@
                 </div>
             @endif
 
-            <div class="flex space-x-4">
-                <form method="post" action="{{ route('passport.authorizations.approve') }}" class="w-full">
+            <div class="space-y-3">
+                <form method="POST" action="{{ route('passport.authorizations.approve') . '?nonce=' . $request->nonce }}">
                     @csrf
                     <input type="hidden" name="state" value="{{ $request->state }}">
                     <input type="hidden" name="client_id" value="{{ $client->getKey() }}">
                     <input type="hidden" name="auth_token" value="{{ $authToken }}">
+
                     <button type="submit"
-                        class="w-full bg-blue-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-blue-700 transition">
+                        class="w-full bg-blue-600 text-white text-sm font-medium py-2 rounded-md hover:bg-blue-700 transition">
                         {{ __('Authorize') }}
                     </button>
                 </form>
 
-                <form method="post" action="{{ route('passport.authorizations.deny') }}" class="w-full">
+                <form method="POST" action="{{ route('passport.authorizations.deny') }}">
                     @csrf
                     @method('DELETE')
                     <input type="hidden" name="state" value="{{ $request->state }}">
                     <input type="hidden" name="client_id" value="{{ $client->getKey() }}">
                     <input type="hidden" name="auth_token" value="{{ $authToken }}">
+
                     <button type="submit"
-                        class="w-full bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg hover:bg-gray-400 transition">
+                        class="w-full bg-gray-200 text-gray-800 text-sm font-medium py-2 rounded-md hover:bg-gray-300 transition">
                         {{ __('Cancel') }}
                     </button>
                 </form>

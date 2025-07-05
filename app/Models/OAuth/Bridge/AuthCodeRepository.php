@@ -2,12 +2,11 @@
 
 namespace App\Models\OAuth\Bridge;
 
-use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
-use Laravel\Passport\Passport;
-use Laravel\Passport\Bridge\AuthCodeRepository as Model;
+use Laravel\Passport\Passport; 
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
+use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
 
-class AuthCodeRepository extends Model
+class AuthCodeRepository extends \OpenIDConnect\Repositories\AuthCodeRepository
 {
 
     /**
