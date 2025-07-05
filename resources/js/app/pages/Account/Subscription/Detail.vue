@@ -3,9 +3,10 @@
         <q-btn
             @click="dialog = true"
             color="positive"
+            label="View"
             outline
             icon="mdi-eye-arrow-right"
-            size="md"
+            size="sm"
         />
 
         <q-dialog v-model="dialog" persistent full-width>
