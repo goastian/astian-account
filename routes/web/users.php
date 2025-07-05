@@ -39,6 +39,8 @@ Route::group([
     Route::put('/subscriptions/cancel/{transaction_id}', [UserSubscriptionController::class, 'cancel'])->name('subscriptions.cancel');
     Route::get('/subscriptions/checkout/success', [UserSubscriptionController::class, 'success'])->name('checkout.success');
 
+    Route::put('/packages/{package_id}/recurring', [UserSubscriptionController::class, 'recurringPayment'])->name('recurring.payment');
+
     Route::prefix('notifications')
         ->as('notification.')
         ->group(function () {

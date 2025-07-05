@@ -53,6 +53,9 @@ class UserPackageTransformer extends TransformerAbstract
             'updated' => $this->format_date($package->updated),
             'links' => [
                 'index' => route('users.subscriptions.index'),
+                'recurring' => route('users.recurring.payment', [
+                    'package_id' => $package->id
+                ])
             ]
         ];
     }

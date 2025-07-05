@@ -17,6 +17,7 @@
                 hide-bottom
                 :rows-per-page-options="[search.per_page]"
             >
+                <!-- Name -->
                 <template v-slot:body-cell-name="props">
                     <q-td>
                         <div class="text-weight-medium text-primary">
@@ -28,6 +29,7 @@
                     </q-td>
                 </template>
 
+                <!-- Price -->
                 <template v-slot:body-cell-price="props">
                     <q-td>
                         {{ props.row.transaction.total }}
@@ -35,6 +37,7 @@
                     </q-td>
                 </template>
 
+                <!-- Bonus -->
                 <template v-slot:body-cell-bonus="props">
                     <q-td>
                         <div v-if="props.row.meta.bonus_enabled">
@@ -44,18 +47,42 @@
                     </q-td>
                 </template>
 
+                <!-- Start / End -->
                 <template v-slot:body-cell-start="props">
                     <q-td>{{ props.row.start_at }}</q-td>
                 </template>
-
                 <template v-slot:body-cell-end="props">
                     <q-td>{{ props.row.end_at }}</q-td>
                 </template>
 
+                <!-- Method -->
                 <template v-slot:body-cell-method="props">
                     <q-td>{{ props.row.transaction.payment_method }}</q-td>
                 </template>
 
+                <!-- Recurring -->
+                <template v-slot:body-cell-recurring="props">
+                    <q-td>
+                        <q-badge
+                            :color="props.row.is_recurring ? 'green' : 'grey'"
+                            outline
+                            align="middle"
+                        >
+                            <q-icon
+                                :name="
+                                    props.row.is_recurring
+                                        ? 'mdi-autorenew'
+                                        : 'mdi-cancel'
+                                "
+                                class="q-mr-xs"
+                                size="16px"
+                            />
+                            {{ props.row.is_recurring ? "Yes" : "No" }}
+                        </q-badge>
+                    </q-td>
+                </template>
+
+                <!-- Status -->
                 <template v-slot:body-cell-status="props">
                     <q-td>
                         <q-badge
@@ -72,8 +99,13 @@
                     </q-td>
                 </template>
 
+                <!-- Actions -->
                 <template v-slot:body-cell-actions="props">
                     <q-td>
+                        <v-recurring-payment
+                            :item="props.row"
+                            @success="getPackages"
+                        />
                         <v-detail :item="props.row" @reload="getPackages" />
                     </q-td>
                 </template>
@@ -95,10 +127,12 @@
 
 <script>
 import VDetail from "./Detail.vue";
+import VRecurringPayment from "./RecurringPayment.vue";
 
 export default {
     components: {
         VDetail,
+        VRecurringPayment,
     },
 
     data() {
@@ -125,6 +159,13 @@ export default {
                 { name: "start", label: "Start", align: "left" },
                 { name: "end", label: "End", align: "left" },
                 { name: "method", label: "Method", align: "left" },
+                {
+                    name: "recurring",
+                    label: "Recurring",
+                    align: "center",
+                    field: "is_recurring",
+                    sortable: false,
+                },
                 { name: "status", label: "Status", align: "center" },
                 { name: "actions", label: "", align: "center" },
             ],

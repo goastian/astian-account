@@ -274,4 +274,24 @@ class PackageRepository implements Contracts
         $package->status = config('billing.status.expired.name');
         $package->push();
     }
+
+    /**
+     * Enable or disable recurring payment by package
+     * @param string $package_id
+     * @return JsonResponser
+     */
+    public function recurringPaymentEnableOrDisable(string $package_id)
+    {
+        $package = $this->find($package_id);
+
+        if ($package->user_id != auth()->user()->id) {
+            throw new ReportError(__('Resource cannot be found'), 404);
+        }
+
+        $package->is_recurring = !$package->is_recurring;
+
+        $package->push();
+
+        return $this->message(__('Recurring payment for this package has been updated successfully'));
+    }
 }
