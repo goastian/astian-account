@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Laravel\Passport\Client;
 use App\Repositories\Traits\Scopes;
 use Symfony\Component\HttpFoundation\Response;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -23,9 +22,10 @@ class CheckForAnyScope extends middleware
     public function handle(Request $request, Closure $next, string ...$scopes): Response
     {
         // Retrieve token to the  request
-        $token = $request->user()->token(); 
+        $token = $request->user()->token();
+
         // Checking authentication
-        if (!$request->user() || !$token) {
+        if (!$request->user() || !$token || empty($token->client) || $token->revoked) {
             throw new AuthenticationException;
         }
 

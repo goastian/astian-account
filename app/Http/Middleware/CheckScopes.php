@@ -26,7 +26,7 @@ class CheckScopes extends middleware
         $token = $request->user()->token();
  
         // Checking Authentication
-        if (!$request->user() || !$token) {
+        if (!$request->user() || !$token || empty($token->client) || $token->revoked) {
             throw new AuthenticationException;
         }
 
