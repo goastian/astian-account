@@ -54,7 +54,7 @@ export default {
         async destroy() {
             try {
                 const res = await this.$server.delete(this.item.links.destroy);
-                if (res.status === 204) {
+                if (res.status === 200) {
                     this.$emit("deleted", true);
                     this.dialog = false;
                 }

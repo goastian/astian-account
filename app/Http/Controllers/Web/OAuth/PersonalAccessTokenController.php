@@ -1,13 +1,12 @@
 <?php
 namespace App\Http\Controllers\Web\OAuth;
 
-use Inertia\Inertia;
-use App\Models\OAuth\Token;
+use Inertia\Inertia; 
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Repositories\Traits\Scopes;
-use Laravel\Passport\TokenRepository;
 use App\Http\Controllers\WebController;
+use App\Repositories\OAuth\TokenRepository;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Transformers\OAuth\PersonalTokenTransformer;
@@ -24,7 +23,7 @@ class PersonalAccessTokenController extends WebController
 
     /**
      * Construct
-     * @param \Laravel\Passport\TokenRepository $tokenRepository
+     * @param \App\Repositories\OAuth\TokenRepository $tokenRepository
      */
     public function __construct(TokenRepository $tokenRepository)
     {
@@ -38,14 +37,10 @@ class PersonalAccessTokenController extends WebController
      */
     public function forUser(Request $request)
     {
-        $tokens = $this->repository->forUser($request->user())
-            ->filter(
-                fn(Token $token): bool => !$token->client->revoked && $token->client->hasGrantType('personal_access')
-            )
-            ->values();
+        $tokens = $this->repository->forUser($request->user());
 
         if (request()->wantsJson()) {
-            return $this->showAll($tokens, PersonalTokenTransformer::class);
+            return $this->showAllByBuilder($tokens, PersonalTokenTransformer::class);
         }
 
         return Inertia::render("OAuth/Personal/Index", [

@@ -5,7 +5,8 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use DateTime;
-use DateInterval;  
+use DateInterval;
+use LogicException;
 use App\Models\User\UserScope;
 use App\Models\Subscription\Group;
 use Laravel\Passport\HasApiTokens;
@@ -167,5 +168,24 @@ class Auth extends Authenticatable
     {
         $this->last_connected = now();
         $this->push();
+    }
+
+    /**
+     * Retrieve the passport providers
+     * @throws \LogicException
+     * @return string
+     */
+    public function getProviderName(): string
+    {
+
+        $providers = collect(config('auth.guards'))->where('driver', 'oauth2-passport-server')->pluck('provider')->all();
+
+        foreach (config('auth.providers') as $provider => $config) {
+            if (in_array($provider, $providers) && $config['driver'] === 'eloquent' && is_a($this, $config['model'])) {
+                return $provider;
+            }
+        }
+
+        throw new LogicException('Unable to determine authentication provider for this model from configuration.');
     }
 }
