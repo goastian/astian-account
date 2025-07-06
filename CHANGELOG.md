@@ -1,5 +1,11 @@
 # Changelog
 
+## [v2.0.1]
+
+### OAuth2 Enhancements
+
+-   Enhance OAuth2 token validation middleware to strictly verify token integrity and associated client existence, preventing 500 errors when tokens remain active but related clients have been deleted or are missing.
+
 ## [v2.0.0]
 
 ### Framework & Package Upgrades
@@ -18,9 +24,9 @@
 -   Notifications mark as read before opening.
 -   Badge indicators and modern design using Quasar.
 
-### User Payment 
+### User Payment
 
-- Added new functionality to enable or disable recurring payment for the user
+-   Added new functionality to enable or disable recurring payment for the user
 
 ### Account Validation
 
