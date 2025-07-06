@@ -13,7 +13,8 @@ use App\Http\Controllers\Api\OAuth\PassportConnectController;
 Route::group(
     [
         'prefix' => 'gateway',
-        'as' => 'gateway.'
+        'as' => 'gateway.',
+        'middleware' => ['throttle:gateway']
     ],
     function () {
 
@@ -33,16 +34,17 @@ Route::group(
  */
 Route::group([
     'prefix' => 'oauth',
-    'as' => 'oauth.'
+    'as' => 'oauth.',
+    'middleware' => ['throttle:passport-token']
 ], function () {
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
-        ->name('passport.token')
-        ->middleware('throttle');
+        ->name('passport.token');
 });
 
 Route::group([
     'prefix' => 'public',
-    'as' => 'public.'
+    'as' => 'public.',
+    'middleware' => ['throttle:default']
 ], function () {
     Route::resource('/countries', CountriesController::class)->only('index');
     Route::get('/payments/billing-period', [PaymentController::class, 'billingPeriod'])->name('payments.billing-period');
