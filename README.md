@@ -92,7 +92,7 @@ server {
 -   Go to admins and choose terminal and type the next command
 
 ```bash
-php artisan passport:install --force
+php artisan passport:keys --force
 ```
 
 ## Payment Methods
