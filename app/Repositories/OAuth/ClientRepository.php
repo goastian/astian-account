@@ -10,9 +10,9 @@ use Elyerr\ApiResponse\Assets\JsonResponser;
 use App\Transformers\OAuth\ClientTransformer;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Contracts\Auth\Authenticatable;
-use Symfony\Component\HttpFoundation\Response; 
+use Symfony\Component\HttpFoundation\Response;  
 
-class ClientRepository extends \OpenIDConnect\Repositories\ClientRepository
+class ClientRepository extends  \Laravel\Passport\ClientRepository
 {
 
     use JsonResponser;
