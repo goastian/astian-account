@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Web\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
+use Rap2hpoutre\LaravelLogViewer\LogViewerController;
+use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\User\UserController;
 use App\Http\Controllers\Web\Admin\User\UserGroupController;
 use App\Http\Controllers\Web\Admin\User\UserScopeController;
@@ -58,3 +59,7 @@ Route::get('/transactions', [TransactionManagerController::class, 'index'])->nam
 Route::put('/transactions/{transaction}', [TransactionManagerController::class, 'activate'])->name('transactions.activate');
 
 Route::resource('terminals', TerminalController::class)->only('index', 'store');
+
+Route::middleware(['auth', 'userCanAny:administrator:logs:full'])->group(function () {
+    Route::get('/logs', [LogViewerController::class, 'index'])->name('logs');
+});
