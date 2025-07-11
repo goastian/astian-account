@@ -48,6 +48,7 @@ class Setting extends Master
         Setting::getSessionSettings();
         Setting::getCacheSettings();
         Setting::getRoutesSettings();
+        Setting::getRateLimitSettings();
     }
 
     /**
@@ -284,6 +285,18 @@ class Setting extends Master
         settingLoad('routes.users.api', false);
         settingLoad('routes.users.clients', false);
         settingLoad('routes.guest.register', true);
+
+        // Setting por rate limit
+        settingLoad('rate_limit.general.api.limit', 60);
+        settingLoad('rate_limit.general.api.block_time', 60);
+        settingLoad('rate_limit.general.gateway.limit', 300);
+        settingLoad('rate_limit.general.gateway.block_time', 60);
+        settingLoad('rate_limit.general.passport-token.limit', 30);
+        settingLoad('rate_limit.general.passport-token.block_time', 60);
+        settingLoad('rate_limit.general.default.limit', 60);
+        settingLoad('rate_limit.general.default.block_time', 60);
+        settingLoad('rate_limit.general.broadcast.limit', 500);
+        settingLoad('rate_limit.general.broadcast.block_time', 60);
     }
 
     /**
@@ -580,5 +593,20 @@ class Setting extends Master
         Config::set('routes.users.api', settingItem('routes.users.api', false));
         Config::set('routes.users.clients', settingItem('routes.users.clients', false));
         Config::set('routes.guest.register', settingItem('routes.guest.register', true));
+    }
+
+
+    public static function getRateLimitSettings()
+    {
+        Config::set('rate_limit.general.api.limit', settingItem('rate_limit.general.api.limit', 60));
+        Config::set('rate_limit.general.api.block_time', settingItem('rate_limit.general.api.block_time', 60));
+        Config::set('rate_limit.general.gateway.limit', settingItem('rate_limit.general.gateway.limit', 300));
+        Config::set('rate_limit.general.gateway.block_time', settingItem('rate_limit.general.gateway.block_time', 60));
+        Config::set('rate_limit.general.passport-token.limit', settingItem('rate_limit.general.passport-token.limit', 30));
+        Config::set('rate_limit.general.passport-token.block_time', settingItem('rate_limit.general.passport-token.block_time', 60));
+        Config::set('rate_limit.general.default.limit', settingItem('rate_limit.general.default.limit', 60));
+        Config::set('rate_limit.general.default.block_time', settingItem('rate_limit.general.default.block_time', 60));
+        Config::set('rate_limit.general.broadcast.limit', settingItem('rate_limit.general.broadcast.limit', 500));
+        Config::set('rate_limit.general.broadcast.block_time', settingItem('rate_limit.general.broadcast.block_time', 60));
     }
 }
