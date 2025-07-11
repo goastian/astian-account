@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Support\Facades\RateLimiter;
@@ -40,49 +42,94 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function configureRateLimiting()
     {
-        RateLimiter::for('api', function (Request $request) {
-            $limit = Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+        $rateLimits = [
+            'api' => [
+                'limit' => config('rate_limit.general.api.limit'),
+                'block_time' => config('rate_limit.general.api.block_time')
+            ],
+            'gateway' => [
+                'limit' => config('rate_limit.general.gateway.limit'),
+                'block_time' => config('rate_limit.general.gateway.block_time')
+            ],
+            'passport-token' => [
+                'limit' => config('rate_limit.general.passport-token.limit'),
+                'block_time' => config('rate_limit.general.passport-token.block_time')
+            ],
+            'default' => [
+                'limit' => config('rate_limit.general.default.limit'),
+                'block_time' => config('rate_limit.general.default.block_time')
+            ],
+            'broadcast' => [
+                'limit' => config('rate_limit.general.broadcast.limit'),
+                'block_time' => config('rate_limit.general.broadcast.block_time')
+            ],
+        ];
 
-            Log::warning("Rate limit exceeded (api)", [
-                'ip' => $request->ip(),
-                'path' => $request->path(),
-            ]);
+        foreach ($rateLimits as $key => $value) {
+            RateLimiter::for($key, function (Request $request) use ($key, $value) {
 
-            return $limit;
-        });
+                $cacheKey = 'rate-limit:' . $key . ':' . ($request->user()?->id ?: $request->ip());
 
-        RateLimiter::for('gateway', function ($request) {
-            $limit = Limit::perMinute(300)->by($request->ip());
+                // Check if user is already blocked
+                if (Cache::has($cacheKey . ':blocked')) {
 
-            Log::warning("Rate limit exceeded (gateway)", [
-                'ip' => $request->ip(),
-                'path' => $request->path(),
-            ]);
+                    $last_remaining = Cache::get($cacheKey . ':remaining_minutes', 1);
 
-            return $limit;
-        });
+                    // Increase time to block user
+                    $new_remaining_time = $last_remaining->addMinutes($value['block_time']);
 
-        RateLimiter::for('passport-token', function ($request) {
-            $limit = Limit::perMinute(30)->by($request->ip());
+                    // Clean current cache keys
+                    Cache::forget($cacheKey . '::blocked');
+                    Cache::forget($cacheKey . ':remaining_minutes');
 
-            Log::warning("Rate limit exceeded (passport token)", [
-                'ip' => $request->ip(),
-                'path' => $request->path()
-            ]);
+                    // Update new keys
+                    Cache::put(
+                        $cacheKey . ':blocked',
+                        true,
+                        $new_remaining_time
+                    );
+                    Cache::put(
+                        $cacheKey . ':remaining_minutes',
+                        $new_remaining_time,
+                        $new_remaining_time
+                    );
 
-            return $limit;
-        });
 
-        RateLimiter::for('default', function ($request) {
-            $limit = Limit::perMinute(60)->by($request->ip());
+                    Log::warning("Rate limit exceeded (blocked user kept trying)", [
+                        'ip' => $request->ip(),
+                        'path' => $request->path(),
+                        'user_id' => $request->user()?->id,
+                        'blocked_until' => $new_remaining_time,
+                    ]);
 
-            Log::warning("Rate limit exceeded (default)", [
-                'ip' => $request->ip(),
-                'path' => $request->path()
-            ]);
+                    return response()->json([
+                        'message' => "Too many attempts. Your access is blocked until {$new_remaining_time} (UTC).",
+                    ], 429);
+                }
 
-            return $limit;
-        });
+                // Set up the initial rate limit
+                return Limit::perMinute($value['limit'])
+                    ->by($request->user()?->id ?: $request->ip())
+                    ->response(function (Request $request) use ($cacheKey, $value) {
+
+                        $unlock_time = now()->addMinutes($value['block_time']);
+
+                        Cache::put($cacheKey . ':blocked', true, $unlock_time);
+                        Cache::put($cacheKey . ':remaining_minutes', $unlock_time, $unlock_time);
+
+                        Log::warning("Rate limit exceeded (initial block)", [
+                            'ip' => $request->ip(),
+                            'path' => $request->path(),
+                            'user_id' => $request->user()?->id,
+                            'blocked_until' => $unlock_time->toDateTimeString()
+                        ]);
+
+                        return response()->json([
+                            'message' => "Too many attempts. Your access is temporarily blocked until {$unlock_time} (UTC)."
+                        ], 429);
+                    });
+            });
+        }
     }
 
     /**
