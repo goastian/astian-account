@@ -1,10 +1,24 @@
 # Changelog
 
+## Unrealized
+
+### 🚦 Rate Limiting
+
+-   Implemented rate limiting on critical routes.
+-   Added configurable rate limit settings in **Admin → Settings → Security**.
+
+### 🔐 OAuth2
+
+-   Fixed an issue with updating OAuth2 clients in the client management interface.
+------
+
 ## [v2.0.1]
 
 ### OAuth2 Enhancements
 
 -   Enhance OAuth2 token validation middleware to strictly verify token integrity and associated client existence, preventing 500 errors when tokens remain active but related clients have been deleted or are missing.
+
+-------
 
 ## [v2.0.0]
 
