@@ -13,6 +13,12 @@
 * Fixed `isAdmin` logic to prevent false positives when a user does not belong to an admin group.
 * Now strictly checks against valid groups assigned to the authenticated user.
 
+### 👥 User Groups (Refactor)
+
+* Unified logic for retrieving all user groups, combining both:
+    - Directly assigned groups (with or without services).
+    - Groups linked through active scopes and services.
+
 ### 🚦 Rate Limiting
 
 * Implemented rate limiting on critical routes to improve security.
