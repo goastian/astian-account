@@ -1,11 +1,22 @@
 # Changelog
 
-## Unrealized
+## 🧪 Unrealized
+
+### ⚡️ Cache
+
+* Added cache support for **user scopes**, **menus**, and **configurations**.
+* The section **Admin → Settings → Cache** allows manual management of cached keys.
+* Automatic cache invalidation implemented when scopes expire or related data changes.
+
+### 👮‍♂️ isAdmin (Fix)
+
+* Fixed `isAdmin` logic to prevent false positives when a user does not belong to an admin group.
+* Now strictly checks against valid groups assigned to the authenticated user.
 
 ### 🚦 Rate Limiting
 
--   Implemented rate limiting on critical routes.
--   Added configurable rate limit settings in **Admin → Settings → Security**.
+* Implemented rate limiting on critical routes to improve security.
+* Added configurable rate limit settings in **Admin → Settings → Security**.
 
 ### 🔐 OAuth2
 
