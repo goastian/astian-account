@@ -20,4 +20,5 @@ Route::group([
     Route::get('/security', [SettingController::class, 'security'])->name('security');
 
     Route::put('/', [SettingController::class, 'update'])->name('update');
+    Route::put('/cache/reload', [SettingController::class, 'reloadCache'])->name('reload');
 });

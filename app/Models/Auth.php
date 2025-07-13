@@ -4,15 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Support\CacheKeys;
 use DateTime;
 use DateInterval;
 use LogicException;
 use App\Models\User\UserScope;
+use Rector\Caching\Enum\CacheKey;
 use App\Models\Subscription\Group;
 use Laravel\Passport\HasApiTokens;
 use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Assets\Asset;
 use App\Repositories\Traits\Standard;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\Auth\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -21,7 +24,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard, Scopes;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -58,7 +61,23 @@ class Auth extends Authenticatable
      */
     public function isAdmin()
     {
-        $gsr = auth()->user()->userScopes()->get()->pluck('gsr_id')->toArray();
+        $user = auth()->user();
+
+        $gsr = Cache::remember(
+            CacheKeys::userAdmin($user->id),
+            now()->addDays(intval(config('cache.expires', 90))),
+            function () use ($user) {
+
+                $scopes = UserScope::where('user_id', $user->id)
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                            ->orWhere('end_date', '>', now());
+                    })->get();
+
+                return count($scopes) ? $scopes->pluck('gsr_id')->toArray() : [];
+            }
+        );
+
         return in_array($this->adminScopeName(), $gsr);
     }
 
@@ -141,11 +160,40 @@ class Auth extends Authenticatable
 
     /**
      * Check if the user has a group
-     * @return bool
+     * @param mixed $group
      */
-    public function hasGroup($group)
+    public function canAccessMenu($group): bool
     {
-        return $this->groups()->get()->pluck('slug')->contains($group);
+        if (!auth()->check()) {
+            return false;
+        }
+
+        $user = auth()->user();
+
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        $cacheKey = CacheKeys::userGroups($user->id);
+
+        if (Cache::has($cacheKey)) {
+            $groups = Cache::get($cacheKey);
+
+        } else {
+            $groups = UserScope::with('scope.service.group')
+                ->where('user_id', $user->id)
+                ->where(function ($query) {
+                    $query->whereNull('end_date')
+                        ->orWhere('end_date', '>', now());
+                })->get()
+                ->map(function ($userScope) {
+                    return $userScope->scope->service->group;
+                })->unique()->values();
+
+            Cache::put($cacheKey, $groups, now()->addDays(intval(config('cache.expires', 90))));
+        }
+
+        return count($groups) ? $groups->pluck('slug')->contains($group) : false;
     }
 
 

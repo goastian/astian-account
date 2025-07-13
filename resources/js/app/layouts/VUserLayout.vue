@@ -54,10 +54,10 @@
             <q-separator inset="item" />
 
             <q-item
-                v-if="hasGroup('administrator')"
                 clickable
                 v-ripple
                 @click="goToAdmin"
+                v-if="admin_dashboard.show"
             >
                 <q-item-section avatar>
                     <q-avatar
@@ -71,10 +71,10 @@
             </q-item>
 
             <q-item
-                v-if="hasGroup('reseller')"
                 clickable
                 v-ripple
                 @click="open(partner_dashboard)"
+                v-if="partner_dashboard.show"
             >
                 <q-item-section avatar>
                     <q-avatar

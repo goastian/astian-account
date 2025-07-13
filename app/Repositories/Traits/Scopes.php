@@ -1,9 +1,11 @@
 <?php
 namespace App\Repositories\Traits;
 
-use App\Models\User\UserScope;
+use App\Support\CacheKeys;
 use Laravel\Passport\Scope;
+use App\Models\User\UserScope;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Subscription\Scope as ModelScope;
 
 trait Scopes
@@ -24,29 +26,41 @@ trait Scopes
      */
     public function scopes($api_key = true)
     {
+        $user = Auth::user();
+        $cacheKey = CacheKeys::userScopes($user->id);
+
         $query = ModelScope::query();
         $query->where('active', true)->with('role');
 
         if ($api_key) {
+            $cacheKey = CacheKeys::userScopesApiKey($user->id);
             $query->where('api_key', true);
         }
 
-        if (Auth::user()->isAdmin()) {
-            return $query->get()
-                ->map(fn($scope) => new Scope($scope->gsr_id, $scope->role->description))
-                ->values();
-        }
+        return Cache::remember(
+            $cacheKey,
+            now()->addDays(intval(config('cache.expires', 90))),
+            function () use ($user, $query) {
 
-        $userScopes = UserScope::where('user_id', auth()->user()->id)
-            ->where(function ($query) {
-                $query->whereNull('end_date')
-                    ->orWhere('end_date', '>', now());
-            })->whereHas('scope', function ($query) {
-                $query->where('active', true)->orWhere('public', true);
-            });
+                if ($user->isAdmin()) {
+                    return $query->get()
+                        ->map(fn($scope) => new Scope($scope->gsr_id, $scope->role->description))
+                        ->values();
+                }
 
-        return $userScopes->get()
-            ->map(fn($scope) => new Scope($scope->gsr_id, $scope->scope->role->description))
-            ->values();
+                $userScopes = UserScope::where('user_id', auth()->user()->id)
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                            ->orWhere('end_date', '>', now());
+                    })->whereHas('scope', function ($query) {
+                        $query->where('active', true)->orWhere('public', true);
+                    });
+
+                return $userScopes->get()
+                    ->map(fn($scope) => new Scope($scope->gsr_id, $scope->scope->role->description))
+                    ->values();
+
+            }
+        );
     }
 }

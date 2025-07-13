@@ -7,7 +7,7 @@
 @section('header')
     <nav class="bg-indigo-600 text-white py-4 shadow-md">
         <div class="container mx-auto flex justify-between items-center ">
-            <a href="{{ config('system.redirect_to', 'home') }}" class="text-lg font-semibold">
+            <a href="{{ route('users.dashboard') }}" class="text-lg font-semibold">
                 <i class="mdi mdi-home text-2xl"></i>
                 {{ __('Dashboard') }}
             </a>
@@ -34,8 +34,10 @@
                     <p><span class="font-medium">Name:</span> {{ $transaction['package']['user']['name'] }}
                         {{ $transaction['package']['user']['last_name'] }}</p>
                     <p><span class="font-medium">Email:</span> {{ $transaction['package']['user']['email'] }}</p>
-                    <p><span class="font-medium">Verified At:</span> {{ $transaction['package']['user']['verified_at'] }}</p>
-                    <p><span class="font-medium">Stripe Customer ID:</span> {{ $transaction['package']['user']['stripe_customer_id'] }}
+                    <p><span class="font-medium">Verified At:</span> {{ $transaction['package']['user']['verified_at'] }}
+                    </p>
+                    <p><span class="font-medium">Stripe Customer ID:</span>
+                        {{ $transaction['package']['user']['stripe_customer_id'] }}
                     </p>
                 </div>
 
@@ -89,7 +91,7 @@
             </div>
 
             <div class="text-center mt-8">
-                <a href="{{ config('system.redirect_to', 'home') }}"
+                <a href="{{ route('users.dashboard') }}"
                     class="inline-block bg-indigo-600 text-white px-6 py-2 rounded hover:bg-indigo-700 transition">
                     <span class="mdi mdi-view-dashboard-outline mr-1"></span> {{ __('Go to Dashboard') }}
                 </a>
