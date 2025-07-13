@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\CacheKeys;
 use App\Models\Setting\Setting;
 use Illuminate\Support\Facades\Cache;
 
@@ -11,9 +12,18 @@ if (!function_exists('settingAdd')) {
      * @param mixed $cache
      * @return void
      */
-    function settingAdd($key, $value, $cache = true)
+    function settingAdd($key, $value)
     {
         try {
+
+            $cacheKey = CacheKeys::settings($key);
+
+            if (CacheKeys::exceptKeys($key)) {
+                Cache::forget($cacheKey);
+                Cache::put($cacheKey, $value, now()->addDays(intval(config('cache.expires', 90))));
+            }
+
+            // Save database
             Setting::updateOrCreate(
                 [
                     'key' => $key,
@@ -37,9 +47,17 @@ if (!function_exists('settingLoad')) {
      * @param mixed $cache
      * @return void
      */
-    function settingLoad($key, $value, $cache = true)
+    function settingLoad($key, $value)
     {
         try {
+
+            if (CacheKeys::exceptKeys($key)) {
+                Cache::put(
+                    CacheKeys::settings($key),
+                    $value,
+                    now()->addDays(intval(config('cache.expires', 90)))
+                );
+            }
 
             Setting::firstOrCreate(
                 [
@@ -63,10 +81,22 @@ if (!function_exists('settingItem')) {
      * @param mixed $default
      * @param mixed $cache
      */
-    function settingItem($key, $default = null, $cache = true)
+    function settingItem($key, $default = null)
     {
         try {
+
+            if (CacheKeys::exceptKeys($key)) {
+
+                $cacheKey = CacheKeys::settings($key);
+
+                // Verify key and return if exists 
+                if (Cache::has($cacheKey)) {
+                    return Cache::get($cacheKey);
+                }
+            }
+
             $data = Setting::where('key', $key)->first();
+
             return $data ? $data->value : $default;
 
         } catch (\Exception $e) {
@@ -86,47 +116,5 @@ if (!function_exists('redirectToHome')) {
     {
         $url = config('app.url') . config('system.redirect_to', '/about');
         return redirect($url);
-    }
-}
-
-
-if (!function_exists('cacheAdd')) {
-    /**
-     * add cache
-     * @param mixed $key
-     * @param mixed $value
-     * @return void
-     */
-    function cacheAdd($key, $value)
-    {
-        $expires = now()->addDays(config('cache.expires'));
-        Cache::forget($key);
-        Cache::put(
-            $key,
-            $value,
-            $expires
-        );
-    }
-}
-
-
-if (!function_exists('cacheKey')) {
-    /**
-     * add cache
-     * @param mixed $key
-     * @param mixed $callback
-     * @return string
-     */
-    function cacheKey($key, $callback)
-    {
-        if (Cache::has($key)) {
-            return Cache::get($key);
-        }
-
-        $expires = now()->addDays(config('cache.expires', 1));
-        $value = $callback();
-        Cache::put($key, $value, $expires);
-
-        return $value;
     }
 }

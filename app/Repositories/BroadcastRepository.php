@@ -1,8 +1,10 @@
 <?php
 namespace App\Repositories;
 
+use App\Support\CacheKeys;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Broadcasting\Broadcast;
 use Illuminate\Database\QueryException;
 use App\Repositories\Contracts\Contracts;
@@ -62,6 +64,8 @@ class BroadcastRepository implements Contracts
             'system' => $data['system']
         ]);
 
+        Cache::forget(CacheKeys::broadcast());
+
         return $this->showOne($model, $this->model->transformer, 201);
     }
 
@@ -105,6 +109,8 @@ class BroadcastRepository implements Contracts
 
         $model->delete();
 
+        Cache::forget(CacheKeys::broadcast());
+
         return $this->showOne($model, $this->model->transformer);
     }
 
@@ -116,7 +122,19 @@ class BroadcastRepository implements Contracts
     public static function register()
     {
         try {
-            $channels = Broadcast::all();
+
+            $cacheKey = CacheKeys::broadcast();
+
+            if (Cache::has($cacheKey)) {
+                $channels = Cache::get($cacheKey);
+
+            } else {
+                $channels = Broadcast::all();
+
+                if (!empty($channels)) {
+                    Cache::put($cacheKey, $channels, now()->addDays(intval(config('cache.expires', 90))));
+                }
+            }
 
             foreach ($channels as $broadcast) {
 

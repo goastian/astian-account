@@ -27,7 +27,7 @@
 
                 {{-- Común --}}
                 <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Expires time') }}</label>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('Expires time in days') }}</label>
                     <input type="number" name="cache[expires]" class="block w-full px-2 py-2 rounded-md border-gray-300"
                         value="{{ config('cache.expires') }}">
                 </div>

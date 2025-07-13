@@ -6,6 +6,7 @@ use Exception;
 use DateInterval;
 use ErrorException;
 use App\Models\User\User;
+use App\Support\CacheKeys;
 use App\Models\User\Partner;
 use Illuminate\Http\Request;
 use App\Models\User\UserScope;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Elyerr\ApiResponse\Assets\Asset;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cache;
 use App\Repositories\Contracts\Contracts;
 use App\Transformers\User\AuthTransformer;
 use App\Notifications\User\UserUpdatedEmail;
@@ -132,6 +134,8 @@ class UserRepository implements Contracts
             'partner_id' => $data['partner_id'] ?? null,
         ]);
 
+        Cache::put(CacheKeys::user($user->id), $user);
+
         Notification::send(
             $user,
             new UserCreatedAccount($temp_password)
@@ -147,11 +151,23 @@ class UserRepository implements Contracts
      */
     public function find(string $id)
     {
-        return $this->model->withTrashed()->with([
+        $cacheKey = CacheKeys::user($id);
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        $model = $this->model->withTrashed()->with([
             'partner',
             'userScopes',
             'groups'
         ])->find($id);
+
+        if (!empty($model)) {
+            Cache::put($cacheKey, $model, now()->addDays(intval(config('cache.expires', 90))));
+        }
+
+        return $model;
     }
 
     /**
@@ -161,7 +177,9 @@ class UserRepository implements Contracts
      */
     public function details(string $user_id)
     {
-        $user = $this->find($user_id);
+        $cacheKey = CacheKeys::user($user_id);
+
+        $user = Cache::has($cacheKey) ? Cache::get($cacheKey) : $this->find($user_id);
 
         return $this->showOne($user, $user->transformer);
     }
@@ -174,6 +192,11 @@ class UserRepository implements Contracts
      */
     public function update(string $id, array $data)
     {
+        $cacheKey = CacheKeys::user($id);
+
+        Cache::forget($cacheKey);
+        Cache::forget(CacheKeys::userAuth($id));
+
         $model = $this->model->find($id);
         $can_update = false;
         $updated_email = false;
@@ -231,6 +254,8 @@ class UserRepository implements Contracts
 
         if ($can_update) {
             $model->push();
+
+            Cache::put(CacheKeys::user($id), $model, now()->addDays(intval(config('cache.expires', 90))));
         }
 
         /**
@@ -267,6 +292,11 @@ class UserRepository implements Contracts
      */
     public function disable(string $id)
     {
+        $cacheKey = CacheKeys::user($id);
+
+        Cache::forget($cacheKey);
+        Cache::forget(CacheKeys::userAuth($id));
+
         $model = $this->model->find($id);
 
         $tokens = $model->tokens;
@@ -277,6 +307,7 @@ class UserRepository implements Contracts
 
         $model->delete();
 
+        Cache::put($cacheKey, $model, now()->addDays(intval(config('cache.expires', 90))));
 
         Notification::send($model, new UserDisableAccount());
 
@@ -294,9 +325,16 @@ class UserRepository implements Contracts
     {
         try {
 
+            $cacheKey = CacheKeys::user($id);
+
+            Cache::forget($cacheKey);
+            Cache::forget(CacheKeys::userAuth($id));
+
             $user = $this->model->onlyTrashed()->find($id);
 
             $user->restore();
+
+            Cache::put($cacheKey, $user, now()->addDays(intval(config('cache.expires', 90))));
 
             Notification::send($user, new UserReactivateAccount());
 
@@ -316,15 +354,20 @@ class UserRepository implements Contracts
     {
         $userScopes = $this->userScope->query();
 
-        $userScopes->where('user_id', $user_id)
+        $userScopes->with([
+            'scope.service.group',
+            'scope',
+            'scope.service',
+            'scope.role'
+        ])
+            ->where('user_id', $user_id)
             ->where(function ($query) {
                 $query->where('end_date', '>', now())
                     ->orWhereNull('end_date');
             })
             ->whereHas('scope', function ($query) {
                 $query->where('active', '!=', false);
-            })
-            ->with(['scope.service.group', 'scope.role']);
+            });
 
         return $this->showAllByBuilder($userScopes, $this->userScope->transformer);
     }
@@ -336,13 +379,20 @@ class UserRepository implements Contracts
      */
     public function searchGroupsForUser(string $user_id)
     {
-        $groups = $this->group->query();
+        return Cache::remember(
+            CacheKeys::userGroups($user_id),
+            now()->addDays(intval(config('cache.expires', 90))),
+            function ($user_id) {
 
-        $groups->whereHas('users', function ($query) use ($user_id) {
-            $query->where('id', $user_id);
-        });
+                $groups = $this->group->query();
 
-        return $this->showAllByBuilder($groups, UserGroupTransformer::class);
+                $groups->whereHas('users', function ($query) use ($user_id) {
+                    $query->where('id', $user_id);
+                });
+
+                return $this->showAllByBuilder($groups, UserGroupTransformer::class);
+            }
+        );
     }
 
     /**
@@ -353,6 +403,15 @@ class UserRepository implements Contracts
      */
     public function assignScopeForUser(string $user_id, array $data)
     {
+
+        Cache::forget(CacheKeys::userScopes($user_id));
+        Cache::forget(CacheKeys::userGroups($user_id));
+        Cache::forget(CacheKeys::userAdmin($user_id));
+        Cache::forget(CacheKeys::userScopesApiKey($user_id));
+        Cache::forget(CacheKeys::userScopeList($user_id));
+        Cache::forget(CacheKeys::userScopeList($user_id));
+        Cache::forget(CacheKeys::userAuth($user_id)); 
+
         DB::transaction(function () use ($user_id, $data) {
 
             foreach ($data['scopes'] as $id) {
@@ -388,6 +447,8 @@ class UserRepository implements Contracts
      */
     public function assignGroupForUser(string $user_id, array $data)
     {
+        Cache::forget(CacheKeys::userGroups($user_id));
+
         $user = $this->model->find($user_id);
 
         $user->groups()->syncWithoutDetaching($data['groups']);
@@ -428,6 +489,13 @@ class UserRepository implements Contracts
         if (empty($scope->end_date) || $scope->end_date >= now()) {
             $scope->end_date = now();
             $scope->push();
+
+            Cache::forget(CacheKeys::userScopes($user_id));
+            Cache::forget(CacheKeys::userGroups($user_id));
+            Cache::forget(CacheKeys::userAdmin($user_id));
+            Cache::forget(CacheKeys::userScopesApiKey($user_id));
+            Cache::forget(CacheKeys::userScopeList($user_id));
+            Cache::forget(CacheKeys::userAuth($user_id));
         }
 
         return $this->message(__("Scopes have been revoked successfully"), 200);
@@ -444,6 +512,8 @@ class UserRepository implements Contracts
         $model = $this->model->find($user_id);
 
         $model->groups()->detach($group_id);
+
+        Cache::forget(CacheKeys::userGroups($user_id));
 
         return $this->message(__('Groups revoked successfully'), 200);
     }
@@ -469,6 +539,9 @@ class UserRepository implements Contracts
     public function updatePersonalInformation(array $data)
     {
         $user = $this->model->find(auth()->user()->id);
+
+        Cache::forget(CacheKeys::user($user->id));
+        Cache::forget(CacheKeys::userAuth($user->id));
 
         if (!empty($data['name'])) {
             $user->name = $data['name'];
@@ -507,6 +580,8 @@ class UserRepository implements Contracts
         }
 
         $user->push();
+
+        Cache::put(CacheKeys::user($user->id), $user, now()->addDays(intval(config('cache.expires', 90))));
 
         return $this->showOne($user, AuthTransformer::class);
     }
@@ -567,6 +642,8 @@ class UserRepository implements Contracts
             $user->groups()->attach($group->id);
 
             $user->notify(new MemberCreatedAccount());
+
+            Cache::put(CacheKeys::user($user->id), $user, now()->addDays(intval(config('cache.expires', 90))));
         });
 
         return redirect()->route('login')->with('status', __('Your account has been registered successfully. A verification email has been sent to your inbox.'));

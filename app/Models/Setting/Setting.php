@@ -11,6 +11,7 @@ use Laravel\Passport\Passport;
 use App\Models\OAuth\RefreshToken;
 use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\QueryException;
 
@@ -365,12 +366,28 @@ class Setting extends Master
         Passport::cookie(settingItem('system.cookie_name'));
 
         try {
-            //Scopes
+
             $scopes = config('openid.passport.tokens_can');
-            foreach (Scope::where('active', true)->get() as $key => $value) {
-                $scopes += array($value->gsr_id => $value->role->description);
-            }
+
+            $dbScopes = Cache::remember(
+                'passport:scopes',
+                now()->addDays(intval(config('cache.expires', 90))),
+                function () {
+
+                    return Scope::with('role')
+                        ->where('active', true)
+                        ->get()
+                        ->mapWithKeys(function ($scope) {
+                            return [$scope->gsr_id => $scope->role->description];
+                        })
+                        ->toArray();
+                }
+            );
+
+            $scopes += $dbScopes;
+
             Passport::tokensCan($scopes);
+
         } catch (QueryException $th) {
         }
 

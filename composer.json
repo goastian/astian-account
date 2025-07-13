@@ -33,6 +33,7 @@
         "laravel/passport": "13.0",
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.2",
+        "rap2hpoutre/laravel-log-viewer": "^2.5",
         "spatie/laravel-fractal": "^6.0",
         "stevebauman/purify": "^6.2",
         "stripe/stripe-php": "^17.1",
@@ -40,6 +41,7 @@
         "symfony/mailgun-mailer": "^7.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.15",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^2.0",
         "laravel/pint": "^1.0",

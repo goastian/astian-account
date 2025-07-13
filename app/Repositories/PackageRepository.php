@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Support\CacheKeys;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Package;
+use Illuminate\Support\Facades\Cache;
 use App\Repositories\Contracts\Contracts;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -206,6 +208,13 @@ class PackageRepository implements Contracts
                 ]
             );
         }
+
+        Cache::forget(CacheKeys::userScopes($user->id));
+        Cache::forget(CacheKeys::userScopesApiKey($user->id));
+        Cache::forget(CacheKeys::userAdmin($user->id));
+        Cache::forget(CacheKeys::userScopeList($user->id));
+        Cache::forget(CacheKeys::userAuth($user->id));
+        Cache::forget(CacheKeys::userGroups($user->id));
     }
 
     /**
