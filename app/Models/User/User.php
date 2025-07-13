@@ -1,18 +1,13 @@
 <?php
 namespace App\Models\User;
 
-use DateTime;
-use DateInterval;
 use App\Models\Auth;
 use App\Models\User\Partner;
 use Illuminate\Http\Request;
-use App\Models\Setting\Terminal;
-use App\Models\Subscription\Group;
-use Illuminate\Support\Facades\DB;
+use App\Models\Setting\Terminal; 
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Notifications\Member\MemberDestroyAccount;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 
 class User extends Auth
 {
@@ -91,23 +86,6 @@ class User extends Auth
         }
 
         return false;
-    }
-
-    /**
-     * Return the groups 
-     */
-    public function myGroups()
-    {
-        $groups = $this->groups()->get();
-
-        if ($this->isAdmin()) {
-            $groups = Group::all();
-        }
-
-        return $groups->map(fn($group) => [
-            'name' => $group->name,
-            'slug' => $group->slug,
-        ])->toArray();
     }
 
     /**
