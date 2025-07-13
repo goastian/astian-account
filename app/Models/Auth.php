@@ -4,12 +4,11 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use App\Support\CacheKeys;
 use DateTime;
 use DateInterval;
 use LogicException;
+use App\Support\CacheKeys;
 use App\Models\User\UserScope;
-use Rector\Caching\Enum\CacheKey;
 use App\Models\Subscription\Group;
 use Laravel\Passport\HasApiTokens;
 use App\Repositories\Traits\Scopes;
@@ -100,7 +99,7 @@ class Auth extends Authenticatable
     {
         $apiKey = $this->accessToken;
 
-        if (isset($apiKey->id)) {
+        if (isset($apiKey->id) && $apiKey->client->hasGrantType('personal_access')) {
             if (in_array($scope, $apiKey->scopes)) {
                 return true;
             }
@@ -168,19 +167,48 @@ class Auth extends Authenticatable
             return false;
         }
 
-        $user = auth()->user();
-
         if ($this->isAdmin()) {
             return true;
         }
 
+        $groups = $this->listUserGroups();
+
+        return count($groups) ? $groups->pluck('slug')->contains($group) : false;
+    }
+
+
+    /**
+     * List the all active groups for user
+     */
+    public function listUserGroups(): mixed
+    {
+        if (!auth()->check()) {
+            return [];
+        }
+
+        $user = auth()->user();
+
         $cacheKey = CacheKeys::userGroups($user->id);
 
         if (Cache::has($cacheKey)) {
-            $groups = Cache::get($cacheKey);
+            return Cache::get($cacheKey);
+        }
+
+        if ($user->isAdmin()) {
+            $groups = Group::get()->unique()->values();
 
         } else {
-            $groups = UserScope::with('scope.service.group')
+
+            // Filter groups without services 
+            $groupsWithoutServices = Group::whereHas(
+                'users',
+                function ($query) use ($user) {
+                    $query->where('id', $user->id);
+                }
+            )->whereDoesntHave('services')->get();
+
+            // Filter groups by Scopes
+            $groupsByScopes = UserScope::with('scope.service.group')
                 ->where('user_id', $user->id)
                 ->where(function ($query) {
                     $query->whereNull('end_date')
@@ -190,10 +218,35 @@ class Auth extends Authenticatable
                     return $userScope->scope->service->group;
                 })->unique()->values();
 
-            Cache::put($cacheKey, $groups, now()->addDays(intval(config('cache.expires', 90))));
+            // Join the all groups for user
+            $groups = $groupsWithoutServices->concat($groupsByScopes);
         }
 
-        return count($groups) ? $groups->pluck('slug')->contains($group) : false;
+        Cache::put(
+            $cacheKey,
+            $groups,
+            now()->addDays(intval(config('cache.expires', 90)))
+        );
+
+        return $groups;
+    }
+
+
+    /**
+     * Return the groups 
+     */
+    public function myGroups()
+    {
+        $groups = $this->listUserGroups();
+
+        if (!count($groups)) {
+            return [];
+        }
+
+        return $groups->map(fn($group) => [
+            'name' => $group->name,
+            'slug' => $group->slug,
+        ])->toArray();
     }
 
 
