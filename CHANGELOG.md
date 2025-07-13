@@ -21,6 +21,12 @@
 ### 🔐 OAuth2
 
 -   Fixed an issue with updating OAuth2 clients in the client management interface.
+
+### 📄 Log Viewer
+
+* Added an integrated **log viewer** accessible from the admin panel.
+* Enables direct viewing of application logs without accessing the server manually.
+
 ------
 
 ## [v2.0.1]
