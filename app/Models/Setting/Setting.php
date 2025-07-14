@@ -31,13 +31,7 @@ class Setting extends Master
      */
     public static function getDefaultSetting()
     {
-        if ($item = config('system.schema_mode', 'https')) {
-            URL::forceScheme($item);
-        }
-
-        Config::set('app.name', settingItem('app.name', 'Oauth2 Server'));
-        Config::set('app.org_name', settingItem('app.org_name', 'Oauth2 org'));
-
+        Setting::getSystemSetting();
         Setting::getPassportSetting();
         Setting::getRedisConfig();
         Setting::getQueueSetting();
@@ -45,11 +39,17 @@ class Setting extends Master
         Setting::getEmailSettings();
         Setting::getServicesSettings();
         Setting::getPaymentSettings();
-        Setting::getSystemSetting();
         Setting::getSessionSettings();
         Setting::getCacheSettings();
         Setting::getRoutesSettings();
         Setting::getRateLimitSettings();
+
+        if (config('system.https_activate', false)) {
+            URL::forceScheme('https');
+        }
+
+        Config::set('app.name', settingItem('app.name', 'Oauth2 Server'));
+        Config::set('app.org_name', settingItem('app.org_name', 'Oauth2 org'));
     }
 
     /**
@@ -254,7 +254,7 @@ class Setting extends Master
         SettingLoad('billing.renew.grace_period_days', 5);
 
         //System settings
-        settingLoad('system.schema_mode', "https");
+        settingLoad('system.https_activate', false);
         settingLoad('system.home_page', "/");
         settingLoad('system.cookie_name', "oauth2_server");
         settingLoad('system.passport_token_services', null);
@@ -262,7 +262,7 @@ class Setting extends Master
         settingLoad('system.disable_create_user_by_command', false);
         settingLoad('system.destroy_user_after', 30);
         settingLoad('system.code_2fa_email_expires', 5);
-        settingLoad('system.csp_enabled', true);
+        settingLoad('system.csp_enabled', false);
         settingLoad('system.redirect_to', "/account");
         settingLoad('system.privacy_url', null);
         settingLoad('system.terms_url', null);
@@ -277,7 +277,7 @@ class Setting extends Master
         settingLoad('session.cookie', 'oauth2_session');
         settingLoad('session.xcsrf-token', 'oauth2_csrf');
         settingLoad('session.path', '/');
-        settingLoad('session.secure', true);
+        settingLoad('session.secure', false);
         settingLoad('session.http_only', true);
         settingLoad('session.partitioned', false);
 
@@ -542,7 +542,7 @@ class Setting extends Master
      */
     public static function getSystemSetting()
     {
-        Config::set('system.schema_mode', settingItem('system.schema_mode', "https"));
+        Config::set('system.https_activate', settingItem('system.https_activate', false));
         Config::set('system.home_page', settingItem('system.home_page', "/"));
         Config::set('system.cookie_name', settingItem('system.cookie_name', null));
         Config::set('system.passport_token_services', settingItem('system.passport_token_services', null));
@@ -550,7 +550,7 @@ class Setting extends Master
         Config::set('system.disable_create_user_by_command', settingItem('system.disable_create_user_by_command', false));
         Config::set('system.destroy_user_after', settingItem('system.destroy_user_after', 30));
         Config::set('system.code_2fa_email_expires', settingItem('system.code_2fa_email_expires', 5));
-        Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
+        Config::set('system.csp_enabled', settingItem('system.csp_enabled', false));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
         Config::set('system.privacy_url', settingItem('system.privacy_url', null));
         Config::set('system.terms_url', settingItem('system.terms_url', null));
@@ -572,7 +572,7 @@ class Setting extends Master
         Config::set('session.cookie', settingItem('session.cookie', 'oauth2_session'));
         Config::set('session.xcsrf-token', settingItem('session.xcsrf-token', 'oauth2_csrf'));
         Config::set('session.path', settingItem('session.path', '/'));
-        Config::set('session.secure', settingItem('session.secure', true));
+        Config::set('session.secure', settingItem('session.secure', false));
         Config::set('session.http_only', settingItem('session.http_only', true));
         Config::set('session.partitioned', settingItem('session.partitioned', false));
     }

@@ -5,8 +5,8 @@ return [
     //redirect after login
     "redirect_to" => "/account",
 
-    // Force the schema mode (http or https)
-    "schema_mode" => "https",
+    // Force the schema mode ( false to http and true for https)
+    "system.https_activate" => false,
 
     // Default redirect after login or main page
     "home_page" => "/",
