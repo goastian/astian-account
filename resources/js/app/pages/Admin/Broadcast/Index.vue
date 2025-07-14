@@ -166,21 +166,7 @@ export default {
                     this.search.current_page = meta.pagination.current_page;
                 }
             } catch (e) { }
-        },
-
-        listenEvents() {
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("CreatedBroadcasting", (e) => {
-                    this.getBroadcasting();
-                });
-
-            this.$echo
-                .private(this.$channels.ch_0())
-                .listen("DestroyedBroadcasting", (e) => {
-                    this.getBroadcasting();
-                });
-        },
+        }, 
     },
 };
 </script>

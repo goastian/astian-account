@@ -214,25 +214,6 @@ export default {
                 }
             } catch (e) {}
         },
-
-        /**
-        listenEvents() {
-            const events = [
-                "UserCreated",
-                "UserUpdated",
-                "UserEnabled",
-                "UserDisabled",
-                "UserDestroyed",
-                "UserPasswordUpdated",
-                "UserRegistered",
-            ];
-
-            events.map((item) => {
-                this.$echo.private("auth").toOthers(item, (e) => {
-                    this.getUsers();
-                });
-            });
-        },*/
     },
 };
 </script>

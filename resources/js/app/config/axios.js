@@ -8,7 +8,7 @@ export const $server = axios.create({
     headers: {
         "X-LOCALTIME": Intl.DateTimeFormat().resolvedOptions().timeZone,
         Accept: "application/json",
-        "X-Socket-ID": window.$echo.socket_id,
+   //     "X-Socket-ID": window.$echo.socket_id,
     },
 
     validateStatus: function (status) {

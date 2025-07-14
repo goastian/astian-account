@@ -1,4 +1,4 @@
-import EchoClient from "echo-client-js";
+/*import EchoClient from "echo-client-js";
 
 const options = {
     host: process.env.MIX_ECHO_SERVER,
@@ -7,4 +7,4 @@ const options = {
 };
 
 export const $echo = new EchoClient(options);
-window.$echo = $echo;
+window.$echo = $echo;*/
