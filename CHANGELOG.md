@@ -33,6 +33,11 @@
 * Added an integrated **log viewer** accessible from the admin panel.
 * Enables direct viewing of application logs without accessing the server manually.
 
+### ⚙️ Setting (Fix)
+
+* Moved `SCHEMA_HTTPS` from dynamic settings to the environment file for better consistency.
+* Fixed deployment issues when running in environments without HTTPS (i.e., HTTP-only setups).
+
 ------
 
 ## [v2.0.1]
