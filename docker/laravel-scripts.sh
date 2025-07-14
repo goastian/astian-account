@@ -10,17 +10,18 @@ echo "Running database migrations..."
 php artisan migrate --force
 echo "Migrations completed successfully"
 
-echo "Installing Node.js dependencies..."
-npm install
+#echo "Installing Node.js dependencies..."
+#npm install
 
-echo "Building frontend assets..."
-npm run production
-echo "Frontend build completed"
+#echo "Building frontend assets..."
+#npm run production
+#echo "Frontend build completed"
 
 echo "⚙️ Running system configuration..."
 php artisan settings:system-start
 
 chown -R www-data:www-data /var/www
+chmod -R 775 /var/www
 chmod 600 secrets/oauth/*.key
 
 echo "🚀 Starting PHP-FPM..."

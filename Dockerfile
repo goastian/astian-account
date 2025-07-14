@@ -30,10 +30,11 @@ RUN apk add --no-cache \
     php83-sodium \
     vim \
     nginx \
-    npm \
+#   npm \
     curl \
     unzip \
-    supervisor
+    supervisor \
+    icu-data-full 
 
 RUN getent passwd www-data || adduser -S -G www-data -s /usr/sbin/nologin www-data
 
@@ -45,9 +46,6 @@ WORKDIR /var/www/
 COPY . /var/www/ 
 
 RUN composer install --no-dev --optimize-autoloader
-
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 /var/www
 
 COPY docker/www.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/nginx.conf /etc/nginx/nginx.conf
