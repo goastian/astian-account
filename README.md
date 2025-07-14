@@ -19,6 +19,8 @@ This server was developed to facilitate the creation of microservices applicatio
 
 This project uses Docker and Laravel for OAuth2 authentication. Follow the steps below to deploy the production environment and create the first user.
 
+-----
+
 ## 🔑 Environment Configuration
 
 Before deployment, make sure to copy the environment file and configure the necessary variables:
@@ -26,8 +28,62 @@ Before deployment, make sure to copy the environment file and configure the nece
 ```bash
 cp .env.example .env
 ```
+## Basic Configuration Guide
+- Application environment (e.g., local, staging, production)
+```
+APP_ENV=production
+```
+- This keys generate when the docker start o execute `php artisan settings:system-start`
+```
+APP_KEY=
+```
+
+- debug mode (true or false), Enables detailed error output (not recommended in production)
+```
+APP_DEBUG=true
+```
+
+- The base URL where the app is running. If the host uses a port other than 80 or 443, include it (e.g. http://example.com:8006)
+```
+APP_URL=http://localhost:8006
+FRONTEND_URL="${APP_URL}"      # URL for the frontend; defaults to -APP_URL
+ASSET_URL="${APP_URL}"                   # URL used to load static assets (CSS, JS, etc.)
+```
+
+- Logging configuration 
+```
+LOG_CHANNEL=daily                         # Logging method (recommended: daily)
+LOG_DEPRECATIONS_CHANNEL=null            # Channel for logging deprecated features (set to null to disable)
+LOG_LEVEL=debug                           # Log level (e.g., debug, info, warning, error)
+```
+
+- Database Configuration
+```
+DB_CONNECTION=pgsql                       # Database driver (pgsql, mysql, sqlite, etc.)
+```
+
+- For Docker environments, use the service name as the host (e.g., "db"). If connecting to an external DB, provide the IP address.
+```
+DB_HOST=192.168.1.33
+```
+
+- Default PostgreSQL port is 5432. Change this only if your DB is configured to use a different port.
+```
+DB_PORT=5432
+DB_DATABASE=testdb                        # Name of your database
+`DB_USERNAME=admin  # Database username
+```
+- Use a secure and strong password in production
+```
+DB_PASSWORD=admin
+```
+
+- Additional Configuration : All other system configurations can be managed via the Admin panel under "Settings".
+- After finishing your configuration, use the "Apply & Cache" (green button) to cache settings for better performance.
 
 Then, edit the .env file with your specific settings.
+
+----
 
 ## Deploy to Production
 
