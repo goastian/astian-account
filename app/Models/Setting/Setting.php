@@ -44,7 +44,7 @@ class Setting extends Master
         Setting::getRoutesSettings();
         Setting::getRateLimitSettings();
 
-        if (config('system.https_activate', false)) {
+        if (config('system.schema_mode', 'https') == 'https') { 
             URL::forceScheme('https');
         }
 
@@ -253,8 +253,7 @@ class Setting extends Master
         SettingLoad('billing.renew.bonus_enabled', false);
         SettingLoad('billing.renew.grace_period_days', 5);
 
-        //System settings
-        settingLoad('system.https_activate', false);
+        //System settings 
         settingLoad('system.home_page', "/");
         settingLoad('system.cookie_name', "oauth2_server");
         settingLoad('system.passport_token_services', null);
@@ -541,8 +540,7 @@ class Setting extends Master
      * @return void
      */
     public static function getSystemSetting()
-    {
-        Config::set('system.https_activate', settingItem('system.https_activate', false));
+    { 
         Config::set('system.home_page', settingItem('system.home_page', "/"));
         Config::set('system.cookie_name', settingItem('system.cookie_name', null));
         Config::set('system.passport_token_services', settingItem('system.passport_token_services', null));

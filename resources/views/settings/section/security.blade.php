@@ -9,25 +9,6 @@
         <div class="w-full md:w-3/4 space-y-4">
 
             <div class="mb-4 px-2 py-2 border-gray-300   rounded-lg p-4 bg-white shadow-sm">
-                <label for="https_activate" class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ __('Schema mode') }}
-                </label>
-                <select name="system[https_activate]"
-                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="" disabled>{{ __('Choose option') }}</option>
-                    <option value="{{ false }}" {{ config('system.https_activate') == false ? 'selected' : '' }}>
-                        {{ __('HTTP mode') }}</option>
-                    <option value="{{ true }}" {{ config('system.https_activate') == true ? 'selected' : '' }}>
-                        {{ __('HTTPS mode') }}</option>
-                </select>
-                <small class="block mt-1 text-gray-600">
-                    {{ __('Forces all routes to use HTTPS instead of HTTP. Recommended for secure deployments.') }}
-                </small>
-            </div>
-
-
-
-            <div class="mb-4 px-2 py-2 border-gray-300   rounded-lg p-4 bg-white shadow-sm">
                 <label class="block text-sm font-medium text-gray-700 mb-2">
                     {{ __('SCP policies') }}
                 </label>

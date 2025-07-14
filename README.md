@@ -48,6 +48,7 @@ APP_DEBUG=true
 APP_URL=http://localhost:8006
 FRONTEND_URL="${APP_URL}"      # URL for the frontend; defaults to -APP_URL
 ASSET_URL="${APP_URL}"                   # URL used to load static assets (CSS, JS, etc.)
+SCHEMA_HTTPS=https  # Possible values (http or https) 
 ```
 
 - Logging configuration 
