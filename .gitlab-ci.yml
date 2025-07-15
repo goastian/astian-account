@@ -3,9 +3,18 @@ docker-build:
   stage: build
   services:
     - docker:dind
-  variables:
-    DOCKER_IMAGE_NAME: "$CI_REGISTRY_IMAGE:latest"
   before_script:
+    - |
+      # Detect which tag to use for the image
+      if [[ -n "$CI_COMMIT_TAG" ]]; then
+        export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+      elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:latest"
+      else
+        echo "Not a tag or default branch. Skipping image build."
+        exit 0
+      fi
+      echo "Docker image to build: $DOCKER_IMAGE_NAME"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
 
   script:
@@ -13,7 +22,7 @@ docker-build:
     - docker push "$DOCKER_IMAGE_NAME"
 
   rules:
-    # Run only if the commit is on the default branch (e.g., main)
+    # Only run when pushing to main branch (default) or pushing a semantic version tag
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       exists: [Dockerfile]
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
