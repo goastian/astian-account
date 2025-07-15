@@ -1,10 +1,11 @@
 docker-build:
-  image: docker:latest  # ← aquí
+  image: docker:latest
   stage: build
   services:
     - docker:dind
   before_script:
     - |
+      # Detect which tag to use for the image
       if [[ -n "$CI_COMMIT_TAG" ]]; then
         export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
       elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
@@ -21,41 +22,12 @@ docker-build:
     - docker push "$DOCKER_IMAGE_NAME"
 
   rules:
+    # Only run when pushing to main branch (default) or pushing a semantic version tag
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       exists: [Dockerfile]
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
       exists: [Dockerfile]
 
-stages:
-  - build
-  - deploy
-
-docker-build-main:
-  image: docker:latest
-  stage: build
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-  script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:latest" .
-    - docker push "$CI_REGISTRY_IMAGE:latest"
-  only:
-    - main
-
-
-docker-build-tag:
-  image: docker:latest
-  stage: build
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
-  script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" .
-    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
-  only:
-    - tags
 
 docker-push-hub:
   image: docker:latest
@@ -66,11 +38,19 @@ docker-push-hub:
     - job: docker-build-tag
       optional: true
   before_script:
+    # Login to Docker Hub
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    # Login to GitLab Registry
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
+    # 1. Pull desde GitLab Container Registry
     - docker pull "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" "docker.io/$DOCKER_HUB_USER/oauth2-passport-server:$CI_COMMIT_TAG"
-    - docker push "docker.io/$DOCKER_HUB_USER/oauth2-passport-server:$CI_COMMIT_TAG"
+
+    # 2. Local tag for docker
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" "$DOCKER_HUB_USER/oauth2-passport-server:$CI_COMMIT_TAG"
+
+    # 3. Push a Docker Hub
+    - docker push "$DOCKER_HUB_USER/oauth2-passport-server:$CI_COMMIT_TAG"
   only:
     - tags
+
