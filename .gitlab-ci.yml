@@ -1,3 +1,7 @@
+stages:
+  - build
+  - deploy
+
 docker-build:
   image: docker:latest
   stage: build
@@ -7,17 +11,23 @@ docker-build:
     - |
       # Detect which tag to use for the image
       if [[ -n "$CI_COMMIT_TAG" ]]; then
-        export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+        export DOCKER_IMAGE_TAG="$CI_COMMIT_TAG"
+      elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        export DOCKER_IMAGE_TAG="latest"
       else
-        export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+        echo "Not a tag or default branch. Skipping image build."
+        exit 0
       fi
+      export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$DOCKER_IMAGE_TAG"
       echo "Docker image to build: $DOCKER_IMAGE_NAME"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker build --pull -t "$DOCKER_IMAGE_NAME" .
     - docker push "$DOCKER_IMAGE_NAME"
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      exists: [Dockerfile]
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
       exists: [Dockerfile]
 
 docker-push-hub:
@@ -31,10 +41,21 @@ docker-push-hub:
   before_script:
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+    - |
+      if [[ -n "$CI_COMMIT_TAG" ]]; then
+        export TAG="$CI_COMMIT_TAG"
+      elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
+        export TAG="latest"
+      else
+        echo "Not a tag or default branch. Skipping Docker Hub push."
+        exit 0
+      fi
   script:
-    - docker pull "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
-    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" "$DOCKER_HUB_USER/oauth2-passport-server:$CI_COMMIT_REF_SLUG"
-    - docker push "$DOCKER_HUB_USER/oauth2-passport-server:$CI_COMMIT_REF_SLUG"
+    - docker pull "$CI_REGISTRY_IMAGE:$TAG"
+    - docker tag "$CI_REGISTRY_IMAGE:$TAG" "$DOCKER_HUB_USER/oauth2-passport-server:$TAG"
+    - docker push "$DOCKER_HUB_USER/oauth2-passport-server:$TAG"
   rules:
-    - if: '$CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+      exists: [Dockerfile]
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
       exists: [Dockerfile]
