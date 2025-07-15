@@ -39,7 +39,10 @@ docker-push-hub:
     - docker:dind
   needs: ["docker-build"]
   before_script:
+    # Login to Docker Hub
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    # Login to GitLab Registry
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker pull "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
     - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" "docker.io/$DOCKER_HUB_USER/oauth2-passport-server:$CI_COMMIT_TAG"
