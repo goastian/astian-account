@@ -2,6 +2,11 @@ stages:
   - build
   - deploy
 
+variables:
+  # Globals keys
+  DOCKER_IMAGE_NAME: "$CI_REGISTRY_IMAGE:$DOCKER_IMAGE_TAG"
+  TAG: ""  #Override on before_script
+
 docker-build:
   image: docker:latest
   stage: build
@@ -9,7 +14,6 @@ docker-build:
     - docker:dind
   before_script:
     - |
-      # Detect which tag to use for the image
       if [[ -n "$CI_COMMIT_TAG" ]]; then
         export DOCKER_IMAGE_TAG="$CI_COMMIT_TAG"
       elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
@@ -18,12 +22,11 @@ docker-build:
         echo "Not a tag or default branch. Skipping image build."
         exit 0
       fi
-      export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$DOCKER_IMAGE_TAG"
-      echo "Docker image to build: $DOCKER_IMAGE_NAME"
+      echo "Docker image to build: $CI_REGISTRY_IMAGE:$DOCKER_IMAGE_TAG"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
-    - docker build --pull -t "$DOCKER_IMAGE_NAME" .
-    - docker push "$DOCKER_IMAGE_NAME"
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$DOCKER_IMAGE_TAG" .
+    - docker push "$CI_REGISTRY_IMAGE:$DOCKER_IMAGE_TAG"
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       exists: [Dockerfile]
@@ -39,8 +42,6 @@ docker-push-hub:
     - job: docker-build
       artifacts: false
   before_script:
-    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
     - |
       if [[ -n "$CI_COMMIT_TAG" ]]; then
         export TAG="$CI_COMMIT_TAG"
@@ -50,6 +51,9 @@ docker-push-hub:
         echo "Not a tag or default branch. Skipping Docker Hub push."
         exit 0
       fi
+      echo "Using tag: $TAG"
+    - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker pull "$CI_REGISTRY_IMAGE:$TAG"
     - docker tag "$CI_REGISTRY_IMAGE:$TAG" "$DOCKER_HUB_USER/oauth2-passport-server:$TAG"
