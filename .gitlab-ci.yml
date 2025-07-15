@@ -16,3 +16,5 @@ docker-build:
     # Run only if the commit is on the default branch (e.g., main)
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       exists: [Dockerfile]
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+      exists: [Dockerfile]
