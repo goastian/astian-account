@@ -1,15 +1,10 @@
-stages:
-  - build
-  - deploy
-
 docker-build:
-  image: docker:cli
+  image: docker:latest  # ← aquí
   stage: build
   services:
     - docker:dind
   before_script:
     - |
-      # Detect which tag to use for the image
       if [[ -n "$CI_COMMIT_TAG" ]]; then
         export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
       elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
@@ -26,22 +21,19 @@ docker-build:
     - docker push "$DOCKER_IMAGE_NAME"
 
   rules:
-    # Only run when pushing to main branch (default) or pushing a semantic version tag
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       exists: [Dockerfile]
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
       exists: [Dockerfile]
 
 docker-push-hub:
-  image: docker:cli
+  image: docker:latest
   stage: deploy
   services:
     - docker:dind
   needs: ["docker-build"]
   before_script:
-    # Login to Docker Hub
     - echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin
-    # Login to GitLab Registry
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
   script:
     - docker pull "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
