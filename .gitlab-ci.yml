@@ -8,11 +8,14 @@ docker-build:
     DOCKER_IMAGE_NAME: ""
   before_script:
     - |
+      # If this is a tag, use it as the Docker tag
       if [[ -n "$CI_COMMIT_TAG" ]]; then
         export DOCKER_IMAGE_TAG="$CI_COMMIT_TAG"
+      # If this is the default branch (e.g., main), use the branch name as tag
       elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
         export DOCKER_IMAGE_TAG="$CI_COMMIT_REF_SLUG"
       fi
+      # Build full image name with tag
       export DOCKER_IMAGE_NAME="$CI_REGISTRY_IMAGE:$DOCKER_IMAGE_TAG"
       echo "Docker image to build: $DOCKER_IMAGE_NAME"
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
@@ -21,15 +24,16 @@ docker-build:
     - docker build --pull -t "$DOCKER_IMAGE_NAME" .
     - docker push "$DOCKER_IMAGE_NAME"
     - |
+      # If this is the default branch, also tag the image as 'latest'
       if [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
         docker tag "$DOCKER_IMAGE_NAME" "$CI_REGISTRY_IMAGE:latest"
         docker push "$CI_REGISTRY_IMAGE:latest"
       fi
 
   rules:
-    # Solo construye imagen si estás en main...
+    # Run only if the commit is on the default branch
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
       exists: [Dockerfile]
-    # ... o si es un push por tag (v1.0.0, etc.)
+    # Or if the commit is a tag (e.g., v1.0.0)
     - if: $CI_COMMIT_TAG
       exists: [Dockerfile]
