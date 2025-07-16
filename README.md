@@ -88,8 +88,12 @@ Then, edit the .env file with your specific settings.
 
 ## Deploy to Production
 
-Run the following command to deploy the application in a production environment:
-
+Run the following command to deploy the application 
+- in a production environment:
+```bash
+./deploy-prod.sh
+```
+- In development environment
 ```bash
 ./deploy-prod.sh
 ```
@@ -98,8 +102,13 @@ Run the following command to deploy the application in a production environment:
 
 To create an initial user in the application, execute the following command inside the container:
 
+- In production environment 
 ```bash
 docker exec -it oauth2-server-app-1 php artisan settings:create-user
+```
+- In Development environment
+```bash
+docker exec -it oauth2-server-dev-app-1 php artisan settings:create-user
 ```
 
 ## Proxy settings Nginx server
