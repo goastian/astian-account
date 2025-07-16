@@ -95,7 +95,7 @@ Run the following command to deploy the application
 ```
 - In development environment
 ```bash
-./deploy-prod.sh
+./deploy-dev.sh
 ```
 
 ## 👤 Create the First User
