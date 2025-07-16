@@ -18,8 +18,8 @@ docker-build:
         export DOCKER_IMAGE_TAG="$CI_COMMIT_TAG"
       elif [[ "$CI_COMMIT_BRANCH" == "$CI_DEFAULT_BRANCH" ]]; then
         export DOCKER_IMAGE_TAG="latest"
-      elif [[ "$CI_COMMIT_BRANCH" == "dev"]]; then
-        export DOCKER_IMAGE_TAG = "dev"
+      elif [[ "$CI_COMMIT_BRANCH" == "dev" ]]; then
+        export DOCKER_IMAGE_TAG="dev"
       else
         echo "Not a tag or default branch. Skipping image build."
         exit 0
@@ -51,7 +51,7 @@ docker-push-hub:
         export TAG="$CI_COMMIT_TAG"
       elif [[ "$CI_COMMIT_BRANCH" == $CI_DEFAULT_BRANCH ]]; then
         export TAG="latest"
-      elif [[ "$CI_COMMIT_BRANCH" == "dev"]]; then
+      elif [[ "$CI_COMMIT_BRANCH" == "dev" ]]; then
         export TAG="dev"
       else
         echo "Not a tag or default branch. Skipping Docker Hub push."
