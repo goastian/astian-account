@@ -1,17 +1,15 @@
-# Authorization Server
+# Oauth2 passport server
 
-Centralized authorization server using OAuth-server through Laravel and Laravel Passport as an abstraction or bridge layer. It implements broadcasting using [Echo Server](https://gitlab.com/elyerr/echo-server) and [Echo Client](https://gitlab.com/elyerr/echo-client-js).
+A robust, centralized authorization server built with Laravel and Laravel Passport, designed to provide secure authentication and authorization for modern applications. This server supports both OAuth2 and OpenID Connect protocols, enabling seamless integration with a wide range of clients and services.
 
-This server was developed to facilitate the creation of microservices applications that can easily connect to the main server as if they were a unified system. With this authentication and authorization server, you can develop microservices or monolithic applications in any programming language and database manager. This enables developers to build applications in the language they are most proficient in, allowing for the creation of more complex applications.
+Key features include:
 
----
+- **User Management:** Comprehensive user administration with roles, permissions, and profile management.
+- **Settings Zone:** Flexible system configuration through an intuitive admin panel, allowing you to manage environment variables, security options, and integrations.
+- **OAuth2 & OpenID Connect:** Standards-compliant support for secure authorization flows, token management, and federated identity.
+- **Admin Dashboard:** Powerful administrative interface for managing users, settings, and system operations.
 
-## Resources
-
--   [Documentation](https://gitlab.com/elyerr/oauth2-passport-server/-/wikis/home)
--   [API Documentation](https://documenter.getpostman.com/view/5625104/2sB2xBDq6o)
--   [Echo Server](https://gitlab.com/elyerr/echo-server)
--   [Echo Client](https://gitlab.com/elyerr/echo-client-js)
+This server is ideal for microservices and monolithic architectures, allowing applications in any programming language or database to connect and authenticate securely. Developers can leverage its features to build scalable, secure, and unified systems with centralized user and settings management.
 
 ---
 
