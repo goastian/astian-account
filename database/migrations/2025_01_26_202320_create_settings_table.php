@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->uuid('id')->unique()->primary();
             $table->string('key', 190);
             $table->longText('value')->nullable();
-            $table->uuid('user_id')->nullable();
             $table->timestamps();
         });
     }

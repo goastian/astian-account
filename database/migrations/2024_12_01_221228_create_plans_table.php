@@ -14,11 +14,14 @@ return new class extends Migration {
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('name');
-            $table->string('slug');
+            $table->string('name')->index();
+            $table->string('slug')->index();
             $table->longText('description'); 
-            $table->boolean('public')->default(false);
             $table->boolean('active')->default(false);
+            $table->boolean('bonus_enabled')->default(false);
+            $table->tinyInteger('bonus_duration', false, true)->default(0);
+            $table->boolean('trial_enabled')->default(false);
+            $table->tinyInteger('trial_duration', false, true)->default(0);
             $table->timestamps();
         });
     }

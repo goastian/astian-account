@@ -15,18 +15,18 @@ return new class extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string("name_en");
-            $table->string("name_es");
+            $table->string("name_en")->index();
+            $table->string("name_es")->index();
             $table->string("continent_en");
             $table->string("continent_es");
             $table->string("capital_en");
             $table->string("capital_es");
-            $table->string("dial_code");
-            $table->string("code_2");
-            $table->string("code_3");  
-            $table->string("tld");  
-            $table->string("km2");  
-            $table->string("emoji");  
+            $table->string("dial_code")->index();
+            $table->string("code_2")->index();
+            $table->string("code_3")->index();
+            $table->string("tld")->index();
+            $table->string("km2")->index();
+            $table->string("emoji")->index();
         });
     }
 
