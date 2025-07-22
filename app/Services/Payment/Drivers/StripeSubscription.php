@@ -8,6 +8,7 @@ use Stripe\PaymentIntent;
 use Stripe\Checkout\Session;
 use App\Models\Subscription\Transaction;
 use App\Repositories\TransactionRepository;
+use App\Models\Subscription\PaymentProvider;
 use Stripe\Exception\InvalidRequestException;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use App\Services\Payment\Contracts\PaymentMethod;
@@ -55,12 +56,12 @@ class StripeSubscription implements PaymentMethod
      */
     public function buy(array $data)
     {
-        $user = $this->createCustomerId();
+        $provider = $this->createCustomerId($data);
 
         //Create metadata 
         $meta = [
             'mode' => 'payment',
-            'customer' => $user->stripe_customer_id,
+            'customer' => $provider->customer_id,
             'expires_at' => now()->addMinutes(30)->timestamp,
             'line_items' => [
                 [
@@ -78,19 +79,22 @@ class StripeSubscription implements PaymentMethod
             'payment_intent_data' => [
                 'setup_future_usage' => 'off_session',
                 'metadata' => [
-                    'user_id' => $user->id,
+                    'user_id' => $provider->user->id,
                     'transaction_code' => $data['transaction_code'],
                 ],
             ],
             'success_url' => route('users.checkout.success') . "?code={$data['transaction_code']}",
             'metadata' => [
-                'user_id' => $user->id,
+                'user_id' => $provider->user->id,
                 'transaction_code' => $data['transaction_code'],
             ],
         ];
 
         try {
             $session = Session::create($meta);
+            // set provider and user data to session response
+            $session['provider'] = $provider->toArray();
+
             return $session;
 
         } catch (InvalidRequestException $th) {
@@ -103,16 +107,21 @@ class StripeSubscription implements PaymentMethod
      * @param array $package
      * @return void
      */
-    public function chargeRecurringPayment(array $package)
+    public function chargeRecurringPayment(array $package): void
     {
         //Generate new transaction code
         $code = $this->repository->generateTransactionCode();
+
+        // Retrieve provider by user id and payment method
+        $provider = PaymentProvider::where('user_id', $package['user']['id'])
+            ->where('name', $package['transaction']['payment_method'])
+            ->first();
 
         //Generate a new payment intent to renew package
         $intent = PaymentIntent::create([
             'amount' => $package['meta']['price']['amount'],
             'currency' => strtolower($package['meta']['price']['currency']),
-            'customer' => $package["user"]["stripe_customer_id"],
+            'customer' => $provider->customer_id,
             'payment_method' => $package['transaction']['payment_method_id'],
             'off_session' => true,
             'confirm' => true,
@@ -144,10 +153,24 @@ class StripeSubscription implements PaymentMethod
      */
     public function forceActivation(array $response)
     {
-        $session = Session::retrieve($response['id']);
+        
+        switch ($response['object']) {
+            case 'payment_intent':
+                $session = (object) [
+                    'payment_intent' => $response['id'],
+                    'status' => $response['status'],                    
+                ];
+                break;
 
-        if ($session->payment_status != "paid") { //check the session has been paid
-            throw new ReportError("Payment not successful. Status: " . $session->payment_status, 402);
+            case 'checkout.session':
+                $session = Session::retrieve($response['id']);
+
+                if ($session->payment_status != "paid") { //check the session has been paid
+                    throw new ReportError("Payment not successful. Status: " . $session->payment_status, 402);
+                }
+                break;
+            default:
+                throw new ReportError("Invalid response object type: " . $response['object'], 400);
         }
 
         // Retrieve the payment intent of the session
@@ -164,22 +187,33 @@ class StripeSubscription implements PaymentMethod
     }
 
     /**
-     * Add customer id to the current user
-     * @return \App\Models\User
+     *  Add customer id to the current user
+     * @param array $data
      */
-    public function createCustomerId()
+    public function createCustomerId(array $data): PaymentProvider
     {
+        //Get the current user
         $user = auth()->user();
-        if (!$user->stripe_customer_id) {
+
+        //Check if the user already has a payment provider
+        $provider = PaymentProvider::with('user')
+            ->where('name', config('billing.methods.stripe.key'))
+            ->where('user_id', $user->id)->first();
+
+        //If the user does not have a payment provider, create one
+        //and create a new customer in Stripe
+        if (empty($provider)) {
             $customer = Customer::create([
                 'email' => $user->email,
                 'name' => $user->name,
             ]);
 
-            $user->stripe_customer_id = $customer->id;
-            $user->save();
+            $provider = $user->paymentProviders()->create([
+                'name' => config('billing.methods.stripe.key'),
+                'customer_id' => $customer->id,
+            ]);
         }
 
-        return $user;
+        return $provider;
     }
 }

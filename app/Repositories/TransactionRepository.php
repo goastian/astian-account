@@ -100,6 +100,34 @@ class TransactionRepository
     }
 
     /**
+     * Retrieve a transaction by code
+     * @param string $code
+     * @return Transaction|null
+     */
+    public function findByCode(string $code): Transaction|null
+    {
+        return $this->model->with([
+            'package',
+            'package.user',
+            'partner'
+        ])->where('code', $code)->first();
+    }
+
+    /**
+     * Retrieve a transaction by id
+     * @param string $id
+     * @return Transaction|null
+     */
+    public function find(string $id): Transaction|null
+    {
+        return $this->model->with([
+            'package',
+            'package.user',
+            'partner'
+        ])->find($id);
+    }
+
+    /**
      * Activate the transaction
      * @param string $id
      * @throws \Elyerr\ApiResponse\Exceptions\ReportError
@@ -134,8 +162,6 @@ class TransactionRepository
      */
     public function buy(array $data)
     {
-        $customer = auth()->user();
-
         // Generate transaction code
         $code = $this->generateTransactionCode();
 
@@ -153,14 +179,16 @@ class TransactionRepository
             $plan
         );
 
-        DB::transaction(function () use ($plan, $data, $paymentManager, $customer) {
+        DB::transaction(function () use ($plan, $data, $paymentManager) {
+
+            $provider = $paymentManager->provider;
 
             //Register package
             $package = $this->packageRepository->create([
                 'status' => config("billing.status.pending.name"),
                 'is_recurring' => true,
                 'transaction_code' => $plan['transaction_code'],
-                'user_id' => $customer->id,
+                'user_id' => $provider->user_id,
                 'meta' => $plan, // add plan to the metadata
             ]);
 
@@ -175,7 +203,7 @@ class TransactionRepository
                 'billing_period' => $plan['price']['billing_period'],
                 'renew' => false,
                 'code' => $plan['transaction_code'],
-                'response' => $paymentManager->toArray(),
+                'response' => $paymentManager->toArray(),// save payment manager response
                 'package_id' => $package->id,
             ];
 
@@ -184,7 +212,7 @@ class TransactionRepository
              */
 
             // Check if the authenticated user already has an assigned partner
-            if (!empty($partner_id = $customer->partner_id)) {
+            if (!empty($partner_id = $provider->user->partner_id)) {
 
                 // Find the partner by ID
                 $partner = $this->partnerRepository->find($partner_id);
@@ -195,7 +223,7 @@ class TransactionRepository
                 }
 
                 // If the user has no assigned partner, check for a referral code
-            } else if (!empty($data['referral_code']) && empty(auth()->user()->partner_id)) {
+            } else if (!empty($data['referral_code']) && empty($provider->user->partner_id)) {
 
                 // Find the partner by referral code
                 $partner = $this->partnerRepository->findByCode($data['referral_code']);
@@ -211,7 +239,7 @@ class TransactionRepository
         });
 
         // Send request notification 
-        $customer->notify(new RequestSubscription(route('users.subscriptions.index'), $code));
+        auth()->user()->notify(new RequestSubscription(route('users.subscriptions.index'), $code));
 
         return $this->data([
             'data' => [
