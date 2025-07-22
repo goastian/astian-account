@@ -323,24 +323,7 @@
                                     <q-icon name="mdi-cash" class="q-mr-sm" />
                                     <strong>Subtotal:</strong>
                                     {{ tx.subtotal }} {{ tx.currency }}
-                                </div>
-                                <div class="q-mb-xs" v-if="tx.tax_applied">
-                                    <q-icon
-                                        name="mdi-percent"
-                                        class="q-mr-sm"
-                                    />
-                                    <strong>Tax:</strong>
-                                    {{ tx.tax_percentage }}%
-                                    <span v-if="tx.tax_amount"
-                                        >({{ tx.tax_amount }})</span
-                                    >
-                                    <q-badge
-                                        color="grey"
-                                        v-if="tx.tax_inclusive"
-                                        class="q-ml-sm"
-                                        >Inclusive</q-badge
-                                    >
-                                </div>
+                                </div> 
                                 <div class="q-mb-xs">
                                     <q-icon
                                         name="mdi-cash-multiple"
