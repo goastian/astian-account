@@ -31,13 +31,13 @@ This server is designed to work seamlessly with both microservices and monolithi
 
 ## Deployment Guides
 
-- [English Documentation](./docs/deploy_en.md)  
-- [Spanish Documentation](./docs/deploy_es.md)
+- [English Documentation](./docs/deploy/deploy_en.md)  
+- [Spanish Documentation](./docs/deploy/deploy_es.md)
 
-## Developer Guides
+## Developers Guides
 
-- [English Documentation](./docs/deploy_en.md)  
-- [Spanish Documentation](./docs/deploy_es.md)
+- [English Documentation](./docs/dev/developers_en.md)  
+- [Spanish Documentation](./docs/deploy/deploy_es.md)
 
 ---
 
