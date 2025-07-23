@@ -107,6 +107,6 @@ class AuthenticatedSessionController extends WebController
             return redirect($request->post_logout_redirect_uri);
         }
 
-        return route('login');
+        return redirect()->route('login');
     }
 }
