@@ -1,4 +1,4 @@
-docker pull elyerr/oauth2-passport-server:latest && \
+docker pull elyerr/oauth2-passport-server:v3.0.0 && \
 docker compose down && \
 docker compose up -d --build && \
 docker image prune -f

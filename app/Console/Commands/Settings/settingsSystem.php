@@ -1,9 +1,9 @@
 <?php
 namespace App\Console\Commands\Settings;
 
-use Artisan;
-use App\Models\Setting\Setting;
+use Artisan; 
 use Illuminate\Console\Command; 
+use App\Services\Settings\Setting;
 use Illuminate\Support\Facades\Log;
 
 class settingsSystem extends Command
