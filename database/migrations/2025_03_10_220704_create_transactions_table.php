@@ -16,15 +16,11 @@ return new class extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('currency');
-            $table->string('status');
-            $table->string('tax_rate_id')->nullable();
-            $table->decimal('tax_percentage', 5, 2)->nullable();
-            $table->unsignedBigInteger('tax_amount')->nullable();
-            $table->boolean('tax_inclusive')->default(false);
-            $table->boolean('tax_applied')->default(false);
+            $table->string('status'); 
             $table->unsignedBigInteger('subtotal')->nullable();
             $table->unsignedBigInteger('total')->nullable();
             $table->string('payment_method');
+            $table->string('payment_method_id')->nullable();
             $table->string('billing_period');
             $table->boolean('renew')->default(false);
             $table->string('session_id')->nullable();

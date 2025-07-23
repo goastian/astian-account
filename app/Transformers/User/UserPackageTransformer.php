@@ -69,8 +69,7 @@ class UserPackageTransformer extends TransformerAbstract
     {
         $attributes = [
             'price' => 'price',
-            'currency' => 'currency',
-            'tax' => 'tax',
+            'currency' => 'currency', 
             'billing_period' => 'billing_period',
             'payment_method' => 'payment_method',
             'start_at' => 'start_at',

@@ -24,7 +24,7 @@ services:
         image: adminer:latest
         restart: always
         ports:
-            - "9005:8080"
+            - "8092:8080"
         depends_on:
             db:
                 condition: service_healthy
@@ -38,7 +38,7 @@ services:
         image: elyerr/oauth2-passport-server:dev
         restart: always
         ports:
-            - "8005:80"
+            - "8091:80"
             - "25:25"
             - "587:587"
             - "465:465"

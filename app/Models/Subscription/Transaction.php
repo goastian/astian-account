@@ -18,12 +18,7 @@ class Transaction extends Master
 
     protected $fillable = [
         'currency',
-        'status',
-        'tax_rate_id',
-        'tax_percentage',
-        'tax_amount',
-        'tax_inclusive',
-        'tax_applied',
+        'status', 
         'subtotal',
         'total',
         'payment_method',
@@ -43,9 +38,7 @@ class Transaction extends Master
 
     protected $casts = [
         'response' => 'array',
-        'renew' => 'boolean',
-        'tax_inclusive' => 'boolean',
-        'tax_applied' => 'boolean',
+        'renew' => 'boolean', 
         'meta' => 'array'
     ];
 

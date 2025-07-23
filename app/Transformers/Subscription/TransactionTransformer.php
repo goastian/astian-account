@@ -37,12 +37,7 @@ class TransactionTransformer extends TransformerAbstract
         return [
             'id' => $transaction->id,
             'currency' => $transaction->currency,
-            'status' => $transaction->status,
-            'tax_rate_id' => $transaction->tax_rate_id,
-            'tax_percentage' => $transaction->tax_percentage,
-            'tax_amount' => $this->formatMoney($transaction->tax_amount),
-            'tax_inclusive' => $transaction->tax_inclusive ? true : false,
-            'tax_applied' => $transaction->tax_applied ? true : false,
+            'status' => $transaction->status, 
             'subtotal' => $this->formatMoney($transaction->subtotal),
             'total' => $this->formatMoney($transaction->total),
             'payment_method' => $transaction->payment_method,

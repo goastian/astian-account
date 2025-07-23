@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->decimal('commission_rate', 5, 2)->default(0);
             $table->uuid('user_id');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('RESTRICT');
         });
     }
 

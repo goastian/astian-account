@@ -14,9 +14,10 @@ return new class extends Migration {
     {
         Schema::create('services', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('name');
+            $table->string('name')->index();
             $table->string('slug')->index();
             $table->string('description')->nullable();
+            $table->string('visibility')->default('private');
             $table->boolean('system')->default(false);
             $table->uuid('group_id');
             $table->timestamps();

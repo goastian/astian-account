@@ -14,8 +14,8 @@ return new class extends Migration {
     {
         Schema::create('groups', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('name', 100)->unique();
-            $table->string('slug');
+            $table->string('name', 100)->unique()->index();
+            $table->string('slug')->unique()->index();
             $table->string('description', 200);
             $table->softDeletes();
             $table->boolean('system')->default(false);

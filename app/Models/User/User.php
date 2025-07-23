@@ -4,10 +4,11 @@ namespace App\Models\User;
 use App\Models\Auth;
 use App\Models\User\Partner;
 use Illuminate\Http\Request;
-use App\Models\Setting\Terminal; 
+use App\Models\Setting\Terminal;
 use Illuminate\Support\Facades\Hash;
 use App\Transformers\User\UserTransformer;
-use Illuminate\Database\Eloquent\SoftDeletes; 
+use App\Models\Subscription\PaymentProvider;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Auth
 {
@@ -33,8 +34,7 @@ class User extends Auth
         'birthday',
         'verified_at',
         'm2fa',
-        'totp',
-        'stripe_customer_id',
+        'totp', 
         'partner_id',
         'accept_cookies',
         'accept_terms',
@@ -104,5 +104,10 @@ class User extends Auth
     public function partner()
     {
         return $this->hasOne(Partner::class);
+    }
+
+    public function paymentProviders()
+    {
+        return $this->hasMany(PaymentProvider::class, 'user_id');
     }
 }

@@ -38,7 +38,7 @@ services:
         image: elyerr/oauth2-passport-server:v2.0.2
         restart: always
         ports:
-            - "8005:80"
+            - "8001:80"
             - "25:25"
             - "587:587"
             - "465:465"

@@ -162,7 +162,7 @@ class PackageRepository implements Contracts
         if (!empty($package->end_at)) {
 
             // Calculate the last valid day for renewal (grace period)
-            $last_day = $package->end_at->addDays(config('billing.renew.grace_period_days'));
+            $last_day = $package->end_at->addDays(intval('billing.renew.grace_period_days'));
 
             // If we're within the renewal grace period and bonuses are enabled
             if (

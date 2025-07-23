@@ -25,11 +25,14 @@ return new class extends Migration {
             $table->string('phone', 15)->nullable()->index();
             $table->date('birthday')->nullable();
             $table->datetime('verified_at')->nullable();
-            $table->boolean('m2fa')->default(0);
-            $table->boolean('totp')->default(0);
-            $table->boolean("accept_terms")->nullable(); 
+            $table->boolean('m2fa')->default(false);
+            $table->boolean('totp')->default(false);
+            $table->boolean("accept_terms")->nullable();
+            $table->boolean('accept_cookies')->nullable();
+            $table->dateTime('last_connected')->nullable();
+            $table->uuid('partner_id')->nullable();
             $table->timestamps();
-            $table->softDeletes(); 
+            $table->softDeletes();
         });
     }
 

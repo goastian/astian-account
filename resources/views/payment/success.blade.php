@@ -36,9 +36,6 @@
                     <p><span class="font-medium">Email:</span> {{ $transaction['package']['user']['email'] }}</p>
                     <p><span class="font-medium">Verified At:</span> {{ $transaction['package']['user']['verified_at'] }}
                     </p>
-                    <p><span class="font-medium">Stripe Customer ID:</span>
-                        {{ $transaction['package']['user']['stripe_customer_id'] }}
-                    </p>
                 </div>
 
                 <!-- Transaction Info -->

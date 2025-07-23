@@ -25,14 +25,21 @@ class RegisterClientController extends WebController
     public function __construct(UserRepository $userRepository)
     {
         $this->repository = $userRepository;
+        $this->middleware('auth')->except('register', 'store', 'verifyAccount');
     }
 
     /**
      * Show view to register users
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function register()
+    public function register(Request $request)
     {
+        // If the request has a redirect_to parameter, store it in the session
+        if (!empty($request->input('redirect_to'))) {
+            session()->put('redirect_to', $request->input('redirect_to'));
+        }
+        
         if (request()->user()) {
             return redirect('/');
         }
@@ -46,6 +53,7 @@ class RegisterClientController extends WebController
      */
     public function store(RegisterRequest $request)
     {
+        $this->recoveryReferralCode($request); 
         return $this->repository->registerCustomer($request->toArray());
     }
 
@@ -65,7 +73,7 @@ class RegisterClientController extends WebController
      */
     public function formVerifyAccount()
     {
-        if (auth()->check() && auth()->user()->verified_at) {
+        if (auth()->user()->verified_at) {
             return redirectToHome();
         }
 
@@ -94,11 +102,45 @@ class RegisterClientController extends WebController
      */
     public function verifiedAccount()
     {
+        $redirect_to = session()->get('redirect_to');
+
+        if (!empty($redirect_to)) {
+            session()->forget('redirect_to');
+            return redirect($redirect_to);
+        }
+
         if (session('token')) {
             session()->forget('token');
             return view('auth.verified-account');
         }
 
         return redirectToHome();
+    }
+
+    /**
+     * Recovery referral code from the redirect_to session
+     * This method extracts the referral code from the redirect_to URL if it exists.
+     * It checks if the redirect_to session variable is set, parses the URL,
+     * and retrieves the referral_code from the query parameters.
+     * If a referral code is found, it merges it into the request.
+     * @return void
+     */
+    private function recoveryReferralCode(Request $request): void
+    {
+        $redirect_to = session()->get('redirect_to');
+        $referral_code = null;
+         
+        if ($redirect_to) {
+            $parsedUrl = parse_url($redirect_to);
+
+            if (isset($parsedUrl['query'])) {
+                parse_str($parsedUrl['query'], $query_params);
+                $referral_code = $query_params['referral_code'] ?? null;
+            }
+
+            if ($referral_code) {
+                $request->merge(['referral_code' => $referral_code]);
+            }
+        }
     }
 }
