@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Setting;
+namespace App\Services\Inertia;
 
 use App\Support\CacheKeys;
 use Illuminate\Support\Facades\Cache;

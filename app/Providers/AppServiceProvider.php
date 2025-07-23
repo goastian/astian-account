@@ -3,8 +3,8 @@
 namespace App\Providers;
 
 use App\Guard\TokenGuard;
-use Laravel\Passport\Passport;
-use App\Models\Setting\Setting;
+use Laravel\Passport\Passport; 
+use App\Services\Settings\Setting;
 use Illuminate\Support\Facades\Auth; 
 use Laravel\Passport\ClientRepository;
 use Illuminate\Support\ServiceProvider;

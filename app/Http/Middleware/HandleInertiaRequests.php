@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use Inertia\Middleware;
-use App\Models\Setting\Menu;
+use Inertia\Middleware; 
 use Illuminate\Http\Request;
+use App\Services\Inertia\Menu;
 
 class HandleInertiaRequests extends Middleware
 {
