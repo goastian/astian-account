@@ -53,8 +53,9 @@
                 class="full-width"
             />
         </div>
-
+        <!-- Guest Login Modal 
         <v-login :guest="guest" @close="guest = false" />
+        -->
     </div>
 </template>
 
