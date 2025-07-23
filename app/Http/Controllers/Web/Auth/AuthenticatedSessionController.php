@@ -44,12 +44,13 @@ class AuthenticatedSessionController extends WebController
         // Redirect to
         $redirect_to = session()->get('redirect_to');
 
+        
+        $request->authenticate();
+        
+        $request->session()->regenerate();
+        
         // Delete session key
         session()->forget('redirect_to');
-
-        $request->authenticate();
-
-        $request->session()->regenerate();
 
         // Save the las connection
         auth()->user()->lastConnected();
