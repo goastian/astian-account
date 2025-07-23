@@ -1,5 +1,32 @@
 # Changelog
 
+## 🚀 [v3.0.0]
+
+### 🗄️ Database
+- 🏷️ Prefixed all table names with `ops_`
+- ⚙️ Optimized migration structure and logic
+- ❌ Removed `tax` fields from the `transactions` table
+- ❌ Removed `stripe_customer_id` from the `users` table
+- 🆕 Added new migration to manage multiple payment providers
+
+### 💳 Payment
+- 🛠️ Fixed support for multiple payment providers
+- 🔒 Fixed issue with forced activation of payment methods
+
+### 👥 Users
+- 🐞 Fixed partner registration with referral code
+
+### 🧩 Middleware
+- 🔁 Fixed redirect logic for unauthenticated (guest) users
+
+### 🔐 Login
+- 🧭 Fixed redirect behavior after first failed login attempt
+
+### 🧰 Services
+- 🔄 Moved `Menu` class from `Models` to `Services`
+- 🧹 Refactored `Settings` to follow separation of concerns and moved to `Services`
+
+
 ## [v2.0.2]
 
 ### ⚡️ Cache
