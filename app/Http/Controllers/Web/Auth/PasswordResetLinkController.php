@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
-use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
@@ -12,6 +12,7 @@ class PasswordResetLinkController extends WebController
 
     public function __construct()
     {
+        $this->middleware('guest');
     }
 
     /**
@@ -46,6 +47,6 @@ class PasswordResetLinkController extends WebController
             ]);
         }
 
-        return redirect('login')->with('status', __($status));
+        return redirect()->route('login')->with('status', __($status));
     }
 }
