@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Elyerr\ApiResponse\Exceptions\ReportError;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
@@ -130,14 +129,5 @@ class RouteServiceProvider extends ServiceProvider
                     });
             });
         }
-    }
-
-    /**
-     * Redirect user after login
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector|null
-     */
-    public static function home(Request $request)
-    {
-        return redirectToHome();
     }
 }
