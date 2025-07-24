@@ -1,9 +1,9 @@
 # Changelog
 
-## 🚧 Unrealized
+## 🚀 [v3.0.1]
 
 ### 👥 Users
-    -🔧 Fix and properly define the relationship with the Partner model (belongsTo, hasOne, etc.), ensuring it aligns with the business logic. 
+-🔧 Fix and properly define the relationship with the Partner model (belongsTo, hasOne, etc.), ensuring it aligns with the business logic. 
 
 
 ## 🚀 [v3.0.0]
