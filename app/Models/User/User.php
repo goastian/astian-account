@@ -103,7 +103,7 @@ class User extends Auth
      */
     public function partner()
     {
-        return $this->hasOne(Partner::class);
+        return $this->hasOne(Partner::class, 'id', 'partner_id');
     }
 
     public function paymentProviders()
