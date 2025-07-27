@@ -2,8 +2,10 @@
 
 namespace App\Repositories;
 
+use App\Support\CacheKeys;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Package;
+use Illuminate\Support\Facades\Cache;
 use App\Repositories\Contracts\Contracts;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -160,7 +162,7 @@ class PackageRepository implements Contracts
         if (!empty($package->end_at)) {
 
             // Calculate the last valid day for renewal (grace period)
-            $last_day = $package->end_at->addDays(config('billing.renew.grace_period_days'));
+            $last_day = $package->end_at->addDays(intval('billing.renew.grace_period_days'));
 
             // If we're within the renewal grace period and bonuses are enabled
             if (
@@ -206,6 +208,13 @@ class PackageRepository implements Contracts
                 ]
             );
         }
+
+        Cache::forget(CacheKeys::userScopes($user->id));
+        Cache::forget(CacheKeys::userScopesApiKey($user->id));
+        Cache::forget(CacheKeys::userAdmin($user->id));
+        Cache::forget(CacheKeys::userScopeList($user->id));
+        Cache::forget(CacheKeys::userAuth($user->id));
+        Cache::forget(CacheKeys::userGroups($user->id));
     }
 
     /**
@@ -273,5 +282,25 @@ class PackageRepository implements Contracts
     {
         $package->status = config('billing.status.expired.name');
         $package->push();
+    }
+
+    /**
+     * Enable or disable recurring payment by package
+     * @param string $package_id
+     * @return JsonResponser
+     */
+    public function recurringPaymentEnableOrDisable(string $package_id)
+    {
+        $package = $this->find($package_id);
+
+        if ($package->user_id != auth()->user()->id) {
+            throw new ReportError(__('Resource cannot be found'), 404);
+        }
+
+        $package->is_recurring = !$package->is_recurring;
+
+        $package->push();
+
+        return $this->message(__('Recurring payment for this package has been updated successfully'));
     }
 }

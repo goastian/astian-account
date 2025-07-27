@@ -57,7 +57,11 @@
 
                     <q-card-actions align="right" class="q-pa-sm">
                         <v-update @updated="getRoles" :item="role" />
-                        <v-delete v-if="!role.system" @deleted="getRoles" :item="role" />
+                        <v-delete
+                            v-if="!role.system"
+                            @deleted="getRoles"
+                            :item="role"
+                        />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -189,7 +193,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch((e) => { });
+                .catch((e) => {});
         },
 
         async copyToClipboard(text) {
@@ -200,7 +204,7 @@ export default {
                     message: "Copy successfully",
                     timeout: 3000,
                 });
-            } catch (err) { }
+            } catch (err) {}
         },
     },
 };

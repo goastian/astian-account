@@ -20,7 +20,26 @@
                     <option value="{{ false }}" {{ config('system.csp_enabled') == false ? 'selected' : '' }}>
                         {{ __('No') }}</option>
                 </select>
-                <small class="block mt-1 text-gray-600">{{ __('This option is used to activate the csp policies') }}</small>
+                <small
+                    class="block mt-1 text-gray-600">{{ __('This option is used to activate the csp policies') }}</small>
+            </div>
+
+            <div class="mb-4 px-2 py-2 border-gray-300   rounded-lg p-4 bg-white shadow-sm">
+                <label for="disable_create_user_by_command" class="block text-sm font-medium text-gray-700 mb-2">
+                    {{ __('Disable User Creation by Command') }}
+                </label>
+                <select id="disable_create_user_by_command" name="system[disable_create_user_by_command]"
+                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                    <option value="1" {{ config('system.disable_create_user_by_command') == 1 ? 'selected' : '' }}>
+                        {{ __('Yes') }}
+                    </option>
+                    <option value="0" {{ config('system.disable_create_user_by_command') == 0 ? 'selected' : '' }}>
+                        {{ __('No') }}
+                    </option>
+                </select>
+                <small class="block mt-1 text-gray-600">
+                    {{ __('This option disables the ability to create users through a command') }}
+                </small>
             </div>
 
             <div class="border-gray-300 rounded-lg p-4 bg-white shadow-sm">
@@ -66,7 +85,7 @@
                     </h3>
                     <div class="mb-2">
                         <label class="block text-sm font-medium text-gray-700">Endpoint</label>
-                        <input type="text" name="services[captcha][providers][turnstile][api]"
+                        <input type="text" name="services[captcha][providers][turnstile][gateway]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
                             value="{{ config('services.captcha.providers.turnstile.api') }}">
                     </div>
@@ -112,22 +131,44 @@
             </div>
 
 
-            <div class="mb-4 px-2 py-2 border-gray-300   rounded-lg p-4 bg-white shadow-sm">
-                <label for="disable_create_user_by_command" class="block text-sm font-medium text-gray-700 mb-2">
-                    {{ __('Disable User Creation by Command') }}
-                </label>
-                <select id="disable_create_user_by_command" name="system[disable_create_user_by_command]"
-                    class="block w-full px-2 py-2 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    <option value="1" {{ config('system.disable_create_user_by_command') == 1 ? 'selected' : '' }}>
-                        {{ __('Yes') }}
-                    </option>
-                    <option value="0" {{ config('system.disable_create_user_by_command') == 0 ? 'selected' : '' }}>
-                        {{ __('No') }}
-                    </option>
-                </select>
-                <small class="block mt-1 text-gray-600">
-                    {{ __('This option disables the ability to create users through a command') }}
-                </small>
+            <div class="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
+                    {{ __('Rate Limit Settings') }}
+                </h3>
+
+                @php
+                    $rateLimits = [
+                        'api' => 'API',
+                        'gateway' => 'Gateway',
+                        'passport-token' => 'Passport Token',
+                        'default' => 'Default',
+                        'broadcast' => 'Broadcast',
+                    ];
+                @endphp
+
+                @foreach ($rateLimits as $key => $label)
+                    <div class="mb-6">
+                        <h4 class="text-md font-medium text-gray-700 mb-2">{{ __($label) }}</h4>
+
+                        <div class="mb-3">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                {{ __('Limit per minute') }}
+                            </label>
+                            <input type="number" name="rate_limit[general][{{ $key }}][limit]"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
+                                value="{{ config("rate_limit.general.$key.limit") }}">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">
+                                {{ __('Block time (minutes)') }}
+                            </label>
+                            <input type="number" name="rate_limit[general][{{ $key }}][block_time]"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
+                                value="{{ config("rate_limit.general.$key.block_time") }}">
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>

@@ -1,15 +1,18 @@
 <?php
 namespace App\Models\OAuth\Bridge;
 
-use DateTime;
-use Laravel\Passport\Client;
-use Laravel\Passport\Events\AccessTokenCreated;
-use Laravel\Passport\Bridge\AccessTokenRepository as Model;
+use DateTime; 
+use Laravel\Passport\Passport;
+use Laravel\Passport\Events\AccessTokenCreated; 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 
-class AccessTokenRepository extends Model
+class AccessTokenRepository extends \OpenIDConnect\Repositories\AccessTokenRepository
 {
-    public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity)
+
+    /**
+     * {@inheritdoc}
+     */
+    public function persistNewAccessToken(AccessTokenEntityInterface $accessTokenEntity): void
     {
         // Retrieve the client id of the token 
         $clientId = $accessTokenEntity->getClient()->getIdentifier();
@@ -24,25 +27,21 @@ class AccessTokenRepository extends Model
             'updated_at' => new DateTime,
             'expires_at' => $accessTokenEntity->getExpiryDateTime(),
         ];
-
-        // Only attach scopes if the client is a Personal Access Client
-        $client = Client::find($clientId);
-
-        // Checking the client exists and is a personal access token
-        if ($client && $client->personal_access_client) {
-            $data['scopes'] = $this->scopesToArray($accessTokenEntity->getScopes());
+ 
+        // Checking api key only personal access token
+        if (in_array('personal_access', $accessTokenEntity->getClient()->grantTypes)) {
+            $data['scopes'] = $accessTokenEntity->getScopes();
         } else {
             $data['scopes'] = [];
         }
 
-        // Create token 
-        $this->tokenRepository->create($data);
+        Passport::token()->forceFill($data)->save();
 
         // Dispatch token
-        $this->events->dispatch(new AccessTokenCreated(
+       /* $this->events->dispatch(new AccessTokenCreated(
             $accessTokenEntity->getIdentifier(),
             $accessTokenEntity->getUserIdentifier(),
             $accessTokenEntity->getClient()->getIdentifier()
-        ));
+        ));*/
     }
 }

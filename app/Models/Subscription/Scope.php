@@ -96,6 +96,6 @@ class Scope extends Master
         $group = $this->service->group->slug;
         $service = $this->service->slug;
         $role = $this->role->slug;
-        return "{$group}_{$service}_{$role}";
+        return "{$group}:{$service}:{$role}";
     }
 }

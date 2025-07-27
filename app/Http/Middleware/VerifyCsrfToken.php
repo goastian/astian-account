@@ -16,6 +16,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         '/webhook/stripe',
+        '/.well-known/openid-configuration',
     ];
 
     /**

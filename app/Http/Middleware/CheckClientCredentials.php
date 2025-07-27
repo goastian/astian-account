@@ -6,7 +6,7 @@ namespace App\Http\Middleware;
 use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Exceptions\ReportError;
 use Laravel\Passport\Exceptions\MissingScopeException;
-use Laravel\Passport\Http\Middleware\CheckClientCredentials as middleware;
+use Laravel\Passport\Http\Middleware\CheckToken as middleware;
 
 class CheckClientCredentials extends middleware
 {

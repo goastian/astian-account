@@ -3,7 +3,8 @@ namespace App\Console\Commands\Settings;
 
 use Artisan;
 use App\Models\Setting\Setting;
-use Illuminate\Console\Command;
+use Illuminate\Console\Command; 
+use Illuminate\Support\Facades\Log;
 
 class settingsSystem extends Command
 {
@@ -29,11 +30,15 @@ class settingsSystem extends Command
     public function handle()
     {
         $this->info("Install server");
+        Log::info("Install server");
+        Artisan::call('settings:key-generator');
+        Artisan::call('migrate', ['--force' => true]);
         Artisan::call('settings:roles-upload');
         Artisan::call('settings:countries-upload');
         Artisan::call('settings:channels-upload');
-        Artisan::call('passport:install');
+        Artisan::call('passport:keys');
         Setting::setDefaultKeys();
         $this->info("Server installed successfully");
+        Log::info("Server installed successfully");
     }
 }

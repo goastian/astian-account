@@ -91,4 +91,14 @@ class UserSubscriptionController extends WebController
 
         return view('payment.success', ['transaction' => $data]);
     }
+
+    /**
+     * Enable or disable recurring payment
+     * @param string $package_id
+     * @return \Elyerr\ApiResponse\Assets\JsonResponser
+     */
+    public function recurringPayment(string $package_id)
+    {
+        return $this->packageRepository->recurringPaymentEnableOrDisable($package_id);
+    }
 }

@@ -1,2 +1,7 @@
 *
+<<<<<<< HEAD
 !.gitignore
+=======
+!.gitignore
+!.dockerignore
+>>>>>>> feature/dev

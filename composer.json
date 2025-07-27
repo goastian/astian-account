@@ -17,17 +17,23 @@
             "role": "Owner"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/elyerr/laravel-openid-connect.git"
+        }
+    ],
     "require": {
-        "php": "^8.0.2",
-        "arcanedev/log-viewer": "^10.1",
-        "doctrine/dbal": "^3.9",
+        "php": "^8.2.0",
         "elyerr/api-response": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^2.0",
-        "laravel/framework": "^10.0",
-        "laravel/passport": "^11.8",
+        "jeremy379/laravel-openid-connect": "dev-main",
+        "laravel/framework": "^12.0",
+        "laravel/passport": "13.0",
         "laravel/tinker": "^2.7",
         "predis/predis": "^2.2",
+        "rap2hpoutre/laravel-log-viewer": "^2.5",
         "spatie/laravel-fractal": "^6.0",
         "stevebauman/purify": "^6.2",
         "stripe/stripe-php": "^17.1",
@@ -35,13 +41,14 @@
         "symfony/mailgun-mailer": "^7.0"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.15",
         "fakerphp/faker": "^1.9.1",
-        "laravel/breeze": "^1.17",
+        "laravel/breeze": "^2.0",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.0",
+        "nunomaduro/collision": "^8.1",
+        "phpunit/phpunit": "^11.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -77,7 +84,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/passport"
+            ]
         }
     },
     "config": {
@@ -85,9 +94,9 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true
+    "minimum-stability": "stable"
 }

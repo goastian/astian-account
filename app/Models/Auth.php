@@ -5,13 +5,16 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use DateTime;
-use DateInterval;  
+use DateInterval;
+use LogicException;
+use App\Support\CacheKeys;
 use App\Models\User\UserScope;
 use App\Models\Subscription\Group;
 use Laravel\Passport\HasApiTokens;
 use App\Repositories\Traits\Scopes;
 use Elyerr\ApiResponse\Assets\Asset;
 use App\Repositories\Traits\Standard;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Notifications\Notifiable;
 use App\Notifications\Auth\ResetPassword;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -20,7 +23,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Auth extends Authenticatable
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard, Scopes;
+    use HasUuids, HasApiTokens, HasFactory, Notifiable, Scopes, Asset, Standard;
 
     /**
      * The data type of the auto-incrementing ID.
@@ -57,7 +60,23 @@ class Auth extends Authenticatable
      */
     public function isAdmin()
     {
-        $gsr = auth()->user()->userScopes()->get()->pluck('gsr_id')->toArray();
+        $user = auth()->user();
+
+        $gsr = Cache::remember(
+            CacheKeys::userAdmin($user->id),
+            now()->addDays(intval(config('cache.expires', 90))),
+            function () use ($user) {
+
+                $scopes = UserScope::where('user_id', $user->id)
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                            ->orWhere('end_date', '>', now());
+                    })->get();
+
+                return count($scopes) ? $scopes->pluck('gsr_id')->toArray() : [];
+            }
+        );
+
         return in_array($this->adminScopeName(), $gsr);
     }
 
@@ -67,7 +86,7 @@ class Auth extends Authenticatable
      */
     public function adminScopeName()
     {
-        return "administrator_admin_full";
+        return "administrator:admin:full";
     }
 
     /**
@@ -80,7 +99,7 @@ class Auth extends Authenticatable
     {
         $apiKey = $this->accessToken;
 
-        if (isset($apiKey->id)) {
+        if (isset($apiKey->id) && $apiKey->client->hasGrantType('personal_access')) {
             if (in_array($scope, $apiKey->scopes)) {
                 return true;
             }
@@ -140,11 +159,94 @@ class Auth extends Authenticatable
 
     /**
      * Check if the user has a group
-     * @return bool
+     * @param mixed $group
      */
-    public function hasGroup($group)
+    public function canAccessMenu($group): bool
     {
-        return $this->groups()->get()->pluck('slug')->contains($group);
+        if (!auth()->check()) {
+            return false;
+        }
+
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        $groups = $this->listUserGroups();
+
+        return count($groups) ? $groups->pluck('slug')->contains($group) : false;
+    }
+
+
+    /**
+     * List the all active groups for user
+     */
+    public function listUserGroups(): mixed
+    {
+        if (!auth()->check()) {
+            return [];
+        }
+
+        $user = auth()->user();
+
+        $cacheKey = CacheKeys::userGroups($user->id);
+
+        if (Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        if ($user->isAdmin()) {
+            $groups = Group::get()->unique()->values();
+
+        } else {
+
+            // Filter groups without services 
+            $groupsWithoutServices = Group::whereHas(
+                'users',
+                function ($query) use ($user) {
+                    $query->where('id', $user->id);
+                }
+            )->whereDoesntHave('services')->get();
+
+            // Filter groups by Scopes
+            $groupsByScopes = UserScope::with('scope.service.group')
+                ->where('user_id', $user->id)
+                ->where(function ($query) {
+                    $query->whereNull('end_date')
+                        ->orWhere('end_date', '>', now());
+                })->get()
+                ->map(function ($userScope) {
+                    return $userScope->scope->service->group;
+                })->unique()->values();
+
+            // Join the all groups for user
+            $groups = $groupsWithoutServices->concat($groupsByScopes);
+        }
+
+        Cache::put(
+            $cacheKey,
+            $groups,
+            now()->addDays(intval(config('cache.expires', 90)))
+        );
+
+        return $groups;
+    }
+
+
+    /**
+     * Return the groups 
+     */
+    public function myGroups()
+    {
+        $groups = $this->listUserGroups();
+
+        if (!count($groups)) {
+            return [];
+        }
+
+        return $groups->map(fn($group) => [
+            'name' => $group->name,
+            'slug' => $group->slug,
+        ])->toArray();
     }
 
 
@@ -167,5 +269,24 @@ class Auth extends Authenticatable
     {
         $this->last_connected = now();
         $this->push();
+    }
+
+    /**
+     * Retrieve the passport providers
+     * @throws \LogicException
+     * @return string
+     */
+    public function getProviderName(): string
+    {
+
+        $providers = collect(config('auth.guards'))->where('driver', 'oauth2-passport-server')->pluck('provider')->all();
+
+        foreach (config('auth.providers') as $provider => $config) {
+            if (in_array($provider, $providers) && $config['driver'] === 'eloquent' && is_a($this, $config['model'])) {
+                return $provider;
+            }
+        }
+
+        throw new LogicException('Unable to determine authentication provider for this model from configuration.');
     }
 }

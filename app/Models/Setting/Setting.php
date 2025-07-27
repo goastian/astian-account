@@ -11,9 +11,9 @@ use Laravel\Passport\Passport;
 use App\Models\OAuth\RefreshToken;
 use App\Models\Subscription\Scope;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\QueryException;
-use App\Models\OAuth\PersonalAccessClient;
 
 class Setting extends Master
 {
@@ -31,16 +31,7 @@ class Setting extends Master
      */
     public static function getDefaultSetting()
     {
-        if ($item = config('system.schema_mode', 'https')) {
-            URL::forceScheme($item);
-        }
-
-        Config::set('app.name', settingItem('app.name', 'Oauth2 Server'));
-        Config::set('app.org_name', settingItem('app.org_name', 'Oauth2 org'));
-
-        Config::set('passport.personal_access_client.id', settingItem('passport_personal_access_client_id'));
-        Config::set('passport.personal_access_client.secret', settingItem('passport_personal_access_client_secret'));
-
+        Setting::getSystemSetting();
         Setting::getPassportSetting();
         Setting::getRedisConfig();
         Setting::getQueueSetting();
@@ -48,10 +39,17 @@ class Setting extends Master
         Setting::getEmailSettings();
         Setting::getServicesSettings();
         Setting::getPaymentSettings();
-        Setting::getSystemSetting();
         Setting::getSessionSettings();
         Setting::getCacheSettings();
         Setting::getRoutesSettings();
+        Setting::getRateLimitSettings();
+
+        if (config('system.schema_mode', 'https') == 'https') { 
+            URL::forceScheme('https');
+        }
+
+        Config::set('app.name', settingItem('app.name', 'Oauth2 Server'));
+        Config::set('app.org_name', settingItem('app.org_name', 'Oauth2 org'));
     }
 
     /**
@@ -255,8 +253,7 @@ class Setting extends Master
         SettingLoad('billing.renew.bonus_enabled', false);
         SettingLoad('billing.renew.grace_period_days', 5);
 
-        //System settings
-        settingLoad('system.schema_mode', "https");
+        //System settings 
         settingLoad('system.home_page', "/");
         settingLoad('system.cookie_name', "oauth2_server");
         settingLoad('system.passport_token_services', null);
@@ -264,7 +261,7 @@ class Setting extends Master
         settingLoad('system.disable_create_user_by_command', false);
         settingLoad('system.destroy_user_after', 30);
         settingLoad('system.code_2fa_email_expires', 5);
-        settingLoad('system.csp_enabled', true);
+        settingLoad('system.csp_enabled', false);
         settingLoad('system.redirect_to', "/account");
         settingLoad('system.privacy_url', null);
         settingLoad('system.terms_url', null);
@@ -279,7 +276,7 @@ class Setting extends Master
         settingLoad('session.cookie', 'oauth2_session');
         settingLoad('session.xcsrf-token', 'oauth2_csrf');
         settingLoad('session.path', '/');
-        settingLoad('session.secure', true);
+        settingLoad('session.secure', false);
         settingLoad('session.http_only', true);
         settingLoad('session.partitioned', false);
 
@@ -288,6 +285,18 @@ class Setting extends Master
         settingLoad('routes.users.api', false);
         settingLoad('routes.users.clients', false);
         settingLoad('routes.guest.register', true);
+
+        // Setting por rate limit
+        settingLoad('rate_limit.general.api.limit', 60);
+        settingLoad('rate_limit.general.api.block_time', 60);
+        settingLoad('rate_limit.general.gateway.limit', 300);
+        settingLoad('rate_limit.general.gateway.block_time', 60);
+        settingLoad('rate_limit.general.passport-token.limit', 30);
+        settingLoad('rate_limit.general.passport-token.block_time', 60);
+        settingLoad('rate_limit.general.default.limit', 60);
+        settingLoad('rate_limit.general.default.block_time', 60);
+        settingLoad('rate_limit.general.broadcast.limit', 500);
+        settingLoad('rate_limit.general.broadcast.block_time', 60);
     }
 
     /**
@@ -349,18 +358,35 @@ class Setting extends Master
      */
     public static function getPassportSetting()
     {
+        Passport::authorizationView('vendor.passport.authorize');
         Passport::loadKeysFrom(base_path('secrets/oauth'));
 
         //Cookies names
-        Passport::cookie(settingItem('cookie_name'));
+        Passport::cookie(settingItem('system.cookie_name'));
 
         try {
-            //Scopes
-            $scopes = [];
-            foreach (Scope::where('active', true)->get() as $key => $value) {
-                $scopes += array($value->gsr_id => $value->role->description);
-            }
+
+            $scopes = config('openid.passport.tokens_can');
+
+            $dbScopes = Cache::remember(
+                'passport:scopes',
+                now()->addDays(intval(config('cache.expires', 90))),
+                function () {
+
+                    return Scope::with('role')
+                        ->where('active', true)
+                        ->get()
+                        ->mapWithKeys(function ($scope) {
+                            return [$scope->gsr_id => $scope->role->description];
+                        })
+                        ->toArray();
+                }
+            );
+
+            $scopes += $dbScopes;
+
             Passport::tokensCan($scopes);
+
         } catch (QueryException $th) {
         }
 
@@ -371,7 +397,6 @@ class Setting extends Master
         Passport::useRefreshTokenModel(RefreshToken::class);
         Passport::useAuthCodeModel(AuthCode::class);
         Passport::useClientModel(Client::class);
-        Passport::usePersonalAccessClientModel(PersonalAccessClient::class);
     }
 
     /**
@@ -515,8 +540,7 @@ class Setting extends Master
      * @return void
      */
     public static function getSystemSetting()
-    {
-        Config::set('system.schema_mode', settingItem('system.schema_mode', "https"));
+    { 
         Config::set('system.home_page', settingItem('system.home_page', "/"));
         Config::set('system.cookie_name', settingItem('system.cookie_name', null));
         Config::set('system.passport_token_services', settingItem('system.passport_token_services', null));
@@ -524,14 +548,12 @@ class Setting extends Master
         Config::set('system.disable_create_user_by_command', settingItem('system.disable_create_user_by_command', false));
         Config::set('system.destroy_user_after', settingItem('system.destroy_user_after', 30));
         Config::set('system.code_2fa_email_expires', settingItem('system.code_2fa_email_expires', 5));
-        Config::set('system.csp_enabled', settingItem('system.csp_enabled', true));
+        Config::set('system.csp_enabled', settingItem('system.csp_enabled', false));
         Config::set('system.redirect_to', settingItem('system.redirect_to', null));
         Config::set('system.privacy_url', settingItem('system.privacy_url', null));
         Config::set('system.terms_url', settingItem('system.terms_url', null));
         Config::set('system.policy_cookies', settingItem('system.policy_cookies', null));
 
-        Config::set('passport.personal_access_client.id', settingItem('passport.personal_access_client.id', null));
-        Config::set('passport.personal_access_client.secret', settingItem('passport.personal_access_client.secret', null));
     }
 
     /**
@@ -548,7 +570,7 @@ class Setting extends Master
         Config::set('session.cookie', settingItem('session.cookie', 'oauth2_session'));
         Config::set('session.xcsrf-token', settingItem('session.xcsrf-token', 'oauth2_csrf'));
         Config::set('session.path', settingItem('session.path', '/'));
-        Config::set('session.secure', settingItem('session.secure', true));
+        Config::set('session.secure', settingItem('session.secure', false));
         Config::set('session.http_only', settingItem('session.http_only', true));
         Config::set('session.partitioned', settingItem('session.partitioned', false));
     }
@@ -586,5 +608,20 @@ class Setting extends Master
         Config::set('routes.users.api', settingItem('routes.users.api', false));
         Config::set('routes.users.clients', settingItem('routes.users.clients', false));
         Config::set('routes.guest.register', settingItem('routes.guest.register', true));
+    }
+
+
+    public static function getRateLimitSettings()
+    {
+        Config::set('rate_limit.general.api.limit', settingItem('rate_limit.general.api.limit', 60));
+        Config::set('rate_limit.general.api.block_time', settingItem('rate_limit.general.api.block_time', 60));
+        Config::set('rate_limit.general.gateway.limit', settingItem('rate_limit.general.gateway.limit', 300));
+        Config::set('rate_limit.general.gateway.block_time', settingItem('rate_limit.general.gateway.block_time', 60));
+        Config::set('rate_limit.general.passport-token.limit', settingItem('rate_limit.general.passport-token.limit', 30));
+        Config::set('rate_limit.general.passport-token.block_time', settingItem('rate_limit.general.passport-token.block_time', 60));
+        Config::set('rate_limit.general.default.limit', settingItem('rate_limit.general.default.limit', 60));
+        Config::set('rate_limit.general.default.block_time', settingItem('rate_limit.general.default.block_time', 60));
+        Config::set('rate_limit.general.broadcast.limit', settingItem('rate_limit.general.broadcast.limit', 500));
+        Config::set('rate_limit.general.broadcast.block_time', settingItem('rate_limit.general.broadcast.block_time', 60));
     }
 }

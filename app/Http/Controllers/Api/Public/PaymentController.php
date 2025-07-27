@@ -46,7 +46,6 @@ class PaymentController extends Controller
         return $this->data(['data' => billing_currencies()]);
     }
 
-
     /**
      * methods
      * @return mixed|\Illuminate\Http\JsonResponse

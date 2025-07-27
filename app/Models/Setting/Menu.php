@@ -2,8 +2,8 @@
 
 namespace App\Models\Setting;
 
-use Inertia\Inertia;
-use Illuminate\Support\Facades\Auth;
+use App\Support\CacheKeys;
+use Illuminate\Support\Facades\Cache;
 use App\Transformers\User\AuthTransformer;
 
 class Menu
@@ -14,9 +14,22 @@ class Menu
      */
     public static function authenticated_user()
     {
-        return auth()->check() ?
-            fractal(Auth::user(), AuthTransformer::class)->toArray()['data'] :
-            [];
+        if (!auth()->check()) {
+            return [];
+        }
+
+        $user = request()->user();
+
+        return Cache::remember(
+            CacheKeys::userAuth($user->id),
+            now()->addDays(intval(config('cache.expires', 90))),
+            function () use ($user) {
+                return fractal(
+                    $user,
+                    AuthTransformer::class
+                )->toArray()['data'];
+            }
+        );
     }
 
     /**
@@ -25,6 +38,8 @@ class Menu
      */
     public static function shareEnvironmentKeys()
     {
+        $user = auth()->user();
+
         return [
             "captcha" => static::captcha(),
             "app_name" => config('app.name'),
@@ -38,9 +53,6 @@ class Menu
                 "register" => route('register'),
                 "logout" => route('logout'),
             ],
-            "accounts_routes" => [
-                "suscriptions" => route('users.subscriptions.index'),
-            ],
             "guest_routes" => [
                 "home_page" => url(config('system.home_page')),
                 "plans" => route('plans.index')
@@ -49,13 +61,13 @@ class Menu
                 "name" => "Admin",
                 "route" => route("admin.dashboard"),
                 "icon" => "mdi-security",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             "partner_dashboard" => [
                 "name" => "Partner",
                 "route" => route("partners.dashboard"),
                 "icon" => "mdi-account-cash",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('reseller'),
             ],
             "partner_routes" => static::partnerRoutes(),
             "allow_register" => config('routes.guest.register', true),
@@ -82,7 +94,7 @@ class Menu
                             'show' => true,
                         ],
                         [
-                            'name' => 'Profile',
+                            'name' => 'profile',
                             'route' => route('users.profile'),
                             'icon' => 'mdi-account-details-outline',
                             'show' => true,
@@ -111,6 +123,13 @@ class Menu
                             'icon' => 'mdi-store-search',
                             'show' => true,
                         ],
+                        [
+                            'name' => 'Notifications',
+                            'route' => route('users.notification.index'),
+                            'icon' => 'mdi-bell-badge-outline',
+                            'show' => true,
+                            'count' => request()->user() ? request()->user()->unreadNotifications()->count() : 0
+                        ]
                     ]
                 ],
                 [
@@ -120,13 +139,13 @@ class Menu
                     'menu' => [
                         [
                             'name' => 'Applications',
-                            'route' => route('passport.clients.index'),
+                            'route' => intval(config('routes.users.api')) ? route('passport.clients.index') : null,
                             'icon' => 'mdi-wan',
                             'show' => intval(config('routes.users.clients')) ? true : false
                         ],
                         [
                             'name' => 'API Key',
-                            'route' => route('passport.personal.tokens.index'),
+                            'route' => intval(config('routes.users.api')) ? route('passport.personal.tokens.index') : null,
                             'icon' => 'mdi-shield-key-outline',
                             'show' => intval(config('routes.users.api')) ? true : false,
                         ],
@@ -142,66 +161,74 @@ class Menu
      */
     public static function adminRoutes()
     {
+        $user = auth()->user();
+
         return [
             [
                 "name" => "Dashboard",
                 "route" => route("admin.dashboard"),
                 "icon" => "mdi-view-dashboard",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Groups",
                 "route" => route("admin.groups.index"),
                 "icon" => "mdi-account-group",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Roles",
                 "route" => route("admin.roles.index"),
                 "icon" => "mdi-format-list-group",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Services",
                 "route" => route("admin.services.index"),
                 "icon" => "mdi-text-box-check",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Users",
                 "route" => route("admin.users.index"),
                 "icon" => "mdi-account-multiple",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Clients",
                 "route" => route("admin.clients.index"),
                 "icon" => "mdi-apps",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Broadcasts",
                 "route" => route("admin.broadcasts.index"),
                 "icon" => "mdi-broadcast",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Plans",
                 "route" => route("admin.plans.index"),
                 "icon" => "mdi-cash-clock",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Transactions",
                 "route" => route("admin.transactions.index"),
                 "icon" => "mdi-account-cash-outline",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
+            ],
+            [
+                "name" => "Terminal",
+                "route" => route("admin.terminals.index"),
+                "icon" => "mdi-console",
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
                 "name" => "Settings",
                 "route" => route("admin.settings.general"),
                 "icon" => "mdi-cogs",
-                'show' => true,
+                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
         ];
     }

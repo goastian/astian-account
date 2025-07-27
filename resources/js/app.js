@@ -5,7 +5,7 @@ import piniaPersist from 'pinia-plugin-persistedstate';
 import { createInertiaApp } from "@inertiajs/vue3";
 
 import { customComponents } from "./app/config/customComponents.js";
-import { $echo } from "./app/config/echo.js";
+//import { $echo } from "./app/config/echo.js";
 import { $server } from "./app/config/axios.js";
 import { layouts } from "./app/config/layouts.js";
 import "./app/config/matomo.js";

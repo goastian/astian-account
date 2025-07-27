@@ -25,11 +25,11 @@ class ServiceController extends WebController
     {
         parent::__construct();
         $this->repository = $serviceRepository;
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_view')->only('index');
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_show')->only('show');
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_create')->only('store');
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_update')->only('update');
-        $this->middleware('userCanAny:administrator_service_full,administrator_service_destroy')->only('destroy');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:view')->only('index');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:show')->only('show');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:create')->only('store');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:update')->only('update');
+        $this->middleware('userCanAny:administrator:service:full,administrator:service:destroy')->only('destroy');
         $this->middleware('wants.json')->only('show');
     }
 

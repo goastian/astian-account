@@ -25,11 +25,11 @@ class PlanController extends WebController
     {
         parent::__construct();
         $this->repository = $planRepository;
-        $this->middleware('userCanAny:administrator_plan_full,administrator_plan_view')->only('index');
-        $this->middleware('userCanAny:administrator_plan_full,administrator_plan_show')->only('show');
-        $this->middleware('userCanAny:administrator_plan_full,administrator_plan_create')->only('store');
-        $this->middleware('userCanAny:administrator_plan_full,administrator_plan_update')->only('update');
-        $this->middleware('userCanAny:administrator_plan_full,administrator_plan_destroy')->only('destroy');
+        $this->middleware('userCanAny:administrator:plan:full,administrator:plan:view')->only('index');
+        $this->middleware('userCanAny:administrator:plan:full,administrator:plan:show')->only('show');
+        $this->middleware('userCanAny:administrator:plan:full,administrator:plan:create')->only('store');
+        $this->middleware('userCanAny:administrator:plan:full,administrator:plan:update')->only('update');
+        $this->middleware('userCanAny:administrator:plan:full,administrator:plan:destroy')->only('destroy');
         $this->middleware('wants.json')->only('show');
     }
 

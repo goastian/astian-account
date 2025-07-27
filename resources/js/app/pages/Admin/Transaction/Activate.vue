@@ -17,9 +17,19 @@
                     Are you sure you want to activate this transaction?
                 </q-card-section>
                 <q-card-actions class="flex">
-                    <q-btn outline label="Accept" color="positive" @click="activate" />
+                    <q-btn
+                        outline
+                        label="Accept"
+                        color="positive"
+                        @click="activate"
+                    />
                     <q-space></q-space>
-                    <q-btn outline label="Cancel" color="negative" @click="dialog = false" />
+                    <q-btn
+                        outline
+                        label="Cancel"
+                        color="negative"
+                        @click="dialog = false"
+                    />
                 </q-card-actions>
             </q-card>
         </q-dialog>

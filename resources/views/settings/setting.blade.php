@@ -8,7 +8,7 @@
 @section('header')
     <nav class="bg-indigo-600 text-white py-4 shadow-md">
         <div class="container mx-auto flex justify-between items-center px-4">
-            <a href="{{ config('system.redirect_to', 'home') }}" class="text-lg font-semibold">
+            <a href="{{ route("users.dashboard") }}" class="text-lg font-semibold">
                 <i class="mdi mdi-home text-2xl"></i>
                 {{ __('Dashboard') }}
             </a>
@@ -37,10 +37,13 @@
                             'admin.settings.routes' => ['icon' => 'mdi-router-network', 'label' => __('Routes')],
                             'admin.settings.redis' => ['icon' => 'mdi-database-cog', 'label' => __('Redis')],
                             'admin.settings.cache' => ['icon' => 'mdi-cached', 'label' => __('Cache')],
-                            'admin.settings.queues' => ['icon' => 'mdi-queue-first-in-last-out', 'label' => __('Queues')],
+                            'admin.settings.queues' => [
+                                'icon' => 'mdi-queue-first-in-last-out',
+                                'label' => __('Queues'),
+                            ],
                             'admin.settings.filesystem' => ['icon' => 'mdi-file-cog', 'label' => __('Filesystem')],
                             'admin.settings.security' => ['icon' => 'mdi-shield', 'label' => __('Security')],
-                            'log-viewer::dashboard' => ['icon' => 'mdi-math-log', 'label' => __('Logs')],
+                            'admin.logs' => ['icon' => 'mdi-math-log', 'label' => __('Log viewer')]
                         ];
                     @endphp
 
@@ -69,6 +72,24 @@
                         <button type="submit"
                             class="px-4 py-2 bg-indigo-600 text-white font-medium rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-300">
                             <i class="mdi mdi-content-save-all"></i> {{ __('Save changes') }}
+                        </button>
+                    </div>
+                </form>
+
+
+                <form action="{{ route('admin.settings.reload') }}" method="post" autocomplete="off">
+                    @method('put')
+                    @csrf
+                    <input type="hidden" name="current_route" value="{{ url()->current() }}">
+
+                    <div class="mb-2 text-sm text-gray-600">
+                        {{ __('This will clear and regenerate the cache for all application settings to ensure the latest values are used across the system.') }}
+                    </div>
+
+                    <div class="my-4 flex items-center">
+                        <button type="submit"
+                            class="px-4 py-2 bg-green-600 text-white font-medium rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300">
+                            <i class="mdi mdi-cached"></i> {{ __('Cache Settings') }}
                         </button>
                     </div>
                 </form>

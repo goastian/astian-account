@@ -29,7 +29,6 @@
                             @content="setContent"
                             :error="errors?.description"
                         />
-                        <v-error :error="errors.description" />
 
                         <div class="row q-col-gutter-md">
                             <q-item

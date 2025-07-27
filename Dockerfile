@@ -1,4 +1,5 @@
 FROM alpine:3.20
+LABEL maintainer="Elvis Yerel Roman C. <yerel9212@yahoo.es>"
 RUN apk add --no-cache \
     php83 \
     php83-fpm \
@@ -27,36 +28,41 @@ RUN apk add --no-cache \
     php83-bcmath \
     php83-gd \
     php83-intl \
-    vim \
+    php83-sodium \
     nginx \
-    npm \
     curl \
-    unzip \
-    supervisor
+    supervisor \
+    icu-data-full
 
+# Add user and group www-data
 RUN getent passwd www-data || adduser -S -G www-data -s /usr/sbin/nologin www-data
 
+# Symlink php
 RUN ln -sf /usr/bin/php83 /usr/bin/php
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 WORKDIR /var/www/
 
-COPY . /var/www/ 
-
-RUN composer install --no-dev --optimize-autoloader
-
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 /var/www
-
+COPY . /var/www/
 COPY docker/www.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/http.d/default.conf
 COPY docker/laravel-scripts.sh /usr/local/bin/laravel-scripts.sh 
-
+# supervisor config to manage services
 RUN mkdir -p /etc/supervisor.d \
-    && cp docker/laravel.ini /etc/supervisor.d/laravel.ini
+    && cp docker/laravel.ini /etc/supervisor.d/laravel.ini \
+    && chmod 755 /etc/nginx/http.d/default.conf \
+    && chmod 755 /usr/local/bin/laravel-scripts.sh
 
-RUN chmod 755 /etc/nginx/http.d/default.conf
-RUN chmod 755 /usr/local/bin/laravel-scripts.sh
-
-EXPOSE 80
+# Install js dependencies and remove after build
+RUN apk add --no-cache --virtual .build-deps npm unzip \
+    && composer install --no-dev --optimize-autoloader \
+    && composer clear-cache \
+    && npm install \
+    && npm run production \
+    && rm -rf node_modules \
+    && npm cache clean --force \
+    && apk del .build-deps \
+    && rm -rf /var/cache/apk/* /tmp/* /var/tmp/* \
+    && rm -rf /var/www/docker

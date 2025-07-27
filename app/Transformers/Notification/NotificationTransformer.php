@@ -39,19 +39,18 @@ class NotificationTransformer extends TransformerAbstract
 
         return [
             'id' => $notification->id,
-            'subject' => $data->title,
-            'message' => $data->message,
-            'resource' => isset($data->resource) ? $data->resource : null,
-            'read' => $this->format_date($notification->read_at),
-            'created' => $this->format_date($notification->created_at),
+            "title" => $data->title ?? null,
+            "message" => $data->message ?? null,
+            "link" => $data->url ?? null,
+            "created" => $this->format_date($notification->created_at),
+            "read_at" => $this->format_date($notification->read_at),
             'links' => [
-                'parent' => route('notifications.index'),
-                'unread' => route('notifications.unread'),
-                'show' => route('notifications.show', ['notification' => $notification->id]),
-                'read' => route('notifications.read', ['notification' => $notification->id]),
-                'mark_as_read' => route('notifications.read_all'),
-                'destroy' => route('notifications.destroy', ['notification' => $notification->id]),
-                'clean' => route('notifications.clean'),
+                'index' => route('users.notification.index'),
+                'destroy_all' => route('users.notification.destroy-all'),
+                'mark_all_as_read' => route('users.notification.mark-all-as-read'),
+                'unread' => route('users.notification.unread'),
+                'show' => route('users.notification.show', ['notification_id' => $notification->id]),
+                'mark_as_read' => route('users.notification.mark-as-read', ['notification_id' => $notification->id]),
             ],
         ];
 

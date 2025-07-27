@@ -1,7 +1,10 @@
 <?php
 namespace App\Http\Controllers\Web\Admin\Setting;
 
+use App\Support\CacheKeys;
 use Illuminate\Http\Request;
+use App\Models\Setting\Setting;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\WebController;
 
 class SettingController extends WebController
@@ -10,8 +13,8 @@ class SettingController extends WebController
     public function __construct()
     {
         parent::__construct();
-        $this->middleware('userCanAny:administrator_settings_full, administrator_settings_view')->except('update');
-        $this->middleware('userCanAny:administrator_settings_full, administrator_settings_update')->only('update');
+        $this->middleware('userCanAny:administrator:settings:full, administrator:settings:view')->except('update');
+        $this->middleware('userCanAny:administrator:settings:full, administrator:settings:update')->only('update');
     }
 
     /**
@@ -35,10 +38,7 @@ class SettingController extends WebController
         $data = $this->transformRequest($data);
 
         foreach ($data as $key => $value) {
-
-            $cache = str_contains($key, 'cache');
-
-            settingAdd($key, $value, !$cache);
+            settingAdd($key, $value);
         }
 
         return redirect($request->current_route)->with('status', __('Setting updated successfully'));
@@ -65,6 +65,31 @@ class SettingController extends WebController
         }
 
         return $flattened;
+    }
+
+    /**
+     * Reload cache for settings
+     * @param \App\Models\Setting\Setting $setting
+     * @return void
+     */
+    public function reloadCache(Request $request, Setting $setting)
+    {
+        $settings = $setting::all();
+
+        foreach ($settings as $setting) {
+            
+            $cache_key = CacheKeys::settings($setting->key);
+            
+            Cache::forget($cache_key);
+            
+            Cache::put(
+                $cache_key,
+                $setting->value,
+                now()->addDays(intval(config('cache.expires', 90)))
+            );
+        }
+
+        return redirect($request->current_route)->with('status', __('Cache updated successfully'));
     }
 
     /**

@@ -120,7 +120,6 @@ export default {
     },
 
     created() {
-
         if (!this.params.start || !this.params.end) {
             const { start, end } = this.getDefaultDates();
             this.params.start = start;

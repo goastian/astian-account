@@ -200,7 +200,11 @@ export default {
                     this.$emit("created", true);
                 }
             } catch (e) {
-                if (e.response?.data?.errors && e.response?.status == 422) {
+                if (
+                    e.response &&
+                    e.response.data.errors &&
+                    e.response.status == 422
+                ) {
                     this.errors = e.response.data.errors;
                 }
 
@@ -213,14 +217,6 @@ export default {
                     this.$q.notify({
                         type: "negative",
                         message: e.response.data.message,
-                    });
-                }
-
-                if (e.response?.status == 403 && e.response?.data?.message) {
-                    this.$q.notify({
-                        type: "negative",
-                        message: e.response.data.message,
-                        timeout: 3000,
                     });
                 }
             }

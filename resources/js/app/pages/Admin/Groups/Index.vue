@@ -9,10 +9,16 @@
                 <v-create @created="getGroups" class="q-mr-md" />
 
                 <!-- Toggle View Mode -->
-                <q-btn-toggle v-model="viewMode" dense toggle-color="primary" :options="[
-                    { value: 'list', icon: 'list' },
-                    { value: 'grid', icon: 'grid_on' },
-                ]" unelevated />
+                <q-btn-toggle
+                    v-model="viewMode"
+                    dense
+                    toggle-color="primary"
+                    :options="[
+                        { value: 'list', icon: 'list' },
+                        { value: 'grid', icon: 'grid_on' },
+                    ]"
+                    unelevated
+                />
             </div>
         </q-toolbar>
 
@@ -54,7 +60,11 @@
 
                     <q-card-actions align="right">
                         <v-update @updated="getGroups" :item="group" />
-                        <v-delete v-if="!group.system" @deleted="getGroups" :item="group" />
+                        <v-delete
+                            v-if="!group.system"
+                            @deleted="getGroups"
+                            :item="group"
+                        />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -92,7 +102,11 @@
 
                     <q-item-section side class="q-gutter-sm">
                         <v-update @updated="getGroups" :item="group" />
-                        <v-delete v-if="!group.system" @deleted="getGroups" :item="group" />
+                        <v-delete
+                            v-if="!group.system"
+                            @deleted="getGroups"
+                            :item="group"
+                        />
                     </q-item-section>
                 </q-item>
             </q-list>
@@ -198,7 +212,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch((e) => { });
+                .catch((e) => {});
         },
     },
 };

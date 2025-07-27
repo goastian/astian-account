@@ -40,22 +40,4 @@ class PlanController extends WebController
             'route' => route('plans.index'),
         ]);
     }
-
-    /**
-     * show
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Subscription\Plan $plan
-     * @return mixed|\Illuminate\Http\JsonResponse|\Inertia\Response
-     */
-    public function pay(Request $request, plan $plan)
-    {
-        if ($request->wantsJson()) {
-            return $this->repository->searchPlanForGuest($request);
-        }
-
-        return Inertia::render('Resources/Pay', [
-            'user' => $this->authenticated_user(),
-            'route' => route('pay.pay')
-        ]);
-    }
 }

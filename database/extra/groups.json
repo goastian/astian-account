@@ -416,6 +416,12 @@
                 "description": "Service to manage and configure VPN access and connections",
                 "actions": [
                     {
+                        "name": "full",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 1
+                    },
+                    {
                         "name": "view",
                         "public": 0,
                         "active": 1,
@@ -465,6 +471,18 @@
                     },
                     {
                         "name": "update",
+                        "public": 0,
+                        "active": 1,
+                        "api_key": 0
+                    }
+                ]
+            },
+            {
+                "name": "Logs",
+                "description": "Service to manage logs",
+                "actions": [
+                    {
+                        "name": "full",
                         "public": 0,
                         "active": 1,
                         "api_key": 0

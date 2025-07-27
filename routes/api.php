@@ -10,54 +10,41 @@ use App\Http\Controllers\Api\OAuth\PassportConnectController;
 /**
  * Gateways to grant access
  */
-Route::prefix('gateway')->group(function () {
+Route::group(
+    [
+        'prefix' => 'gateway',
+        'as' => 'gateway.',
+        'middleware' => ['throttle:gateway']
+    ],
+    function () {
 
-    Route::get('/check-authentication', [PassportConnectController::class, 'check_authentication']);
-    Route::get('/check-scope', [PassportConnectController::class, 'check_scope']);
-    Route::get('/check-scopes', [PassportConnectController::class, 'check_scopes']);
-    Route::get('/check-client-credentials', [PassportConnectController::class, 'check_client_credentials']);
-    Route::get('/token-can', [PassportConnectController::class, 'token_can']);
-    Route::get('/user', [PassportConnectController::class, 'authenticated']);
-    Route::get('/access', [PassportConnectController::class, 'access']);
-    Route::post('/logout', [PassportConnectController::class, 'revokeAuthorization']);
-});
+        Route::get('/check-authentication', [PassportConnectController::class, 'check_authentication'])->name('basic_auth');
+        Route::get('/check-scope', [PassportConnectController::class, 'check_scope_any'])->name('auth.scope.any');
+        Route::get('/check-scopes', [PassportConnectController::class, 'check_scope_all'])->name('auth.scope.all');
+        Route::get('/check-client-credentials', [PassportConnectController::class, 'check_client_credentials'])->name('client.credentials');
+        Route::get('/token-can', [PassportConnectController::class, 'user_can'])->name('user.can');
+        Route::get('/user', [PassportConnectController::class, 'authenticated'])->name('user.info');
+        Route::get('/access', [PassportConnectController::class, 'access'])->name('user.scopes');
+        Route::post('/logout', [PassportConnectController::class, 'revokeAuthorization'])->name('logout');
+    }
+);
 
 /**
  * Oauth Routes to get credentials
  */
 Route::group([
     'prefix' => 'oauth',
-    'as' => 'oauth.'
+    'as' => 'oauth.',
+    'middleware' => ['throttle:passport-token']
 ], function () {
     Route::post('/token', [AccessTokenController::class, 'issueToken'])
-        ->name('passport.token')
-        ->middleware('authorize');
+        ->name('passport.token');
 });
-
-
-
-/**
- * Routes to send notifications
- */
-/*
-Route::group([
-    'prefix' => 'notifications',
-    'middleware' => ['wants.json'],
-
-], function () {
-    Route::get('/', [UserNotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/unread', [UserNotificationController::class, 'show_unread_notifications'])->name('notifications.unread');
-    Route::get('/{notification}', [UserNotificationController::class, 'show'])->name('notifications.show');
-    Route::post('/mark_as_read', [UserNotificationController::class, 'mark_as_read_notifications'])->name('notifications.read_all');
-    Route::post('/{notification}', [UserNotificationController::class, 'mark_as_read_notification'])->name('notifications.read');
-    Route::delete('/clean', [UserNotificationController::class, 'clean'])->name('notifications.clean');
-    Route::delete('/{notification}', [UserNotificationController::class, 'destroy'])->name('notifications.destroy');
-});*/
-
 
 Route::group([
     'prefix' => 'public',
-    'as' => 'public.'
+    'as' => 'public.',
+    'middleware' => ['throttle:default']
 ], function () {
     Route::resource('/countries', CountriesController::class)->only('index');
     Route::get('/payments/billing-period', [PaymentController::class, 'billingPeriod'])->name('payments.billing-period');

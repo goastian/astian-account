@@ -132,7 +132,11 @@ export default {
                     });
                 }
             } catch (e) {
-                if (e.response?.data?.errors && e.response?.status == 422) {
+                if (
+                    e.response &&
+                    e.response.status == 422 &&
+                    e.response.data.errors
+                ) {
                     this.errors = e.response.data.errors;
                 }
 

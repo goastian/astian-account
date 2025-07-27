@@ -1,9 +1,11 @@
 <?php
 namespace App\Repositories;
- 
+
+use App\Support\CacheKeys;
 use Illuminate\Http\Request;
 use App\Models\Subscription\Service;
 use Elyerr\ApiResponse\Assets\Asset;
+use Illuminate\Support\Facades\Cache;
 use App\Repositories\Contracts\Contracts;
 use Elyerr\ApiResponse\Assets\JsonResponser;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -235,6 +237,7 @@ class ServiceRepository implements Contracts
                 ]
             );
 
+        Cache::forget(CacheKeys::passportScopes());
         return $this->message(__('Role has been added successfully'), 201);
     }
 
@@ -258,6 +261,8 @@ class ServiceRepository implements Contracts
         } catch (\Throwable $th) {
             throw new ReportError(__("This resource cannot be deleted because it is being used by another resource."), 400);
         }
+
+        Cache::forget(CacheKeys::passportScopes());
 
         return $this->message(__('Role has been revoked successfully'), 200);
     }

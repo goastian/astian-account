@@ -2,9 +2,6 @@
 
 namespace App\Repositories\Traits;
 
-use App\Models\User\User;
-use Illuminate\Support\Str;
-
 trait Standard
 {
     /**
@@ -17,10 +14,9 @@ trait Standard
     public function notificationDatabase($title, $description, $url = null)
     {
         return [
-            "title" => __($title),
-            "description" => __($description),
+            "title" => $title,
+            "message" => $description,
             "link" => $url,
-            "created_at" => date('Y-m-d H:i:s', strtotime(now()))
         ];
     }
 }

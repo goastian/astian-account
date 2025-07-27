@@ -28,12 +28,12 @@ class UserController extends WebController
     {
         parent::__construct();
         $this->repository = $userRepository;
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_view')->only('index');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_show')->only('show');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_create')->only('store');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_update')->only('update');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_disable')->only('disable');
-        $this->middleware('userCanAny:administrator_user_full,administrator_user_enable')->only('enable');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:view')->only('index');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:show')->only('show');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:create')->only('store');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:update')->only('update');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:disable')->only('disable');
+        $this->middleware('userCanAny:administrator:user:full,administrator:user:enable')->only('enable');
 
         $this->middleware('wants.json')->only('show');
     }

@@ -2,12 +2,11 @@
 
 namespace App\Models\OAuth\Bridge;
 
-use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
-use Laravel\Passport\Passport;
-use Laravel\Passport\Bridge\AuthCodeRepository as Model;
+use Laravel\Passport\Passport; 
 use League\OAuth2\Server\Entities\AuthCodeEntityInterface;
+use App\Repositories\OAuth\Server\Grant\OAuthSessionTokenRepository;
 
-class AuthCodeRepository extends Model
+class AuthCodeRepository extends \OpenIDConnect\Repositories\AuthCodeRepository
 {
 
     /**
@@ -23,7 +22,7 @@ class AuthCodeRepository extends Model
     /**
      * {@inheritdoc}
      */
-    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
+    public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity): void
     {
         $identifier = $authCodeEntity->getIdentifier();
 
@@ -35,7 +34,7 @@ class AuthCodeRepository extends Model
             'revoked' => false,
             'expires_at' => $authCodeEntity->getExpiryDateTime(),
         ];
-
+       
         Passport::authCode()->forceFill($attributes)->save();
 
         // Set code to the current session

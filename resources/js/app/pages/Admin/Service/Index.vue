@@ -72,7 +72,11 @@
 
                         <div class="q-mt-sm text-caption">
                             <strong>System:</strong>
-                            <q-badge :color="service.system ? 'green' : 'orange'" outline class="q-ml-xs">
+                            <q-badge
+                                :color="service.system ? 'green' : 'orange'"
+                                outline
+                                class="q-ml-xs"
+                            >
                                 {{ service.system ? "Yes" : "No" }}
                             </q-badge>
                         </div>
@@ -89,7 +93,11 @@
 
                     <q-card-actions align="right">
                         <v-update :item="service" @updated="getServices" />
-                        <v-delete v-if="!service.system" :item="service" @deleted="getServices" />
+                        <v-delete
+                            v-if="!service.system"
+                            :item="service"
+                            @deleted="getServices"
+                        />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -138,7 +146,11 @@
                     <div class="row no-wrap items-center q-gutter-xs">
                         <v-detail :service="service" />
                         <v-update :item="service" @updated="getServices" />
-                        <v-delete v-if="!service.system" :item="service" @deleted="getServices" />
+                        <v-delete
+                            v-if="!service.system"
+                            :item="service"
+                            @deleted="getServices"
+                        />
                     </div>
                 </q-item-section>
             </q-item>
@@ -255,7 +267,7 @@ export default {
                     this.pages = meta.pagination;
                     this.search.current_page = meta.pagination.current_page;
                 })
-                .catch((e) => { });
+                .catch((e) => {});
         },
     },
 };
