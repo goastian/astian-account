@@ -219,12 +219,6 @@ class Menu
                 'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
             ],
             [
-                "name" => "Terminal",
-                "route" => route("admin.terminals.index"),
-                "icon" => "mdi-console",
-                'show' => empty($user) ? false : $user->canAccessMenu('administrator'),
-            ],
-            [
                 "name" => "Settings",
                 "route" => route("admin.settings.general"),
                 "icon" => "mdi-cogs",
