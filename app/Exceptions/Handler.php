@@ -2,11 +2,9 @@
 
 namespace App\Exceptions;
 
-use Throwable;
-use Psr\Log\LogLevel;
+use Throwable; 
 use Illuminate\Http\Response;
-use Illuminate\Routing\Router;
-use App\Providers\RouteServiceProvider;
+use Illuminate\Routing\Router; 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Contracts\Support\Responsable;
 use Elyerr\ApiResponse\Exceptions\ReportError;
@@ -78,6 +76,20 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
+        //check the page exists
+        if ($e instanceof NotFoundHttpException) {
+
+            //The request wants json 
+            if (request()->wantsJson()) {
+                throw new ReportError(__("Page not found"), 404);
+            }   
+            //check if it the users is authenticable
+            if (auth()->check()) {
+                return redirect()->route('users.dashboard');
+            }
+            //redirect to the login
+            return redirect()->route('login')->with('error', __("Page not found"));
+        }
 
         if ($e instanceof ModelNotFoundException) {
             throw new ReportError(__("Not Found"), 404);
@@ -87,7 +99,6 @@ class Handler extends ExceptionHandler
             if (request()->wantsJson()) {
                 throw new ReportError(__($e->getMessage()), 419);
             }
-            return redirect('/');
         }
 
         if ($e instanceof BadRequestHttpException) {
