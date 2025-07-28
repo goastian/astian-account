@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b228d17a7372a401634fc3a90162c7c",
+    "content-hash": "a05c91a3d8c54b71e9ff94cccb17fb5f",
     "packages": [
         {
             "name": "brick/math",
@@ -10755,7 +10755,7 @@
     "stability-flags": {
         "jeremy379/laravel-openid-connect": 20
     },
-    "prefer-stable": false,
+    "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2.0"
