@@ -6,9 +6,7 @@
             <div class="row container-plan justify-center">
                 <div class="card left col column">
                     <div class="row items-center top">
-                        <span class="icon logo" v-if="plan.scopes[0].service.name == 'vpn'">🛡️</span>
                         <div class="column">
-                            <span>{{ plan.scopes[0].role.name }}</span>
                             <span class="title strong">{{ plan.name }}</span>
                         </div>
                     </div>

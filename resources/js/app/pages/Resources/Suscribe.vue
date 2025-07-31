@@ -9,7 +9,6 @@
 
                     <div class="column">
                         <span class="strong">{{ plan.name }}</span>
-                        <span>{{ plan.scopes[0].service.name }}</span>
                         <template v-for="price in plan.prices">
                             <div
                                 v-if="price.billing_period == period"
