@@ -623,8 +623,7 @@ class UserRepository implements Contracts
                 'password' => Hash::make($data['password']),
                 'birthday' => $data['birthday'],
                 'accept_terms' => $data['accept_terms'],
-                'accept_cookies' => $data['accept_cookies'],
-                'referral_code' => $data['referral_code'] ?? true,
+                'accept_cookies' => $data['accept_cookies']
             ]);
 
             if ($data['referral_code']) {
@@ -636,6 +635,7 @@ class UserRepository implements Contracts
 
                 if (!empty($partner)) {
                     $user->partner_id = $partner->id;
+                    $user->push();
                 }
             }
 

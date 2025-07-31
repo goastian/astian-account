@@ -30,7 +30,7 @@
                     v-if="!$page.props.user?.id"
                     flat
                     label="Login"
-                    @click="guest = true"
+                    @click="open($page.props.auth_routes['login'])"
                 />
                 <v-profile />
             </div>
@@ -53,7 +53,9 @@
                 </q-toolbar-title>
             </q-toolbar>
         </q-footer>-->
+        <!-- Guest Login Modal 
         <v-login :guest="guest" @close="guest = false" />
+        -->
     </q-layout>
 </template>
 
@@ -66,14 +68,20 @@ export default {
     },
     methods: {
         open(url) {
-            window.location.href = url;
+            const currentUrl = window.location.href;
+            const redirectUrl = new URL(url);
+
+            redirectUrl.searchParams.set("redirect_to", currentUrl); 
+
+            window.location.href = redirectUrl.toString();
         },
 
         isActive(item) {
             return item.route == window.location.href;
         },
         homePage() {
-            window.location.href = this.$page.props.user_routes[0].menu[0]['route'];
+            window.location.href =
+                this.$page.props.user_routes[0].menu[0]["route"];
         },
     },
 };

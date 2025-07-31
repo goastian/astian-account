@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers\Web\Auth;
 
-use App\Http\Controllers\WebController;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\WebController;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 
 class NewPasswordController extends WebController
 {
+
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     /**
      * Show view to change password
      *
@@ -55,6 +60,6 @@ class NewPasswordController extends WebController
             ]);
         }
 
-        return redirect('login')->with('status', __($status));
+        return redirect()->route('login')->with('status', __($status));
     }
 }

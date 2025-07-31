@@ -36,7 +36,7 @@ return [
      * You can override the repositories below.
      */
     'repositories' => [
-        'identity' => \OpenIDConnect\Repositories\IdentityRepository::class,
+        'identity' => \App\Repositories\OAuth\OpenID\IdentityRepository::class,
     ],
 
     'routes' => [
