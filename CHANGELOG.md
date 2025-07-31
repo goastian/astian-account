@@ -1,5 +1,11 @@
 # Changelog
 
+## 🚀 [v3.0.2]
+
+### 🐛 Fixes
+
+- Resolved issue where the OpenID Connect endpoint returned static user claims. Now returns dynamic, authenticated user data.
+
 ## 🚀 [v3.0.1]
 
 ### 👥 Users
