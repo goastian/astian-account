@@ -35,7 +35,7 @@ services:
             - public-net
 
     app:
-        image: elyerr/oauth2-passport-server:v3.0.2
+        image: elyerr/oauth2-passport-server
         restart: always
         ports:
             - "8001:80"
@@ -46,7 +46,7 @@ services:
             db:
                 condition: service_healthy
         volumes:
-            - .env:/var/www/.env
+            - .env:/root/.env
             - app-secrets:/var/www/secrets
         command: sh -c "/usr/local/bin/laravel-scripts.sh"
         networks:

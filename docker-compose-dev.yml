@@ -46,7 +46,7 @@ services:
             db:
                 condition: service_healthy
         volumes:
-            - .env:/var/www/.env
+            - .env:/root/.env
             - app-secrets:/var/www/secrets
         command: sh -c "/usr/local/bin/laravel-scripts.sh"
         networks:
