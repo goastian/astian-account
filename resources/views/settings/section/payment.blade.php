@@ -106,22 +106,22 @@
                 </div>
 
                 <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">{{ __('Secret') }}</label>
-                    <input type="text" name="services[stripe][secret]"
+                    <label class="block text-sm font-medium text-gray-700">{{ __('Secret Key') }}</label>
+                    <input type="password" name="services[stripe][secret]"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
                         value="{{ config('services.stripe.secret') }}">
                 </div>
 
                 <div class="mb-2">
-                    <label class="block text-sm font-medium text-gray-700">{{ __('Key') }}</label>
-                    <input type="text" name="services[stripe][key]"
+                    <label class="block text-sm font-medium text-gray-700">{{ __('Public Key') }}</label>
+                    <input type="password" name="services[stripe][key]"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
                         value="{{ config('services.stripe.key') }}">
                 </div>
 
                 <div class="mb-2">
                     <label class="block text-sm font-medium text-gray-700">{{ __('Webhook secret') }}</label>
-                    <input type="text" name="services[stripe][webhook_secret]"
+                    <input type="password" name="services[stripe][webhook_secret]"
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"
                         value="{{ config('services.stripe.webhook_secret') }}">
                 </div>

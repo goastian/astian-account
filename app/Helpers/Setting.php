@@ -50,15 +50,6 @@ if (!function_exists('settingLoad')) {
     function settingLoad($key, $value)
     {
         try {
-
-            if (CacheKeys::exceptKeys($key)) {
-                Cache::put(
-                    CacheKeys::settings($key),
-                    $value,
-                    now()->addDays(intval(config('cache.expires', 90)))
-                );
-            }
-
             Setting::firstOrCreate(
                 [
                     'key' => $key,

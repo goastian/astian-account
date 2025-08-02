@@ -92,7 +92,7 @@
 
                     <div class="mb-2">
                         <label class="block text-sm font-medium text-gray-700">Site key</label>
-                        <input type="text" name="services[captcha][providers][turnstile][sitekey]"
+                        <input type="password" name="services[captcha][providers][turnstile][sitekey]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
                             value="{{ config('services.captcha.providers.turnstile.sitekey') }}">
                     </div>
@@ -116,7 +116,7 @@
 
                     <div class="mb-2">
                         <label class="block text-sm font-medium text-gray-700">Site key</label>
-                        <input type="text" name="services[captcha][providers][hcaptcha][sitekey]"
+                        <input type="password" name="services[captcha][providers][hcaptcha][sitekey]"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-300"
                             value="{{ config('services.captcha.providers.hcaptcha.sitekey') }}">
                     </div>
