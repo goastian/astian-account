@@ -48,11 +48,11 @@ COPY . /var/www/
 COPY docker/www.conf /etc/php83/php-fpm.d/www.conf
 COPY docker/nginx.conf /etc/nginx/nginx.conf
 COPY docker/default.conf /etc/nginx/http.d/default.conf
-COPY docker/laravel-scripts.sh /usr/local/bin/laravel-scripts.sh 
+COPY docker/laravel-scripts.sh /usr/local/bin/laravel-scripts.sh
 # supervisor config to manage services
 RUN mkdir -p /etc/supervisor.d \
     && cp docker/laravel.ini /etc/supervisor.d/laravel.ini \
-    && chmod 755 /etc/nginx/http.d/default.conf \
+    && chmod 444 /etc/nginx/http.d/default.conf \
     && chmod 755 /usr/local/bin/laravel-scripts.sh
 
 # Install js dependencies and remove after build
